@@ -6,7 +6,7 @@ const fr = (html: string) =>
     .replace(/ ([?!;»])/g, ' $1')
     .replace(/« /g, '« ')
     .replace(/ :(?=[\s<])/g, ' :')
-    .replace(/(\d) (€|%)/g, '$1 $2');
+    .replace(/(\d) (?=(?:€|%|h|j|ans|L|Go|m²)(?![\p{L}\d]))/gu, '$1\u00A0');
 
 const LAWS_CL: SourceRef = { label: 'Laws of UX — Charge cognitive', url: 'https://lawsofux.com/cognitive-load/' };
 const LAWS_WM: SourceRef = { label: 'Laws of UX — Mémoire de travail', url: 'https://lawsofux.com/working-memory/' };
@@ -30,11 +30,12 @@ const NNG_EXTERNAL: SourceRef = {
 const SHIP_CSS = `.sh-list { display: flex; flex-direction: column; gap: 6px; }
 .sh-opt { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid #e1e4ea; border-radius: 8px; font-size: 13px; }
 .sh-opt::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #8b92a1; flex: none; }
-.sh-opt > span { margin-inline-start: auto; color: #5a6172; white-space: nowrap; }
-.sh-tag { font-size: 11px; font-weight: 700; font-style: normal; color: #1f6b3a; background: #e3f4e8; padding: 1px 6px; border-radius: 999px; }`;
+.sh-name { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.sh-info { margin-inline-start: auto; color: #5a6172; white-space: nowrap; }
+.sh-tag { font-size: 11px; font-weight: 700; font-style: normal; color: #1f6b3a; background: #e3f4e8; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }`;
 
 const ship = (name: string, info: string, tag = '') =>
-  `<span class="sh-opt"><b>${name}</b>${tag ? `<em class="sh-tag">${tag}</em>` : ''}<span>${info}</span></span>`;
+  `<span class="sh-opt"><span class="sh-name"><b>${name}</b>${tag ? `<em class="sh-tag">${tag}</em>` : ''}</span><span class="sh-info">${info}</span></span>`;
 
 const TB_ITEMS: [string, string][] = [
   ['sparkles', 'Résumer'],
@@ -111,8 +112,8 @@ Les applications pratiques d’impeccable :
           },
           badNote: 'Huit options de même poids : au-delà de 7, c’est la surcharge — on compare, on hésite, on abandonne.',
           good: {
-            alt: 'Même choix réduit à trois options, la moins chère signalée, avec un lien vers les cinq autres modes.',
-            html: fr(`<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Mode de livraison</p><div class="sh-list">${ship('Point relais', '3,50 € · 3 à 5 j', 'Le moins cher')}${ship('Domicile', '4,90 € · 48 h')}${ship('Retrait en magasin', 'Gratuit · dès 2 h')}</div><span class="mk-btn mk-btn--text" style="align-self:flex-start;padding:0;min-height:28px">Autres modes de livraison (5)</span></div>`),
+            alt: 'Même choix réduit à trois options, la plus choisie signalée, avec un lien vers les cinq autres modes.',
+            html: fr(`<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Mode de livraison</p><div class="sh-list">${ship('Point relais', '3,50 € · 3 à 5 j', 'Le plus choisi')}${ship('Domicile', '4,90 € · 48 h')}${ship('Retrait en magasin', 'Gratuit · dès 2 h')}</div><span class="mk-btn mk-btn--text" style="align-self:flex-start;padding:0;min-height:28px">Autres modes de livraison (5)</span></div>`),
             css: SHIP_CSS,
           },
           goodNote: 'Trois options courantes, un repère, et les cinq autres à un clic.',
@@ -178,7 +179,7 @@ L’échec typique est le **pont de mémoire** : devoir retenir à l’étape 3 
 4. **La barrière du jargon** : un vocabulaire technique ou métier oblige à traduire. → Langage courant ; si un terme est inévitable, définis-le sur place.
 5. **Le plancher de bruit visuel** : tout a le même poids, rien ne ressort. → Une hiérarchie nette : un élément principal, 2 à 3 secondaires, tout le reste en retrait.
 6. **Le motif incohérent** : des actions semblables fonctionnent différemment selon l’endroit. → Standardise : même type d’action, même type d’interface.
-7. **La multitâche imposée** : lire, décider et naviguer en même temps. → Séquence les étapes : une chose à la fois.
+7. **Le multitâche imposé** : lire, décider et naviguer en même temps. → Séquence les étapes : une chose à la fois.
 8. **Le changement de contexte** : sauter d’écran en écran, d’onglet en onglet ou de fenêtre en fenêtre pour réunir les informations d’une seule décision. → Rassemble au même endroit ce dont chaque décision a besoin.`,
       examples: [
         {
@@ -199,7 +200,7 @@ L’échec typique est le **pont de mémoire** : devoir retenir à l’étape 3 
             alt: 'Même fiche avec un seul badge discret, un titre sombre, le prix en gras, les mentions regroupées en gris et un seul bouton plein.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:8px"><span class="mk-badge" style="align-self:flex-start">-20 %</span><p class="mk-h2">Sac à dos Trek 28 L</p><p><span class="mk-price" style="font-size:20px">71,92 €</span> <s class="mk-muted">89,90 €</s></p><p class="mk-small mk-muted">Livraison offerte dès 50 € · Garantie 2 ans · Éco-conçu</p><div class="mk-row mk-wrap" style="--gap:8px"><span class="mk-btn">Ajouter au panier</span><span class="mk-btn mk-btn--ghost">Ajouter aux favoris</span></div></div>`),
           },
-          goodNote: 'Un élément principal (le prix et l’ajout au panier), un secondaire, le reste en retrait.',
+          goodNote: 'Un seul élément principal (le bouton « Ajouter au panier »), trois secondaires (titre, prix, favoris), le reste en retrait (badge, mentions).',
         },
       ],
     },
@@ -228,7 +229,7 @@ Ses garde-fous, tirés d’impeccable (*distill*, *onboard*) :
     { id: 'noise', front: 'Comment sortir du plancher de bruit visuel ?', back: 'Un élément principal, deux ou trois secondaires, tout le reste en retrait.' },
     { id: 'jargon', front: 'Que faire d’un terme métier inévitable ?', back: 'Le définir sur place. Partout ailleurs, langage courant.' },
     { id: 'context', front: 'Comment éviter le changement de contexte ?', back: 'Rassembler au même endroit toutes les informations nécessaires à une décision (tableau comparatif, récapitulatif).' },
-    { id: 'sequence', front: 'Comment corriger la multitâche imposée ?', back: 'Séquencer : une décision à la fois, avec une progression visible.' },
+    { id: 'sequence', front: 'Comment corriger le multitâche imposé ?', back: 'Séquencer : une décision à la fois, avec une progression visible.' },
     { id: 'disclosure', front: 'Quelle limite pour la divulgation progressive ?', back: 'Ne jamais cacher une information nécessaire à la décision en cours : le mystère n’est pas du minimalisme.' },
   ],
   exercises: [
@@ -281,9 +282,12 @@ La règle pratique d’impeccable pour les boutons : **1 principal, 1 à 2 secon
           id: 'recap',
           visual: {
             alt: 'Étape 3 d’un virement avec un récapitulatif : bénéficiaire Léa Martin, montant 250 euros, motif Loyer novembre, un lien « Modifier », le champ du code SMS et un bouton « Confirmer le virement de 250,00 € ».',
-            html: fr(`<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-small mk-muted">Étape 3 sur 3</p><p class="mk-h2">Vérifier et confirmer</p><div class="vr"><div class="mk-row mk-between"><span class="mk-muted">Bénéficiaire</span><span><b>Léa Martin</b> · FR76 … 0189</span></div><div class="mk-row mk-between"><span class="mk-muted">Montant</span><b class="mk-price">250,00 €</b></div><div class="mk-row mk-between"><span class="mk-muted">Motif</span><span>Loyer novembre</span></div><span class="vr-edit">Modifier</span></div><div class="mk-field"><span class="mk-label">Code reçu par SMS</span><span class="mk-input">••••••</span></div><span class="mk-btn mk-btn--block">Confirmer le virement de 250,00 €</span></div>`),
+            html: fr(`<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-small mk-muted">Étape 3 sur 3</p><p class="mk-h2">Vérifier et confirmer</p><div class="vr"><div class="mk-row mk-between"><span class="mk-muted">Bénéficiaire</span><span class="vr-val"><b>Léa Martin</b><span class="vr-iban">FR76 … 0189</span></span></div><div class="mk-row mk-between"><span class="mk-muted">Montant</span><b class="mk-price">250,00 €</b></div><div class="mk-row mk-between"><span class="mk-muted">Motif</span><span>Loyer novembre</span></div><span class="vr-edit">Modifier</span></div><div class="mk-field"><span class="mk-label">Code reçu par SMS</span><span class="mk-input">••••••</span></div><span class="mk-btn mk-btn--block vr-cta">Confirmer le virement de 250,00 €</span></div>`),
             css: `.vr { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 10px; background: #f4f6f9; font-size: 13px; }
-.vr-edit { align-self: flex-end; color: #1f4fd8; font-weight: 600; }`,
+.vr-val { display: flex; flex-wrap: wrap; justify-content: flex-end; column-gap: 8px; }
+.vr-iban { color: #5a6172; white-space: nowrap; }
+.vr-edit { align-self: flex-end; color: #1f4fd8; font-weight: 600; }
+.vr-cta { white-space: normal; text-align: center; text-wrap: balance; line-height: 1.25; padding-block: 8px; }`,
           },
           why: 'Tout ce qui fonde la décision est sous les yeux, avec un lien pour corriger : rien à retenir.',
         },
@@ -429,8 +433,8 @@ La correction d’impeccable : **réunir au même endroit les informations néce
       ideal: 28,
       explanation: `Le point **Segmentation** de la check-list d’impeccable demande de présenter l’information en groupes digestes ; le point **Regroupement**, de grouper visuellement ce qui va ensemble — d’abord par la **proximité** (loi de la Gestalt).
 
-Ici, les champs d’un même groupe sont espacés de 10 px. Avec 10 px entre les groupes aussi, le formulaire devient une liste monotone qu’on lit champ par champ. Un écart nettement plus grand — repère pratique : deux à quatre fois l’espace interne, soit 20 à 40 px — fait apparaître trois blocs qu’on traite l’un après l’autre. Au-delà, les groupes se détachent au point de sembler appartenir à des écrans différents.`,
-      takeaway: 'Segmente par l’espace : serré dans un groupe, nettement plus large entre les groupes (repère : deux à quatre fois l’espace interne).',
+Ici, les champs d’un même groupe sont espacés de 10 px. Avec 10 px entre les groupes aussi, le formulaire devient une liste monotone qu’on lit champ par champ. Il faut un écart nettement plus grand que l’espace interne : sur cette maquette, 20 à 40 px font apparaître trois blocs qu’on traite l’un après l’autre. Au-delà, les groupes se détachent au point de sembler appartenir à des écrans différents.`,
+      takeaway: 'Segmente par l’espace : serré dans un groupe, nettement plus large entre les groupes.',
       sources: ['imp:critique', 'imp:layout', LAWS_PROX, LAWS_CHUNK],
     },
     {
@@ -440,7 +444,7 @@ Ici, les champs d’un même groupe sont espacés de 10 px. Avec 10 px entre les
       prompt: 'Trouve les deux sources de charge cognitive inutile dans ce devis d’assurance habitation.',
       visual: {
         frame: 'browser',
-        alt: 'Étape 2 d’un devis d’assurance habitation : surface du logement, une question « Souhaitez-vous la PNO ? », une liste de onze garanties à cocher sans regroupement, et un bouton « Continuer ».',
+        alt: 'Étape 2 d’un devis d’assurance habitation : surface du logement, une question « Souhaitez-vous la PNO ? » avec les choix Oui et Non, une rubrique « Garanties souhaitées » de onze cases à cocher sur deux colonnes, et un bouton « Continuer ».',
         html: fr(`<div class="mk-pad mk-stack" style="--gap:14px">
 <div data-hotspot="progress"><p class="mk-small mk-muted">Étape 2 sur 4</p><p class="mk-h2">Votre logement</p></div>
 <div class="mk-field" data-hotspot="surface"><span class="mk-label">Surface habitable</span><span class="mk-input" style="max-width:140px">62 m²</span></div>
@@ -461,7 +465,7 @@ Ici, les champs d’un même groupe sont espacés de 10 px. Avec 10 px entre les
       ],
       explanation: `Deux violations de la liste d’impeccable :
 
-- **Le mur d’options** : onze garanties à plat, sans hiérarchie. Correction : regrouper (essentielles, utiles selon votre situation, options), recommander un ensemble adapté au logement décrit, et replier le reste derrière « Personnaliser mes garanties ».
+- **Le mur d’options** : onze garanties à plat, sans hiérarchie. Correction : regrouper (« Essentielles », « Utiles selon votre situation », « Options »), recommander un ensemble adapté au logement décrit, et replier le reste derrière « Personnaliser mes garanties ».
 - **La barrière du jargon** : « PNO » oblige à traduire. Correction : poser la question en mots courants — « Êtes-vous propriétaire d’un logement que vous n’habitez pas ? » — ou définir le terme sur place.
 
 L’indicateur d’étape, le champ de surface et le bouton sont clairs.`,
@@ -475,7 +479,7 @@ L’indicateur d’étape, le champ de surface et le bouton sont clairs.`,
       prompt: 'Trouve les deux violations de charge cognitive sur cet écran de gestion des commandes.',
       visual: {
         frame: 'browser',
-        alt: 'Écran « Commandes » d’une boutique : fil d’Ariane, champ de recherche, quatre indicateurs aux fonds de couleurs vives, des onglets de filtre, et une liste de quatre commandes dont l’action prend une forme différente à chaque ligne.',
+        alt: 'Écran « Commandes » d’une boutique : fil d’Ariane, champ de recherche, quatre indicateurs chiffrés sur fonds rouge, vert, jaune et violet, des onglets de filtre, et une liste de quatre commandes suivies chacune d’une action : un bouton « Expédier », une icône de camion, une icône à trois points, puis un lien « Marquer expédiée ».',
         html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
 <div class="mk-row mk-between mk-wrap" style="--gap:8px"><div data-hotspot="crumbs"><p class="mk-small mk-muted">Boutique › Commandes</p><p class="mk-h2">Commandes</p></div><span class="db-search" data-hotspot="search"><i data-icon="search" style="--ico:15px"></i>N° ou client</span></div>
 <div class="db-kpis" data-hotspot="kpis"><div class="db-k db-k1"><i data-icon="trending-up"></i><b>128</b><span>Commandes</span></div><div class="db-k db-k2"><i data-icon="euro"></i><b>9 412 €</b><span>Ventes</span></div><div class="db-k db-k3"><i data-icon="truck"></i><b>14</b><span>À expédier</span></div><div class="db-k db-k4"><i data-icon="refresh-cw"></i><b>3</b><span>Retours</span></div></div>
@@ -516,7 +520,7 @@ Le fil d’Ariane, la recherche et les onglets de filtre sont clairs et cohéren
       context: 'Tu passes la check-list en 8 points d’impeccable sur l’écran de réservation d’une salle de sport. Trois points échouent : le focus unique, les choix minimaux et la mémoire de travail.',
       prompt: 'Comment qualifier la charge cognitive de cet écran ?',
       options: [
-        { id: 'low', label: 'Faible : rien à corriger', why: 'Faible correspond à 0 ou 1 échec.' },
+        { id: 'low', label: 'Faible : c’est bien', why: 'Faible correspond à 0 ou 1 échec.' },
         { id: 'moderate', label: 'Modérée : à traiter bientôt', why: 'Deux ou trois échecs : charge modérée.' },
         { id: 'high', label: 'Élevée : correction critique', why: 'Élevée commence à 4 échecs.' },
         { id: 'unknown', label: 'Impossible à dire sans test utilisateur', why: 'La check-list donne justement un verdict sans test, en comptant les échecs ; un test vérifiera ensuite les corrections.' },
@@ -537,7 +541,7 @@ Les points en échec désignent déjà les corrections : retirer ce qui distrait
       options: [
         { id: 'defer', label: 'Créer le compte avec l’e-mail et le mot de passe, guider vers une première course, puis demander chaque information au moment où elle sert.', why: 'Divulgation progressive : le minimum pour commencer, le reste quand il apporte quelque chose.' },
         { id: 'optional', label: 'Garder les 14 champs sur une page, en marquant 11 d’entre eux « facultatif ».', why: 'Les champs restent visibles : il faut encore les lire et décider de chacun.' },
-        { id: 'steps', label: 'Répartir les 14 champs sur 7 écrans de 2 champs.', why: 'Autant de décisions, sept transitions de plus — et toujours avant toute réussite.' },
+        { id: 'steps', label: 'Répartir les 14 champs sur 7 écrans de 2 champs.', why: 'Autant de décisions, six transitions de plus — et toujours avant toute réussite.' },
         { id: 'accordion', label: 'Replier les 11 champs de profil dans un accordéon « Plus d’infos », sur la page d’inscription.', why: 'Mieux qu’un mur de champs, mais tout est encore demandé avant que la personne ait vu ce que vaut l’application.' },
       ],
       answer: 'defer',
@@ -577,7 +581,7 @@ L’allure ou la fréquence d’entraînement prennent leur sens après une prem
         { id: 'chunking', label: 'Segmentation', why: 'Réussi : l’écran se découpe en petits groupes digestes (moyens de paiement, carte, action).' },
       ],
       answers: ['focus', 'memory'],
-      explanation: `Deux échecs sur huit : **charge modérée**, à traiter bientôt.
+      explanation: `Parmi les points proposés, deux échouent. Le bandeau brouille aussi la hiérarchie visuelle, qu’on peut compter comme un troisième échec : avec deux ou trois échecs, la charge est **modérée**, à traiter bientôt.
 
 - **Focus unique** : au moment de payer, rien ne doit concurrencer la tâche. Un bandeau « Ventes privées » invite à partir ailleurs — au pire moment.
 - **Mémoire de travail** : l’écran demande de se souvenir du montant vu à l’étape précédente. C’est un pont de mémoire ; le montant doit figurer sur l’écran de paiement, idéalement dans le bouton lui-même (par exemple « Payer 86,40 € »).
@@ -604,31 +608,33 @@ Vouloir tout supprimer mène à simplifier jusqu’à l’abstraction : on retir
       difficulty: 1,
       prompt: 'Un parcours en plusieurs étapes impose forcément plus de charge cognitive qu’une seule longue page.',
       answer: false,
-      explanation: `La charge dépend de ce qu’on doit considérer **en même temps**, pas du nombre d’écrans. Séquencer permet de se concentrer sur une décision avant la suivante : c’est le point « Une chose à la fois » de la check-list d’impeccable, et la correction de la « multitâche imposée ».
+      explanation: `La charge dépend de ce qu’on doit considérer **en même temps**, pas du nombre d’écrans. Séquencer permet de se concentrer sur une décision avant la suivante : c’est le point « Une chose à la fois » de la check-list d’impeccable, et la correction du « multitâche imposé ».
 
 À deux conditions : chaque étape porte une vraie décision (sinon on ajoute des transitions pour rien), et la progression reste visible (« Étape 2 sur 3 »), avec un récapitulatif pour n’avoir rien à retenir.`,
       takeaway: 'Séquencer réduit la charge quand chaque étape porte une décision et que la progression reste visible.',
       sources: ['imp:critique', 'imp:distill'],
     },
     {
-      id: 'cognitive-load-onboarding-order',
+      id: 'cognitive-load-method-order',
       type: 'order',
       difficulty: 2,
-      prompt: 'Range ces moments de la prise en main d’un outil de gestion de projet, du premier au dernier, selon la divulgation progressive.',
+      prompt: 'Range les étapes d’une évaluation de la charge cognitive d’un écran, de la première à la dernière.',
       items: [
-        { id: 'account', label: 'Créer le compte avec le strict nécessaire (e-mail et mot de passe)' },
-        { id: 'first', label: 'Réussir un premier projet, à partir d’un modèle prérempli' },
-        { id: 'profile', label: 'Compléter son profil quand l’information sert (fuseau horaire au premier rappel)' },
-        { id: 'advanced', label: 'Découvrir les automatisations quand une tâche se répète' },
+        { id: 'decisions', label: 'Repérer la tâche principale et chaque point de décision de l’écran' },
+        { id: 'count', label: 'Compter les options visibles à chaque point de décision' },
+        { id: 'checklist', label: 'Passer les 8 points de la check-list en notant chaque échec' },
+        { id: 'score', label: 'Compter les échecs et qualifier la charge : faible, modérée ou élevée' },
+        { id: 'report', label: 'Signaler les échecs et les points à plus de 4 options, avec l’urgence que donne le verdict' },
       ],
-      explanation: `Impeccable (*onboard*) : la prise en main n’a pas pour but d’enseigner tout le produit, mais d’amener au plus vite au moment qui prouve qu’il vaut la peine.
+      explanation: `Chaque étape s’appuie sur le résultat de la précédente :
 
-1. **Le minimum** pour créer le compte — on collecte le reste plus tard.
-2. **Une première réussite réelle**, guidée, avec un modèle ou des données d’exemple.
-3. **Les informations complémentaires**, demandées au moment où elles servent.
-4. **Les fonctions avancées**, découvertes en contexte, quand le besoin apparaît.`,
-      takeaway: 'Prise en main : le minimum d’abord, une première réussite vite, le reste en contexte, quand il sert.',
-      sources: ['imp:onboard', 'imp:critique'],
+1. **La tâche principale et les points de décision** : la tâche sert de repère au point « Focus unique », et c’est à chaque point de décision que la mémoire de travail est sollicitée.
+2. **Les options visibles**, comptées à chacun de ces points : 4 au plus, c’est gérable ; de 5 à 7, c’est la limite ; 8 et plus, la surcharge.
+3. **La check-list en 8 points** : le point « Choix minimaux » se juge directement sur ce décompte.
+4. **Le verdict** : 0 ou 1 échec, charge faible ; 2 ou 3, modérée ; 4 et plus, élevée.
+5. **Le rapport** : impeccable demande de signaler les échecs **et** chaque point de décision à plus de 4 options visibles. Le verdict fixe l’urgence : « à traiter bientôt » ou « correction critique ».`,
+      takeaway: 'Points de décision, options visibles, check-list, verdict, rapport : chaque étape de l’évaluation s’appuie sur la précédente.',
+      sources: ['imp:critique'],
     },
     {
       id: 'cognitive-load-violations-match',
@@ -643,7 +649,7 @@ Vouloir tout supprimer mène à simplifier jusqu’à l’abstraction : on retir
         { id: 'hidden', left: 'Navigation cachée', right: 'Afficher le fil d’Ariane et l’entrée active' },
         { id: 'jargon', left: 'Barrière du jargon', right: 'Définir sur place le terme métier inévitable' },
         { id: 'noise', left: 'Plancher de bruit visuel', right: 'Un élément principal, deux ou trois secondaires, le reste en retrait' },
-        { id: 'multitask', left: 'Multitâche imposée', right: 'Séquencer : une décision à la fois' },
+        { id: 'multitask', left: 'Multitâche imposé', right: 'Séquencer : une décision à la fois' },
       ],
       explanation: `Chaque violation a sa correction type, tirée d’impeccable :
 
@@ -652,7 +658,7 @@ Vouloir tout supprimer mène à simplifier jusqu’à l’abstraction : on retir
 - **Navigation cachée** → montrer la position : fil d’Ariane, état actif, progression.
 - **Barrière du jargon** → langage courant, définition sur place.
 - **Plancher de bruit visuel** → une hiérarchie nette.
-- **Multitâche imposée** → une chose à la fois.
+- **Multitâche imposé** → une chose à la fois.
 
 Les deux violations absentes ici — motif incohérent et changement de contexte — se corrigent en standardisant les composants et en réunissant au même endroit les informations d’une décision.`,
       takeaway: 'Regrouper, répéter, situer, traduire, hiérarchiser, séquencer : chaque violation a sa correction type.',

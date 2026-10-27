@@ -30,7 +30,7 @@ const ADDRESS_CSS = (p: string) => `
 .${p}-prog span { display: block; width: 50%; height: 100%; border-radius: 2px; background: #0b5d4b; }
 .${p}-body { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; }
 .${p}-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.${p} .mk-label small { font-weight: 400; color: #5a6172; }
+.${p} .mk-label small { font-size: 12px; font-weight: 400; color: #5a6172; }
 .${p}-tel { display: flex; align-items: center; gap: 8px; --ico: 15px; }
 .${p}-tel svg { color: #5a6172; }
 .${p}-check { display: flex; align-items: center; gap: 8px; }
@@ -73,7 +73,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .ush-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #d7e1f0; }
 .ush-h { font-size: 22px; font-weight: 800; line-height: 1.15; }
 .ush-btn { margin-top: 6px; padding: 8px 14px; border-radius: 999px; background: #fff; color: #1d2230; font-weight: 700; }
-.ush-chips { display: flex; gap: 8px; overflow: hidden; white-space: nowrap; }
+.ush-chips { display: flex; flex-wrap: wrap; gap: 8px; white-space: nowrap; }
 .ush-chips span { padding: 6px 12px; border: 1px solid #c7cedb; border-radius: 999px; font-weight: 600; }
 .ush-sec { display: flex; align-items: baseline; justify-content: space-between; }
 .ush-sec b { font-size: 15px; }
@@ -170,7 +170,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
     notes: `Deux accueils de boutique pour le même besoin — trouver un produit — et deux logiques opposées.
 
 - **Densité.** L’accueil américain compte cinq blocs et une action principale par bloc. L’accueil chinois aligne plus de vingt points d’entrée sur la même hauteur : l’appli y est un portail où l’on attend tous les services à portée de pouce, et l’écriture chinoise, compacte, loge plus d’information par ligne.
-- **Grille d’accès (金刚区).** Dix icônes sur deux lignes, aux libellés de deux caractères, ouvrent les canaux (supermarché, promotions, coupons, live, voyages). Côté américain, quatre catégories en pastilles suffisent.
+- **Grille d’accès (金刚区).** Dix icônes sur deux lignes, aux libellés de deux caractères, ouvrent les canaux (supermarché, promotions, coupons, vente en direct, voyages). Côté américain, quatre catégories en pastilles suffisent.
 - **Flux en cascade (瀑布流).** Des cartes de hauteurs variables sur deux colonnes invitent à défiler et à découvrir ; l’accueil américain propose une sélection courte dans une grille régulière.
 - **Urgence et promotions.** Vente flash avec compte à rebours, remise « 跨店每满300减50 » (50\u00a0¥ de moins par tranche de 300\u00a0¥, tous vendeurs confondus), pastilles rouges : la fête commerciale du 11.11 structure l’écran. Aux États-Unis, la promotion tient dans une bannière.
 - **Preuve sociale.** « 1.2万人付款 » (12\u00a0000 acheteurs) ou « 已售10万+ » (plus de 100\u00a0000 vendus) remplacent la note en étoiles.
@@ -199,7 +199,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
   <div class="usp-body">
     <p class="usp-brand">Pulse Audio</p>
     <p class="usp-title">Pulse Buds Pro Wireless Earbuds</p>
-    <p class="usp-rate"><span class="usp-stars"><i data-icon="star"></i><i data-icon="star"></i><i data-icon="star"></i><i data-icon="star"></i><i data-icon="star"></i></span>4.5 · 2,184 reviews</p>
+    <p class="usp-rate"><span class="usp-stars"><i data-icon="star"></i><i data-icon="star"></i><i data-icon="star"></i><i data-icon="star"></i><span class="usp-half"><i data-icon="star"></i><i data-icon="star"></i></span></span>4.5 · 2,184 reviews</p>
     <p class="usp-price">$99.00</p>
     <p class="usp-afford">or 4 interest-free payments of $24.75</p>
     <p class="usp-ship"><i data-icon="truck"></i><span><b>Free delivery Thu, Oct 29</b><br>Free 30-day returns</span></p>
@@ -218,6 +218,9 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .usp-rate { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #5a6172; }
 .usp-stars { display: flex; color: #b45309; --ico: 13px; }
 .usp-stars svg { fill: currentColor; }
+.usp-half { position: relative; display: flex; }
+.usp-half svg:first-child { fill: none; }
+.usp-half svg:last-child { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); }
 .usp-price { margin-top: 4px; font-size: 24px; font-weight: 800; }
 .usp-afford { margin-top: -4px; font-size: 12px; color: #5a6172; }
 .usp-ship { display: flex; align-items: flex-start; gap: 8px; padding: 10px 0; border-block: 1px solid #eceef2; --ico: 16px; }
@@ -286,7 +289,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
     notes: `La même paire d’écouteurs, vendue sur deux marchés.
 
 - **Ce qui entoure le prix.** La fiche japonaise rassemble prix taxe incluse (« 税込 », affichage obligatoire depuis avril 2021), livraison gratuite, points, coupon, date de livraison, stock, garantie et moyens de paiement. La fiche américaine montre le prix, l’offre de paiement fractionné et la livraison ; le reste est replié.
-- **Pourquoi.** Le contrôle de l’incertitude atteint 92 au Japon contre 46 aux États-Unis : l’exhaustivité rassure (anshin) et l’omission inquiète. Côté américain, une page aérée qui va à l’essentiel inspire confiance.
+- **Pourquoi.** Le contrôle de l’incertitude atteint 92 au Japon contre 46 aux États-Unis. Marcus et Gould associaient pourtant un score élevé à la simplicité ; au Japon, paradoxalement, la réassurance passe par l’exhaustivité (anshin) : l’omission inquiète. Le modèle des grandes places de marché pousse aussi à la densité. Côté américain, une page aérée qui va à l’essentiel inspire confiance.
 - **Titre.** Le titre japonais aligne les mots-clés (réduction de bruit, autonomie, étanchéité), comme sur les grandes places de marché ; le titre américain nomme simplement le produit.
 - **Actions.** Deux boutons d’achat (« カートに入れる », ajouter au panier, et « 今すぐ買う », acheter maintenant) et les favoris avec leur compteur ; une seule action principale côté américain.
 - **Prix.** 8\u00a0980\u00a0yens taxe incluse d’un côté ; 99\u00a0dollars hors taxes de l’autre, la sales tax s’ajoutant au paiement.
@@ -491,7 +494,7 @@ ${RADIO('brp', '#c2410c')}
 
 - **Moyens de paiement.** Allemagne : facture (on paie après réception), PayPal, prélèvement SEPA, puis la carte. Brésil : Pix (instantané, souvent remisé), carte en mensualités sans intérêts, boleto pour qui n’a pas de carte.
 - **Un prix par moyen de paiement.** Au Brésil, le prix Pix (R$\u00a0473,10, soit 5\u00a0% de remise) et la mensualité (10x de R$\u00a049,80) s’affichent à côté de chaque option. En Allemagne, un seul total, avec la TVA incluse détaillée (« inkl. 19\u00a0% MwSt. »).
-- **Bouton final.** En Allemagne, le libellé est imposé par la loi (§ 312j BGB) : « Zahlungspflichtig bestellen ». Au Brésil, « Finalizar compra » suffit.
+- **Bouton final.** En Allemagne, la loi (§ 312j BGB) exige un libellé sans ambiguïté sur l’obligation de payer : « Zahlungspflichtig bestellen » ou une formule équivalente (« Kaufen »). Au Brésil, « Finalizar compra » suffit.
 - **Données demandées.** Le Brésil demande le CPF, nécessaire à la facture électronique (nota fiscal), et dit pourquoi. L’Allemagne ne demande pas d’identifiant fiscal au consommateur.
 - **Confiance.** Label de boutique vérifiée et liens vers les AGB, le droit de rétractation et la protection des données en Allemagne ; accès direct à WhatsApp au Brésil.
 
@@ -499,7 +502,7 @@ ${RADIO('brp', '#c2410c')}
 
 - Choisis les moyens de paiement par marché, dans l’ordre d’usage local, plutôt qu’une liste mondiale identique partout.
 - Brésil : affiche le prix Pix et la mensualité dès la fiche produit, et annonce le délai de compensation du boleto.
-- Allemagne : facture et SEPA en bonne place, mentions légales près du bouton, libellé imposé.`,
+- Allemagne : facture et SEPA en bonne place, mentions légales près du bouton, libellé explicite exigé par la loi.`,
   },
 
   /* ------------------------------------------------------------------ 5. Address form, LTR / RTL */
@@ -552,8 +555,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
       css: `${ADDRESS_CSS('ara')}
 .ara { font-family: ${AR}; font-size: 14px; line-height: 1.6; }
 .ara .mk-label { font-size: 13px; }
-.ara-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.ara-three .mk-label { white-space: nowrap; }`,
+.ara-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 8px; }`,
     },
     notes: `Le même formulaire d’adresse en français et en arabe : en écriture de droite à gauche, la mise en page se retourne, mais pas tout.
 
@@ -656,7 +658,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
   /* ------------------------------------------------------------------ 7. Stock app */
   {
     id: 'bourse',
-    title: 'Appli boursière : couleurs de hausse et de baisse',
+    title: 'Appli boursière\u00a0: couleurs de hausse et de baisse',
     a: 'us',
     b: 'cn',
     visualA: {
@@ -725,7 +727,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
     <li><span class="cns-n"><b>深证成指</b><small>399001</small></span><span class="cns-v up">11,023.40</span><span class="cns-c up">+1.02%</span></li>
     <li><span class="cns-n"><b>创业板指</b><small>399006</small></span><span class="cns-v down">2,268.13</span><span class="cns-c down">-0.45%</span></li>
     <li><span class="cns-n"><b>沪深300</b><small>000300</small></span><span class="cns-v up">4,015.77</span><span class="cns-c up">+0.51%</span></li>
-    <li><span class="cns-n"><b>恒生指数</b><small>HSI</small></span><span class="cns-v down">25,610.32</span><span class="cns-c down">-0.83%</span></li>
+    <li><span class="cns-n"><b>科创50</b><small>000688</small></span><span class="cns-v down">1,036.48</span><span class="cns-c down">-0.83%</span></li>
   </ul>
   <div class="mk-tabbar"><span><i data-icon="house"></i>首页</span><span class="on"><i data-icon="chart-column"></i>行情</span><span><i data-icon="list"></i>自选</span><span><i data-icon="wallet"></i>交易</span><span><i data-icon="user"></i>我的</span></div>
 </div>`,
@@ -831,7 +833,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 .krb-cards small { font-size: 11px; color: #4e5968; }
 .krb-noti { display: flex; align-items: center; gap: 8px; margin: 8px 10px 10px; padding: 8px 12px; border-radius: 12px; background: #fff; font-size: 12px; --ico: 15px; }
 .krb-noti span { flex: 1; }
-.krb-noti small { color: #4e5968; }
+.krb-noti small { font-size: 11px; color: #4e5968; }
 .krb .mk-tabbar { font-size: 11px; }
 .krb .mk-tabbar > .on { color: #0d7a5f; }
 .krb-dot { position: relative; }
