@@ -6,6 +6,7 @@ const WCAG_255: SourceRef = {
   label: 'W3C — Comprendre le critère 2.5.5 (taille des cibles, renforcé)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html',
 };
+const NNG_CARDS: SourceRef = { label: 'Nielsen Norman Group — Cards: UI-Component Definition', url: 'https://www.nngroup.com/articles/cards-component/' };
 
 /* ---------- Shared mock pieces ---------- */
 
@@ -54,6 +55,7 @@ const PHONE_KPI_CSS = `
 .ph-top { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .ph-kpi { background: #f4f6f9; border-radius: 10px; padding: 10px 12px; }
 .ph-kpi b { display: block; font-size: 20px; }
+.mk-tabbar { font-size: 11px; }
 `;
 
 const layout: ModuleContent = {
@@ -64,7 +66,7 @@ const layout: ModuleContent = {
     'Grouper par la proximité, rythmer l’espace avec une échelle, ajuster la densité à l’usage et faire évoluer la structure d’un écran à l’autre, cibles tactiles comprises.',
   minutes: 11,
   commands: ['layout', 'distill'],
-  sources: ['imp:layout', 'imp:craft-floor', 'imp:distill', 'imp:operate', 'imp:detector', 'wcag:target', PROXIMITY],
+  sources: ['imp:layout', 'imp:craft-floor', 'imp:distill', 'imp:operate', 'imp:detector', 'wcag:target', PROXIMITY, NNG_CARDS],
   sections: [
     {
       id: 'lecture',
@@ -81,14 +83,14 @@ Avant de toucher un espacement, formule une **thèse spatiale** :
 - la densité et le rythme voulus ;
 - comment la structure change selon le conteneur, l’écran, le mode de saisie et les contenus extrêmes.
 
-La hiérarchie suit la priorité du produit, pas les réglages par défaut d’un framework.`,
+La hiérarchie suit la priorité du produit, pas les réglages par défaut d’un framework. Regarde d’abord le rendu, puis lance le détecteur : il repère des formes connues, mais un scan propre ne prouve ni la hiérarchie ni le rythme.`,
       examples: [
         {
           title: 'Le même écran, vu en plissant les yeux',
           bad: {
             alt: 'Écran flouté d’une application de cours de yoga : quatre tuiles de même taille et de même poids, sans élément dominant.',
             html: `<div class="mk-pad sq"><div class="mk-grid" style="--gap:10px">
-  <div class="mk-card mk-stack" style="--gap:6px"><p class="mk-strong">Prochain cours</p><p class="mk-small">Vinyasa · jeudi 18 h 30</p><span class="mk-btn mk-btn--s mk-btn--ghost">Réserver</span></div>
+  <div class="mk-card mk-stack" style="--gap:6px"><p class="mk-strong">Prochain cours</p><p class="mk-small">Vinyasa · jeudi 18&nbsp;h&nbsp;30</p><span class="mk-btn mk-btn--s mk-btn--ghost">Réserver</span></div>
   <div class="mk-card mk-stack" style="--gap:6px"><p class="mk-strong">Abonnement</p><p class="mk-small">8 séances restantes</p><span class="mk-btn mk-btn--s mk-btn--ghost">Gérer</span></div>
   <div class="mk-card mk-stack" style="--gap:6px"><p class="mk-strong">Messages</p><p class="mk-small">2 non lus</p><span class="mk-btn mk-btn--s mk-btn--ghost">Ouvrir</span></div>
   <div class="mk-card mk-stack" style="--gap:6px"><p class="mk-strong">Boutique</p><p class="mk-small">Tapis, briques, sangles</p><span class="mk-btn mk-btn--s mk-btn--ghost">Voir</span></div>
@@ -97,9 +99,9 @@ La hiérarchie suit la priorité du produit, pas les réglages par défaut d’u
           },
           badNote: 'Floutée, la page n’est qu’une grille de blocs égaux : rien ne mène.',
           good: {
-            alt: 'Le même contenu flouté, organisé autour d’un grand bloc « Prochain cours » avec un bouton plein, suivi d’une liste plus discrète.',
+            alt: 'Le même contenu flouté, organisé autour d’un grand titre annonçant le prochain cours et d’un bouton plein, suivis d’une liste plus discrète.',
             html: `<div class="mk-pad sq mk-stack" style="--gap:18px">
-  <div class="mk-stack" style="--gap:6px"><p class="mk-small mk-muted">Prochain cours</p><p class="mk-h1">Vinyasa, jeudi 18 h 30</p><span class="mk-btn" style="align-self:flex-start">Réserver ma place</span></div>
+  <div class="mk-stack" style="--gap:12px"><div class="mk-stack" style="--gap:4px"><p class="mk-h1">Vinyasa, jeudi 18&nbsp;h&nbsp;30</p><p class="mk-muted">Prochain cours · 6 places libres</p></div><span class="mk-btn" style="align-self:flex-start">Réserver ma place</span></div>
   <ul class="mk-list"><li><span class="mk-grow">Abonnement</span><span class="mk-small mk-muted">8 séances</span></li><li><span class="mk-grow">Messages</span><span class="mk-small mk-muted">2 non lus</span></li><li><span class="mk-grow">Boutique</span><span class="mk-small mk-muted">Tapis, briques</span></li></ul>
 </div>`,
             css: SQUINT_CSS,
@@ -145,11 +147,11 @@ Garde distincts les contenus distincts, sans transformer chaque groupe en compos
     {
       id: 'rythme',
       title: 'Rythme : une échelle et des contrastes d’espace',
-      body: `Le **rythme** naît du contraste délibéré entre intervalles serrés et intervalles généreux. Une même valeur répétée partout donne le même poids à tout : le détecteur d’impeccable signale cet *espacement monotone* quand une seule valeur domine la majorité des espacements.
+      body: `Le **rythme** naît du contraste délibéré entre intervalles serrés et intervalles généreux. Une même valeur répétée partout donne le même poids à tout : le détecteur d’impeccable signale cet *espacement monotone* quand une même valeur représente plus de 60 % des espacements relevés, avec trois valeurs distinctes au plus.
 
 - Utilise une **échelle documentée** plutôt que des valeurs au cas par cas. Une base de **4** (4, 8, 12, 16, 24, 32, 48, 64…) offre en général les marches intermédiaires utiles (4 ou 12, par exemple) qu’une base de 8 seule ne permet pas.
 - **Plus d’espace au-dessus d’un titre qu’en dessous** : le titre se lie au contenu qu’il introduit. Quand il colle au bloc précédent, chaque section semble légender la précédente (règle *heading-rhythm*).
-- Utilise \`gap\` pour le rythme entre éléments frères : la relation est portée par le parent, sans marge parasite après le dernier élément.
+- Utilise \`gap\` quand l’écart est le même entre tous les frères (les lignes d’une liste, les champs d’un groupe) : la relation est portée par le parent, sans marge parasite après le dernier élément. Pour des écarts différenciés, imbrique des groupes, chacun avec son \`gap\`, ou donne une marge à l’élément qui doit s’écarter.
 - Nomme par leur rôle les espacements qui se répètent (\`--space-group\`, \`--space-section\`).
 
 La variation n’est pas un but : la répétition aide à reconnaître, on la rompt quand le contenu ou la priorité change. Et les corrections optiques se font en dernier, après avoir regardé le rendu.`,
@@ -180,11 +182,11 @@ La variation n’est pas un but : la répétition aide à reconnaître, on la ro
     {
       id: 'cartes',
       title: 'Cartes : le conteneur paresseux',
-      body: `Impeccable appelle la carte **le conteneur paresseux** : on l’ajoute par défaut, sans se demander si l’élément est vraiment un objet autonome. Une grille de cartes identiques (icône, titre, texte) comme structure de page est un réflexe à refuser.
+      body: `Impeccable appelle la carte **le conteneur paresseux** : celui qu’on ajoute par défaut. Une grille de cartes identiques (icône, titre, texte) comme structure de page est un réflexe à refuser.
 
-- **Une carte se justifie** quand l’élément est un objet à part entière : comparable, déplaçable, cliquable en entier, avec ses propres actions.
+- **Une carte se justifie** pour un objet autonome, qu’on parcourt et qu’on ouvre d’un clic, avec ses propres actions — surtout quand ses voisines contiennent autre chose (un tableau de bord, un fil d’actualité). Pour **comparer** ou **chercher** parmi des éléments semblables, une liste ou un tableau se lisent mieux (Nielsen Norman Group).
 - **Jamais de cartes imbriquées** : une carte dans une carte crée du bruit et une profondeur inutile. Aplatis avec l’espacement, la typographie et des séparateurs.
-- **Déclare l’élévation une fois** : une bordure *ou* une ombre, pas une bordure fine sous une large ombre.
+- **La profondeur** (ombre, élévation) ne sert qu’à clarifier un état ou une hiérarchie. Déclare-la une fois : une bordure *ou* une ombre, pas une bordure fine sous une large ombre.
 - **Marge intérieure** : au moins 8 px, idéalement 12 à 16 px, dans tout conteneur bordé ou coloré ; sinon le texte touche le bord (règle *cramped-padding*).
 - Dans un carrousel horizontal, garde **le même retrait des deux côtés** : une carte collée au bord, coins coupés, trahit un panneau plus large que sa zone visible (règle *edge-flush-cards*).`,
       examples: [
@@ -218,12 +220,12 @@ La variation n’est pas un but : la répétition aide à reconnaître, on la ro
       body: `La quantité d’information par zone dépend de la **fréquence d’usage**, de la **complexité des décisions** et du **mode** de la surface.
 
 - **Opérer** (outil quotidien, back-office) : structure prévisible, densité stable. Un tableau de nombreuses lignes est légitime quand la personne en a besoin ; la cohérence d’un écran à l’autre vaut mieux que la surprise.
-- **Persuader** et **Expérience** : la composition peut être asymétrique, aérée, volontairement disruptive quand l’univers le justifie.
+- **Persuader** et **Expérience** : la composition peut être asymétrique, fluide ou volontairement disruptive quand l’univers le justifie.
 - **Lire** : une colonne de lecture confortable et une navigation linéaire.
 
 Pour simplifier un écran (commande *distill*) : **une** action principale, peu d’actions secondaires, le reste en divulgation progressive ; un flux vertical plutôt qu’une grille complexe ; un seul alignement ; des cartes retirées quand l’espacement suffit.
 
-Mais simplifier n’est pas cacher : un écran si épuré qu’on ne sait plus quoi faire n’est pas minimaliste, il est obscur. Ne retire jamais une information dont la personne a besoin pour décider.`,
+Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clair, oui ; retirer ce dont la personne a besoin pour décider, non. Un écran si épuré qu’on ne sait plus quoi faire n’est pas minimaliste, il est obscur.`,
     },
     {
       id: 'responsive',
@@ -233,9 +235,9 @@ Mais simplifier n’est pas cacher : un écran si épuré qu’on ne sait plus q
 - Préfère des composants **sensibles à leur conteneur** (\`@container\`) quand le même composant vit dans des contextes différents.
 - Garde l’**ordre du DOM et du focus** cohérent avec l’ordre visuel.
 - Teste les extrêmes : textes longs, traductions, zoom, états vides, éléments collants, encoches. Un contenu qui déborde de son conteneur, ou une colonne qui s’étire loin sous la ligne de flottaison pendant que sa voisine flotte dans le vide, sont des défauts de structure.
-- Le texte courant ne touche jamais le bord de l’écran : au moins 16 px de marge latérale (12 px sur les écrans de 480 px de large ou moins), idéalement 24 à 32 px.
+- Le texte courant ne touche jamais le bord de l’écran : vise au moins 16 px de marge latérale, idéalement 24 à 32 px. Le détecteur signale moins de 12 px sur un écran de 480 px de large ou moins, moins de 16 px au-delà.
 
-**Cibles tactiles.** Une icône peut être petite à l’œil ; sa **zone d’appui**, non. Le WCAG 2.2 (critère 2.5.8, niveau AA) exige au moins **24 × 24 px CSS**, ou un espacement équivalent ; le niveau AAA et les guides de plateformes visent **44 × 44** (Apple : 44 pt, Material : 48 dp). Agrandis la zone avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
+**Cibles tactiles.** Une icône peut être petite à l’œil ; sa **zone d’appui**, non. Le WCAG 2.2 (critère 2.5.8, niveau AA) exige au moins **24 × 24 px CSS**, ou un espacement équivalent ; le niveau AAA et les guides de plateformes visent **au moins 44 × 44** (Apple : 44 pt, Material : 48 dp). Agrandis la zone avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
       examples: [
         {
           title: 'Une barre d’outils sur téléphone',
@@ -247,12 +249,12 @@ Mais simplifier n’est pas cacher : un écran si épuré qu’on ne sait plus q
           },
           badNote: 'Des cibles de 16 × 16 px collées : un pouce en touche deux à la fois.',
           good: {
-            alt: 'Même barre d’outils : les icônes gardent un dessin discret mais chacune occupe une zone ronde de 44 px.',
+            alt: 'Même barre d’outils : les icônes gardent leur dessin de 16 px, mais chacune occupe une zone ronde de 44 px.',
             frame: 'phone',
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Le retour des tramways</p><p class="mk-small mk-muted">Lecture 6 min</p><div class="mk-row tb" style="--gap:4px;margin-inline-start:-12px">${TOOL_ICONS.map((i) => `<span class="tb-b"><i data-icon="${i}" style="--ico:20px"></i></span>`).join('')}</div><p>Dans vingt villes françaises, le tram redevient l’épine dorsale des transports…</p></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Le retour des tramways</p><p class="mk-small mk-muted">Lecture 6 min</p><div class="mk-row tb" style="--gap:4px;margin-inline-start:-12px">${TOOL_ICONS.map((i) => `<span class="tb-b"><i data-icon="${i}" style="--ico:16px"></i></span>`).join('')}</div><p>Dans vingt villes françaises, le tram redevient l’épine dorsale des transports…</p></div>`,
             css: `.tb { color: #36405a; } .tb-b { width: 44px; height: 44px; border-radius: 50%; display: inline-grid; place-items: center; background: #f1f3f6; }`,
           },
-          goodNote: 'Dessin de 20 px, zone d’appui de 44 × 44 px : facile à viser, sans alourdir.',
+          goodNote: 'Même dessin de 16 px, zone d’appui de 44 × 44 px : facile à viser, sans alourdir.',
         },
       ],
     },
@@ -260,17 +262,17 @@ Mais simplifier n’est pas cacher : un écran si épuré qu’on ne sait plus q
   rules: [
     { id: 'squint', front: 'En quoi consiste le test du plissement d’yeux ?', back: 'Flouter l’écran : on doit encore reconnaître l’élément principal, le secondaire et les grands groupes, dans l’ordre.' },
     { id: 'proximity', front: 'Premier outil pour montrer que des éléments vont ensemble ?', back: 'La proximité : serrés dans un groupe, nettement séparés entre groupes. Le conteneur vient seulement si elle ne suffit pas.' },
-    { id: 'heading-space', front: 'Où mettre le plus d’espace autour d’un titre ?', back: 'Au-dessus. Le titre se lie au contenu qu’il introduit, pas au bloc précédent.' },
+    { id: 'heading-space', front: 'Plus d’espace au-dessus d’un intertitre qu’en dessous : est-ce suffisant ?', back: 'Non : l’espace au-dessus doit aussi dépasser nettement l’écart entre deux paragraphes, sinon la nouvelle section ne se détache pas.' },
     { id: 'scale', front: 'Quelle échelle d’espacement adopter ?', back: 'Une échelle documentée en base 4 (4, 8, 12, 16, 24, 32, 48…), plutôt que des valeurs au cas par cas.' },
-    { id: 'monotonous', front: 'Pourquoi pas 16 px partout ?', back: 'Un intervalle unique donne le même poids à tout : plus de groupes visibles, plus de rythme.' },
+    { id: 'monotonous', front: 'Pourquoi pas 16 px partout ?', back: 'Un intervalle unique donne le même poids à tout : les groupes et le rythme disparaissent.' },
     { id: 'nested', front: 'Une carte dans une carte ?', back: 'Jamais. Aplatis avec l’espacement, la typographie et des séparateurs.' },
-    { id: 'cards', front: 'Quand une carte se justifie-t-elle ?', back: 'Quand l’élément est un objet autonome (comparable, déplaçable, cliquable en entier), pas comme conteneur par défaut.' },
-    { id: 'padding', front: 'Marge intérieure minimale d’un conteneur bordé ou coloré ?', back: '8 px au minimum, idéalement 12 à 16 px.' },
-    { id: 'gap', front: '`gap` ou marges sur les enfants ?', back: '`gap` pour le rythme entre frères : la relation est portée par le parent, sans marge parasite au bout.' },
+    { id: 'cards', front: 'Quand une carte se justifie-t-elle ?', back: 'Pour un objet autonome qu’on parcourt et qu’on ouvre d’un clic, souvent différent de ses voisins. Pour comparer ou chercher parmi des éléments semblables, préfère une liste ou un tableau.' },
+    { id: 'padding', front: 'Tu poses un fond coloré derrière un texte : que dois-tu ajouter aussi ?', back: 'Une marge intérieure d’au moins 8 px, idéalement 12 à 16 : le fond dessine un bord, et le texte ne doit pas le toucher.' },
+    { id: 'gap', front: '`gap` ou marges sur les enfants ?', back: '`gap` quand tous les frères sont espacés pareil : le parent porte la relation, sans marge parasite au bout. Pour des écarts différents, imbrique des groupes ou ajoute une marge ciblée.' },
     { id: 'density', front: 'Comment choisir la densité d’un écran ?', back: 'Selon la fréquence d’usage, la complexité des décisions et le mode : un outil quotidien peut être dense, une page d’accueil respire.' },
     { id: 'responsive', front: 'Qu’est-ce qu’un responsive structurel ?', back: 'Réordonner, replier, faire refluer ou révéler selon ce qui reste important — pas seulement rétrécir.' },
-    { id: 'edge', front: 'Marge latérale minimale du texte courant sur mobile ?', back: '16 px (12 px sur les écrans de 480 px de large ou moins) ; idéalement 24 à 32 px.' },
-    { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '24 × 24 px CSS (WCAG 2.2 AA), 44 × 44 recommandé. La zone d’appui peut dépasser le dessin de l’icône.' },
+    { id: 'edge', front: 'Quelle marge latérale pour le texte courant ?', back: 'Vise au moins 16 px, idéalement 24 à 32. Le détecteur signale moins de 12 px sur un écran de 480 px de large ou moins, moins de 16 px au-delà.' },
+    { id: 'targets', front: 'La zone d’appui d’une icône doit-elle avoir la taille de son dessin ?', back: 'Non : le dessin peut rester petit. Agrandis la zone avec du `padding` ou un pseudo-élément : 24 × 24 px au moins (WCAG 2.2 AA), idéalement 44 × 44.' },
   ],
   exercises: [
     {
@@ -336,7 +338,7 @@ La version recommandée crée deux intervalles très différents — serré à l
       ideal: 32,
       explanation: `Un intertitre appartient au contenu qu’il **introduit**. Il lui faut donc plus d’espace au-dessus qu’en dessous : ici, 8 px le séparent de son paragraphe, et 12 px séparent deux paragraphes d’une même section.
 
-- Vers 4 à 12 px, l’intertitre colle au paragraphe précédent : il semble le conclure au lieu d’ouvrir une section (règle *heading-rhythm* du détecteur). Jusqu’à une vingtaine de pixels, la coupure reste à peine plus marquée qu’entre deux paragraphes.
+- De 0 à 8 px, l’intertitre est aussi près, voire plus près, du paragraphe précédent que du sien : il semble le conclure au lieu d’ouvrir une section (règle *heading-rhythm* du détecteur). De 10 à une vingtaine de pixels, la coupure reste à peine plus marquée que l’écart de 12 px entre deux paragraphes.
 - Autour de 32 px — quatre fois l’espace sous le titre, près de trois fois l’écart entre paragraphes —, la coupure se voit sans effort.
 - Au-delà d’environ 40 px, dans une colonne aussi compacte, les sections se détachent et la page se fragmente.`,
       takeaway: 'Plus d’espace au-dessus d’un titre qu’en dessous, et nettement plus que l’écart entre deux paragraphes.',
@@ -424,17 +426,17 @@ Pour séparer des sous-parties, aplatis : l’**espacement**, la **typographie**
       difficulty: 2,
       prompt: 'Sur une page de paramètres, chacun des quinze réglages est enfermé dans sa propre carte ombrée. Quelle est la meilleure correction ?',
       options: [
-        { id: 'flatten', label: 'Retirer les cartes, regrouper les réglages sous des intertitres et les séparer par l’espace et de fins traits.', why: 'Les réglages ne sont pas des objets autonomes : la proximité, les intertitres et des séparateurs les organisent sans boîtes.' },
+        { id: 'flatten', label: 'Retirer les cartes et grouper les réglages sous des intertitres.', why: 'Les réglages ne sont pas des objets autonomes : la proximité, les intertitres et des séparateurs les organisent sans boîtes.' },
         { id: 'shadow', label: 'Accentuer les ombres pour mieux distinguer les cartes.', why: 'On renforce le bruit au lieu de le retirer : quinze boîtes plus marquées restent quinze boîtes.' },
         { id: 'wrap', label: 'Regrouper les cartes par thème dans de grandes cartes englobantes.', why: 'On crée des cartes imbriquées, que le plancher de qualité refuse toujours.' },
         { id: 'colors', label: 'Donner une couleur de fond différente à chaque carte.', why: 'La couleur décorative n’organise rien et dilue les couleurs qui ont un rôle.' },
       ],
       answer: 'flatten',
-      explanation: `Impeccable appelle la carte **le conteneur paresseux** : on l’ajoute sans se demander si l’élément est un objet autonome. Un réglage n’en est pas un : on ne le compare pas, on ne le déplace pas, on ne le clique pas en entier.
+      explanation: `Impeccable appelle la carte **le conteneur paresseux**. Un bon test : l’élément est-il un objet autonome, qu’on ouvre d’un clic et qui porte ses propres actions ? Un réglage n’en est pas un : il se règle sur place, au milieu d’éléments semblables. Or, pour des éléments homogènes, une liste se parcourt mieux que des cartes (Nielsen Norman Group).
 
 La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à la mise en page ; l’**espacement** et l’**alignement** suffisent. Groupe les réglages par thème, sous des intertitres, et garde les boîtes pour les vrais objets.`,
       takeaway: 'Une carte se mérite : réserve-la aux objets autonomes et organise le reste par l’espace, les intertitres et les séparateurs.',
-      sources: ['imp:craft-floor', 'imp:distill'],
+      sources: ['imp:craft-floor', 'imp:distill', NNG_CARDS],
     },
     {
       id: 'layout-page-hotspot',
@@ -445,7 +447,7 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
         alt: 'Page « Mon abonnement » : en-tête, bandeau bleu d’essai gratuit, carte « Facturation », intertitre « Historique des paiements », liste de paiements et bouton « Changer d’offre ».',
         frame: 'browser',
         html: `<div class="mk-pad" style="display:flex;flex-direction:column">
-  <div class="mk-row mk-between" data-hotspot="header"><p class="mk-h2">Mon abonnement</p><span class="mk-small mk-muted">Camille Laurent</span></div>
+  <div class="mk-row mk-between cs-head" data-hotspot="header"><p class="mk-h2">Mon abonnement</p><span class="mk-small mk-muted">Camille Laurent</span></div>
   <p class="cs-trial" data-hotspot="cramped">Votre essai gratuit se termine dans 3 jours. Ajoutez un moyen de paiement pour continuer.</p>
   <div class="mk-card mk-stack" style="--gap:10px" data-hotspot="nested">
     <p class="mk-strong">Facturation</p>
@@ -455,7 +457,9 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
   <ul class="mk-list" data-hotspot="history"><li><span class="mk-grow">1er mars · Offre Atelier</span><span class="mk-price">19,00 €</span></li><li><span class="mk-grow">1er février · Offre Atelier</span><span class="mk-price">19,00 €</span></li></ul>
   <span class="mk-btn" data-hotspot="cta" style="align-self:flex-start;margin-top:16px">Changer d’offre</span>
 </div>`,
-        css: `.cs-trial { margin: 16px 0; background: #e8f0fe; color: #1a3a7a; padding: 1px 3px; border-radius: 6px; }
+        css: `.cs-head { flex-wrap: wrap; row-gap: 2px; }
+.cs-head > * { white-space: nowrap; }
+.cs-trial { margin: 16px 0; background: #e8f0fe; color: #1a3a7a; padding: 1px 3px; border-radius: 6px; }
 .cs-in { border: 1px solid #e1e4ea; border-radius: 10px; padding: 12px; }
 .cs-in2 { border: 1px solid #e1e4ea; border-radius: 8px; padding: 8px 10px; box-shadow: 0 1px 3px rgb(15 20 35 / 0.1); }
 .cs-h { font-size: 16px; font-weight: 700; margin-top: 4px; margin-bottom: 24px; }`,
@@ -464,7 +468,7 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
         { id: 'cramped', label: 'Bandeau d’essai gratuit', correct: true, why: 'Le texte touche presque les bords du fond bleu (1 à 3 px) : il faut au moins 8 px, idéalement 12 à 16 px, dans un conteneur coloré.' },
         { id: 'nested', label: 'Carte « Facturation »', correct: true, why: 'Une carte qui contient un cadre qui contient une carte ombrée : trois niveaux d’emboîtement pour une seule information.' },
         { id: 'heading', label: 'Intertitre « Historique des paiements »', correct: true, why: '4 px au-dessus, 24 px en dessous : l’intertitre colle à la carte précédente et s’éloigne de la liste qu’il introduit.' },
-        { id: 'header', label: 'En-tête de page', correct: false, why: 'Titre et nom du compte alignés sur une ligne : clair et sobre.' },
+        { id: 'header', label: 'En-tête de page', correct: false, why: 'Titre de page et nom du compte, sans décor : clair et sobre.' },
         { id: 'history', label: 'Liste des paiements', correct: false, why: 'Lignes régulières, montants en chiffres tabulaires, séparateurs fins : rien à corriger.' },
         { id: 'cta', label: 'Bouton « Changer d’offre »', correct: false, why: 'Action nommée, bien détachée de la liste.' },
       ],
@@ -494,11 +498,12 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
         css: `.rc-title { padding: 10px 16px 8px; }
 .rc-img { margin: 0 16px; }
 .rc-tools { display: flex; gap: 4px; padding: 8px 16px; color: #36405a; }
-.rc-body { padding: 4px 0 14px; line-height: 1.5; }`,
+.rc-body { padding: 4px 0 14px; line-height: 1.5; }
+.mk-tabbar { font-size: 11px; }`,
       },
       hotspots: [
-        { id: 'body', label: 'Paragraphe de préparation', correct: true, why: 'Le texte touche les bords de l’écran : il faut au moins 16 px de marge latérale (12 px sur les écrans de 480 px ou moins), idéalement 24 à 32.' },
-        { id: 'tools', label: 'Rangée d’icônes', correct: true, why: 'Quatre cibles de 14 px espacées de 4 px : bien sous les 24 × 24 px du WCAG 2.2, et impossibles à toucher sans erreur.' },
+        { id: 'body', label: 'Paragraphe de préparation', correct: true, why: 'Le texte touche les bords de l’écran : vise au moins 16 px de marge latérale, idéalement 24 à 32 (sur un téléphone, le détecteur signale moins de 12 px).' },
+        { id: 'tools', label: 'Rangée d’icônes', correct: true, why: 'Quatre cibles de 14 px espacées de 4 px : bien sous les 24 × 24 px du WCAG 2.2, et difficiles à toucher sans erreur.' },
         { id: 'title', label: 'Titre de la recette', correct: false, why: 'Aligné sur la même marge de 16 px que la photo : cohérent.' },
         { id: 'photo', label: 'Photo', correct: false, why: 'Même retrait que le titre, proportions fixes : rien à corriger.' },
         { id: 'tabbar', label: 'Barre d’onglets', correct: false, why: 'Quatre onglets larges, icône et libellé : des cibles confortables.' },
@@ -507,19 +512,19 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
 
 - **Marges latérales** : un texte collé au bord de l’écran se lit mal et paraît coupé. Le détecteur d’impeccable le signale sous 16 px (12 px sur les écrans de 480 px ou moins) et recommande 24 à 32 px.
 - **Cibles tactiles** : le WCAG 2.2 exige au moins 24 × 24 px CSS par cible (critère 2.5.8), et 44 × 44 est recommandé. Le dessin peut rester petit : c’est la zone d’appui qu’on agrandit, avec du \`padding\`.`,
-      takeaway: 'Sur mobile : 16 px de marge latérale au minimum, et des zones d’appui d’au moins 24 px, idéalement 44.',
+      takeaway: 'Sur mobile : vise 16 px de marge latérale (jamais moins de 12), et des zones d’appui d’au moins 24 px, idéalement 44.',
       sources: ['imp:detector', 'wcag:target', 'imp:layout'],
     },
     {
       id: 'layout-density-choice',
       type: 'choice',
       difficulty: 2,
-      prompt: 'Des comptables saisissent des écritures toute la journée dans ce logiciel. Quelle densité pour la liste des écritures ?',
+      prompt: 'Des comptables saisissent des écritures toute la journée dans leur logiciel. Quelle densité pour la liste des écritures ?',
       options: [
-        { id: 'dense', label: 'Un tableau dense : lignes compactes, colonnes alignées, chiffres tabulaires, beaucoup d’écritures visibles à la fois.', why: 'Usage quotidien et intensif : la densité devient une aide, et la structure stable permet de travailler vite.' },
+        { id: 'dense', label: 'Un tableau compact : colonnes alignées, une trentaine d’écritures à l’écran.', why: 'Usage quotidien et intensif : la densité devient une aide, et la structure stable permet de travailler vite.' },
         { id: 'airy', label: 'De grandes cartes aérées, une écriture par carte, comme sur une page d’accueil.', why: 'Quelques écritures à la fois : on fait défiler sans cesse et on perd la vue d’ensemble.' },
-        { id: 'wizard', label: 'Un assistant pas à pas : une écriture par écran, un champ à la fois.', why: 'Utile pour une tâche rare et complexe, pénible pour une saisie répétée cent fois par jour.' },
-        { id: 'varied', label: 'Une mise en page qui change selon les jours pour rester stimulante.', why: 'La surprise nuit à un outil quotidien : la cohérence d’un écran à l’autre est une vertu.' },
+        { id: 'tall', label: 'Des lignes hautes avec avatar et résumé, huit écritures par écran.', why: 'Avatar et résumé n’aident ni à saisir ni à vérifier : avec huit lignes par écran, on défile sans cesse.' },
+        { id: 'paged', label: 'Dix écritures par page, avec une pagination, pour rester lisible.', why: 'La liste se morcelle : on tourne les pages au lieu de parcourir et de comparer. La lisibilité vient de l’alignement, pas d’un petit nombre de lignes.' },
       ],
       answer: 'dense',
       explanation: `La densité se choisit selon la **fréquence d’usage**, la **complexité des décisions** et le **mode** de la surface. Un logiciel de comptabilité est une surface *Opérer* : la personne connaît l’outil et veut voir beaucoup, vite.
@@ -568,7 +573,7 @@ Impeccable l’autorise explicitement : des tableaux de nombreuses lignes, des p
       answer: 'structural',
       explanation: `Un responsive réussi est **structurel** : on réordonne, on replie, on fait refluer ou on révèle selon ce qui reste important sur un petit écran. Ici, la barre latérale devient un menu et des onglets, l’indicateur principal passe en tête, les colonnes s’empilent.
 
-Rétrécir l’ensemble rend tout illisible ; garder la mise en page d’ordinateur impose un défilement horizontal et cache la moitié du contenu (le WCAG demande qu’un contenu reste utilisable à 320 px de large sans défilement dans les deux sens).`,
+Rétrécir l’ensemble rend tout illisible ; garder la mise en page d’ordinateur impose un défilement horizontal et cache la moitié du contenu (le WCAG demande qu’un contenu reste utilisable à 320 px de large sans devoir défiler à la fois horizontalement et verticalement).`,
       takeaway: 'Sur petit écran, change la structure — replier, empiler par priorité, révéler — au lieu de rétrécir ou de laisser déborder.',
       sources: ['imp:layout', 'imp:operate', { label: 'W3C — Comprendre le critère 1.4.10 (redistribution)', url: 'https://www.w3.org/WAI/WCAG22/Understanding/reflow.html' }],
     },
@@ -607,7 +612,7 @@ Ces valeurs varient selon la densité du produit ; l’**ordre**, lui, ne change
         { id: 'nested', left: 'Des cartes dans des cartes', right: 'Aplatir : espace, typographie, séparateurs' },
         { id: 'mono', left: 'Le même espacement de 16 px partout', right: 'Serrer les groupes, espacer les sections' },
         { id: 'flush', left: 'Les cartes d’un carrousel sont coupées au bord', right: 'Le même retrait des deux côtés du défilement' },
-        { id: 'edge', left: 'Le texte touche le bord de l’écran mobile', right: 'Au moins 16 px de marge latérale' },
+        { id: 'overflow', left: 'Un long nom de produit sort de son conteneur', right: 'Laisser le texte passer à la ligne' },
       ],
       explanation: `Chaque règle du détecteur a sa correction structurelle :
 
@@ -616,8 +621,8 @@ Ces valeurs varient selon la densité du produit ; l’**ordre**, lui, ne change
 - *nested-cards* : on retire des boîtes au lieu d’en ajouter ;
 - *monotonous-spacing* : on crée des contrastes d’espace ;
 - *edge-flush-cards* : un panneau plus large que sa zone visible coupe ses cartes ;
-- *body-text-viewport-edge* : 16 px de marge (12 px sur les écrans de 480 px ou moins), 24 à 32 idéalement.`,
-      takeaway: 'Chaque défaut d’espace a sa correction : ouvrir au-dessus des titres, marger les encadrés, aplatir, rythmer, retirer le texte des bords.',
+- *text-overflow* : un contenu plus large que son conteneur ; on le laisse passer à la ligne ou on contraint sa largeur.`,
+      takeaway: 'Chaque défaut d’espace a sa correction : ouvrir au-dessus des titres, marger les encadrés, aplatir, rythmer, aligner les retraits, laisser le texte passer à la ligne.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
     {
@@ -661,7 +666,7 @@ Le WCAG 2.2 exige au moins **24 × 24 px CSS** par cible (critère 2.5.8, niveau
       explanation: `Les trois bons choix ont un point commun : ils rendent l’espace **systématique** et **porteur de sens**. Une échelle limite les valeurs, \`gap\` exprime la relation entre frères, la proximité groupe avant toute boîte.
 
 Les trois autres sont des défauts classiques : titre à égale distance de deux blocs, valeurs arbitraires, texte coincé contre le bord d’un encadré.`,
-      takeaway: 'Une échelle, du `gap` pour les frères, la proximité avant les conteneurs ; jamais de titre à mi-chemin ni de texte collé au bord.',
+      takeaway: 'Une échelle, du `gap` pour une liste régulière, la proximité avant les conteneurs ; jamais de titre à mi-chemin ni de texte collé au bord.',
       sources: ['imp:layout', 'imp:craft-floor', 'imp:detector', COMMON_REGION],
     },
     {
@@ -691,8 +696,8 @@ Les trois autres sont des défauts classiques : titre à égale distance de deux
         {
           id: 'focused',
           visual: {
-            alt: 'Accueil avec une salutation, un grand bouton « Réserver une table », la prochaine réservation et une ligne de liens secondaires.',
-            html: `<div class="mk-pad mk-stack" style="--gap:16px"><div class="mk-stack" style="--gap:10px"><p class="mk-h2">Bonsoir Camille</p><span class="mk-btn mk-btn--block">Réserver une table</span></div><div class="mk-stack" style="--gap:4px"><p class="mk-small mk-muted">Prochaine réservation</p><p class="mk-strong">Jeudi 20 h · Le Comptoir, 2 personnes</p></div><div class="mk-row mk-small" style="--gap:14px"><span class="mk-btn--text" style="padding:0">Offres</span><span class="mk-btn--text" style="padding:0">Parrainage</span><span class="mk-btn--text" style="padding:0">Aide</span></div></div>`,
+            alt: 'Accueil avec une salutation, un grand bouton « Réserver une table », la prochaine réservation suivie d’un lien vers toutes les réservations, et une ligne de liens secondaires dont les paramètres.',
+            html: `<div class="mk-pad mk-stack" style="--gap:16px"><div class="mk-stack" style="--gap:10px"><p class="mk-h2">Bonsoir Camille</p><span class="mk-btn mk-btn--block">Réserver une table</span></div><div class="mk-stack" style="--gap:4px"><p class="mk-small mk-muted">Prochaine réservation</p><p class="mk-strong">Jeudi 20&nbsp;h · Le Comptoir, 2 personnes</p><span class="mk-btn--text mk-small" style="padding:0;margin-top:2px;align-self:flex-start">Toutes mes réservations</span></div><div class="mk-row mk-wrap mk-small" style="--gap:14px;row-gap:6px"><span class="mk-btn--text" style="padding:0">Offres</span><span class="mk-btn--text" style="padding:0">Parrainage</span><span class="mk-btn--text" style="padding:0">Aide</span><span class="mk-btn--text" style="padding:0">Paramètres</span></div></div>`,
           },
           why: 'Une action principale, l’information utile juste après, le reste en liens secondaires : simple, sans perdre l’essentiel.',
         },
@@ -709,7 +714,7 @@ Les trois autres sont des défauts classiques : titre à égale distance de deux
       explanation: `La commande *distill* d’impeccable demande **une** action principale, peu d’actions secondaires et le reste en divulgation progressive — mais elle met aussi en garde : ne pas retirer une information nécessaire, ne pas simplifier au point de devenir obscur.
 
 La version recommandée garde la réservation à venir (ce qu’on vient vérifier) et relègue le reste en liens. La grille de tuiles égales est le réflexe inverse : elle donne autant de poids aux paramètres qu’à la tâche principale.`,
-      takeaway: 'Simplifier : une action principale, l’essentiel visible, le reste en second plan — sans rien cacher dont on a besoin.',
+      takeaway: 'Simplifier : une action principale, l’essentiel visible, le reste en second plan — sans rien retirer dont on a besoin.',
       sources: ['imp:distill', 'imp:craft-floor'],
     },
   ],

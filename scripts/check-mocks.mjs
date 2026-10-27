@@ -87,6 +87,10 @@ function scan() {
         range.selectNodeContents(n);
         const label = `« ${text.slice(0, 48)}${text.length > 48 ? '…' : ''} »`;
         check(label, range.getBoundingClientRect(), el, el);
+        // impeccable's undersized-ui-text: functional text under 11 px (scaled-down thumbnails excepted).
+        const px = parseFloat(getComputedStyle(el).fontSize);
+        if (px < 11 && visible(el) && !srOnly(el) && !el.closest('[aria-hidden="true"], .mk-phone-status, .mk-browser-bar, sup, sub'))
+          found.push({ label, x: 0, y: 0, how: `texte de ${px} px` });
         if (!visible(el) || srOnly(el)) continue;
         // Only the visible part of a line can collide (an ellipsis hides the rest).
         const c = clipOf(el)?.getBoundingClientRect();
@@ -176,7 +180,9 @@ try {
           console.log(
             f.how === 'chevauchement'
               ? `    textes superposés (${f.x} × ${f.y} px) : ${f.label}`
-              : `    ${f.how}${f.x > 2 ? ` de ${f.x} px en largeur` : ''}${f.y > 2 ? ` de ${f.y} px en hauteur` : ''} : ${f.label}`,
+              : f.how.startsWith('texte de')
+                ? `    ${f.how} (moins de 11 px) : ${f.label}`
+                : `    ${f.how}${f.x > 2 ? ` de ${f.x} px en largeur` : ''}${f.y > 2 ? ` de ${f.y} px en hauteur` : ''} : ${f.label}`,
           );
         if (r.found.length > 6) console.log(`    … et ${r.found.length - 6} autre(s)`);
       }
