@@ -73,7 +73,7 @@ src/
   components/   rendu des maquettes en Shadow DOM isolé (Mock), lecteurs d’épreuves, correction
   pages/        les écrans
   styles/       jetons de design (OKLCH, clair / sombre), base, composants
-scripts/        captures d’écran du contenu (npm run shots -- <module>), icônes des maquettes
+scripts/        contrôle visuel du contenu (npm run shots -- <module>, npm run check:mocks), icônes des maquettes
 docs/CONTENU.md guide pour écrire de nouvelles leçons et épreuves
 ```
 
@@ -81,7 +81,8 @@ docs/CONTENU.md guide pour écrire de nouvelles leçons et épreuves
 
 Lis [`docs/CONTENU.md`](docs/CONTENU.md). En bref : crée ou complète un fichier dans
 `src/content/modules/`, lance `npm run validate`, puis `npm run shots -- <module>` pour
-vérifier chaque maquette à l’œil.
+vérifier chaque maquette à l’œil et `npm run check:mocks -- <module>` pour repérer ce qui
+déborde, sur bureau comme sur mobile.
 
 ## Crédits et licences
 
