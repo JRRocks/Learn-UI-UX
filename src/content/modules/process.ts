@@ -295,7 +295,7 @@ La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond,
         },
       ],
       answer: 'described',
-      explanation: `DESIGN.md sert à ce qu’un nouvel écran — conçu par toi, par quelqu’un de l’équipe ou par un agent — reste dans la marque. Chaque jeton doit donc dire **ce qu’il est, où il sert et pourquoi** :
+      explanation: `DESIGN.md sert à ce qu’un nouvel écran — conçu par toi, par un collègue ou par un agent — reste dans la marque. Chaque jeton doit donc dire **ce qu’il est, où il sert et pourquoi** :
 
 - un **nom descriptif** et la **valeur exacte entre parenthèses** : « Bleu d’action (#1f4fd8) » plutôt que « blue-600 », un nom d’échelle qui convient au code mais ne dit rien de l’usage ;
 - son **usage** et ses interdits ;
@@ -353,7 +353,7 @@ Les noms de classes bruts (\`rounded-lg\`, \`shadow-md\`) n’apprennent rien : 
         },
       ],
       answer: 'semantic',
-      explanation: `Avec une couche de **jetons sémantiques**, les composants ne connaissent que des rôles (\`--surface\`, \`--raised\`, \`--text\`, \`--action\`). Le thème sombre **rebranche ces rôles** sur d’autres primitifs : quelques lignes, et chaque composant suit — y compris ceux qui n’existent pas encore.
+      explanation: `Avec une couche de **jetons sémantiques**, les composants ne connaissent que des rôles (\`--surface\`, \`--text\`, \`--action\`…). Le thème sombre **rebranche ces rôles** sur d’autres primitifs : quelques lignes, et chaque composant suit — y compris ceux qui n’existent pas encore.
 
 Rebrancher n’est pas inverser : les valeurs sombres se **composent**. Ici, la surface surélevée reste plus claire que le fond, comme en clair, et le bleu d’action s’éclaircit pour rester lisible sur le sombre ; chaque contraste se revérifie.
 
