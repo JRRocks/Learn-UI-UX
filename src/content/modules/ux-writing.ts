@@ -28,6 +28,10 @@ const WCAG_LINK: SourceRef = {
   label: 'W3C — Comprendre le critère 2.4.4 (fonction du lien selon le contexte)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context.html',
 };
+const WCAG_LINK_ONLY: SourceRef = {
+  label: 'W3C — Comprendre le critère 2.4.9 (fonction du lien, lien uniquement ; niveau AAA)',
+  url: 'https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-link-only.html',
+};
 const WCAG_ERROR: SourceRef = {
   label: 'W3C — Comprendre le critère 3.3.3 (suggestion après une erreur)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/error-suggestion.html',
@@ -95,11 +99,12 @@ const SEARCH_CSS = `
 const LOADING_CSS = `
 .ld { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 8px; background: #f4f6f9; }
 .spin { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid #c9d2e1; border-top-color: #1f4fd8; flex: none; }
+.ld-num { white-space: nowrap; }
 `;
 
 const invoice = (status: string) =>
   fr(`<div class="mk-pad mk-stack" style="--gap:10px">
-  <div class="mk-row mk-between"><p class="mk-h3">Facture F-2026-0412</p><span class="mk-price">1 280,00 €</span></div>
+  <div class="mk-row mk-between mk-wrap" style="--gap:4px 10px"><p class="mk-h3">Facture <span class="ld-num">F-2026-0412</span></p><span class="mk-price">1&#8239;280,00&nbsp;€</span></div>
   <p class="mk-small mk-muted">Atelier Morel · échéance le 30 novembre</p>
   <div class="ld"><span class="spin"></span><span>${status}</span></div>
 </div>`);
@@ -112,7 +117,7 @@ const uxWriting: ModuleContent = {
     'Écrire des libellés, erreurs, états vides et confirmations qui disent ce qui se passe et quoi faire ensuite, dans une voix constante et des messages traduisibles.',
   minutes: 11,
   commands: ['clarify'],
-  sources: ['imp:clarify', 'imp:craft-floor', 'imp:detector', 'imp:onboard', NNG_CONFIRM, NNG_ERRORS, NNG_PLACEHOLDER, WCAG_LINK],
+  sources: ['imp:clarify', 'imp:craft-floor', 'imp:detector', 'imp:onboard', NNG_CONFIRM, NNG_ERRORS, NNG_PLACEHOLDER, WCAG_LINK_ONLY],
   sections: [
     {
       id: 'materiau',
@@ -126,6 +131,8 @@ Avant de réécrire une phrase, lis **tout le parcours** : un libellé isolé ne
 - les termes et les majuscules qui changent d’un écran à l’autre ;
 - les titres, introductions et confirmations qui répètent la même idée ;
 - un ton qui ignore le stress, le risque ou l’urgence du moment.
+
+Ne change ni un fait, ni un sens juridique, ni un terme métier sans le faire valider par qui en est responsable : une reformulation plus fluide peut modifier un engagement.
 
 Puis, pour chaque état, décide dans cet ordre : **le fait** dont la personne a besoin maintenant, **l’action** possible ensuite, le **contexte** qui change sa décision, et le **ton** juste. Dis chaque idée une fois : si le titre explique déjà l’état, l’introduction apporte du neuf ou disparaît.
 
@@ -161,7 +168,7 @@ Pour une **action destructrice**, nomme l’objet et la conséquence : « Suppri
           },
           badNote: 'Rien ne dit ce qui sera supprimé : on répond « Oui » par réflexe.',
           good: {
-            alt: 'Même liste avec une boîte de dialogue « Supprimer le projet « Refonte 2026 » ? », qui précise que 48 fichiers et les commentaires seront supprimés pour toute l’équipe, boutons « Annuler » et « Supprimer le projet ».',
+            alt: 'Même liste avec une boîte de dialogue « Supprimer le projet “Refonte 2026” ? », qui précise que 48 fichiers et les commentaires seront supprimés pour toute l’équipe, boutons « Annuler » et « Supprimer le projet ».',
             height: 330,
             html:
               PROJECTS +
@@ -183,7 +190,7 @@ Pour une **action destructrice**, nomme l’objet et la conséquence : « Suppri
 - **Les exigences avant l’envoi.** Format, longueur et conditions s’affichent avant que la personne se trompe (« 8 caractères minimum, dont un chiffre »), pas seulement dans l’erreur.
 - **Dire pourquoi** une information est demandée, seulement quand ce n’est pas évident : « Le livreur t’appelle en cas d’absence » sous un numéro de téléphone.
 - **Obligatoire et facultatif** se signalent toujours de la même façon dans tout le produit.
-- **Le texte d’aide répond à une question implicite** (quel format ? à quoi ça sert ? qui le verra ?) au lieu de répéter l’étiquette. « Saisissez votre adresse e-mail » sous « Adresse e-mail » n’apprend rien.
+- **Le texte d’aide répond à une question implicite** (quel format ? à quoi ça sert ? qui le verra ?) au lieu de répéter l’étiquette. « Saisissez votre adresse e-mail » sous « Adresse e-mail » n’apprend rien. Le détail rare passe en **divulgation progressive** : l’essentiel reste visible, le reste attend derrière un lien « Détails » ou une section repliable.
 
 La **validation** dit ce qui demande de l’attention et comment le corriger, sans accuser : « Ajoute au moins un chiffre » plutôt que « Mot de passe invalide ». Elle se place près du champ et s’annonce aux lecteurs d’écran.`,
       examples: [
@@ -204,19 +211,19 @@ La **validation** dit ce qui demande de l’attention et comment le corriger, sa
           },
           badNote: 'Une fois remplis, les champs perdent leur nom ; les indications grises sont à peine lisibles.',
           good: {
-            alt: 'Même formulaire avec une étiquette au-dessus de chaque champ, un champ marqué facultatif, un exemple lisible et une aide sous le téléphone.',
+            alt: 'Même formulaire avec une étiquette au-dessus de chaque champ et un champ marqué facultatif ; les indications sont écrites sous les étiquettes, hors des champs encore vides : le contenu attendu du complément d’adresse, un exemple de numéro et la raison pour laquelle on le demande.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:10px">
   <p class="mk-h3">Adresse de livraison</p>
   <div class="mk-field"><span class="mk-label">Nom complet</span><div class="mk-input">Camille Durand</div></div>
   <div class="mk-field"><span class="mk-label">Adresse</span><div class="mk-input">12 rue des Lilas</div></div>
-  <div class="mk-field"><span class="mk-label">Complément d’adresse <span class="fm-opt">(facultatif)</span></span><div class="mk-input fm-ph">Bâtiment, étage, digicode</div></div>
+  <div class="mk-field"><span class="mk-label">Complément d’adresse <span class="fm-opt">(facultatif)</span></span><span class="mk-help">Bâtiment, étage, digicode</span><div class="mk-input"></div></div>
   <div class="mk-grid" style="--cols:2;--gap:8px"><div class="mk-field"><span class="mk-label">Code postal</span><div class="mk-input">75011</div></div><div class="mk-field"><span class="mk-label">Ville</span><div class="mk-input">Paris</div></div></div>
-  <div class="mk-field"><span class="mk-label">Téléphone</span><div class="mk-input fm-ph">06 12 34 56 78</div><span class="mk-help">Le livreur t’appelle en cas d’absence.</span></div>
+  <div class="mk-field"><span class="mk-label">Téléphone</span><span class="mk-help">Ex. : 06&nbsp;12&nbsp;34&nbsp;56&nbsp;78. Le livreur t’appelle en cas d’absence.</span><div class="mk-input"></div></div>
   <span class="mk-btn mk-btn--block">Continuer vers le paiement</span>
 </div>`),
-            css: `.fm-ph { color: #6b7180; } .fm-opt { font-weight: 400; color: #5a6172; }`,
+            css: `.fm-opt { font-weight: 400; color: #5a6172; }`,
           },
-          goodNote: 'Étiquettes persistantes, exemple lisible (4,9:1), aide qui dit pourquoi on demande le numéro.',
+          goodNote: 'Étiquettes persistantes, exemple et aide hors des champs, toujours visibles : rien ne passe pour une valeur déjà saisie.',
         },
       ],
     },
@@ -231,7 +238,7 @@ La **validation** dit ce qui demande de l’attention et comment le corriger, sa
 
 - **Pas de code interne en message principal** : « Erreur 413 » n’aide personne. Le code peut figurer en petit, pour le support.
 - **Ne promets pas une cause ou une solution que le système ignore** : « Le serveur est en maintenance » est faux si la requête a simplement expiré.
-- **N’accuse pas** : « Vous avez saisi une date invalide » devient « Indique une date au format JJ/MM/AAAA ».
+- **N’accuse pas** : « Tu as saisi une date invalide » devient « Indique une date au format JJ/MM/AAAA ».
 - **Visible et proche** : le message s’affiche à côté de l’élément en cause, avec un texte et une icône, pas seulement une couleur.
 - **Prends au sérieux** la vie privée, le paiement, la suppression, la perte d’accès et le travail bloqué : la chaleur est bienvenue, les blagues non.`,
       examples: [
@@ -275,7 +282,7 @@ La **validation** dit ce qui demande de l’attention et comment le corriger, sa
 - **Accès refusé** : explique qui a accès et comment le demander.
 - **Panne** : ce qui n’a pas pu se charger, et « Réessayer ».
 
-**Succès.** Confirme le résultat (« Virement de 120 € envoyé à Marc »). Mentionne la conséquence suivante seulement si elle change ce que la personne doit faire (« Il arrivera lundi »). Un succès de routine reste bref, voire silencieux.`,
+**Succès.** Confirme le résultat (« Virement de 120 € envoyé à Marc »). Mentionne la conséquence suivante seulement si elle change ce que la personne doit faire (« Il arrivera lundi »). Un succès de routine reste bref ; il peut se passer de message quand le changement se voit déjà à l’écran (interrupteur basculé, élément coché).`,
       examples: [
         {
           title: 'Un premier usage qui guide',
@@ -288,13 +295,13 @@ La **validation** dit ce qui demande de l’attention et comment le corriger, sa
 </div>`),
             css: `.iv-head { display: grid; grid-template-columns: 1fr 2fr 1.2fr 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid #e3e6ec; font-size: 12px; font-weight: 600; color: #5a6172; }`,
           },
-          badNote: 'Ni ce qui apparaîtra ici, ni comment commencer.',
+          badNote: '« Aucune donnée » ne dit ni ce qui apparaîtra ici, ni par où commencer ; « Nouvelle », sans objet, ne dit pas quoi.',
           good: {
-            alt: 'Page « Factures » avec une icône de reçu, le titre « Tes factures apparaîtront ici », une phrase d’explication et deux boutons « Créer une facture » et « Importer un fichier CSV ».',
+            alt: 'Page « Factures » avec une icône de document, le titre « Tes factures apparaîtront ici », une phrase d’explication et deux boutons « Créer une facture » et « Importer un fichier CSV ».',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
   <p class="mk-h2">Factures</p>
   <div class="mk-stack mk-center iv-empty" style="--gap:8px">
-    <i data-icon="receipt" style="--ico:28px"></i>
+    <i data-icon="file-text" style="--ico:28px"></i>
     <p class="mk-h3">Tes factures apparaîtront ici</p>
     <p class="mk-muted">Crée ta première facture en deux minutes, ou importe celles de ton ancien outil.</p>
     <div class="mk-row mk-wrap" style="--gap:8px;justify-content:center"><span class="mk-btn">Créer une facture</span><span class="mk-btn mk-btn--ghost">Importer un fichier CSV</span></div>
