@@ -330,7 +330,7 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
 - **Rasoir d’Occam** : à efficacité égale, choisis la solution qui suppose le moins. Retire un élément tant que la fonction n’en souffre pas. Mauvais usage : retirer les libellés des icônes — le mystère n’est pas du minimalisme, rappelle impeccable.
 - **Principe de Pareto** : environ 80 % des effets viennent de 20 % des causes. Concentre l’effort sur les parcours les plus fréquents. Mauvais usage : sacrifier le reste quand il est vital pour certains (accessibilité, cas d’erreur).
 - **Loi de Parkinson** (1955) : une tâche s’étire jusqu’à occuper le temps disponible. Raccourcis la tâche — remplissage automatique, paiement express — plutôt que de presser la personne. Mauvais usage : un faux compte à rebours, qui est un motif trompeur.
-- **Surcharge de choix** (Toffler, 1970) : trop d’options peuvent gêner la décision. Mais l’effet est conditionnel : une méta-analyse de 50 expériences (Scheibehenne et coll., 2010) trouve un effet moyen quasi nul ; une autre (Chernev et coll., 2015) le retrouve quand la tâche est difficile, les options complexes à comparer, les préférences floues ou l’envie de décider vite forte. Impeccable (distill) tient ce « paradoxe du choix » pour réel et demande moins d’options : c’est juste à un point de décision chargé, pas comme loi universelle. Réduis ce qui est affiché et aide à comparer le reste — vue côte à côte, filtres, option conseillée — plutôt que de couper à l’aveugle.`,
+- **Surcharge de choix** (Toffler, 1970) : trop d’options peuvent gêner la décision. Mais l’effet est conditionnel : une méta-analyse de 50 expériences (Scheibehenne et coll., 2010) trouve un effet moyen quasi nul ; une autre (Chernev et coll., 2015) le retrouve quand la tâche est difficile, les options complexes à comparer, les préférences floues ou l’envie de décider vite forte. Impeccable (distill) tient ce « paradoxe du choix » pour réel et demande moins d’options : c’est vrai à un point de décision chargé, pas comme loi universelle. Réduis ce qui est affiché et aide à comparer le reste — vue côte à côte, filtres, option conseillée — plutôt que de couper à l’aveugle.`,
     },
   ],
   rules: [
@@ -639,10 +639,10 @@ L’indicateur d’étapes (gradient d’objectif), le champ e-mail et le bouton
       context: 'En revue de design, un collègue propose : « Le menu de la boutique a 14 catégories. La loi de Miller dit qu’on retient 7 ± 2 éléments : coupons-le à 7. »',
       prompt: 'Que lui réponds-tu ?',
       options: [
-        { id: 'recognition', label: 'Un menu se reconnaît, il ne se mémorise pas : regroupons plutôt les catégories sous quelques entrées claires.', why: 'Exact : un menu sollicite la reconnaissance, pas le rappel. Le vrai levier est la clarté des regroupements.' },
+        { id: 'recognition', label: 'Un menu se reconnaît sans se mémoriser : regroupons les catégories sous quelques entrées claires.', why: 'Exact : un menu sollicite la reconnaissance, pas le rappel. Le vrai levier est la clarté des regroupements.' },
         { id: 'seven', label: 'D’accord : au-delà de 7 entrées, les gens oublient les premières et se perdent dans le menu.', why: 'Les entrées restent affichées : personne n’a besoin de s’en souvenir.' },
         { id: 'four', label: 'Allons plus loin : 4 catégories en tout, puisque Cowan a révisé le chiffre de Miller à 4.', why: 'Cowan limite ce qu’on compare en même temps, pas le nombre total de catégories : 4 entrées pour toute une boutique deviendraient abstraites. Impeccable vise ≤ 5 entrées de premier niveau, le reste regroupé dessous.' },
-        { id: 'flat', label: 'Gardons les 14 catégories à plat : un menu reste visible, sa longueur n’a donc aucune importance.', why: 'Un menu long n’est pas interdit, mais 14 entrées sans regroupement compliquent le choix (Hick) et le balayage.' },
+        { id: 'flat', label: 'Gardons les 14 catégories à plat : puisqu’un menu reste visible, sa longueur n’a aucune importance.', why: 'Un menu long n’est pas interdit, mais 14 entrées sans regroupement compliquent le choix (Hick) et le balayage.' },
       ],
       answer: 'recognition',
       explanation: `Miller (1956) parlait de l’empan de la **mémoire immédiate** — ce qu’on retient sans le voir. Un menu, lui, reste sous les yeux : c’est de la **reconnaissance**. Le Nielsen Norman Group range la limite de 7 entrées par menu parmi les idées reçues, et prévient qu’un menu trop court rend les choix abstraits.
@@ -658,7 +658,7 @@ Le bon argument n’est pas le rappel mais la comparaison : les options qu’on 
       context: 'La recherche de trajets de ton application de covoiturage met 2 à 3 secondes à répondre.',
       prompt: 'Quelle réponse d’interface est la meilleure pendant cette attente ?',
       options: [
-        { id: 'feedback', label: 'Accuser réception tout de suite (bouton enfoncé, squelette de la liste), puis afficher les trajets.', why: 'Un retour en moins de 400 ms garde la personne dans le rythme, et le squelette annonce ce qui vient.' },
+        { id: 'feedback', label: 'Accuser réception aussitôt (bouton enfoncé, squelette de liste), puis afficher les trajets.', why: 'Un retour en moins de 400 ms garde la personne dans le rythme, et le squelette annonce ce qui vient.' },
         { id: 'nothing', label: 'Ne rien changer à l’écran avant l’arrivée des trajets, pour éviter tout clignotement inutile.', why: 'Éviter un clignotement vaut pour une attente de moins d’une seconde. Au-delà, sans retour, on se demande si l’appui a été pris en compte, et on tape à nouveau.' },
         { id: 'percent', label: 'Afficher une barre de progression de 0 à 100 % pour montrer précisément l’avancement.', why: 'Un pourcentage se justifie au-delà d’une dizaine de secondes ; pour 2 à 3 s, c’est excessif — et inventé si le système ne connaît pas son avancement.' },
         { id: 'delay', label: 'Ajouter une animation de 3 secondes pour que la recherche paraisse plus sérieuse.', why: 'Allonger l’attente pour la mise en scène, c’est simuler un travail : impeccable l’interdit.' },
@@ -677,7 +677,7 @@ Avec 2 à 3 secondes de calcul, on ne peut pas livrer les trajets en 400 ms — 
       context: 'Les tests montrent que le formulaire d’adresse de livraison (six champs) est jugé pénible. Une idée circule : supprimer des champs.',
       prompt: 'Quelle simplification respecte la loi de Tesler ?',
       options: [
-        { id: 'autocomplete', label: 'Une recherche d’adresse avec autocomplétion qui remplit les champs, et « Complément » facultatif.', why: 'Le système absorbe la complexité : quelques lettres tapées, et une adresse complète.' },
+        { id: 'autocomplete', label: 'Une recherche d’adresse avec autocomplétion, et un champ « Complément » facultatif.', why: 'Le système absorbe la complexité : quelques lettres tapées, et une adresse complète.' },
         { id: 'remove', label: 'Supprimer le champ « Complément d’adresse » (bâtiment, étage, code d’accès).', why: 'La complexité ne disparaît pas : elle ressurgit chez le livreur et chez le client, sous forme de colis non livrés.' },
         { id: 'single', label: 'Remplacer les six champs par un seul champ de texte libre « Votre adresse », sans aide.', why: 'Moins de champs, mais toute la structuration repose sur la personne — et sur un système qui devra deviner.' },
         { id: 'steps', label: 'Répartir les six champs sur trois écrans de deux champs, plus légers à remplir.', why: 'La même saisie, plus deux transitions : l’effort est déplacé, pas réduit.' },
