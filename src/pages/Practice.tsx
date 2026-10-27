@@ -13,6 +13,7 @@ import {
   RotateCcw,
   Scale,
   SlidersHorizontal,
+  Timer,
   type LucideIcon,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -164,13 +165,26 @@ export function Practice() {
 
       <section className="section" aria-labelledby="exam-title">
         <div className="section-head">
-          <h2 id="exam-title">Examen blanc</h2>
+          <h2 id="exam-title">Défis</h2>
         </div>
         <div className="format" style={{ borderTop: '1px solid var(--rule)' }}>
+          <Timer aria-hidden="true" />
+          <div>
+            <h3>Défi chrono</h3>
+            <p>
+              90 secondes de vrai ou faux, toutes leçons confondues. Le chrono s’arrête pendant la correction.
+              {p.records.blitz ? ` Ton record : ${p.records.blitz}.` : ''}
+            </p>
+          </div>
+          <Link to="/session?mode=blitz" className="btn btn-secondary">
+            Relever le défi
+          </Link>
+        </div>
+        <div className="format">
           <GraduationCap aria-hidden="true" />
           <div>
-            <h3>30 épreuves, toutes leçons confondues</h3>
-            <p>Pas de correction pendant l’examen : tout est expliqué dans le bilan. 80 % de réussite débloque un badge.</p>
+            <h3>Examen blanc</h3>
+            <p>30 épreuves de toutes les leçons, sans correction pendant l’examen : tout est expliqué dans le bilan. 80 % de réussite débloque un badge.</p>
           </div>
           <Link to="/session?mode=exam" className="btn btn-primary">
             Passer l’examen

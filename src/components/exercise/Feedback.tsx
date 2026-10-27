@@ -141,7 +141,7 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
           <h2>Pourquoi</h2>
           <Md text={ex.explanation} className="prose" />
         </div>
-        <aside className="feedback-side" aria-label="Notes de correction">
+        <div className="feedback-side">
           <div className="note">
             <h2 className="note-mark">Choix recommandé</h2>
             <Recommended ex={ex} draft={draft} />
@@ -175,7 +175,7 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
               {module && <Link to={`/apprendre/${module.id}`}>Revoir la leçon « {module.title} »</Link>}
             </div>
           )}
-        </aside>
+        </div>
       </div>
     </section>
   );

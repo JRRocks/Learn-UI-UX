@@ -538,13 +538,11 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
               <span className="grid-label" id={`g-${ex.id}-${c.id}`}>
                 {c.label}
               </span>
-              <span className="segmented" role="radiogroup" aria-labelledby={`g-${ex.id}-${c.id}`}>
+              <span className="segmented" role="group" aria-labelledby={`g-${ex.id}-${c.id}`}>
                 {values.map((v) => (
                   <button
                     key={v}
                     type="button"
-                    role="radio"
-                    aria-checked={mine === v}
                     aria-pressed={mine === v}
                     aria-label={ex.scale.labels[v - ex.scale.min]}
                     disabled={revealed}

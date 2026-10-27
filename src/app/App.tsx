@@ -1,8 +1,9 @@
 import { BookOpen, ChartColumn, Globe, House, Library, Moon, Sparkles, Sun, Target, type LucideIcon } from 'lucide-react';
-import { useEffect, useLayoutEffect } from 'react';
+import { Suspense, lazy, useEffect, useLayoutEffect } from 'react';
 import { EXERCISES, MODULES } from '../content';
 import { streak } from '../engine/progress';
 import { About } from '../pages/About';
+import { Blitz } from '../pages/Blitz';
 import { Cards } from '../pages/Cards';
 import { CultureCompare, CultureDetail, CulturePairPage, Cultures } from '../pages/Cultures';
 import { Home } from '../pages/Home';
@@ -11,7 +12,6 @@ import { Learn } from '../pages/Learn';
 import { Lesson } from '../pages/Lesson';
 import { NotFound } from '../pages/NotFound';
 import { Practice } from '../pages/Practice';
-import { Preview } from '../pages/Preview';
 import { Progress } from '../pages/Progress';
 import { Resources } from '../pages/Resources';
 import { SessionPage } from '../pages/Session';
@@ -20,6 +20,9 @@ import { store, useProgress } from './store';
 import { dismissToast, useToasts } from './toasts';
 
 store.setBadgeContext({ exercises: EXERCISES, moduleIds: MODULES.map((m) => m.id) });
+
+// Authoring preview (#/apercu/<module>), used by `npm run shots`; left out of production builds.
+const Preview = import.meta.env.DEV ? lazy(() => import('../pages/Preview').then((m) => ({ default: m.Preview }))) : null;
 
 const NAV: { to: string; label: string; match: string; Icon: LucideIcon }[] = [
   { to: '/', label: 'Accueil', match: '', Icon: House },
@@ -98,6 +101,7 @@ function page(route: Route) {
     case 'entrainement':
       return <Practice />;
     case 'session':
+      if (route.query.get('mode') === 'blitz') return <Blitz key={route.raw} />;
       return <SessionPage key={route.raw} query={route.query} raw={route.raw} />;
     case 'fiches':
       return <Cards key={route.raw} query={route.query} />;
@@ -154,7 +158,12 @@ export function App() {
     document.title = name ? `${name} — Épreuves` : 'Épreuves — atelier UI/UX';
   }, [section, param]);
 
-  if (section === 'apercu' && param) return <Preview target={param} />;
+  if (Preview && section === 'apercu' && param)
+    return (
+      <Suspense fallback={<p>Chargement…</p>}>
+        <Preview target={param} />
+      </Suspense>
+    );
 
   const current = section ?? '';
   const st = streak(progress);

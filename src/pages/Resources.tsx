@@ -104,7 +104,7 @@ function Catalog() {
         {shown.map((a) => (
           <li key={a.id}>
             <div className="catalog-head">
-              <h3>{a.name}</h3>
+              <h2>{a.name}</h2>
               <code>{a.id}</code>
               <span className="chip">{a.family === 'cliche' ? 'Cliché' : 'Qualité'}</span>
               <span className="chip">{SEVERITY_LABEL[a.severity]}</span>

@@ -9,9 +9,10 @@ import { Fragment, type ReactNode } from 'react';
 /** French typography: no-break spaces before high punctuation and inside guillemets. */
 export function frenchSpacing(text: string): string {
   return text
-    .replace(/ ([;!?»])/g, '\u202F$1')
+    .replace(/ ([;!?])/g, '\u202F$1')
     .replace(/ :(?=\s|$)/g, '\u00A0:')
-    .replace(/« /g, '«\u202F');
+    .replace(/«[ \u00A0\u202F]?/g, '«\u202F')
+    .replace(/[ \u00A0\u202F]?»/g, '\u202F»');
 }
 
 const INLINE = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;

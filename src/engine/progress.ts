@@ -48,6 +48,8 @@ export interface ProgressState {
   badges: Record<string, string>;
   sessions: SessionRecord[];
   settings: Settings;
+  /** Best scores of timed challenges, by challenge id. */
+  records: Record<string, number>;
 }
 
 export const XP = {
@@ -69,6 +71,7 @@ export function emptyProgress(): ProgressState {
     badges: {},
     sessions: [],
     settings: { theme: 'system', dailyGoal: 60 },
+    records: {},
   };
 }
 
@@ -88,6 +91,7 @@ export function normalizeProgress(raw: unknown): ProgressState {
     badges: obj(r.badges, base.badges),
     sessions: Array.isArray(r.sessions) ? r.sessions.slice(-60) : [],
     settings: { ...base.settings, ...obj(r.settings, {}) },
+    records: obj(r.records, base.records),
   };
 }
 
@@ -149,6 +153,11 @@ export function markLessonRead(state: ProgressState, moduleId: string, now: Date
     lessons: { ...state.lessons, [moduleId]: today },
     days: bumpDay(state.days, today, XP.lesson, 0, 0),
   };
+}
+
+export function setRecord(state: ProgressState, id: string, score: number): ProgressState {
+  if ((state.records[id] ?? 0) >= score) return state;
+  return { ...state, records: { ...state.records, [id]: score } };
 }
 
 export function addSession(state: ProgressState, rec: SessionRecord): ProgressState {
