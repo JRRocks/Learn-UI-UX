@@ -334,9 +334,9 @@ Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zon
       hotspots: [
         { id: 'id', label: 'Champ sans étiquette', correct: true, why: 'Seul un texte indicatif nomme le champ : il disparaît dès la première frappe et n’est pas une étiquette fiable pour un lecteur d’écran. Il faut une étiquette visible (3.3.2), liée au champ dans le code (1.3.1 et 4.1.2).' },
         { id: 'paste', label: 'Collage interdit dans le mot de passe', correct: true, why: 'Bloquer le collage empêche de coller le mot de passe depuis un gestionnaire externe et force à le retenir ou le recopier : échec du critère 3.3.8 (authentification accessible, AA) faute d’alternative.' },
-        { id: 'title', label: 'Titre « Espace client »', correct: false, why: 'Un titre clair qui annonce la page.' },
-        { id: 'submit', label: 'Bouton « Se connecter »', correct: false, why: 'Verbe explicite, blanc sur bleu à 6,6:1, cible pleine largeur.' },
-        { id: 'forgot', label: 'Lien « Mot de passe oublié ? »', correct: false, why: 'Souligné, contrasté, libellé explicite : il se repère sans la couleur.' },
+        { id: 'title', label: 'Titre « Espace client »', correct: false, why: 'Un titre clair qui annonce la page.' },
+        { id: 'submit', label: 'Bouton « Se connecter »', correct: false, why: 'Verbe explicite, blanc sur bleu à 6,6:1, cible pleine largeur.' },
+        { id: 'forgot', label: 'Lien « Mot de passe oublié ? »', correct: false, why: 'Souligné, contrasté, libellé explicite : il se repère sans la couleur.' },
       ],
       explanation: `Deux défauts distincts sont en jeu :
 
@@ -386,7 +386,7 @@ Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zon
         { id: 'checks', label: 'Cases à cocher presque invisibles', correct: true, why: 'Bordure #e3e6ec sur blanc, environ 1,3:1 : on ne repère pas le contrôle. Il faut 3:1 au moins (1.4.11).' },
         { id: 'pages', label: 'Pagination minuscule', correct: true, why: 'Des cibles de 16 px séparées de 2 px : sous les 24 × 24 px de 2.5.8, et trop serrées pour profiter de l’exception d’espacement.' },
         { id: 'title', label: 'Titre', correct: false, why: 'Titre clair et contrasté.' },
-        { id: 'export', label: 'Bouton « Exporter »', correct: false, why: 'Le libellé « Exporter » et son icône identifient le bouton : sa bordure n’a pas besoin d’atteindre 3:1 (1.4.11), contrairement à celle d’une case à cocher, seul repère du contrôle.' },
+        { id: 'export', label: 'Bouton « Exporter »', correct: false, why: 'Le libellé « Exporter » et son icône identifient le bouton : sa bordure n’a pas besoin d’atteindre 3:1 (1.4.11), contrairement à celle d’une case à cocher, seul repère du contrôle.' },
         { id: 'search', label: 'Champ de recherche', correct: false, why: 'Étiquette visible et texte indicatif contrasté (4,8:1).' },
         { id: 'info', label: 'Données des commandes', correct: false, why: 'Texte foncé, en-têtes explicites, montants alignés : rien à signaler.' },
       ],
