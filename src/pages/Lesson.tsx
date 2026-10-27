@@ -28,7 +28,11 @@ function Example({ e }: { e: LessonExample }) {
               <span className="verdict-tag verdict-tag--bad">
                 <CircleX aria-hidden="true" /> À éviter
               </span>
-              {e.badNote && <MdInline text={e.badNote} />}
+              {e.badNote && (
+                <span>
+                  <MdInline text={e.badNote} />
+                </span>
+              )}
             </figcaption>
           </figure>
         )}
@@ -41,7 +45,11 @@ function Example({ e }: { e: LessonExample }) {
               <span className="verdict-tag verdict-tag--good">
                 <CircleCheck aria-hidden="true" /> Préférer
               </span>
-              {e.goodNote && <MdInline text={e.goodNote} />}
+              {e.goodNote && (
+                <span>
+                  <MdInline text={e.goodNote} />
+                </span>
+              )}
             </figcaption>
           </figure>
         )}

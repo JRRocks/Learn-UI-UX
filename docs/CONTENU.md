@@ -12,13 +12,15 @@ ONLY=color,layout npx vitest run src/content   # validation des modules choisis
 npx tsc --noEmit                                # types
 npm run shots -- color                          # captures de chaque exemple et épreuve → shots/color/*.png
 npm run shots -- color --mobile                 # même chose en largeur mobile
-npm run check:mocks -- color                    # textes coupés ou superposés dans les maquettes (bureau + mobile)
+npm run check:mocks -- color                    # textes coupés, superposés, trop petits ou trop pâles (bureau + mobile)
 ```
 
 Ouvre les captures et regarde-les vraiment : une maquette illisible, qui déborde ou qui ne
 montre pas clairement le défaut enseigné est un bug de contenu. `check:mocks` liste ce que
 les maquettes masquent (texte coupé, points de suspension, contenu sous la ligne de
-flottaison d’un cadre) et les textes dessinés les uns sur les autres : un débordement voulu dans une version « À éviter » est normal, le
+flottaison d’un cadre), les textes dessinés les uns sur les autres, le texte fonctionnel
+sous 11 px (règle `undersized-ui-text` du détecteur) et le texte sous 4,5:1 (3:1 pour le
+grand texte). Un défaut voulu dans une version « À éviter » ou un leurre est normal ; le
 même dans une version recommandée ne l’est pas.
 
 ## Ton et langue

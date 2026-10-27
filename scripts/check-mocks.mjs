@@ -1,4 +1,4 @@
-// Visual QA without screenshots: finds text and controls cut off, or drawn over each other, inside the mocks.
+// Visual QA without screenshots: finds text cut off, drawn over other text, too small or too pale inside the mocks.
 //   npm run check:mocks                      → every module, cultures and the catalog
 //   npm run check:mocks -- color layout      → only these targets
 // Checks desktop (1180 px) and mobile (390 px) widths. A mock that clips its own
@@ -48,6 +48,35 @@ function scan() {
     const r = el.getBoundingClientRect();
     return r.width <= 1 || r.height <= 1;
   };
+  // WCAG contrast of a text against the first opaque background behind it (null when unknown:
+  // gradient or image behind, or no opaque ancestor inside the mock).
+  const rgba = (c) => {
+    const m = c.match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    const [r, g, b, a = 1] = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+    return [r, g, b, a];
+  };
+  const lum = ([r, g, b]) => {
+    const f = (v) => ((v /= 255) <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+  const contrastOf = (el) => {
+    let fg = rgba(getComputedStyle(el).color);
+    if (!fg) return null;
+    let alpha = fg[3];
+    for (let p = el; p; p = p.parentElement) alpha *= Number(getComputedStyle(p).opacity);
+    for (let p = el; p; p = p.parentElement) {
+      const s = getComputedStyle(p);
+      if (s.backgroundImage !== 'none') return null;
+      const bg = rgba(s.backgroundColor);
+      if (bg && bg[3] >= 0.9) {
+        const mix = fg.slice(0, 3).map((v, i) => v * alpha + bg[i] * (1 - alpha));
+        const [hi, lo] = [lum(mix), lum(bg)].sort((x, y) => y - x);
+        return (hi + 0.05) / (lo + 0.05);
+      }
+    }
+    return null;
+  };
   const out = [];
   for (const shot of document.querySelectorAll('[data-shot]')) {
     const id = shot.getAttribute('data-shot');
@@ -91,6 +120,13 @@ function scan() {
         const px = parseFloat(getComputedStyle(el).fontSize);
         if (px < 11 && visible(el) && !srOnly(el) && !el.closest('[aria-hidden="true"], .mk-phone-status, .mk-browser-bar, sup, sub'))
           found.push({ label, x: 0, y: 0, how: `texte de ${px} px` });
+        // Text contrast (WCAG 1.4.3); disabled controls are exempt.
+        if (visible(el) && !srOnly(el) && !el.closest('[disabled], [aria-disabled="true"], .mk-btn--disabled, .mk-phone-status, .mk-browser-bar')) {
+          const ratio = contrastOf(el);
+          const cs = getComputedStyle(el);
+          const large = px >= 24 || (px >= 18.66 && Number(cs.fontWeight) >= 700);
+          if (ratio && ratio < (large ? 3 : 4.5)) found.push({ label, x: 0, y: 0, how: `contraste ${ratio.toFixed(2).replace('.', ',')}:1` });
+        }
         if (!visible(el) || srOnly(el)) continue;
         // Only the visible part of a line can collide (an ellipsis hides the rest).
         const c = clipOf(el)?.getBoundingClientRect();
@@ -182,6 +218,8 @@ try {
               ? `    textes superposés (${f.x} × ${f.y} px) : ${f.label}`
               : f.how.startsWith('texte de')
                 ? `    ${f.how} (moins de 11 px) : ${f.label}`
+                : f.how.startsWith('contraste')
+                  ? `    ${f.how} (sous le minimum WCAG) : ${f.label}`
                 : `    ${f.how}${f.x > 2 ? ` de ${f.x} px en largeur` : ''}${f.y > 2 ? ` de ${f.y} px en hauteur` : ''} : ${f.label}`,
           );
         if (r.found.length > 6) console.log(`    … et ${r.found.length - 6} autre(s)`);
