@@ -415,7 +415,7 @@ La couche expressive de la marque (intention de la palette, accent typographique
 </div>`),
             css: M3_CSS,
           },
-          badNote: 'Un écran d’iPhone transplanté : bouton retour textuel « ‹ Réglages », interrupteurs iOS.',
+          badNote: 'Un écran d’iPhone transplanté : bouton retour textuel « ‹ Réglages », interrupteurs iOS.',
           good: {
             alt: 'Même écran Android en Material 3 : barre d’application avec flèche de retour et titre aligné au début, interrupteurs Material.',
             frame: 'phone',
@@ -566,7 +566,7 @@ La marque passe d’une plateforme à l’autre par le système de thème (palet
         css: M3_CSS,
       },
       hotspots: [
-        { id: 'back', label: 'Bouton retour « ‹ Listes »', correct: true, why: 'Un chevron suivi du nom de l’écran précédent : c’est l’idiome iOS. Sur Android, la barre d’application porte une flèche de retour (titre au début ou centré, selon la variante Material), et le Retour système fait le reste.' },
+        { id: 'back', label: 'Bouton retour « ‹ Listes »', correct: true, why: 'Un chevron suivi du nom de l’écran précédent : c’est l’idiome iOS. Sur Android, la barre d’application porte une flèche de retour (titre au début ou centré, selon la variante Material), et le Retour système fait le reste.' },
         { id: 'share', label: 'Interrupteur vert', correct: true, why: 'Un interrupteur à la forme et au vert d’iOS. Material a son propre interrupteur, que les habitués d’Android reconnaissent.' },
         { id: 'menu', label: 'Menu à trois points', correct: false, why: 'Le menu à débordement vertical est l’idiome Material pour les actions secondaires.' },
         { id: 'list', label: 'Liste à cocher', correct: false, why: 'Des lignes de 56 dp avec des cases à cocher : conforme à Material.' },

@@ -264,7 +264,7 @@ Impeccable va dans le même sens : ne jamais simuler un travail ni retarder un r
     { id: 'precheck', front: 'Une case cochée par défaut vaut-elle consentement ?', back: 'Non : ni silence, ni case précochée, ni inactivité (considérant 32 du RGPD, arrêt Planet49 de 2019).' },
     { id: 'cookies', front: 'Que demande la CNIL pour le refus des cookies ?', back: 'Refuser aussi simplement qu’accepter : « Tout refuser » au même niveau et au même format que « Tout accepter ». Un « Paramétrer » seul ne suffit pas.' },
     { id: 'fines', front: 'Quelles sanctions la CNIL a-t-elle prononcées pour des refus de cookies trop compliqués ?', back: 'Google 150 M€ et Facebook 60 M€ (fin 2021), TikTok 5 M€ (rendue publique en janvier 2023).' },
-    { id: 'dsa', front: 'Que prévoit l’article 25 du DSA ?', back: 'Il interdit aux plateformes en ligne les interfaces qui trompent, manipulent ou altèrent substantiellement les décisions libres et éclairées.' },
+    { id: 'dsa', front: 'Que prévoit l’article 25 du DSA ?', back: 'Il interdit aux plateformes en ligne les interfaces qui trompent, manipulent ou altèrent substantiellement les décisions libres et éclairées — hors pratiques déjà couvertes par le RGPD ou la directive 2005/29/CE.' },
     { id: 'nagging', front: 'Comment éviter le harcèlement (nagging) ?', back: 'Offrir un vrai « non » (« Non merci », « Ne plus demander ») et ne pas redemander un choix déjà fait.' },
   ],
   exercises: [
@@ -282,7 +282,7 @@ Impeccable va dans le même sens : ne jamais simuler un travail ni retarder un r
             html: fr(`<div class="ck-page"><div class="ck mk-stack" style="--gap:10px">${CK_TEXT}<span class="mk-btn mk-btn--block ck-btn">Tout accepter</span><span class="mk-btn mk-btn--block mk-btn--ghost">Paramétrer</span></div></div>`),
             css: CK_CSS,
           },
-          why: 'Pas de refus au premier niveau : il faut ouvrir les réglages et tout décocher, soit plusieurs clics contre un seul pour accepter. La CNIL juge qu’un « Paramétrer » seul ne suffit pas.',
+          why: 'Pas de refus au premier niveau : il faut ouvrir les réglages puis enregistrer un refus, soit au moins deux clics contre un seul pour accepter. La CNIL juge qu’un « Paramétrer » seul ne suffit pas.',
         },
         {
           id: 'faint',
@@ -319,7 +319,7 @@ Fin 2021, elle a sanctionné Google (150 M€) et Facebook (60 M€) parce que r
         {
           id: 'shame',
           visual: {
-            height: 330,
+            height: 400,
             alt: 'Fenêtre proposant -10 % contre une inscription, avec un bouton « J’en profite » et un lien de refus « Non merci, je préfère payer plein tarif ».',
             html: newsDialog('Non merci, je préfère payer plein tarif'),
             css: `.cs-no { font-size: 13px; color: #3a4152; text-decoration: underline; }`,
@@ -329,7 +329,7 @@ Fin 2021, elle a sanctionné Google (150 M€) et Facebook (60 M€) parce que r
         {
           id: 'neutral',
           visual: {
-            height: 330,
+            height: 400,
             alt: 'Même fenêtre avec un lien de refus « Non merci » et la mention « Un e-mail par semaine, désinscription en un clic ».',
             html: newsDialog('Non merci', '<p class="mk-small mk-muted">Un e-mail par semaine, désinscription en un clic.</p>'),
             css: `.cs-no { font-size: 13px; color: #3a4152; text-decoration: underline; }`,
@@ -341,7 +341,7 @@ Fin 2021, elle a sanctionné Google (150 M€) et Facebook (60 M€) parce que r
       explanation: `Le **confirmshaming** manipule par la culpabilité ou la honte : l’option de refus est rédigée pour rabaisser qui la choisit. Le site Deceptive Patterns cite un vendeur de trousses de premiers secours dont le lien de refus disait, en substance, « Non, je préfère me vider de mon sang ».
 
 L’offre elle-même n’a rien de trompeur ; c’est la formulation du refus qui l’est. Un refus se rédige de façon neutre et courte : « Non merci ».`,
-      takeaway: 'Un refus se formule de façon neutre (« Non merci ») : culpabiliser celui qui dit non est un motif trompeur.',
+      takeaway: 'Un refus se formule de façon neutre (« Non merci ») : culpabiliser la personne qui dit non est un motif trompeur.',
       sources: [dp('confirmshaming', 'Confirmshaming'), 'imp:clarify'],
     },
     {
@@ -450,7 +450,7 @@ C’est aussi un problème juridique : le RGPD exige un consentement **éclairé
       answer: 'aligned',
       explanation: `La **comparaison empêchée** (*comparison prevention*) rend la comparaison si pénible qu’on renonce — et qu’on se rabat sur l’offre mise en avant ou la plus chère. Les ficelles : unités différentes (semaine, mois, an), caractéristiques sans critères communs, détails cachés derrière des liens.
 
-Ici, les deux pages décrivent les mêmes offres : 1,38 € par semaine font bien 5,99 € par mois, et 239,88 € par an, 19,99 € par mois. Seule la version recommandée permet de le voir sans calculer. C’est aussi une question de charge cognitive : un tableau côte à côte retient l’information à la place de la personne.`,
+Ici, les deux pages décrivent les mêmes offres : 5,99 € par mois s’affichent en 1,38 € par semaine (5,99 × 12 ÷ 52, arrondi), et 19,99 € par mois en 239,88 € par an. Seule la version recommandée permet de le voir sans calculer. C’est aussi une question de charge cognitive : un tableau côte à côte retient l’information à la place de la personne.`,
       takeaway: 'Présente les offres dans la même unité et selon les mêmes critères : empêcher la comparaison est un motif trompeur.',
       sources: [dp('comparison-prevention', 'Comparison prevention'), 'deceptive'],
     },
@@ -477,7 +477,7 @@ Ici, les deux pages décrivent les mêmes offres : 1,38 € par semaine font bie
         css: `.co-trip { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #f4f6f9; }
 .co-lines { display: flex; flex-direction: column; gap: 8px; }
 .co-total { border-top: 1px solid #e3e6ec; padding-top: 10px; }
-.co-fee { width: fit-content; margin: 4px 0 0 auto; font-size: 10px; color: #a3a9b5; }`,
+.co-fee { width: fit-content; margin: 0 0 0 auto; padding: 5px 0 5px 8px; font-size: 10px; color: #a3a9b5; }`,
       },
       hotspots: [
         { id: 'insurance', label: 'Assurance cochée d’avance', correct: true, why: 'Panier piégé par présélection : une option payante ajoutée sans demande. Tout paiement supplémentaire exige un consentement exprès ; à défaut, le client a droit au remboursement.' },
@@ -512,10 +512,11 @@ Le rappel du trajet et le bouton qui annonce le montant sont, eux, de bonnes pra
 <div class="cs-row"><div><b>Réseaux sociaux</b><p class="mk-small mk-muted">Boutons de partage, vidéos intégrées</p></div><span class="mk-toggle mk-toggle--on"></span></div>
 </div>
 <span class="cs-partners" data-hotspot="partners">Voir la liste de nos 214 partenaires</span>
-<div class="mk-grid" style="--cols:2;--gap:8px" data-hotspot="buttons"><span class="mk-btn mk-btn--ghost">Tout refuser</span><span class="mk-btn mk-btn--ghost">Enregistrer mes choix</span></div>
+<div class="mk-grid cs-btns" style="--cols:2;--gap:8px" data-hotspot="buttons"><span class="mk-btn mk-btn--ghost">Tout refuser</span><span class="mk-btn mk-btn--ghost">Enregistrer mes choix</span></div>
 </div>`),
         css: `.cs-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid #eceef2; font-size: 13px; }
-.cs-partners { align-self: flex-start; font-size: 12px; color: #1f4fd8; text-decoration: underline; }`,
+.cs-partners { align-self: flex-start; font-size: 12px; color: #1f4fd8; text-decoration: underline; }
+.cs-btns .mk-btn { white-space: normal; text-align: center; line-height: 1.25; padding: 6px 10px; }`,
       },
       hotspots: [
         { id: 'intro', label: '« En poursuivant votre navigation, vous acceptez »', correct: true, why: 'Poursuivre la navigation n’est pas un acte positif clair : ce n’est pas un consentement.' },
@@ -554,7 +555,7 @@ Les cookies strictement nécessaires, eux, peuvent rester actifs sans consenteme
 </div></div>`),
         css: `.cn-top { padding: 10px 14px; border-bottom: 1px solid #eceef2; }
 .cn-area { min-height: 64px; color: #6b7280; font-size: 13px; }
-.cn-shame { align-self: center; font-size: 11px; color: #a3a9b5; text-decoration: underline; }
+.cn-shame { align-self: center; padding: 5px 10px; font-size: 11px; color: #a3a9b5; text-decoration: underline; }
 .cn-phone { display: flex; gap: 6px; align-items: flex-start; padding: 8px 10px; border-radius: 8px; background: #f4f6f9; font-size: 12px; color: #3a4152; }`,
       },
       hotspots: [
@@ -564,15 +565,15 @@ Les cookies strictement nécessaires, eux, peuvent rester actifs sans consenteme
         { id: 'date', label: 'Date de fin d’accès', correct: false, why: 'Indiquer jusqu’à quand l’accès reste actif est une information honnête et utile.' },
         { id: 'downloads', label: 'Téléchargements retirés', correct: false, why: 'Prévenir des effets réels de la résiliation, sans dramatiser, aide à décider.' },
       ],
-      explanation: `Pour les plateformes en ligne, le DSA cite parmi les pratiques à encadrer le fait de « rendre la procédure de désinscription d’un service plus compliquée que l’inscription à celui-ci ». Ici, trois freins :
+      explanation: `En France, depuis le 1er juin 2023, ce qui se souscrit en ligne doit pouvoir se résilier en ligne, par une fonction gratuite et facile d’accès (Code de la consommation, article L215-1-1). Dans toute l’UE, la directive sur les pratiques commerciales déloyales tient compte des obstacles importants ou disproportionnés mis à la résiliation pour juger une pratique agressive (article 9). Ici, trois freins :
 
 - **Obstruction** : un questionnaire obligatoire, avec un minimum de caractères, pour lasser.
 - **Confirmshaming et interférence visuelle** : la résiliation n’est qu’un petit lien pâle, formulé pour culpabiliser, face à un gros bouton « Garder Premium ».
-- **Résiliation obstruée** : finir par téléphone, sur un numéro surtaxé, alors que l’abonnement se prend en ligne. En France, depuis le 1er juin 2023, ce qui se souscrit en ligne doit pouvoir se résilier en ligne, gratuitement.
+- **Résiliation obstruée** : finir par téléphone, sur un numéro surtaxé, alors que l’abonnement se prend en ligne.
 
-Rappeler la date de fin d’accès et ce qui sera retiré relève, au contraire, de l’information honnête.`,
+Impeccable (critique, heuristique 3) demande une « sortie de secours » claire, sans dialogue prolongé. Rappeler la date de fin d’accès et ce qui sera retiré relève, au contraire, de l’information honnête.`,
       takeaway: 'Résilier doit être aussi simple que s’abonner : même canal, pas de questionnaire obligatoire, un bouton clair et neutre.',
-      sources: [dp('hard-to-cancel', 'Hard to cancel'), dp('obstruction', 'Obstruction'), dp('confirmshaming', 'Confirmshaming'), INC, DSA],
+      sources: [dp('hard-to-cancel', 'Hard to cancel'), dp('obstruction', 'Obstruction'), dp('confirmshaming', 'Confirmshaming'), INC, UCPD, 'imp:critique'],
     },
     {
       id: 'dark-patterns-consent-choice',
