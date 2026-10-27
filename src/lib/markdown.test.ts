@@ -25,6 +25,11 @@ describe('markdown subset', () => {
     expect(frenchSpacing('Vrai ? « oui » : «non»')).toBe('Vrai ? « oui » : « non »');
     expect(frenchSpacing('12:30 et https://exemple.fr')).toBe('12:30 et https://exemple.fr');
   });
+
+  it('keeps numeric ranges on one line', () => {
+    expect(frenchSpacing('de 36–40 et 1,2–1,5')).toBe('de 36–\u206040 et 1,2–\u20601,5');
+    expect(frenchSpacing('avant – après')).toBe('avant – après');
+  });
 });
 
 describe('mock icons', () => {

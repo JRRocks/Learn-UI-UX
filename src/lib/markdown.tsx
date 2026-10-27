@@ -12,7 +12,9 @@ export function frenchSpacing(text: string): string {
     .replace(/ ([;!?])/g, '\u202F$1')
     .replace(/ :(?=\s|$)/g, '\u00A0:')
     .replace(/«[ \u00A0\u202F]?/g, '«\u202F')
-    .replace(/[ \u00A0\u202F]?»/g, '\u202F»');
+    .replace(/[ \u00A0\u202F]?»/g, '\u202F»')
+    // A numeric range (« 36–40 ») must not break after its dash.
+    .replace(/(\d)\u2013(?=\d)/g, '$1\u2013\u2060');
 }
 
 const INLINE = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
