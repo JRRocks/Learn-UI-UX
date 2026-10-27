@@ -1,9 +1,11 @@
 import type { ModuleContent, SourceRef } from '../../engine/types';
 
 /*
- * Intl outputs quoted below were checked with Node 22 (ICU): fr-FR compact currency of 987 654 321
- * gives "988 M €" (or "987,7 M €" with maximumFractionDigits: 1); PluralRules('fr').select(0) is "one";
- * PluralRules('ar') has six categories; '😀'.length is 2 and the family emoji is 8 UTF-16 code units.
+ * Intl outputs quoted below were checked with Node 22 (ICU 77, CLDR 47): fr-FR compact currency of 987 654 321
+ * gives "988 M €" (or "987,7 M €" with maximumFractionDigits: 1), of 12 480 350 gives "12 M €" (or "12,5 M €");
+ * PluralRules('fr').select(0) is "one"; PluralRules('ar') has six categories; '😀'.length is 2; the family
+ * emoji is 8 UTF-16 code units but 1 grapheme for Intl.Segmenter, so "En vacances en famille" + family emoji
+ * has length 31 and 24 graphemes; NFC, NFD, NFKC and NFKD all keep ك/ک and ي/ی distinct.
  */
 
 const W3C_TEXT_SIZE: SourceRef = { label: 'W3C — Text size in translation', url: 'https://www.w3.org/International/articles/article-text-size' };
@@ -46,23 +48,29 @@ const KPI_CSS = `
 
 const KPI_GRID_CSS = `${KPI_CSS}
 .har-kpis { display: flex; flex-wrap: wrap; gap: 10px; }
-.har-kpis .har-kpi { flex: 0 0 150px; }
+.har-kpis .har-kpi { flex: 1 1 150px; }
 .har-kpis b { font-size: 21px; }
 `;
 
 const SEARCH_HEAD = `<span class="mk-input" style="display:flex;align-items:center;gap:8px"><i data-icon="search" style="--ico:16px"></i>Müller</span>
   <div class="har-tr har-th"><span>Client</span><span>Ville</span><span class="har-num">Commandes</span></div>`;
 
-/** Arabic settings list; only the directional icons change between the two versions. */
-const AR_SETTINGS = (back: string, chevron: string) => `<div class="mk-pad mk-stack" style="--gap:10px">
-  <div class="mk-row" style="--gap:10px"><i data-icon="${back}"></i><p class="mk-h2">الإعدادات</p></div>
-  <ul class="mk-list">
-    <li><i data-icon="user" style="--ico:18px"></i><span class="mk-grow">الحساب</span><i data-icon="${chevron}" style="--ico:16px"></i></li>
-    <li><i data-icon="bell" style="--ico:18px"></i><span class="mk-grow">الإشعارات</span><i data-icon="${chevron}" style="--ico:16px"></i></li>
-    <li><i data-icon="languages" style="--ico:18px"></i><span class="mk-grow">اللغة</span><span class="mk-small mk-muted">العربية</span><i data-icon="${chevron}" style="--ico:16px"></i></li>
-    <li><i data-icon="lock" style="--ico:18px"></i><span class="mk-grow">الخصوصية</span><i data-icon="${chevron}" style="--ico:16px"></i></li>
-  </ul>
+/** Family emoji (man, woman, girl): 8 UTF-16 code units, a single grapheme. */
+const FAMILY = '\u{1F468}‍\u{1F469}‍\u{1F467}';
+
+/** Profile status limited to 30 characters; only the counter (and what it blocks) differs between versions. */
+const STATUS_FIELD = (count: number) => {
+  const over = count > 30;
+  return `<div class="mk-pad mk-stack" style="--gap:14px">
+  <p class="mk-h2">Modifier le profil</p>
+  <div class="mk-field">
+    <span class="mk-label">Statut</span>
+    <span class="mk-input${over ? ' mk-input--error' : ''}">En vacances en famille ${FAMILY}</span>
+    <div class="mk-row" style="--gap:10px">${over ? '<span class="mk-error">30 caractères maximum</span>' : ''}<span class="${over ? 'mk-error' : 'mk-help'}" style="margin-inline-start:auto">${count}/30</span></div>
+  </div>
+  <span class="mk-btn mk-btn--block${over ? ' mk-btn--disabled' : ''}">Enregistrer</span>
 </div>`;
+};
 
 /** Arabic conversation list for the RTL duel. */
 const AR_CHATS = (back: string) => `<div class="mk-pad mk-stack" style="--gap:10px">
@@ -98,6 +106,7 @@ const harden: ModuleContent = {
 - **Grands nombres** : millions, milliards, montants à 9 chiffres.
 - **Beaucoup d’éléments** : 1 000 lignes, 50 options dans une liste — pagination ou défilement virtuel, recherche et filtres ; on ne charge pas 10 000 éléments d’un coup.
 - **Aucune donnée** : liste vide, recherche sans résultat, aucune notification — toujours avec une action claire pour avancer.
+- **Chargement** : premier affichage, page suivante, actualisation — dis ce qui charge (« Chargement des projets… ») et donne une estimation quand l’opération est longue. Les modules « Performance perçue » et « Rédaction UX » détaillent ces états.
 - **Mauvaises conditions** : hors ligne, connexion lente, délai dépassé, erreurs serveur, actions simultanées.
 
 Les maquettes « parfaites » cachent ces cas ; la vérification consiste à les **provoquer** : coller un nom de 100 caractères, mettre des emoji dans chaque champ, cliquer dix fois de suite sur « Envoyer », couper le réseau, ralentir la connexion, passer l’interface en arabe.`,
@@ -143,7 +152,7 @@ Les maquettes « parfaites » cachent ces cas ; la vérification consiste à les
 Le piège classique des mises en page flexibles : par défaut, un enfant flex ou grid ne rétrécit pas sous la largeur de son contenu (\`min-width: auto\`). Un nom de fichier sans espace pousse alors les boutons hors du cadre. La correction : \`min-width: 0\` sur l’enfant qui doit rétrécir (et \`min-height: 0\` dans une grille).
 
 - Pas de **largeur fixe** sur un conteneur de texte : les conteneurs grandissent avec leur contenu.
-- Ne tronque jamais un **nombre** : « 12 480 3… » devient faux. Préfère une notation compacte — \`Intl.NumberFormat\` avec \`notation: 'compact'\` donne « 988 M € » en français — et garde la valeur exacte accessible.
+- Ne tronque jamais un **nombre** : « 12 480 3… » devient faux. Dans un tableau, élargis la colonne. Dans une tuile d’indicateur, préfère une notation compacte : pour 12 480 350 €, \`Intl.NumberFormat\` avec \`notation: 'compact'\` donne « 12 M € » en français (« 12,5 M € » avec une décimale). Et garde la valeur exacte accessible.
 - Teste le **zoom à 200 %**.
 - Sur mobile, les champs de formulaire font au moins **16 px** : en dessous, Safari sur iOS zoome de force sur le champ au focus et casse la mise en page. Le corps de texte suit le même plancher ; 14 px seulement pour du texte vraiment secondaire.`,
       examples: [
@@ -156,12 +165,11 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
           },
           badNote: 'L’enfant flex refuse de rétrécir sous la largeur de son contenu : tout ce qui suit passe hors champ.',
           good: {
-            alt: 'Même ligne : le nom est tronqué par des points de suspension avant l’extension .pdf, et la taille et le bouton restent visibles.',
-            html: `<div class="mk-pad"><div class="mk-card"><div class="mk-row mk-wrap" style="--gap:8px 10px"><i data-icon="file-text"></i><span class="har-fname" title="Rapport_annuel_2026_version_finale_validée_par_la_direction_v3.pdf"><span class="har-base">Rapport_annuel_2026_version_finale_validée_par_la_direction_v3</span><span>.pdf</span></span><span class="mk-row" style="--gap:10px;margin-inline-start:auto"><span class="mk-small mk-muted">2,4&nbsp;Mo</span><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Télécharger</span></span></div></div></div>`,
-            css: `.har-fname { display: flex; flex: 1 1 150px; min-width: 0; font-weight: 600; }
-.har-base { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }`,
+            alt: 'Même ligne : le nom revient à la ligne et se lit en entier ; la taille et le bouton de téléchargement restent visibles.',
+            html: `<div class="mk-pad"><div class="mk-card"><div class="mk-row mk-wrap" style="--gap:8px 10px"><i data-icon="file-text"></i><span class="har-fname">Rapport_annuel_2026_version_finale_validée_par_la_direction_v3.pdf</span><span class="mk-row" style="--gap:10px;margin-inline-start:auto"><span class="mk-small mk-muted">2,4&nbsp;Mo</span><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Télécharger</span></span></div></div></div>`,
+            css: `.har-fname { flex: 1 1 150px; min-width: 0; font-weight: 600; overflow-wrap: break-word; }`,
           },
-          goodNote: 'min-width: 0 et une ellipse sur la base du nom : l’extension reste visible, et le nom complet s’affiche en infobulle.',
+          goodNote: '`min-width: 0` laisse le nom rétrécir et `overflow-wrap: break-word` le coupe là où il dépasse : il se lit en entier, et la taille et le bouton restent à leur place.',
         },
       ],
     },
@@ -176,28 +184,24 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
 
 - **Conserve le ZWNJ** (U+200C, antiliant sans chasse) : en persan et en kurde, il coupe la liaison cursive à l’intérieur d’un mot composé. Un filtre qui le supprime change l’orthographe, voire le sens.
 - **Variantes de lettres** : le persan utilise ی (U+06CC) et ک (U+06A9), l’arabe ي (U+064A) et ك (U+0643). Conserve la forme d’origine, mais traite-les comme **équivalentes** pour la recherche et la validation : refuser l’une bloque les gens dont le clavier envoie l’autre.
-- **Chiffres et calendriers** : \`new Intl.NumberFormat('fa-IR').format(1234)\` écrit « ۱٬۲۳۴ », la locale \`ar-SA\` « ١٬٢٣٤ » ; \`Intl.DateTimeFormat\` suit le calendrier persan (hégire solaire) avec \`fa-IR\`, le calendrier hégirien avec \`ar-SA-u-ca-islamic\`.
+- **Chiffres et calendriers** : \`Intl\` adapte les chiffres à la **locale**, le code qui désigne une langue et une région : \`new Intl.NumberFormat('fa-IR').format(1234)\` écrit « ۱٬۲۳۴ », la locale \`ar-SA\` « ١٬٢٣٤ » ; \`Intl.DateTimeFormat\` suit le calendrier persan (hégire solaire) avec \`fa-IR\`, le calendrier hégirien avec \`ar-SA-u-ca-islamic\`.
 
-**Chinois, japonais, coréen (CJK) et emoji** : encodage UTF-8 partout, polices qui couvrent ces écritures, et prudence avec les compteurs de caractères — en JavaScript, \`'😀'.length\` vaut 2, et un emoji « famille » (homme, femme, fille) en compte 8 pour un seul caractère visible.`,
+**Chinois, japonais, coréen (CJK) et emoji** : encodage UTF-8 partout, polices qui couvrent ces écritures, et prudence avec les compteurs de caractères — en JavaScript, \`'😀'.length\` vaut 2, et un emoji « famille » (homme, femme, fille) en compte 8 pour un seul caractère visible. Pour compter ce que la personne voit, compte les **graphèmes** (les caractères tels qu’on les perçoit) avec \`Intl.Segmenter\`.`,
       examples: [
         {
-          title: 'Mettre la mise en page en miroir',
+          title: 'Compter les caractères qu’on voit',
           bad: {
-            alt: 'Écran de réglages en arabe dont la mise en page est restée de gauche à droite : flèche retour et icônes à gauche, texte aligné à gauche, chevrons pointant vers la droite.',
+            alt: 'Écran « Modifier le profil » : le champ Statut contient « En vacances en famille » suivi d’un emoji famille ; le compteur affiche 31/30 en rouge avec le message « 30 caractères maximum », et le bouton Enregistrer est désactivé.',
             frame: 'phone',
-            lang: 'ar',
-            dir: 'ltr',
-            html: AR_SETTINGS('arrow-left', 'chevron-right'),
+            html: STATUS_FIELD(31),
           },
-          badNote: 'Le texte est traduit, mais la page se lit encore comme en français : départ, alignement et flèches sont inversés.',
+          badNote: 'Le compteur utilise `.length`, qui compte les unités de code UTF-16 : l’emoji famille en vaut 8 à lui seul. Un statut de 24 caractères visibles est refusé.',
           good: {
-            alt: 'Même écran de réglages en arabe, en miroir : flèche retour et icônes à droite, texte aligné à droite, chevrons pointant vers la gauche.',
+            alt: 'Même écran avec le même statut : le compteur affiche 24/30 et le bouton Enregistrer est actif.',
             frame: 'phone',
-            lang: 'ar',
-            dir: 'rtl',
-            html: AR_SETTINGS('arrow-right', 'chevron-left'),
+            html: STATUS_FIELD(24),
           },
-          goodNote: 'L’attribut dir="rtl" et des propriétés logiques retournent la mise en page ; seules les icônes directionnelles changent.',
+          goodNote: '`Intl.Segmenter` découpe le texte en graphèmes : l’emoji famille compte pour un caractère, comme à l’écran.',
         },
       ],
     },
@@ -209,14 +213,14 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
 - **Dates** : le 27 octobre 2026 s’écrit \`10/27/2026\` en \`en-US\`, \`27.10.2026\` en \`de-DE\` et \`27/10/2026\` en \`fr-FR\`. Une date comme 03/04 désigne le 3 avril ou le 4 mars selon le pays.
 - **Nombres** : « 1,000 » en anglais et « 1.000 » en allemand valent tous deux mille ; à l’inverse, « 1,500 » vaut mille cinq cents en anglais, mais un et demi en allemand. En français, le séparateur des milliers est une espace fine insécable et la décimale une virgule.
 - **Devises** : le symbole change de place et d’espacement — « €1,234.56 » en \`en-US\`, « 1.234,56 € » en \`de-DE\`, « 1 234,56 € » en \`fr-FR\`.
-- **Pluriels** : \`count !== 1 ? 's' : ''\` ne marche qu’en anglais. L’arabe a **six** catégories de pluriel (zéro, un, deux, quelques, beaucoup, autre) ; le polonais et le russe distinguent « quelques » et « beaucoup » ; en français, les règles CLDR mettent 0 au singulier (« 0 fichier »). Utilise une bibliothèque i18n ou \`Intl.PluralRules\`.
+- **Pluriels** : \`count !== 1 ? 's' : ''\` ne marche qu’en anglais. L’arabe a **six** catégories de pluriel (zéro, un, deux, quelques, beaucoup, autre) ; le polonais et le russe distinguent « quelques » et « beaucoup » ; en français, les règles du CLDR (*Common Locale Data Repository*, la base d’Unicode qui décrit formats et pluriels de chaque langue, et sur laquelle s’appuie \`Intl\`) mettent 0 au singulier (« 0 fichier »). Utilise une bibliothèque i18n ou \`Intl.PluralRules\`.
 
 \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` et \`Intl.PluralRules\` font ce travail à partir de la **locale** — la langue et la région de la personne.`,
     },
     {
       id: 'erreurs',
-      title: 'Erreurs : quoi, pourquoi, comment s’en sortir',
-      body: `Un message d’erreur utile répond à trois questions : **ce qui a échoué**, **pourquoi** (quand c’est connu et utile), **comment s’en sortir** ou quelle alternative reste. Il ne met pas un code interne en avant, n’accuse pas l’utilisateur, ne promet pas une cause que le système ignore — et **conserve la saisie**.
+      title: 'Erreurs serveur et réseau : une réponse par cas',
+      body: `Un message d’erreur utile répond à trois questions : **ce qui a échoué**, **pourquoi** (quand c’est connu et utile), **comment s’en sortir** ou quelle alternative reste (le module « Rédaction UX » détaille sa rédaction). Il ne met pas un code interne en avant, n’accuse pas l’utilisateur, ne promet pas une cause que le système ignore — et **conserve la saisie**.
 
 Chaque réponse du serveur appelle une réaction différente :
 
@@ -242,7 +246,7 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
           good: {
             alt: 'Même éditeur avec un bandeau en tête : « Note non enregistrée. La connexion a été perdue ; votre texte est conservé sur cet appareil » et un bouton Réessayer.',
             html: `<div class="mk-pad mk-stack" style="--gap:10px">
-  <div class="har-banner"><i data-icon="wifi" style="--ico:18px"></i><div class="mk-grow"><p class="mk-strong">Note non enregistrée</p><p class="mk-small">La connexion a été perdue&#8239;; votre texte est conservé sur cet appareil.</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Réessayer</span></div>
+  <div class="har-banner"><i data-icon="circle-alert" style="--ico:18px"></i><div class="mk-grow"><p class="mk-strong">Note non enregistrée</p><p class="mk-small">La connexion a été perdue&#8239;; votre texte est conservé sur cet appareil.</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Réessayer</span></div>
   ${NOTE_BODY}
 </div>`,
             css: `.har-banner { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #fdf3e3; color: #6b3a00; border: 1px solid #f1d6a8; }`,
@@ -256,7 +260,11 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
       title: 'Double clic, gestes interrompus, permissions, validation',
       body: `**Double soumission.** Sur une connexion lente, sans retour visible, les gens recliquent. Désactive le bouton pendant l’envoi en le disant (« Paiement en cours… »), gère les situations de concurrence (*race conditions*), et côté serveur rends l’opération **idempotente** : rejouée deux fois, elle produit le même résultat. Les mises à jour optimistes prévoient un retour arrière si le serveur refuse.
 
-**Gestes interrompus** (curseurs maison, surfaces glissables, bandes de contrôles défilantes). Un second doigt qui se pose laisse le premier glissement garder son pointeur ou se terminer proprement, sans sauter vers le nouveau. Quand le navigateur annule le geste pour faire défiler (\`pointercancel\`), que la capture est perdue (\`lostpointercapture\`), que le pointeur est relâché hors du contrôle ou que la fenêtre perd le focus (\`blur\`), efface l’état de glissement et libère la capture. Le geste suivant doit fonctionner sans recharger.
+**Modifications simultanées.** Quand deux personnes modifient la même donnée en même temps, détecte le **conflit** (avec un numéro de version, par exemple) plutôt que de laisser le second enregistrement écraser le premier en silence ; montre les deux versions et laisse choisir celle à garder, ou fusionner.
+
+**Nettoyage.** Quand un composant disparaît, retire ses écouteurs, arrête ses minuteurs, résilie ses abonnements et annule ses requêtes en cours (\`AbortController\`) : sinon la mémoire fuit, et une réponse tardive tente de mettre à jour un écran déjà fermé.
+
+**Gestes interrompus** (curseurs maison, surfaces glissables, bandes de contrôles défilantes). Pendant un glissement, le contrôle prend en général la **capture du pointeur** : il reçoit tous les mouvements du doigt ou de la souris, même hors de sa zone. Un second doigt qui se pose laisse le premier glissement garder son pointeur ou se terminer proprement, sans sauter vers le nouveau. Quand le navigateur annule le geste pour faire défiler (\`pointercancel\`), que la capture est perdue (\`lostpointercapture\`), que le pointeur est relâché hors du contrôle ou que la fenêtre perd le focus (\`blur\`), efface l’état de glissement et libère la capture. Le geste suivant doit fonctionner sans recharger.
 
 **Permissions.** Pas le droit de voir, pas le droit de modifier, lecture seule : chaque cas s’affiche clairement, avec sa raison.
 
@@ -265,7 +273,7 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
     {
       id: 'tester',
       title: 'Provoquer les cas limites',
-      body: `- **À la main** : données extrêmes (très long, très court, vide), autres langues, hors ligne, connexion ralentie (profil 3G), lecteur d’écran, clavier seul, anciens navigateurs, dix clics rapides sur « Envoyer ».
+      body: `- **À la main** : données extrêmes (très long, très court, vide), autres langues, hors ligne, connexion ralentie (profil 3G), lecteur d’écran, clavier seul, mode contraste élevé de Windows (\`forced-colors\` : le système impose ses couleurs, rien ne doit reposer sur la couleur seule), anciens navigateurs, dix clics rapides sur « Envoyer ».
 - **Automatiquement** : tests unitaires des cas limites, tests d’intégration des scénarios d’erreur, tests de bout en bout des parcours critiques, régression visuelle, tests d’accessibilité (axe, WAVE).
 - **Pour les gestes** : dis ce qui a produit la preuve (fenêtre émulée, toucher synthétique, moteur de rendu, appareil physique) et ce qui n’a pas été testé.
 
@@ -330,7 +338,7 @@ La version robuste donne \`min-width: 0\` au bloc de texte pour qu’il puisse r
         {
           id: 'fixed',
           visual: {
-            alt: 'Fenêtre en allemand « Änderungen speichern? » dont les deux boutons ont la même largeur fixe : le libellé du bouton principal est coupé après « Änderungen spei ».',
+            alt: 'Fenêtre en allemand « Änderungen speichern? » dont les deux boutons ont la même largeur fixe : le libellé du bouton principal, « Änderungen speichern », est coupé : seul son début est visible.',
             lang: 'de',
             html: `<div class="mk-pad"><div class="har-dialog">
   <p class="mk-h3">Änderungen speichern?</p>
@@ -368,7 +376,7 @@ Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter 
       id: 'harden-amount-duel',
       type: 'choice',
       difficulty: 2,
-      prompt: 'Le chiffre d’affaires annuel d’un client atteint 987 654 321,00 €. Quelle tuile l’affiche correctement ?',
+      prompt: 'Le chiffre d’affaires annuel de l’enseigne atteint 987 654 321,00 €. Quelle tuile l’affiche correctement ?',
       options: [
         {
           id: 'cut',
@@ -376,10 +384,10 @@ Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter 
             alt: 'Trois tuiles d’indicateurs ; le chiffre d’affaires annuel est coupé par des points de suspension au milieu du nombre.',
             html: `<div class="mk-pad"><div class="har-kpis">
   <div class="har-kpi"><span class="mk-small mk-muted">Chiffre d’affaires annuel</span><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">987&#8239;654&#8239;321,00&nbsp;€</b></div>
-  <div class="har-kpi"><span class="mk-small mk-muted">Clients actifs</span><b>1&#8239;284</b></div>
+  <div class="har-kpi"><span class="mk-small mk-muted">Clients actifs</span><b>412&#8239;380</b></div>
   <div class="har-kpi"><span class="mk-small mk-muted">Panier moyen</span><b>54,20&nbsp;€</b></div>
 </div></div>`,
-            css: KPI_GRID_CSS,
+            css: `${KPI_GRID_CSS}.har-kpis .har-kpi { flex: 0 0 150px; }`,
           },
           why: 'Le montant est tronqué au milieu des chiffres : il ne veut plus rien dire, et un lecteur pressé peut retenir un tout autre nombre.',
         },
@@ -389,7 +397,7 @@ Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter 
             alt: 'Trois tuiles d’indicateurs ; le chiffre d’affaires annuel s’affiche « 987,7 M € », avec la valeur exacte en petit en dessous.',
             html: `<div class="mk-pad"><div class="har-kpis">
   <div class="har-kpi"><span class="mk-small mk-muted">Chiffre d’affaires annuel</span><b>987,7&nbsp;M&nbsp;€</b><span class="mk-small mk-muted">987&#8239;654&#8239;321,00&nbsp;€</span></div>
-  <div class="har-kpi"><span class="mk-small mk-muted">Clients actifs</span><b>1&#8239;284</b></div>
+  <div class="har-kpi"><span class="mk-small mk-muted">Clients actifs</span><b>412&#8239;380</b></div>
   <div class="har-kpi"><span class="mk-small mk-muted">Panier moyen</span><b>54,20&nbsp;€</b></div>
 </div></div>`,
             css: KPI_GRID_CSS,
@@ -439,7 +447,7 @@ Pour un indicateur, la **notation compacte** de \`Intl.NumberFormat\` (\`notatio
       answer: 'local',
       explanation: `Une erreur doit rester **à la taille de ce qui a échoué**. Remplacer toute la page parce qu’un composant ne répond pas prive l’utilisateur de tout ce qui marchait encore — impeccable range ce réflexe parmi les erreurs à éviter.
 
-Le message suit la structure de la rédaction UX : **ce qui a échoué** (le graphique des ventes), **ce qui reste vrai** (les autres données sont à jour), **comment s’en sortir** (réessayer). Un code interne peut figurer pour le support, jamais comme message principal.`,
+Le message suit la structure d’une erreur utile : **ce qui a échoué** (le graphique des ventes), **pourquoi** (le service de statistiques ne répond pas), **comment s’en sortir** (réessayer) — en précisant ce qui reste disponible (les autres données sont à jour). Un code interne peut figurer pour le support, jamais comme message principal.`,
       takeaway: 'Une panne reste locale : le composant en erreur dit quoi et propose de réessayer, le reste de l’interface continue de fonctionner.',
       sources: ['imp:harden', 'imp:clarify', NNG_ERRORS],
     },
@@ -486,19 +494,22 @@ Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inli
       difficulty: 2,
       prompt: 'Ce tableau de commandes a été rempli avec de vraies données. Trouve les deux endroits qui cassent.',
       visual: {
-        alt: 'Tableau de quatre commandes avec les colonnes Client, Statut et Montant ; un nom de société très long passe sous l’étiquette de statut et un montant est coupé ; une pagination indique 1 à 4 sur 1 284.',
+        alt: 'Tableau de quatre commandes avec les colonnes Client, Statut et Montant, pour Léa Martin, Société coopérative laitière du Haut-Doubs, Hugo Petit et Atelier Nørd ; une pagination indique 1 à 4 sur 1 284 commandes.',
         frame: 'browser',
         html: `<div class="mk-pad"><div class="mk-stack har-orders" style="--gap:0">
   <div class="har-tr har-th" data-hotspot="header"><span>Client</span><span>Statut</span><span class="har-num">Montant</span></div>
   <div class="har-tr"><span>Léa Martin</span><span><span class="har-st har-st--ok">Payée</span></span><span class="har-num">84,90&nbsp;€</span></div>
-  <div class="har-tr"><span style="white-space:nowrap" data-hotspot="client">Société coopérative laitière du Haut-Doubs</span><span><span class="har-st har-st--ok">Payée</span></span><span class="har-num">2&#8239;310,00&nbsp;€</span></div>
+  <div class="har-tr"><span class="har-over" data-hotspot="client">Société coopérative laitière du Haut-Doubs</span><span class="har-under"><span class="har-st har-st--ok">Payée</span></span><span class="har-num">2&#8239;310,00&nbsp;€</span></div>
   <div class="har-tr"><span>Hugo Petit</span><span data-hotspot="status" style="justify-self:start"><span class="har-st har-st--wait">En attente</span></span><span class="har-num">129,00&nbsp;€</span></div>
   <div class="har-tr"><span>Atelier Nørd</span><span><span class="har-st har-st--ok">Payée</span></span><span class="har-num" data-hotspot="amount" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">12&#8239;480&#8239;350,00&nbsp;€</span></div>
   <p class="mk-small mk-muted" data-hotspot="pager" style="align-self:flex-end;margin-top:10px">1–4 sur 1&#8239;284 commandes</p>
 </div></div>`,
         css: `${TABLE_CSS}
 .har-orders { max-width: 480px; }
-.har-orders .har-tr { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) 84px; }`,
+.har-orders .har-tr { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) 84px; }
+/* The long name spills under the status label but stops before the amount column, at every width. */
+.har-over { grid-area: 1 / 1 / 2 / 3; white-space: nowrap; overflow: hidden; }
+.har-under { grid-area: 1 / 2; }`,
       },
       hotspots: [
         {
@@ -511,7 +522,7 @@ Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inli
           id: 'amount',
           label: 'Montant tronqué',
           correct: true,
-          why: 'Le montant est coupé au milieu de ses chiffres : un nombre tronqué devient faux. La colonne doit s’élargir, ou le montant passer en notation compacte avec la valeur exacte accessible.',
+          why: 'Le montant est coupé au milieu de ses chiffres : un nombre tronqué devient faux. Dans un tableau, la colonne s’élargit pour afficher le montant exact en chiffres tabulaires ; la notation compacte convient aux tuiles d’indicateurs.',
         },
         { id: 'header', label: 'En-têtes de colonnes', correct: false, why: 'Courts et alignés sur leurs données : rien à corriger.' },
         { id: 'status', label: 'Étiquette « En attente »', correct: false, why: 'L’étiquette tient dans sa colonne.' },
@@ -525,7 +536,7 @@ Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inli
       explanation: `Deux défauts classiques du vrai contenu :
 
 - **Débordement de texte** : un nom long, sans retour à la ligne possible, envahit la colonne voisine. Le texte doit pouvoir revenir à la ligne (\`overflow-wrap\`), ou être tronqué proprement avec le nom complet accessible.
-- **Nombre tronqué** : un montant coupé au milieu de ses chiffres ne signifie plus rien. Les montants ne se tronquent pas ; la colonne s’élargit ou passe en notation compacte.
+- **Nombre tronqué** : un montant coupé au milieu de ses chiffres ne signifie plus rien. Les montants ne se tronquent pas : la colonne s’élargit pour afficher la valeur exacte.
 
 La pagination, elle, est la réponse attendue à 1 284 commandes.`,
       takeaway: 'Avec du vrai contenu, aucun texte ne déborde sur ses voisins et aucun nombre n’est tronqué.',
@@ -593,18 +604,20 @@ Passer la locale de l’utilisateur à ces API règle d’un coup toutes les lan
       leftTitle: 'Code HTTP',
       rightTitle: 'Réaction de l’interface',
       pairs: [
-        { id: '400', left: '400 — requête invalide', right: 'Afficher les erreurs de validation près des champs concernés' },
-        { id: '401', left: '401 — non authentifié', right: 'Renvoyer vers la connexion en préservant le travail en cours' },
-        { id: '403', left: '403 — accès interdit', right: 'Expliquer le refus et comment obtenir l’accès' },
-        { id: '404', left: '404 — introuvable', right: 'Afficher un état « introuvable » avec une issue' },
-        { id: '429', left: '429 — trop de requêtes', right: 'Expliquer la limite et indiquer quand réessayer' },
-        { id: '500', left: '500 — erreur serveur', right: 'Message générique, bouton « Réessayer » et contact du support' },
+        { id: '400', left: '400', right: 'Afficher sous les champs concernés ce qu’il faut corriger' },
+        { id: '401', left: '401', right: 'Renvoyer vers la connexion en préservant le travail en cours' },
+        { id: '403', left: '403', right: 'Expliquer le refus et comment obtenir l’accès' },
+        { id: '404', left: '404', right: 'Afficher « Cette commande n’existe plus » avec un lien vers la liste' },
+        { id: '429', left: '429', right: 'Expliquer la limite et indiquer quand réessayer' },
+        { id: '500', left: '500', right: 'Message générique, bouton « Réessayer » et contact du support' },
       ],
-      explanation: `Une seule bannière « Une erreur est survenue » pour tous les cas laisse l’utilisateur sans recours. Chaque famille d’erreur appelle une réponse précise :
+      explanation: `Une seule bannière « Une erreur est survenue » pour tous les cas laisse l’utilisateur sans recours. Chaque code dit autre chose et appelle une réponse précise :
 
-- **401** et **403** se ressemblent mais n’ont rien à voir : le premier signifie « on ne sait pas qui vous êtes » (se reconnecter), le second « on sait qui vous êtes, mais vous n’avez pas le droit » (demander l’accès).
-- **429** signale une limite de débit : le serveur peut préciser, dans l’en-tête \`Retry-After\`, quand réessayer.
-- **500** est une panne côté serveur : l’utilisateur n’y peut rien, sinon réessayer ou contacter le support.`,
+- **400** (requête invalide) : le serveur refuse des données mal formées, le plus souvent un formulaire mal rempli ; on montre quoi corriger, près des champs.
+- **401** (non authentifié) et **403** (interdit) se ressemblent mais n’ont rien à voir : le premier signifie « on ne sait pas qui vous êtes » (se reconnecter), le second « on sait qui vous êtes, mais vous n’avez pas le droit » (demander l’accès).
+- **404** (introuvable) : la ressource n’existe pas, ou plus ; on le dit et on propose une issue.
+- **429** (trop de requêtes) signale une limite de débit : le serveur peut préciser, dans l’en-tête \`Retry-After\`, quand réessayer.
+- **500** (erreur serveur) est une panne côté serveur : l’utilisateur n’y peut rien, sinon réessayer ou contacter le support.`,
       takeaway: 'Chaque code a sa réponse : 400 → champs, 401 → reconnexion, 403 → accès, 404 → introuvable, 429 → patienter, 500 → réessayer.',
       sources: ['imp:harden', MDN_STATUS],
     },
@@ -617,12 +630,17 @@ Passer la locale de l’utilisateur à ces API règle d’un coup toutes les lan
       options: [
         {
           id: 'disable-idem',
-          label: 'Désactiver le bouton pendant l’envoi en affichant « Paiement en cours… », et rendre la requête idempotente côté serveur.',
+          label: 'Désactiver le bouton avec « Paiement en cours… » et rendre le paiement idempotent côté serveur.',
           why: 'Le retour visible évite le second appui ; l’idempotence garantit qu’une requête rejouée ne crée pas une seconde commande.',
         },
         {
+          id: 'disable-only',
+          label: 'Désactiver le bouton dès le premier appui, avec le libellé « Paiement en cours… ».',
+          why: 'Bon réflexe côté interface, mais insuffisant : la requête peut aussi partir deux fois à cause du réseau ou d’un rechargement de page. Sans idempotence côté serveur, la seconde commande est créée.',
+        },
+        {
           id: 'warning',
-          label: 'Ajouter le texte « N’appuyez qu’une seule fois ! » sous le bouton.',
+          label: 'Ajouter sous le bouton le message « Merci de n’appuyer qu’une seule fois sur Payer ».',
           why: 'On reporte sur l’utilisateur un défaut du système — et sans retour visible, on réappuie quand même.',
         },
         {
@@ -632,7 +650,7 @@ Passer la locale de l’utilisateur à ces API règle d’un coup toutes les lan
         },
         {
           id: 'hide',
-          label: 'Masquer le bouton dès le premier appui, sans autre indication.',
+          label: 'Masquer le bouton « Payer » dès le premier appui, sans afficher d’autre indication.',
           why: 'Le bouton disparaît sans explication : on croit à une panne, on recharge… et on repaie.',
         },
       ],
@@ -691,7 +709,7 @@ La validation et l’assainissement côté **serveur** sont donc **toujours** ob
       },
       control: 'Taille du texte du champ',
       min: 11,
-      max: 22,
+      max: 20,
       step: 1,
       initial: 13,
       unit: 'px',
@@ -713,17 +731,22 @@ La correction est simple : **16 px minimum** dans les champs sur mobile — le 
       options: [
         {
           id: 'equiv',
-          label: 'Conserver la forme d’origine en base, et traiter ك/ک et ي/ی comme équivalents pour la recherche et la validation.',
+          label: 'Garder le texte d’origine en base et traiter ك/ک et ي/ی comme équivalents pour chercher et valider.',
           why: 'La recherche trouve le livre quel que soit le clavier, et le texte stocké reste fidèle.',
         },
         {
+          id: 'nfkc',
+          label: 'Normaliser la requête et l’index de recherche en Unicode NFKC avant de les comparer.',
+          why: 'Aucune normalisation Unicode (NFC, NFD, NFKC, NFKD) ne rapproche ces lettres : ك (U+0643) et ک (U+06A9) restent deux caractères distincts. La recherche échoue toujours.',
+        },
+        {
           id: 'convert',
-          label: 'Convertir définitivement tous les textes de la base vers les lettres arabes.',
+          label: 'Convertir une fois pour toutes les textes de la base vers les lettres arabes.',
           why: 'On altère le texte persan d’origine ; l’équivalence ne doit servir qu’à la comparaison.',
         },
         {
           id: 'reject',
-          label: 'Refuser la saisie et afficher « Caractère invalide ».',
+          label: 'Refuser la saisie et afficher « Caractère invalide : utilisez un clavier persan ».',
           why: 'On bloque les gens dont le clavier envoie l’autre variante — un défaut du système présenté comme une faute de l’utilisateur.',
         },
         {
@@ -735,7 +758,7 @@ La correction est simple : **16 px minimum** dans les champs sur mobile — le 
       answer: 'equiv',
       explanation: `Le persan et l’arabe partagent un alphabet, mais deux lettres ont des formes Unicode distinctes : **ی** (U+06CC) et **ک** (U+06A9) en persan, **ي** (U+064A) et **ك** (U+0643) en arabe. Selon le clavier utilisé, la même personne peut taper l’une ou l’autre.
 
-Impeccable recommande de **conserver** la forme d’origine en stockage et de **traiter les variantes comme équivalentes** pour la recherche et la validation. Et de ne jamais retirer le ZWNJ (U+200C), l’antiliant qui coupe la liaison cursive à l’intérieur des mots composés persans.`,
+Impeccable recommande de **conserver** la forme d’origine en stockage et de **traiter les variantes comme équivalentes** pour la recherche et la validation. La normalisation Unicode (NFC, NFKC…) n’y suffit pas : pour elle, ces lettres restent des caractères distincts. L’équivalence se code explicitement, avec une table de correspondance appliquée à la requête et à l’index. Et on ne retire jamais le ZWNJ (U+200C), l’antiliant qui coupe la liaison cursive à l’intérieur des mots composés persans.`,
       takeaway: 'Écritures arabes : conserve le texte d’origine (ZWNJ compris) et rends ي/ی et ك/ک équivalents pour chercher et valider.',
       sources: ['imp:harden', 'w3c:alreq'],
     },
@@ -749,7 +772,7 @@ Impeccable recommande de **conserver** la forme d’origine en stockage et de **
       options: [
         {
           id: 'cancel',
-          label: 'Écouter `pointercancel` et `lostpointercapture` (ainsi que `blur`) pour effacer l’état de glissement et libérer la capture du pointeur.',
+          label: 'Sur `pointercancel`, `lostpointercapture` et `blur`, effacer l’état de glissement et libérer la capture.',
           why: 'Chaque fin anormale du geste remet le contrôle dans un état propre ; le geste suivant fonctionne normalement.',
         },
         {
@@ -763,36 +786,41 @@ Impeccable recommande de **conserver** la forme d’origine en stockage et de **
           why: 'Le geste suivant doit fonctionner sans rechargement : c’est précisément le critère de réussite.',
         },
         {
-          id: 'ignore',
-          label: 'Ne rien faire : il suffit de toucher la poignée une seconde fois.',
-          why: 'L’état reste incohérent, et le volume change sans qu’on le veuille.',
+          id: 'document-up',
+          label: 'Écouter `pointerup` sur `document` plutôt que sur la poignée, pour capter les relâchements hors du contrôle.',
+          why: 'Utile quand le doigt se relâche hors du contrôle, mais insuffisant : quand le navigateur reprend le geste pour faire défiler, il envoie `pointercancel`, et aucun `pointerup` ne suit. Le curseur reste collé.',
         },
       ],
       answer: 'cancel',
-      explanation: `Un geste peut s’interrompre de plusieurs façons : le navigateur l’annule pour faire défiler (\`pointercancel\`), la capture du pointeur est perdue (\`lostpointercapture\`), le doigt se relâche hors du contrôle, la fenêtre perd le focus (\`blur\`), un second doigt se pose. Si le composant n’écoute que \`pointerup\`, il ne voit jamais la fin du geste et reste en mode glissement.
+      explanation: `Un geste peut s’interrompre de plusieurs façons : le navigateur l’annule pour faire défiler (\`pointercancel\`), la capture du pointeur est perdue (\`lostpointercapture\`), le doigt se relâche hors du contrôle, la fenêtre perd le focus (\`blur\`). Pour chacun de ces cas, impeccable demande d’**effacer l’état de glissement et de libérer la capture**. Un composant qui n’attend que \`pointerup\` reste en mode glissement : après un \`pointercancel\`, le navigateur n’envoie pas de \`pointerup\`.
 
-Impeccable demande, pour chacun de ces cas, d’**effacer l’état de glissement et de libérer la capture**, puis de vérifier que le geste suivant marche sans rechargement — en précisant comment ce comportement a été testé (toucher émulé ou appareil réel).`,
+Un second doigt qui se pose est un cas à part : le premier glissement garde son pointeur ou se termine proprement, sans sauter vers le nouveau.
+
+Dans tous les cas, on vérifie que le geste suivant marche sans rechargement, en précisant comment ce comportement a été testé (toucher émulé ou appareil réel).`,
       takeaway: 'Un geste interrompu (`pointercancel`, perte de capture, `blur`) remet le contrôle à zéro : le geste suivant marche sans recharger.',
       sources: ['imp:harden', MDN_POINTER],
     },
     {
-      id: 'harden-error-order',
+      id: 'harden-session-order',
       type: 'order',
       difficulty: 1,
-      prompt: 'Range les éléments de ce message d’erreur dans l’ordre où ils doivent se lire.',
+      context: 'Une personne rédige une longue note. Quand elle l’enregistre, le serveur répond 401 : sa session a expiré.',
+      prompt: 'Range les étapes de la reprise dans l’ordre.',
       items: [
-        { id: 'what', label: 'Ce qui a échoué : « Le paiement n’a pas abouti. »' },
-        { id: 'why', label: 'Pourquoi, si c’est connu et utile : « Votre banque a refusé la transaction. »' },
-        { id: 'how', label: 'Comment s’en sortir : « Essayez une autre carte ou contactez votre banque. »' },
-        { id: 'action', label: 'L’action de reprise : un bouton « Utiliser une autre carte »' },
+        { id: 'keep', label: 'Garder le texte de la note sur l’appareil' },
+        { id: 'login', label: 'Ouvrir l’écran de connexion' },
+        { id: 'restore', label: 'Après la connexion, rouvrir la note avec son texte intact' },
+        { id: 'retry', label: 'Relancer l’enregistrement et confirmer « Note enregistrée »' },
       ],
-      explanation: `Un message d’erreur actionnable répond dans l’ordre à trois questions — **quoi**, **pourquoi**, **comment s’en sortir** — puis met l’action de reprise à portée de main.
+      explanation: `Un **401** signifie que le serveur ne sait plus qui écrit : la session a expiré. Impeccable demande de renvoyer vers la connexion, sans jamais perdre la saisie.
 
-- Le **quoi** vient d’abord : c’est le fait dont la personne a besoin maintenant.
-- Le **pourquoi** ne figure que s’il est connu et utile ; on ne promet pas une cause que le système ignore.
-- Le **comment** transforme l’impasse en prochaine étape. Et la saisie (adresse, panier) reste en place.`,
-      takeaway: 'Un message d’erreur : ce qui a échoué, pourquoi (si c’est utile), comment s’en sortir — puis l’action de reprise.',
-      sources: ['imp:clarify', NNG_ERRORS],
+- Le texte se sauvegarde **avant** de quitter l’écran : après la redirection, il serait perdu.
+- La connexion vient ensuite ; une fois connectée, la personne retrouve sa note telle qu’elle l’avait laissée.
+- L’enregistrement repart alors avec la nouvelle session, et sa réussite est confirmée : rien n’a été perdu.
+
+Le message qui accompagne la reprise suit la règle habituelle (ce qui a échoué, pourquoi, comment s’en sortir), détaillée dans le module « Rédaction UX ».`,
+      takeaway: 'Sur un 401 : garder le travail sur l’appareil, reconnecter, restaurer, puis relancer l’enregistrement. La personne ne perd rien.',
+      sources: ['imp:harden', MDN_STATUS],
     },
   ],
 };

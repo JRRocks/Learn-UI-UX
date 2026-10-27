@@ -8,6 +8,10 @@ const NNG_MOBILE_ONBOARDING: SourceRef = {
   label: 'Nielsen Norman Group — Mobile-App Onboarding: An Analysis of Components and Techniques',
   url: 'https://www.nngroup.com/articles/mobile-app-onboarding/',
 };
+const NNG_MOBILE_TUTORIALS: SourceRef = {
+  label: 'Nielsen Norman Group — Mobile Tutorials: Wasted Effort or Efficiency Boost?',
+  url: 'https://www.nngroup.com/articles/mobile-tutorials/',
+};
 const NNG_EMPTY: SourceRef = {
   label: 'Nielsen Norman Group — Designing Empty States in Complex Applications',
   url: 'https://www.nngroup.com/articles/empty-state-interface-design/',
@@ -39,9 +43,10 @@ const CRM_CSS = `${EMPTY_CSS}
 const INVOICES = `<p class="mk-h2">Factures</p>
   <div class="mk-row" style="--gap:8px"><span class="onb-anchor"><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Exporter</span>__TIP__</span><span class="mk-btn mk-btn--s">Nouvelle facture</span></div>
   <ul class="mk-list">
-    <li><span class="mk-grow">F-2026-121 · Atelier Roux</span><span class="mk-badge">Payée</span><span class="mk-price">640,00&nbsp;€</span></li>
-    <li><span class="mk-grow">F-2026-120 · Studio Lumen</span><span class="mk-badge">Envoyée</span><span class="mk-price">2&#8239;400,00&nbsp;€</span></li>
-    <li><span class="mk-grow">F-2026-119 · Café Merle</span><span class="mk-badge">Payée</span><span class="mk-price">180,00&nbsp;€</span></li>
+    <li><span class="mk-grow">Atelier Roux</span><span class="mk-price">640,00&nbsp;€</span></li>
+    <li><span class="mk-grow">Studio Lumen</span><span class="mk-price">2&#8239;400,00&nbsp;€</span></li>
+    <li><span class="mk-grow">Café Merle</span><span class="mk-price">180,00&nbsp;€</span></li>
+    <li><span class="mk-grow">Garage Vidal</span><span class="mk-price">1&#8239;150,00&nbsp;€</span></li>
   </ul>`;
 
 const TASKS_CSS = `
@@ -56,7 +61,7 @@ const onboarding: ModuleContent = {
     'Amener les nouveaux utilisateurs le plus vite possible au moment qui prouve la valeur du produit, concevoir des états vides qui enseignent, et doser l’aide contextuelle sans l’imposer.',
   minutes: 11,
   commands: ['onboard'],
-  sources: ['imp:onboard', 'imp:clarify', NNG_TUTORIALS, NNG_MOBILE_ONBOARDING, NNG_EMPTY, MATERIAL_EMPTY],
+  sources: ['imp:onboard', 'imp:clarify', 'imp:delight', NNG_TUTORIALS, NNG_MOBILE_ONBOARDING, NNG_MOBILE_TUTORIALS, NNG_EMPTY, MATERIAL_EMPTY],
   sections: [
     {
       id: 'valeur',
@@ -75,11 +80,11 @@ Enseigne les **20 %** qui apportent 80 % de la valeur, place les concepts im
       id: 'principes',
       title: 'Montrer, laisser passer, ne pas infantiliser',
       body: `- **Montre plutôt que dis** : des exemples qui fonctionnent, de vraies fonctions plutôt qu’un mode tutoriel séparé, une chose à la fois.
-- **Rends-le facultatif** quand c’est possible : un « Passer » ou « Je préfère explorer seul » bien visible, et jamais d’accès au produit bloqué.
+- **Rends-le facultatif** quand c’est possible : un « Passer » ou « J’explore par moi-même » bien visible, et jamais d’accès au produit bloqué.
 - **Le contexte plutôt que la cérémonie** : enseigne une fonction au moment où l’on en a besoin, pas en préambule. Les états vides et les infobulles au point d’usage sont tes meilleurs outils.
-- **Respecte l’intelligence** des gens : sois bref, n’explique pas l’évident, suppose qu’ils connaissent les conventions courantes.
+- **Respecte l’intelligence** des gens : va à l’essentiel, n’explique pas l’évident, suppose qu’ils connaissent les conventions courantes.
 
-La recherche va dans le même sens. Nielsen Norman Group observe que les tutoriels en « jeu de cartes » du premier lancement sont souvent passés, vite oubliés, et n’améliorent pas la réussite des tâches : les gens veulent utiliser le produit tout de suite (le **paradoxe de l’utilisateur actif**). L’aide qui arrive au moment où elle sert (*pull revelation*) marche mieux que celle qu’on pousse hors contexte (*push revelation*).`,
+La recherche va dans le même sens. Nielsen Norman Group observe que les tutoriels en « jeu de cartes » du premier lancement (une suite d’écrans à faire défiler) sont souvent passés, vite oubliés, et n’améliorent pas la réussite des tâches. Les gens veulent utiliser le produit tout de suite, même si un peu d’apprentissage préalable leur ferait gagner du temps à terme : c’est le **paradoxe de l’utilisateur actif**. L’aide doit donc venir à eux, dans le produit : celle qui arrive au moment où elle sert (*pull revelation*) marche mieux que celle qu’on pousse hors contexte (*push revelation*).`,
       examples: [
         {
           title: 'Montrer plutôt que dire',
@@ -119,12 +124,14 @@ La recherche va dans le même sens. Nielsen Norman Group observe que les tutorie
     {
       id: 'premier-parcours',
       title: 'Accueil, compte, concepts, première réussite',
-      body: `Quand un parcours d’accueil est justifié, chaque étape a un rôle précis :
+      body: `Un parcours d’accueil se justifie dans peu de cas : le produit a besoin d’informations pour démarrer (créer un compte, vérifier une identité), il s’adapte fortement au contexte de la personne (un objectif, un niveau), ou ses fonctions clés sortent vraiment des conventions. Sinon, laisse les gens apprendre en utilisant. Quand il est justifié, chaque étape a un rôle précis :
 
 - **Écran d’accueil** : une proposition de valeur claire (qu’est-ce que c’est ?), ce qu’on va accomplir, une estimation de temps honnête, et la possibilité de passer.
-- **Création de compte** : le **minimum** d’informations (le reste plus tard), une explication pour chaque donnée demandée, des valeurs par défaut intelligentes, une connexion via un compte existant quand c’est pertinent.
+- **Création de compte** : le **minimum** d’informations (le reste plus tard), la raison d’une demande quand elle n’est pas évidente (pourquoi un téléphone, une date de naissance ?), des valeurs par défaut intelligentes, une connexion via un compte existant quand c’est pertinent.
 - **Concepts clés** : **1 à 3**, pas plus, en langage simple, avec des exemples, de préférence à faire plutôt qu’à lire, et un indicateur de progression (« Étape 1 sur 3 »).
-- **Première réussite** : guider vers une vraie tâche avec des modèles ou des exemples préremplis, célébrer sans en faire trop, et indiquer clairement la suite.`,
+- **Première réussite** : guider vers une vraie tâche avec des modèles ou des exemples préremplis, célébrer sans en faire trop, et indiquer clairement la suite.
+
+Dose la célébration selon l’effort et l’enjeu : une première facture envoyée est un jalon qui mérite une confirmation chaleureuse et l’annonce de la suite ; un enregistrement courant appelle une simple confirmation, nette. Et dans un premier usage, rends la prochaine action claire avant d’ajouter de la personnalité.`,
       examples: [
         {
           title: 'Une création de compte minimale',
@@ -203,7 +210,7 @@ Un état vide dit aussi la **vérité sur le système** : la page a-t-elle fini 
       body: `Tous les écrans vides ne racontent pas la même histoire. Distingue :
 
 - **Premier usage** — la fonction n’a jamais servi : mets en avant la valeur, propose un modèle.
-- **Vidé par l’utilisateur** — il a tout supprimé ou tout terminé volontairement : touche légère, message bref, moyen simple de recréer. Pas de grand discours de bienvenue.
+- **Vidé par l’utilisateur** — la personne a tout supprimé ou tout terminé volontairement : touche légère, message bref, moyen simple de recréer. Pas de grand discours de bienvenue.
 - **Aucun résultat** — une recherche ou un filtre ne renvoie rien : rappelle la requête, propose une autre recherche et l’effacement des filtres.
 - **Pas de permission** — le contenu existe mais n’est pas accessible : explique pourquoi et comment obtenir l’accès. Ne prétends pas que c’est vide.
 - **Erreur** — le chargement a échoué : explique ce qui s’est passé et propose de réessayer.`,
@@ -211,7 +218,7 @@ Un état vide dit aussi la **vérité sur le système** : la page a-t-elle fini 
         {
           title: 'Vidé par l’utilisateur',
           bad: {
-            alt: 'Liste de tâches entièrement terminée qui affiche le grand message de bienvenue du premier usage, avec une illustration, un long texte et un bouton Créer ma première tâche.',
+            alt: 'Liste de tâches entièrement terminée, avec en bas une section repliée « Terminées aujourd’hui · 12 », qui affiche pourtant le grand message de bienvenue du premier usage : une illustration, un long texte et un bouton Créer ma première tâche.',
             frame: 'phone',
             html: `<div class="mk-pad mk-stack" style="--gap:10px">
   <p class="mk-h2">Aujourd’hui</p>
@@ -219,9 +226,11 @@ Un état vide dit aussi la **vérité sur le système** : la page a-t-elle fini 
   <p class="mk-h3 mk-center">Bienvenue dans Tâches&#8239;!</p>
   <p class="mk-small mk-muted mk-center">Les tâches vous aident à organiser votre journée. Commencez par créer votre première tâche, ajoutez-lui une échéance, puis cochez-la une fois terminée.</p>
   <span class="mk-btn mk-btn--block">Créer ma première tâche</span>
+  <div class="onb-done"><span>Terminées aujourd’hui · 12</span><i data-icon="chevron-down" style="--ico:16px"></i></div>
 </div>`,
+            css: `.onb-done { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 1px solid #e3e6ec; font-size: 13px; font-weight: 600; color: #5a6172; }`,
           },
-          badNote: 'La personne vient de tout terminer, et on lui ressert la présentation du premier jour.',
+          badNote: 'Douze tâches terminées aujourd’hui, et on ressert à la personne la présentation du premier jour.',
           good: {
             alt: 'Même liste de tâches terminée : un message bref « Tout est fait pour aujourd’hui », le nombre de tâches terminées et un petit bouton Ajouter une tâche.',
             frame: 'phone',
@@ -251,9 +260,11 @@ Un état vide dit aussi la **vérité sur le système** : la page a-t-elle fini 
 
 **Visites guidées** : réservées aux interfaces complexes, aux changements importants ou aux outils métier. Mets en lumière l’élément (le reste assombri), garde **3 à 7 étapes** au maximum, laisse avancer librement, propose « Passer la visite » et permets de la **rejouer** depuis le menu d’aide. Préfère l’interaction à la lecture passive (cliquer de vrais boutons), le **parcours** aux fonctions (« Créez un projet » plutôt que « Voici le bouton Projet »), et fournis des **données d’exemple** pour que les actions marchent.
 
-**Tutoriels interactifs** : un bac à sable avec des données d’exemple, un objectif clair (« Créez un graphique des ventes par région »), une validation, et un moment de « diplôme ».
+**Tutoriels interactifs** : quand il faut vraiment s’exercer, parce que les concepts sont complexes ou inhabituels, ou que l’enjeu est élevé et qu’il vaut mieux se tromper sans risque. Un bac à sable avec des données d’exemple, un objectif clair (« Créez un graphique des ventes par région »), un guidage pas à pas, une validation, et un moment de « diplôme ».
 
-**Aide dans le produit** : une icône \`?\` près des fonctions complexes, des liens « En savoir plus », les raccourcis clavier affichés (⌘K sur le champ de recherche).`,
+**Aide dans le produit** : une icône \`?\` près des fonctions complexes, des liens « En savoir plus », les raccourcis clavier affichés (⌘K sur le champ de recherche).
+
+**Au clavier et au lecteur d’écran** : une visite ou une annonce reste utilisable sans souris. Le focus (l’élément qui reçoit les frappes du clavier) va dans la bulle, Échap la ferme, puis le focus revient à l’élément d’origine ; dans une fenêtre modale, il reste piégé tant qu’elle est ouverte. Et une infobulle n’est jamais la seule source d’une information indispensable : sur un écran tactile, rien ne la déclenche au survol.`,
     },
     {
       id: 'memoire',
@@ -270,11 +281,11 @@ Un état vide dit aussi la **vérité sur le système** : la page a-t-elle fini 
     { id: 'skip', front: 'L’onboarding doit-il être obligatoire ?', back: 'Non, autant que possible : un « Passer » bien visible, et jamais d’accès au produit bloqué.' },
     { id: 'show', front: 'Montrer ou dire ?', back: 'Montrer : de vrais exemples et de vraies fonctions, une chose à la fois, plutôt qu’un tutoriel à lire.' },
     { id: 'concepts', front: 'Combien de concepts présenter au premier lancement ?', back: '1 à 3, avec un indicateur de progression ; le reste se découvre en contexte.' },
-    { id: 'account', front: 'Que demander à la création de compte ?', back: 'Le minimum ; le reste plus tard. Explique pourquoi tu demandes chaque information.' },
-    { id: 'first-success', front: 'Comment provoquer une première réussite ?', back: 'Guider vers une vraie tâche avec des modèles ou exemples préremplis, célébrer sans excès et indiquer la suite.' },
+    { id: 'account', front: 'Que demander à la création de compte ?', back: 'Le minimum ; le reste plus tard. Explique pourquoi tu demandes une information quand ce n’est pas évident (téléphone, date de naissance…).' },
+    { id: 'first-success', front: 'Comment provoquer une première réussite ?', back: 'Guider vers une vraie tâche avec des modèles ou exemples préremplis, célébrer à la mesure de l’enjeu (un jalon, pas chaque clic) et indiquer la suite.' },
     { id: 'empty', front: 'Que doit contenir un état vide ?', back: 'Ce qui apparaîtra ici, pourquoi c’est utile, comment commencer (action ou modèle), un repère visuel et une aide contextuelle.' },
     { id: 'empty-types', front: 'Quels sont les cinq types d’états vides ?', back: 'Premier usage, vidé par l’utilisateur, aucun résultat, pas de permission, erreur de chargement.' },
-    { id: 'cleared', front: 'Un utilisateur vient de tout supprimer : quel état vide ?', back: 'Une touche légère : un message bref et un moyen simple de recréer, pas le discours du premier usage.' },
+    { id: 'cleared', front: 'Une personne vient de tout supprimer : quel état vide ?', back: 'Une touche légère : un message bref et un moyen simple de recréer, pas le discours du premier usage.' },
     { id: 'no-results', front: 'Une recherche ne renvoie rien : que proposer ?', back: 'Rappeler la requête et les filtres, suggérer une autre recherche et l’effacement des filtres.' },
     { id: 'tour', front: 'Combien d’étapes pour une visite guidée ?', back: '3 à 7 au maximum, calées sur un parcours, avec « Passer la visite », navigation libre et possibilité de la rejouer.' },
     { id: 'tooltip', front: 'Quand afficher une infobulle d’aide ?', back: 'Au moment pertinent — la première fois qu’on voit la fonction —, pointée sur l’élément, brève, refermable avec « Ne plus afficher ».' },
@@ -365,7 +376,7 @@ Un état vide complet suit la structure d’impeccable : **ce qui apparaîtra ic
   <div class="mk-stack" style="--gap:4px"><div class="mk-row mk-between mk-small"><span>Courses</span><span>212 / 300&nbsp;€</span></div><div class="onb-bar"><span style="width:70%"></span></div></div>
   <div class="mk-stack" style="--gap:4px"><div class="mk-row mk-between mk-small"><span>Loisirs</span><span>64 / 120&nbsp;€</span></div><div class="onb-bar"><span style="width:53%"></span></div></div>
   <div class="mk-stack" style="--gap:4px"><div class="mk-row mk-between mk-small"><span>Transports</span><span>38 / 90&nbsp;€</span></div><div class="onb-bar"><span style="width:42%"></span></div></div>
-  <div class="onb-tip"><span class="mk-grow">Ajoutez votre première dépense&nbsp;: 10 secondes suffisent.</span><span class="onb-tip-skip">Passer</span></div>
+  <div class="onb-tip"><span class="mk-grow">Ajoutez votre première dépense&nbsp;: 10&nbsp;secondes suffisent.</span><span class="onb-tip-skip">Passer</span></div>
   <span class="mk-btn mk-btn--block"><i data-icon="plus" style="--ico:16px"></i>Ajouter une dépense</span>
 </div>`,
             css: `.onb-bar { height: 8px; border-radius: 4px; background: #e6e9ef; }
@@ -388,7 +399,7 @@ La version recommandée applique les principes d’impeccable : **montrer plutô
       id: 'onboarding-no-results-duel',
       type: 'choice',
       difficulty: 2,
-      context: 'Un commercial cherche « Lefèvre » dans un CRM qui contient 1 240 clients, avec le filtre « Actifs » appliqué. Aucun client ne correspond.',
+      context: 'Une commerciale cherche « Lefèvre » dans un CRM qui contient 1 240 clients, avec le filtre « Actifs » appliqué. Aucun client ne correspond.',
       prompt: 'Quel état vide est le plus utile ?',
       options: [
         {
@@ -412,7 +423,7 @@ La version recommandée applique les principes d’impeccable : **montrer plutô
         {
           id: 'no-results',
           visual: {
-            alt: 'Même recherche ; le message indique qu’aucun client actif ne correspond à « Lefèvre », propose d’effacer le filtre Actifs et de chercher parmi tous les clients.',
+            alt: 'Même recherche ; le message indique qu’aucun client actif ne correspond à « Lefèvre », suggère l’orthographe voisine « Lefebvre », qui donne 2 clients actifs, et propose d’effacer le filtre Actifs.',
             frame: 'browser',
             html: `<div class="mk-pad mk-stack" style="--gap:10px">
   ${CRM_HEAD}
@@ -420,8 +431,8 @@ La version recommandée applique les principes d’impeccable : **montrer plutô
     <i data-icon="search" class="onb-ico" style="--ico:28px"></i>
     <p class="mk-h3">Aucun client actif ne correspond à «&#8239;Lefèvre&#8239;»</p>
     <p class="mk-small mk-muted" style="max-width:40ch">Vérifiez l’orthographe, ou élargissez la recherche à tous vos clients.</p>
+    <p class="mk-small"><span class="onb-link">Essayer «&#8239;Lefebvre&#8239;»</span> <span class="mk-muted">· 2 clients actifs</span></p>
     <span class="mk-btn mk-btn--ghost mk-btn--s">Effacer le filtre «&#8239;Actifs&#8239;»</span>
-    <p class="mk-small"><span class="onb-link">Chercher parmi les 1&#8239;240 clients</span></p>
   </div>
 </div>`,
             css: CRM_CSS,
@@ -432,7 +443,7 @@ La version recommandée applique les principes d’impeccable : **montrer plutô
       answer: 'no-results',
       explanation: `Un « aucun résultat » n’est pas un **premier usage**. Les confondre est trompeur : la personne croit que la base est vide et risque de créer un doublon.
 
-Impeccable distingue cinq types d’états vides. Pour l’**absence de résultat**, on rappelle la requête et les filtres actifs, on suggère une autre recherche et on propose d’**effacer les filtres** — souvent la vraie cause du vide.`,
+Impeccable distingue cinq types d’états vides. Pour l’**absence de résultat**, on rappelle la requête et les filtres actifs, on suggère une autre recherche (ici, une orthographe voisine qui donne des résultats) et on propose d’**effacer les filtres** — souvent la vraie cause du vide.`,
       takeaway: 'Aucun résultat : rappelle la requête et les filtres, propose une autre recherche et l’effacement des filtres.',
       sources: ['imp:onboard', 'imp:clarify', NNG_EMPTY],
     },
@@ -531,7 +542,7 @@ La fenêtre « Quoi de neuf » au démarrage est une révélation poussée (*pus
         },
       ],
       answer: 'denied',
-      explanation: `« Pas de permission » est l’un des cinq types d’états vides, et le plus souvent maquillé en simple vide. Or un vide **trompeur** est pire qu’un refus clair : la personne conclut que le contenu n’existe pas, le recrée ailleurs, ou y dépose des fichiers qu’elle ne pourra plus retrouver.
+      explanation: `« Pas de permission » est l’un des cinq types d’états vides, et il est tentant de le maquiller en simple vide. Or un vide **trompeur** est pire qu’un refus clair : la personne conclut que le contenu n’existe pas, le recrée ailleurs, ou y dépose des fichiers qu’elle ne pourra plus retrouver.
 
 Impeccable demande d’**expliquer pourquoi** l’accès manque et **comment l’obtenir**. Nommer l’équipe ou le propriétaire et proposer « Demander l’accès » transforme une impasse en démarche.`,
       takeaway: 'Pas de permission : dis-le, explique pourquoi et comment obtenir l’accès. Ne déguise jamais un refus en vide.',
@@ -561,7 +572,7 @@ Impeccable demande d’**expliquer pourquoi** l’accès manque et **comment l�
           id: 'steps',
           label: 'Neuf étapes annoncées',
           correct: true,
-          why: 'Neuf étapes avant d’utiliser l’application : bien au-delà des 1 à 3 concepts recommandés. Le reste se découvre en contexte.',
+          why: 'Neuf étapes avant de pouvoir utiliser l’application : un long parcours préalable, qu’impeccable range parmi les erreurs à éviter. Présente 1 à 3 concepts, le reste en contexte.',
         },
         {
           id: 'pitch',
@@ -581,7 +592,7 @@ Impeccable demande d’**expliquer pourquoi** l’accès manque et **comment l�
       ],
       explanation: `L’écran d’accueil a quatre missions selon impeccable : une **proposition de valeur claire**, ce qu’on va accomplir, une **estimation de temps honnête** et une **option pour passer**.
 
-Ici, la promesse est du jargon marketing — le détecteur d’impeccable range d’ailleurs « nouvelle génération » (*next-generation*) parmi les formules creuses —, le parcours annonce neuf étapes alors que 1 à 3 concepts suffisent, et la sortie existe mais se cache : un « Passer » caché figure explicitement parmi les erreurs à éviter. La durée annoncée, elle, est une bonne pratique.`,
+Ici, la promesse est du jargon marketing — le détecteur d’impeccable range d’ailleurs « nouvelle génération » (*next-generation*) parmi les formules creuses. Neuf étapes avant de pouvoir utiliser le produit, c’est le long parcours préalable qu’impeccable range parmi les erreurs à éviter (1 à 3 concepts suffisent, le reste se découvre en contexte). Et la sortie existe mais se cache : un « Passer » caché figure lui aussi parmi ces erreurs. La durée annoncée, elle, est une bonne pratique.`,
       takeaway: 'Écran d’accueil : ce qu’est le produit en clair, un parcours court, une durée honnête et un « Passer » bien visible.',
       sources: ['imp:onboard', 'imp:detector'],
     },
@@ -596,7 +607,7 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h2">Rapports</p><span class="mk-btn mk-btn--s" data-hotspot="import"><i data-icon="upload" style="--ico:14px"></i>Importer des données</span></div>
   <div class="onb-astuce" data-hotspot="tip"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Astuce&nbsp;: cliquez sur un bouton pour effectuer une action.</span><i data-icon="x" style="--ico:14px"></i></div>
-  <div class="mk-tabs" style="flex-wrap:wrap"><span class="mk-tab mk-tab--on">Synthèse</span><span class="mk-tab mk-row" style="--gap:6px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
+  <div class="mk-tabs"><span class="mk-tab mk-tab--on">Synthèse</span><span class="mk-tab mk-row" style="--gap:5px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
   <div class="mk-grid" style="--gap:10px">
     <div class="onb-metric"><span class="mk-small mk-muted mk-row" style="--gap:6px">Taux de rétention<span class="onb-help" data-hotspot="help">?</span></span><b>—</b></div>
     <div class="onb-metric"><span class="mk-small mk-muted">Chiffre d’affaires</span><b>—</b></div>
@@ -604,10 +615,11 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
   <div class="onb-chart" data-hotspot="empty"><span class="mk-muted">Aucune donnée</span></div>
 </div>`,
         css: `.onb-astuce { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; background: #fff7e0; color: #6b4a00; font-size: 13px; }
+.mk-tab { padding: 8px 10px; white-space: nowrap; }
 .onb-new { padding: 1px 7px; border-radius: 999px; background: #e8eefc; color: #1a3a99; font-size: 11px; font-weight: 700; }
 .onb-metric { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid #e1e4ea; border-radius: 10px; }
 .onb-metric b { font-size: 20px; }
-.onb-help { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #5a6172; font-size: 10px; font-weight: 700; color: #36405a; }
+.onb-help { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #5a6172; font-size: 11px; font-weight: 700; color: #36405a; }
 .onb-chart { display: grid; place-items: center; min-height: 110px; border: 1px dashed #c3c8d3; border-radius: 10px; }`,
       },
       hotspots: [
@@ -632,7 +644,7 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
 - **Ne pas infantiliser** : une astuce qui explique comment cliquer sur un bouton dépense l’attention des gens pour rien — et leur apprend à ignorer les astuces suivantes.
 - **Un vide qui enseigne** : « Aucune donnée » devrait dire quels graphiques apparaîtront ici et proposer d’importer des données ou de partir d’un jeu d’exemple.
 
-L’icône \`?\` près d’une notion complexe, le badge « Nouveau » et l’action d’import directe sont, eux, exactement les outils de la découverte progressive.`,
+Les trois autres zones sont, elles, de bonnes pratiques : une aide au point d’usage (l’icône \`?\` près d’une notion complexe), un signal de découverte progressive (le badge « Nouveau ») et un chemin direct vers l’action clé (le bouton d’import).`,
       takeaway: 'Aide au premier usage : des vides qui enseignent et des aides au point d’usage — jamais d’explication de l’évidence.',
       sources: ['imp:onboard', NNG_EMPTY],
     },
@@ -643,26 +655,26 @@ L’icône \`?\` près d’une notion complexe, le badge « Nouveau » et l’ac
       context: 'La visite guidée d’un outil de planification doit couvrir un seul parcours : créer un planning, y placer une tâche, inviter l’équipe, publier.',
       prompt: 'Règle le nombre d’étapes de cette visite.',
       visual: {
-        alt: 'Bulle de visite guidée au-dessus d’un planning assombri : compteur « Étape 1 sur N », une rangée de points, le titre Créez votre premier planning, et les boutons Passer la visite et Suivant.',
+        alt: 'Visite guidée d’un outil de planification : le bouton Nouveau planning est mis en lumière, le reste de la page assombri, et une bulle ancrée au bouton affiche le compteur « Étape 1 sur N », une rangée de points, le titre Créez votre premier planning, et les boutons Passer la visite et Suivant.',
         html: `<div class="onb-tour">
-  <div class="mk-pad mk-stack" style="--gap:10px">
-    <p class="mk-h3">Planning — semaine 44</p>
+  <div class="mk-pad mk-stack" style="--gap:12px">
+    <div class="mk-row mk-between"><p class="mk-h3">Plannings</p><span class="mk-btn mk-btn--s onb-spot"><i data-icon="plus" style="--ico:14px"></i>Nouveau planning</span></div>
     <div class="onb-days"><span></span><span></span><span></span><span></span><span></span></div>
   </div>
-  <div class="onb-dim"></div>
   <div class="onb-bubble">
     <p class="mk-small mk-muted onb-count">Étape 1 sur&nbsp;</p>
     <p class="mk-strong">Créez votre premier planning</p>
-    <p class="mk-small">Glissez une tâche sur le calendrier pour la planifier.</p>
+    <p class="mk-small">Cliquez sur Nouveau planning, puis choisissez la semaine.</p>
     <div class="onb-dots-n"></div>
     <div class="mk-row mk-between"><span class="mk-btn mk-btn--text mk-btn--s">Passer la visite</span><span class="mk-btn mk-btn--s">Suivant</span></div>
   </div>
 </div>`,
         css: `.onb-tour { position: relative; min-height: 250px; }
 .onb-days { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.onb-days > span { height: 120px; border-radius: 8px; background: #eef1f6; }
-.onb-dim { position: absolute; inset: 0; background: rgb(15 20 35 / 0.45); }
-.onb-bubble { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(290px, calc(100% - 24px)); display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: #fff; box-shadow: 0 12px 30px rgb(15 20 35 / 0.25); }
+.onb-days > span { height: 190px; border-radius: 8px; background: #eef1f6; }
+.onb-spot { position: relative; z-index: 1; box-shadow: 0 0 0 4px #fff, 0 0 0 9999px rgb(15 20 35 / 0.45); }
+.onb-bubble { position: absolute; z-index: 2; top: 64px; right: 12px; width: min(290px, calc(100% - 24px)); display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: #fff; box-shadow: 0 12px 30px rgb(15 20 35 / 0.25); }
+.onb-bubble::before { content: ""; position: absolute; top: -6px; right: 64px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); }
 .onb-count { counter-reset: steps var(--n, 12); }
 .onb-count::after { content: counter(steps); }
 .onb-dots-n { position: relative; width: calc(var(--n, 12) * 12px); max-width: 100%; height: 8px; background: radial-gradient(circle at 6px 4px, #c3c8d3 3px, transparent 3.5px) 0 0 / 12px 8px repeat-x; }
@@ -674,11 +686,11 @@ L’icône \`?\` près d’une notion complexe, le badge « Nouveau » et l’ac
       step: 1,
       initial: 12,
       unit: '',
-      target: [3, 7],
+      target: [4, 5],
       ideal: 4,
-      explanation: `Impeccable limite une visite guidée à **3 à 7 étapes**. Au-delà, la visite devient une leçon à retenir plutôt qu’un parcours à suivre, et le « 1 sur 12 » annonce un effort qui donne surtout envie de passer.
+      explanation: `Impeccable limite une visite guidée à **3 à 7 étapes** au maximum. Au-delà, la visite devient une leçon à retenir plutôt qu’un parcours à suivre, et le « 1 sur 12 » annonce un effort qui donne surtout envie de passer.
 
-Le bon nombre est celui du **parcours** visé, pas celui des fonctions : ici, créer un planning, y placer une tâche, inviter l’équipe, publier — quatre étapes. Le reste se découvre en contexte. Et la visite reste facultative (« Passer la visite ») et rejouable depuis l’aide.`,
+Dans cette limite, le bon nombre est celui du **parcours** visé, pas celui des fonctions : créer un planning, y placer une tâche, inviter l’équipe, publier — quatre étapes, cinq au plus avec une étape de conclusion. Trois obligerait à sauter ou à fusionner une action ; au-delà de cinq, on ajoute des étapes hors parcours. Le reste se découvre en contexte, et la visite reste facultative (« Passer la visite ») et rejouable depuis l’aide.`,
       takeaway: 'Une visite guidée : 3 à 7 étapes, calées sur un parcours, facultative et rejouable.',
       sources: ['imp:onboard'],
     },

@@ -183,6 +183,7 @@ const culture: ModuleContent = {
     'w3c:clreq',
     'w3c:jlreq',
     S.readium,
+    S.budoux,
     S.w3cTextSize,
     'material:bidi',
     'mozilla:rtl',
@@ -481,8 +482,8 @@ L’allemand est souvent **30 % plus long** que l’anglais, et ses mots compos�
 - Retourne les seules icônes directionnelles, par exemple avec \`[dir="rtl"] .icone-sens { transform: scaleX(-1); }\` — jamais la page entière.
 - **Isole les contenus de gauche à droite** insérés dans un texte arabe — numéros, e-mails, références, URL — avec \`<bdi>\`, \`dir="ltr"\`, ou \`dir="auto"\` sur les champs libres. Sinon, l’algorithme bidirectionnel d’Unicode réordonne leurs morceaux : c’est l’un des bugs RTL les plus fréquents.
 - Chiffres : \`Intl.NumberFormat('ar-SA')\` produit des chiffres arabes orientaux (١٢٣), \`ar-AE\` des chiffres occidentaux ; laisse la locale décider ou impose le système avec l’extension \`-u-nu-latn\`.
-- Calendriers : choisis-le avec l’extension \`-u-ca-\` — \`ar-SA-u-ca-islamic-umalqura\` pour le calendrier hégirien officiel saoudien, \`ar-SA-u-ca-gregory\` pour le grégorien. \`fa-IR\` affiche d’office le calendrier solaire hégirien de l’Iran.
-- Persan et kurde : ne supprime jamais l’**antiliant sans chasse** (ZWNJ, U+200C), qui sépare les parties d’un mot composé sans couper le mot. Le persan écrit ی et ک là où l’arabe écrit ي et ك : garde la forme saisie, mais rends-les équivalentes dans la recherche.`,
+- Calendriers : impose le calendrier avec l’extension \`-u-ca-\` — \`ar-SA-u-ca-islamic-umalqura\` pour le calendrier hégirien officiel saoudien, \`ar-SA-u-ca-gregory\` pour le grégorien. \`fa-IR\` affiche d’office le calendrier solaire hégirien de l’Iran.
+- Persan et kurde : ne supprime jamais l’**antiliant sans chasse** (ZWNJ, U+200C) ; placé entre les parties d’un mot composé, il empêche deux lettres de se lier sans couper le mot. Le persan écrit ی et ک là où l’arabe écrit ي et ك : garde la forme saisie, mais rends-les équivalentes dans la recherche.`,
       examples: [
         {
           title: 'Une liste de réglages en arabe',
@@ -1406,7 +1407,7 @@ Le temps qui s’écoule se représente de la droite vers la gauche en RTL (une 
         {
           id: 'raw',
           visual: {
-            alt: 'Carte « Service client » en arabe avec la mention « Appelez-nous » suivie du numéro, inséré tel quel dans le texte arabe.',
+            alt: 'Carte « Service client » en arabe : la mention « Appelez-nous » est suivie du numéro, qui s’affiche dans l’ordre « 5678 234 11 966+ ».',
             dir: 'rtl',
             lang: 'ar',
             css: `.cs{display:flex;flex-direction:column;gap:10px}
@@ -1424,7 +1425,7 @@ Le temps qui s’écoule se représente de la droite vers la gauche en RTL (une 
         {
           id: 'isolated',
           visual: {
-            alt: 'La même carte où le numéro est isolé dans un élément de gauche à droite au sein du texte arabe.',
+            alt: 'La même carte : après la mention « Appelez-nous », le numéro s’affiche dans l’ordre « +966 11 234 5678 ».',
             dir: 'rtl',
             lang: 'ar',
             css: `.cs{display:flex;flex-direction:column;gap:10px}
@@ -1481,7 +1482,7 @@ Pour un calendrier, des créneaux de livraison ou des délais en jours ouvrés, 
         { id: 'left', label: '`margin-left: 12px` : le sens de l’écriture s’occupe du reste', why: 'Une propriété physique ne s’inverse pas : en arabe, la marge reste à gauche, du mauvais côté.' },
       ],
       answer: 'logical',
-      explanation: `Les **propriétés logiques** décrivent l’espace par rapport au sens de l’écriture plutôt qu’à l’écran : \`margin-inline-start\` vaut la marge gauche en français et la marge droite en arabe. Avec \`dir="rtl"\` sur la racine, flexbox et grid inversent aussi l’ordre des éléments : une grande partie du miroir se fait sans code supplémentaire.
+      explanation: `Les **propriétés logiques** décrivent l’espace par rapport au sens de l’écriture plutôt qu’à l’écran : \`margin-inline-start\` vaut la marge gauche en français et la marge droite en arabe. Avec \`dir="rtl"\` sur la racine, flexbox et grid inversent aussi l’ordre des éléments : une grande partie de la mise en miroir se fait sans code supplémentaire.
 
 Impeccable recommande ce réflexe dans toute interface destinée à plusieurs langues : \`margin-inline-start\` plutôt que \`margin-left\`, \`padding-inline\` plutôt que \`padding-left\` et \`padding-right\`, \`border-inline-end\` plutôt que \`border-right\`.`,
       takeaway: 'Écris tes espacements avec les propriétés logiques (`margin-inline-start`, `padding-inline`, `inset-inline-end`) : ils suivent le sens de l’écriture.',
@@ -1819,10 +1820,10 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
         {
           id: 'flexible',
           visual: {
-            alt: 'Le même écran avec des tuiles souples : les libellés allemands se coupent avec un trait d’union sur deux lignes et le bouton s’élargit.',
+            alt: 'Le même écran avec des tuiles souples : les libellés allemands passent à la ligne, coupés par un trait d’union quand la place manque, et le bouton s’élargit.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
-.ds-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
 .ds-tile span{font-size:13px;font-weight:600;line-height:1.3;hyphens:auto;overflow-wrap:break-word;max-width:100%}
@@ -1837,11 +1838,11 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
   <span class="mk-btn">Änderungen speichern</span>
 </div>`,
           },
-          why: 'Largeurs souples, langue déclarée et césure automatique : les mots longs se coupent selon les règles allemandes, rien n’est tronqué.',
+          why: 'Largeurs souples, langue déclarée et césure automatique : les mots longs se coupent au besoin selon les règles allemandes, rien n’est tronqué.',
         },
       ],
       answer: 'flexible',
-      explanation: `L’allemand est en moyenne **30 % plus long** que l’anglais, et bien plus sur les libellés courts : pour une chaîne de moins de 10 caractères, IBM prévoit une traduction 2 à 3 fois plus longue. « Privacy » devient « Datenschutzeinstellungen ».
+      explanation: `L’allemand est souvent **30 % plus long** que l’anglais, et bien plus sur les libellés courts : pour une chaîne de moins de 10 caractères, IBM prévoit une traduction 2 à 3 fois plus longue. « Privacy settings » devient « Datenschutzeinstellungen ».
 
 Trois réglages évitent la troncature :
 
@@ -1929,17 +1930,19 @@ Le Canada ajoute aussi les taxes au paiement, mais parle de province et de code 
       sources: [S.salesTax, 'mdn:intl'],
     },
     {
-      id: 'culture-us-tax-tf',
+      id: 'culture-us-units-tf',
       type: 'truefalse',
       difficulty: 1,
       culture: 'us',
-      prompt: 'Aux États-Unis, le prix affiché sur une fiche produit inclut normalement la taxe de vente.',
-      answer: false,
-      explanation: `**Faux.** Il n’existe pas de taxe de vente fédérale aux États-Unis : chaque État, comté et ville fixe la sienne, et cinq États n’en prélèvent pas au niveau de l’État (Alaska, Delaware, Montana, New Hampshire, Oregon). Le prix affiché est donc **hors taxe**, et la *sales tax* s’ajoute au paiement, une fois l’adresse connue.
+      prompt: 'Pour localiser une appli météo aux États-Unis, il faut convertir les températures en degrés Fahrenheit, pas seulement traduire l’interface et formater les nombres.',
+      answer: true,
+      explanation: `**Vrai.** Les États-Unis mesurent en unités usuelles américaines : degrés Fahrenheit, miles, livres, onces, pouces. Une prévision à 20\u00a0°C y devient 68\u00a0°F : c’est la valeur qui change, pas seulement sa présentation.
 
-C’est l’inverse de l’Union européenne, où le prix affiché au consommateur inclut la TVA. Pour l’interface : aux États-Unis, annonce « plus tax » et une estimation tôt dans le panier ; en Europe, affiche des prix TTC.`,
-      takeaway: 'Aux États-Unis, la taxe de vente s’ajoute au paiement selon l’adresse : affiche les prix hors taxe et annonce la taxe tôt dans le panier.',
-      sources: [S.salesTax],
+\`Intl.NumberFormat\` écrit l’unité selon la locale — \`new Intl.NumberFormat('en-US', { style: 'unit', unit: 'fahrenheit' }).format(68)\` donne « 68°F » —, mais il ne convertit rien : passer de 20 à 68 reste le travail de ton code.
+
+Stocke les mesures dans une seule unité (degrés Celsius, mètres), convertis-les à l’affichage selon le marché, et laisse l’utilisateur changer d’unité dans les réglages.`,
+      takeaway: 'Aux États-Unis, températures en °F, distances en miles, poids en livres : convertis les valeurs, car `Intl` écrit l’unité mais ne convertit rien.',
+      sources: [S.usUnits, S.nfUnit],
     },
     {
       id: 'culture-us-date-choice',
@@ -2121,9 +2124,9 @@ Pour l’interface, deux moments comptent :
       type: 'truefalse',
       difficulty: 1,
       culture: 'ke',
-      prompt: 'Au Kenya, un service qui n’a pas d’application pour smartphone ne peut pas toucher les utilisateurs de téléphones basiques.',
-      answer: false,
-      explanation: `**Faux.** Les menus **USSD** — des codes comme \`*334#\`, qui ouvre le menu M-Pesa depuis 2020 — et les **SMS** fonctionnent sur n’importe quel téléphone, sans connexion Internet. Banques, assureurs, services agricoles et administrations s’en servent pour toucher tout le monde.
+      prompt: 'Au Kenya, un service peut toucher les utilisateurs de téléphones basiques sans aucune appli, grâce aux menus USSD et aux SMS.',
+      answer: true,
+      explanation: `**Vrai.** Les menus **USSD** — des codes comme \`*334#\`, qui ouvre le menu M-Pesa depuis 2020 — et les **SMS** fonctionnent sur n’importe quel téléphone, sans connexion Internet. Banques, assureurs, services agricoles et administrations s’en servent pour toucher tout le monde.
 
 Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d’étapes, des libellés compréhensibles sans contexte : une session expire vite. Et pour les applis, rester léger et prévoir un mode hors ligne, car les données mobiles coûtent cher.`,
       takeaway: 'Au Kenya, l’USSD et le SMS touchent tous les téléphones : pense le service au-delà de l’appli, en menus courts et numérotés.',
@@ -2158,7 +2161,7 @@ Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d�
   <span class="mk-btn mk-btn--block">Bayar sekarang</span>
 </div>`,
           },
-          why: 'Carte seule : en Indonésie, la carte reste minoritaire dans le commerce en ligne.',
+          why: 'Carte seule : en Indonésie, la carte n’est qu’un moyen parmi d’autres, derrière les portefeuilles.',
         },
         {
           id: 'local',
@@ -2193,7 +2196,7 @@ Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d�
         },
       ],
       answer: 'local',
-      explanation: `En Indonésie, les **portefeuilles électroniques** sont le premier moyen de paiement du commerce en ligne, devant les virements ; la carte reste minoritaire. Les acheteurs attendent :
+      explanation: `En Indonésie, les **portefeuilles électroniques** arrivent en tête du commerce en ligne (29 % des achats selon PPRO, 2021), devant la carte (24 %) et le virement (23 %). Les acheteurs attendent :
 
 - leurs portefeuilles : GoPay, OVO, DANA, ShopeePay ;
 - **QRIS**, le QR code national, lisible par n’importe quelle appli bancaire ou portefeuille ;
@@ -2211,14 +2214,14 @@ Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d�
       options: [
         { id: 'local', label: '`Rp1.250.000`', why: 'Point pour les milliers, pas de décimales : le format des boutiques indonésiennes.' },
         { id: 'us', label: '`Rp1,250,000.00`', why: 'Groupement anglo-saxon et centimes : deux erreurs pour un lecteur indonésien.' },
-        { id: 'intl', label: '`Rp 1.250.000,00`', why: 'C’est ce que renvoie Intl par défaut en id-ID ; mais les centimes ne servent plus dans le commerce : il faut demander zéro décimale.' },
+        { id: 'intl', label: '`Rp 1.250.000,00`', why: 'Le format que renvoient certains moteurs par défaut, comme Node ; mais les centimes ne servent plus dans le commerce : il faut demander zéro décimale.' },
         { id: 'short', label: '`IDR 1.25M`', why: 'Abréviation anglaise : en indonésien, on abrège avec « jt » (juta, million), par exemple Rp1,25 jt.' },
       ],
       answer: 'local',
       explanation: `La roupie indonésienne s’écrit avec un **point pour les milliers** et une virgule décimale — mais les centimes (*sen*) ne s’emploient plus dans le commerce : les prix s’affichent sans décimales, souvent collés au symbole (Rp1.250.000).
 
-\`Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })\` renvoie par défaut « Rp 1.250.000,00 ». Ajoute \`maximumFractionDigits: 0\` : la locale fournit les séparateurs, à toi d’appliquer l’usage commercial.`,
-      takeaway: 'En Indonésie : Rp1.250.000, point pour les milliers et pas de décimales. Règle `Intl` avec `maximumFractionDigits: 0`.',
+Le réglage par défaut d’\`Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })\` varie selon le moteur : « Rp 1.250.000,00 » dans Node, déjà « Rp 1.250.000 » dans Chrome. Impose \`maximumFractionDigits: 0\` pour obtenir partout « Rp 1.250.000 », avec une espace insécable après le symbole ; la forme collée des boutiques est un usage à appliquer toi-même.`,
+      takeaway: 'En Indonésie : point pour les milliers et pas de décimales (Rp1.250.000). Impose `maximumFractionDigits: 0` à `Intl`, dont le réglage par défaut varie selon le moteur.',
       sources: ['mdn:intl'],
     },
     {
@@ -2226,9 +2229,9 @@ Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d�
       type: 'truefalse',
       difficulty: 2,
       culture: 'sea',
-      prompt: 'En Indonésie, un marchand doit afficher un QR code différent pour chaque portefeuille (GoPay, OVO, DANA…).',
-      answer: false,
-      explanation: `**Faux.** **QRIS** (*Quick Response Code Indonesian Standard*), le standard national lancé par Bank Indonesia en août 2019 et appliqué à tout le pays depuis le 1er janvier 2020, rend les QR codes de paiement interopérables : un seul code QRIS, au comptoir ou à l’écran, se paie avec n’importe quelle appli bancaire ou portefeuille compatible.
+      prompt: 'En Indonésie, un seul QR code QRIS se paie avec n’importe quelle appli bancaire ou portefeuille compatible (GoPay, OVO, DANA…).',
+      answer: true,
+      explanation: `**Vrai.** **QRIS** (*Quick Response Code Indonesian Standard*), le standard national lancé par Bank Indonesia en août 2019 et appliqué à tout le pays depuis le 1er janvier 2020, rend les QR codes de paiement interopérables : le marchand n’affiche plus un code par portefeuille, mais un seul code QRIS, au comptoir ou à l’écran.
 
 Pour un parcours de paiement, l’interface s’en trouve simplifiée : un QR code QRIS et la consigne « scanne avec ton appli bancaire ou ton portefeuille », plutôt qu’une mosaïque de logos et de codes.`,
       takeaway: 'En Indonésie, un seul QR code QRIS est accepté par toutes les applis compatibles : propose-le plutôt qu’un code par portefeuille.',
@@ -2345,8 +2348,6 @@ Sans le moyen réflexe, la vente se perd au dernier écran, là où l’intentio
         { id: 'in', left: 'Inde', right: 'Code à usage unique (OTP) envoyé sur le numéro de mobile' },
         { id: 'kr', left: 'Corée du Sud', right: 'Vérification d’identité par les opérateurs mobiles (appli PASS)' },
         { id: 'se', left: 'Suède', right: 'Connexion et signature avec BankID' },
-        { id: 'jp', left: 'Japon', right: 'Nom en kanji accompagné de sa lecture en katakana' },
-        { id: 'br', left: 'Brésil', right: 'Numéro CPF demandé à l’achat' },
       ],
       explanation: `L’e-mail et le mot de passe, réflexe occidental, ne sont qu’une façon parmi d’autres d’identifier quelqu’un :
 
@@ -2354,12 +2355,10 @@ Sans le moyen réflexe, la vente se perd au dernier écran, là où l’intentio
 - **Inde** : un code à usage unique (OTP) envoyé sur le mobile remplace souvent le mot de passe.
 - **Corée du Sud** : PASS, l’appli commune aux trois opérateurs (SK Telecom, KT, LG U+), vérifie l’identité sur plus de 20 000 sites (2021).
 - **Suède** : BankID, que possèdent presque tous les adultes, sert à se connecter et à signer.
-- **Japon** : le nom s’accompagne de sa lecture en katakana.
-- **Brésil** : le CPF, identifiant fiscal, est demandé au paiement.
 
 Plaquer le parcours d’inscription de son marché d’origine, c’est imposer une étape que l’utilisateur n’attend pas.`,
       takeaway: 'Chaque marché a sa façon d’identifier : mobile et SMS en Chine, OTP en Inde, PASS en Corée, BankID en Suède. Ne plaque pas l’e-mail et le mot de passe partout.',
-      sources: ['palo-it:china', S.koreaPass, S.bankid, S.furigana],
+      sources: ['palo-it:china', S.koreaPass, S.koreaPassSites, S.bankid],
     },
     {
       id: 'culture-formats-match',
@@ -2399,7 +2398,7 @@ Le piège n’est pas de les ignorer, mais de les coder à la main.`,
       answer: false,
       explanation: `**Faux.** Les scores de Hofstede sont des **moyennes nationales**, issues à l’origine d’enquêtes auprès d’employés d’IBM (1967–1973), puis complétées. Ils comparent des populations, pas des personnes : en déduire le profil d’un individu est un sophisme écologique.
 
-À l’intérieur d’un pays, l’âge, la ville, le métier ou l’habitude du numérique font varier les attentes. Une étude portant sur plus de 190 000 personnes (Fischer et Schwartz, 2011) trouve d’ailleurs plus de consensus que de désaccord entre pays sur les priorités de valeurs.
+À l’intérieur d’un pays, l’âge, la ville, le métier ou l’habitude du numérique font varier les attentes. Une étude portant sur près de 170 000 personnes, issues de trois enquêtes internationales (Fischer et Schwartz, 2011), trouve d’ailleurs plus de consensus que de désaccord entre pays sur les priorités de valeurs.
 
 Utilise ces scores pour formuler des hypothèses (« ce marché attendra peut-être plus de réassurance »), puis vérifie-les avec des utilisateurs réels.`,
       takeaway: 'Hofstede décrit des moyennes nationales, pas des personnes : sers-t’en pour poser des hypothèses, puis teste avec des utilisateurs réels.',
@@ -2421,7 +2420,7 @@ Utilise ces scores pour formuler des hypothèses (« ce marché attendra peut-ê
 
 Les hypothèses d’interface qu’on en tire souvent : en contexte fort, montrer la relation et l’environnement (qui est derrière le service, qui l’utilise, ce qu’en disent les autres) et soigner le ton ; en contexte faible, aller droit au but, avec des informations factuelles et du libre-service. À vérifier, comme toute grille, avec des utilisateurs locaux.`,
       takeaway: 'Contexte fort : le sens passe par l’implicite et la relation ; contexte faible : par des messages explicites. Deux hypothèses de ton à tester.',
-      sources: ['hall', 'marcus2000'],
+      sources: ['hall', S.wurtz],
     },
   ],
 };
