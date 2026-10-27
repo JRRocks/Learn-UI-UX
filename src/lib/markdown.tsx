@@ -34,8 +34,15 @@ export function inline(text: string, keyPrefix = 'i'): ReactNode[] {
     if (at > last) out.push(frenchSpacing(text.slice(last, at)));
     const key = `${keyPrefix}-${n++}`;
     if (tok.startsWith('**')) out.push(<strong key={key}>{inline(tok.slice(2, -2), key)}</strong>);
-    else if (tok.startsWith('`')) out.push(<code key={key}>{tok.slice(1, -1)}</code>);
-    else if (tok.startsWith('[')) {
+    else if (tok.startsWith('`')) {
+      // Short snippets (`--surface`, `max-width: 50ch`) never break at their hyphens.
+      const code = tok.slice(1, -1);
+      out.push(
+        <code key={key} className={code.length <= 20 ? 'code-short' : undefined}>
+          {code}
+        </code>,
+      );
+    } else if (tok.startsWith('[')) {
       const [, label, href] = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(tok) ?? [];
       const external = /^https?:/.test(href);
       out.push(

@@ -94,6 +94,10 @@ code {
   overflow-wrap: anywhere;
 }
 
+code.code-short {
+  white-space: nowrap;
+}
+
 kbd {
   display: inline-block;
   min-width: 1.6em;
