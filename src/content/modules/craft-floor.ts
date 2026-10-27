@@ -3,8 +3,8 @@ import type { ModuleContent } from '../../engine/types';
 /**
  * French typography inside mock markup (the Markdown renderer only handles text fields): thin
  * no-break space before ? ! ; » and after «, no-break space before :, thin no-break space as
- * thousands separator, and a number kept with its unit or sign (« 19 € », « 78 % », « 9 h »,
- * « 5 min », « n° 2041 »).
+ * thousands separator, and a number kept with its unit, its month or its sign (« 19 € »,
+ * « 78 % », « 9 h », « 5 min », « 30 avril », « n° 2041 »).
  */
 const fr = (html: string) =>
   html
@@ -12,7 +12,7 @@ const fr = (html: string) =>
     .replace(/« /g, '« ')
     .replace(/ :/g, ' :')
     .replace(/(\d) (?=\d{3}(?!\d))/g, '$1 ')
-    .replace(/(\d) (?=(?:€|%|h|min)(?![\p{L}\d]))/gu, '$1 ')
+    .replace(/(\d) (?=(?:€|%|h|min|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)(?![\p{L}\d]))/gu, '$1 ')
     .replace(/(n°|×) (?=\d)/g, '$1 ');
 
 const craftFloor: ModuleContent = {
