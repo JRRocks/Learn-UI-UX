@@ -1189,19 +1189,19 @@ Trois marchés, trois conventions : vert et rouge en Occident, rouge et vert en 
       sources: [S.koreaStock],
     },
     {
-      id: 'culture-kr-spaces-tf',
+      id: 'culture-kr-overflow-tf',
       type: 'truefalse',
       difficulty: 2,
       culture: 'kr',
-      prompt: 'Comme le chinois et le japonais, le coréen s’écrit sans espaces entre les mots.',
-      answer: false,
-      explanation: `**Faux.** Le chinois et le japonais s’écrivent sans espaces entre les mots, mais le coréen moderne **espace ses mots** — plus exactement ses groupes « mot + particules », appelés *eojeol*.
+      prompt: 'Avec `word-break: keep-all`, un libellé coréen écrit sans espace, comme 개인정보처리방침, peut déborder d’une colonne étroite.',
+      answer: true,
+      explanation: `**Vrai.** \`keep-all\` interdit de couper un mot entre deux syllabes : la ligne ne peut plus se couper qu’aux espaces. Un terme composé écrit d’un bloc, comme 개인정보처리방침 (« politique de confidentialité »), devient alors insécable : dans une tuile, un onglet ou une cellule étroite, il dépasse de sa boîte — comme une référence de commande ou une adresse web.
 
-Cette différence change la façon de couper les lignes : en chinois et en japonais, on peut couper entre presque tous les caractères ; en coréen, le lecteur attend des coupures aux espaces, d’où \`word-break: keep-all\`.
+Le filet de sécurité : \`overflow-wrap: anywhere\`. Les mots restent entiers tant qu’ils tiennent sur la ligne ; seul un mot plus large que sa colonne se coupe, entre deux syllabes.
 
-Ranger « le CJK » sous une seule règle typographique est donc une erreur : chaque écriture a ses conventions.`,
-      takeaway: 'Le coréen espace ses mots, contrairement au chinois et au japonais : il se coupe aux espaces, avec `word-break: keep-all`.',
-      sources: [S.klreq, S.wordBreak],
+Teste donc tes libellés coréens dans la colonne la plus étroite de l’interface, comme tu testes l’allemand.`,
+      takeaway: '`word-break: keep-all` rend insécables les mots coréens écrits d’un bloc : ajoute `overflow-wrap: anywhere` pour qu’ils ne débordent pas d’une colonne étroite.',
+      sources: [S.wordBreak, S.overflowWrap],
     },
 
     /* ---------- Inde ---------- */
@@ -1355,20 +1355,20 @@ Localiser pour « l’anglais » ne suffit pas : \`en-IN\`, \`en-US\`, \`en-GB\`
 </div>`,
       },
       hotspots: [
-        { id: 'back', label: 'Flèche retour', correct: true, why: 'En RTL, le retour pointe vers la droite, d’où l’on vient. Cette flèche n’a pas été miroitée.' },
-        { id: 'more', label: 'Chevron de « Tout voir »', correct: true, why: 'Le chevron qui mène à la suite doit pointer vers la gauche, sens de la lecture en arabe : il n’a pas été miroité.' },
-        { id: 'play', label: 'Bouton de lecture', correct: true, why: 'Les commandes de lecture ne se miroitent pas : le triangle doit pointer vers la droite, comme partout.' },
-        { id: 'logo', label: 'Logo', correct: false, why: 'Un logo ne se miroite pas : il est resté tel quel, c’est correct.' },
-        { id: 'check', label: 'Coche « Épisode 2 vu »', correct: false, why: 'Une coche ne se miroite pas : correct.' },
+        { id: 'back', label: 'Flèche retour', correct: true, why: 'En RTL, le retour pointe vers la droite, d’où l’on vient. Cette flèche n’a pas été inversée.' },
+        { id: 'more', label: 'Chevron de « Tout voir »', correct: true, why: 'Le chevron qui mène à la suite doit pointer vers la gauche, sens de la lecture en arabe : il n’a pas été inversé.' },
+        { id: 'play', label: 'Bouton de lecture', correct: true, why: 'Les commandes de lecture ne s’inversent pas : le triangle doit pointer vers la droite, comme partout.' },
+        { id: 'logo', label: 'Logo', correct: false, why: 'Un logo ne s’inverse pas : il est resté tel quel, c’est correct.' },
+        { id: 'check', label: 'Coche « Épisode 2 vu »', correct: false, why: 'Une coche ne s’inverse pas : correct.' },
         { id: 'phone', label: 'Numéro du service client', correct: false, why: 'Le numéro est isolé de gauche à droite : il se lit dans l’ordre, c’est correct.' },
       ],
-      explanation: `En arabe, la mise en page se **miroite**, mais pas tout ce qu’elle contient :
+      explanation: `En arabe, la mise en page se **met en miroir**, mais pas tout ce qu’elle contient :
 
-- **À miroiter** : ce qui indique un sens de navigation. Le retour pointe vers la droite, le chevron « voir plus » vers la gauche.
+- **À inverser** : ce qui indique un sens de navigation. Le retour pointe vers la droite, le chevron « voir plus » vers la gauche.
 - **À laisser tel quel** : les commandes de lecture (le triangle pointe toujours vers la droite : il suit le sens de la bande, pas celui de l’écriture), les coches, les logos et les numéros.
 
 Les deux types d’erreur viennent du même réflexe : retourner les icônes au hasard au lieu de se demander, pour chacune, si elle indique un sens de navigation.`,
-      takeaway: 'En RTL, miroite ce qui indique un sens de navigation ; jamais les commandes de lecture, les coches, les logos ni les numéros.',
+      takeaway: 'En RTL, inverse ce qui indique un sens de navigation ; jamais les commandes de lecture, les coches, les logos ni les numéros.',
       sources: ['material:bidi', 'mozilla:rtl'],
     },
     {
@@ -1376,23 +1376,23 @@ Les deux types d’erreur viennent du même réflexe : retourner les icônes au 
       type: 'multi',
       difficulty: 2,
       culture: 'arab',
-      prompt: 'Tu passes une appli en arabe. Coche tout ce qu’il faut miroiter.',
+      prompt: 'Tu passes une appli en arabe. Coche tout ce qu’il faut mettre en miroir.',
       options: [
         { id: 'back', label: 'La flèche « retour » de l’en-tête', why: 'Elle indique un sens de navigation : en RTL, elle pointe vers la droite.' },
         { id: 'steps', label: 'La barre de progression des étapes du paiement', why: 'La progression suit le sens de lecture : elle avance de la droite vers la gauche.' },
-        { id: 'nav', label: 'La position du menu latéral et l’ordre des onglets', why: 'Toute la mise en page se miroite : le menu passe sur le côté droit, le premier onglet aussi.' },
-        { id: 'play', label: 'Le bouton de lecture d’une vidéo', why: 'Les commandes de lecture suivent le sens de la bande, pas celui de l’écriture : on ne les miroite pas.' },
-        { id: 'clock', label: 'L’icône d’horloge de l’historique', why: 'Une horloge tourne dans le sens des aiguilles d’une montre partout : on ne la miroite pas.' },
+        { id: 'nav', label: 'La position du menu latéral et l’ordre des onglets', why: 'Toute la mise en page se met en miroir : le menu passe sur le côté droit, le premier onglet aussi.' },
+        { id: 'play', label: 'Le bouton de lecture d’une vidéo', why: 'Les commandes de lecture suivent le sens de la bande, pas celui de l’écriture : on ne les inverse pas.' },
+        { id: 'clock', label: 'L’icône d’horloge de l’historique', why: 'Une horloge tourne dans le sens des aiguilles d’une montre partout : on ne l’inverse pas.' },
         { id: 'phone', label: 'Un numéro de téléphone', why: 'Les chiffres s’écrivent toujours de gauche à droite, même dans un texte arabe.' },
       ],
       answers: ['back', 'steps', 'nav'],
       explanation: `La règle tient en une question : **cet élément indique-t-il un sens de lecture ou de navigation ?**
 
-- Oui → on le miroite : flèches retour et suivant, chevrons, progression des étapes, curseurs, position des menus et ordre des onglets.
+- Oui → on le met en miroir : flèches retour et suivant, chevrons, progression des étapes, curseurs, position des menus et ordre des onglets.
 - Non → on le laisse : commandes de lecture média, horloges et flèches circulaires qui tournent dans le sens des aiguilles d’une montre, coches, logos, photos, nombres et numéros.
 
 Le temps qui s’écoule se représente de la droite vers la gauche en RTL (une frise, une suite d’étapes) — mais une horloge tourne toujours dans le même sens.`,
-      takeaway: 'Miroite la mise en page et ce qui indique un sens de navigation ; laisse la lecture média, les horloges, les coches, les logos et les nombres.',
+      takeaway: 'Mets en miroir la mise en page et ce qui indique un sens de navigation ; laisse la lecture média, les horloges, les coches, les logos et les nombres.',
       sources: ['material:bidi', 'mozilla:rtl'],
     },
     {
