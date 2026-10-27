@@ -70,7 +70,9 @@ Avant d’ajouter quoi que ce soit, écris une **thèse de délice** en une phra
 - une illustration, un son, une vibration ou un détail ancré dans l’univers du produit ;
 - une découverte qui révèle une vraie utilité.
 
-Sur une surface **Opérer** ou **Lire**, la fiabilité porte tout le reste : le délice se concentre sur quelques moments — premier usage, accomplissement, reprise après une erreur, maîtrise.`,
+Dérive ce dispositif du **mécanisme du produit** et de son **univers visuel**, pas d’un catalogue d’effets.
+
+La dose dépend du *mode* de la surface, c’est-à-dire de ce que la personne y vient faire. Sur une surface **Persuader** (elle décide et agit : page d’accueil, campagne) ou **Expérience** (elle est dans l’œuvre : portfolio, galerie), la personnalité peut passer par la voix, la composition, le mouvement et la découverte, tant que ce qui est présenté reste au centre. Sur une surface **Opérer** (elle accomplit une tâche : application, réglages) ou **Lire** (elle comprend un contenu : documentation, article), la fiabilité porte tout le reste : le délice se concentre sur quelques moments — premier usage, accomplissement, reprise après une erreur, maîtrise.`,
     },
     {
       id: 'moments',
@@ -104,14 +106,14 @@ Une même application peut donc offrir une coche discrète à l’action quotidi
           bad: {
             alt: 'Éditeur de notes recouvert d’une fenêtre « Bravo ! Votre brouillon a bien été enregistré » entourée de confettis, avec un bouton « Super ! ».',
             height: 230,
-            html: `<div class="mk-pad mk-stack nb" style="--gap:8px">${NOTE}<div class="mk-overlay"><div class="mk-dialog mk-center mk-stack" style="--gap:8px"><p class="mk-h2">Bravo !</p><p>Votre brouillon a bien été enregistré.</p><span class="mk-btn">Super !</span></div></div><div class="cf">${CONFETTI}</div></div>`,
+            html: `<div class="mk-pad mk-stack nb" style="--gap:8px">${NOTE}<div class="mk-overlay"><div class="mk-dialog mk-center mk-stack" style="--gap:8px"><p class="mk-h2">Bravo&#8239;!</p><p>Votre brouillon a bien été enregistré.</p><span class="mk-btn">Super&#8239;!</span></div></div><div class="cf">${CONFETTI}</div></div>`,
             css: `${CONFETTI_CSS} .nb { position: relative; min-height: 230px; }`,
           },
           badNote: 'Une fête et un clic de plus pour une action répétée trente fois par jour : charmant la première fois, pénible ensuite.',
           good: {
             alt: 'Même éditeur avec, en haut à droite, une petite coche verte et la mention « Enregistré à 14 h 32 ».',
             height: 230,
-            html: `<div class="mk-pad mk-stack" style="--gap:8px"><div class="mk-row mk-between"><span></span><span class="sv"><i data-icon="check" style="--ico:14px"></i>Enregistré à 14 h 32</span></div>${NOTE}</div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:8px"><div class="mk-row mk-between"><span></span><span class="sv"><i data-icon="check" style="--ico:14px"></i>Enregistré à 14&nbsp;h&nbsp;32</span></div>${NOTE}</div>`,
             css: `.sv { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #1a6e32; }`,
           },
           goodNote: 'Une confirmation discrète et certaine, sans interrompre l’écriture.',
@@ -125,10 +127,18 @@ Une même application peut donc offrir une coche discrète à l’action quotidi
 
 - **retarder, bloquer ou masquer** la tâche principale ;
 - **simuler un travail**, ou retarder la fin pour mettre en scène une animation : une attente montre une progression vraie ou un contexte utile ;
-- passer outre les **conventions de la plateforme** ou l’**accessibilité** (lecteur d’écran, clavier, tactile, mouvement réduit, traduction) ;
-- ajouter des **affirmations** que personne n’a demandées ;
+- passer outre les **conventions de la plateforme** ou l’**accessibilité** (lecteur d’écran, clavier, tactile, mouvement réduit, traduction, contexte culturel : un jeu de mots ou une célébration ne voyagent pas toujours d’une culture à l’autre) ;
+- ajouter des **affirmations factuelles** que personne n’a demandées (chiffres, promesses, comparaisons) ;
 - jouer un **son** sans consentement, ou en ignorant le mode silencieux ;
 - devenir **obligatoire**, **impossible à passer** ou épuisant à la répétition.
+
+Pour vérifier un moment de délice :
+
+- il est assez **spécifique** pour qu’un produit voisin ne puisse pas le reprendre tel quel ;
+- il améliore la **compréhension**, la **confiance**, la **motivation** ou le **retour au calme** après une difficulté ;
+- l’interface reste **rapide et évidente** sans la fioriture ;
+- la **répétition** ne transforme pas le charme en friction ;
+- les parcours **sans son**, au **clavier**, au **tactile** et **traduits** fonctionnent.
 
 **Erreurs et reprises** : commence par le problème et la solution. La chaleur peut réduire le stress ; la **blague** n’a pas sa place quand il s’agit d’**argent**, de **vie privée**, d’une **suppression**, d’une **perte** ou d’un travail bloqué. La consigne d’impeccable tient en une phrase : la chaleur, oui ; la blague, non.`,
       examples: [
@@ -136,13 +146,13 @@ Une même application peut donc offrir une coche discrète à l’action quotidi
           title: 'Un paiement refusé',
           bad: {
             alt: 'Écran de paiement avec un encadré rouge pâle « Oups, votre carte fait la grève ! Elle a sûrement besoin de vacances » et un bouton « Réessayer ».',
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Paiement</p><div class="pe"><p class="mk-strong">Oups, votre carte fait la grève !</p><p class="mk-small">Elle a sûrement besoin de vacances. Réessayez plus tard ?</p></div><div class="mk-row mk-between"><span class="mk-small mk-muted">Total</span><span class="mk-price">89,90 €</span></div><span class="mk-btn mk-btn--block">Réessayer</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Paiement</p><div class="pe"><p class="mk-strong">Oups, votre carte fait la grève&#8239;!</p><p class="mk-small">Elle a sûrement besoin de vacances. Réessayez plus tard&#8239;?</p></div><div class="mk-row mk-between"><span class="mk-small mk-muted">Total</span><span class="mk-price">89,90&nbsp;€</span></div><span class="mk-btn mk-btn--block">Réessayer</span></div>`,
             css: `.pe { border-radius: 10px; padding: 12px 14px; background: #fdecea; color: #7a1d16; display: flex; flex-direction: column; gap: 2px; }`,
           },
           badNote: 'Une blague sur l’argent au moment où la personne s’inquiète : on ignore si elle a été débitée et quoi faire.',
           good: {
             alt: 'Même écran : encadré « Paiement refusé par votre banque », précisant qu’aucun montant n’a été débité et les solutions, avec deux boutons.',
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Paiement</p><div class="pe"><p class="mk-strong mk-row" style="--gap:6px"><i data-icon="circle-alert" style="--ico:16px"></i>Paiement refusé par votre banque</p><p class="mk-small">Aucun montant n’a été débité. Vérifiez le plafond de votre carte, ou utilisez un autre moyen de paiement.</p></div><div class="mk-row mk-between"><span class="mk-small mk-muted">Total</span><span class="mk-price">89,90 €</span></div><span class="mk-btn mk-btn--block">Utiliser une autre carte</span><span class="mk-btn mk-btn--ghost mk-btn--block">Réessayer avec cette carte</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Paiement</p><div class="pe"><p class="mk-strong mk-row" style="--gap:6px"><i data-icon="circle-alert" style="--ico:16px"></i>Paiement refusé par votre banque</p><p class="mk-small">Aucun montant n’a été débité. Vérifiez le plafond de votre carte, ou utilisez un autre moyen de paiement.</p></div><div class="mk-row mk-between"><span class="mk-small mk-muted">Total</span><span class="mk-price">89,90&nbsp;€</span></div><span class="mk-btn mk-btn--block">Utiliser une autre carte</span><span class="mk-btn mk-btn--ghost mk-btn--block">Réessayer avec cette carte</span></div>`,
             css: `.pe { border-radius: 10px; padding: 12px 14px; background: #fdecea; color: #7a1d16; display: flex; flex-direction: column; gap: 4px; }`,
           },
           goodNote: 'Le problème, ce qui est rassurant (rien n’a été débité) et deux sorties : chaleureux sans plaisanter.',
@@ -164,12 +174,12 @@ La voix reste constante ; le ton s’adapte au moment — plus léger pour un ja
           title: 'Un plan de semis vient d’être créé',
           bad: {
             alt: 'Message de succès « Youpi ! C’est fait ! Trop génial, vous êtes au top ! » avec un bouton « OK ».',
-            html: `<div class="mk-pad-l mk-stack mk-center" style="--gap:8px"><p class="mk-h1">Youpi ! C’est fait !</p><p class="mk-muted">Trop génial, vous êtes au top !</p><span class="mk-btn" style="align-self:center">OK</span></div>`,
+            html: `<div class="mk-pad-l mk-stack mk-center" style="--gap:8px"><p class="mk-h1">Youpi&#8239;! C’est fait&#8239;!</p><p class="mk-muted">Trop génial, vous êtes au top&#8239;!</p><span class="mk-btn" style="align-self:center">OK</span></div>`,
           },
           badNote: 'Enthousiasme générique : on ne sait ni ce qui a été créé, ni ce qui vient ensuite.',
           good: {
             alt: 'Message de succès « Votre plan de semis est prêt » détaillant le nombre de légumes et la date du premier semis, avec un bouton « Voir le calendrier ».',
-            html: `<div class="mk-pad-l mk-stack" style="--gap:8px"><p class="mk-h2">Votre plan de semis est prêt</p><p>12 légumes, du radis au potiron. Premier semis en intérieur : <strong>le 3 mars</strong>.</p><p class="mk-small mk-muted">Un rappel arrivera la veille de chaque semis.</p><span class="mk-btn" style="align-self:flex-start;margin-top:4px">Voir le calendrier</span></div>`,
+            html: `<div class="mk-pad-l mk-stack" style="--gap:8px"><p class="mk-h2">Votre plan de semis est prêt</p><p>12 légumes, du radis au potiron. Premier semis en intérieur&nbsp;: <strong>le 3&nbsp;mars</strong>.</p><p class="mk-small mk-muted">Un rappel arrivera la veille de chaque semis.</p><span class="mk-btn" style="align-self:flex-start;margin-top:4px">Voir le calendrier</span></div>`,
           },
           goodNote: 'Le langage du potager, ce qui a été fait, ce qui vient ensuite : la personnalité passe par la précision.',
         },
@@ -180,10 +190,11 @@ La voix reste constante ; le ton s’adapte au moment — plus léger pour un ja
       title: 'Découvrir, et dépasser les conventions avec discernement',
       body: `**La découverte** récompense la curiosité **sans cacher une fonction nécessaire** : un raccourci clavier proposé après trois sélections une à une, un geste qui accélère une tâche fréquente. La récompense, c’est l’utilité elle-même.
 
-La commande *overdrive* d’impeccable va plus loin : **pousser une interface au-delà des conventions**, avec discernement. Ce qui est « extraordinaire » dépend du contexte : un système de particules impressionne sur un portfolio et embarrasse sur une page de réglages — mais une page de réglages aux enregistrements instantanés et aux transitions d’état fluides est extraordinaire, elle aussi.
+La commande *overdrive* d’impeccable va plus loin : **pousser une interface au-delà des conventions**, avec discernement. Elle change la **sensation** d’une interface, pas ce que fait le produit : une coédition en temps réel ou un mode hors ligne relèvent de décisions produit. Ce qui est « extraordinaire » dépend du contexte : un système de particules impressionne sur un portfolio et embarrasse sur une page de réglages — mais une page de réglages aux enregistrements instantanés et aux transitions d’état fluides est extraordinaire, elle aussi.
 
 - Propose deux ou trois directions et fais choisir avant de construire.
 - **Amélioration progressive** obligatoire : sans l’effet, l’expérience doit rester bonne.
+- Jamais de prouesse technique pour **masquer des fondations faibles** (hiérarchie, typographie, mise en page) : corrige-les d’abord.
 - Vise 60 images par seconde et simplifie sous 50 ; mets en pause ce qui sort de l’écran ; teste sur un appareil de milieu de gamme ; jamais de son sans accord explicite.
 - Jamais plusieurs moments extraordinaires en concurrence : la concentration crée l’impact, l’excès crée du bruit.
 - Quatre vérifications : l’effet sur quelqu’un qui découvre, le **retrait** (s’en apercevrait-on ?), l’appareil, le contexte.`,
@@ -191,7 +202,7 @@ La commande *overdrive* d’impeccable va plus loin : **pousser une interface au
   ],
   rules: [
     { id: 'definition', front: 'Qu’est-ce que le délice en design d’interface ?', back: 'Le caractère du produit révélé par une interaction utile, une réponse humaine ou un détail soigné — pas une couche de fantaisie générique.' },
-    { id: 'specific', front: 'Comment savoir si un moment de délice est réussi ?', back: 'Il est assez spécifique pour qu’un produit voisin ne puisse pas le reprendre tel quel.' },
+    { id: 'specific', front: 'Comment savoir si un moment de délice est réussi ?', back: 'Il est assez spécifique pour qu’un produit voisin ne puisse pas le reprendre tel quel. Il aide vraiment (compréhension, confiance, motivation), et l’interface reste rapide et évidente sans lui.' },
     { id: 'where', front: 'Où concentrer le délice dans une application ?', back: 'Sur quelques moments : premier usage, accomplissement, reprise après une erreur, maîtrise. La fiabilité porte le reste.' },
     { id: 'proportion', front: 'Quelle intensité donner à une célébration ?', back: 'Proportionnelle à l’effort et à l’enjeu, et d’autant plus discrète que l’action est fréquente.' },
     { id: 'hundredth', front: 'Quel test pour une micro-interaction répétée ?', back: 'La centième fois : elle doit rester satisfaisante, jamais lassante ni ralentissante.' },
@@ -216,7 +227,7 @@ La commande *overdrive* d’impeccable va plus loin : **pousser une interface au
           visual: {
             alt: 'Écran de suivi d’hydratation recouvert d’une fenêtre « Bravo !!! Un verre d’eau de plus ! » entourée de confettis, avec un bouton « Merci ! ».',
             frame: 'phone',
-            html: `<div class="mk-pad mk-stack wt" style="--gap:12px"><p class="mk-h2">Hydratation</p><p>6 verres sur 8 aujourd’hui</p>${GLASSES(6)}<div class="mk-overlay"><div class="mk-dialog mk-center mk-stack" style="--gap:8px"><p class="mk-h2">Bravo !!!</p><p>Un verre d’eau de plus ! Continuez comme ça, champion !</p><span class="mk-btn">Merci !</span></div></div><div class="cf">${CONFETTI}</div></div>`,
+            html: `<div class="mk-pad mk-stack wt" style="--gap:12px"><p class="mk-h2">Hydratation</p><p>6 verres sur 8 aujourd’hui</p>${GLASSES(6)}<div class="mk-overlay"><div class="mk-dialog mk-center mk-stack" style="--gap:8px"><p class="mk-h2">Bravo&#8239;!!!</p><p>Un verre d’eau de plus&#8239;! Continuez comme ça&#8239;!</p><span class="mk-btn">Merci&#8239;!</span></div></div><div class="cf">${CONFETTI}</div></div>`,
             css: `${WATER_CSS} ${CONFETTI_CSS}`,
           },
           why: 'Une fête plein écran et un clic de plus, huit fois par jour : la célébration devient une corvée.',
@@ -226,7 +237,7 @@ La commande *overdrive* d’impeccable va plus loin : **pousser une interface au
           visual: {
             alt: 'Même écran : le compteur indique 6 verres sur 8, six verres sur huit sont remplis et une ligne discrète indique « Verre ajouté à 14 h 10 · Annuler ».',
             frame: 'phone',
-            html: `<div class="mk-pad mk-stack wt" style="--gap:12px"><p class="mk-h2">Hydratation</p><p>6 verres sur 8 aujourd’hui</p>${GLASSES(6)}<p class="mk-small mk-row" style="--gap:6px;color:#1a6e32"><i data-icon="check" style="--ico:14px"></i>Verre ajouté à 14 h 10 <span class="mk-btn--text" style="padding:0">Annuler</span></p></div>`,
+            html: `<div class="mk-pad mk-stack wt" style="--gap:12px"><p class="mk-h2">Hydratation</p><p>6 verres sur 8 aujourd’hui</p>${GLASSES(6)}<p class="mk-small mk-row" style="--gap:6px;color:#1a6e32"><i data-icon="check" style="--ico:14px"></i>Verre ajouté à 14&nbsp;h&nbsp;10 <span class="mk-btn--text" style="padding:0">Annuler</span></p></div>`,
             css: WATER_CSS,
           },
           why: 'Le compteur avance, un verre de plus se remplit, une ligne confirme et permet d’annuler : un retour sûr, agréable à la centième fois.',
@@ -256,8 +267,8 @@ Le test d’impeccable : la réponse doit rester satisfaisante **à la centième
         {
           id: 'moment',
           visual: {
-            alt: 'Écran dédié : couverture du livre, titre « Votre premier livre est en ligne », phrase indiquant qu’il est disponible, bouton « Voir la page du livre » et lien « Partager le lien ».',
-            html: `<div class="mk-pad-l mk-stack" style="--gap:10px">${COVER}<p class="mk-h2">Votre premier livre est en ligne</p><p>« Les Saisons du jardin » est disponible dans les librairies numériques partenaires.</p><div class="mk-row mk-wrap" style="--gap:8px"><span class="mk-btn">Voir la page du livre</span><span class="mk-btn mk-btn--ghost">Partager le lien</span></div><span class="mk-small mk-muted">Fermer</span></div>`,
+            alt: 'Écran dédié : couverture du livre, titre « Votre premier livre est en ligne », phrase indiquant qu’il est disponible, un bouton « Voir la page du livre », un bouton « Partager le lien » et un bouton « Fermer ».',
+            html: `<div class="mk-pad-l mk-stack" style="--gap:10px">${COVER}<p class="mk-h2">Votre premier livre est en ligne</p><p>«&#8239;Les Saisons du jardin&#8239;» est disponible dans les librairies numériques partenaires.</p><div class="mk-row mk-wrap" style="--gap:8px"><span class="mk-btn">Voir la page du livre</span><span class="mk-btn mk-btn--ghost">Partager le lien</span></div><span class="mk-btn mk-btn--text" style="align-self:flex-start;padding:0">Fermer</span></div>`,
             css: `.bk-cover { width: 74px; height: 100px; border-radius: 4px 8px 8px 4px; background: linear-gradient(160deg, #2f4a3a, #14532d); color: #e4efe7; font-size: 11px; font-weight: 700; padding: 10px 8px; display: flex; align-items: flex-end; box-shadow: 0 6px 16px rgb(15 20 35 / 0.18); }`,
           },
           why: 'Un vrai moment, à la hauteur du jalon : le livre, ce qui vient de se passer, les suites utiles, et une sortie libre.',
@@ -266,7 +277,7 @@ Le test d’impeccable : la réponse doit rester satisfaisante **à la centième
           id: 'blocking',
           visual: {
             alt: 'Écran sombre plein cadre « FÉLICITATIONS !!! » avec une icône de son activé et un bouton grisé « Passer (dans 8 s) ».',
-            html: `<div class="mk-pad-l mk-stack mk-center bl" style="--gap:12px"><span class="bl-snd"><i data-icon="volume-2" style="--ico:16px"></i>Son activé</span><p class="bl-t">FÉLICITATIONS !!!</p><p style="color:#c9d3e6">Préparez-vous à la gloire littéraire…</p><span class="mk-btn mk-btn--disabled" style="align-self:center">Passer (dans 8 s)</span></div>`,
+            html: `<div class="mk-pad-l mk-stack mk-center bl" style="--gap:12px"><span class="bl-snd"><i data-icon="volume-2" style="--ico:16px"></i>Son activé</span><p class="bl-t">FÉLICITATIONS&#8239;!!!</p><p style="color:#c9d3e6">Préparez-vous à la gloire littéraire…</p><span class="mk-btn mk-btn--disabled" style="align-self:center">Passer (dans 8&nbsp;s)</span></div>`,
             css: `.bl { background: #1b2a4a; color: #fff; min-height: 220px; justify-content: center; } .bl-snd { display: inline-flex; align-items: center; gap: 6px; align-self: flex-end; font-size: 12px; color: #ffd27a; } .bl-t { font-size: 26px; font-weight: 800; }`,
           },
           why: 'Animation imposée de 8 secondes, son lancé sans accord, aucune information utile : le délice bloque la tâche.',
@@ -289,7 +300,7 @@ Mais l’ampleur a des garde-fous : le moment ne doit ni bloquer, ni devenir imp
           id: 'joke',
           visual: {
             alt: 'Bandeau « Oups ! Nos serveurs font une petite sieste… Revenez plus tard ! » au-dessus d’une liste de notes.',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="sy"><p class="mk-strong">Oups ! Nos serveurs font une petite sieste…</p><p class="mk-small">Revenez plus tard !</p></div><ul class="mk-list"><li>Liste de courses</li><li>Idées pour l’anniversaire de Jules</li><li>Compte rendu du conseil de classe</li></ul></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="sy"><p class="mk-strong">Oups&#8239;! Nos serveurs font une petite sieste…</p><p class="mk-small">Revenez plus tard&#8239;!</p></div><ul class="mk-list"><li>Liste de courses</li><li>Idées pour l’anniversaire de Jules</li><li>Compte rendu du conseil de classe</li></ul></div>`,
             css: `.sy { background: #fff7e0; color: #7a4a06; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }`,
           },
           why: 'Une plaisanterie là où la personne craint de perdre son travail : on ne sait ni quelles notes sont concernées, ni si elles sont à l’abri.',
@@ -297,11 +308,12 @@ Mais l’ampleur a des garde-fous : le moment ne doit ni bloquer, ni devenir imp
         {
           id: 'clear',
           visual: {
-            alt: 'Bandeau « 3 notes n’ont pas pu être synchronisées », précisant qu’elles restent sur l’appareil, avec un bouton « Réessayer maintenant ».',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="sy"><p class="mk-strong mk-row" style="--gap:6px"><i data-icon="refresh-cw" style="--ico:15px"></i>3 notes n’ont pas pu être synchronisées</p><p class="mk-small">Elles restent enregistrées sur cet appareil. La synchronisation reprendra dès le retour de la connexion.</p><span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start;margin-top:6px">Réessayer maintenant</span></div><ul class="mk-list"><li>Liste de courses</li><li>Idées pour l’anniversaire de Jules</li><li>Compte rendu du conseil de classe</li></ul></div>`,
-            css: `.sy { background: #fff7e0; color: #7a4a06; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }`,
+            alt: 'Bandeau « 3 notes n’ont pas pu être synchronisées », précisant qu’elles restent sur l’appareil et qu’un nouvel essai automatique est prévu, avec un bouton « Réessayer maintenant » ; chaque note de la liste porte la mention « Non synchronisée ».',
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="sy"><p class="mk-strong mk-row" style="--gap:6px"><i data-icon="refresh-cw" style="--ico:15px"></i>3 notes n’ont pas pu être synchronisées</p><p class="mk-small">Elles restent enregistrées sur cet appareil. Nouvel essai automatique dans quelques minutes.</p><span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start;margin-top:6px">Réessayer maintenant</span></div><ul class="mk-list"><li><div class="mk-grow"><p>Liste de courses</p><p class="sy-off"><i data-icon="refresh-cw" style="--ico:12px"></i>Non synchronisée</p></div></li><li><div class="mk-grow"><p>Idées pour l’anniversaire de Jules</p><p class="sy-off"><i data-icon="refresh-cw" style="--ico:12px"></i>Non synchronisée</p></div></li><li><div class="mk-grow"><p>Compte rendu du conseil de classe</p><p class="sy-off"><i data-icon="refresh-cw" style="--ico:12px"></i>Non synchronisée</p></div></li></ul></div>`,
+            css: `.sy { background: #fff7e0; color: #7a4a06; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.sy-off { display: flex; align-items: center; gap: 4px; margin-top: 2px; font-size: 12px; font-weight: 600; color: #7a4a06; }`,
           },
-          why: 'Le problème, ce qui rassure (rien n’est perdu), ce qui va se passer et une action : la chaleur passe par la précision.',
+          why: 'Le problème, les notes concernées, ce qui rassure (rien n’est perdu), ce qui va se passer et une action : la chaleur passe par la précision.',
         },
       ],
       answer: 'clear',
@@ -322,7 +334,7 @@ La chaleur reste possible — un ton calme, une information rassurante —, mais
           visual: {
             alt: 'Écran « Mes sorties » avec un grand cercle gris, le texte « C’est bien vide par ici… Revenez quand vous aurez couru ! » et aucun bouton.',
             frame: 'phone',
-            html: `<div class="mk-pad mk-stack mk-center" style="--gap:12px;padding-block:28px"><p class="mk-h3" style="text-align:start">Mes sorties</p><div class="em-ill"></div><p class="mk-strong">C’est bien vide par ici…</p><p class="mk-small mk-muted">Revenez quand vous aurez couru !</p></div>`,
+            html: `<div class="mk-pad mk-stack mk-center" style="--gap:12px;padding-block:28px"><p class="mk-h3" style="text-align:start">Mes sorties</p><div class="em-ill"></div><p class="mk-strong">C’est bien vide par ici…</p><p class="mk-small mk-muted">Revenez quand vous aurez couru&#8239;!</p></div>`,
             css: `.em-ill { width: 96px; height: 96px; border-radius: 50%; background: #eef1f5; align-self: center; }`,
           },
           why: 'Une formule amusante mais aucune piste : la personne ne sait pas comment enregistrer sa première sortie.',
@@ -332,7 +344,7 @@ La chaleur reste possible — un ton calme, une information rassurante —, mais
           visual: {
             alt: 'Écran « Mes sorties » : « Aucune sortie enregistrée », une phrase sur ce que mesure l’application, un bouton « Démarrer une sortie » et un lien d’import depuis une montre.',
             frame: 'phone',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px;padding-block:28px"><p class="mk-h3">Mes sorties</p><p class="mk-h2" style="margin-top:12px">Aucune sortie enregistrée</p><p class="mk-muted">Lancez votre première sortie : Foulée mesure la distance, l’allure et le dénivelé.</p><span class="mk-btn mk-btn--block"><i data-icon="play" style="--ico:16px"></i>Démarrer une sortie</span><span class="mk-btn mk-btn--ghost mk-btn--block">Importer depuis ma montre</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px;padding-block:28px"><p class="mk-h3">Mes sorties</p><p class="mk-h2" style="margin-top:12px">Aucune sortie enregistrée</p><p class="mk-muted">Lancez votre première sortie&nbsp;: Foulée mesure la distance, l’allure et le dénivelé.</p><span class="mk-btn mk-btn--block"><i data-icon="play" style="--ico:16px"></i>Démarrer une sortie</span><span class="mk-btn mk-btn--ghost mk-btn--block">Importer depuis ma montre</span></div>`,
           },
           why: 'L’état vide explique ce qui apparaîtra ici et propose l’action suivante, avec une alternative utile.',
         },
@@ -396,13 +408,13 @@ Une animation réussie peut accompagner l’arrivée du résultat — en parall�
         frame: 'phone',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div data-hotspot="header"><p class="mk-h2">Aujourd’hui</p><p class="mk-small mk-muted">Mardi 4 mars</p></div>
-  <div class="mk-stack" style="--gap:6px" data-hotspot="progress"><div class="mk-row mk-between mk-small"><span>3 tâches sur 5</span><span class="mk-muted">60 %</span></div><div class="pg"><span></span></div></div>
+  <div class="mk-stack" style="--gap:6px" data-hotspot="progress"><div class="mk-row mk-between mk-small"><span>2 tâches sur 4</span><span class="mk-muted">50&nbsp;%</span></div><div class="pg"><span></span></div></div>
   <ul class="mk-list"><li><span class="mk-check mk-check--on"></span><span class="mk-muted">Appeler le plombier</span></li><li><span class="mk-check mk-check--on"></span><span class="mk-muted">Payer la cantine</span></li><li><span class="mk-check"></span><span>Réserver le train pour Lyon</span></li><li><span class="mk-check"></span><span>Rendre les livres</span></li></ul>
-  <p class="tk-tip" data-hotspot="tip">Astuce : faites glisser une tâche vers la gauche pour la reporter à demain.</p>
+  <p class="tk-tip" data-hotspot="tip">Astuce&nbsp;: faites glisser une tâche vers la gauche pour la reporter à demain.</p>
   <p class="mk-small mk-muted" data-hotspot="sync">Synchronisation… on nourrit les hamsters.</p>
-  <div class="tk-sheet mk-stack" style="--gap:8px" data-hotspot="sheet"><p class="mk-h3">Bravo ! Une tâche de moins.</p><p class="mk-small mk-muted">Prenez le temps de savourer ce moment.</p><span class="mk-btn mk-btn--block mk-btn--disabled">Continuer (5 s)</span></div>
+  <div class="tk-sheet mk-stack" style="--gap:8px" data-hotspot="sheet"><p class="mk-h3">Bravo&#8239;! Une tâche de moins.</p><p class="mk-small mk-muted">Prenez le temps de savourer ce moment.</p><span class="mk-btn mk-btn--block mk-btn--disabled">Continuer (5&nbsp;s)</span></div>
 </div>`,
-        css: `.pg { height: 6px; border-radius: 3px; background: #e6e9ef; } .pg span { display: block; width: 60%; height: 100%; border-radius: 3px; background: #1f4fd8; }
+        css: `.pg { height: 6px; border-radius: 3px; background: #e6e9ef; } .pg span { display: block; width: 50%; height: 100%; border-radius: 3px; background: #1f4fd8; }
 .tk-tip { font-size: 12px; background: #eef3ff; color: #36405a; border-radius: 8px; padding: 8px 10px; }
 .tk-sheet { border-radius: 14px; padding: 14px; background: #fff; box-shadow: 0 -4px 20px rgb(15 20 35 / 0.12); border: 1px solid #e1e4ea; }`,
       },
@@ -413,10 +425,10 @@ Une animation réussie peut accompagner l’arrivée du résultat — en parall�
         { id: 'progress', label: 'Jauge de progression', correct: false, why: 'Une progression vraie, sobre et utile.' },
         { id: 'header', label: 'Titre et date', correct: false, why: 'Clair et calme : rien à corriger.' },
       ],
-      explanation: `Deux garde-fous d’impeccable sont franchis :
+      explanation: `Deux consignes d’impeccable sont ignorées :
 
-- **Ne jamais retarder ni bloquer la tâche**, et proportionner la célébration à l’effort : cocher une tâche est une action fréquente, qui mérite un retour bref, pas un panneau à attendre.
-- **La fantaisie générique est pire qu’une clarté neutre** : une ligne de synchronisation doit dire ce qui se passe.
+- un garde-fou : **ne jamais retarder ni bloquer la tâche**, et proportionner la célébration à l’effort. Cocher une tâche est une action fréquente, qui mérite un retour bref, pas un panneau à attendre ;
+- une règle de rédaction : **la fantaisie générique est pire qu’une clarté neutre**. Une ligne de synchronisation doit dire ce qui se passe.
 
 L’astuce, elle, est un bon exemple de découverte : elle révèle un geste utile sans cacher aucune fonction.`,
       takeaway: 'Le délice ne retarde jamais la tâche et ne remplace jamais l’information ; une bonne découverte révèle une vraie utilité.',
@@ -433,9 +445,9 @@ L’astuce, elle, est un bon exemple de découverte : elle révèle un geste uti
         html: `<div class="mk-pad mk-stack" style="--gap:4px">
   <div data-hotspot="greeting" style="margin-bottom:10px"><p class="mk-h2">Bonjour Camille</p><p class="mk-small mk-muted">Compte courant · Banque Arlette</p></div>
   <div class="ac-row" data-hotspot="notif"><div class="mk-grow"><p class="mk-strong">Virements reçus</p><p class="mk-small mk-muted">Une notification à chaque virement entrant.</p></div><span class="ac-ok"><i data-icon="check" style="--ico:14px"></i>Enregistré</span><span class="mk-toggle mk-toggle--on"></span></div>
-  <div class="ac-row" data-hotspot="privacy"><div class="mk-grow"><p class="mk-strong">Partager mes données d’achat avec nos partenaires</p><p class="mk-small mk-muted">Promis, ils sont très sympas !</p></div><span class="mk-toggle"></span></div>
+  <div class="ac-row" data-hotspot="privacy"><div class="mk-grow"><p class="mk-strong">Partager mes données d’achat avec nos partenaires</p><p class="mk-small mk-muted">Promis, ils sont très sympas&#8239;!</p></div><span class="mk-toggle"></span></div>
   <div class="ac-row" data-hotspot="statements"><div class="mk-grow"><p class="mk-strong">Relevés de compte</p><p class="mk-small mk-muted">Les 12 derniers mois, en PDF.</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Télécharger</span></div>
-  <div class="ac-row" data-hotspot="close"><div class="mk-grow"><p class="mk-strong">Clôturer mon compte</p><p class="mk-small mk-muted">Vous partez déjà ? Notre cœur saigne… contrairement à votre découvert.</p></div><span class="mk-btn mk-btn--danger mk-btn--s">Clôturer</span></div>
+  <div class="ac-row" data-hotspot="close"><div class="mk-grow"><p class="mk-strong">Clôturer mon compte</p><p class="mk-small mk-muted">Vous partez déjà&#8239;? Notre cœur saigne… contrairement à votre découvert.</p></div><span class="mk-btn mk-btn--danger mk-btn--s">Clôturer</span></div>
 </div>`,
         css: `.ac-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #eceef2; }
 .ac-ok { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #1a6e32; }`,
@@ -484,7 +496,7 @@ Ici, l’humour tombe sur les deux sujets les plus sensibles de la page : le par
         { id: 'empty', left: 'Premier usage, écran encore vide', right: 'L’action suivante évidente, puis un ton propre au produit' },
         { id: 'wait', left: 'Une attente de vingt secondes', right: 'Une progression réelle et l’étape en cours' },
         { id: 'error', left: 'Un paiement refusé', right: 'Le problème et la solution d’abord, chaleureux sans blague' },
-        { id: 'repeat', left: 'Une action répétée cinquante fois par jour', right: 'Un retour bref et certain, identique à chaque fois' },
+        { id: 'repeat', left: 'Une action répétée cinquante fois par jour', right: 'Un retour bref, certain et prévisible' },
         { id: 'milestone', left: 'Un jalon rare et important', right: 'Un moment plus ample, que l’on peut passer' },
       ],
       explanation: `Chaque situation émotionnelle a sa réponse, tirée de la commande *delight* :
@@ -501,7 +513,7 @@ Ici, l’humour tombe sur les deux sujets les plus sensibles de la page : le par
       id: 'delight-discovery-choice',
       type: 'choice',
       difficulty: 2,
-      prompt: 'Dans un logiciel de facturation, laquelle de ces « découvertes » récompense vraiment la curiosité ?',
+      prompt: 'Dans un logiciel de facturation, laquelle de ces « découvertes » mérite sa place ?',
       options: [
         { id: 'shortcut', label: 'Après trois factures sélectionnées une à une, une astuce propose Maj + clic pour sélectionner une plage.', why: 'La découverte révèle une utilité réelle, au moment où elle sert.' },
         { id: 'game', label: 'Dix clics sur le logo lancent un mini-jeu caché.', why: 'Un clin d’œil sans utilité, qui ne dit rien du produit ni du métier.' },
@@ -519,18 +531,18 @@ L’astuce de sélection arrive au moment où la personne fait un geste répéti
       id: 'delight-overdrive-choice',
       type: 'choice',
       difficulty: 3,
-      prompt: 'Sur la page de réglages d’une application de gestion, quelle ambition « au-delà des conventions » est la plus juste ?',
+      prompt: 'Dans un logiciel de comptabilité, un tableau affiche 50 000 écritures. Quelle ambition « au-delà des conventions » est la plus juste ?',
       options: [
-        { id: 'optimistic', label: 'Des enregistrements instantanés et optimistes, avec des transitions d’état fluides.', why: 'C’est l’exemple même d’impeccable : sur une page de réglages, l’extraordinaire se sent dans la réactivité.' },
-        { id: 'particles', label: 'Un système de particules en arrière-plan qui suit le curseur.', why: 'Impressionnant sur un portfolio, embarrassant sur une page de réglages.' },
-        { id: 'cinema', label: 'Une transition cinématographique d’une seconde et demie entre chaque onglet.', why: 'Une mise en scène qui fait attendre à chaque clic : l’inverse d’un outil qui ne fait jamais hésiter.' },
-        { id: 'sound', label: 'Un son de validation à chaque bascule, activé par défaut.', why: 'Jamais de son sans accord explicite de la personne.' },
+        { id: 'fluid', label: 'Un défilement qui reste fluide à 60 images par seconde, et un filtre qui répond sans le moindre à-coup.', why: 'Sur un outil de travail, l’extraordinaire se sent : un tableau énorme qui ne fait jamais hésiter. C’est l’un des exemples qu’impeccable donne pour une interface fonctionnelle.' },
+        { id: 'backdrop', label: 'Un fond animé en 3D derrière le tableau, qui ondule au rythme du défilement.', why: 'Un effet de vitrine : à sa place sur un portfolio, il détourne ici l’attention des chiffres.' },
+        { id: 'coedit', label: 'La coédition du tableau en temps réel, avec les curseurs des collègues affichés.', why: 'Tentant, mais c’est une nouvelle capacité, pas une meilleure sensation : overdrive change la façon dont l’interface se ressent, pas ce que fait le produit.' },
+        { id: 'cinema', label: 'Une transition cinématographique d’une seconde et demie à chaque changement de page.', why: 'Une mise en scène qui fait attendre à chaque clic : l’inverse d’un outil qui ne fait jamais hésiter.' },
       ],
-      answer: 'optimistic',
-      explanation: `La commande *overdrive* pousse une interface au-delà des conventions, mais **le contexte décide de ce qui est extraordinaire**. Pour une interface fonctionnelle, l’effet « waouh » est dans la sensation : une réponse instantanée, des états qui s’enchaînent sans saccade, un outil qui n’hésite jamais.
+      answer: 'fluid',
+      explanation: `La commande *overdrive* pousse une interface au-delà des conventions, mais **le contexte décide de ce qui est extraordinaire**. Sur une interface fonctionnelle, l’effet « waouh » est dans la sensation. Impeccable cite justement un tableau de 100 000 lignes affiché à 60 images par seconde grâce au **défilement virtualisé** (seules les lignes visibles sont dessinées), ou une recherche qui filtre 50 000 éléments sans scintillement.
 
-Ses garde-fous restent valables : amélioration progressive, 60 images par seconde, aucun son sans accord, et jamais plusieurs moments extraordinaires en concurrence.`,
-      takeaway: 'L’extraordinaire dépend du contexte : sur un outil, il se sent dans la réactivité, pas dans le spectacle.',
+Le fond animé appartient aux surfaces de vitrine, et la transition longue fait attendre à chaque clic. La coédition en temps réel est tentante, mais elle change ce que fait le produit : c’est une décision produit, pas une amélioration de l’interface.`,
+      takeaway: 'L’extraordinaire dépend du contexte : sur un outil, il se sent dans la réactivité, pas dans le spectacle ni dans une fonction de plus.',
       sources: ['imp:overdrive'],
     },
     {
@@ -539,15 +551,17 @@ Ses garde-fous restent valables : amélioration progressive, 60 images par secon
       difficulty: 3,
       prompt: 'Quelle « thèse de délice » convient à une application de suivi de potager ?',
       options: [
-        { id: 'garden', label: 'Quand une récolte est notée, sa parcelle se colore sur le plan du potager et le total de la saison se met à jour : la personne doit sentir son jardin prendre forme au fil des semaines.', why: 'Spécifique au produit et utile : aucun voisin ne pourrait la reprendre telle quelle.' },
-        { id: 'confetti', label: 'Ajouter des confettis et des animations amusantes à chaque action pour rendre l’application plus fun.', why: 'Générique et répétitif : la règle de la centième fois l’écarte.' },
-        { id: 'mascot', label: 'Une mascotte qui fait une blague différente sur chaque écran.', why: 'De la fantaisie interchangeable, qui finit par gêner la lecture.' },
-        { id: 'sounds', label: 'Des sons de célébration à chaque tâche, pour donner de l’énergie.', why: 'Du son sans accord, et une célébration sans proportion avec l’effort.' },
+        { id: 'garden', label: 'Quand une récolte est notée, sa parcelle se colore sur le plan du potager et le total de la saison se met à jour : la personne doit sentir son jardin prendre forme au fil des semaines.', why: 'Spécifique au produit, utile et immédiate : aucun voisin ne pourrait la reprendre telle quelle.' },
+        { id: 'confetti', label: 'Des confettis et une animation de succès à chaque action, pour que l’application paraisse plus vivante et que la personne ait envie d’y revenir chaque jour.', why: 'Générique et répétitif : n’importe quelle application pourrait l’ajouter, et la règle de la centième fois l’écarte.' },
+        { id: 'mascot', label: 'Une mascotte en forme de radis apparaît à chaque récolte notée pour féliciter la personne : elle doit se sentir encouragée et accompagnée tout au long de la saison.', why: 'Le décor est potager, mais le dispositif sort d’un catalogue : une mascotte qui félicite se transpose à n’importe quelle application, et lasse à force de revenir.' },
+        { id: 'grow', label: 'À chaque récolte notée, quatre secondes de légumes qui poussent à l’écran, impossibles à passer : la personne doit savourer chaque cueillette de la saison.', why: 'Bien ancrée dans l’univers du produit, mais elle impose quatre secondes d’attente à chaque saisie : le délice ne retarde jamais la tâche.' },
       ],
       answer: 'garden',
       explanation: `Impeccable demande d’écrire une **thèse de délice** en une phrase : ce que la personne doit ressentir, et pourquoi ce sentiment appartient à ce produit. Le test : le moment est-il **assez spécifique pour qu’un produit voisin ne puisse pas le reprendre tel quel** ?
 
-La parcelle qui se colore vient du mécanisme même de l’application (noter une récolte) et de son univers (le plan du potager). Confettis, mascotte et sons pourraient être collés sur n’importe quelle application.`,
+La parcelle qui se colore vient du mécanisme même de l’application (noter une récolte) et de son univers (le plan du potager). Les confettis se colleraient sur n’importe quelle application, et la mascotte n’a du potager que le costume : son dispositif sort d’un catalogue.
+
+L’animation de légumes, elle, est bien ancrée dans l’univers, mais elle impose quatre secondes d’attente à chaque saisie. Être spécifique ne suffit pas : le délice ne retarde jamais la tâche.`,
       takeaway: 'Une thèse de délice part du mécanisme et de l’univers du produit ; si un voisin peut la copier telle quelle, elle est générique.',
       sources: ['imp:delight'],
     },
@@ -562,12 +576,12 @@ La parcelle qui se colore vient du mécanisme même de l’application (noter un
         { id: 'fake-bar', label: 'Une fausse barre de progression pour faire patienter', why: 'Simuler du travail trahit la confiance.' },
         { id: 'first-invoice', label: 'Un message « Votre première facture est partie » discret, à la fin du premier envoi', why: 'Un jalon reconnu avec mesure, sans rien bloquer : c’est du bon délice.' },
         { id: 'haptic', label: 'Une légère vibration à la validation d’un paiement, qui respecte les réglages du téléphone', why: 'Un retour physique bref et respectueux des préférences : acceptable.' },
-        { id: 'empty-ill', label: 'Une illustration dans l’état vide, placée après le bouton d’action principal', why: 'L’action vient d’abord, la personnalité ensuite : bon ordre.' },
+        { id: 'empty-ill', label: 'Une illustration sobre dans l’état vide, avec un bouton d’action principal bien visible', why: 'L’action reste évidente ; la personnalité s’ajoute sans la concurrencer.' },
       ],
       answers: ['unskippable', 'silent-mode', 'fake-bar'],
       explanation: `Les garde-fous d’impeccable : le délice ne doit jamais **retarder ou bloquer** la tâche, devenir **obligatoire ou impossible à passer**, jouer un **son sans consentement ou malgré le mode silencieux**, ni **simuler du travail**.
 
-Les trois autres idées respectent ces limites : un jalon reconnu avec mesure, un retour physique qui suit les réglages, une illustration qui passe après l’action.`,
+Les trois autres idées respectent ces limites : un jalon reconnu avec mesure, un retour physique qui suit les réglages, une illustration qui laisse l’action évidente.`,
       takeaway: 'Le délice ne bloque pas, ne s’impose pas, ne fait pas de bruit sans accord et ne simule jamais de travail.',
       sources: ['imp:delight', 'imp:overdrive'],
     },
@@ -585,7 +599,9 @@ Les trois autres idées respectent ces limites : un jalon reconnu avec mesure, u
       answer: 'ending',
       explanation: `La **règle pic-fin** (*peak-end rule*), issue des travaux de Daniel Kahneman, dit qu’on juge une expérience surtout d’après son moment le plus intense et d’après sa fin, plus que d’après la moyenne de tous ses instants.
 
-Dans une déclaration de sinistre, le pic est souvent négatif (le dégât lui-même) : on ne peut pas l’effacer, mais on peut soigner la fin. Un récapitulatif clair, un numéro de dossier et des étapes datées transforment le souvenir du parcours. Et comme il s’agit d’une perte, la chaleur passe par le soin, jamais par la blague.`,
+Dans une déclaration de sinistre, le pic est souvent négatif : le dégât lui-même, puis l’étape où l’on décrit les dommages et joint les photos. Cette étape se soigne aussi — guidage clair, brouillon conservé, ton rassurant —, mais l’événement ne s’efface pas, alors que la fin dépend entièrement du produit. Un récapitulatif clair, un numéro de dossier et des étapes datées transforment le souvenir du parcours.
+
+Et comme il s’agit d’une perte, la chaleur passe par le soin, jamais par la blague.`,
       takeaway: 'Le souvenir d’un parcours tient à son pic et à sa fin : soigne la conclusion, surtout quand le moment est difficile.',
       sources: [PEAK_END, KAHNEMAN, 'imp:critique', 'imp:delight'],
     },
