@@ -224,12 +224,12 @@ La commande *overdrive* d’impeccable va plus loin : **pousser une interface au
         {
           id: 'quiet',
           visual: {
-            alt: 'Même écran : le compteur passe à 6 verres sur 8, une jauge avance et une ligne discrète indique « Verre ajouté à 14 h 10 · Annuler ».',
+            alt: 'Même écran : le compteur indique 6 verres sur 8, six verres sur huit sont remplis et une ligne discrète indique « Verre ajouté à 14 h 10 · Annuler ».',
             frame: 'phone',
             html: `<div class="mk-pad mk-stack wt" style="--gap:12px"><p class="mk-h2">Hydratation</p><p>6 verres sur 8 aujourd’hui</p>${GLASSES(6)}<p class="mk-small mk-row" style="--gap:6px;color:#1a6e32"><i data-icon="check" style="--ico:14px"></i>Verre ajouté à 14 h 10 <span class="mk-btn--text" style="padding:0">Annuler</span></p></div>`,
             css: WATER_CSS,
           },
-          why: 'Le compteur et la jauge avancent, une ligne confirme et permet d’annuler : un retour sûr, agréable à la centième fois.',
+          why: 'Le compteur avance, un verre de plus se remplit, une ligne confirme et permet d’annuler : un retour sûr, agréable à la centième fois.',
         },
       ],
       answer: 'quiet',

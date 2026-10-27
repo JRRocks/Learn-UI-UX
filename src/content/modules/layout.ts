@@ -145,9 +145,9 @@ Garde distincts les contenus distincts, sans transformer chaque groupe en compos
     {
       id: 'rythme',
       title: 'Rythme : une échelle et des contrastes d’espace',
-      body: `Le **rythme** naît du contraste délibéré entre intervalles serrés et intervalles généreux. Une même valeur répétée partout donne le même poids à tout : le détecteur d’impeccable signale cet *espacement monotone* quand une seule valeur domine presque tous les espacements.
+      body: `Le **rythme** naît du contraste délibéré entre intervalles serrés et intervalles généreux. Une même valeur répétée partout donne le même poids à tout : le détecteur d’impeccable signale cet *espacement monotone* quand une seule valeur domine la majorité des espacements.
 
-- Utilise une **échelle documentée** plutôt que des valeurs au cas par cas. Une base de **4** (4, 8, 12, 16, 24, 32, 48, 64…) offre les marches intermédiaires utiles qu’une base de 8 seule ne permet pas.
+- Utilise une **échelle documentée** plutôt que des valeurs au cas par cas. Une base de **4** (4, 8, 12, 16, 24, 32, 48, 64…) offre en général les marches intermédiaires utiles (4 ou 12, par exemple) qu’une base de 8 seule ne permet pas.
 - **Plus d’espace au-dessus d’un titre qu’en dessous** : le titre se lie au contenu qu’il introduit. Quand il colle au bloc précédent, chaque section semble légender la précédente (règle *heading-rhythm*).
 - Utilise \`gap\` pour le rythme entre éléments frères : la relation est portée par le parent, sans marge parasite après le dernier élément.
 - Nomme par leur rôle les espacements qui se répètent (\`--space-group\`, \`--space-section\`).
@@ -233,7 +233,7 @@ Mais simplifier n’est pas cacher : un écran si épuré qu’on ne sait plus q
 - Préfère des composants **sensibles à leur conteneur** (\`@container\`) quand le même composant vit dans des contextes différents.
 - Garde l’**ordre du DOM et du focus** cohérent avec l’ordre visuel.
 - Teste les extrêmes : textes longs, traductions, zoom, états vides, éléments collants, encoches. Un contenu qui déborde de son conteneur, ou une colonne qui s’étire loin sous la ligne de flottaison pendant que sa voisine flotte dans le vide, sont des défauts de structure.
-- Le texte courant ne touche jamais le bord de l’écran : au moins 16 px de marge latérale (12 px sous 480 px de large), idéalement 24 à 32 px.
+- Le texte courant ne touche jamais le bord de l’écran : au moins 16 px de marge latérale (12 px sur les écrans de 480 px de large ou moins), idéalement 24 à 32 px.
 
 **Cibles tactiles.** Une icône peut être petite à l’œil ; sa **zone d’appui**, non. Le WCAG 2.2 (critère 2.5.8, niveau AA) exige au moins **24 × 24 px CSS**, ou un espacement équivalent ; le niveau AAA et les guides de plateformes visent **44 × 44** (Apple : 44 pt, Material : 48 dp). Agrandis la zone avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
       examples: [
@@ -269,7 +269,7 @@ Mais simplifier n’est pas cacher : un écran si épuré qu’on ne sait plus q
     { id: 'gap', front: '`gap` ou marges sur les enfants ?', back: '`gap` pour le rythme entre frères : la relation est portée par le parent, sans marge parasite au bout.' },
     { id: 'density', front: 'Comment choisir la densité d’un écran ?', back: 'Selon la fréquence d’usage, la complexité des décisions et le mode : un outil quotidien peut être dense, une page d’accueil respire.' },
     { id: 'responsive', front: 'Qu’est-ce qu’un responsive structurel ?', back: 'Réordonner, replier, faire refluer ou révéler selon ce qui reste important — pas seulement rétrécir.' },
-    { id: 'edge', front: 'Marge latérale minimale du texte courant sur mobile ?', back: '16 px (12 px sous 480 px de large) ; idéalement 24 à 32 px.' },
+    { id: 'edge', front: 'Marge latérale minimale du texte courant sur mobile ?', back: '16 px (12 px sur les écrans de 480 px de large ou moins) ; idéalement 24 à 32 px.' },
     { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '24 × 24 px CSS (WCAG 2.2 AA), 44 × 44 recommandé. La zone d’appui peut dépasser le dessin de l’icône.' },
   ],
   exercises: [
@@ -336,7 +336,7 @@ La version recommandée crée deux intervalles très différents — serré à l
       ideal: 32,
       explanation: `Un intertitre appartient au contenu qu’il **introduit**. Il lui faut donc plus d’espace au-dessus qu’en dessous : ici, 8 px le séparent de son paragraphe, et 12 px séparent deux paragraphes d’une même section.
 
-- En dessous d’environ 24 px, l’intertitre colle au paragraphe précédent : il semble le conclure au lieu d’ouvrir une section (règle *heading-rhythm* du détecteur).
+- Vers 4 à 12 px, l’intertitre colle au paragraphe précédent : il semble le conclure au lieu d’ouvrir une section (règle *heading-rhythm* du détecteur). Jusqu’à une vingtaine de pixels, la coupure reste à peine plus marquée qu’entre deux paragraphes.
 - Autour de 32 px — quatre fois l’espace sous le titre, près de trois fois l’écart entre paragraphes —, la coupure se voit sans effort.
 - Au-delà d’environ 40 px, dans une colonne aussi compacte, les sections se détachent et la page se fragmente.`,
       takeaway: 'Plus d’espace au-dessus d’un titre qu’en dessous, et nettement plus que l’écart entre deux paragraphes.',
@@ -497,7 +497,7 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
 .rc-body { padding: 4px 0 14px; line-height: 1.5; }`,
       },
       hotspots: [
-        { id: 'body', label: 'Paragraphe de préparation', correct: true, why: 'Le texte touche les bords de l’écran : il faut au moins 16 px de marge latérale (12 px sous 480 px), idéalement 24 à 32.' },
+        { id: 'body', label: 'Paragraphe de préparation', correct: true, why: 'Le texte touche les bords de l’écran : il faut au moins 16 px de marge latérale (12 px sur les écrans de 480 px ou moins), idéalement 24 à 32.' },
         { id: 'tools', label: 'Rangée d’icônes', correct: true, why: 'Quatre cibles de 14 px espacées de 4 px : bien sous les 24 × 24 px du WCAG 2.2, et impossibles à toucher sans erreur.' },
         { id: 'title', label: 'Titre de la recette', correct: false, why: 'Aligné sur la même marge de 16 px que la photo : cohérent.' },
         { id: 'photo', label: 'Photo', correct: false, why: 'Même retrait que le titre, proportions fixes : rien à corriger.' },
@@ -531,7 +531,7 @@ Impeccable l’autorise explicitement : des tableaux de nombreuses lignes, des p
     {
       id: 'layout-responsive-choice',
       type: 'choice',
-      difficulty: 2,
+      difficulty: 1,
       prompt: 'Ce tableau de bord des ventes, conçu pour ordinateur, doit fonctionner sur téléphone. Quelle adaptation est la bonne ?',
       options: [
         {
@@ -616,7 +616,7 @@ Ces valeurs varient selon la densité du produit ; l’**ordre**, lui, ne change
 - *nested-cards* : on retire des boîtes au lieu d’en ajouter ;
 - *monotonous-spacing* : on crée des contrastes d’espace ;
 - *edge-flush-cards* : un panneau plus large que sa zone visible coupe ses cartes ;
-- *body-text-viewport-edge* : 16 px de marge (12 px sous 480 px), 24 à 32 idéalement.`,
+- *body-text-viewport-edge* : 16 px de marge (12 px sur les écrans de 480 px ou moins), 24 à 32 idéalement.`,
       takeaway: 'Chaque défaut d’espace a sa correction : ouvrir au-dessus des titres, marger les encadrés, aplatir, rythmer, retirer le texte des bords.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
@@ -653,7 +653,7 @@ Le WCAG 2.2 exige au moins **24 × 24 px CSS** par cible (critère 2.5.8, niveau
         { id: 'scale', label: 'Une échelle documentée : 4, 8, 12, 16, 24, 32, 48', why: 'Juste : une base de 4 offre les marches intermédiaires utiles.' },
         { id: 'gap', label: 'Un `gap` sur la liste plutôt qu’une marge basse sur chaque élément', why: 'Juste : la relation est portée par le parent, sans marge parasite après le dernier élément.' },
         { id: 'heading', label: 'Le même espace au-dessus et au-dessous d’un intertitre', why: 'Faux : le titre doit être plus près de son contenu que du bloc précédent.' },
-        { id: 'adhoc', label: 'Des valeurs ajustées à l’œil, 13, 17 ou 22 px, selon les écrans', why: 'Faux : des valeurs au cas par cas cassent le rythme et la cohérence.' },
+        { id: 'adhoc', label: 'Des valeurs choisies au cas par cas, 13, 17 ou 22 px, écran par écran', why: 'Faux : des valeurs arbitraires cassent le rythme et la cohérence.' },
         { id: 'padding', label: 'Une marge intérieure de 4 px dans un encadré coloré', why: 'Faux : au moins 8 px, idéalement 12 à 16 px.' },
         { id: 'region', label: 'La proximité d’abord, un conteneur seulement si elle ne suffit pas', why: 'Juste : c’est l’ordre recommandé par impeccable.' },
       ],
@@ -694,7 +694,7 @@ Les trois autres sont des défauts classiques : titre à égale distance de deux
             alt: 'Accueil avec une salutation, un grand bouton « Réserver une table », la prochaine réservation et une ligne de liens secondaires.',
             html: `<div class="mk-pad mk-stack" style="--gap:16px"><div class="mk-stack" style="--gap:10px"><p class="mk-h2">Bonsoir Camille</p><span class="mk-btn mk-btn--block">Réserver une table</span></div><div class="mk-stack" style="--gap:4px"><p class="mk-small mk-muted">Prochaine réservation</p><p class="mk-strong">Jeudi 20 h · Le Comptoir, 2 personnes</p></div><div class="mk-row mk-small" style="--gap:14px"><span class="mk-btn--text" style="padding:0">Offres</span><span class="mk-btn--text" style="padding:0">Parrainage</span><span class="mk-btn--text" style="padding:0">Aide</span></div></div>`,
           },
-          why: 'Une action principale, l’information utile juste après, le reste en liens secondaires : simple sans rien cacher.',
+          why: 'Une action principale, l’information utile juste après, le reste en liens secondaires : simple, sans perdre l’essentiel.',
         },
         {
           id: 'empty',

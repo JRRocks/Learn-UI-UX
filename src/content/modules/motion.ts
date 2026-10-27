@@ -91,7 +91,7 @@ const motion: ModuleContent = {
     'Donner un rôle à chaque animation, choisir des durées et des courbes justes, animer les bonnes propriétés et prévoir un mode réduit qui garde le sens.',
   minutes: 10,
   commands: ['animate'],
-  sources: ['imp:animate', 'imp:operate', 'imp:craft-floor', 'imp:detector', 'imp:audit', MDN_RM, WCAG_222],
+  sources: ['imp:animate', 'imp:operate', 'imp:craft-floor', 'imp:detector', 'imp:audit', MDN_RM, WCAG_222, WCAG_233, MATERIAL_SPEED],
   sections: [
     {
       id: 'role',
@@ -131,8 +131,8 @@ En interface produit, la plupart des transitions tiennent entre **150 et 250 ms*
 
 - **Entrée** : une courbe qui décélère (*ease-out* quart, quint ou exponentielle).
 - **Sortie** : plus courte ; elle peut accélérer (*ease-in*), puisque l’élément quitte la scène.
-- **Pas de rebond ni d’élastique par réflexe.** Le détecteur relève les animations nommées *bounce*, *elastic*, *wobble*, *jiggle* ou *spring*, et les \`cubic-bezier\` dont un point de contrôle sort de l’intervalle −0,1 à 1,1 en ordonnée : la courbe dépasse son arrivée puis revient. Ces effets datent l’interface et retardent l’instant où l’élément se stabilise.
-- **Linéaire** : un rythme mécanique, réservé aux mouvements continus (barre de progression, rotation d’un indicateur de chargement).`,
+- **Pas de rebond ni d’élastique par réflexe.** Le détecteur relève les animations nommées *bounce*, *elastic*, *wobble*, *jiggle* ou *spring*, et les \`cubic-bezier\` dont un point de contrôle sort de l’intervalle −0,1 à 1,1 en ordonnée : la courbe dépasse son point de départ ou d’arrivée, puis revient. Ces effets datent l’interface et retardent l’instant où l’élément se stabilise.
+- **Linéaire** : un rythme mécanique, qui convient surtout aux mouvements continus (barre de progression, rotation d’un indicateur de chargement).`,
       examples: [
         {
           title: 'Ouvrir une fenêtre : rebondir ou se poser',
@@ -177,7 +177,7 @@ N’empile pas les techniques pour le spectacle : une idée de matière forte su
     {
       id: 'reduit',
       title: 'Mouvement réduit : moins, pas rien',
-      body: `Chaque animation web a besoin d’un chemin \`prefers-reduced-motion\` **intentionnel**. Pour certaines personnes (troubles vestibulaires, migraines), les grands déplacements, parallaxes et zooms provoquent vertiges ou nausées.
+      body: `Chaque animation web a besoin d’un chemin \`prefers-reduced-motion\` **intentionnel**. Chez les personnes atteintes de troubles vestibulaires, les grands déplacements, parallaxes et zooms peuvent provoquer vertiges, nausées ou maux de tête.
 
 - **Retire ou réduis les déplacements** : glissements, parallaxe, zooms, rotations.
 - **Garde l’opacité, la couleur et les changements d’état qui portent du sens** : un fondu court remplace un glissement.

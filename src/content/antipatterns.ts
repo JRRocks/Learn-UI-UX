@@ -52,12 +52,12 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
 .st-c--tab { border-left: 4px solid #7c3aed; }`,
       ),
       good: v(
-        'Même carte avec une petite icône d’ampoule à côté du titre et une bordure fine sur tout le pourtour.',
-        `<div class="st"><div class="st-c"><b><i data-icon="sparkles" style="--ico:16px"></i>Conseil du jour</b><span>Relance tes devis non signés après 7 jours : c’est là que la moitié des réponses arrivent.</span></div></div>`,
+        'Même carte avec une petite icône d’information à côté du titre et une bordure fine sur tout le pourtour.',
+        `<div class="st"><div class="st-c"><b><i data-icon="info" style="--ico:16px"></i>Conseil du jour</b><span>Relance tes devis non signés après 7 jours : c’est là que la moitié des réponses arrivent.</span></div></div>`,
         `.st { padding: 16px; background: #f6f7f9; }
 .st-c { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px; background: #fff; border: 1px solid #e3e6ec; font-size: 14px; line-height: 1.5; color: #4b5262; }
 .st-c b { display: flex; align-items: center; gap: 6px; color: #1d2230; }
-.st-c .mk-ico { color: #b45309; }`,
+.st-c .mk-ico { color: #1f4fd8; }`,
       ),
     },
   },
@@ -521,8 +521,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `<div class="it"><div class="it-f"><b><i data-icon="refresh-cw" style="--ico:16px"></i>Synchronisation bancaire</b><span>Tes relevés arrivent chaque nuit.</span></div><div class="it-f"><b><i data-icon="send" style="--ico:16px"></i>Relances automatiques</b><span>Un rappel part à J+7.</span></div></div>`,
         `.it { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px; }
 .it-f { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #5a6172; }
-.it-f b { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #1d2230; }
-.it-f .mk-ico { color: #14532d; }`,
+.it-f b { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.3; color: #1d2230; }
+.it-f .mk-ico { margin-top: 2px; color: #14532d; }`,
       ),
     },
   },
@@ -728,8 +728,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       'Une approche (`letter-spacing`) resserrée au-delà du point où les caractères gardent leur forme coûte en lisibilité. Le détecteur la signale sous −0,07em sur du texte courant et sous −0,09em pour un affichage de 40 px ou plus.',
     fix: 'Resserre optiquement, sans détruire les lettres : le plancher de qualité s’arrête à −0,04em, et −0,02 à −0,03em se lit généralement mieux.',
     demo: {
-      bad: v('Grand titre « Planifiez sans friction » dont les lettres se touchent.', `<div class="nt"><p style="letter-spacing:-0.1em">Planifiez sans friction</p></div>`, `.nt { padding: 30px 18px; } .nt p { font-size: 42px; line-height: 1.05; font-weight: 800; }`),
-      good: v('Même titre avec un resserrement léger, les lettres restent distinctes.', `<div class="nt"><p style="letter-spacing:-0.02em">Planifiez sans friction</p></div>`, `.nt { padding: 30px 18px; } .nt p { font-size: 42px; line-height: 1.05; font-weight: 800; }`),
+      bad: v('Grand titre « Planifiez sans friction » dont les lettres se touchent.', `<div class="nt"><p style="letter-spacing:-0.1em">Planifiez sans friction</p></div>`, `.nt { padding: 30px 18px; } .nt p { font-size: 36px; line-height: 1.05; font-weight: 800; }`),
+      good: v('Même titre avec un resserrement léger, les lettres restent distinctes.', `<div class="nt"><p style="letter-spacing:-0.02em">Planifiez sans friction</p></div>`, `.nt { padding: 30px 18px; } .nt p { font-size: 36px; line-height: 1.05; font-weight: 800; }`),
     },
   },
   {
@@ -753,7 +753,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `<div class="bi"><div class="bi-img" role="img" aria-label="Photographie du plat"></div><b>Cabillaud, beurre blanc</b><span>Légumes du marché · 18,50 €</span></div>`,
         `.bi { padding: 16px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #4b5262; }
 .bi b { margin-top: 6px; font-size: 15px; color: #1d2230; }
-.bi-img { aspect-ratio: 16 / 9; border-radius: 10px; background: radial-gradient(circle at 45% 55%, #fbfaf6 0 22%, #e9dfc8 23% 30%, transparent 31%), radial-gradient(circle at 60% 48%, #f4efe4 0 14%, transparent 15%), linear-gradient(160deg, #3d4a3a 0%, #6b7a55 55%, #2f3a2c 100%); }`,
+.bi-img { aspect-ratio: 16 / 9; border-radius: 10px; background: radial-gradient(ellipse 20% 12% at 52% 50%, #f3e9d2 0 70%, transparent 72%), radial-gradient(circle at 50% 52%, #fbf8f1 0 27%, #e2d8c4 28% 33%, transparent 34%), radial-gradient(circle at 25% 30%, #7d8f5a 0 6%, transparent 7%), linear-gradient(160deg, #4a5a3f 0%, #6b7a55 50%, #2f3a2c 100%); }`,
       ),
     },
   },
@@ -1037,13 +1037,13 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     fix: 'Applique `text-wrap: pretty` au texte courant (Chrome, Safari) pour ramener un mot à côté. Sinon, retouche la dernière phrase ou lie les deux derniers mots par une espace insécable. Garde-le si la coupure est voulue.',
     demo: {
       bad: v(
-        'Paragraphe de trois lignes dont la dernière ne contient que le mot « suivant. ».',
-        `<div class="sg"><p>Ta commande est préparée le jour même<br>si tu la passes avant 14 h, puis expédiée<br>le jour ouvré suivant.<br>Compte 48 h pour une livraison en France<br>métropolitaine, et 4 jours pour la<br>Corse.</p></div>`,
+        'Paragraphe de cinq lignes dont la dernière ne contient que le mot « heure. ».',
+        `<div class="sg"><p>Ta commande est préparée le jour même si<br>tu la passes avant 14 h. Elle est ensuite<br>expédiée en colis suivi, et tu reçois le<br>numéro de suivi par e-mail sous une<br>heure.</p></div>`,
         `.sg { padding: 18px; } .sg p { font-size: 14px; line-height: 1.6; white-space: nowrap; }`,
       ),
       good: v(
-        'Même paragraphe dont la dernière ligne contient plusieurs mots.',
-        `<div class="sg"><p>Ta commande est préparée le jour même<br>si tu la passes avant 14 h, puis expédiée<br>le jour ouvré suivant.<br>Compte 48 h pour une livraison en France<br>métropolitaine, et 4 jours<br>pour la Corse.</p></div>`,
+        'Même paragraphe dont la dernière ligne contient deux mots, « une heure. ».',
+        `<div class="sg"><p>Ta commande est préparée le jour même si<br>tu la passes avant 14 h. Elle est ensuite<br>expédiée en colis suivi, et tu reçois le<br>numéro de suivi par e-mail sous<br>une heure.</p></div>`,
         `.sg { padding: 18px; } .sg p { font-size: 14px; line-height: 1.6; white-space: nowrap; }`,
       ),
     },
@@ -1344,8 +1344,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         CLEAN_HERO,
       ),
       good: v(
-        'Accroche qui dit concrètement ce que fait le produit : sauvegarde chiffrée chaque nuit, restauration en un clic.',
-        `<div class="ch"><p class="ch-h">Tes fichiers sauvegardés chaque nuit, chiffrés, restaurables en un clic</p><p class="ch-p">Hébergement en France, 30 jours d’historique par fichier.</p></div>`,
+        'Accroche qui dit concrètement ce que fait le produit : sauvegarde chiffrée chaque nuit, puis les détails de restauration et d’hébergement.',
+        `<div class="ch"><p class="ch-h">Tes fichiers sauvegardés chaque nuit, chiffrés</p><p class="ch-p">Restauration en un clic, hébergement en France, 30 jours d’historique par fichier.</p></div>`,
         CLEAN_HERO,
       ),
     },

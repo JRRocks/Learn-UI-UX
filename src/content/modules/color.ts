@@ -72,7 +72,7 @@ const color: ModuleContent = {
     'Construire une palette par rôles, vérifier les contrastes au calcul près, ne jamais coder une information par la seule couleur et composer un thème sombre au lieu de l’inverser.',
   minutes: 11,
   commands: ['colorize', 'quieter'],
-  sources: ['imp:colorize', 'imp:craft-floor', 'imp:quieter', 'imp:operate', 'imp:detector', 'wcag:contrast', 'wcag22', MDN_OKLCH],
+  sources: ['imp:colorize', 'imp:craft-floor', 'imp:quieter', 'imp:operate', 'imp:new-work', 'imp:detector', 'wcag:contrast', 'wcag22', WCAG_141, CBA, MATERIAL_DARK, MDN_OKLCH],
   sections: [
     {
       id: 'roles',
@@ -93,7 +93,7 @@ La **teinte** se choisit d’après le sens du produit et sa direction visuelle,
         {
           title: 'Un nuancier ou des rôles',
           bad: {
-            alt: 'Écran de factures : trois tuiles de chiffres en violet, rose et orange, des statuts colorés au hasard et un bouton d’action grisé.',
+            alt: 'Écran de factures : titre violet, trois tuiles de chiffres en turquoise, rose et orange, des statuts colorés au hasard et un bouton d’action grisé.',
             html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between"><p class="mk-h3" style="color:#7c3aed">Factures · mars</p><span class="mk-btn mk-btn--s" style="background:#e6e9ef;color:#5a6172">Nouvelle facture</span></div>
   <div class="mk-grid" style="--cols:3;--gap:8px">
@@ -109,7 +109,7 @@ La **teinte** se choisit d’après le sens du produit et sa direction visuelle,
 </div>`,
             css: INVOICES_CSS,
           },
-          badNote: 'Six teintes sans rôle : elles décorent, « En retard » est en vert et l’action principale est grisée.',
+          badNote: 'Cinq teintes vives sans rôle : elles décorent, « En retard » est en vert et l’action principale est grisée.',
           good: {
             alt: 'Même écran : tuiles neutres, chiffre des retards en rouge, statuts avec icône et libellé, bouton d’action bleu.',
             html: `<div class="mk-pad mk-stack" style="--gap:12px">
@@ -160,7 +160,7 @@ Le niveau AAA monte à 7:1 pour le texte courant.
 
 Quelques repères sur fond blanc : \`#767676\` est le gris neutre le plus clair qui passe (4,54:1), \`#999999\` n’atteint que 2,85:1. Le blanc sur un vert franc (\`#16a34a\`) ou un orange (\`#f59e0b\`) échoue aussi pour un texte courant : 3,3:1 et 2,2:1.
 
-Vérifie **tous les états** — survol, focus, erreur, désactivé —, le texte posé sur une image, les superpositions et **les deux thèmes**. Le WCAG exempte les composants désactivés et le purement décoratif, mais impeccable demande tout de même de les contrôler.
+Vérifie **tous les états** — survol, focus, erreur, désactivé —, le texte posé sur une image, les superpositions et **les deux thèmes**. Le WCAG exempte les composants désactivés et le purement décoratif ; impeccable demande tout de même de contrôler les états désactivés.
 
 Préfère des **couleurs explicites** aux empilements de transparences : avec de l’alpha, le contraste dépend de ce qu’il y a dessous.`,
     },
@@ -189,7 +189,7 @@ Un champ en erreur s’accompagne d’un message qui dit quoi corriger, pas d’
 </div>`,
             css: `.lg { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }`,
           },
-          badNote: 'Rouge contre vert, même trait, légende à part : pour une personne daltonienne, les deux courbes se confondent au croisement.',
+          badNote: 'Rouge contre vert, même trait, légende à part : pour qui confond le rouge et le vert, les deux courbes se ressemblent, surtout au croisement.',
           good: {
             alt: 'Même graphique : une courbe bleue continue et une courbe orange en pointillés, chacune étiquetée directement à son extrémité.',
             html: `<div class="mk-pad mk-stack" style="--gap:8px">
@@ -197,7 +197,7 @@ Un champ en erreur s’accompagne d’un message qui dit quoi corriger, pas d’
   <svg viewBox="0 0 320 150" style="width:100%;max-width:380px">${CHART_GRID}<polyline points="${ONLINE}" fill="none" stroke="#1f4fd8" stroke-width="2.5"/><polyline points="${STORE}" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-dasharray="6 4"/><text x="262" y="39" font-size="12" font-weight="600" fill="#1f4fd8">En ligne</text><text x="262" y="74" font-size="12" font-weight="600" fill="#c2410c">Boutique</text></svg>
 </div>`,
           },
-          goodNote: 'Teintes de luminosités différentes, trait continu contre pointillés, étiquettes directes : la couleur n’est plus le seul indice.',
+          goodNote: 'Un bleu et un orange, que les daltonismes rouge-vert distinguent bien, un trait continu contre des pointillés et des étiquettes directes : la couleur n’est plus le seul indice.',
         },
       ],
     },
@@ -469,7 +469,7 @@ Le titre et le paragraphe (15,9:1) comme la mention légale (6,2:1) passent. Ne 
         },
       ],
       answer: 'composed',
-      explanation: `Un thème sombre réussi se **compose** : un fond gris très sombre plutôt que noir, des surfaces surélevées un peu plus claires (une ombre portée se voit mal dans le sombre), des accents moins saturés que sur fond clair, et des contrastes vérifiés un par un — ici, tous au-dessus de 6,5:1.
+      explanation: `Un thème sombre réussi se **compose** : un fond gris très sombre plutôt que noir, des surfaces surélevées un peu plus claires (une ombre portée se voit mal dans le sombre), des accents moins saturés que sur fond clair, et des contrastes vérifiés un par un — ici, tous à 6,5:1 au moins.
 
 Les lueurs colorées, les nappes de dégradé radial et le couple violet / cyan néon sont devenus la signature des interfaces générées : ils décorent sans rien hiérarchiser, et impeccable les classe parmi les clichés.`,
       takeaway: 'En sombre, étage les surfaces en luminosité et désature les accents ; pas de halos ni de lueurs décoratives.',
@@ -485,14 +485,14 @@ Les lueurs colorées, les nappes de dégradé radial et le couple violet / cyan 
         {
           id: 'rainbow',
           visual: {
-            alt: 'Liste d’expéditions avec un titre violet, des icônes sur des tuiles orange, violette et cyan, des statuts tous en rose et un bouton turquoise.',
+            alt: 'Liste d’expéditions avec un titre violet, des icônes sur des tuiles orange, violette et turquoise, des statuts tous en rose et un bouton turquoise.',
             html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between"><p class="mk-h3" style="color:#7c3aed">Expéditions</p><span class="mk-btn mk-btn--s" style="background:#0e7490">Nouvel envoi</span></div>
   ${SHIP_ROWS(['<span class="sh-st" style="color:#db2777">Livrée</span>', '<span class="sh-st" style="color:#db2777">En retard</span>', '<span class="sh-st" style="color:#db2777">En transit</span>'])}
 </div>`,
             css: `${SHIP_CSS} .sh-ico { color: #fff; } .sh-ico--1 { background: #c2410c; } .sh-ico--2 { background: #7c3aed; } .sh-ico--3 { background: #0e7490; }`,
           },
-          why: 'Six teintes vives sans rôle : l’œil saute d’une tuile à l’autre, et les statuts, tous roses, ne se distinguent plus.',
+          why: 'Quatre teintes vives sans rôle : l’œil saute d’une tuile à l’autre, et les statuts, tous roses, ne se distinguent plus.',
         },
         {
           id: 'roles',

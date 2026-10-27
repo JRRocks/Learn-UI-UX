@@ -347,13 +347,13 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
 .od-col { display: flex; flex-direction: column; }
 .od-checks { width: 34px; }
 .od-main { flex: 1; min-width: 0; }
-.od-status { width: 64px; }
+.od-status { width: 76px; padding-inline-start: 16px; }
 .od-cell { height: 38px; display: flex; align-items: center; border-bottom: 1px solid #eceef2; }
 .od-head { font-size: 12px; font-weight: 600; color: #5a6172; }
 .od-grid { display: grid; grid-template-columns: 64px minmax(0, 1fr) 84px; gap: 8px; width: 100%; }
 .od-r { text-align: end; font-variant-numeric: tabular-nums; }
 .od-box { width: 16px; height: 16px; border: 1.5px solid #e3e6ec; border-radius: 4px; margin-inline-start: 8px; }
-.od-dot { width: 12px; height: 12px; border-radius: 50%; margin-inline-start: 14px; }
+.od-dot { width: 12px; height: 12px; border-radius: 50%; margin-inline-start: 12px; }
 .od-pages { display: flex; gap: 2px; align-self: center; }
 .od-pages span { width: 16px; height: 16px; display: grid; place-items: center; font-size: 11px; border-radius: 3px; color: #36405a; }
 .od-pages .on { background: #1f4fd8; color: #fff; }`,
@@ -379,7 +379,7 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
       ],
       explanation: `Trois critères différents, trois défauts que l’œil pressé ne voit pas :
 
-- **1.4.1 (A)** : les pastilles de statut ne parlent qu’en couleur — une personne daltonienne confond l’orange, le rouge et le vert, et le lecteur d’écran ne lit rien.
+- **1.4.1 (A)** : les pastilles de statut ne parlent qu’en couleur — une personne qui distingue mal le rouge du vert peut confondre ces pastilles, et le lecteur d’écran ne lit rien.
 - **1.4.11 (AA)** : une case à cocher doit se repérer ; sa bordure doit atteindre 3:1.
 - **2.5.8 (AA)** : chaque cible fait au moins 24 × 24 px, ou reste assez isolée pour qu’un cercle de 24 px centré sur elle ne touche aucune autre cible.
 

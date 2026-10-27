@@ -68,7 +68,13 @@ export function checkExercise(ex: Exercise, moduleId: string, errors: string[]) 
       if (new Set(ids).size !== ids.length) errors.push(`${w}: ids d'options en double`);
       const visuals = ex.options.filter((o) => o.visual).length;
       if (visuals && visuals !== ex.options.length) errors.push(`${w}: toutes les options doivent avoir un visuel, ou aucune`);
-      if (!ex.fixedOrder && /\b(à gauche|à droite|de gauche|de droite|en haut|en bas|la première|la seconde|la deuxième)\b/i.test(ex.explanation))
+      // Only references to an option's position are a problem; left/right inside a mock (RTL lessons) is fine.
+      if (
+        !ex.fixedOrder &&
+        /\b(version|option|maquette|proposition|image|carte|réponse)s? (de |à |du |en )?(gauche|droite|haut|bas)\b|\b(la|le) (première|premier|seconde|second|deuxième|troisième) (version|option|maquette|proposition|réponse)\b/i.test(
+          ex.explanation,
+        )
+      )
         errors.push(`${w}.explanation: référence à la position d'une option (les options sont mélangées à l'affichage)`);
       ex.options.forEach((o, i) => {
         if (!o.label && !o.visual) errors.push(`${w}.options[${i}]: ni label ni visuel`);

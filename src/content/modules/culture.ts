@@ -472,7 +472,7 @@ L’allemand est souvent **30 % plus long** que l’anglais, et ses mots compos�
   </ul>
 </div>`,
           },
-          goodNote: '`dir="rtl"` sur la racine : la ligne s’inverse d’elle-même ; seules les flèches de navigation sont retournées.',
+          goodNote: 'La racine passe de droite à gauche : chaque ligne s’inverse d’elle-même ; seules les flèches de navigation sont retournées.',
         },
       ],
     },
@@ -599,6 +599,840 @@ Ces règles évoluent : vérifie-les avec un juriste local avant chaque lancemen
     { id: 'legal', front: 'Deux obligations à ne pas rater en France et en Allemagne ?', back: 'France : « Tout refuser » aussi simple que « Tout accepter » pour les cookies. Allemagne : bouton final « zahlungspflichtig bestellen » et Impressum.' },
   ],
   exercises: [
+    /* ---------- Chine continentale ---------- */
+    {
+      id: 'culture-cn-home-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'cn',
+      prompt: 'Quelle page d’accueil répond le mieux aux attentes des utilisateurs d’une appli de services de proximité en Chine ?',
+      context: 'Une start-up européenne lance en Chine continentale une appli de livraison et de services du quotidien.',
+      options: [
+        {
+          id: 'minimal',
+          visual: {
+            alt: 'Accueil épuré : le nom de l’appli, un grand titre « Tout ce qu’il faut, livré en 30 minutes », un seul bouton « Commander » et une grande illustration.',
+            frame: 'phone',
+            lang: 'zh-CN',
+            css: `.hm-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+.hm-logo{font-weight:800;font-size:18px}
+.hm-hero{padding:6px 16px 16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.hm-title{font-size:22px;font-weight:800;line-height:1.3}
+.hm-sub{color:#5a6172}
+.hm-hero .mk-btn{background:#ffd23f;color:#1d2230}
+.hm-img{margin:0 16px 16px;border-radius:12px;aspect-ratio:16/11;background:linear-gradient(160deg,#fff1c2,#ffd23f 60%,#f4b400)}`,
+            html: `<div class="hm-bar"><span class="hm-logo">邻家</span><i data-icon="menu"></i></div>
+<div class="hm-hero">
+  <p class="hm-title">生活所需<br>30分钟送到家</p>
+  <p class="hm-sub">外卖、买菜、送药，一个应用全搞定</p>
+  <span class="mk-btn">开始点餐</span>
+</div>
+<div class="hm-img"></div>
+<div class="mk-tabbar"><span class="on"><i data-icon="house"></i>首页</span><span><i data-icon="file-text"></i>订单</span><span><i data-icon="user"></i>我的</span></div>`,
+          },
+          why: 'Un seul service visible : l’utilisateur doit deviner ce que l’appli sait faire et passer par un menu pour le reste.',
+        },
+        {
+          id: 'grid',
+          visual: {
+            alt: 'Accueil avec la ville et une barre de recherche, une grille de dix icônes de services (repas, supermarché, courses, pharmacie, coursier, fleurs, taxi, hôtel, boissons, tout voir), un bandeau de bienvenue avec réduction et deux cartes de produits.',
+            frame: 'phone',
+            lang: 'zh-CN',
+            css: `.g-top{display:flex;align-items:center;gap:8px;padding:10px 12px 6px}
+.g-loc{display:flex;align-items:center;gap:2px;font-weight:700;font-size:13px;white-space:nowrap}
+.g-loc .mk-ico{--ico:14px}
+.g-search{flex:1;display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:#f2f3f5;color:#5a6172;font-size:12px;min-width:0}
+.g-search .mk-ico{--ico:14px}
+.g-grid{display:grid;grid-template-columns:repeat(5,1fr);row-gap:10px;padding:8px 4px 10px}
+.g-cell{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px}
+.g-ico{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:#fff}
+.g-ico .mk-ico{--ico:19px}
+.c1{background:#e8590c}.c2{background:#2b8a3e}.c3{background:#1c7ed6}.c4{background:#c2255c}.c5{background:#7048e8}
+.g-promo{margin:0 12px;padding:9px 12px;border-radius:12px;background:#fff4d6;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px}
+.g-promo b{color:#c92a2a}
+.g-pill{background:#ffd23f;border-radius:999px;padding:3px 10px;font-weight:700;font-size:12px}
+.g-feed{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px 12px}
+.g-card{border-radius:10px;background:#f6f7f9;overflow:hidden;font-size:12px;display:flex;flex-direction:column;gap:2px}
+.g-card .mk-img{border-radius:0}
+.g-card p{padding:0 8px}
+.g-card .g-p{color:#c92a2a;font-weight:800;padding-bottom:8px}
+.dot{position:relative}
+.dot::after{content:"";position:absolute;top:0;inset-inline-end:6px;width:7px;height:7px;border-radius:50%;background:#e03131}`,
+            html: `<div class="g-top"><span class="g-loc"><i data-icon="map-pin"></i>静安区</span><span class="g-search"><i data-icon="search"></i>搜索商家或商品</span></div>
+<div class="g-grid">
+  <span class="g-cell"><span class="g-ico c1"><i data-icon="utensils"></i></span>外卖</span>
+  <span class="g-cell"><span class="g-ico c2"><i data-icon="store"></i></span>超市</span>
+  <span class="g-cell"><span class="g-ico c2"><i data-icon="sprout"></i></span>买菜</span>
+  <span class="g-cell"><span class="g-ico c3"><i data-icon="pill"></i></span>买药</span>
+  <span class="g-cell"><span class="g-ico c1"><i data-icon="bike"></i></span>跑腿</span>
+  <span class="g-cell"><span class="g-ico c4"><i data-icon="gift"></i></span>鲜花</span>
+  <span class="g-cell"><span class="g-ico c3"><i data-icon="car"></i></span>打车</span>
+  <span class="g-cell"><span class="g-ico c5"><i data-icon="hotel"></i></span>酒店</span>
+  <span class="g-cell"><span class="g-ico c4"><i data-icon="coffee"></i></span>奶茶</span>
+  <span class="g-cell"><span class="g-ico c5"><i data-icon="layout-grid"></i></span>全部</span>
+</div>
+<div class="g-promo"><span><b>新人专享</b> 满30减15</span><span class="g-pill">领取</span></div>
+<div class="g-feed">
+  <div class="g-card"><div class="mk-img" style="--ratio:4/3"></div><p>招牌牛肉面</p><p class="g-p">¥22</p></div>
+  <div class="g-card"><div class="mk-img" style="--ratio:4/3"></div><p>鲜榨橙汁</p><p class="g-p">¥12</p></div>
+</div>
+<div class="mk-tabbar"><span class="on"><i data-icon="house"></i>首页</span><span><i data-icon="file-text"></i>订单</span><span class="dot"><i data-icon="message-circle"></i>消息</span><span><i data-icon="user"></i>我的</span></div>`,
+          },
+          why: 'Recherche, grille d’icônes et promotions : toute l’offre est à un geste, comme dans les super-apps locales.',
+        },
+      ],
+      answer: 'grid',
+      explanation: `En Chine, une appli de services est souvent une **super-app** : WeChat, Alipay ou Meituan servent de portail vers des dizaines de services — repas, courses, pharmacie, taxi, hôtel. Les utilisateurs ont l’habitude de voir cette offre d’un coup d’œil dès l’accueil, dans une **grille d’icônes** (le 金刚区, « zone King Kong ») placée sous la recherche et au-dessus des promotions.
+
+L’accueil épuré cache tout derrière un menu : il faut deviner ce que l’appli sait faire. Or l’usage est presque entièrement mobile (98,6 % des internautes chinois dès 2018) et l’écran d’accueil sert de porte d’entrée unique.
+
+La densité n’excuse pas le désordre : icônes alignées, libellés courts, couleurs qui séparent les blocs. Et la convention se vérifie par des tests avec des utilisateurs locaux.`,
+      takeaway: 'En Chine, une appli de services montre l’étendue de son offre dès l’accueil (recherche, grille d’icônes, promotions) : dense, mais rangée.',
+      sources: ['palo-it:china', S.cnnic],
+    },
+    {
+      id: 'culture-cn-stock-colors',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'cn',
+      prompt: 'Laquelle de ces fiches boursières est adaptée à un investisseur en Chine continentale ?',
+      options: [
+        {
+          id: 'green-up',
+          visual: {
+            alt: 'Fiche de l’indice de Shanghai en hausse de 0,82 % : la valeur, la variation et la courbe montante sont en vert ; la ligne en baisse est en rouge.',
+            frame: 'phone',
+            lang: 'zh-CN',
+            css: `.sk{--up:#12803f;--down:#d42a2a;padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.sk-name{display:flex;align-items:baseline;gap:6px}
+.sk-name b{font-size:16px}
+.sk-name span{color:#5a6172;font-size:12px}
+.sk-val{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.sk-chg{display:flex;gap:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.sk-chart{color:var(--up);width:100%;height:auto}
+.sk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:12px}
+.sk-stats span{display:block;color:#5a6172}
+.sk-stats b{font-variant-numeric:tabular-nums}
+.sk-list{list-style:none;margin:0;padding:0;border-top:1px solid #e3e6ec}
+.sk-list li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #eceef2;font-size:13px}
+.sk-list b{font-variant-numeric:tabular-nums}
+.u{color:var(--up)}.d{color:var(--down)}`,
+            html: `<div class="sk">
+  <div class="sk-name"><b>上证指数</b><span>000001</span></div>
+  <p class="sk-val u">3312.45</p>
+  <div class="sk-chg u"><span>+26.83</span><span>+0.82%</span></div>
+  <svg class="sk-chart" viewBox="0 0 280 72" aria-hidden="true"><polyline points="0,58 18,54 36,57 54,49 72,51 90,44 108,46 126,38 144,41 162,33 180,36 198,27 216,30 234,22 252,25 280,14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+  <div class="sk-stats"><div><span>今开</span><b class="u">3290.12</b></div><div><span>最高</span><b class="u">3318.06</b></div><div><span>最低</span><b class="d">3284.77</b></div></div>
+  <ul class="sk-list">
+    <li><span>深证成指</span><b class="d">10512.33 &nbsp;-0.35%</b></li>
+    <li><span>创业板指</span><b class="u">2156.78 &nbsp;+1.24%</b></li>
+  </ul>
+</div>`,
+          },
+          why: 'Hausse en vert, baisse en rouge : la convention occidentale. Un investisseur chinois lit d’abord « baisse ».',
+        },
+        {
+          id: 'red-up',
+          visual: {
+            alt: 'La même fiche : la valeur, la variation et la courbe montante sont en rouge ; la ligne en baisse est en vert.',
+            frame: 'phone',
+            lang: 'zh-CN',
+            css: `.sk{--up:#d42a2a;--down:#12803f;padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.sk-name{display:flex;align-items:baseline;gap:6px}
+.sk-name b{font-size:16px}
+.sk-name span{color:#5a6172;font-size:12px}
+.sk-val{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.sk-chg{display:flex;gap:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.sk-chart{color:var(--up);width:100%;height:auto}
+.sk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:12px}
+.sk-stats span{display:block;color:#5a6172}
+.sk-stats b{font-variant-numeric:tabular-nums}
+.sk-list{list-style:none;margin:0;padding:0;border-top:1px solid #e3e6ec}
+.sk-list li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #eceef2;font-size:13px}
+.sk-list b{font-variant-numeric:tabular-nums}
+.u{color:var(--up)}.d{color:var(--down)}`,
+            html: `<div class="sk">
+  <div class="sk-name"><b>上证指数</b><span>000001</span></div>
+  <p class="sk-val u">3312.45</p>
+  <div class="sk-chg u"><span>+26.83</span><span>+0.82%</span></div>
+  <svg class="sk-chart" viewBox="0 0 280 72" aria-hidden="true"><polyline points="0,58 18,54 36,57 54,49 72,51 90,44 108,46 126,38 144,41 162,33 180,36 198,27 216,30 234,22 252,25 280,14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+  <div class="sk-stats"><div><span>今开</span><b class="u">3290.12</b></div><div><span>最高</span><b class="u">3318.06</b></div><div><span>最低</span><b class="d">3284.77</b></div></div>
+  <ul class="sk-list">
+    <li><span>深证成指</span><b class="d">10512.33 &nbsp;-0.35%</b></li>
+    <li><span>创业板指</span><b class="u">2156.78 &nbsp;+1.24%</b></li>
+  </ul>
+</div>`,
+          },
+          why: 'Hausse en rouge, baisse en vert, signes +/− conservés : la convention des marchés chinois.',
+        },
+      ],
+      answer: 'red-up',
+      explanation: `Sur les marchés de Chine continentale, **la hausse s’affiche en rouge et la baisse en vert** : le rouge y est la couleur de la richesse et de la prospérité. C’est l’inverse de la convention occidentale.
+
+Une fiche « hausse en vert » se lit à l’envers : l’investisseur voit la couleur de la baisse avant même de lire le chiffre. En finance, cette inversion coûte cher.
+
+Deux précautions complètent la convention :
+
+- ne jamais faire porter le sens à la seule couleur : signe +/−, flèche ou libellé (critère WCAG 1.4.1) ;
+- si l’appli sert plusieurs marchés, proposer un réglage « rouge = hausse » ou « vert = hausse ».`,
+      takeaway: 'En Chine continentale, la hausse est rouge et la baisse verte : suis la convention du marché et double toujours la couleur d’un signe.',
+      sources: [S.colours, 'wcag22'],
+    },
+    {
+      id: 'culture-cn-newyear-hotspot',
+      type: 'hotspot',
+      difficulty: 3,
+      culture: 'cn',
+      prompt: 'Une équipe européenne a conçu cette page promotionnelle du Nouvel An chinois. Trouve les trois maladresses culturelles.',
+      visual: {
+        alt: 'Page promo du Nouvel An : bannière noire et blanche « Cadeaux du Nouvel An », bouton rouge d’enveloppe rouge, trois cadeaux (casquette verte « pour votre mari », pendule rétro « pour les aînés » à 444 ¥, carpe koï « abondance chaque année » à 88 ¥) et un lien de partage par QR code.',
+        frame: 'phone',
+        lang: 'zh-CN',
+        css: `.ny{display:flex;flex-direction:column;gap:10px;padding:0 0 12px}
+.ny-banner{padding:18px 16px;background:#1d1d1f;color:#fff;text-align:center;display:flex;flex-direction:column;gap:4px;border-bottom:4px solid #d9d9d9}
+.ny-kicker{font-size:12px;letter-spacing:.2em;color:#d0d0d0}
+.ny-title{font-size:26px;font-weight:800}
+.ny-sub{font-size:13px;color:#e6e6e6}
+.ny-red{margin:0 12px;padding:10px 12px;border-radius:12px;background:#d42a2a;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.ny-red > span:first-child{display:flex;align-items:center;gap:6px}
+.ny-pill{background:#ffd43b;color:#7a1d00;border-radius:999px;padding:3px 10px;font-size:12px}
+.ny-list{display:flex;flex-direction:column;gap:8px;padding:0 12px}
+.ny-item{display:flex;gap:10px;align-items:center;padding:8px;border:1px solid #eceef2;border-radius:10px}
+.ny-thumb{width:52px;height:52px;border-radius:8px;display:grid;place-items:center;background:#f1f3f5;color:#5a6172;flex:none}
+.ny-thumb .mk-ico{--ico:26px}
+.ny-thumb--red{background:#e8590c;color:#fff}
+.cap{position:relative;width:30px;height:15px;border-radius:15px 15px 3px 3px;background:#2f9e44}
+.cap::after{content:"";position:absolute;inset-inline-start:22px;bottom:0;width:16px;height:5px;border-radius:3px;background:#2f9e44}
+.ny-tag{font-size:11px;color:#c92a2a;font-weight:700}
+.ny-name{font-weight:600}
+.ny-price{color:#c92a2a;font-weight:800}
+.ny-share{margin:0 12px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#5a6172}`,
+        html: `<div class="ny">
+  <div class="ny-banner" data-hotspot="banner"><p class="ny-kicker">春节限定</p><p class="ny-title">新春好礼</p><p class="ny-sub">全场满299减50</p></div>
+  <div class="ny-red" data-hotspot="hongbao"><span><i data-icon="gift"></i>领取新春红包</span><span class="ny-pill">去领取</span></div>
+  <div class="ny-list">
+    <div class="ny-item" data-hotspot="hat"><div class="ny-thumb"><span class="cap"></span></div><div><p class="ny-tag">送老公</p><p class="ny-name">绿色棒球帽</p><p class="ny-price">¥129</p></div></div>
+    <div class="ny-item" data-hotspot="clock"><div class="ny-thumb"><i data-icon="clock"></i></div><div><p class="ny-tag">送长辈</p><p class="ny-name">复古实木座钟</p><p class="ny-price">¥444</p></div></div>
+    <div class="ny-item" data-hotspot="koi"><div class="ny-thumb ny-thumb--red"><i data-icon="sparkles"></i></div><div><p class="ny-tag">年年有余</p><p class="ny-name">锦鲤挂饰</p><p class="ny-price">¥88</p></div></div>
+  </div>
+  <div class="ny-share" data-hotspot="share"><i data-icon="qr-code"></i>扫码分享给好友</div>
+</div>`,
+      },
+      hotspots: [
+        { id: 'banner', label: 'Bannière noire et blanche', correct: true, why: 'Le noir et le blanc évoquent le deuil (les funérailles sont des « affaires blanches », 白事). Le Nouvel An appelle le rouge et l’or.' },
+        { id: 'hat', label: 'Casquette verte « pour votre mari »', correct: true, why: '« Porter un chapeau vert » (戴绿帽子) veut dire être trompé : offert à un mari, le cadeau devient une insulte.' },
+        { id: 'clock', label: 'Pendule à 444 ¥ « pour les aînés »', correct: true, why: 'Offrir une pendule (送钟) se prononce comme « accompagner un mourant » (送终) ; et 444 répète le 4, homophone de « mort ».' },
+        { id: 'hongbao', label: 'Bouton d’enveloppe rouge', correct: false, why: 'Les enveloppes rouges (红包) sont le geste attendu du Nouvel An, en rouge comme il se doit.' },
+        { id: 'koi', label: 'Carpe koï à 88 ¥', correct: false, why: '« 年年有余 » joue sur 鱼 (poisson) et 余 (surplus), et 88 est un prix porte-bonheur : bon choix.' },
+        { id: 'share', label: 'Partage par QR code', correct: false, why: 'Le QR code est le mode de partage le plus courant en Chine : rien à corriger.' },
+      ],
+      explanation: `Couleurs, chiffres et cadeaux portent des sens que la traduction ne transmet pas :
+
+- **Couleurs** : rouge et or pour la fête ; le noir et le blanc sont associés au deuil.
+- **Homophonies** : 4 (四 *sì*) sonne comme « mort » (死 *sǐ*) ; offrir une pendule (送钟) sonne comme « accompagner un mourant » (送终) ; à l’inverse, 8 et le poisson (鱼, prononcé comme 余, « surplus ») portent chance.
+- **Expressions** : un chapeau vert désigne un mari trompé.
+
+Une équipe étrangère ne peut pas deviner ces associations. La seule méthode fiable : faire relire visuels, prix et textes par des natifs avant chaque campagne, surtout autour des fêtes.`,
+      takeaway: 'Fais relire couleurs, chiffres, cadeaux et expressions par des natifs : un détail anodin chez toi peut évoquer le deuil ou l’insulte ailleurs.',
+      sources: [S.fauxPas, S.greenHat, S.colours],
+    },
+    {
+      id: 'culture-cn-dense-tf',
+      type: 'truefalse',
+      difficulty: 1,
+      culture: 'cn',
+      prompt: 'Les utilisateurs chinois préfèrent toujours les interfaces chargées.',
+      answer: false,
+      explanation: `**Faux** — c’est une tendance, pas une loi.
+
+La densité des applis chinoises a de vraies causes : une écriture compacte, un usage presque entièrement mobile, des super-apps qui donnent accès à des dizaines de services. Mais une partie de cette densité sert d’abord le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs.
+
+Les contre-exemples abondent : Douyin s’ouvre en plein écran sur une seule vidéo, la liste de conversations de WeChat reste sobre. Les attentes varient aussi avec l’âge, la ville et la tâche ; un paiement ou un formulaire gagnent à être simples partout.
+
+La bonne question n’est pas « chargé ou épuré ? » mais « que faut-il voir ici pour décider et avoir confiance ? » — et la réponse se teste.`,
+      takeaway: 'La densité est une tendance du marché chinois, pas une règle : elle dépend du produit, de la tâche et du modèle économique. Teste avec des utilisateurs locaux.',
+      sources: ['palo-it:china'],
+    },
+    {
+      id: 'culture-cn-leading-slider',
+      type: 'slider',
+      difficulty: 2,
+      culture: 'cn',
+      prompt: 'Règle l’interlignage de ce paragraphe chinois pour une lecture confortable.',
+      visual: {
+        alt: 'Paragraphe de corps de texte en chinois dont l’interlignage varie avec le curseur.',
+        lang: 'zh-CN',
+        html: `<div class="mk-pad"><p class="zh">${ZH_PARA}</p></div>`,
+        css: `.zh{font-size:15px;max-width:30em;line-height:var(--n, 1.1)}`,
+      },
+      control: 'Interlignage',
+      min: 1,
+      max: 2.6,
+      step: 0.05,
+      initial: 1.1,
+      unit: '',
+      target: [1.5, 2],
+      ideal: 1.7,
+      explanation: `Chaque caractère chinois occupe un **carré plein**, sans les ascendantes et les descendantes qui aèrent naturellement une ligne latine. Avec un interlignage serré, les lignes se collent et l’œil saute de l’une à l’autre.
+
+Les règles de composition du chinois publiées par le W3C situent l’espace entre les lignes entre **50 et 100 % du corps**, soit un \`line-height\` de **1,5 à 2**. Au-delà, la lisibilité ne progresse plus et le paragraphe se délite.
+
+Impeccable le rappelle : l’interlignage se règle selon la police, la largeur et **la langue**, pas avec un ratio universel.`,
+      takeaway: 'Pour un corps de texte chinois, vise un interlignage de 1,5 à 2 (environ 1,7) : les caractères pleins et carrés ont besoin d’air entre les lignes.',
+      sources: ['w3c:clreq', 'imp:typeset'],
+    },
+    {
+      id: 'culture-cn-market-choice',
+      type: 'choice',
+      difficulty: 3,
+      culture: 'cn',
+      prompt: 'Quel marché vise cette page de commande ?',
+      visual: {
+        alt: 'Page de confirmation de commande en chinois simplifié : adresse à Shanghai avec un numéro de mobile masqué, montant de 128 yuans, choix entre WeChat Pay et Alipay, bouton « Valider la commande » et, en pied de page, un numéro d’enregistrement ICP.',
+        frame: 'browser',
+        lang: 'zh-CN',
+        css: `.cm{display:flex;flex-direction:column;gap:10px}
+.cm-addr{padding:10px 12px;border-radius:10px;background:#f4f6f9;display:flex;gap:8px;align-items:flex-start}
+.cm-addr .mk-ico{--ico:16px;color:#5a6172;margin-top:2px}
+.cm-pay{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.cm-pay--on{border-color:#12803f;box-shadow:0 0 0 1px #12803f}
+.cm-wx{color:#12803f}.cm-ali{color:#1c5fd1}
+.cm-pay .mk-grow{font-weight:600}
+.cm .mk-btn{background:#d42a2a}
+.cm-foot{text-align:center;font-size:11px;color:#5a6172}`,
+        html: `<div class="cm mk-pad">
+  <p class="mk-h2">确认订单</p>
+  <div class="cm-addr"><i data-icon="map-pin"></i><div><p class="mk-strong">王小明　139****5678</p><p class="mk-small mk-muted">上海市静安区南京西路888号18楼</p></div></div>
+  <div class="mk-row mk-between"><span>商品金额</span><span class="mk-price">¥128.00</span></div>
+  <div class="mk-row mk-between"><span>运费</span><span>免运费</span></div>
+  <p class="mk-label">支付方式</p>
+  <div class="cm-pay cm-pay--on"><i class="cm-wx" data-icon="message-circle"></i><span class="mk-grow">微信支付</span><i class="cm-wx" data-icon="circle-check"></i></div>
+  <div class="cm-pay"><i class="cm-ali" data-icon="wallet"></i><span class="mk-grow">支付宝</span></div>
+  <span class="mk-btn mk-btn--block">提交订单 ¥128.00</span>
+  <p class="cm-foot">© 2026 邻家生活　沪ICP备18034562号-1</p>
+</div>`,
+      },
+      options: [
+        { id: 'cn', label: 'Chine continentale', why: 'Yuans, WeChat Pay et Alipay, mobile masqué à la chinoise et surtout le numéro d’enregistrement ICP, propre aux sites hébergés en Chine continentale.' },
+        { id: 'tw', label: 'Taïwan', why: 'Taïwan écrit en caractères traditionnels (確認訂單) et paie en dollars de Taïwan (NT$).' },
+        { id: 'sg', label: 'Singapour', why: 'Singapour utilise aussi les caractères simplifiés, mais paie en dollars de Singapour (PayNow) et n’a pas d’enregistrement ICP.' },
+        { id: 'hk', label: 'Hong Kong', why: 'Hong Kong écrit en caractères traditionnels et paie en dollars de Hong Kong (FPS, Octopus).' },
+      ],
+      answer: 'cn',
+      explanation: `Le chinois simplifié ne suffit pas à désigner un marché : Singapour l’utilise aussi, tandis que Taïwan et Hong Kong écrivent en caractères traditionnels. Ce sont les **conventions** qui tranchent :
+
+- le montant en yuans (¥) ;
+- WeChat Pay et Alipay comme moyens de paiement ;
+- le numéro de mobile masqué à la chinoise (139****5678) ;
+- surtout, le **numéro d’enregistrement ICP** (沪ICP备…) en pied de page, obligatoire pour un site hébergé en Chine continentale.
+
+On ne localise donc pas « en chinois », mais pour une **locale** : \`zh-CN\`, \`zh-TW\`, \`zh-HK\` et \`zh-SG\` n’ont ni la même écriture, ni la même monnaie, ni les mêmes paiements, ni les mêmes obligations.`,
+      takeaway: 'Une langue n’est pas un marché : zh-CN, zh-TW, zh-HK et zh-SG diffèrent par l’écriture, la monnaie, les paiements et la loi.',
+      sources: ['w3c:i18n', 'palo-it:china'],
+    },
+
+    /* ---------- Japon ---------- */
+    {
+      id: 'culture-jp-furigana-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'jp',
+      prompt: 'Quel formulaire d’inscription est adapté au Japon ?',
+      options: [
+        {
+          id: 'western',
+          visual: {
+            alt: 'Formulaire d’inscription en japonais : prénom, deuxième prénom, nom de famille, adresse écrite de la rue vers la préfecture, puis code postal en dernier.',
+            frame: 'phone',
+            lang: 'ja',
+            css: `.jf{display:flex;flex-direction:column;gap:12px}
+.jf .mk-input{min-height:36px;padding:7px 10px}`,
+            html: `<div class="jf mk-pad">
+  <p class="mk-h2">会員登録</p>
+  <div class="mk-field"><span class="mk-label">名（ファーストネーム）</span><span class="mk-input">太郎</span></div>
+  <div class="mk-field"><span class="mk-label">ミドルネーム</span><span class="mk-input"></span></div>
+  <div class="mk-field"><span class="mk-label">姓（ラストネーム）</span><span class="mk-input">山田</span></div>
+  <div class="mk-field"><span class="mk-label">住所</span><span class="mk-input">梅田1-2-3 大阪市北区 大阪府</span></div>
+  <div class="mk-field"><span class="mk-label">郵便番号</span><span class="mk-input">530-0001</span></div>
+  <span class="mk-btn mk-btn--block">登録する</span>
+</div>`,
+          },
+          why: 'Prénom d’abord, deuxième prénom, aucune lecture du nom, adresse à l’envers : un formulaire occidental traduit.',
+        },
+        {
+          id: 'local',
+          visual: {
+            alt: 'Formulaire d’inscription en japonais : nom de famille puis prénom, leur lecture en katakana, code postal avec un bouton « Rechercher l’adresse », puis préfecture et ville ; les champs obligatoires portent une étiquette rouge.',
+            frame: 'phone',
+            lang: 'ja',
+            css: `.jf{display:flex;flex-direction:column;gap:12px}
+.jf .mk-input{min-height:36px;padding:7px 10px}
+.jf-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.req{display:inline-block;margin-inline-start:6px;padding:1px 6px;border-radius:4px;background:#c92a2a;color:#fff;font-size:10px;font-weight:700;vertical-align:1px}
+.jf-zip{display:flex;gap:8px;align-items:center}
+.jf-zip .mk-input{flex:1}`,
+            html: `<div class="jf mk-pad">
+  <p class="mk-h2">会員登録</p>
+  <div class="mk-field"><span class="mk-label">お名前<span class="req">必須</span></span><div class="jf-two"><span class="mk-input">山田</span><span class="mk-input">太郎</span></div></div>
+  <div class="mk-field"><span class="mk-label">フリガナ<span class="req">必須</span></span><div class="jf-two"><span class="mk-input">ヤマダ</span><span class="mk-input">タロウ</span></div></div>
+  <div class="mk-field"><span class="mk-label">郵便番号<span class="req">必須</span></span><div class="jf-zip"><span class="mk-input">530-0001</span><span class="mk-btn mk-btn--ghost mk-btn--s">住所を検索</span></div></div>
+  <div class="mk-field"><span class="mk-label">都道府県・市区町村</span><span class="mk-input">大阪府 大阪市北区梅田</span></div>
+  <span class="mk-btn mk-btn--block">登録する</span>
+</div>`,
+          },
+          why: 'Nom de famille d’abord, lecture en katakana, code postal qui remplit l’adresse : le formulaire suit les usages japonais.',
+        },
+      ],
+      answer: 'local',
+      explanation: `Un même kanji peut se lire de plusieurs façons : 中田 se lit *Nakata* ou *Nakada*. Les formulaires japonais demandent donc le nom en kanji **et** sa lecture en katakana (フリガナ) : l’entreprise sait comment s’adresser au client au téléphone, trie ses fichiers dans l’ordre japonais et rapproche les virements bancaires, libellés en katakana.
+
+La version recommandée suit aussi l’ordre local — **nom de famille d’abord** (山田 太郎) —, signale les champs obligatoires (必須) et laisse le code postal remplir l’adresse. L’autre inverse l’ordre, ajoute un deuxième prénom, inhabituel au Japon, et oublie la lecture.`,
+      takeaway: 'Au Japon, demande le nom de famille d’abord et sa lecture en katakana (フリガナ) : les kanji d’un nom ne disent pas comment il se prononce.',
+      sources: [S.furigana, S.w3cNames],
+    },
+    {
+      id: 'culture-jp-fullwidth-choice',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'jp',
+      prompt: 'Une cliente japonaise saisit son numéro en caractères pleine chasse. Que doit faire le formulaire ?',
+      visual: {
+        alt: 'Champ « Numéro de téléphone » en japonais contenant 090-1234-5678 saisi en chiffres pleine chasse, plus larges que des chiffres ordinaires.',
+        lang: 'ja',
+        html: `<div class="mk-pad"><div class="mk-field" style="max-width:300px"><span class="mk-label">電話番号</span><span class="mk-input">０９０－１２３４－５６７８</span><span class="mk-help">例：090-1234-5678</span></div></div>`,
+      },
+      options: [
+        { id: 'normalize', label: 'L’accepter et le convertir en demi-chasse (`090-1234-5678`) avant de le valider', why: 'L’utilisatrice n’a rien à corriger : le formulaire range lui-même la saisie dans le format attendu.' },
+        { id: 'reject', label: 'Afficher « 半角数字で入力してください » (saisissez en chiffres demi-chasse) et bloquer l’envoi', why: 'Message de rejet classique : il bloque l’utilisatrice pour un réglage de son clavier.' },
+        { id: 'block', label: 'Empêcher la frappe de tout caractère pleine chasse dans le champ', why: 'La méthode de saisie japonaise compose le texte avant de l’envoyer au champ : bloquer la frappe casse la saisie sans dire pourquoi.' },
+        { id: 'raw', label: 'L’enregistrer tel quel', why: 'Les chiffres pleine chasse ne sont pas des chiffres ASCII : recherche, dédoublonnage et envoi de SMS échoueront plus tard.' },
+      ],
+      answer: 'normalize',
+      explanation: `Au Japon, la saisie passe par une **méthode d’entrée (IME)** qui produit des caractères pleine chasse (全角, *zenkaku*) ou demi-chasse (半角, *hankaku*) selon son mode. Pour l’utilisatrice, « ０９０ » et « 090 » sont le même numéro ; pour un formulaire mal conçu, ce sont des caractères différents.
+
+Rejeter la saisie est un travers fréquent des formulaires japonais : on punit l’utilisatrice pour un réglage de son clavier. La bonne pratique est d’**accepter puis normaliser** : \`value.normalize('NFKC')\` convertit les chiffres, les lettres et le tiret pleine chasse en demi-chasse (« ０９０－１２３４ » devient « 090-1234 »). Pense aussi aux faux tirets, comme la marque d’allongement « ー », que NFKC ne convertit pas.`,
+      takeaway: 'Au Japon, accepte chiffres et lettres pleine chasse et normalise-les (NFKC) au lieu de rejeter la saisie.',
+      sources: [S.normalize, 'imp:harden'],
+    },
+    {
+      id: 'culture-jp-address-order',
+      type: 'order',
+      difficulty: 2,
+      culture: 'jp',
+      prompt: 'Range les champs d’une adresse japonaise dans l’ordre où on les saisit.',
+      items: [
+        { id: 'zip', label: 'Code postal — 〒530-0001' },
+        { id: 'pref', label: 'Préfecture — 大阪府' },
+        { id: 'city', label: 'Ville et arrondissement — 大阪市北区' },
+        { id: 'block', label: 'Quartier et numéros — 梅田1-2-3' },
+        { id: 'building', label: 'Immeuble et étage — 梅田ビル 5階' },
+      ],
+      explanation: `Une adresse japonaise va **du plus grand au plus petit**, à l’inverse de l’usage occidental : préfecture, ville, quartier, numéros d’îlot et de bâtiment, puis immeuble et étage.
+
+Le code postal vient en premier, précédé du symbole 〒 : ses sept chiffres suffisent à retrouver la préfecture, la ville et le quartier. Les formulaires japonais proposent un bouton « 住所を検索 » (rechercher l’adresse) qui remplit ces champs ; il ne reste à saisir que les numéros et l’immeuble.
+
+Copier l’ordre occidental (rue d’abord, code postal à la fin) oblige l’utilisateur à écrire son adresse à l’envers.`,
+      takeaway: 'Une adresse japonaise va du plus grand au plus petit — code postal, préfecture, ville, quartier, immeuble — et le code postal remplit le reste.',
+      sources: [S.japanPost, S.w3cL10n],
+    },
+    {
+      id: 'culture-jp-type-multi',
+      type: 'multi',
+      difficulty: 3,
+      culture: 'jp',
+      prompt: 'Lesquelles de ces pratiques conviennent pour composer du texte japonais à l’écran ?',
+      options: [
+        { id: 'weight', label: 'Mettre en valeur par la graisse, la couleur ou des points d’emphase (`text-emphasis`)', why: 'Ce sont les moyens d’emphase propres à l’écriture japonaise.' },
+        { id: 'leading', label: 'Donner un interlignage généreux, autour de 1,7', why: 'Des caractères pleins et carrés demandent de l’air entre les lignes.' },
+        { id: 'system', label: 'S’appuyer sur les polices système (Hiragino Sans, Yu Gothic, Noto Sans JP) ou des sous-ensembles', why: 'Une police japonaise complète couvre des milliers de caractères et pèse plusieurs mégaoctets.' },
+        { id: 'italic', label: 'Mettre les termes importants en italique', why: 'Les polices japonaises n’ont pas d’italique : le navigateur fabrique un faux oblique peu lisible.' },
+        { id: 'keepall', label: 'Appliquer `word-break: keep-all` pour éviter de couper les mots', why: 'Sans espace entre les mots, `keep-all` ne laisserait couper qu’aux espaces et à la ponctuation : les lignes déborderaient. C’est un réglage pour le coréen.' },
+        { id: 'kinsoku', label: 'Laisser un « 。 » ou un « 、 » commencer une ligne quand la place manque', why: 'Les règles de *kinsoku* interdisent la ponctuation fermante en début de ligne.' },
+      ],
+      answers: ['weight', 'leading', 'system'],
+      explanation: `Le japonais se compose avec ses propres règles, décrites par le W3C dans *Requirements for Japanese Text Layout* :
+
+- **Pas d’italique** : on souligne par la graisse, la couleur ou les points d’emphase (\`text-emphasis\`).
+- **Interlignage généreux**, autour de 1,7.
+- **Polices système** ou sous-ensembles : des milliers de caractères pèsent lourd.
+- **Coupures** : on peut couper entre presque tous les caractères, mais jamais avant une ponctuation fermante (。、）」) — ce sont les règles de *kinsoku*. \`word-break: keep-all\`, utile en coréen, supprimerait presque tous les points de coupure : les lignes déborderaient.`,
+      takeaway: 'Texte japonais : pas d’italique, interlignage généreux, polices système, règles de kinsoku — et jamais `keep-all`, réservé au coréen.',
+      sources: ['w3c:jlreq', S.textEmphasis, S.wordBreak, S.readium],
+    },
+    /* ---------- Corée du Sud ---------- */
+    {
+      id: 'culture-kr-keepall-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'kr',
+      prompt: 'Quelle carte affiche correctement ce texte coréen ?',
+      options: [
+        {
+          id: 'default',
+          visual: {
+            alt: 'Notification de livraison en coréen dont les lignes se coupent au milieu des mots.',
+            frame: 'phone',
+            lang: 'ko',
+            css: `.kn{padding:14px}
+.kn-card{border:1px solid #e1e4ea;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.kn-head{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15px}
+.kn-head .mk-ico{color:#1c5fd1}
+.kn-text{font-size:16px;line-height:1.6}`,
+            html: `<div class="kn"><div class="kn-card">
+  <p class="kn-head"><i data-icon="truck"></i>배송 안내</p>
+  <p class="kn-text">${KO_TEXT}</p>
+  <span class="mk-btn mk-btn--ghost mk-btn--s">배송 조회</span>
+</div></div>`,
+          },
+          why: 'Le navigateur coupe entre deux syllabes : des mots se retrouvent à cheval sur deux lignes.',
+        },
+        {
+          id: 'keepall',
+          visual: {
+            alt: 'La même notification dont les lignes se coupent uniquement entre les mots.',
+            frame: 'phone',
+            lang: 'ko',
+            css: `.kn{padding:14px}
+.kn-card{border:1px solid #e1e4ea;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.kn-head{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15px}
+.kn-head .mk-ico{color:#1c5fd1}
+.kn-text{font-size:16px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}`,
+            html: `<div class="kn"><div class="kn-card">
+  <p class="kn-head"><i data-icon="truck"></i>배송 안내</p>
+  <p class="kn-text">${KO_TEXT}</p>
+  <span class="mk-btn mk-btn--ghost mk-btn--s">배송 조회</span>
+</div></div>`,
+          },
+          why: '`word-break: keep-all` ne coupe qu’aux espaces : chaque mot reste entier.',
+        },
+      ],
+      answer: 'keepall',
+      explanation: `Le coréen **espace ses mots** — plus exactement ses groupes « mot + particules ». Un lecteur coréen attend donc des retours à la ligne aux espaces, comme en français.
+
+Par défaut, les navigateurs traitent pourtant les syllabes hangeul comme des idéogrammes chinois et autorisent une coupure entre deux syllabes : un mot commence sur une ligne et finit sur la suivante, et la lecture bute à chaque fin de ligne.
+
+\`word-break: keep-all\` supprime ces coupures à l’intérieur des mots : la ligne ne se coupe qu’aux espaces. Ajoute \`overflow-wrap: anywhere\` pour les chaînes très longues sans espace (adresses web, références), et réserve ce réglage au coréen.`,
+      takeaway: 'En coréen, ajoute `word-break: keep-all` : les lignes ne se coupent qu’aux espaces, comme le lecteur l’attend.',
+      sources: [S.wordBreak, S.klreq],
+    },
+    {
+      id: 'culture-kr-stock-choice',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'kr',
+      prompt: 'Dans une appli boursière destinée à la Corée du Sud, de quelle couleur s’affiche une baisse de cours ?',
+      options: [
+        { id: 'blue', label: 'Bleu', why: 'C’est la convention coréenne : hausse en rouge, baisse en bleu.' },
+        { id: 'green', label: 'Vert', why: 'Le vert signale la baisse en Chine et la hausse en Occident ; en Corée, il n’a aucun de ces rôles.' },
+        { id: 'red', label: 'Rouge', why: 'En Corée du Sud, le rouge signale la hausse, comme en Chine.' },
+        { id: 'gray', label: 'Gris', why: 'Le gris sert plutôt à un cours inchangé.' },
+      ],
+      answer: 'blue',
+      explanation: `En Corée du Sud, les applis boursières affichent la **hausse en rouge** et la **baisse en bleu**. Le vert, couleur de la hausse en Occident et de la baisse en Chine, n’y joue aucun de ces rôles.
+
+Trois marchés, trois conventions : vert et rouge en Occident, rouge et vert en Chine, rouge et bleu en Corée. Une palette « Asie » unique serait fausse quelque part : règle les couleurs **par locale**, et double-les toujours d’un signe ou d’une flèche (▲▼).`,
+      takeaway: 'En Corée du Sud, la hausse est rouge et la baisse bleue : les conventions de couleur se règlent par marché, pas par continent.',
+      sources: [S.koreaStock, S.colours],
+    },
+    {
+      id: 'culture-kr-spaces-tf',
+      type: 'truefalse',
+      difficulty: 2,
+      culture: 'kr',
+      prompt: 'Comme le chinois et le japonais, le coréen s’écrit sans espaces entre les mots.',
+      answer: false,
+      explanation: `**Faux.** Le chinois et le japonais s’écrivent sans espaces entre les mots, mais le coréen moderne **espace ses mots** — plus exactement ses groupes « mot + particules », appelés *eojeol*.
+
+Cette différence change la façon de couper les lignes : en chinois et en japonais, on peut couper entre presque tous les caractères ; en coréen, le lecteur attend des coupures aux espaces, d’où \`word-break: keep-all\`.
+
+Ranger « le CJK » sous une seule règle typographique est donc une erreur : chaque écriture a ses conventions.`,
+      takeaway: 'Le coréen espace ses mots, contrairement au chinois et au japonais : il se coupe aux espaces, avec `word-break: keep-all`.',
+      sources: [S.klreq, S.wordBreak],
+    },
+
+    /* ---------- Inde ---------- */
+    {
+      id: 'culture-in-price-hotspot',
+      type: 'hotspot',
+      difficulty: 2,
+      culture: 'in',
+      prompt: 'Cette fiche produit vise des acheteurs en Inde. Trouve les deux erreurs de localisation.',
+      visual: {
+        alt: 'Fiche produit en anglais d’un téléviseur 4K : note 4,4, prix ₹149,999 toutes taxes comprises, vérification de livraison par code PIN, livraison gratuite le jeudi 29 octobre, paiement par Visa, Mastercard ou American Express, remplacement sous 10 jours, bouton « Buy now ».',
+        frame: 'browser',
+        lang: 'en-IN',
+        css: `.pp{display:flex;flex-direction:column;gap:9px}
+.pp-crumb{font-size:12px;color:#5a6172}
+.pp-rate{display:flex;align-items:center;gap:4px;font-size:13px}
+.pp-rate .mk-ico{--ico:14px;color:#9a6a00}
+.pp-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pp-price b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.pp-pin{display:flex;align-items:center;gap:8px;font-size:13px}
+.pp-pin .mk-input{width:96px;min-height:32px;padding:5px 8px}
+.pp-line{display:flex;align-items:center;gap:6px;font-size:13px}
+.pp-line .mk-ico{--ico:16px;color:#5a6172}
+.pp-buy{background:#f59f00;color:#1d2230;align-self:flex-start;padding:0 28px}`,
+        html: `<div class="pp mk-pad">
+  <p class="pp-crumb">Electronics › Televisions</p>
+  <p class="mk-h2">Aria 55-inch 4K Ultra HD Smart TV</p>
+  <p class="pp-rate"><i data-icon="star"></i><b>4.4</b><span class="mk-muted">· 2,318 ratings</span></p>
+  <div class="pp-price" data-hotspot="price"><b>₹149,999</b><span class="mk-small mk-muted">Inclusive of all taxes</span></div>
+  <div class="pp-pin" data-hotspot="pin"><i data-icon="map-pin" style="--ico:16px"></i><span>Deliver to PIN code</span><span class="mk-input">560001</span><span class="mk-btn mk-btn--text mk-btn--s">Check</span></div>
+  <p class="pp-line" data-hotspot="delivery"><i data-icon="truck"></i>FREE delivery by Thu, 29 Oct</p>
+  <p class="pp-line" data-hotspot="pay"><i data-icon="credit-card"></i>Pay with Visa · Mastercard · American Express</p>
+  <p class="pp-line" data-hotspot="returns"><i data-icon="refresh-cw"></i>10-day replacement</p>
+  <span class="mk-btn pp-buy">Buy now</span>
+</div>`,
+      },
+      hotspots: [
+        { id: 'price', label: 'Prix ₹149,999', correct: true, why: 'En Inde, les chiffres se groupent en lakhs : ₹1,49,999. Le groupement occidental se lit mal et trahit un site étranger.' },
+        { id: 'pay', label: 'Moyens de paiement', correct: true, why: 'Seulement des cartes : ni UPI, ni paiement à la livraison, les deux réflexes des acheteurs indiens.' },
+        { id: 'pin', label: 'Vérification par code PIN', correct: false, why: 'Le code postal indien (PIN code, 6 chiffres) sert à vérifier la livraison : c’est la bonne convention.' },
+        { id: 'delivery', label: 'Date de livraison', correct: false, why: 'Jour, date puis mois (Thu, 29 Oct) : l’ordre attendu en anglais indien.' },
+        { id: 'returns', label: 'Remplacement sous 10 jours', correct: false, why: 'Une politique de retour claire rassure : bon signal de confiance.' },
+      ],
+      explanation: `Deux conventions indiennes sont ignorées :
+
+- **Le groupement des chiffres** : après le premier millier, l’Inde groupe par deux. 1 lakh = 1,00,000 (100 000) ; 1 crore = 1,00,00,000 (10 millions). Le prix s’écrit donc ₹1,49,999 — \`Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 })\` le fait pour toi.
+- **Les moyens de paiement** : l’UPI (PhonePe, Google Pay, Paytm) et le **paiement à la livraison** dominent. Selon un rapport de 2024, le paiement à la livraison représentait encore environ 46 % des commandes des marques en ligne indiennes, devant l’UPI (environ 40 %).`,
+      takeaway: 'En Inde, groupe les grands nombres en lakhs (₹1,49,999) et propose UPI et paiement à la livraison, pas seulement la carte.',
+      sources: ['mdn:intl', S.indiaCod, S.upi],
+    },
+    {
+      id: 'culture-in-lakh-choice',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'in',
+      prompt: 'Que renvoie `new Intl.NumberFormat(\'en-IN\').format(2500000)` ?',
+      options: [
+        { id: 'in', label: '`25,00,000`', why: 'Groupement indien : trois chiffres, puis des groupes de deux. 25,00,000 = 25 lakhs = 2,5 millions.' },
+        { id: 'us', label: '`2,500,000`', why: 'C’est le groupement de `en-US`, pas celui de `en-IN`.' },
+        { id: 'de', label: '`2.500.000`', why: 'Le point comme séparateur des milliers, c’est par exemple l’allemand (`de-DE`).' },
+        { id: 'lakh', label: '`25 lakh`', why: '`Intl` n’écrit pas le mot par défaut ; en notation compacte, `en-IN` donne « 25L ».' },
+      ],
+      answer: 'in',
+      explanation: `Le système de numération indien groupe les trois derniers chiffres, puis **par deux** : 1,00,000 (1 lakh, cent mille), 10,00,000 (10 lakhs, un million), 1,00,00,000 (1 crore, dix millions).
+
+Inutile de l’écrire à la main : la locale \`en-IN\` le connaît. Le même nombre donne 2,500,000 en \`en-US\` et 2.500.000 en \`de-DE\` — d’où l’intérêt de toujours passer la locale de l’utilisateur à \`Intl.NumberFormat\`.`,
+      takeaway: 'Passe la locale à `Intl` : en-IN groupe par deux après le premier millier (25,00,000 = 25 lakhs = 2,5 millions).',
+      sources: ['mdn:intl'],
+    },
+    {
+      id: 'culture-in-market-choice',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'in',
+      prompt: 'Quel marché vise cette page de paiement ?',
+      visual: {
+        alt: 'Page de paiement en anglais : livraison à Pune avec un point de repère « near City Bus Depot », choix entre UPI, carte avec mensualités sans frais et paiement à la livraison, total de ₹1,24,500.',
+        frame: 'browser',
+        lang: 'en-IN',
+        css: `.im{display:flex;flex-direction:column;gap:10px}
+.im-addr{padding:10px 12px;background:#f4f6f9;border-radius:10px;font-size:13px}
+.im-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.im-opt--on{border-color:#1f4fd8;box-shadow:0 0 0 1px #1f4fd8}
+.im-opt .mk-ico{--ico:20px;color:#36405a}`,
+        html: `<div class="im mk-pad">
+  <p class="mk-h2">Payment</p>
+  <div class="im-addr"><p class="mk-strong">Deliver to Priya Sharma, 411004</p><p class="mk-muted">Flat 302, Shanti Apartments, FC Road, Pune · Landmark: near City Bus Depot</p></div>
+  <div class="im-opt im-opt--on"><i data-icon="qr-code"></i><div><p class="mk-strong">UPI</p><p class="mk-small mk-muted">PhonePe, Google Pay, Paytm or any UPI app</p></div></div>
+  <div class="im-opt"><i data-icon="credit-card"></i><div><p class="mk-strong">Credit / Debit card</p><p class="mk-small mk-muted">No Cost EMI on select cards</p></div></div>
+  <div class="im-opt"><i data-icon="wallet"></i><div><p class="mk-strong">Cash on Delivery</p><p class="mk-small mk-muted">Pay by cash or UPI at your door</p></div></div>
+  <div class="mk-row mk-between mk-strong"><span>Order total</span><span>₹1,24,500</span></div>
+  <span class="mk-btn mk-btn--block">Pay ₹1,24,500</span>
+</div>`,
+      },
+      options: [
+        { id: 'in', label: 'Inde', why: 'Roupies groupées en lakhs, UPI, paiement à la livraison, point de repère et code PIN à 6 chiffres.' },
+        { id: 'us', label: 'États-Unis', why: 'Les États-Unis paient en dollars, surtout par carte, et n’utilisent ni l’UPI ni de champ « Landmark ».' },
+        { id: 'ke', label: 'Kenya', why: 'Au Kenya, on paie en shillings (KSh), surtout avec M-Pesa.' },
+        { id: 'uk', label: 'Royaume-Uni', why: 'Livres sterling, code postal alphanumérique (SW1A 1AA) et cartes bancaires.' },
+      ],
+      answer: 'in',
+      explanation: `L’anglais est partagé par des dizaines de marchés ; ce sont les conventions qui révèlent l’Inde :
+
+- le **groupement en lakhs** du montant (₹1,24,500) ;
+- l’**UPI** (PhonePe, Google Pay, Paytm) et le **paiement à la livraison** ;
+- le champ **Landmark** (« near … »), un point de repère qui aide le livreur ;
+- le **code PIN** à 6 chiffres.
+
+Localiser pour « l’anglais » ne suffit pas : \`en-IN\`, \`en-US\`, \`en-GB\` et \`en-KE\` sont des locales différentes.`,
+      takeaway: 'Une langue partagée ne dit pas le marché : monnaie, groupement des chiffres, paiements et champs d’adresse le révèlent.',
+      sources: ['mdn:intl', S.upi, S.indiaCod],
+    },
+
+    /* ---------- Monde arabe ---------- */
+    {
+      id: 'culture-arab-rtl-hotspot',
+      type: 'hotspot',
+      difficulty: 2,
+      culture: 'arab',
+      prompt: 'Cette appli de vidéo a été passée en arabe. Trouve les trois éléments mal gérés.',
+      visual: {
+        alt: 'Appli de vidéo en arabe, de droite à gauche : en-tête avec une flèche retour pointant vers la gauche, le titre « Séries du Ramadan » et le logo ; une vidéo dont le bouton de lecture pointe vers la gauche ; une rangée « Continuer à regarder » avec un lien « Tout voir » suivi d’un chevron vers la droite ; une coche « Épisode 2 vu » ; le numéro du service client.',
+        frame: 'phone',
+        dir: 'rtl',
+        lang: 'ar',
+        css: `.st{display:flex;flex-direction:column;gap:10px;padding-bottom:14px}
+.st-bar{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.st-ico{display:inline-flex}
+.st-title{flex:1;font-weight:700;font-size:15px}
+.st-logo{font-weight:800;color:#6741d9;font-size:15px}
+.st-video{margin:0 14px;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(160deg,#2b2350,#6741d9 70%,#9775fa);display:grid;place-items:center}
+.st-play{width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#1d2230}
+.st-play .mk-ico{--ico:22px}
+.st-ep{margin:0 14px;font-size:13px;color:#5a6172}
+.st-row{display:flex;justify-content:space-between;align-items:center;margin:0 14px}
+.st-h{font-weight:700}
+.st-more{display:inline-flex;align-items:center;gap:2px;color:#1f4fd8;font-size:13px;font-weight:600}
+.st-more .mk-ico{--ico:16px}
+.st-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 14px}
+.st-done{display:flex;align-items:center;gap:6px;margin:0 14px;font-size:13px;color:#12803f;font-weight:600}
+.st-done .mk-ico{--ico:16px}
+.st-help{margin:0 14px;font-size:13px;color:#5a6172}`,
+        html: `<div class="st">
+  <div class="st-bar"><span class="st-ico" data-hotspot="back"><i data-icon="arrow-left"></i></span><span class="st-title">مسلسلات رمضان</span><span class="st-logo" data-hotspot="logo">شاشة</span></div>
+  <div class="st-video"><span class="st-play" data-hotspot="play"><i data-icon="play" style="transform:scaleX(-1)"></i></span></div>
+  <p class="st-ep">الحلقة 3 · بيت الجدة</p>
+  <div class="st-row"><span class="st-h">تابع المشاهدة</span><span class="st-more" data-hotspot="more">عرض الكل<i data-icon="chevron-right"></i></span></div>
+  <div class="st-cards"><div class="mk-img" style="--ratio:16/10"></div><div class="mk-img" style="--ratio:16/10"></div></div>
+  <p class="st-done" data-hotspot="check"><i data-icon="check"></i>تمت مشاهدة الحلقة 2</p>
+  <p class="st-help" data-hotspot="phone">خدمة العملاء: <bdi dir="ltr">+966 11 234 5678</bdi></p>
+</div>`,
+      },
+      hotspots: [
+        { id: 'back', label: 'Flèche retour', correct: true, why: 'En RTL, le retour pointe vers la droite, d’où l’on vient. Cette flèche n’a pas été miroitée.' },
+        { id: 'more', label: 'Chevron de « Tout voir »', correct: true, why: 'Le chevron qui mène à la suite doit pointer vers la gauche, sens de la lecture en arabe : il n’a pas été miroité.' },
+        { id: 'play', label: 'Bouton de lecture', correct: true, why: 'Les commandes de lecture ne se miroitent pas : le triangle doit pointer vers la droite, comme partout.' },
+        { id: 'logo', label: 'Logo', correct: false, why: 'Un logo ne se miroite pas : il est resté tel quel, c’est correct.' },
+        { id: 'check', label: 'Coche « Épisode 2 vu »', correct: false, why: 'Une coche ne se miroite pas : correct.' },
+        { id: 'phone', label: 'Numéro du service client', correct: false, why: 'Le numéro est isolé de gauche à droite : il se lit dans l’ordre, c’est correct.' },
+      ],
+      explanation: `En arabe, la mise en page se **miroite**, mais pas tout ce qu’elle contient :
+
+- **À miroiter** : ce qui indique un sens de navigation. Le retour pointe vers la droite, le chevron « voir plus » vers la gauche.
+- **À laisser tel quel** : les commandes de lecture (le triangle pointe toujours vers la droite : il suit le sens de la bande, pas celui de l’écriture), les coches, les logos et les numéros.
+
+Les deux types d’erreur viennent du même réflexe : retourner les icônes au hasard au lieu de se demander, pour chacune, si elle indique un sens de navigation.`,
+      takeaway: 'En RTL, miroite ce qui indique un sens de navigation ; jamais les commandes de lecture, les coches, les logos ni les numéros.',
+      sources: ['material:bidi', 'mozilla:rtl'],
+    },
+    {
+      id: 'culture-arab-mirror-multi',
+      type: 'multi',
+      difficulty: 2,
+      culture: 'arab',
+      prompt: 'Tu passes une appli en arabe. Coche tout ce qu’il faut miroiter.',
+      options: [
+        { id: 'back', label: 'La flèche « retour » de l’en-tête', why: 'Elle indique un sens de navigation : en RTL, elle pointe vers la droite.' },
+        { id: 'steps', label: 'La barre de progression des étapes du paiement', why: 'La progression suit le sens de lecture : elle avance de la droite vers la gauche.' },
+        { id: 'nav', label: 'La position du menu latéral et l’ordre des onglets', why: 'Toute la mise en page se miroite : le menu passe sur le côté droit, le premier onglet aussi.' },
+        { id: 'play', label: 'Le bouton de lecture d’une vidéo', why: 'Les commandes de lecture suivent le sens de la bande, pas celui de l’écriture : on ne les miroite pas.' },
+        { id: 'clock', label: 'L’icône d’horloge de l’historique', why: 'Une horloge tourne dans le sens des aiguilles d’une montre partout : on ne la miroite pas.' },
+        { id: 'phone', label: 'Un numéro de téléphone', why: 'Les chiffres s’écrivent toujours de gauche à droite, même dans un texte arabe.' },
+      ],
+      answers: ['back', 'steps', 'nav'],
+      explanation: `La règle tient en une question : **cet élément indique-t-il un sens de lecture ou de navigation ?**
+
+- Oui → on le miroite : flèches retour et suivant, chevrons, progression des étapes, curseurs, position des menus et ordre des onglets.
+- Non → on le laisse : commandes de lecture média, horloges et flèches circulaires qui tournent dans le sens des aiguilles d’une montre, coches, logos, photos, nombres et numéros.
+
+Le temps qui s’écoule se représente de la droite vers la gauche en RTL (une frise, une suite d’étapes) — mais une horloge tourne toujours dans le même sens.`,
+      takeaway: 'Miroite la mise en page et ce qui indique un sens de navigation ; laisse la lecture média, les horloges, les coches, les logos et les nombres.',
+      sources: ['material:bidi', 'mozilla:rtl'],
+    },
+    {
+      id: 'culture-arab-phone-duel',
+      type: 'choice',
+      difficulty: 3,
+      culture: 'arab',
+      prompt: 'Sur quelle carte le numéro du service client s’affiche-t-il correctement ?',
+      context: 'Le numéro à afficher est le +966 11 234 5678.',
+      options: [
+        {
+          id: 'raw',
+          visual: {
+            alt: 'Carte « Service client » en arabe avec la mention « Appelez-nous » suivie du numéro, inséré tel quel dans le texte arabe.',
+            dir: 'rtl',
+            lang: 'ar',
+            css: `.cs{display:flex;flex-direction:column;gap:10px}
+.cs-num{font-size:18px;font-weight:700}
+.cs .mk-btn{background:#12803f}`,
+            html: `<div class="cs mk-pad">
+  <p class="mk-h3">خدمة العملاء</p>
+  <p class="mk-small mk-muted">نرد على اتصالك من الأحد إلى الخميس.</p>
+  <p class="cs-num">اتصل بنا: +966 11 234 5678</p>
+  <span class="mk-btn mk-btn--block">اتصل الآن</span>
+</div>`,
+          },
+          why: 'Sans isolement, l’algorithme bidirectionnel range les groupes de chiffres de la droite vers la gauche : le numéro s’affiche dans le désordre, et faux si on le recopie.',
+        },
+        {
+          id: 'isolated',
+          visual: {
+            alt: 'La même carte où le numéro est isolé dans un élément de gauche à droite au sein du texte arabe.',
+            dir: 'rtl',
+            lang: 'ar',
+            css: `.cs{display:flex;flex-direction:column;gap:10px}
+.cs-num{font-size:18px;font-weight:700}
+.cs .mk-btn{background:#12803f}`,
+            html: `<div class="cs mk-pad">
+  <p class="mk-h3">خدمة العملاء</p>
+  <p class="mk-small mk-muted">نرد على اتصالك من الأحد إلى الخميس.</p>
+  <p class="cs-num">اتصل بنا: <bdi dir="ltr">+966 11 234 5678</bdi></p>
+  <span class="mk-btn mk-btn--block">اتصل الآن</span>
+</div>`,
+          },
+          why: 'Le numéro est isolé (`<bdi dir="ltr">`) : il se lit de gauche à droite, dans l’ordre, au sein du texte arabe.',
+        },
+      ],
+      answer: 'isolated',
+      explanation: `Dans un paragraphe arabe, l’**algorithme bidirectionnel d’Unicode** décide de l’ordre d’affichage. Chaque nombre s’écrit bien de gauche à droite, mais les espaces et le « + » qui séparent les groupes prennent la direction du paragraphe : les groupes s’enchaînent alors de la droite vers la gauche, et le numéro s’affiche dans le désordre.
+
+La correction : **isoler** les données qui doivent rester de gauche à droite — numéros, e-mails, adresses web, références de commande — avec \`<bdi dir="ltr">\`, \`<span dir="ltr">\` ou \`unicode-bidi: isolate\`. Dans les formulaires : \`dir="ltr"\` sur un champ de téléphone, \`dir="auto"\` sur un champ libre.
+
+C’est l’un des bugs RTL les plus fréquents, et il ne se voit qu’avec de vrais contenus mixtes.`,
+      takeaway: 'Isole les données de gauche à droite (numéros, e-mails, références) dans un texte RTL avec `<bdi>` ou `dir="ltr"`, sinon leurs morceaux se réordonnent.',
+      sources: [S.w3cBidi, 'mozilla:rtl', S.bdi],
+    },
+    {
+      id: 'culture-arab-weekend-choice',
+      type: 'choice',
+      difficulty: 3,
+      culture: 'arab',
+      prompt: 'Ton appli de livraison propose des créneaux « week-end » en Arabie saoudite. Quels jours couvrent-ils ?',
+      options: [
+        { id: 'fri-sat', label: 'Vendredi et samedi', why: 'C’est le week-end officiel saoudien depuis 2013.' },
+        { id: 'sat-sun', label: 'Samedi et dimanche', why: 'C’est le week-end des Émirats arabes unis depuis janvier 2022, pas celui de l’Arabie saoudite.' },
+        { id: 'thu-fri', label: 'Jeudi et vendredi', why: 'C’était le week-end saoudien jusqu’en 2013.' },
+        { id: 'sun', label: 'Dimanche seulement', why: 'Le dimanche est un jour ouvré en Arabie saoudite : la semaine de travail va du dimanche au jeudi.' },
+      ],
+      answer: 'fri-sat',
+      explanation: `Le week-end n’est pas universel. En Arabie saoudite, il tombe le **vendredi et le samedi** (depuis 2013 ; auparavant le jeudi et le vendredi), et la semaine de travail commence le dimanche. Les Émirats arabes unis sont passés au **samedi–dimanche** en janvier 2022, avec le vendredi après-midi chômé dans le secteur public.
+
+Pour un calendrier, des créneaux de livraison ou des délais en jours ouvrés, ne code pas le week-end en dur : les données CLDR, exposées dans les navigateurs récents par \`new Intl.Locale('ar-SA').getWeekInfo()\`, donnent le premier jour de la semaine et les jours de week-end de chaque région.`,
+      takeaway: 'Ne code pas le week-end en dur : vendredi–samedi en Arabie saoudite, samedi–dimanche aux Émirats depuis 2022. Tire-le des données de la locale.',
+      sources: [S.weekInfo, S.uaeWeekend],
+    },
+    {
+      id: 'culture-arab-css-choice',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'arab',
+      prompt: 'Ta carte produit doit fonctionner en français et en arabe. Comment écrire l’espace entre l’icône et le texte ?',
+      options: [
+        { id: 'logical', label: '`margin-inline-start: 12px` sur le texte', why: 'La marge se place au début de la ligne, quel que soit le sens : à gauche en français, à droite en arabe.' },
+        { id: 'override', label: '`margin-left: 12px`, puis une règle `[dir="rtl"]` qui remet `margin-left` à 0 et ajoute `margin-right`', why: 'Ça marche, mais chaque règle s’écrit deux fois : la première surcharge oubliée devient un bug.' },
+        { id: 'flip', label: '`transform: scaleX(-1)` sur toute la carte en arabe', why: 'Tout est retourné, texte et images compris : le texte devient illisible.' },
+        { id: 'left', label: '`margin-left: 12px` : le sens de l’écriture s’occupe du reste', why: 'Une propriété physique ne s’inverse pas : en arabe, la marge reste à gauche, du mauvais côté.' },
+      ],
+      answer: 'logical',
+      explanation: `Les **propriétés logiques** décrivent l’espace par rapport au sens de l’écriture plutôt qu’à l’écran : \`margin-inline-start\` vaut la marge gauche en français et la marge droite en arabe. Avec \`dir="rtl"\` sur la racine, flexbox et grid inversent aussi l’ordre des éléments : une grande partie du miroir se fait sans code supplémentaire.
+
+Impeccable recommande ce réflexe dans toute interface destinée à plusieurs langues : \`margin-inline-start\` plutôt que \`margin-left\`, \`padding-inline\` plutôt que \`padding-left\` et \`padding-right\`, \`border-inline-end\` plutôt que \`border-right\`.`,
+      takeaway: 'Écris tes espacements avec les propriétés logiques (`margin-inline-start`, `padding-inline`, `inset-inline-end`) : ils suivent le sens de l’écriture.',
+      sources: ['mdn:logical', 'imp:harden'],
+    },
     // @@EXERCISES@@
   ],
 };
