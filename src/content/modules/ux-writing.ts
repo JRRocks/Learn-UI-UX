@@ -739,7 +739,7 @@ Ce qui change selon le moment, c’est le **ton** : plus sobre, plus factuel, sa
       answers: ['buzz', 'aphorism', 'theater'],
       explanation: `Le détecteur d’impeccable repère plusieurs **tics de texte généré**. Ses règles lisent l’anglais, mais les mêmes réflexes trahissent un texte français :
 
-- **Jargon marketing** (*streamline*, *empower*, *next-generation*… : le détecteur cherche ces tournures anglaises ; « nouvelle génération » ou « de pointe » relèvent du même réflexe) : il remplace ce que le produit fait par une promesse vague.
+- **Jargon marketing** (*streamline*, *empower*, *next-generation*… ; en français « nouvelle génération », « de pointe ») : il remplace ce que le produit fait par une promesse vague.
 - **Cadence aphoristique** : trois sections ou plus qui finissent sur une courte réplique (« X. Pas de Y. ») ou un contraste fabriqué (*Not a…*). Une fois, ça passe ; c’est la répétition qui trahit.
 - **Cadrage en « théâtre »** (*compliance theater*) : qualifier quelque chose de théâtre au lieu de dire ce qu’il fait ou ne fait pas.
 
@@ -795,7 +795,7 @@ Le critère WCAG 2.4.4 (niveau A) tolère un lien éclairé par sa phrase ; impe
   <div class="st-row" data-hotspot="name"><div class="mk-grow"><p class="mk-label">Nom de l’espace de travail</p><p class="mk-small mk-muted">Studio Lumen</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Renommer</span></div>
   <div class="st-row" data-hotspot="members"><div class="mk-grow"><p class="mk-label">Membres du workspace</p><p class="mk-small mk-muted">12 personnes</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Inviter</span></div>
   <div class="st-row" data-hotspot="lang"><div class="mk-grow"><p class="mk-label">Langue de l’espace de travail</p><p class="mk-small mk-muted">Français</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Modifier</span></div>
-  <div class="st-row" data-hotspot="billing"><div class="mk-grow"><p class="mk-label">Facturation</p><p class="mk-small mk-muted">Formule Équipe · 12 sièges · 96 € par mois</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Gérer</span></div>
+  <div class="st-row" data-hotspot="billing"><div class="mk-grow"><p class="mk-label">Facturation</p><p class="mk-small mk-muted">Formule Équipe · 96&nbsp;€ par&nbsp;mois</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Gérer</span></div>
   <div class="st-row" data-hotspot="leave"><div class="mk-grow"><p class="mk-label">Quitter l’organisation</p><p class="mk-small mk-muted">Vous perdrez l’accès à tous ses projets.</p></div><span class="mk-btn mk-btn--danger mk-btn--s">Quitter</span></div>
 </div>`),
         css: `.st-row { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid #eceef2; }`,
@@ -818,24 +818,24 @@ On ne varie pas les termes pour éviter une répétition, comme on le ferait dan
       id: 'ux-writing-short-label-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Plus un libellé de bouton est court, plus il est clair : « OK » vaut mieux que « Supprimer le projet ».',
+      prompt: 'Un libellé de bouton doit tenir en un seul mot pour rester lisible sur mobile.',
       answer: false,
-      explanation: `La brièveté n’est utile que si le sens reste. « OK » est court mais ne dit pas ce qu’il déclenche ; « Supprimer le projet » se comprend même lu seul, en balayant l’écran.
+      explanation: `La brièveté n’est utile que si le sens reste. Un verbe seul suffit quand l’objet est évident : « Enregistrer » dans un éditeur, « Envoyer » sous un message. Sinon, il faut le verbe **et** l’objet : « Supprimer » seul laisse deviner quoi (le fichier, le dossier, le compte ?), « Supprimer le projet » se comprend même lu seul, en balayant l’écran.
 
-La règle d’impeccable : le texte final est **aussi court que possible sans retirer le sens ni la sortie de secours**. Pour un bouton, cela donne un verbe et un objet.`,
-      takeaway: 'Un libellé est aussi court que possible, mais il garde le verbe et l’objet qui disent ce qu’il fait.',
+Sur mobile, un bouton pleine largeur accueille sans peine « Continuer vers le paiement ». La règle d’impeccable : le texte final est **aussi court que possible sans retirer le sens ni la sortie de secours**.`,
+      takeaway: 'Un libellé est aussi court que possible, mais il garde l’objet quand le résultat n’est pas évident : « Supprimer le projet », pas « Supprimer ».',
       sources: ['imp:clarify'],
     },
     {
       id: 'ux-writing-humor-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Une touche d’humour dans un message de paiement refusé aide à dédramatiser la situation.',
+      prompt: 'Sur l’écran de suppression définitive d’un compte, une touche d’humour aide à dédramatiser la décision.',
       answer: false,
-      explanation: `Un paiement refusé inquiète : la personne se demande si elle a été débitée, si sa carte est bloquée, si sa commande est perdue. Une blague à ce moment-là paraît désinvolte et retarde l’information utile.
+      explanation: `Supprimer définitivement son compte est une décision lourde : la personne veut savoir ce qui disparaît (projets, historique, abonnement), si un retour en arrière est possible et comment garder une copie de ses données. Une blague à ce moment-là paraît désinvolte et détourne l’attention de ces conséquences.
 
-Impeccable range le paiement, la vie privée, la suppression, la perte d’accès et le travail bloqué parmi les moments à traiter **avec sérieux** : la chaleur est bienvenue (« Aucun montant n’a été débité »), les blagues non. L’humour peut avoir sa place sur un succès ou un état vide sans enjeu.`,
-      takeaway: 'Paiement, suppression, accès, vie privée : un ton chaleureux mais sérieux, jamais de blague.',
+Impeccable range la suppression, la perte d’accès, le paiement, la vie privée et le travail bloqué parmi les moments à traiter **avec sérieux** : la chaleur est bienvenue (« Vous pouvez d’abord télécharger une copie de vos données »), les blagues non. L’humour peut avoir sa place sur un succès ou un état vide sans enjeu.`,
+      takeaway: 'Suppression, perte d’accès, paiement, vie privée : un ton chaleureux mais sérieux, jamais de blague.',
       sources: ['imp:clarify'],
     },
     {
@@ -864,11 +864,11 @@ Le code technique n’est jamais le message principal : il vient en dernier, en 
       leftTitle: 'Situation',
       rightTitle: 'Message',
       pairs: [
-        { id: 'first', left: 'Premier usage', right: 'Tes projets apparaîtront ici. Crée le premier ou pars d’un modèle.' },
-        { id: 'search', left: 'Recherche sans résultat', right: 'Aucun résultat pour « facture mrs ». Vérifie l’orthographe ou cherche par montant.' },
-        { id: 'filters', left: 'Filtres trop restrictifs', right: 'Aucune commande avec ces 3 filtres. Effacer les filtres' },
-        { id: 'access', left: 'Accès refusé', right: 'Seuls les administrateurs voient la facturation. Demande l’accès à Léa Martin.' },
-        { id: 'failure', left: 'Échec de chargement', right: 'Impossible de charger tes messages. Vérifie ta connexion, puis réessaie.' },
+        { id: 'first', left: 'Inscription toute récente', right: 'Tes projets apparaîtront ici. Crée le premier ou pars d’un modèle.' },
+        { id: 'search', left: 'Faute de frappe dans la requête', right: 'Aucun résultat pour « facture mrs ». Vérifie l’orthographe ou cherche par montant.' },
+        { id: 'filters', left: 'Plusieurs critères cochés à la fois', right: 'Aucune commande avec ces 3 filtres. Effacer les filtres' },
+        { id: 'access', left: 'Page réservée à un autre rôle', right: 'Seuls les administrateurs voient la facturation. Demande l’accès à Léa Martin.' },
+        { id: 'failure', left: 'Réseau coupé pendant l’ouverture', right: 'Impossible de charger tes messages. Vérifie ta connexion, puis réessaie.' },
       ],
       explanation: `« Aucun élément » couvre cinq situations qui n’appellent pas la même réponse :
 
