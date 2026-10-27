@@ -31,7 +31,18 @@ const WCAG_NON_TEXT: SourceRef = {
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html',
 };
 const MDN_POPOVER: SourceRef = { label: 'MDN — API Popover', url: 'https://developer.mozilla.org/fr/docs/Web/API/Popover_API' };
+const MDN_TOP_LAYER: SourceRef = { label: 'MDN — Couche supérieure (top layer)', url: 'https://developer.mozilla.org/fr/docs/Glossary/Top_layer' };
+const MDN_POSITION: SourceRef = { label: 'MDN — position', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/position' };
 const MDN_SCROLLBAR: SourceRef = { label: 'MDN — scrollbar-color', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/scrollbar-color' };
+const MDN_COLOR_SCHEME: SourceRef = { label: 'MDN — color-scheme', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/color-scheme' };
+const CSS_SCROLLBARS: SourceRef = {
+  label: 'W3C — CSS Scrollbars Styling Module Level 1 (contraste du pouce et de la piste)',
+  url: 'https://www.w3.org/TR/css-scrollbars-1/',
+};
+const GOVUK_BUTTON: SourceRef = {
+  label: 'GOV.UK Design System — Button (boutons désactivés)',
+  url: 'https://design-system.service.gov.uk/components/button/',
+};
 
 /* ---------- Shared mock pieces ---------- */
 
@@ -43,7 +54,10 @@ const SPIN_CSS = `
 
 /** Invoices page header, shared by both sides of the loading duel. */
 const INVOICES_HEAD = `<div class="mk-row mk-between"><p class="mk-h2">Factures</p><span class="mk-btn mk-btn--s"><i data-icon="plus" style="--ico:14px"></i>Nouvelle facture</span></div>
-  <div class="mk-tabs"><span class="mk-tab mk-tab--on">Toutes</span><span class="mk-tab">En attente</span><span class="mk-tab">Payées</span></div>`;
+  <div class="mk-tabs"><span class="mk-tab mk-tab--on">Toutes</span><span class="mk-tab">À payer</span><span class="mk-tab">Payées</span></div>`;
+
+/** Keeps each tab label on one line at phone width. */
+const INVOICES_CSS = `.mk-tab { white-space: nowrap; }`;
 
 const SKELETON_ROW = (a: number, b: number) =>
   `<li><span class="pol-sk pol-sk-av"></span><div class="mk-grow mk-stack" style="--gap:6px"><span class="pol-sk" style="width:${a}%"></span><span class="pol-sk pol-sk--thin" style="width:${b}%"></span></div><span class="pol-sk" style="width:64px"></span></li>`;
@@ -76,9 +90,10 @@ const MEMBER_ROWS = `<div class="pol-tr pol-th"><span>Membre</span><span>Rôle</
 
 const MEMBER_CSS = `
 .pol-table { position: relative; border: 1px solid #e1e4ea; border-radius: 10px; }
-.pol-tr { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 72px 32px; align-items: center; gap: 8px; padding: 9px 12px; border-top: 1px solid #eceef2; }
+.pol-tr { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 60px 28px; align-items: center; gap: 8px; padding: 9px 12px; border-top: 1px solid #eceef2; }
 .pol-th { border-top: 0; font-size: 12px; font-weight: 600; color: #5a6172; }
 .pol-foot { background: #f7f8fa; border-radius: 0 0 10px 10px; }
+.pol-foot > span { grid-column: 1 / -1; justify-self: end; }
 .pol-more { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; color: #5a6172; }
 .pol-more--on { background: #eef1f7; color: #1d2230; }
 .pol-menu { position: absolute; z-index: 2; top: calc(100% - 4px); inset-inline-end: 10px; width: 200px; display: flex; flex-direction: column; padding: 6px; background: #fff; border: 1px solid #e1e4ea; border-radius: 10px; box-shadow: 0 10px 28px rgb(15 20 35 / 0.16); }
@@ -95,7 +110,20 @@ const polish: ModuleContent = {
     'Mener la dernière passe avant la mise en ligne : classer la dérive, trier les défauts du fonctionnel au cosmétique, donner à chaque contrôle tous ses états et finir les surfaces qu’on oublie — sans refondre en douce.',
   minutes: 11,
   commands: ['polish'],
-  sources: ['imp:polish', 'imp:operate', 'imp:craft-floor', NNG_SKELETON, NNG_BUTTON_STATES, WCAG_FOCUS],
+  sources: [
+    'imp:polish',
+    'imp:operate',
+    'imp:craft-floor',
+    NNG_SKELETON,
+    NNG_PROGRESS,
+    NNG_EMPTY,
+    NNG_BUTTON_STATES,
+    WCAG_NON_TEXT,
+    WCAG_FOCUS,
+    MDN_TOP_LAYER,
+    MDN_COLOR_SCHEME,
+    CSS_SCROLLBARS,
+  ],
   sections: [
     {
       id: 'affinage',
@@ -169,11 +197,11 @@ Corrige la **cause**, au niveau le plus étroit qui convient. Promeus en jeton u
 2. **États manquants** : chargement, vide, erreur, succès, désactivé, permission.
 3. **Parcours, hiérarchie, responsive et dérive du système.**
 4. **Incohérences visuelles et de mouvement.**
-5. **Nettoyage du code et des assets** : sorties de débogage, code mort, imports inutilisés, styles obsolètes, doublons créés par la finition.
+5. **Nettoyage du code et des ressources** (images, polices, icônes) : sorties de débogage, code mort, imports inutilisés, styles obsolètes, doublons créés par la finition.
 
-Un état **trompeur** est aussi grave qu’une panne : Nielsen Norman Group décrit le message « Aucun enregistrement » affiché pendant le chargement, puis remplacé par les données — les utilisateurs pressés repartent avant de les voir.
+Un état **trompeur** est aussi grave qu’une panne : Nielsen Norman Group décrit le message « Aucun enregistrement » affiché pendant le chargement, puis remplacé par les données. La plupart des gens, pressés, ne voient jamais les données et ne finissent pas leur tâche ; ceux qui attendent perdent confiance dans l’outil.
 
-Ne perfectionne pas un coin en laissant le reste sous le même niveau d’exigence : polis **tout le chemin**. L’arrivée, les transitions, les états vides et les chemins de reprise doivent se raccorder, au lieu de se comporter comme des écrans isolés.`,
+Ne peaufine pas un coin en laissant le reste en dessous de ce niveau d’exigence : polis **tout le chemin**. L’arrivée, les transitions, les états vides et les chemins de reprise doivent se raccorder, au lieu de se comporter comme des écrans isolés. Et sur chaque écran, la tâche principale et l’état courant se voient d’emblée, sans que tout prenne le même poids.`,
     },
     {
       id: 'etats-controles',
@@ -181,7 +209,7 @@ Ne perfectionne pas un coin en laissant le reste sous le même niveau d’exigen
       body: `Tout composant interactif a un état **par défaut, survol, focus, actif (pressé), désactivé, chargement et erreur** — et un état de **succès** quand l’action aboutit. N’en livre pas la moitié.
 
 - **Survol** : signale que l’élément réagit au pointeur. Il n’existe ni au doigt ni au clavier : l’**affordance** (le signe qu’on peut agir) doit déjà se voir au repos.
-- **Focus** : montre où se trouve le clavier. Un contour plutôt qu’un simple changement de couleur, contrasté d’au moins **3:1** avec ce qui l’entoure. Ne le supprime jamais sans le remplacer.
+- **Focus** : montre où se trouve le clavier. Un contour plutôt qu’un simple changement de couleur, contrasté d’au moins **3:1** avec les couleurs voisines (critère WCAG 1.4.11, niveau AA). Mieux encore (critère 2.4.13, niveau AAA) : une aire au moins égale à celle d’un contour de 2 px autour du composant, avec 3:1 entre l’état focalisé et l’état normal. Ne le supprime jamais sans le remplacer.
 - **Actif** : accuse réception du clic en 100 à 150 ms au plus (recommandation de Nielsen Norman Group) ; sinon, on clique une seconde fois.
 - **Désactivé** : indique que l’action n’est pas disponible maintenant — et, si ce n’est pas évident, pourquoi.
 - **Chargement** : garde la largeur du bouton, nomme l’opération (« Envoi… ») et bloque la double soumission.
@@ -192,7 +220,7 @@ Standardise ce vocabulaire d’états (survol, focus, actif, désactivé, sélec
         {
           title: 'Une fiche d’états complète',
           bad: {
-            alt: 'Fiche d’états d’un bouton Envoyer : défaut, survol, focus clavier et pressé sont identiques ; en chargement, le bouton devient un petit rond avec un indicateur.',
+            alt: 'Fiche d’états d’un bouton Envoyer : défaut, survol, focus clavier, pressé, erreur et succès sont identiques ; en chargement, le bouton devient un petit rond avec un indicateur.',
             html: `<div class="mk-pad pol-sheet">
   <span class="mk-small mk-muted">Défaut</span><span class="mk-btn">Envoyer</span>
   <span class="mk-small mk-muted">Survol</span><span class="mk-btn">Envoyer</span>
@@ -200,15 +228,17 @@ Standardise ce vocabulaire d’états (survol, focus, actif, désactivé, sélec
   <span class="mk-small mk-muted">Pressé</span><span class="mk-btn">Envoyer</span>
   <span class="mk-small mk-muted">Désactivé</span><span class="mk-btn mk-btn--disabled">Envoyer</span>
   <span class="mk-small mk-muted">Chargement</span><span class="pol-round"><span class="pol-spin"></span></span>
+  <span class="mk-small mk-muted">Erreur</span><span class="mk-btn">Envoyer</span>
+  <span class="mk-small mk-muted">Succès</span><span class="mk-btn">Envoyer</span>
 </div>`,
             css: `.pol-sheet { display: grid; grid-template-columns: max-content max-content; gap: 10px 18px; align-items: center; }
 .pol-sheet .mk-btn { min-width: 136px; }
 .pol-round { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #1f4fd8; }
 ${SPIN_CSS}`,
           },
-          badNote: 'Survol, focus et pressé ne se distinguent pas du repos ; en chargement, le bouton rétrécit et perd son libellé.',
+          badNote: 'Survol, focus, pressé, erreur et succès ne se distinguent pas du repos ; en chargement, le bouton rétrécit et perd son libellé.',
           good: {
-            alt: 'Fiche d’états d’un bouton Envoyer : survol plus foncé, focus avec un contour décalé, pressé plus sombre, désactivé gris, chargement à largeur constante avec le texte Envoi.',
+            alt: 'Fiche d’états d’un bouton Envoyer : survol plus foncé, focus avec un contour décalé, pressé plus sombre, désactivé gris, chargement à largeur constante avec le texte Envoi, erreur avec un bouton Réessayer et le message Échec de l’envoi, succès vert avec une coche et le texte Envoyé.',
             html: `<div class="mk-pad pol-sheet">
   <span class="mk-small mk-muted">Défaut</span><span class="mk-btn">Envoyer</span>
   <span class="mk-small mk-muted">Survol</span><span class="mk-btn" style="background:#1a43b8">Envoyer</span>
@@ -216,12 +246,15 @@ ${SPIN_CSS}`,
   <span class="mk-small mk-muted">Pressé</span><span class="mk-btn" style="background:#163a9c;box-shadow:inset 0 2px 4px rgb(0 0 0 / 0.35)">Envoyer</span>
   <span class="mk-small mk-muted">Désactivé</span><span class="mk-btn mk-btn--disabled">Envoyer</span>
   <span class="mk-small mk-muted">Chargement</span><span class="mk-btn"><span class="pol-spin"></span>Envoi…</span>
+  <span class="mk-small mk-muted">Erreur</span><span class="mk-stack" style="--gap:4px"><span class="mk-btn">Réessayer</span><span class="mk-error mk-row" style="--gap:4px"><i data-icon="circle-alert" style="--ico:13px"></i>Échec de l’envoi</span></span>
+  <span class="mk-small mk-muted">Succès</span><span class="mk-btn pol-ok"><i data-icon="check" style="--ico:15px"></i>Envoyé</span>
 </div>`,
             css: `.pol-sheet { display: grid; grid-template-columns: max-content max-content; gap: 10px 18px; align-items: center; }
 .pol-sheet .mk-btn { min-width: 136px; }
+.pol-ok { background: #0b7a5e; }
 ${SPIN_CSS}`,
           },
-          goodNote: 'Chaque état se reconnaît ; le focus a un contour décalé ; le chargement garde la largeur et nomme l’opération.',
+          goodNote: 'Chaque état se reconnaît ; le focus a un contour décalé ; le chargement garde la largeur et nomme l’opération ; l’erreur et le succès disent ce qui s’est passé.',
         },
       ],
     },
@@ -230,7 +263,7 @@ ${SPIN_CSS}`,
       title: 'Chargement, vide, erreur : dire la vérité',
       body: `Les zones de contenu ont elles aussi leurs états, et chacun doit dire **la vérité** sur ce qui se passe.
 
-- **Chargement** : sous 1 seconde, n’affiche rien — un indicateur qui clignote inquiète plus qu’il ne rassure. Pour une page ou une zone de contenu, préfère un **squelette** (*skeleton*) : des blocs neutres qui reprennent la forme du contenu à venir. On comprend la structure et rien ne saute à l’arrivée des données. Garde le spinner pour un petit module isolé (une carte, une vidéo) et une attente de 2 à 10 secondes. Au-delà de 10 secondes, une barre de progression avec une estimation. Ne fabrique jamais une fausse progression.
+- **Chargement** : sous 1 seconde, n’affiche rien — un indicateur qui clignote inquiète plus qu’il ne rassure. Pour une page ou une zone de contenu, préfère un **squelette** (*skeleton*) : des blocs neutres qui reprennent la forme du contenu à venir. On comprend la structure et rien ne saute à l’arrivée des données. Garde l’indicateur rotatif (*spinner*) pour un petit module isolé (une carte, une vidéo) et une attente de 2 à 10 secondes. Au-delà de 10 secondes, une barre de progression avec une estimation. Ne fabrique jamais une fausse progression.
 - **Vide** : un état vide **enseigne l’interface** — ce qui apparaîtra ici et comment commencer — au lieu d’un simple « Rien ici ». Et il n’apparaît qu’une fois le chargement terminé.
 - **Erreur** : ce qui a échoué et comment s’en sortir ; une panne dans un composant ne bloque pas toute l’interface.
 - **Succès** : une confirmation brève du résultat ; la conséquence suivante seulement si elle change ce qu’il faut faire.
@@ -268,8 +301,9 @@ ${SPIN_CSS}`,
       title: 'Les finitions qu’on oublie',
       body: `Certaines surfaces trahissent une interface « assemblée » plutôt que construite.
 
-- **Les surfaces du navigateur** : la sélection de texte (\`::selection\`), le curseur d’insertion (\`caret-color\`), les barres de défilement (\`scrollbar-color\`), les anneaux de focus, le décalage du soulignement (\`text-underline-offset\`) et les chiffres des tableaux (\`tabular-nums\`) sortent avec les réglages du navigateur, qui n’appartiennent à aucun système de design. Thématise-les depuis la palette : c’est le signal de soin le moins cher. Thématiser n’est pas réinventer : on teinte la barre de défilement native, on ne la remplace pas par un composant maison.
-- **Les menus qui débordent** : un menu positionné en absolu dans un ancêtre en \`overflow: hidden\` ou \`overflow: auto\` est coupé net. Utilise \`<dialog>\`, l’API popover, \`position: fixed\` ou un portail pour qu’il s’échappe de son conteneur.
+- **Les surfaces du navigateur** : la sélection de texte (\`::selection\`), le curseur d’insertion (\`caret-color\`), les barres de défilement (\`scrollbar-color\`), les anneaux de focus, le décalage du soulignement (\`text-underline-offset\`) et les chiffres des tableaux (\`tabular-nums\`) sortent avec les réglages du navigateur, qui n’appartiennent à aucun système de design. Thématise-les depuis la palette : c’est le signal de soin le moins cher. Dans un thème sombre, commence par déclarer \`color-scheme: dark\` : le navigateur dessine alors en sombre ses barres de défilement et ses contrôles de formulaire. Thématiser n’est pas réinventer : on teinte la barre de défilement native, sans descendre sous 3:1 de contraste entre le pouce (la partie qui glisse) et sa piste, et on ne la remplace pas par un composant maison.
+- **Les menus qui débordent** : un menu positionné en absolu dans un ancêtre en \`overflow: hidden\` ou \`overflow: auto\` est coupé net. Fais-le échapper à son conteneur : l’attribut \`popover\` (qui le place dans la couche supérieure de la page), un \`<dialog>\` ouvert avec \`showModal()\`, \`position: fixed\` (si aucun ancêtre n’a de \`transform\` ni de \`filter\`) ou un portail (le menu est rendu à la fin du document, hors du conteneur).
+- **La mise en page et la typographie** : aligne tout sur la grille et l’échelle d’espacement du projet, en corrigeant l’alignement optique (ce qui paraît aligné à l’œil) autant que l’alignement mathématique. Resserre ce qui va ensemble, sépare nettement les groupes distincts. Un même rôle garde le même style typographique ; teste les longueurs de ligne, les retours à la ligne, les traductions plus longues, le zoom et le chargement des polices, sur chaque largeur prise en charge.
 - **Des affordances cohérentes** : même forme de bouton, même vocabulaire de contrôles de formulaire, même famille d’icônes (trait, graisse, taille, alignement optique) d’un écran à l’autre.
 - **Les images** : réserve leur place (\`aspect-ratio\`, dimensions) pour éviter les sauts de mise en page, et écris un texte alternatif utile.
 - **Le texte** : terminologie, majuscules et ponctuation identiques partout.`,
@@ -297,7 +331,7 @@ ${SPIN_CSS}`,
           },
           badNote: 'Sélection, lien et barre de défilement gardent les réglages du navigateur : trois taches claires dans un thème sombre.',
           good: {
-            alt: 'Même éditeur sombre avec une sélection teintée d’ambre, un lien ambre au soulignement décalé et une barre de défilement sombre et discrète.',
+            alt: 'Même éditeur sombre avec une sélection teintée d’ambre, un lien ambre au soulignement décalé et une barre de défilement sombre au pouce gris, sobre mais lisible.',
             html: `<div class="pol-ed">
   <div class="pol-ed-text">
     <p class="pol-ed-h">Compte rendu — atelier du 14 mars</p>
@@ -311,9 +345,9 @@ ${SPIN_CSS}`,
 .pol-sel-good { background: rgb(232 170 72 / 0.32); }
 .pol-link-good { color: #f0b860; text-decoration: underline; text-decoration-color: rgb(240 184 96 / 0.5); text-underline-offset: 3px; }
 .pol-bar { width: 14px; flex: none; padding: 4px 3px; }
-.pol-bar span { display: block; height: 70px; border-radius: 7px; background: #3a3f4b; }`,
+.pol-bar span { display: block; height: 70px; border-radius: 7px; background: #6b7283; }`,
           },
-          goodNote: 'Les mêmes surfaces natives, teintées depuis la palette : rien ne sort du thème, rien n’a été réinventé.',
+          goodNote: 'Les mêmes surfaces natives, teintées depuis la palette : rien ne sort du thème, rien n’a été réinventé, et le pouce de la barre garde 3,7:1 de contraste sur sa piste.',
         },
       ],
     },
@@ -323,12 +357,13 @@ ${SPIN_CSS}`,
       body: `Refais le parcours complet à la souris, au clavier et au toucher, puis vérifie :
 
 - les largeurs mobile, intermédiaire et large ;
-- les états chargement, vide, erreur, succès, désactivé, contenu long et contenu manquant ;
-- le zoom, le contraste, le focus, la sémantique et les noms lus par les lecteurs d’écran ;
+- les états chargement, vide, erreur, succès, désactivé et permission, avec un contenu long, manquant ou traduit, et une connexion lente ou coupée, là où le produit peut les rencontrer ;
+- le zoom, le contraste, le focus visible, un ordre de tabulation logique, les libellés, des cibles tactiles adaptées à la plateforme, la sémantique et les noms lus par les lecteurs d’écran ;
+- un mouvement cohérent, interruptible et fluide — sans animation ajoutée pour rendre la finition visible ;
 - la console, les sauts de mise en page, la latence des interactions et le chargement des images ;
 - l’accord avec le DESIGN.md, les écrans voisins et le périmètre demandé.
 
-Termine en relisant le **diff** (la différence entre le code avant et après ta passe) : retire les changements accidentels, le code orphelin, les valeurs redondantes et les fichiers temporaires. On ne livre que lorsque la fonctionnalité est complète et finie de façon homogène sur tout le parcours.`,
+Corrige les vrais défauts et ne documente que des exceptions volontaires et étroites. Termine en relisant le **diff** (la différence entre le code avant et après ta passe) : retire les changements accidentels, le code orphelin, les valeurs redondantes et les fichiers temporaires. On ne livre que lorsque la fonctionnalité est complète et finie de façon homogène sur tout le parcours.`,
     },
   ],
   rules: [
@@ -355,7 +390,7 @@ Termine en relisant le **diff** (la différence entre le code avant et après ta
     {
       id: 'focus',
       front: 'À quoi doit ressembler un focus clavier ?',
-      back: 'Un contour visible d’au moins 2 px, contrasté à 3:1 entre l’état focalisé et l’état normal. Jamais supprimé sans remplacement.',
+      back: 'Visible et contrasté à 3:1 avec les couleurs voisines (WCAG 1.4.11, AA) ; idéalement aussi grand qu’un contour de 2 px, avec 3:1 entre l’état focalisé et l’état normal (2.4.13, AAA). Jamais supprimé sans remplacement.',
     },
     {
       id: 'hover',
@@ -380,7 +415,7 @@ Termine en relisant le **diff** (la différence entre le code avant et après ta
     {
       id: 'menus',
       front: 'Pourquoi un menu déroulant se retrouve-t-il coupé ?',
-      back: 'Il est positionné dans un ancêtre en `overflow: hidden` ou `auto`. Sors-le du flux : `<dialog>`, `popover`, `position: fixed` ou portail.',
+      back: 'Il est positionné dans un ancêtre en `overflow: hidden` ou `auto`, qui le coupe. Fais-le échapper à ce conteneur : attribut `popover`, `<dialog>` ouvert en modal, `position: fixed` ou portail.',
     },
     {
       id: 'surfaces',
@@ -415,6 +450,7 @@ Termine en relisant le **diff** (la différence entre le code avant et après ta
   <div class="pol-wait"><span class="pol-spin pol-spin--big"></span><span class="mk-small mk-muted">Chargement…</span></div>
 </div>`,
             css: `.pol-wait { min-height: 196px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+${INVOICES_CSS}
 ${SPIN_CSS}`,
           },
           why: 'Un spinner au milieu de la page ne dit rien de ce qui arrive : la zone paraît vide, puis tout saute quand les données arrivent.',
@@ -428,13 +464,14 @@ ${SPIN_CSS}`,
   ${INVOICES_HEAD}
   <ul class="mk-list">${SKELETON_ROW(52, 30)}${SKELETON_ROW(40, 24)}${SKELETON_ROW(58, 34)}${SKELETON_ROW(46, 28)}</ul>
 </div>`,
-            css: SKELETON_CSS,
+            css: `${SKELETON_CSS}
+${INVOICES_CSS}`,
           },
           why: 'Le squelette reprend la forme des lignes à venir : on comprend la structure, et rien ne saute quand les données arrivent.',
         },
       ],
       answer: 'skeleton',
-      explanation: `Pour une zone de contenu entière, un **squelette** — des blocs neutres qui imitent la mise en page à venir — vaut mieux qu’un spinner : il montre que le chargement avance, prépare l’œil à la structure de la page et évite le saut de mise en page à l’arrivée des données.
+      explanation: `Pour une zone de contenu entière, un **squelette** — des blocs neutres qui imitent la mise en page à venir — vaut mieux qu’un **spinner** (un indicateur rotatif) : il montre que le chargement avance, prépare l’œil à la structure de la page et évite le saut de mise en page à l’arrivée des données.
 
 Le spinner a sa place, mais ailleurs : sur un petit module isolé (une carte, une vidéo) et pour une attente de 2 à 10 secondes. Sous 1 seconde, n’affiche rien ; au-delà de 10 secondes, passe à une barre de progression avec une estimation.`,
       takeaway: 'Pour charger une zone de contenu, un squelette qui reprend sa forme — pas un spinner perdu au milieu de la page.',
@@ -519,11 +556,11 @@ ${SPIN_CSS}`,
         },
       ],
       answer: 'escapes',
-      explanation: `Un menu positionné en \`absolute\` reste prisonnier du premier ancêtre qui coupe son contenu (\`overflow: hidden\`, \`auto\` ou \`clip\`). Sur la dernière ligne d’un tableau, il est tranché net — et « Retirer de l’équipe » devient introuvable.
+      explanation: `Un menu positionné en \`absolute\` se place par rapport à son ancêtre positionné le plus proche (une ligne en \`position: relative\`, par exemple). Si cet ancêtre est, ou se trouve dans, un conteneur qui coupe son contenu (\`overflow: hidden\`, \`auto\` ou \`clip\`), le menu est coupé avec lui. Sur la dernière ligne d’un tableau, il est tranché net — et « Retirer de l’équipe » devient introuvable.
 
-Ce défaut ne se voit souvent qu’avec certaines données (la dernière ligne, un tableau court) : il faut ouvrir les menus partout. La correction consiste à sortir la surcouche du conteneur : élément \`<dialog>\`, attribut \`popover\` (qui place l’élément dans la couche supérieure de la page), \`position: fixed\` ou un portail vers la fin du document.`,
-      takeaway: 'Un menu, une infobulle ou un popover doit s’échapper de son conteneur : `<dialog>`, `popover`, `position: fixed` ou portail.',
-      sources: ['imp:operate', 'imp:detector', MDN_POPOVER],
+Ce défaut ne se voit souvent qu’avec certaines données (la dernière ligne, un tableau court) : il faut ouvrir les menus partout. La correction consiste à faire échapper la surcouche à son conteneur : attribut \`popover\` (qui place l’élément dans la couche supérieure de la page), \`<dialog>\` ouvert avec \`showModal()\` (ouvert avec \`show()\`, il reste dans le conteneur), \`position: fixed\` (tant qu’aucun ancêtre n’a de \`transform\` ni de \`filter\`) ou un portail vers la fin du document.`,
+      takeaway: 'Une surcouche (menu, infobulle, fenêtre) doit échapper au conteneur qui la coupe : attribut `popover`, `<dialog>` ouvert en modal, `position: fixed` ou portail.',
+      sources: ['imp:operate', 'imp:detector', MDN_POPOVER, MDN_TOP_LAYER, MDN_POSITION],
     },
     {
       id: 'polish-consistency-duel',
@@ -579,7 +616,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
       difficulty: 2,
       prompt: 'Trouve les deux défauts d’états sur cette page de réglages.',
       visual: {
-        alt: 'Page Réglages du compte avec trois onglets, un champ Nom complet, un champ Téléphone à bordure rouge et des boutons Annuler et Enregistrer.',
+        alt: 'Page Réglages du compte : trois onglets (Profil souligné, Sécurité, et Alertes dans une pastille bleue pleine), un champ Nom complet, un champ Téléphone à bordure rouge contenant 06 12 34 5, et des boutons Annuler et Enregistrer.',
         frame: 'browser',
         html: `<div class="mk-pad mk-stack" style="--gap:14px">
   <p class="mk-h2" data-hotspot="title" style="align-self:flex-start">Réglages du compte</p>
@@ -593,9 +630,9 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
       hotspots: [
         {
           id: 'tab',
-          label: 'Onglet inactif en couleur pleine',
+          label: 'Onglet non sélectionné en couleur pleine',
           correct: true,
-          why: 'L’onglet Alertes, inactif, porte l’accent saturé alors que l’onglet actif reste discret : on ne sait plus quelle page est ouverte. L’accent sert la sélection, pas les états inactifs.',
+          why: 'L’onglet Alertes, non sélectionné, porte l’accent saturé alors que l’onglet sélectionné reste discret : on ne sait plus quelle page est ouverte. L’accent sert la sélection, pas les états inactifs.',
         },
         {
           id: 'phone',
@@ -605,14 +642,19 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
         },
         { id: 'title', label: 'Titre de la page', correct: false, why: 'Titre clair, à la bonne taille : rien à corriger.' },
         { id: 'name', label: 'Champ Nom complet', correct: false, why: 'Champ standard avec un libellé persistant : il est fini.' },
-        { id: 'save', label: 'Bouton Enregistrer', correct: false, why: 'Bouton principal du système, libellé explicite.' },
+        {
+          id: 'save',
+          label: 'Bouton Enregistrer',
+          correct: false,
+          why: 'Le laisser cliquable malgré l’erreur n’est pas un défaut : grisé, il n’expliquerait pas ce qui manque. Au clic, le formulaire doit signaler l’erreur près du champ — c’est ce message qui manque.',
+        },
       ],
       explanation: `Deux états mal finis, deux façons de tromper :
 
 - **L’accent sur un état inactif** : impeccable proscrit les couleurs pleines sur les éléments inactifs. Ici, l’onglet qui crie le plus fort est justement celui qui n’est pas sélectionné — l’état affiché ment.
 - **L’erreur réduite à une couleur** : l’état d’erreur d’un champ dit ce qui ne va pas et comment corriger (« Numéro incomplet : 10 chiffres attendus »), près du champ, et ne repose pas sur la couleur seule.`,
       takeaway: 'L’accent signale la sélection, jamais un élément inactif ; un état d’erreur se lit en mots, pas seulement en rouge.',
-      sources: ['imp:operate', 'imp:clarify', 'imp:polish'],
+      sources: ['imp:operate', 'imp:clarify', 'imp:polish', GOVUK_BUTTON],
     },
     {
       id: 'polish-priority-hotspot',
@@ -620,7 +662,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
       difficulty: 3,
       prompt: 'Ce panier présente plusieurs défauts. Clique sur celui à corriger en premier.',
       visual: {
-        alt: 'Panier sur téléphone avec deux articles, dont l’un a un titre en capitales et une icône de corbeille pleine, un total, et un bandeau promotionnel sombre posé sur le bouton Payer.',
+        alt: 'Panier sur téléphone : un casque au titre en capitales avec une corbeille au trait, un câble au titre normal avec une corbeille pleine et épaisse, un total, et un bandeau promotionnel sombre posé sur le bouton Payer.',
         frame: 'phone',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <p class="mk-h2" data-hotspot="title" style="align-self:flex-start">Panier (2)</p>
@@ -684,7 +726,7 @@ Ici, l’icône d’une autre famille et la casse incohérente sont de vrais dé
 2. états manquants (chargement, vide, erreur, succès, désactivé, permission) ;
 3. parcours, hiérarchie, responsive et dérive du système ;
 4. incohérences visuelles et de mouvement ;
-5. nettoyage du code et des assets.
+5. nettoyage du code et des ressources (images, polices, icônes).
 
 La logique : on corrige d’abord ce qui empêche d’arriver au bout, puis ce qui laisse dans le flou, puis ce qui désoriente, enfin ce qui gêne seulement l’œil. Le nettoyage ferme la passe pour ne pas laisser de dette derrière soi.`,
       takeaway: 'Tri : bloquant → états manquants → parcours et dérive → visuel et mouvement → nettoyage du code.',
@@ -719,12 +761,12 @@ On corrige ainsi la cause au niveau le plus étroit qui convient : ni rustine lo
       type: 'choice',
       difficulty: 2,
       context:
-        'On te confie la passe de finition de la page de tarifs avant sa mise en ligne. En la parcourant, tu constates que son comparatif en six colonnes est illisible sur mobile : c’est la structure même qui ne fonctionne pas.',
+        'On te confie la passe de finition de la page de tarifs avant sa mise en ligne. En la parcourant, tu constates qu’elle compare six offres sur quarante critères presque identiques : même sur grand écran, personne ne parvient à choisir. C’est le concept même de la page qui ne fonctionne pas.',
       prompt: 'Que fais-tu ?',
       options: [
         {
           id: 'flag',
-          label: 'Je signale le problème de structure, je recommande une refonte de ce comparatif et je polis le reste dans le périmètre.',
+          label: 'Je signale le problème de fond, je recommande une refonte et je polis le reste du périmètre.',
           why: 'La finition affine, elle ne remplace pas : le problème de fond est nommé et confié à la bonne démarche.',
         },
         {
@@ -738,13 +780,15 @@ On corrige ainsi la cause au niveau le plus étroit qui convient : ni rustine lo
           why: 'Le défaut le plus grave resterait invisible pour l’équipe, caché derrière des détails soignés.',
         },
         {
-          id: 'animate',
-          label: 'J’ajoute des animations au comparatif pour que la finition se remarque.',
-          why: 'Impeccable le refuse explicitement : on n’ajoute pas d’animation pour rendre la finition visible.',
+          id: 'trim',
+          label: 'Je retire de moi-même les critères qui me semblent redondants pour alléger le tableau.',
+          why: 'Retirer des critères, c’est changer le contenu de l’offre sans décision : la finition préserve le contenu et demande avant de modifier une affirmation.',
         },
       ],
       answer: 'flag',
-      explanation: `« La finition est un affinage, jamais une refonte déguisée » : elle **préserve** l’univers visuel, le contenu, le comportement et tout ce qui est hors périmètre. Quand le concept lui-même est faux, la bonne réponse est de **le dire** et de recommander une refonte, plutôt que de glisser un remplacement dans une passe censée affiner.
+      explanation: `« La finition est un affinage, jamais une refonte déguisée » : elle **préserve** l’univers visuel, le contenu, le comportement et tout ce qui est hors périmètre. Quand le concept lui-même est faux, la bonne réponse est de **le dire** et de recommander une refonte, plutôt que de glisser un remplacement — ou des coupes dans le contenu — dans une passe censée affiner.
+
+Ne confonds pas avec un défaut d’adaptation : un tableau qui déborde sur mobile se corrige pendant la passe, car le responsive fait partie du tri. Ici, même sur grand écran, personne ne peut choisir : c’est le concept de la page qui est en cause.
 
 Se taire n’est pas mieux : le défaut le plus important resterait caché derrière des espacements impeccables.`,
       takeaway: 'Si le concept est faux, dis-le et recommande une refonte ; la finition affine, elle ne remplace jamais en douce.',
@@ -792,9 +836,9 @@ Se taire n’est pas mieux : le défaut le plus important resterait caché derri
 
 - sous 1 seconde, rien ; pour une zone de contenu, un squelette ; pour un petit module, un indicateur local ; au-delà de 10 secondes, une progression réelle avec une estimation ;
 - le texte nomme l’opération réelle ;
-- on ne fabrique jamais de progression, et on n’affiche pas un faux vide pendant le chargement. Nielsen Norman Group relève que ce « Aucun enregistrement » provisoire fait partir les utilisateurs pressés avant l’arrivée des données.`,
+- on ne fabrique jamais de progression, et on n’affiche pas un faux vide pendant le chargement. Nielsen Norman Group relève que ce « Aucun enregistrement » provisoire fait abandonner la plupart des gens, pressés, avant l’arrivée des données, et que ceux qui attendent perdent confiance dans l’outil.`,
       takeaway: 'Un chargement dit la vérité : rien sous 1 s, squelette pour le contenu, opération nommée, ni fausse progression ni faux vide.',
-      sources: ['imp:operate', 'imp:clarify', NNG_SKELETON, NNG_EMPTY],
+      sources: ['imp:operate', 'imp:clarify', NNG_SKELETON, NNG_PROGRESS, NNG_EMPTY],
     },
     {
       id: 'polish-scrollbar-choice',
@@ -827,9 +871,11 @@ Se taire n’est pas mieux : le défaut le plus important resterait caché derri
       answer: 'tint',
       explanation: `Les **surfaces du navigateur** — sélection de texte, curseur d’insertion, barres de défilement, anneaux de focus, décalage du soulignement, chiffres des tableaux — sortent avec des réglages qui n’appartiennent à aucun système de design. Impeccable demande de les thématiser depuis la palette : c’est le signal de soin le moins cher.
 
-Mais thématiser n’est pas réinventer. Sur une surface d’application, impeccable refuse aussi les affordances standard refaites « pour le style » (barres de défilement maison, contrôles de formulaire étranges, modales non standard). \`scrollbar-color\` teinte la barre native sans toucher à son comportement.`,
+Mais thématiser n’est pas réinventer. Sur une surface d’application, impeccable refuse aussi les affordances standard refaites « pour le style » (barres de défilement maison, contrôles de formulaire étranges, modales non standard). \`scrollbar-color\` teinte la barre native sans toucher à son comportement.
+
+Dans un thème sombre, des barres claires trahissent souvent un \`color-scheme\` non déclaré. Premier réglage : \`color-scheme: dark\`, pour que le navigateur dessine en sombre ses barres et ses contrôles natifs ; \`scrollbar-color\` affine ensuite la teinte depuis la palette, en gardant au moins 3:1 de contraste entre le pouce (la partie qui glisse) et sa piste.`,
       takeaway: 'Thématise les surfaces du navigateur depuis la palette (`scrollbar-color`, `::selection`, `caret-color`…), sans les remplacer par des composants maison.',
-      sources: ['imp:craft-floor', 'imp:operate', MDN_SCROLLBAR],
+      sources: ['imp:craft-floor', 'imp:operate', MDN_SCROLLBAR, MDN_COLOR_SCHEME, CSS_SCROLLBARS],
     },
     {
       id: 'polish-detector-tf',
@@ -853,7 +899,7 @@ La finition se vérifie en **utilisant** la fonctionnalité : à la souris, au c
 
 L’affordance doit se voir **au repos** (forme de bouton, lien souligné, libellé d’action) ; le survol vient en plus, comme confirmation.`,
       takeaway: 'L’affordance se voit au repos ; le survol confirme, il ne révèle pas.',
-      sources: ['imp:polish', NNG_BUTTON_STATES, NNG_FLAT],
+      sources: ['imp:adapt', NNG_BUTTON_STATES, NNG_FLAT],
     },
     {
       id: 'polish-focus-slider',
@@ -879,10 +925,10 @@ L’affordance doit se voir **au repos** (forme de bouton, lien souligné, libel
       unit: 'px',
       target: [2, 4],
       ideal: 3,
-      explanation: `Le **focus** montre où se trouve le clavier. Un contour de 1 px se confond avec la bordure du champ. WCAG 2.2 (critère 2.4.13, niveau AAA) demande un indicateur au moins aussi grand qu’un contour de **2 px** autour du composant, avec un contraste d’au moins **3:1** entre l’état focalisé et l’état normal.
+      explanation: `Le **focus** montre où se trouve le clavier. Un contour de 1 px se confond avec la bordure du champ. Le minimum (critère WCAG 1.4.11, niveau AA) : un indicateur contrasté à **3:1** avec les couleurs voisines. Plus exigeant, le critère 2.4.13 (niveau AAA) demande un indicateur au moins aussi grand qu’un contour de **2 px** autour du composant, avec un contraste d’au moins **3:1** entre l’état focalisé et l’état normal.
 
-En pratique, 2 à 3 px légèrement décalés du composant (\`outline-offset\`) restent nets sans l’écraser ; au-delà, l’anneau commence à dominer le formulaire. Et on ne supprime jamais le focus (\`outline: none\`) sans le remplacer.`,
-      takeaway: 'Un focus visible : un contour d’au moins 2 px, contrasté à 3:1, décalé du composant — jamais supprimé sans remplacement.',
+En pratique, 2 à 4 px légèrement décalés du composant (\`outline-offset\`) restent nets sans l’écraser ; au-delà, l’anneau domine le formulaire. Le décalage n’est pas exigé, mais il rend l’anneau plus visible. Et on ne supprime jamais le focus (\`outline: none\`) sans le remplacer.`,
+      takeaway: 'Un focus visible : un contour d’au moins 2 px, contrasté à 3:1, de préférence légèrement décalé du composant — jamais supprimé sans remplacement.',
       sources: [WCAG_FOCUS, WCAG_NON_TEXT, 'imp:polish'],
     },
   ],

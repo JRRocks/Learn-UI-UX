@@ -178,9 +178,9 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
       title: 'Les trois Core Web Vitals',
       body: `Google résume l’expérience d’une page en trois **Core Web Vitals** : le chargement (LCP), la réactivité (INP) et la stabilité visuelle (CLS). Leurs seuils « bons » se mesurent au **75e centile** des visites, séparément sur mobile et sur ordinateur :
 
-- **LCP** (*Largest Contentful Paint*) **≤ 2,5 s** : le temps d’affichage du plus grand élément visible (image d’en-tête, bloc de titre). On l’améliore en optimisant et en préchargeant l’image principale, en mettant le CSS critique en ligne, avec un CDN (réseau de serveurs proches des visiteurs) ou un rendu côté serveur. Et **jamais de chargement différé au-dessus de la ligne de flottaison** : \`loading="lazy"\` sur l’image d’en-tête retarde le LCP.
-- **INP** (*Interaction to Next Paint*) **≤ 200 ms** : le délai entre une interaction (clic, toucher, frappe) et l’affichage qui suit. Il observe toute la visite et retient l’**interaction la plus lente** (en écartant une valeur extrême toutes les 50 interactions). Il a **remplacé en mars 2024 le FID** (*First Input Delay*), qui ne mesurait que le délai avant le traitement de la première interaction. On l’améliore en **découpant les tâches longues** (plus de 50 ms sur le fil principal, celui qui traite aussi les interactions et le rendu), en différant le JavaScript non critique et en déplaçant les calculs lourds dans un *web worker* (un script exécuté en arrière-plan, hors du fil principal).
-- **CLS** (*Cumulative Layout Shift*) **≤ 0,1** : la stabilité visuelle, c’est-à-dire les déplacements inattendus du contenu. On l’améliore en **donnant des dimensions** aux images et vidéos (\`width\` et \`height\`, ou \`aspect-ratio\`), en réservant la place des publicités et intégrations, et en n’insérant jamais de contenu au-dessus de ce qui est déjà affiché.`,
+- **LCP** (*Largest Contentful Paint*) **≤ 2,5 s** : le temps d’affichage du plus grand élément visible (image d’en-tête, bloc de titre). On l’améliore en optimisant et en préchargeant l’image principale, en mettant le CSS critique en ligne, avec un CDN (réseau de serveurs proches des visiteurs) ou un rendu côté serveur. Et **jamais de chargement différé au-dessus de la ligne de flottaison** : \`loading="lazy"\` sur l’image d’en-tête retarde le LCP.
+- **INP** (*Interaction to Next Paint*) **≤ 200 ms** : le délai entre une interaction (clic, toucher, frappe) et l’affichage qui suit. Il observe toute la visite et retient l’**interaction la plus lente** (en écartant une valeur extrême toutes les 50 interactions). Il a **remplacé en mars 2024 le FID** (*First Input Delay*), qui ne mesurait que le délai avant le traitement de la première interaction. On l’améliore en **découpant les tâches longues** (plus de 50 ms sur le fil principal, celui qui traite aussi les interactions et le rendu), en différant le JavaScript non critique et en déplaçant les calculs lourds dans un *web worker* (un script exécuté en arrière-plan, hors du fil principal).
+- **CLS** (*Cumulative Layout Shift*) **≤ 0,1** : la stabilité visuelle, c’est-à-dire les déplacements inattendus du contenu. On l’améliore en **donnant des dimensions** aux images et vidéos (\`width\` et \`height\`, ou \`aspect-ratio\`), en réservant la place des publicités et intégrations, et en n’insérant jamais de contenu au-dessus de ce qui est déjà affiché.`,
       examples: [
         {
           title: 'Réserver la place d’une image',
@@ -302,7 +302,7 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
     },
   ],
   rules: [
-    { id: 'cwv', front: 'Quels sont les seuils « bons » des Core Web Vitals ?', back: 'LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1, au 75e centile des visites, sur mobile comme sur ordinateur.' },
+    { id: 'cwv', front: 'Quels sont les seuils « bons » des Core Web Vitals ?', back: 'LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1, au 75e centile des visites, sur mobile comme sur ordinateur.' },
     { id: 'inp', front: 'Qu’a remplacé l’INP, et quand ?', back: 'Le FID, en mars 2024. L’INP observe toutes les interactions de la visite et retient la plus lente ; le FID ne mesurait que le délai de la première.' },
     { id: 'cls-img', front: 'Comment éviter le décalage d’une image qui se charge ?', back: 'Lui donner ses dimensions (`width` et `height`) ou un `aspect-ratio` : la place est réservée.' },
     { id: 'lazy-hero', front: 'Faut-il charger en différé l’image d’en-tête ?', back: 'Non : jamais de `loading="lazy"` au-dessus de la ligne de flottaison. L’image principale doit partir au plus tôt.' },
@@ -374,8 +374,8 @@ Le Nielsen Norman Group conseille plutôt le spinner pour **un seul module** (un
           visual: {
             alt: 'Deux instants d’une page de recette : à 0,8 s, le doigt vise le bouton « Enregistrer » ; à 1,6 s, un bandeau promotionnel apparaît en tête, tout descend et le doigt se retrouve sur le texte.',
             html: fr(`<div class="fs">
-  ${frame('À 0,8 s', `<p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`)}
-  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`)}
+  ${frame('À 0,8 s', `<p class="fs-t">Quiche lorraine</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`)}
+  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Quiche lorraine</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -386,8 +386,8 @@ Le Nielsen Norman Group conseille plutôt le spinner pour **un seul module** (un
           visual: {
             alt: 'Deux instants de la même page : à 0,8 s, un emplacement en pointillés est déjà réservé en tête ; à 1,6 s, le bandeau le remplit et le bouton reste sous le doigt.',
             html: fr(`<div class="fs">
-  ${frame('À 0,8 s', `<div class="fs-res"></div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`)}
-  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`)}
+  ${frame('À 0,8 s', `<div class="fs-res"></div><p class="fs-t">Quiche lorraine</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`)}
+  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Quiche lorraine</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -581,7 +581,7 @@ Les autres blocs sont de bons réflexes : élévation en \`transform\`, \`font-d
       explanation: `Depuis le **12 mars 2024**, l’**INP** (*Interaction to Next Paint*) a remplacé le FID parmi les Core Web Vitals. Le FID ne mesurait que le délai avant le traitement de la **première** interaction ; l’INP observe **toutes** les interactions de la visite, jusqu’à l’affichage qui suit, et retient la **plus lente** (en écartant une valeur extrême toutes les 50 interactions).
 
 Un bon INP est **inférieur ou égal à 200 ms**, au 75e centile des visites. On l’améliore en découpant les tâches longues, en différant le JavaScript non critique et en déplaçant les calculs lourds hors du fil principal.`,
-      takeaway: 'L’INP (≤ 200 ms) a remplacé le FID en mars 2024 : il observe toutes les interactions de la visite et retient la plus lente.',
+      takeaway: 'L’INP (≤ 200 ms) a remplacé le FID en mars 2024 : il observe toutes les interactions de la visite et retient la plus lente.',
       sources: ['imp:optimize', WEBDEV_INP_CWV, WEBDEV_INP, WEBDEV_LONG_TASKS],
     },
     {
@@ -604,16 +604,16 @@ D’où les règles de rendu : animer \`transform\` et \`opacity\` plutôt que d
       leftTitle: 'Seuil',
       rightTitle: 'Ce qu’il garantit',
       pairs: [
-        { id: 'lcp', left: 'LCP ≤ 2,5 s', right: 'Le plus grand élément visible est vite affiché' },
-        { id: 'inp', left: 'INP ≤ 200 ms', right: 'L’écran réagit vite à chaque interaction de la visite' },
-        { id: 'cls', left: 'CLS ≤ 0,1', right: 'Le contenu ne bouge pas de façon inattendue' },
+        { id: 'lcp', left: 'LCP ≤ 2,5 s', right: 'Le plus grand élément visible est vite affiché' },
+        { id: 'inp', left: 'INP ≤ 200 ms', right: 'L’écran réagit vite à chaque interaction de la visite' },
+        { id: 'cls', left: 'CLS ≤ 0,1', right: 'Le contenu ne bouge pas de façon inattendue' },
         { id: 'nielsen', left: '0,1 s (Nielsen)', right: 'La réponse paraît instantanée' },
         { id: 'doherty', left: '400 ms (seuil de Doherty)', right: 'L’échange reste fluide, sans que l’attention décroche' },
       ],
       explanation: `Les trois **Core Web Vitals** mesurent le chargement (LCP), la réactivité (INP) et la stabilité visuelle (CLS), avec des seuils évalués au 75e centile des visites.
 
 Les deux autres repères viennent de la psychologie de l’attente : sous **0,1 s**, une réponse paraît instantanée (Nielsen) ; sous **400 ms**, l’échange garde son rythme (seuil de Doherty). Au-delà d’**1 s**, le fil de la pensée se rompt ; au-delà de **10 s**, l’attention décroche.`,
-      takeaway: 'LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 ; et côté perception : 0,1 s pour l’instantané, 400 ms pour la fluidité.',
+      takeaway: 'LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 ; et côté perception : 0,1 s pour l’instantané, 400 ms pour la fluidité.',
       sources: ['web.dev:cwv', NNG_RESPONSE, DOHERTY],
     },
     {
@@ -643,12 +643,12 @@ Les **données de terrain** servent deux fois : pour repérer le problème, puis
       options: [
         {
           id: 'instant',
-          label: 'Un retour immédiat sur le bouton (« Enregistrement… », bouton désactivé), puis une confirmation discrète',
+          label: 'Le bouton passe à « Enregistrement… » et se désactive, puis confirme',
           why: 'La réponse arrive en moins de 0,1 s, le bouton ne peut pas être actionné deux fois, et aucun indicateur ne clignote.',
         },
-        { id: 'modal', label: 'Une fenêtre modale avec un spinner pendant l’enregistrement', why: 'Pour une attente de moins d’une seconde, la modale apparaît et disparaît en un éclair : un flash qui interrompt pour rien.' },
-        { id: 'progress', label: 'Une barre de progression de 0 à 100 %', why: 'La progression déterminée sert aux attentes de plus de 10 s ; ici, elle passerait de 0 à 100 % sans être lue.' },
-        { id: 'nothing', label: 'Rien : c’est trop court pour être perçu', why: 'Sans retour au clic, on doute que l’action ait été prise en compte, et l’on clique une seconde fois.' },
+        { id: 'modal', label: 'Une fenêtre modale avec un spinner, fermée dès la fin de l’enregistrement', why: 'Pour une attente de moins d’une seconde, la modale apparaît et disparaît en un éclair : un flash qui interrompt pour rien.' },
+        { id: 'progress', label: 'Une barre de progression de 0 à 100 % qui suit l’enregistrement', why: 'La progression déterminée sert aux attentes de plus de 10 s ; ici, elle passerait de 0 à 100 % sans être lue.' },
+        { id: 'nothing', label: 'Rien : sous une seconde, le délai passe inaperçu', why: 'Sans retour au clic, on doute que l’action ait été prise en compte, et l’on clique une seconde fois.' },
       ],
       answer: 'instant',
       explanation: `Une action doit répondre **en moins de 0,1 s** pour paraître instantanée, même si le travail continue derrière. Pour une attente de moins d’une seconde, un **indicateur de chargement** n’apporte rien : il apparaîtrait et disparaîtrait aussitôt, sans qu’on ait le temps de le lire, comme un flash qui distrait.
@@ -663,17 +663,18 @@ Le bon retour est **local et immédiat** : le bouton change d’état (« Enregi
       difficulty: 3,
       prompt: 'Pour quelles actions une UI optimiste est-elle adaptée ?',
       options: [
-        { id: 'like', label: 'Aimer une publication', why: 'Fréquente, réversible, réussit presque toujours : le cas d’école.' },
+        { id: 'like', label: 'Aimer une publication', why: 'Fréquente, réussit presque toujours, et un échec se rattrape sans dommage : le cas d’école.' },
         { id: 'wishlist', label: 'Ajouter un article à une liste de souhaits', why: 'Réversible et sans conséquence : afficher le résultat tout de suite est sans risque.' },
         { id: 'task', label: 'Cocher une tâche comme terminée', why: 'Réversible d’un geste ; en cas d’échec, la case se décoche avec un message.' },
+        { id: 'last-seat', label: 'Réserver la dernière place d’un atelier', why: 'Plusieurs personnes peuvent viser la même place : l’échec n’a rien de rare. Afficher « Réservé » trop tôt, c’est risquer d’annoncer une place déjà prise.' },
+        { id: 'promo', label: 'Appliquer un code promo au panier', why: 'Seul le serveur sait si le code est valide et ce qu’il retire du total, et les codes expirés ou mal saisis sont courants : on attend sa réponse pour afficher le nouveau prix.' },
         { id: 'transfer', label: 'Valider un virement de 1 200 €', why: 'Coûteux et difficile à annuler : on attend la confirmation réelle de la banque avant d’annoncer le succès.' },
-        { id: 'delete', label: 'Supprimer définitivement son compte', why: 'Irréversible : afficher « Compte supprimé » avant la confirmation serait un mensonge si l’opération échoue.' },
       ],
       answers: ['like', 'wishlist', 'task'],
-      explanation: `L’UI optimiste parie que l’action va réussir et affiche le résultat **avant** la réponse du serveur. Ce pari est raisonnable pour les actions **fréquentes, réversibles et presque toujours réussies** : en cas d’échec, l’interface revient en arrière et le dit.
+      explanation: `L’UI optimiste parie que l’action va réussir et affiche le résultat **avant** la réponse du serveur. Ce pari est raisonnable pour les actions **fréquentes, presque toujours réussies, dont l’échec se rattrape sans dommage** : en cas d’échec, l’interface revient en arrière et le dit.
 
-Il ne l’est pas pour les actions **coûteuses ou irréversibles** (paiement, virement, suppression définitive) : un faux succès y aurait des conséquences réelles. Là, on montre un état d’attente honnête et l’on annonce le résultat une fois confirmé.`,
-      takeaway: 'UI optimiste pour les actions fréquentes et réversibles ; attente honnête pour l’argent et l’irréversible.',
+Il ne l’est pas quand **l’échec est courant** ou que seul le serveur connaît le résultat (la dernière place d’un atelier, un code promo à valider), ni pour les actions **coûteuses ou irréversibles** (paiement, virement, suppression définitive) : un faux succès y aurait des conséquences réelles. Là, on montre un état d’attente honnête et l’on annonce le résultat une fois confirmé.`,
+      takeaway: 'UI optimiste pour les actions fréquentes et presque toujours réussies ; attente honnête quand l’échec est courant, et pour l’argent ou l’irréversible.',
       sources: ['imp:harden', 'imp:optimize'],
     },
     {
@@ -685,12 +686,12 @@ Il ne l’est pas pour les actions **coûteuses ou irréversibles** (paiement, v
       options: [
         {
           id: 'measure',
-          label: 'Mesurer sur un Android d’entrée de gamme avec un réseau bridé, et consulter les données de terrain',
+          label: 'Mesurer sur un téléphone modeste avec un réseau bridé, et lire les données de terrain',
           why: 'On reproduit ce que vivent les clients avant de décider quoi corriger.',
         },
-        { id: 'will-change', label: 'Ajouter `will-change` sur tous les éléments animés', why: 'Une optimisation à l’aveugle, qui peut même aggraver le rendu en multipliant les couches.' },
-        { id: 'images', label: 'Compresser toutes les images au maximum', why: 'Peut-être utile, peut-être pas : sans mesure, on ne sait pas si les images sont le problème, et l’on dégrade leur qualité.' },
-        { id: 'rewrite', label: 'Réécrire l’application avec un framework plus récent', why: 'Des mois de travail sans savoir ce qui ralentit : le même goulot peut survivre à la réécriture.' },
+        { id: 'will-change', label: 'Ajouter `will-change` sur tous les éléments animés pour forcer l’accélération graphique', why: 'Une optimisation à l’aveugle, qui peut même aggraver le rendu en multipliant les couches.' },
+        { id: 'images', label: 'Compresser toutes les images en AVIF, qualité 50 %, pour alléger chaque page', why: 'Peut-être utile, peut-être pas : sans mesure, on ne sait pas si les images sont le problème, et l’on dégrade leur qualité.' },
+        { id: 'rewrite', label: 'Réécrire l’application avec un framework plus récent, réputé plus rapide', why: 'Des mois de travail sans savoir ce qui ralentit : le même goulot peut survivre à la réécriture.' },
       ],
       answer: 'measure',
       explanation: `L’écart entre l’équipe et les clients vient presque toujours du **contexte de mesure** : un ordinateur récent en fibre cache ce qu’un téléphone modeste sur un réseau mobile subit. Impeccable insiste : mesure sur de **vrais appareils**, avec de **vrais réseaux**, et teste sur un Android d’entrée de gamme, pas seulement sur un iPhone haut de gamme.
