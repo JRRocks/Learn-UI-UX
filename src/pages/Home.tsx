@@ -1,4 +1,4 @@
-import { BookOpen, Layers, Repeat } from 'lucide-react';
+import { BookOpen, Layers, Play, Repeat } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link } from '../app/router';
 import { useProgress } from '../app/store';
@@ -6,6 +6,7 @@ import { CATEGORIES, EXERCISES, MODULES, RULE_CARDS, exercisesOf } from '../cont
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
 import { dueCardKeys, dueExerciseIds, mastery, masteryLabel, streak } from '../engine/progress';
+import { unfinishedSession } from './Session';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
 
@@ -22,6 +23,7 @@ export function Home() {
   const dateLabel = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   const last14 = Array.from({ length: 14 }, (_, i) => addDays(today, i - 13));
   const earned = BADGES.filter((b) => p.badges[b.id]);
+  const resume = unfinishedSession();
 
   return (
     <div className="page">
@@ -65,6 +67,18 @@ export function Home() {
         </div>
 
         <div className="today-side">
+          {resume && (
+            <Link to={resume.raw} className="side-link">
+              <Play aria-hidden="true" />
+              <span>
+                Reprendre : {resume.label}
+                <small>Reprise à l’épreuve {resume.index + 1}</small>
+              </span>
+              <strong>
+                {resume.index}/{resume.total}
+              </strong>
+            </Link>
+          )}
           <Link to="/session?mode=review" className="side-link">
             <Repeat aria-hidden="true" />
             <span>

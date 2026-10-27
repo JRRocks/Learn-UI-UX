@@ -30,6 +30,9 @@
   --partial-ink: oklch(0.5 0.1 70);
   --partial-wash: oklch(0.96 0.04 85);
   --focus: oklch(0.55 0.18 252);
+  /* Activity levels: tints of the correction red (explicit, so no hue drift through color-mix). */
+  --heat-1: oklch(0.87 0.06 38);
+  --heat-2: oklch(0.74 0.12 35);
 
   --on-ink: oklch(0.985 0.004 258);
   --hero-bg: var(--ink);
@@ -95,6 +98,8 @@
     --partial-ink: oklch(0.82 0.1 80);
     --partial-wash: oklch(0.3 0.045 80);
     --focus: oklch(0.72 0.15 252);
+    --heat-1: oklch(0.38 0.07 36);
+    --heat-2: oklch(0.52 0.12 35);
     --on-ink: oklch(0.2 0.016 262);
     --hero-bg: oklch(0.3 0.05 262);
     --hero-fg: oklch(0.96 0.008 258);
@@ -123,6 +128,8 @@
   --partial-ink: oklch(0.82 0.1 80);
   --partial-wash: oklch(0.3 0.045 80);
   --focus: oklch(0.72 0.15 252);
+  --heat-1: oklch(0.38 0.07 36);
+  --heat-2: oklch(0.52 0.12 35);
   --on-ink: oklch(0.2 0.016 262);
   --hero-bg: oklch(0.3 0.05 262);
   --hero-fg: oklch(0.96 0.008 258);

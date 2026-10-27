@@ -765,11 +765,11 @@
 }
 
 .streak-strip i[data-level='1'] {
-  background: color-mix(in oklch, var(--mark) 40%, var(--paper-2));
+  background: var(--heat-1);
 }
 
 .streak-strip i[data-level='2'] {
-  background: color-mix(in oklch, var(--mark) 70%, var(--paper-2));
+  background: var(--heat-2);
 }
 
 .streak-strip i[data-level='3'] {
@@ -2371,11 +2371,11 @@
 }
 
 .heatmap i[data-level='1'] {
-  background: color-mix(in oklch, var(--mark) 35%, var(--paper-2));
+  background: var(--heat-1);
 }
 
 .heatmap i[data-level='2'] {
-  background: color-mix(in oklch, var(--mark) 65%, var(--paper-2));
+  background: var(--heat-2);
 }
 
 .heatmap i[data-level='3'] {

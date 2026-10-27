@@ -66,7 +66,25 @@ interface Saved {
   played: Played[];
 }
 
-const keyFor = (raw: string) => `learn-ui-ux:session:${raw}`;
+const PREFIX = 'learn-ui-ux:session:';
+const keyFor = (raw: string) => `${PREFIX}${raw}`;
+
+/** A session left unfinished in this tab, to offer "Reprendre" on the home page. */
+export function unfinishedSession(): { raw: string; label: string; index: number; total: number } | null {
+  try {
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i);
+      if (!key?.startsWith(PREFIX)) continue;
+      const raw = key.slice(PREFIX.length);
+      const saved = restore(raw);
+      if (saved && saved.index > 0 && saved.index < saved.ids.length)
+        return { raw, label: specLabel(parseSpec(new URLSearchParams(raw.split('?')[1] ?? ''))), index: saved.index, total: saved.ids.length };
+    }
+  } catch {
+    // Storage unavailable: nothing to resume.
+  }
+  return null;
+}
 
 function restore(raw: string): Saved | null {
   try {
