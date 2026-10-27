@@ -86,7 +86,7 @@ Dans les trois cas, l’identité en place est préservée, et une passe de fini
   <div class="mk-row mk-between"><span style="color:#7c3aed;text-decoration:underline;font-size:13px">Offrir cet atelier</span><span class="mk-btn" style="background:#ea580c;border-radius:999px">Réserver</span></div>
 </div></div>`,
           },
-          badNote: 'Trois familles, sept couleurs, six tailles : chaque élément réclame l’attention, aucun ne l’obtient.',
+          badNote: 'Trois familles, six couleurs vives, sept tailles : chaque élément réclame l’attention, aucun ne l’obtient.',
           good: {
             alt: 'Même carte d’atelier avec une seule police, un seul bleu pour les actions, des gris pour les informations secondaires et trois tailles de texte.',
             html: `<div class="mk-pad"><div class="mk-card mk-stack" style="--gap:8px">
@@ -97,7 +97,7 @@ Dans les trois cas, l’identité en place est préservée, et une passe de fini
   <div class="mk-row mk-between"><span class="mk-btn mk-btn--text">Offrir cet atelier</span><span class="mk-btn">Réserver</span></div>
 </div></div>`,
           },
-          goodNote: 'Une famille, un bleu d’action plus des neutres, trois tailles, deux graisses : la réservation saute aux yeux.',
+          goodNote: 'Une famille, un bleu d’action plus des neutres, trois tailles : la réservation saute aux yeux.',
         },
       ],
     },
@@ -347,7 +347,7 @@ La vraie simplification réduit le **nombre** d’actions visibles et regroupe l
             alt: 'Section Chiffres clés sur un dégradé vert, titre blanc en capitales très grasses, trois cartes blanches à ombre portée avec des chiffres orange, violet et vert.',
             html: `<div class="int-loud">
   <p class="int-loud-h">CHIFFRES CLÉS</p>
-  <div class="mk-grid" style="--cols:3;--gap:10px">
+  <div class="int-loud-grid">
     <div class="int-loud-card"><b style="color:#ea580c">12 400</b><span>DOSSIERS EN 2025</span></div>
     <div class="int-loud-card"><b style="color:#7c3aed">38</b><span>EXPERTS-COMPTABLES</span></div>
     <div class="int-loud-card"><b style="color:#16a34a">4</b><span>BUREAUX EN BRETAGNE</span></div>
@@ -355,6 +355,7 @@ La vraie simplification réduit le **nombre** d’actions visibles et regroupe l
 </div>`,
             css: `.int-loud { display: flex; flex-direction: column; gap: 14px; padding: 20px; background: linear-gradient(135deg, #1e5b4a, #34c38f); border-radius: 10px; }
 .int-loud-h { color: #fff; font-size: 22px; font-weight: 900; letter-spacing: 0.06em; text-shadow: 0 2px 8px rgb(0 0 0 / 0.35); }
+.int-loud-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 10px; }
 .int-loud-card { display: flex; flex-direction: column; gap: 4px; padding: 12px 10px; background: #fff; border-radius: 12px; box-shadow: 0 10px 24px rgb(0 0 0 / 0.3); }
 .int-loud-card b { font-size: 24px; font-weight: 900; line-height: 1.1; }
 .int-loud-card span { font-size: 10px; font-weight: 800; letter-spacing: 0.04em; color: #36405a; }`,
@@ -555,7 +556,7 @@ Le prix et l’action principale, eux, sont exactement ce qu’une simplificatio
   </ul>
 </div>`,
         css: `.int-kpi { display: flex; flex-direction: column; gap: 2px; padding: 12px; border: 1px solid #e1e4ea; border-radius: 10px; }
-.int-kpi b { font-size: 22px; font-variant-numeric: tabular-nums; }
+.int-kpi b { font-size: 20px; font-variant-numeric: tabular-nums; }
 .int-glow { border-color: #a855f7; box-shadow: 0 0 22px 5px rgb(168 85 247 / 0.7); }
 .int-tag-loud { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 900; letter-spacing: 0.05em; }`,
       },

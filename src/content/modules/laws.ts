@@ -49,6 +49,10 @@ const NUNES: SourceRef = {
   label: 'Nunes & Drèze (2006) — The Endowed Progress Effect',
   url: 'https://doi.org/10.1086/500480',
 };
+const CHERNEV: SourceRef = {
+  label: 'Chernev, Böckenholt & Goodman (2015) — When product assortment leads to choice overload (méta-analyse)',
+  url: 'https://www.kellogg.northwestern.edu/faculty/research/detail/2015/when-product-assortment-leads-to-choice-overload-a-conceptual',
+};
 const WCAG_COLOR: SourceRef = {
   label: 'W3C — Comprendre le critère 1.4.1 (utilisation de la couleur)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html',
@@ -89,13 +93,20 @@ const gridMock = (cls: string) =>
 
 const HELP_TITLE = '<p class="mk-h2">Comment pouvons-nous vous aider ?</p>';
 
-const PLAN_CSS = `.plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border: 1px solid #dfe3ea; border-radius: 10px; text-align: center; overflow-wrap: anywhere; }
+const PLAN_CSS = `.plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border: 1px solid #dfe3ea; border-radius: 10px; text-align: center; overflow-wrap: break-word; }
 .plan-name { font-weight: 700; font-size: 13.5px; }
 .plan-price { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .plan-price small { display: block; font-size: 12px; font-weight: 500; color: #5a6172; }
 .plan-desc { font-size: 12px; color: #5a6172; min-height: 34px; }
 .plan--pick { border: 2px solid #1f4fd8; padding: 11px 5px; box-shadow: 0 6px 18px rgb(31 79 216 / 0.14); }
-.plan-badge { background: #1f4fd8; color: #fff; font-size: 11px; padding: 2px 7px; }`;
+.plan-badge { background: #1f4fd8; color: #fff; font-size: 11px; padding: 2px 7px; }
+@media (max-width: 440px) {
+  .plan { padding: 10px 4px; }
+  .plan--pick { padding: 9px 3px; }
+  .plan-name { font-size: 12px; }
+  .plan-price { font-size: 17px; }
+  .plan-badge { font-size: 10px; padding: 2px 6px; }
+}`;
 
 const plan = (name: string, price: string, desc: string, pick = false) =>
   `<div class="plan${pick ? ' plan--pick' : ''}">${pick ? '<span class="mk-badge plan-badge">Conseillée</span>' : ''}<p class="plan-name">${name}</p><p class="plan-price">${price}<small>/mois</small></p><p class="plan-desc">${desc}</p><span class="mk-btn mk-btn--s${pick ? '' : ' mk-btn--ghost'}">Choisir</span></div>`;
@@ -113,8 +124,8 @@ const JK_CONTENT = `<div class="mk-pad mk-stack" style="--gap:8px">
 <p class="mk-small mk-muted">Fabriqué au Portugal · 12 coloris</p>
 </div>`;
 
-const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e6e9ef; }
-.jk-logo { font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; }
+const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #e6e9ef; }
+.jk-logo { font-size: 14px; font-weight: 800; letter-spacing: 0.01em; white-space: nowrap; }
 .jk-odd .jk-logo { margin-inline-start: auto; }
 .jk-cart { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #5a6172; }
 .jk-explore { font-size: 13px; font-weight: 600; color: #1f2a44; }
@@ -144,6 +155,7 @@ const laws: ModuleContent = {
     NUNES,
     ZEIGARNIK_2025,
     SCHEIBEHENNE,
+    CHERNEV,
     'wcag:target',
     'hig',
     'material3',
@@ -154,7 +166,7 @@ const laws: ModuleContent = {
       title: 'Des lois, pas toutes du même calibre',
       body: `Les « lois de l’UX » rassemblées par Jon Yablonski (Laws of UX) sont des régularités observées en psychologie, en sciences cognitives ou en ingénierie — pas des lois physiques. Elles n’ont pas toutes la même solidité :
 
-- **Mesurées et robustes** : Fitts (viser une cible), Hick (choisir parmi plusieurs options), Doherty (temps de réponse). Elles prédisent des durées et se vérifient en test.
+- **Mesurées** : Fitts (viser une cible) et Hick (choisir parmi plusieurs options) prédisent des durées et se vérifient en test ; le seuil de Doherty (temps de réponse) vient de mesures de productivité menées chez IBM.
 - **Limites de la perception et de la mémoire** : Miller et sa révision par Cowan, la position sérielle, l’effet Von Restorff, la règle pic-fin, les lois de la Gestalt.
 - **Maximes de conception** : Jakob, Tesler, Postel, Occam, Pareto, Parkinson. Ce sont des principes nés de l’expérience, pas des résultats chiffrés.
 - **Effets fragiles ou conditionnels** : la surcharge de choix et l’effet Zeigarnik se répliquent mal ; on les cite avec prudence.
@@ -167,7 +179,7 @@ Pour chaque loi, retiens trois choses : **ce qu’elle prédit**, **son applicat
       body: `### Loi de Fitts (1954)
 Le temps pour atteindre une cible croît avec sa **distance** et diminue avec sa **taille** — plus exactement, avec le logarithme du rapport entre les deux. Aller vite vers une petite cible produit des erreurs.
 
-- **Application** : l’action principale est large et proche de la main (le pouce sur mobile). Cibles tactiles d’au moins **44 × 44 pt** (Apple) ou **48 × 48 dp** (Material Design) ; le WCAG 2.2 fixe un plancher de 24 × 24 px (niveau AA).
+- **Application** : l’action principale est large et proche de la main (le pouce sur mobile). Cibles tactiles d’au moins **44 × 44 pt** (Apple) ou **48 × 48 dp** (Material Design) ; le WCAG 2.2 fixe un minimum de 24 × 24 px (niveau AA), sauf pour une cible assez isolée de ses voisines.
 - **L’espacement compte** : des cibles serrées attirent les erreurs. Éloigne « Supprimer » des actions fréquentes : la distance protège aussi.
 - **Mauvais usage** : tout agrandir. Si chaque bouton est énorme, aucun n’est plus facile qu’un autre et l’écran perd sa hiérarchie.
 
@@ -283,12 +295,12 @@ La région commune et la connexité uniforme sont des ajouts plus récents de St
       body: `### Effet Von Restorff (1933)
 Parmi des éléments semblables, celui qui **diffère** est le mieux remarqué et retenu. Réserve-le à l’action ou à l’information clé : un seul par écran.
 
-- **Mauvais usages** : tout mettre en avant (plus rien ne ressort) ; compter sur la seule couleur (une personne daltonienne ne voit pas la différence — double-la d’une forme, d’un texte, d’un poids) ; un élément si voyant qu’on le prend pour une publicité.
+- **Mauvais usages** : tout mettre en avant (plus rien ne ressort) ; compter sur la seule couleur (une personne daltonienne peut ne pas voir la différence — double-la d’une forme, d’un texte, d’un poids) ; un élément si voyant qu’on le prend pour une publicité.
 
 ### Seuil de Doherty (1982)
 La productivité s’envole quand le système répond en **moins de 400 ms**, contre 2 secondes admises jusque-là (Doherty et Thadani, IBM).
 
-- **Application** : un retour visuel immédiat (100 à 150 ms selon impeccable), puis le résultat. Au-delà d’une seconde, montre que le travail avance ; au-delà de dix, affiche une progression chiffrée (repères du Nielsen Norman Group : 0,1 s, 1 s, 10 s).
+- **Application** : un retour visuel immédiat (100 à 150 ms selon impeccable), puis le résultat. Au-delà d’une seconde, montre que le travail avance ; au-delà de 10 s, affiche une progression chiffrée (repères du Nielsen Norman Group : 0,1 s, 1 s, 10 s).
 - **Performance perçue** : un squelette de page, un état « en cours » ou un résultat partiel rendent l’attente supportable.
 - **Mauvais usage** : Laws of UX note qu’un délai ajouté peut augmenter la valeur perçue. Impeccable l’interdit : ne jamais simuler un travail ni retarder un résultat pour la mise en scène.`,
     },
@@ -297,7 +309,7 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
       title: 'Émotion et motivation',
       body: `- **Règle pic-fin** (Kahneman et coll., 1993) : on juge une expérience surtout sur son moment le plus intense et sur sa fin, pas sur la moyenne. Soigne les pics négatifs (erreur, attente, paiement refusé) et l’écran final (confirmation, reçu, étape suivante). Impeccable l’inclut dans toute critique : parcours émotionnel, creux, réassurance aux moments à fort enjeu. Mauvais usage : maquiller une mauvaise expérience par une fin flatteuse — le pic négatif reste.
 - **Effet esthétique-utilisabilité** (Kurosu et Kashimura, 1995) : un design soigné est **perçu** comme plus facile à utiliser et rend plus tolérant aux petits défauts. Mauvais usage : en conclure qu’il l’est. En test, l’esthétique masque des problèmes : observe ce que les gens font, pas seulement ce qu’ils en disent.
-- **Gradient d’objectif** (Hull, 1932) : on accélère à l’approche du but. Une progression visible (« Étape 2 sur 3 ») motive. Dans une station de lavage, une carte de 10 cases dont 2 déjà tamponnées a été complétée par 34 % des clients, contre 19 % pour une carte vierge de 8 cases — pour le même effort (Nunes et Drèze, 2006). Mauvais usage : une progression qui ment ; impeccable demande de ne jamais inventer une progression.
+- **Gradient d’objectif** (Hull, 1932) : on accélère à l’approche du but. Une progression visible (« Étape 2 sur 3 ») motive. Même une avance offerte compte : dans une station de lavage, une carte de 10 cases dont 2 déjà tamponnées a été complétée par 34 % des clients, contre 19 % pour une carte vierge de 8 cases — pour le même effort (Nunes et Drèze, 2006). Mauvais usage : une progression qui ment ; impeccable demande de ne jamais inventer une progression.
 - **Effet Zeigarnik** (années 1920) : on retiendrait mieux les tâches inachevées. Une méta-analyse de 2025 ne retrouve pas cet avantage de mémoire, mais confirme une tendance robuste à **reprendre** une tâche interrompue (effet Ovsiankina). Application : sauvegarder les brouillons et laisser reprendre là où on s’est arrêté — pas multiplier les tâches « à finir » pour retenir les gens.`,
     },
     {
@@ -309,12 +321,12 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
 - **Rasoir d’Occam** : à efficacité égale, choisis la solution qui suppose le moins. Retire un élément tant que la fonction n’en souffre pas. Mauvais usage : retirer les libellés des icônes — le mystère n’est pas du minimalisme, rappelle impeccable.
 - **Principe de Pareto** : environ 80 % des effets viennent de 20 % des causes. Concentre l’effort sur les parcours les plus fréquents. Mauvais usage : sacrifier le reste quand il est vital pour certains (accessibilité, cas d’erreur).
 - **Loi de Parkinson** (1955) : une tâche s’étire jusqu’à occuper le temps disponible. Raccourcis la tâche — remplissage automatique, paiement express — plutôt que de presser la personne. Mauvais usage : un faux compte à rebours, qui est un motif trompeur.
-- **Surcharge de choix** (Toffler, 1970) : trop d’options peut gêner la décision. Mais une méta-analyse de 50 expériences (Scheibehenne et coll., 2010) trouve un effet moyen quasi nul : il apparaît surtout quand les options sont difficiles à comparer et les préférences floues. Le remède est souvent d’aider à comparer — vue côte à côte, filtres, option conseillée — plutôt que de couper.`,
+- **Surcharge de choix** (Toffler, 1970) : trop d’options peut gêner la décision. Mais l’effet est conditionnel : une méta-analyse de 50 expériences (Scheibehenne et coll., 2010) trouve un effet moyen quasi nul ; une autre (Chernev et coll., 2015) le retrouve quand la tâche est difficile, les options complexes à comparer, les préférences floues ou l’envie de décider vite forte. Le remède est souvent d’aider à comparer — vue côte à côte, filtres, option conseillée — plutôt que de couper.`,
     },
   ],
   rules: [
     { id: 'fitts', front: 'Que prédit la loi de Fitts ?', back: 'Le temps pour atteindre une cible croît avec la distance et diminue avec la taille. Actions fréquentes : grandes et proches ; actions destructives : à l’écart.' },
-    { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 pt chez Apple, 48 × 48 dp chez Material Design. Le WCAG 2.2 fixe un plancher de 24 × 24 px (niveau AA).' },
+    { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 pt chez Apple, 48 × 48 dp chez Material Design. Le WCAG 2.2 exige au moins 24 × 24 px (niveau AA), sauf cible bien isolée.' },
     { id: 'hick', front: 'Que prédit la loi de Hick ?', back: 'Le temps de décision croît (de façon logarithmique) avec le nombre et la complexité des choix. Mets en avant l’option recommandée, sans tout enfouir dans des sous-menus.' },
     { id: 'cowan', front: 'Combien d’éléments tient la mémoire de travail ?', back: 'Environ 4 (Cowan, 2001), pas 7 ± 2. Impeccable : ≤ 4 éléments à considérer ensemble à un point de décision.' },
     { id: 'miller-menu', front: 'La loi de Miller limite-t-elle un menu à 7 entrées ?', back: 'Non : un menu se lit, il ne se mémorise pas (reconnaissance). Ce qui compte, c’est de regrouper et de hiérarchiser.' },
@@ -326,7 +338,7 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
     { id: 'tesler', front: 'Que dit la loi de Tesler ?', back: 'La complexité irréductible ne disparaît pas : le système ou l’utilisateur la porte. Fais-la porter par le système.' },
     { id: 'postel', front: 'Comment appliquer la loi de Postel à un formulaire ?', back: 'Accepte les saisies variées (espaces, tirets, indicatif), normalise-les, et renvoie un format clair.' },
     { id: 'proximity', front: 'Comment rattacher un libellé à son champ ?', back: 'Par la proximité : il doit être nettement plus près de son champ que du champ précédent.' },
-    { id: 'fragile', front: 'Surcharge de choix et effet Zeigarnik : quelle confiance leur accorder ?', back: 'Prudence. La surcharge apparaît surtout quand comparer est difficile ; l’avantage de mémoire de Zeigarnik ne se réplique pas, la reprise des tâches interrompues, si.' },
+    { id: 'fragile', front: 'Surcharge de choix et effet Zeigarnik : quelle confiance leur accorder ?', back: 'Prudence. La surcharge n’apparaît que sous conditions (comparaison difficile, préférences floues) ; l’avantage de mémoire de Zeigarnik ne se réplique pas, la reprise des tâches interrompues, si.' },
   ],
   exercises: [
     {
@@ -387,7 +399,7 @@ L’écran recommandé joue sur les deux leviers : une cible pleine largeur de 4
       unit: 'px',
       target: [44, 64],
       ideal: 48,
-      explanation: `La **loi de Fitts** : plus une cible est grande, plus on l’atteint vite et sans erreur. Les plateformes fixent des minimums : **44 × 44 pt** chez Apple, **48 × 48 dp** chez Material Design. Le WCAG 2.2 pose un plancher de 24 × 24 px (niveau AA) — un minimum légal, pas une cible de confort.
+      explanation: `La **loi de Fitts** : plus une cible est grande, plus on l’atteint vite et sans erreur. Les plateformes fixent des minimums : **44 × 44 pt** chez Apple, **48 × 48 dp** chez Material Design. Le WCAG 2.2 pose un minimum de 24 × 24 px (niveau AA) — un seuil de conformité, pas une cible de confort.
 
 Pour l’action principale, touchée souvent et au pouce, vise environ 48 px. Au-delà d’une soixantaine de pixels, le bouton mange la place du contenu pour un gain de précision faible.`,
       takeaway: 'Action principale tactile : environ 48 px de haut (44 pt minimum chez Apple, 48 dp chez Material), jamais sous les 24 px du WCAG.',
@@ -406,7 +418,7 @@ Pour l’action principale, touchée souvent et au pouce, vise environ 48 px. Au
             alt: 'Page d’aide présentant douze tuiles de rubriques identiques en grille : facture, relevé de compteur, déménagement, contrat, paiement…',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">${HELP_TITLE}<div class="help-grid"><span>Facture</span><span>Relevé de compteur</span><span>Déménagement</span><span>Contrat</span><span>Paiement</span><span>Échéancier</span><span>Offres</span><span>Espace client</span><span>Mot de passe</span><span>Coupure</span><span>Réclamation</span><span>Autre demande</span></div></div>`),
             css: `.help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
-.help-grid span { min-width: 0; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 52px; padding: 6px; border: 1px solid #d5dae3; border-radius: 8px; font-size: 13px; font-weight: 600; color: #1f2a44; overflow-wrap: anywhere; }`,
+.help-grid span { min-width: 0; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 52px; padding: 6px; border: 1px solid #d5dae3; border-radius: 8px; font-size: 13px; font-weight: 600; color: #1f2a44; overflow-wrap: break-word; }`,
           },
           why: 'Douze tuiles de même poids : il faut toutes les lire et les comparer, même pour la démarche la plus courante.',
         },
@@ -553,7 +565,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
 .ad-del { min-height: 46px; padding: 0 12px; }`,
       },
       hotspots: [
-        { id: 'close', label: 'Croix de fermeture de 14 px', correct: true, why: 'Une cible de 14 × 14 px sans zone de toucher élargie : sous le plancher de 24 px du WCAG 2.2 et très loin des 44 pt recommandés.' },
+        { id: 'close', label: 'Croix de fermeture de 14 px', correct: true, why: 'Une cible de 14 × 14 px sans zone de toucher élargie : très loin des 44 pt recommandés par Apple et des 48 dp de Material Design.' },
         { id: 'delete', label: '« Supprimer » collé à « Enregistrer »', correct: true, why: 'Une action destructive à 4 px de l’action la plus fréquente : le moindre écart de pouce supprime l’adresse.' },
         { id: 'save', label: 'Bouton « Enregistrer »', correct: false, why: 'Large et dans la zone du pouce : c’est la bonne cible. Le problème est sa voisine.' },
         { id: 'title', label: 'Titre de l’écran', correct: false, why: 'Le titre nomme clairement la tâche : rien à corriger.' },
@@ -561,7 +573,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
       ],
       explanation: `La loi de Fitts dit deux choses utiles ici :
 
-- **La taille compte** : une croix de 14 px est une cible minuscule. Elle peut garder un petit dessin, mais sa zone de toucher doit atteindre au moins 44 × 44 pt.
+- **La taille compte** : une croix de 14 px est une cible minuscule. Le dessin peut rester petit, mais sa zone de toucher devrait atteindre 44 × 44 pt, comme le recommande Apple.
 - **L’espacement compte** : Laws of UX recommande des cibles tactiles bien espacées. Une action destructive collée à l’action fréquente attire les touches accidentelles. Éloigne-la, et préfère une possibilité d’annuler à une simple confirmation.`,
       takeaway: 'Cibles tactiles d’au moins 44 px et bien espacées ; les actions destructives se tiennent à l’écart des actions fréquentes.',
       sources: [law('fittss-law', 'Loi de Fitts'), 'wcag:target', 'hig', 'imp:clarify'],
@@ -576,7 +588,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
         alt: 'Étape 2 d’une inscription : une barre de progression, trois formules portant chacune un badge criard de couleur différente, un champ e-mail, un champ téléphone refusé pour cause d’espaces, et un bouton « Continuer ».',
         html: fr(`<div class="mk-pad mk-stack" style="--gap:14px">
 <div class="mk-stack" style="--gap:6px" data-hotspot="steps"><div class="mk-row mk-between mk-small"><b>Étape 2 sur 3 · Formule et coordonnées</b><span class="mk-muted">Plus qu’une étape</span></div><div class="su-bar"><span></span></div></div>
-<div class="mk-grid" style="--cols:3;--gap:8px" data-hotspot="badges">
+<div class="su-grid" data-hotspot="badges">
 <div class="su-plan su-p1"><span class="su-b">Populaire !</span><b>Mensuel</b><span class="mk-small">7,99 €/mois</span></div>
 <div class="su-plan su-p2"><span class="su-b">Top prix !</span><b>Annuel</b><span class="mk-small">79 €/an</span></div>
 <div class="su-plan su-p3"><span class="su-b">Conseillé !</span><b>Famille</b><span class="mk-small">12,99 €/mois</span></div>
@@ -587,11 +599,12 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
 </div>`),
         css: `.su-bar { height: 6px; border-radius: 3px; background: #e3e6ec; }
 .su-bar span { display: block; width: 66%; height: 100%; border-radius: 3px; background: #1f4fd8; }
-.su-plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 10px; border: 2px solid; text-align: center; overflow-wrap: anywhere; }
+.su-plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 10px; border: 2px solid; text-align: center; overflow-wrap: break-word; }
 .su-b { max-width: 100%; font-size: 10.5px; font-weight: 800; color: #fff; padding: 2px 6px; border-radius: 999px; }
 .su-p1 { border-color: #d92d3a; background: #fff0f0; } .su-p1 .su-b { background: #d92d3a; }
 .su-p2 { border-color: #c25e00; background: #fff4e5; } .su-p2 .su-b { background: #c25e00; }
-.su-p3 { border-color: #7b3fbf; background: #f6efff; } .su-p3 .su-b { background: #7b3fbf; }`,
+.su-p3 { border-color: #7b3fbf; background: #f6efff; } .su-p3 .su-b { background: #7b3fbf; }
+.su-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 8px; }`,
       },
       hotspots: [
         { id: 'phone', label: 'Numéro refusé à cause des espaces', correct: true, why: 'Loi de Postel ignorée : le système refuse une saisie parfaitement compréhensible au lieu de retirer les espaces lui-même.' },
@@ -707,9 +720,9 @@ Conséquence pratique : un beau prototype rend les gens plus tolérants aux peti
       answer: false,
       explanation: `L’étude célèbre des confitures (Iyengar et Lepper, 2000) a popularisé l’idée : un stand de 24 variétés attirait plus de monde qu’un stand de 6, mais vendait moins. Pourtant, une méta-analyse de 50 expériences (Scheibehenne, Greifeneder et Todd, 2010) trouve un effet moyen **quasi nul**, avec de fortes variations d’une étude à l’autre.
 
-La surcharge apparaît dans certaines conditions : options difficiles à comparer, préférences floues, absence de repère. Le remède n’est donc pas de couper à l’aveugle, mais d’**aider à choisir** : comparaison côte à côte, filtres, option conseillée.`,
+Une méta-analyse ultérieure (Chernev, Böckenholt et Goodman, 2015) précise les conditions où la surcharge apparaît bien : tâche difficile, options complexes à comparer, préférences floues, envie de décider vite. Le remède n’est donc pas de couper à l’aveugle, mais d’**aider à choisir** : comparaison côte à côte, filtres, option conseillée.`,
       takeaway: 'La surcharge de choix est conditionnelle : aide à comparer (côte à côte, filtres, option conseillée) plutôt que de couper à l’aveugle.',
-      sources: [law('choice-overload', 'Surcharge de choix'), SCHEIBEHENNE],
+      sources: [law('choice-overload', 'Surcharge de choix'), SCHEIBEHENNE, CHERNEV],
     },
     {
       id: 'laws-response-order',

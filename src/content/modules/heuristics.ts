@@ -76,7 +76,8 @@ const DASHBOARD: Visual = {
 kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border: 1px solid #c7cedb; border-bottom-width: 2px; border-radius: 4px; color: #36405a; background: #fff; }
 .fa-kbd { background: transparent; color: #fff; border-color: rgb(255 255 255 / 0.6); }
 .fa-help { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: #1f4fd8; }
-.fa-nav { padding: 0 12px; }
+.fa-nav { padding: 0 12px; flex-wrap: wrap; }
+.fa-nav .mk-tab { white-space: nowrap; }
 .fa-alert { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; background: #fdecea; color: #8c1d18; font-size: 13px; font-weight: 600; }
 .fa-promo { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #efeafd; color: #3b2a7a; font-size: 13px; }
 .fa-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 8px; }
@@ -592,7 +593,7 @@ Pour une action réversible comme celle-ci, l’annulation après coup vaut mieu
     {
       id: 'heuristics-memory-duel',
       type: 'choice',
-      difficulty: 2,
+      difficulty: 1,
       prompt: 'Quelle dernière étape demande le moins d’effort de mémoire ?',
       context: 'Demande de retour d’un article sur une boutique en ligne, étape 3 sur 3.',
       options: [

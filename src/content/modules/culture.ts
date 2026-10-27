@@ -136,7 +136,8 @@ const S = {
 const ZH_PARA =
   '城市里的小店正在悄悄改变。越来越多的街坊习惯在手机上下单，由附近的店主亲自送货上门。对老人来说，这意味着不用再提着重物爬楼梯；对店主来说，这是留住老顾客的新办法。我们走访了十二家社区小店，听他们讲述这一年的变化。';
 
-const KO_TEXT = '주문하신 상품이 오늘 밤 12시 전에 출발합니다. 새벽 배송으로 내일 아침 7시 전에 문 앞에 도착해요.';
+const KO_TEXT =
+  '주문하신 상품이 물류센터에서 출발했습니다. 새벽 배송으로 내일 아침 7시 전에 문 앞에 도착할 예정이며, 배송이 완료되면 사진으로 알려 드릴게요.';
 
 const culture: ModuleContent = {
   id: 'culture',
@@ -146,7 +147,34 @@ const culture: ModuleContent = {
     'Adapter une interface à un marché au-delà de la traduction : grilles de lecture culturelles, densité, couleurs et symboles, écritures, droite à gauche, formats, paiements et obligations légales — et savoir quand tester plutôt que supposer.',
   minutes: 18,
   commands: ['harden', 'clarify'],
-  sources: ['imp:harden', 'imp:clarify', 'w3c:i18n', 'marcus2000', 'hofstede', 'hall', 'mdn:intl', 'mdn:logical', 'material:bidi', 'mozilla:rtl', 'w3c:clreq', 'cnil:cookies'],
+  sources: [
+    'imp:harden',
+    'imp:clarify',
+    'w3c:i18n',
+    S.w3cL10n,
+    S.marcusBeijing,
+    'marcus2000',
+    S.marcusCourse,
+    'hofstede',
+    'hall',
+    S.fischer,
+    'palo-it:china',
+    S.cnnic,
+    S.lifull,
+    'w3c:clreq',
+    'w3c:jlreq',
+    S.readium,
+    S.w3cTextSize,
+    'material:bidi',
+    'mozilla:rtl',
+    'mdn:logical',
+    'mdn:intl',
+    S.w3cNames,
+    'cnil:cookies',
+    S.toubon,
+    S.bgb312j,
+    S.japanTax,
+  ],
   sections: [
     {
       id: 'localiser',
@@ -241,7 +269,7 @@ L’anthropologue Edward T. Hall oppose les cultures à **contexte fort**, où u
 - **Le besoin de contexte.** Dans une culture à contexte fort, on veut voir l’ensemble avant de décider. Au Japon, la notion d’*anshin* (sentiment de sécurité) pousse à tout montrer : frais de port, délais, points, avis, garanties près du prix. Des designers rapportent que des pages épurées y paraissent « trop *sabishii* » (vides, tristes) ; selon le Japan Times, des versions épurées du portail immobilier LIFULL HOME’S ont fait baisser l’engagement et les conversions, et l’équipe est revenue à la version dense.
 
 ### Le contrepoint
-Une partie de la densité sert d’abord le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs. Et la tendance n’est pas figée : Douyin s’ouvre en plein écran sur une seule vidéo, Naver a recentré son accueil mobile sur la recherche, Mercari reste sobre. Temu et Shein mêlent densité « asiatique » et respiration « occidentale » selon les marchés.
+Une partie de la densité sert d’abord le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs. Et la tendance n’est pas figée : Douyin s’ouvre en plein écran sur une seule vidéo, Naver a recentré son accueil mobile sur la recherche en 2019, Mercari reste sobre ; Temu et Shein mêlent des codes denses venus de Chine et des mises en page plus aérées.
 
 La leçon n’est donc pas « chargé en Asie, épuré en Occident », mais : **montre ce que l’utilisateur a besoin de voir pour décider et avoir confiance, et range-le**. Une interface dense reste lisible si elle est alignée, groupée et hiérarchisée par la couleur et les blocs.`,
       examples: [
@@ -358,7 +386,7 @@ La leçon n’est donc pas « chargé en Asie, épuré en Occident », mais : **
     {
       id: 'ecritures',
       title: 'Écritures et typographie',
-      body: `Chaque écriture a ses règles de composition. Un texte traduit dans une maquette pensée pour l’anglais casse rarement là où on l’attend.
+      body: `Chaque écriture a ses règles de composition. Un texte traduit dans une maquette pensée pour l’anglais casse souvent là où on ne l’attend pas.
 
 ### Chinois et japonais
 - **Pas d’italique** : les polices chinoises, japonaises et coréennes n’en ont presque jamais, et le navigateur fabrique un faux oblique peu lisible. On met en valeur par la graisse, la couleur ou les **points d’emphase** (\`text-emphasis\`).
@@ -484,7 +512,7 @@ L’allemand est souvent **30 % plus long** que l’anglais, et ses mots compos�
 - **Dates** : 10/27/2026 aux États-Unis, 27/10/2026 en France, 27.10.2026 en Allemagne, 2026-10-27 en Suède, 2026年10月27日 en Chine et au Japon (où l’ère impériale, Reiwa 8 en 2026, figure encore sur des formulaires officiels). Le calendrier hégirien coexiste avec le grégorien dans le Golfe.
 - **Nombres** : 1,234.56 (\`en-US\`), 1.234,56 (\`de-DE\`), 1 234,56 (\`fr-FR\`). L’Inde groupe par lakhs et crores : 1,00,000 (100 000) et 1,00,00,000 (10 millions). La Chine et le Japon comptent par 万 (10 000) : 1.2万 pour 12 000.
 - **Monnaies** : symbole avant ou après, espace ou non, décimales ou non (Rp1.250.000 se passe de centimes).
-- **Semaines** : elle commence le dimanche aux États-Unis, le lundi en Europe ; le week-end tombe le vendredi et le samedi en Arabie saoudite ; les Suédois planifient en numéros de semaine.
+- **Semaines** : la semaine commence le dimanche aux États-Unis, le lundi en Europe ; le week-end tombe le vendredi et le samedi en Arabie saoudite ; les Suédois planifient en numéros de semaine.
 
 Ne formate jamais à la main : \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` (avec \`style: 'currency'\` ou \`notation: 'compact'\`), \`Intl.PluralRules\` et \`Intl.RelativeTimeFormat\` connaissent ces règles pour chaque locale.
 
@@ -531,7 +559,7 @@ Ne formate jamais à la main : \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` (a
 
 ### Moyens de paiement locaux
 - **Chine** : WeChat Pay et Alipay, par QR code.
-- **Inde** : UPI (PhonePe, Google Pay, Paytm) et paiement à la livraison — encore environ 46 % des commandes des marques en ligne en 2023-2024.
+- **Inde** : UPI (PhonePe, Google Pay, Paytm) et paiement à la livraison — encore environ 46 % des commandes des marques qui vendent en direct (D2C) en 2023-2024.
 - **Brésil** : Pix (lancé fin 2020 par la Banque centrale, devenu le moyen le plus utilisé du pays), boleto et paiement en plusieurs fois sans frais (*parcelamento* : « em até 10x sem juros »).
 - **Kenya** : M-Pesa. **Indonésie** : portefeuilles (GoPay, OVO, DANA, ShopeePay), QR code national QRIS, compte virtuel, paiement à la livraison.
 - **Japon** : paiement en supérette (*konbini*), PayPay. **Allemagne** : PayPal, achat sur facture (*Kauf auf Rechnung*), prélèvement SEPA. **Suède** : Swish, Klarna. **États-Unis** : cartes, Apple Pay, PayPal, paiement fractionné.
@@ -1029,7 +1057,7 @@ Rejeter la saisie est un travers fréquent des formulaires japonais : on punit l
       ],
       explanation: `Une adresse japonaise va **du plus grand au plus petit**, à l’inverse de l’usage occidental : préfecture, ville, quartier, numéros d’îlot et de bâtiment, puis immeuble et étage.
 
-Le code postal vient en premier, précédé du symbole 〒 : ses sept chiffres suffisent à retrouver la préfecture, la ville et le quartier. Les formulaires japonais proposent un bouton « 住所を検索 » (rechercher l’adresse) qui remplit ces champs ; il ne reste à saisir que les numéros et l’immeuble.
+Le code postal vient en premier, précédé du symbole 〒 : ses sept chiffres suffisent à retrouver la préfecture, la ville et le quartier. Les formulaires japonais proposent souvent un bouton « 住所を検索 » (rechercher l’adresse) qui remplit ces champs ; il ne reste à saisir que les numéros et l’immeuble.
 
 Copier l’ordre occidental (rue d’abord, code postal à la fin) oblige l’utilisateur à écrire son adresse à l’envers.`,
       takeaway: 'Une adresse japonaise va du plus grand au plus petit — code postal, préfecture, ville, quartier, immeuble — et le code postal remplit le reste.',
@@ -1046,8 +1074,8 @@ Copier l’ordre occidental (rue d’abord, code postal à la fin) oblige l’ut
         { id: 'leading', label: 'Donner un interlignage généreux, autour de 1,7', why: 'Des caractères pleins et carrés demandent de l’air entre les lignes.' },
         { id: 'system', label: 'S’appuyer sur les polices système (Hiragino Sans, Yu Gothic, Noto Sans JP) ou des sous-ensembles', why: 'Une police japonaise complète couvre des milliers de caractères et pèse plusieurs mégaoctets.' },
         { id: 'italic', label: 'Mettre les termes importants en italique', why: 'Les polices japonaises n’ont pas d’italique : le navigateur fabrique un faux oblique peu lisible.' },
-        { id: 'keepall', label: 'Appliquer `word-break: keep-all` pour éviter de couper les mots', why: 'Sans espace entre les mots, `keep-all` ne laisserait couper qu’aux espaces et à la ponctuation : les lignes déborderaient. C’est un réglage pour le coréen.' },
-        { id: 'kinsoku', label: 'Laisser un « 。 » ou un « 、 » commencer une ligne quand la place manque', why: 'Les règles de *kinsoku* interdisent la ponctuation fermante en début de ligne.' },
+        { id: 'keepall', label: 'Appliquer `word-break: keep-all` pour éviter de couper les mots', why: 'Sans espace entre les mots, keep-all ne laisserait couper qu’aux espaces et à la ponctuation : les lignes déborderaient. C’est un réglage pour le coréen.' },
+        { id: 'kinsoku', label: 'Laisser un « 。 » ou un « 、 » commencer une ligne quand la place manque', why: 'Les règles de kinsoku interdisent la ponctuation fermante en début de ligne.' },
       ],
       answers: ['weight', 'leading', 'system'],
       explanation: `Le japonais se compose avec ses propres règles, décrites par le W3C dans *Requirements for Japanese Text Layout* :
@@ -1103,7 +1131,7 @@ Copier l’ordre occidental (rue d’abord, code postal à la fin) oblige l’ut
   <span class="mk-btn mk-btn--ghost mk-btn--s">배송 조회</span>
 </div></div>`,
           },
-          why: '`word-break: keep-all` ne coupe qu’aux espaces : chaque mot reste entier.',
+          why: 'Avec word-break: keep-all, la ligne ne se coupe qu’aux espaces : chaque mot reste entier.',
         },
       ],
       answer: 'keepall',
@@ -1194,7 +1222,7 @@ Ranger « le CJK » sous une seule règle typographique est donc une erreur : ch
       explanation: `Deux conventions indiennes sont ignorées :
 
 - **Le groupement des chiffres** : après le premier millier, l’Inde groupe par deux. 1 lakh = 1,00,000 (100 000) ; 1 crore = 1,00,00,000 (10 millions). Le prix s’écrit donc ₹1,49,999 — \`Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 })\` le fait pour toi.
-- **Les moyens de paiement** : l’UPI (PhonePe, Google Pay, Paytm) et le **paiement à la livraison** dominent. Selon un rapport de 2024, le paiement à la livraison représentait encore environ 46 % des commandes des marques en ligne indiennes, devant l’UPI (environ 40 %).`,
+- **Les moyens de paiement** : l’UPI (PhonePe, Google Pay, Paytm) et le **paiement à la livraison** dominent. Selon un rapport de 2024 sur les marques indiennes qui vendent en direct (D2C), le paiement à la livraison représentait encore environ 46 % de leurs commandes, devant l’UPI (environ 40 %).`,
       takeaway: 'En Inde, groupe les grands nombres en lakhs (₹1,49,999) et propose UPI et paiement à la livraison, pas seulement la carte.',
       sources: ['mdn:intl', S.indiaCod, S.upi],
     },
@@ -1206,9 +1234,9 @@ Ranger « le CJK » sous une seule règle typographique est donc une erreur : ch
       prompt: 'Que renvoie `new Intl.NumberFormat(\'en-IN\').format(2500000)` ?',
       options: [
         { id: 'in', label: '`25,00,000`', why: 'Groupement indien : trois chiffres, puis des groupes de deux. 25,00,000 = 25 lakhs = 2,5 millions.' },
-        { id: 'us', label: '`2,500,000`', why: 'C’est le groupement de `en-US`, pas celui de `en-IN`.' },
-        { id: 'de', label: '`2.500.000`', why: 'Le point comme séparateur des milliers, c’est par exemple l’allemand (`de-DE`).' },
-        { id: 'lakh', label: '`25 lakh`', why: '`Intl` n’écrit pas le mot par défaut ; en notation compacte, `en-IN` donne « 25L ».' },
+        { id: 'us', label: '`2,500,000`', why: 'C’est le groupement de en-US, pas celui de en-IN.' },
+        { id: 'de', label: '`2.500.000`', why: 'Le point comme séparateur des milliers, c’est par exemple l’allemand (de-DE).' },
+        { id: 'lakh', label: '`25 lakh`', why: 'Intl n’écrit pas le mot par défaut ; en notation compacte, en-IN donne « 25L ».' },
       ],
       answer: 'in',
       explanation: `Le système de numération indien groupe les trois derniers chiffres, puis **par deux** : 1,00,000 (1 lakh, cent mille), 10,00,000 (10 lakhs, un million), 1,00,00,000 (1 crore, dix millions).
@@ -1383,7 +1411,7 @@ Le temps qui s’écoule se représente de la droite vers la gauche en RTL (une 
   <span class="mk-btn mk-btn--block">اتصل الآن</span>
 </div>`,
           },
-          why: 'Le numéro est isolé (`<bdi dir="ltr">`) : il se lit de gauche à droite, dans l’ordre, au sein du texte arabe.',
+          why: 'Le numéro est isolé dans un élément bdi de gauche à droite : il se lit dans l’ordre, au sein du texte arabe.',
         },
       ],
       answer: 'isolated',
@@ -1585,7 +1613,7 @@ Placer le CEP à la fin, comme un code postal occidental, fait saisir à la main
 .ck2-logo{font-weight:800;font-size:17px;letter-spacing:-.01em}
 .ck2-head{font-size:19px;font-weight:700;line-height:1.3}
 .ck2-banner{border:1px solid #d5d9e2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgb(15 20 35 / .12)}
-.ck2-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.ck2-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
 .ck2-link{font-size:13px;color:#1f4fd8;text-decoration:underline;align-self:flex-start}`,
         html: `<div class="ck2">
   <p class="ck2-logo">L’Écho des Calanques</p>
@@ -1683,10 +1711,10 @@ Pour un produit numérique : parcours d’achat, fiches, conditions générales 
 
 - **Montants** : espace fine insécable pour les milliers, virgule décimale, symbole après le montant — 1 249,00 €. C’est exactement ce que produit \`Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })\`.
 - **Dates** : jour/mois/année (27/10/2026) ; « 10/27/2026 » se lit comme une date impossible.
-- **Ponctuation** : espace insécable avant « : ; ! ? % », guillemets « » avec des espaces fines.
+- **Ponctuation** : espace insécable avant les deux-points, le point-virgule, les points d’exclamation et d’interrogation et le signe %, guillemets « » avec des espaces fines.
 
 Un format étranger ne bloque pas la lecture, mais il signale un produit traduit à la va-vite — et sème le doute sur le montant réellement débité.`,
-      takeaway: 'En France : 1 249,00 € (espace fine, virgule, symbole après), 27/10/2026, et une espace insécable avant « : ; ! ? % ».',
+      takeaway: 'En France : 1 249,00 € (espace fine, virgule, symbole après), date en 27/10/2026, et une espace insécable avant les deux-points, le point-virgule, « ! », « ? » et « % ».',
       sources: ['mdn:intl', 'butterick'],
     },
 
@@ -1745,7 +1773,7 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
             alt: 'Écran « Einstellungen » avec trois tuiles de largeur fixe dont les libellés allemands sont tronqués par des points de suspension, et un bouton tronqué lui aussi.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
-.ds-grid{display:grid;grid-template-columns:repeat(3,96px);gap:10px}
+.ds-grid{display:grid;grid-template-columns:repeat(3,80px);gap:8px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
 .ds-tile span{display:block;width:100%;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1783,7 +1811,7 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
   <span class="mk-btn">Änderungen speichern</span>
 </div>`,
           },
-          why: 'Largeurs souples, langue déclarée et `hyphens: auto` : les mots longs se coupent selon les règles allemandes, rien n’est tronqué.',
+          why: 'Largeurs souples, langue déclarée et césure automatique : les mots longs se coupent selon les règles allemandes, rien n’est tronqué.',
         },
       ],
       answer: 'flexible',
@@ -1808,7 +1836,7 @@ Impeccable recommande de prévoir 30 à 40 % de place en plus et de tester avec 
       options: [
         { id: 'impressum', label: 'Un Impressum (mentions légales) facilement accessible depuis chaque page', why: 'Obligation légale (§ 5 DDG) : identité, adresse, contact, registre, numéro de TVA.' },
         { id: 'button', label: 'Un bouton final « zahlungspflichtig bestellen » ou une formule aussi claire', why: 'Obligation légale (§ 312j BGB) : sans elle, le contrat n’est pas conclu.' },
-        { id: 'cancel', label: 'Un bouton « Verträge hier kündigen » pour résilier en ligne', why: 'Obligation légale depuis juillet 2022 (§ 312k BGB) pour les contrats conclus en ligne qui se prolongent.' },
+        { id: 'cancel', label: 'Un bouton « Verträge hier kündigen » pour résilier en ligne', why: 'Obligation légale depuis juillet 2022 (§ 312k BGB) pour les abonnements souscrits en ligne.' },
         { id: 'invoice', label: 'Proposer le paiement sur facture (Kauf auf Rechnung)', why: 'Très attendu par les acheteurs allemands, mais pas imposé par la loi.' },
         { id: 'seal', label: 'Afficher un label de confiance comme Trusted Shops', why: 'Rassurant et répandu, mais facultatif.' },
         { id: 'sie', label: 'Vouvoyer le client (« Sie »)', why: 'Une tradition, pas une loi : beaucoup de marques grand public tutoient (« du »).' },
@@ -1816,14 +1844,531 @@ Impeccable recommande de prévoir 30 à 40 % de place en plus et de tester avec 
       answers: ['impressum', 'button', 'cancel'],
       explanation: `Distingue ce que la loi impose de ce que le marché attend :
 
-- **Obligations** : l’**Impressum** (§ 5 DDG), facilement accessible depuis chaque page ; le bouton de commande « zahlungspflichtig bestellen » (§ 312j BGB) ; pour un contrat conclu en ligne qui se prolonge, un bouton de résiliation « Verträge hier kündigen » menant à une confirmation « jetzt kündigen » (§ 312k BGB, depuis juillet 2022).
+- **Obligations** : l’**Impressum** (§ 5 DDG), facilement accessible depuis chaque page ; le bouton de commande « zahlungspflichtig bestellen » (§ 312j BGB) ; pour un abonnement souscrit en ligne, un bouton de résiliation « Verträge hier kündigen » menant à une confirmation « jetzt kündigen » (§ 312k BGB, depuis juillet 2022).
 - **Attentes fortes, mais facultatives** : le paiement sur facture, les labels comme Trusted Shops, le vouvoiement.
 
 Ignorer une obligation expose à des mises en demeure (*Abmahnungen*) ; ignorer une attente coûte des ventes. Les deux comptent, pas de la même façon.`,
       takeaway: 'Sépare ce que la loi impose (Impressum, bouton de commande, bouton de résiliation) de ce que le marché attend (facture, labels, ton).',
       sources: [S.ddg5, S.bgb312j, S.bgb312k],
     },
-    // @@EXERCISES@@
+    /* ---------- États-Unis ---------- */
+    {
+      id: 'culture-us-market-choice',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'us',
+      prompt: 'Quel marché vise cette page de paiement ?',
+      visual: {
+        alt: 'Page de paiement en anglais : ville Austin, État Texas, code ZIP 78701 ; sous-total de 89 dollars, taxe de vente estimée de 7,34 dollars, total de 96,34 dollars ; moyens de paiement Apple Pay, PayPal, Venmo et paiement en 4 fois.',
+        frame: 'browser',
+        lang: 'en-US',
+        css: `.um{display:flex;flex-direction:column;gap:10px}
+.um .sel{display:flex;justify-content:space-between;align-items:center}
+.um .mk-input{min-height:34px;padding:6px 10px}
+.um-sum{display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#f4f6f9;border-radius:10px;font-size:14px}
+.um-sum div{display:flex;justify-content:space-between}
+.um-sum .t{font-weight:700;padding-top:4px;border-top:1px solid #dfe3ea}
+.um-pay{display:flex;flex-wrap:wrap;gap:6px}`,
+        html: `<div class="um mk-pad">
+  <p class="mk-h2">Checkout</p>
+  <div class="mk-grid" style="--cols:3;--gap:8px">
+    <div class="mk-field"><span class="mk-label">City</span><span class="mk-input">Austin</span></div>
+    <div class="mk-field"><span class="mk-label">State</span><span class="mk-input sel">Texas <i data-icon="chevron-down" style="--ico:14px"></i></span></div>
+    <div class="mk-field"><span class="mk-label">ZIP code</span><span class="mk-input">78701</span></div>
+  </div>
+  <div class="um-sum">
+    <div><span>Subtotal</span><span>$89.00</span></div>
+    <div><span>Estimated sales tax</span><span>$7.34</span></div>
+    <div class="t"><span>Total</span><span>$96.34</span></div>
+  </div>
+  <div class="um-pay"><span class="mk-badge">Apple Pay</span><span class="mk-badge">PayPal</span><span class="mk-badge">Venmo</span><span class="mk-badge">Pay in 4</span></div>
+  <span class="mk-btn mk-btn--block">Place order</span>
+</div>`,
+      },
+      options: [
+        { id: 'us', label: 'États-Unis', why: 'ZIP code, État, taxe de vente ajoutée au paiement et Venmo : tout est américain.' },
+        { id: 'ca', label: 'Canada', why: 'Le Canada paie aussi en dollars et ajoute les taxes au paiement, mais parle de province et de code postal alphanumérique (A1A 1A1).' },
+        { id: 'uk', label: 'Royaume-Uni', why: 'Livres sterling, postcode alphanumérique et TVA incluse dans le prix affiché.' },
+        { id: 'au', label: 'Australie', why: 'L’Australie a aussi des États, mais un postcode à 4 chiffres et une TVA (GST) incluse dans le prix affiché.' },
+      ],
+      answer: 'us',
+      explanation: `Plusieurs pays paient en dollars ; ce sont d’autres repères qui désignent les États-Unis :
+
+- le **ZIP code** à 5 chiffres (l’Australie a aussi des États, pas de ZIP) ;
+- la **taxe de vente ajoutée au paiement**, après le sous-total : aux États-Unis, les prix s’affichent hors taxe, car le taux dépend de l’État et de la ville ;
+- **Venmo** et le paiement en 4 fois, très américains.
+
+Le Canada ajoute aussi les taxes au paiement, mais parle de province et de code postal alphanumérique (A1A 1A1).`,
+      takeaway: 'Aux États-Unis : prix hors taxe, taxe de vente ajoutée au paiement, ZIP et État. Ces repères distinguent même deux pays qui paient en dollars.',
+      sources: [S.salesTax, 'mdn:intl'],
+    },
+    {
+      id: 'culture-us-tax-tf',
+      type: 'truefalse',
+      difficulty: 1,
+      culture: 'us',
+      prompt: 'Aux États-Unis, le prix affiché sur une fiche produit inclut normalement la taxe de vente.',
+      answer: false,
+      explanation: `**Faux.** Il n’existe pas de taxe de vente fédérale aux États-Unis : chaque État, comté et ville fixe la sienne, et cinq États n’en prélèvent pas au niveau de l’État (Alaska, Delaware, Montana, New Hampshire, Oregon). Le prix affiché est donc **hors taxe**, et la *sales tax* s’ajoute au paiement, une fois l’adresse connue.
+
+C’est l’inverse de l’Union européenne, où le prix affiché au consommateur inclut la TVA. Pour l’interface : aux États-Unis, annonce « plus tax » et une estimation tôt dans le panier ; en Europe, affiche des prix TTC.`,
+      takeaway: 'Aux États-Unis, la taxe de vente s’ajoute au paiement selon l’adresse : affiche les prix hors taxe et annonce la taxe tôt dans le panier.',
+      sources: [S.salesTax],
+    },
+    {
+      id: 'culture-us-date-choice',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'us',
+      prompt: 'Ton appli affiche « 03/04/2026 » à des utilisateurs américains et français. Quelle solution évite les malentendus ?',
+      options: [
+        { id: 'intl', label: 'Écrire le mois en lettres selon la locale avec `Intl.DateTimeFormat` (« Mar 4, 2026 », « 4 mars 2026 »)', why: 'Le mois en lettres lève toute ambiguïté, et chacun lit sa propre convention.' },
+        { id: 'ddmm', label: 'Garder JJ/MM/AAAA partout : c’est le format le plus répandu dans le monde', why: 'Un Américain lira toujours 03/04 comme le 4 mars : l’ambiguïté demeure pour lui.' },
+        { id: 'mmdd', label: 'Passer en MM/JJ/AAAA partout, puisque l’appli a été conçue aux États-Unis', why: 'Les utilisateurs français liront le 3 avril : l’ambiguïté change juste de camp.' },
+        { id: 'relative', label: 'N’afficher que des dates relatives (« dans 3 jours »)', why: 'Utile pour un fil d’actualité, pas pour une échéance ou un rendez-vous.' },
+      ],
+      answer: 'intl',
+      explanation: `« 03/04/2026 » se lit **4 mars** aux États-Unis (mois/jour) et **3 avril** en France (jour/mois). Aucune des deux lectures n’est fautive : c’est le format tout en chiffres qui est ambigu.
+
+La solution : formater chaque date avec \`Intl.DateTimeFormat\` dans la locale de l’utilisateur, et écrire le mois en lettres quand une erreur coûte cher (rendez-vous, échéance, vol) : « Mar 4, 2026 » en \`en-US\`, « 4 mars 2026 » en \`fr-FR\`. Pour les échanges de données, garde le format ISO 8601 (2026-03-04).`,
+      takeaway: 'Une date tout en chiffres est ambiguë entre marchés : formate-la avec `Intl` selon la locale, mois en lettres quand une erreur coûte cher.',
+      sources: ['mdn:intl'],
+    },
+
+    /* ---------- Pays nordiques ---------- */
+    {
+      id: 'culture-nordics-bankid-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'nordics',
+      prompt: 'Quel écran de connexion convient à une banque en ligne suédoise ?',
+      options: [
+        {
+          id: 'password',
+          visual: {
+            alt: 'Écran de connexion d’une banque en suédois : adresse e-mail, mot de passe, bouton « Se connecter » et lien « Mot de passe oublié ? ».',
+            frame: 'phone',
+            lang: 'sv',
+            css: `.sb{display:flex;flex-direction:column;gap:12px}
+.sb-logo{display:flex;align-items:center;gap:6px;font-weight:800;font-size:16px;color:#0b4f8a}
+.sb-logo .mk-ico{--ico:18px}`,
+            html: `<div class="sb mk-pad">
+  <p class="sb-logo"><i data-icon="landmark"></i>Fjällbanken</p>
+  <p class="mk-h2">Logga in</p>
+  <div class="mk-field"><span class="mk-label">E-postadress</span><span class="mk-input">anna.lind@exempel.se</span></div>
+  <div class="mk-field"><span class="mk-label">Lösenord</span><span class="mk-input">••••••••••</span></div>
+  <span class="mk-btn mk-btn--block">Logga in</span>
+  <span class="mk-btn mk-btn--text">Glömt lösenordet?</span>
+</div>`,
+          },
+          why: 'E-mail et mot de passe : un secret de plus à retenir et à protéger, alors que presque tous les adultes suédois ont BankID.',
+        },
+        {
+          id: 'bankid',
+          visual: {
+            alt: 'Écran de connexion de la même banque : « Se connecter avec BankID », consigne d’ouvrir l’appli BankID et de scanner le QR code, un grand QR code, un bouton « Ouvrir BankID sur cet appareil ».',
+            frame: 'phone',
+            lang: 'sv',
+            css: `.sb{display:flex;flex-direction:column;gap:12px}
+.sb-logo{display:flex;align-items:center;gap:6px;font-weight:800;font-size:16px;color:#0b4f8a}
+.sb-logo .mk-ico{--ico:18px}
+.sb-qr{align-self:center;padding:12px;border:1px solid #e1e4ea;border-radius:14px;color:#1d2230}
+.sb-qr .mk-ico{--ico:112px}`,
+            html: `<div class="sb mk-pad">
+  <p class="sb-logo"><i data-icon="landmark"></i>Fjällbanken</p>
+  <p class="mk-h2">Logga in med BankID</p>
+  <p class="mk-small mk-muted">Öppna BankID-appen och skanna QR-koden.</p>
+  <div class="sb-qr"><i data-icon="qr-code" data-stroke="1.5"></i></div>
+  <span class="mk-btn mk-btn--block">Öppna BankID på den här enheten</span>
+  <span class="mk-btn mk-btn--text">Har du inte BankID?</span>
+</div>`,
+          },
+          why: 'BankID par QR code ou sur l’appareil : l’identification standard en Suède, pour les banques comme pour les services publics.',
+        },
+      ],
+      answer: 'bankid',
+      explanation: `En Suède, **BankID** est l’identité numérique de référence : en 2023, 99,4 % des Suédois de 18 à 67 ans en avaient un. On s’en sert pour se connecter à sa banque, à son assurance, aux services publics, et pour signer.
+
+Proposer un e-mail et un mot de passe oblige l’utilisateur à créer un secret de plus, alors qu’il attend le geste habituel : scanner le QR code avec l’appli BankID ou l’ouvrir sur le même appareil. Les voisins ont des systèmes comparables (BankID en Norvège, MitID au Danemark).`,
+      takeaway: 'En Suède, l’identification passe par BankID : c’est le standard attendu pour se connecter et signer.',
+      sources: [S.bankid],
+    },
+    {
+      id: 'culture-nordics-week-choice',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'nordics',
+      prompt: 'Tu adaptes un agenda de réservation pour la Suède. Quel réglage ajouter ?',
+      options: [
+        { id: 'weeks', label: 'Afficher les numéros de semaine (« v. 44 ») et commencer la semaine le lundi', why: 'Les Suédois planifient volontiers en semaines, et la semaine commence le lundi.' },
+        { id: 'sunday', label: 'Commencer la semaine le dimanche', why: 'C’est la convention américaine ; en Suède, la semaine commence le lundi.' },
+        { id: 'ampm', label: 'Passer à l’horloge sur 12 heures avec AM/PM', why: 'La Suède utilise l’horloge sur 24 heures.' },
+        { id: 'mmdd', label: 'Afficher les dates au format mois/jour', why: 'La Suède écrit les dates au format ISO : 2026-10-27.' },
+      ],
+      answer: 'weeks',
+      explanation: `En Suède, on planifie volontiers **en semaines** : « vecka 44 » désigne la semaine du 26 octobre au 1er novembre 2026. Les agendas affichent le numéro de semaine ISO, et la semaine commence le **lundi**.
+
+Le reste suit la même logique : dates au format ISO (2026-10-27), heures sur 24 h. Les réglages américains — dimanche en tête, AM/PM, mois/jour — y seraient déroutants.`,
+      takeaway: 'En Suède, agendas et plannings affichent le numéro de semaine ISO et commencent le lundi ; dates en 2026-10-27, heures sur 24 h.',
+      sources: [S.isoWeek, S.weekInfo],
+    },
+    {
+      id: 'culture-nordics-du-tf',
+      type: 'truefalse',
+      difficulty: 2,
+      culture: 'nordics',
+      prompt: 'En Suède, une banque doit vouvoyer ses clients (« ni ») pour paraître sérieuse.',
+      answer: false,
+      explanation: `**Faux.** Depuis la « du-reformen » de la fin des années 1960, le tutoiement (« du ») est la norme en Suède, y compris avec les banques et les administrations. Le vouvoiement (« ni ») y paraît souvent distant, voire étrange.
+
+Ce ton direct va de pair avec une faible distance hiérarchique (31 sur l’échelle de Hofstede). En Allemagne et en France, les banques traditionnelles vouvoient le plus souvent (« Sie », « vous ») : le bon registre dépend du marché, pas d’un réflexe universel de « sérieux ».`,
+      takeaway: 'En Suède, le tutoiement (« du ») est la norme, banques et administrations comprises : le ton suit la culture, pas un réflexe de sérieux.',
+      sources: [S.duReform, 'hofstede'],
+    },
+
+    /* ---------- Afrique de l’Est (Kenya) ---------- */
+    {
+      id: 'culture-ke-market-choice',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'ke',
+      prompt: 'Quel marché vise cette page de paiement ?',
+      visual: {
+        alt: 'Page de paiement en anglais : total de 2 450 shillings (KSh), paiement M-PESA avec la ligne Safaricom, champ du numéro de téléphone 0712 345 678, consigne de valider l’invite reçue sur le téléphone avec son code PIN, livraison à Westlands, Nairobi, aide sur WhatsApp.',
+        frame: 'phone',
+        lang: 'en-KE',
+        css: `.km{display:flex;flex-direction:column;gap:10px}
+.km-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
+.km-total b{font-size:18px;font-variant-numeric:tabular-nums}
+.km-opt{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid #0b7a3b;box-shadow:0 0 0 1px #0b7a3b;border-radius:10px}
+.km-opt .mk-ico{--ico:20px;color:#0b7a3b}
+.km .mk-btn--block{background:#0b7a3b}
+.km-help{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:#5a6172}
+.km-help .mk-ico{--ico:14px;margin-top:2px}`,
+        html: `<div class="km mk-pad">
+  <p class="mk-h2">Checkout</p>
+  <div class="km-total"><span>Total</span><b>KSh 2,450</b></div>
+  <div class="km-opt"><i data-icon="phone"></i><div><p class="mk-strong">M-PESA</p><p class="mk-small mk-muted">Pay with your Safaricom line</p></div></div>
+  <div class="mk-field"><span class="mk-label">M-PESA phone number</span><span class="mk-input">0712 345 678</span></div>
+  <p class="mk-small mk-muted">You will get a prompt on your phone. Enter your M-PESA PIN to complete the payment.</p>
+  <span class="mk-btn mk-btn--block">Pay KSh 2,450</span>
+  <p class="km-help"><i data-icon="message-circle"></i>Delivery to Westlands, Nairobi · Questions? Chat with us on WhatsApp</p>
+</div>`,
+      },
+      options: [
+        { id: 'ke', label: 'Kenya', why: 'Shillings kényans (KSh), M-Pesa avec une ligne Safaricom, invite de paiement sur le téléphone, livraison à Nairobi.' },
+        { id: 'in', label: 'Inde', why: 'L’Inde paie en roupies (₹), surtout par UPI.' },
+        { id: 'ng', label: 'Nigeria', why: 'Le Nigeria paie en nairas (₦), par carte, virement ou portefeuille local ; M-Pesa n’y est pas proposé.' },
+        { id: 'za', label: 'Afrique du Sud', why: 'L’Afrique du Sud paie en rands (R), par carte ou virement ; M-Pesa s’y est retiré en 2016.' },
+      ],
+      answer: 'ke',
+      explanation: `Au Kenya, l’argent mobile **M-Pesa**, lancé par Safaricom en 2007, est le moyen de paiement par défaut. Le parcours typique : le client saisit son numéro, reçoit une **invite sur son téléphone** (*STK push*) et la valide avec son code PIN M-Pesa — sans carte.
+
+Les autres indices : le montant en shillings (KSh), le numéro mobile kényan (07…), l’assistance sur WhatsApp.`,
+      takeaway: 'Au Kenya, l’argent mobile M-Pesa est le paiement par défaut : propose l’invite sur le téléphone avant la carte.',
+      sources: [S.mpesa, S.daraja],
+    },
+    {
+      id: 'culture-ke-mpesa-order',
+      type: 'order',
+      difficulty: 2,
+      culture: 'ke',
+      prompt: 'Range les étapes d’un paiement M-Pesa par invite sur le téléphone (STK push).',
+      items: [
+        { id: 'choose', label: 'Le client choisit M-Pesa et confirme son numéro Safaricom sur le site' },
+        { id: 'request', label: 'Le site envoie la demande de paiement à M-Pesa' },
+        { id: 'prompt', label: 'Une invite s’affiche sur le téléphone du client, avec le montant et le nom du marchand' },
+        { id: 'pin', label: 'Le client saisit son code PIN M-Pesa pour valider' },
+        { id: 'confirm', label: 'M-Pesa confirme par SMS et le site affiche la commande comme payée' },
+      ],
+      explanation: `Avec l’invite M-Pesa (*STK push*, aussi appelée M-Pesa Express), c’est le marchand qui déclenche la demande ; le client n’a qu’à **confirmer avec son code PIN** sur son téléphone. Pas de carte, pas de numéro de compte à recopier.
+
+Pour l’interface, deux moments comptent :
+
+- l’**attente** : un écran « Vérifie ton téléphone » avec le montant, un délai et un bouton pour renvoyer l’invite ;
+- le **repli** : si l’invite n’arrive pas, les instructions pour payer depuis le menu M-Pesa (numéro *Paybill* et référence de commande).`,
+      takeaway: 'Avec l’invite M-Pesa, le client ne tape que son code PIN : prévois un écran d’attente clair et une solution de repli par Paybill.',
+      sources: [S.daraja, S.mpesa],
+    },
+    {
+      id: 'culture-ke-ussd-tf',
+      type: 'truefalse',
+      difficulty: 1,
+      culture: 'ke',
+      prompt: 'Au Kenya, un service qui n’a pas d’application pour smartphone ne peut pas toucher les utilisateurs de téléphones basiques.',
+      answer: false,
+      explanation: `**Faux.** Les menus **USSD** — des codes comme \`*334#\`, qui ouvre le menu M-Pesa depuis 2020 — et les **SMS** fonctionnent sur n’importe quel téléphone, sans connexion Internet. Banques, assureurs, services agricoles et administrations s’en servent pour toucher tout le monde.
+
+Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d’étapes, des libellés compréhensibles sans contexte : une session expire vite. Et pour les applis, rester léger et prévoir un mode hors ligne, car les données mobiles coûtent cher.`,
+      takeaway: 'Au Kenya, l’USSD et le SMS touchent tous les téléphones : pense le service au-delà de l’appli, en menus courts et numérotés.',
+      sources: [S.ussd, S.mpesa],
+    },
+
+    /* ---------- Asie du Sud-Est (Indonésie) ---------- */
+    {
+      id: 'culture-sea-checkout-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'sea',
+      prompt: 'Quel écran de paiement convient à une boutique en ligne indonésienne ?',
+      options: [
+        {
+          id: 'card',
+          visual: {
+            alt: 'Écran de paiement en indonésien : total de 459 000 roupies et formulaire de carte bancaire seul (numéro, validité, code de sécurité).',
+            frame: 'phone',
+            lang: 'id',
+            css: `.ic{display:flex;flex-direction:column;gap:10px}
+.ic-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
+.ic-total b{font-size:18px;font-variant-numeric:tabular-nums}
+.ic .mk-input{min-height:34px;padding:6px 10px}
+.ic .mk-btn--block{background:#0b7a3b}`,
+            html: `<div class="ic mk-pad">
+  <p class="mk-h2">Pembayaran</p>
+  <div class="ic-total"><span>Total tagihan</span><b>Rp459.000</b></div>
+  <p class="mk-strong">Kartu kredit/debit</p>
+  <div class="mk-field"><span class="mk-label">Nomor kartu</span><span class="mk-input">0000 0000 0000 0000</span></div>
+  <div class="mk-grid" style="--cols:2;--gap:8px"><div class="mk-field"><span class="mk-label">Masa berlaku</span><span class="mk-input">BB/TT</span></div><div class="mk-field"><span class="mk-label">CVV</span><span class="mk-input">123</span></div></div>
+  <span class="mk-btn mk-btn--block">Bayar sekarang</span>
+</div>`,
+          },
+          why: 'Carte seule : en Indonésie, la carte reste minoritaire dans le commerce en ligne.',
+        },
+        {
+          id: 'local',
+          visual: {
+            alt: 'Écran de paiement en indonésien : total de 459 000 roupies et choix entre portefeuilles (GoPay, OVO, DANA, ShopeePay), QRIS lisible par toute appli bancaire, virement par compte virtuel, paiement à la livraison et carte.',
+            frame: 'phone',
+            lang: 'id',
+            css: `.ic{display:flex;flex-direction:column;gap:10px}
+.ic-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
+.ic-total b{font-size:18px;font-variant-numeric:tabular-nums}
+.ic .mk-btn--block{background:#0b7a3b}
+.ic-group{display:flex;flex-direction:column;gap:6px}
+.ic-opt{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.ic-opt--on{border-color:#0b7a3b;box-shadow:0 0 0 1px #0b7a3b}
+.ic-opt .mk-ico{--ico:18px;color:#36405a}
+.ic-opt p{line-height:1.3}
+.ic-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}`,
+            html: `<div class="ic mk-pad">
+  <p class="mk-h2">Pilih metode pembayaran</p>
+  <div class="ic-total"><span>Total tagihan</span><b>Rp459.000</b></div>
+  <div class="ic-group">
+    <div class="ic-opt ic-opt--on"><i data-icon="wallet"></i><div><p class="mk-strong">Dompet digital</p><div class="ic-chips"><span class="mk-badge">GoPay</span><span class="mk-badge">OVO</span><span class="mk-badge">DANA</span><span class="mk-badge">ShopeePay</span></div></div></div>
+    <div class="ic-opt"><i data-icon="qr-code"></i><div><p class="mk-strong">QRIS</p><p class="mk-small mk-muted">Scan dari aplikasi bank atau e-wallet apa pun</p></div></div>
+    <div class="ic-opt"><i data-icon="landmark"></i><div><p class="mk-strong">Virtual Account</p><p class="mk-small mk-muted">BCA · Mandiri · BNI · BRI</p></div></div>
+    <div class="ic-opt"><i data-icon="truck"></i><p class="mk-strong">COD (Bayar di Tempat)</p></div>
+    <div class="ic-opt"><i data-icon="credit-card"></i><p class="mk-strong">Kartu kredit/debit</p></div>
+  </div>
+  <span class="mk-btn mk-btn--block">Bayar Rp459.000</span>
+</div>`,
+          },
+          why: 'Portefeuilles, QRIS, compte virtuel et paiement à la livraison avant la carte : les réflexes de l’acheteur indonésien.',
+        },
+      ],
+      answer: 'local',
+      explanation: `En Indonésie, les **portefeuilles électroniques** sont le premier moyen de paiement du commerce en ligne, devant les virements ; la carte reste minoritaire. Les acheteurs attendent :
+
+- leurs portefeuilles : GoPay, OVO, DANA, ShopeePay ;
+- **QRIS**, le QR code national, lisible par n’importe quelle appli bancaire ou portefeuille ;
+- le virement par **compte virtuel** (*Virtual Account*) de leur banque ;
+- le **paiement à la livraison** (COD, *Bayar di Tempat*).`,
+      takeaway: 'En Indonésie, mets en avant portefeuilles, QRIS, compte virtuel et paiement à la livraison ; la carte n’est qu’une option parmi d’autres.',
+      sources: [S.idWallets, S.qris],
+    },
+    {
+      id: 'culture-sea-price-choice',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'sea',
+      prompt: 'Comment afficher un prix de 1 250 000 roupies sur une fiche produit indonésienne ?',
+      options: [
+        { id: 'local', label: '`Rp1.250.000`', why: 'Point pour les milliers, pas de décimales : le format des boutiques indonésiennes.' },
+        { id: 'us', label: '`Rp1,250,000.00`', why: 'Groupement anglo-saxon et centimes : deux erreurs pour un lecteur indonésien.' },
+        { id: 'intl', label: '`Rp 1.250.000,00`', why: 'C’est ce que renvoie Intl par défaut en id-ID ; mais les centimes ne servent plus dans le commerce : il faut demander zéro décimale.' },
+        { id: 'short', label: '`IDR 1.25M`', why: 'Abréviation anglaise : en indonésien, on abrège avec « jt » (juta, million), par exemple Rp1,25 jt.' },
+      ],
+      answer: 'local',
+      explanation: `La roupie indonésienne s’écrit avec un **point pour les milliers** et une virgule décimale — mais les centimes (*sen*) ne s’emploient plus dans le commerce : les prix s’affichent sans décimales, souvent collés au symbole (Rp1.250.000).
+
+\`Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })\` renvoie par défaut « Rp 1.250.000,00 ». Ajoute \`maximumFractionDigits: 0\` : la locale fournit les séparateurs, à toi d’appliquer l’usage commercial.`,
+      takeaway: 'En Indonésie : Rp1.250.000, point pour les milliers et pas de décimales. Règle `Intl` avec `maximumFractionDigits: 0`.',
+      sources: ['mdn:intl'],
+    },
+    {
+      id: 'culture-sea-qris-tf',
+      type: 'truefalse',
+      difficulty: 2,
+      culture: 'sea',
+      prompt: 'En Indonésie, un marchand doit afficher un QR code différent pour chaque portefeuille (GoPay, OVO, DANA…).',
+      answer: false,
+      explanation: `**Faux.** **QRIS** (*Quick Response Code Indonesian Standard*), le standard national lancé par Bank Indonesia en août 2019 et appliqué à tout le pays depuis le 1er janvier 2020, rend les QR codes de paiement interopérables : un seul code QRIS, au comptoir ou à l’écran, se paie avec n’importe quelle appli bancaire ou portefeuille compatible.
+
+Pour un parcours de paiement, l’interface s’en trouve simplifiée : un QR code QRIS et la consigne « scanne avec ton appli bancaire ou ton portefeuille », plutôt qu’une mosaïque de logos et de codes.`,
+      takeaway: 'En Indonésie, un seul QR code QRIS est accepté par toutes les applis compatibles : propose-le plutôt qu’un code par portefeuille.',
+      sources: [S.qris, S.qrisOne],
+    },
+
+    /* ---------- Méthode et grilles de lecture ---------- */
+    {
+      id: 'culture-localize-order',
+      type: 'order',
+      difficulty: 1,
+      prompt: 'Ton équipe veut lancer son appli au Japon. Range les étapes de la localisation.',
+      items: [
+        { id: 'research', label: 'Étudier le marché : usages, concurrents locaux, paiements, obligations légales' },
+        { id: 'i18n', label: 'Internationaliser le code selon ces besoins : textes extraits, Unicode, `Intl`, mises en page souples' },
+        { id: 'l10n', label: 'Traduire et adapter contenus, formats et parcours avec des locuteurs natifs' },
+        { id: 'test', label: 'Tester les parcours clés avec des utilisateurs japonais, sur leurs appareils' },
+        { id: 'measure', label: 'Lancer, mesurer et corriger' },
+      ],
+      explanation: `Chaque étape s’appuie sur la précédente :
+
+1. L’**étude du marché** dit ce qu’il faudra prendre en charge : écritures, formats, moyens de paiement, obligations, habitudes (furigana, paiement en supérette, densité…).
+2. L’**internationalisation** prépare le code à ces besoins : on ne traduit pas un texte écrit en dur, on ne formate pas un prix en yens sans \`Intl\`.
+3. La **localisation** (traduction, formats, parcours, images) se fait avec des natifs, sur un code prêt.
+4. Les **tests avec des utilisateurs du marché** révèlent ce qu’aucune grille ne prédit.
+5. Après le lancement, on **mesure et on corrige** : la localisation est un processus continu, pas une livraison unique.`,
+      takeaway: 'Localiser se prépare : étudier le marché, internationaliser le code, adapter avec des natifs, tester sur place, puis mesurer.',
+      sources: [S.w3cL10n, S.marcusBeijing],
+    },
+    {
+      id: 'culture-terms-match',
+      type: 'match',
+      difficulty: 1,
+      prompt: 'Associe chaque terme à sa définition.',
+      leftTitle: 'Terme',
+      rightTitle: 'Définition',
+      pairs: [
+        { id: 'i18n', left: 'Internationalisation (i18n)', right: 'Concevoir le produit pour qu’il s’adapte à toute langue et toute région sans être réécrit' },
+        { id: 'l10n', left: 'Localisation (l10n)', right: 'Adapter le produit à un marché précis : langue, formats, conventions, paiements' },
+        { id: 'cult', left: 'Culturalisation', right: 'Adapter le fond — images, symboles, exemples, ton — pour qu’il soit pertinent et acceptable' },
+        { id: 'trad', left: 'Traduction', right: 'Transposer les textes d’une langue dans une autre' },
+        { id: 'locale', left: 'Locale', right: 'Identifiant langue + région (pt-BR, zh-TW) qui pilote les formats' },
+      ],
+      explanation: `Ces cinq notions s’emboîtent :
+
+- l’**internationalisation** rend le produit adaptable, une fois pour toutes, dans le code ;
+- la **localisation** l’adapte à chaque locale ;
+- la **traduction** n’est qu’une partie de la localisation ;
+- la **culturalisation** va jusqu’au fond : images, symboles, exemples, ton ;
+- la **locale** (\`pt-BR\`, \`zh-TW\`) est l’unité de travail : une langue *et* une région.`,
+      takeaway: 'Traduire n’est qu’une partie de la localisation ; l’internationalisation la rend possible, la culturalisation la rend pertinente.',
+      sources: [S.w3cL10n, 'w3c:i18n'],
+    },
+    {
+      id: 'culture-hofstede-match',
+      type: 'match',
+      difficulty: 3,
+      prompt: 'Associe chaque tendance culturelle à l’hypothèse d’interface proposée par Marcus et Gould.',
+      leftTitle: 'Tendance culturelle',
+      rightTitle: 'Hypothèse d’interface',
+      pairs: [
+        { id: 'pdi', left: 'Forte distance hiérarchique', right: 'Mettre en avant expertise, certifications et dirigeants ; guider l’accès à l’information' },
+        { id: 'idv', left: 'Individualisme marqué', right: 'Valoriser la réussite personnelle et les arguments tranchés' },
+        { id: 'col', left: 'Collectivisme', right: 'Montrer le groupe, la tradition et des affirmations consensuelles' },
+        { id: 'uai', left: 'Fort contrôle de l’incertitude', right: 'Annoncer les conséquences avant l’action et empêcher l’utilisateur de se perdre' },
+        { id: 'lto', left: 'Orientation long terme', right: 'Privilégier la valeur pratique et le réseau de relations' },
+        { id: 'mas', left: 'Orientation réussite (« masculinité »)', right: 'Proposer maîtrise, exploration et compétition' },
+      ],
+      explanation: `Marcus et Gould (2000) ont traduit les dimensions de Hofstede en hypothèses d’interface : autorité et certifications pour une forte distance hiérarchique, réussite personnelle pour l’individualisme, groupe et tradition pour le collectivisme, prévention des erreurs pour un fort contrôle de l’incertitude, valeur pratique et relations pour le long terme, maîtrise et compétition pour l’orientation réussite.
+
+Ce sont des **hypothèses**, pas des règles, et le terrain les contredit parfois : le Japon, très attaché au contrôle de l’incertitude, préfère souvent des pages denses et complètes à des pages simples. Sers-t’en pour savoir quoi tester.`,
+      takeaway: 'Les dimensions de Hofstede suggèrent des hypothèses de design (autorité, groupe, réassurance…) : à vérifier sur le terrain, jamais à appliquer telles quelles.',
+      sources: ['marcus2000', S.marcusCourse, 'hofstede'],
+    },
+    {
+      id: 'culture-payment-match',
+      type: 'match',
+      difficulty: 2,
+      prompt: 'Associe chaque marché au moyen de paiement local à proposer en priorité, à côté de la carte.',
+      leftTitle: 'Marché',
+      rightTitle: 'Moyen de paiement réflexe',
+      pairs: [
+        { id: 'cn', left: 'Chine continentale', right: 'WeChat Pay et Alipay, par QR code' },
+        { id: 'in', left: 'Inde', right: 'UPI' },
+        { id: 'br', left: 'Brésil', right: 'Pix' },
+        { id: 'ke', left: 'Kenya', right: 'M-Pesa' },
+        { id: 'de', left: 'Allemagne', right: 'Achat sur facture et PayPal' },
+        { id: 'se', left: 'Suède', right: 'Swish et Klarna' },
+        { id: 'jp', left: 'Japon', right: 'Paiement en supérette (konbini) et PayPay' },
+      ],
+      explanation: `Dans chaque marché, un moyen de paiement « réflexe » s’est imposé :
+
+- **Chine** : WeChat Pay et Alipay, par QR code ;
+- **Inde** : l’UPI, système de paiement instantané lancé en 2016 ;
+- **Brésil** : Pix, lancé par la Banque centrale fin 2020 ;
+- **Kenya** : M-Pesa, l’argent mobile de Safaricom (2007) ;
+- **Allemagne** : l’achat sur facture et PayPal ;
+- **Suède** : Swish (virement instantané par numéro de téléphone) et Klarna ;
+- **Japon** : le paiement en supérette (*konbini*) et le QR code PayPay.
+
+Sans le moyen réflexe, la vente se perd au dernier écran, là où l’intention d’achat est la plus forte.`,
+      takeaway: 'Chaque marché a son moyen de paiement réflexe : sans lui, le panier s’arrête au dernier écran.',
+      sources: [S.upi, S.pix, S.mpesa, S.swish],
+    },
+    {
+      id: 'culture-formats-match',
+      type: 'match',
+      difficulty: 2,
+      prompt: 'Associe chaque format à la locale qui l’utilise.',
+      leftTitle: 'Format',
+      rightTitle: 'Locale',
+      pairs: [
+        { id: 'de', left: '1.234,56 €', right: 'Allemagne (de-DE)' },
+        { id: 'fr', left: '1 234,56 €', right: 'France (fr-FR)' },
+        { id: 'us', left: '$1,234.56', right: 'États-Unis (en-US)' },
+        { id: 'in', left: '₹1,23,456.78', right: 'Inde (en-IN)' },
+        { id: 'br', left: 'R$ 1.234,56', right: 'Brésil (pt-BR)' },
+        { id: 'se', left: '2026-10-27', right: 'Suède (sv-SE)' },
+        { id: 'kr', left: '2026. 10. 27.', right: 'Corée du Sud (ko-KR)' },
+      ],
+      explanation: `Ces formats sortent tous de \`Intl\` avec la bonne locale :
+
+- \`de-DE\` : point pour les milliers, virgule décimale, symbole après ;
+- \`fr-FR\` : espace fine pour les milliers, virgule décimale, symbole après ;
+- \`en-US\` : virgule pour les milliers, symbole avant ;
+- \`en-IN\` : groupement en lakhs (1,23,456) ;
+- \`pt-BR\` : séparateurs comme en allemand, symbole R$ avant ;
+- \`sv-SE\` : dates au format ISO (année-mois-jour) ;
+- \`ko-KR\` : année, mois et jour séparés par des points.
+
+Le piège n’est pas de les ignorer, mais de les coder à la main.`,
+      takeaway: 'Ne fabrique jamais un format à la main : `Intl` connaît les séparateurs, l’ordre et les symboles de chaque locale.',
+      sources: ['mdn:intl'],
+    },
+    {
+      id: 'culture-hofstede-limits-tf',
+      type: 'truefalse',
+      difficulty: 2,
+      prompt: 'Le score de Hofstede d’un pays permet de prédire les préférences d’un utilisateur de ce pays.',
+      answer: false,
+      explanation: `**Faux.** Les scores de Hofstede sont des **moyennes nationales**, issues à l’origine d’enquêtes auprès d’employés d’IBM (1967–1973), puis complétées. Ils comparent des populations, pas des personnes : en déduire le profil d’un individu est un sophisme écologique.
+
+À l’intérieur d’un pays, l’âge, la ville, le métier ou l’habitude du numérique font varier les attentes. Une étude portant sur plus de 190 000 personnes (Fischer et Schwartz, 2011) trouve d’ailleurs plus de consensus que de désaccord entre pays sur les priorités de valeurs.
+
+Utilise ces scores pour formuler des hypothèses (« ce marché attendra peut-être plus de réassurance »), puis vérifie-les avec des utilisateurs réels.`,
+      takeaway: 'Hofstede décrit des moyennes nationales, pas des personnes : sers-t’en pour poser des hypothèses, puis teste avec des utilisateurs réels.',
+      sources: ['hofstede', S.fischer],
+    },
+    {
+      id: 'culture-hall-choice',
+      type: 'choice',
+      difficulty: 3,
+      prompt: 'Selon Edward T. Hall, que signifie communiquer dans une culture « à contexte fort » ?',
+      options: [
+        { id: 'implicit', label: 'Une grande part du sens passe par l’implicite : la relation, la situation, le non-dit', why: 'C’est la définition de Hall : le contexte porte une partie du message.' },
+        { id: 'explicit', label: 'Tout doit être dit explicitement, de façon directe et détaillée', why: 'C’est l’inverse : la définition du contexte faible.' },
+        { id: 'loud', label: 'Les messages doivent être plus visibles : couleurs vives, gros titres', why: 'Hall parle de communication, pas d’intensité visuelle.' },
+        { id: 'written', label: 'L’écrit compte davantage que l’oral', why: 'Ce n’est pas le critère de Hall : il s’agit de la part de sens laissée au contexte.' },
+      ],
+      answer: 'implicit',
+      explanation: `Pour l’anthropologue Edward T. Hall, une culture à **contexte fort** fait passer une grande part du sens par l’implicite : la relation entre les personnes, la situation, ce qui n’a pas besoin d’être dit (Japon, Chine, Corée, monde arabe). Une culture à **contexte faible** attend des messages explicites, directs et complets (États-Unis, Allemagne, pays nordiques).
+
+Les hypothèses d’interface qu’on en tire souvent : en contexte fort, montrer la relation et l’environnement (qui est derrière le service, qui l’utilise, ce qu’en disent les autres) et soigner le ton ; en contexte faible, aller droit au but, avec des informations factuelles et du libre-service. À vérifier, comme toute grille, avec des utilisateurs locaux.`,
+      takeaway: 'Contexte fort : le sens passe par l’implicite et la relation ; contexte faible : par des messages explicites. Deux hypothèses de ton à tester.',
+      sources: ['hall', 'marcus2000'],
+    },
   ],
 };
 

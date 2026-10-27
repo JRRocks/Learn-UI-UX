@@ -98,7 +98,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
 .bs-a { color: #0000ee; text-decoration: underline; }
 .bs-t { border-collapse: collapse; font-size: 14px; }
 .bs-t td { padding: 4px 0; border-bottom: 1px solid #eee5df; }
-.bs-t .n { text-align: end; padding-inline-start: 16px; }
+.bs-t .n { text-align: end; padding-inline-start: 16px; white-space: nowrap; }
 .bs-in { display: flex; align-items: center; min-height: 36px; padding: 0 10px; border: 1px solid #c9bfb8; border-radius: 6px; color: #6b5f57; font-size: 14px; outline: 2px solid #1a73e8; outline-offset: 0; }
 .bs-caret { display: inline-block; width: 1px; height: 18px; margin-inline-start: 2px; background: #000; }`,
           },
@@ -118,7 +118,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
 .bs-a { color: #9a3f17; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .bs-t { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
 .bs-t td { padding: 4px 0; border-bottom: 1px solid #eee5df; }
-.bs-t .n { text-align: end; padding-inline-start: 16px; }
+.bs-t .n { text-align: end; padding-inline-start: 16px; white-space: nowrap; }
 .bs-in { display: flex; align-items: center; min-height: 36px; padding: 0 10px; border: 1px solid #b4532a; border-radius: 6px; color: #6b5f57; font-size: 14px; outline: 2px solid #b4532a; outline-offset: 2px; }
 .bs-caret { display: inline-block; width: 2px; height: 18px; margin-inline-start: 2px; background: #b4532a; }`,
           },
@@ -183,7 +183,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
           bad: {
             alt: 'Trois cartes identiques avec une tuile d’icône, un titre d’un mot (Rapide, Sécurisé, Simple) et une phrase vague.',
             html: `<div class="ic"><div class="ic-card"><span class="ic-tile"><i data-icon="zap" style="--ico:16px"></i></span><b>Rapide</b><span>Gagnez du temps au quotidien.</span></div><div class="ic-card"><span class="ic-tile"><i data-icon="shield-check" style="--ico:16px"></i></span><b>Sécurisé</b><span>Vos données sont protégées.</span></div><div class="ic-card"><span class="ic-tile"><i data-icon="sparkles" style="--ico:16px"></i></span><b>Simple</b><span>Une prise en main immédiate.</span></div></div>`,
-            css: `.ic { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 16px; }
+            css: `.ic { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; padding: 16px; }
 .ic-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 10px; border: 1px solid #e5e7eb; border-radius: 14px; font-size: 12px; color: #5a6172; }
 .ic-card b { font-size: 14px; color: #1d2230; }
 .ic-tile { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: #ede9fe; color: #6d28d9; }`,
@@ -279,7 +279,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
           bad: {
             alt: 'Trois cartes de chantier, chacune avec une fine bordure grise et une large ombre diffuse.',
             html: `<div class="gh"><div class="gh-card gh-card--ghost"><b>Rénovation cuisine</b><span>Devis envoyé</span></div><div class="gh-card gh-card--ghost"><b>Salle de bain</b><span>En cours</span></div><div class="gh-card gh-card--ghost"><b>Terrasse bois</b><span>Terminé</span></div></div>`,
-            css: `.gh { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 22px 16px 28px; background: #fff; }
+            css: `.gh { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px; padding: 22px 16px 28px; background: #fff; }
 .gh-card { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; font-size: 12px; color: #5a6172; }
 .gh-card b { font-size: 13px; color: #1d2230; }
 .gh-card--ghost { border: 1px solid #e5e7eb; box-shadow: 0 18px 40px -10px rgb(15 23 42 / 0.22); }`,
@@ -288,7 +288,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
           good: {
             alt: 'Mêmes trois cartes posées sur un fond gris clair, avec une simple bordure et aucune ombre.',
             html: `<div class="gh"><div class="gh-card"><b>Rénovation cuisine</b><span>Devis envoyé</span></div><div class="gh-card"><b>Salle de bain</b><span>En cours</span></div><div class="gh-card"><b>Terrasse bois</b><span>Terminé</span></div></div>`,
-            css: `.gh { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 22px 16px 28px; background: #f3f5f8; }
+            css: `.gh { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px; padding: 22px 16px 28px; background: #f3f5f8; }
 .gh-card { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; font-size: 12px; color: #5a6172; background: #fff; border: 1px solid #dfe3ea; }
 .gh-card b { font-size: 13px; color: #1d2230; }`,
           },
@@ -473,10 +473,10 @@ Pour signaler un état, d’autres moyens sont plus précis : un point, une grai
           visual: {
             alt: 'Trois cartes de formules Solo, Équipe et Agence, chacune avec une fine bordure grise et une grande ombre diffuse.',
             html: `<div class="pl"><div class="pl-c pl-c--ghost"><b>Solo</b><span class="pl-p">9 €</span><span>1 utilisateur</span></div><div class="pl-c pl-c--ghost"><b>Équipe</b><span class="pl-p">29 €</span><span>5 utilisateurs</span></div><div class="pl-c pl-c--ghost"><b>Agence</b><span class="pl-p">79 €</span><span>20 utilisateurs</span></div></div>`,
-            css: `.pl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 22px 16px 30px; background: #fff; }
+            css: `.pl { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 12px; padding: 22px 16px 30px; background: #fff; }
 .pl-c { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 12px; font-size: 12px; color: #5a6172; background: #fff; }
 .pl-c b { font-size: 14px; color: #1d2230; }
-.pl-p { font-size: 20px; font-weight: 750; color: #1d2230; font-variant-numeric: tabular-nums; }
+.pl-p { font-size: 20px; font-weight: 750; color: #1d2230; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pl-c--ghost { border: 1px solid #e5e7eb; box-shadow: 0 20px 44px -10px rgb(15 23 42 / 0.24); }`,
           },
           why: 'Chaque carte porte à la fois une bordure d’un pixel et une large ombre diffuse : la « carte fantôme » répétée sur toute la rangée.',
@@ -486,10 +486,10 @@ Pour signaler un état, d’autres moyens sont plus précis : un point, une grai
           visual: {
             alt: 'Trois cartes de formules posées sur un fond gris clair, avec une simple bordure, la formule Équipe sur un fond bleu très pâle.',
             html: `<div class="pl"><div class="pl-c"><b>Solo</b><span class="pl-p">9 €</span><span>1 utilisateur</span></div><div class="pl-c pl-c--on"><b>Équipe</b><span class="pl-p">29 €</span><span>5 utilisateurs</span></div><div class="pl-c"><b>Agence</b><span class="pl-p">79 €</span><span>20 utilisateurs</span></div></div>`,
-            css: `.pl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 22px 16px 30px; background: #f3f5f8; }
+            css: `.pl { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 12px; padding: 22px 16px 30px; background: #f3f5f8; }
 .pl-c { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 12px; font-size: 12px; color: #5a6172; background: #fff; border: 1px solid #dfe3ea; }
 .pl-c b { font-size: 14px; color: #1d2230; }
-.pl-p { font-size: 20px; font-weight: 750; color: #1d2230; font-variant-numeric: tabular-nums; }
+.pl-p { font-size: 20px; font-weight: 750; color: #1d2230; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pl-c--on { background: #eef3ff; border-color: #9fb6ee; }`,
           },
           why: 'Une seule déclaration d’élévation : un bord net sur un fond teinté. La formule mise en avant se distingue par sa teinte.',
@@ -603,7 +603,7 @@ Le plancher demande donc **plus d’espace au-dessus d’un titre qu’en dessou
 .td-filter { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid #cdd3dc; border-radius: 6px; background: #fff; font-size: 12px; }
 .td-row { display: flex; gap: 10px; }
 .td-hero { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 12px; border-radius: 12px; background: #fff; box-shadow: 0 6px 18px rgb(15 23 42 / 0.08); border-top: 3px solid #10b981; }
-.td-big { font-size: 30px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02em; }
+.td-big { font-size: 30px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
 .td-lbl { font-size: 11px; color: #5a6172; }
 .td-stats { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 8px; font-size: 11px; color: #5a6172; }
 .td-stats b { color: #047857; }

@@ -36,7 +36,8 @@ const CRM_CSS = `${EMPTY_CSS}
 .onb-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: #e8eefc; color: #1a3a99; font-size: 13px; font-weight: 600; white-space: nowrap; }
 `;
 
-const INVOICES = `<div class="mk-row mk-between"><p class="mk-h2">Factures</p><div class="mk-row" style="--gap:8px"><span class="onb-anchor"><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Exporter</span>__TIP__</span><span class="mk-btn mk-btn--s">Nouvelle facture</span></div></div>
+const INVOICES = `<p class="mk-h2">Factures</p>
+  <div class="mk-row" style="--gap:8px"><span class="onb-anchor"><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Exporter</span>__TIP__</span><span class="mk-btn mk-btn--s">Nouvelle facture</span></div>
   <ul class="mk-list">
     <li><span class="mk-grow">F-2026-121 · Atelier Roux</span><span class="mk-badge">Payée</span><span class="mk-price">640,00&nbsp;€</span></li>
     <li><span class="mk-grow">F-2026-120 · Studio Lumen</span><span class="mk-badge">Envoyée</span><span class="mk-price">2&#8239;400,00&nbsp;€</span></li>
@@ -469,8 +470,8 @@ Impeccable distingue cinq types d’états vides. Pour l’**absence de résulta
             )}</div></div>`,
             css: `.onb-scene { position: relative; min-height: 230px; }
 .onb-anchor { position: relative; }
-.onb-pop { position: absolute; z-index: 2; top: calc(100% + 10px); right: 0; width: 236px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; background: #fff; border: 1px solid #d5d9e2; box-shadow: 0 12px 30px rgb(15 20 35 / 0.18); font-size: 13px; line-height: 1.4; white-space: normal; }
-.onb-pop::before { content: ""; position: absolute; top: -6px; right: 30px; width: 10px; height: 10px; background: #fff; border-top: 1px solid #d5d9e2; border-left: 1px solid #d5d9e2; transform: rotate(45deg); }
+.onb-pop { position: absolute; z-index: 2; top: calc(100% + 10px); left: 0; width: 236px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; background: #fff; border: 1px solid #d5d9e2; box-shadow: 0 12px 30px rgb(15 20 35 / 0.18); font-size: 13px; line-height: 1.4; white-space: normal; }
+.onb-pop::before { content: ""; position: absolute; top: -6px; left: 30px; width: 10px; height: 10px; background: #fff; border-top: 1px solid #d5d9e2; border-left: 1px solid #d5d9e2; transform: rotate(45deg); }
 .onb-new { padding: 1px 7px; border-radius: 999px; background: #e8eefc; color: #1a3a99; font-size: 11px; font-weight: 700; }
 .onb-link { color: #1f4fd8; text-decoration: underline; text-underline-offset: 2px; }`,
           },
@@ -595,7 +596,7 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h2">Rapports</p><span class="mk-btn mk-btn--s" data-hotspot="import"><i data-icon="upload" style="--ico:14px"></i>Importer des données</span></div>
   <div class="onb-astuce" data-hotspot="tip"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Astuce&nbsp;: cliquez sur un bouton pour effectuer une action.</span><i data-icon="x" style="--ico:14px"></i></div>
-  <div class="mk-tabs"><span class="mk-tab mk-tab--on">Vue d’ensemble</span><span class="mk-tab mk-row" style="--gap:6px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
+  <div class="mk-tabs" style="flex-wrap:wrap"><span class="mk-tab mk-tab--on">Synthèse</span><span class="mk-tab mk-row" style="--gap:6px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
   <div class="mk-grid" style="--gap:10px">
     <div class="onb-metric"><span class="mk-small mk-muted mk-row" style="--gap:6px">Taux de rétention<span class="onb-help" data-hotspot="help">?</span></span><b>—</b></div>
     <div class="onb-metric"><span class="mk-small mk-muted">Chiffre d’affaires</span><b>—</b></div>
@@ -675,7 +676,7 @@ L’icône \`?\` près d’une notion complexe, le badge « Nouveau » et l’ac
       unit: '',
       target: [3, 7],
       ideal: 4,
-      explanation: `Impeccable limite une visite guidée à **3 à 7 étapes**. Au-delà, on ne retient plus les premières, on décroche, et le « 1 sur 12 » annonce un effort que peu de gens acceptent.
+      explanation: `Impeccable limite une visite guidée à **3 à 7 étapes**. Au-delà, la visite devient une leçon à retenir plutôt qu’un parcours à suivre, et le « 1 sur 12 » annonce un effort qui donne surtout envie de passer.
 
 Le bon nombre est celui du **parcours** visé, pas celui des fonctions : ici, créer un planning, y placer une tâche, inviter l’équipe, publier — quatre étapes. Le reste se découvre en contexte. Et la visite reste facultative (« Passer la visite ») et rejouable depuis l’aide.`,
       takeaway: 'Une visite guidée : 3 à 7 étapes, calées sur un parcours, facultative et rejouable.',

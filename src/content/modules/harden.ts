@@ -45,7 +45,8 @@ const KPI_CSS = `
 `;
 
 const KPI_GRID_CSS = `${KPI_CSS}
-.har-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; }
+.har-kpis { display: flex; flex-wrap: wrap; gap: 10px; }
+.har-kpis .har-kpi { flex: 0 0 150px; }
 .har-kpis b { font-size: 21px; }
 `;
 
@@ -156,8 +157,8 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
           badNote: 'L’enfant flex refuse de rétrécir sous la largeur de son contenu : tout ce qui suit passe hors champ.',
           good: {
             alt: 'Même ligne : le nom est tronqué par des points de suspension avant l’extension .pdf, et la taille et le bouton restent visibles.',
-            html: `<div class="mk-pad"><div class="mk-card"><div class="mk-row"><i data-icon="file-text"></i><span class="har-fname" title="Rapport_annuel_2026_version_finale_validée_par_la_direction_v3.pdf"><span class="har-base">Rapport_annuel_2026_version_finale_validée_par_la_direction_v3</span><span>.pdf</span></span><span class="mk-small mk-muted">2,4&nbsp;Mo</span><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Télécharger</span></div></div></div>`,
-            css: `.har-fname { display: flex; flex: 1; min-width: 0; font-weight: 600; }
+            html: `<div class="mk-pad"><div class="mk-card"><div class="mk-row mk-wrap" style="--gap:8px 10px"><i data-icon="file-text"></i><span class="har-fname" title="Rapport_annuel_2026_version_finale_validée_par_la_direction_v3.pdf"><span class="har-base">Rapport_annuel_2026_version_finale_validée_par_la_direction_v3</span><span>.pdf</span></span><span class="mk-row" style="--gap:10px;margin-inline-start:auto"><span class="mk-small mk-muted">2,4&nbsp;Mo</span><span class="mk-btn mk-btn--ghost mk-btn--s"><i data-icon="download" style="--ico:14px"></i>Télécharger</span></span></div></div></div>`,
+            css: `.har-fname { display: flex; flex: 1 1 150px; min-width: 0; font-weight: 600; }
 .har-base { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }`,
           },
           goodNote: 'min-width: 0 et une ellipse sur la base du nom : l’extension reste visible, et le nom complet s’affiche en infobulle.',
@@ -305,16 +306,17 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
         {
           id: 'wraps',
           visual: {
-            alt: 'Carte de profil dont le nom très long passe sur deux lignes, avec le bouton Suivre qui reste à sa place.',
-            html: `<div class="mk-pad"><div class="mk-card"><div class="mk-row"><span class="mk-avatar" style="width:44px;height:44px"></span><div class="mk-grow"><p class="mk-strong">Maximilian Alexander von Hohenzollern-Sigmaringen-Bergstraße</p><p class="mk-small mk-muted">Architecte · Munich</p></div><span class="mk-btn mk-btn--s">Suivre</span></div><p class="mk-small mk-muted" style="margin-top:10px">128 projets · 2&#8239;400 abonnés</p></div></div>`,
+            alt: 'Carte de profil dont le nom très long passe sur plusieurs lignes, avec le bouton Suivre qui reste visible.',
+            css: `.har-who { flex: 1 1 150px; min-width: 0; overflow-wrap: anywhere; }`,
+            html: `<div class="mk-pad"><div class="mk-card"><div class="mk-row mk-wrap"><span class="mk-avatar" style="width:44px;height:44px"></span><div class="har-who"><p class="mk-strong">Maximilian Alexander von Hohenzollern-Sigmaringen-Bergstraße</p><p class="mk-small mk-muted">Architecte · Munich</p></div><span class="mk-btn mk-btn--s" style="margin-inline-start:auto">Suivre</span></div><p class="mk-small mk-muted" style="margin-top:10px">128 projets · 2&#8239;400 abonnés</p></div></div>`,
           },
-          why: 'Le nom revient à la ligne dans l’espace disponible et le bouton reste à sa place.',
+          why: 'Le nom revient à la ligne dans l’espace disponible et le bouton reste visible et cliquable.',
         },
       ],
       answer: 'wraps',
       explanation: `Les maquettes utilisent des noms courts comme « Léa Martin » ; la réalité contient des noms de 60 caractères, des noms composés et des titres sans espace. Dans une rangée flex, un enfant ne rétrécit pas sous la largeur de son contenu par défaut (\`min-width: auto\`) : un texte qui ne peut pas revenir à la ligne pousse alors ses voisins dehors.
 
-La version robuste donne \`flex: 1\` et \`min-width: 0\` au bloc de texte et laisse le nom revenir à la ligne — ou le limite à deux lignes avec \`line-clamp\`, le nom complet restant lisible sur le profil.`,
+La version robuste donne \`min-width: 0\` au bloc de texte pour qu’il puisse rétrécir, laisse le nom revenir à la ligne et autorise la rangée à passer à la ligne sur un écran étroit (\`flex-wrap\`). Autre option : limiter le nom à deux lignes avec \`line-clamp\`, le nom complet restant lisible sur le profil.`,
       takeaway: 'Teste avec un nom de 60 caractères : `min-width: 0` sur l’enfant flex, retour à la ligne ou `line-clamp`, jamais de débordement.',
       sources: ['imp:harden', CSS_TRICKS_FLEX, MDN_MINWIDTH],
     },
@@ -540,14 +542,16 @@ La pagination, elle, est la réponse attendue à 1 284 commandes.`,
         frame: 'browser',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between mk-wrap" style="--gap:6px 12px"><p class="mk-h2">Bonjour Camille</p><span class="mk-small mk-muted" data-hotspot="login">Dernière connexion&nbsp;: aujourd’hui à 9&nbsp;h&nbsp;41</span></div>
-  <div class="mk-grid" style="--gap:10px">
+  <div class="har-pair">
     <div class="har-kpi"><span class="mk-small mk-muted">Solde disponible</span><b data-hotspot="number" style="align-self:flex-start">12,480.50&nbsp;€</b></div>
     <div class="har-kpi"><span class="mk-small mk-muted">Prochaine échéance</span><b data-hotspot="date" style="align-self:flex-start">10/30/2026</b></div>
   </div>
   <p class="mk-row" style="--gap:8px;align-self:flex-start" data-hotspot="plural"><i data-icon="mail" style="--ico:16px"></i>Vous avez 1 messages non lus</p>
   <span class="mk-btn" data-hotspot="cta" style="align-self:flex-start">Voir les factures</span>
 </div>`,
-        css: KPI_CSS,
+        css: `${KPI_CSS}
+.har-pair { display: flex; flex-wrap: wrap; gap: 10px; }
+.har-pair > .har-kpi { flex: 1 1 150px; }`,
       },
       hotspots: [
         {

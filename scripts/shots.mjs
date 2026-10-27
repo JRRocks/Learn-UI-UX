@@ -20,7 +20,8 @@ const out = `shots/${target}${mobile ? '-mobile' : ''}${dark ? '-dark' : ''}`;
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
-const server = await createServer({ server: { port: 0, host: '127.0.0.1' }, logLevel: 'error', clearScreen: false });
+// No HMR: other authors may be writing content files while captures run.
+const server = await createServer({ server: { port: 0, host: '127.0.0.1', hmr: false }, logLevel: 'error', clearScreen: false });
 await server.listen();
 const { port } = server.httpServer.address();
 const browser = await chromium.launch();

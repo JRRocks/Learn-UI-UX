@@ -399,7 +399,7 @@ Classer la dérive dit où corriger : dans le système, dans le composant, ou su
 </div></div>`,
       },
       hotspots: [
-        { id: 'visual', label: 'Direction visuelle', correct: true, why: 'Couleurs et typographie se décident dans le parcours de création et se consignent dans DESIGN.md ; `init` ne demande même pas ces choix. Seule exception : une contrainte de marque existante que l’utilisateur rend obligatoire.' },
+        { id: 'visual', label: 'Direction visuelle', correct: true, why: 'Couleurs et typographie se décident dans le parcours de création et se consignent dans DESIGN.md ; la commande init ne demande même pas ces choix. Seule exception : une contrainte de marque existante que l’utilisateur rend obligatoire.' },
         { id: 'proof', label: 'Témoignage « à rédiger pour la démo »', correct: true, why: 'Une preuve inventée n’est pas une preuve. PRODUCT.md note les preuves réelles, et signale celles qui manquent.' },
         { id: 'home', label: 'Composition de la page d’accueil', correct: true, why: 'C’est la stratégie d’une surface : elle vit dans le brief de cette page, pas dans la vérité du produit.' },
         { id: 'users', label: 'Utilisateurs', correct: false, why: 'Qui, dans quelle situation, pour quelle tâche : exactement ce que PRODUCT.md doit contenir.' },
@@ -496,10 +496,10 @@ Le piège classique : traiter un monde établi comme une page blanche parce qu�
       difficulty: 1,
       prompt: 'Après le premier tour, tu connais le but, le public et le résultat attendu. Quand lancer un second tour de questions ?',
       options: [
-        { id: 'gap', label: 'Seulement si les réponses révèlent un manque important : contenu réel, états, limites, contraintes', why: 'C’est la règle de `shape` : un tour par défaut, un second pour un manque qui changerait le résultat.' },
+        { id: 'gap', label: 'Seulement si les réponses révèlent un manque important : contenu réel, états, limites, contraintes', why: 'C’est la règle de shape : un tour par défaut, un second pour un manque qui changerait le résultat.' },
         { id: 'always', label: 'Toujours, pour couvrir toutes les questions du modèle', why: 'Déverser un questionnaire complet épuise la personne et noie les vraies décisions.' },
-        { id: 'style', label: 'Pour demander la palette et la police préférées', why: '`shape` ne demande jamais de valeurs visuelles : la direction se décide ensuite.' },
-        { id: 'never', label: 'Jamais : on passe directement à l’écriture du code', why: '`shape` n’écrit jamais de code ; et un manque important mérite un second tour.' },
+        { id: 'style', label: 'Pour demander la palette et la police préférées', why: 'Le cadrage ne demande jamais de valeurs visuelles : la direction se décide ensuite.' },
+        { id: 'never', label: 'Jamais : on passe directement à l’écriture du code', why: 'Le cadrage n’écrit jamais de code ; et un manque important mérite un second tour.' },
       ],
       answer: 'gap',
       explanation: `Le cadrage de \`shape\` avance par tours de **deux ou trois questions liées**. Un seul tour suffit par défaut ; on en ajoute un second **seulement si les réponses révèlent un manque important** — sur le contenu réel et ses plages, les états à prévoir, les limites ou les contraintes.

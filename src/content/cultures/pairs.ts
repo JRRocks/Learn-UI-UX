@@ -29,7 +29,7 @@ const ADDRESS_CSS = (p: string) => `
 .${p}-prog { height: 4px; margin: 0 16px; border-radius: 2px; background: #eceef2; }
 .${p}-prog span { display: block; width: 50%; height: 100%; border-radius: 2px; background: #0b5d4b; }
 .${p}-body { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; }
-.${p}-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.${p}-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .${p} .mk-label small { font-weight: 400; color: #5a6172; }
 .${p}-tel { display: flex; align-items: center; gap: 8px; --ico: 15px; }
 .${p}-tel svg { color: #5a6172; }
@@ -73,12 +73,12 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .ush-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #d7e1f0; }
 .ush-h { font-size: 22px; font-weight: 800; line-height: 1.15; }
 .ush-btn { margin-top: 6px; padding: 8px 14px; border-radius: 999px; background: #fff; color: #1d2230; font-weight: 700; }
-.ush-chips { display: flex; gap: 8px; }
+.ush-chips { display: flex; gap: 8px; overflow: hidden; white-space: nowrap; }
 .ush-chips span { padding: 6px 12px; border: 1px solid #c7cedb; border-radius: 999px; font-weight: 600; }
 .ush-sec { display: flex; align-items: baseline; justify-content: space-between; }
 .ush-sec b { font-size: 15px; }
 .ush-sec span { color: #1f4fd8; font-weight: 600; }
-.ush-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ush-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .ush-ph { display: grid; place-items: center; aspect-ratio: 4 / 5; background: var(--g); color: rgb(255 255 255 / 0.8); --ico: 40px; }
 .ush-name { margin-top: 6px; font-weight: 600; }
 .ush-price { font-weight: 700; }
@@ -93,7 +93,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
       html: `<div class="cnh">
   <div class="cnh-top"><span class="cnh-search"><i data-icon="search"></i><span class="cnh-q">羽绒服女冬季新款</span><i data-icon="camera"></i></span><span class="cnh-go">搜索</span></div>
   <div class="cnh-tabs"><span class="on">推荐</span><span>女装</span><span>手机</span><span>家电</span><span>美妆</span><span>食品</span></div>
-  <div class="cnh-banner"><b>双11预售</b><span>跨店每满300减50 · 定金立减</span></div>
+  <div class="cnh-banner"><b>双11预售</b><span>跨店每满300减50</span></div>
   <div class="cnh-grid">
     <span><b style="--c:#e11d48"><i data-icon="store"></i></b>超市</span>
     <span><b style="--c:#c2410c"><i data-icon="badge-check"></i></b>百亿补贴</span>
@@ -120,7 +120,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
       <div class="cnh-card"><div class="cnh-pic" style="--h:150px;--g:linear-gradient(160deg,#f4dccd,#d39a80)"></div><p class="cnh-t">加厚羽绒服女2026新款中长款</p><p class="cnh-tags"><span>包邮</span><span>退货包运费</span></p><p class="cnh-pr"><b>¥299</b><small>1.2万人付款</small></p></div>
     </div>
     <div class="cnh-col">
-      <div class="cnh-card"><div class="cnh-pic" style="--h:92px;--g:linear-gradient(160deg,#e2e8f0,#a3b1c4)"></div><p class="cnh-t">316不锈钢保温杯 大容量</p><p class="cnh-pr"><b>¥39.9</b><small>已售10万+</small></p></div>
+      <div class="cnh-card"><div class="cnh-pic" style="--h:92px;--g:linear-gradient(160deg,#e2e8f0,#a3b1c4)"></div><p class="cnh-t">316不锈钢保温杯</p><p class="cnh-pr"><b>¥39.9</b><small>已售10万+</small></p></div>
       <div class="cnh-card"><div class="cnh-pic" style="--h:64px;--g:linear-gradient(160deg,#f6e7c9,#d8ad62)"></div><p class="cnh-t">每日坚果礼盒 1.5kg</p></div>
     </div>
   </div>
@@ -134,10 +134,10 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .cnh-tabs { display: flex; gap: 14px; padding: 4px 12px 8px; overflow: hidden; background: #fff; color: #4b5563; font-size: 14px; white-space: nowrap; }
 .cnh-tabs .on { color: #1f2329; font-weight: 700; box-shadow: inset 0 -3px 0 #e1251b; }
 .cnh-banner { display: flex; align-items: center; gap: 8px; margin: 8px; padding: 10px 12px; border-radius: 10px; background: linear-gradient(90deg, #b8160c, #e1251b); color: #fff; }
-.cnh-banner b { font-size: 16px; }
+.cnh-banner b { flex: none; font-size: 16px; }
 .cnh-banner span { font-size: 12px; }
-.cnh-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px 0; margin: 0 8px; padding: 12px 2px 10px; border-radius: 10px; background: #fff; }
-.cnh-grid > span { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; line-height: 1.3; white-space: nowrap; }
+.cnh-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px 2px; margin: 0 6px; padding: 12px 4px 10px; border-radius: 10px; background: #fff; }
+.cnh-grid > span { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; line-height: 1.3; text-align: center; }
 .cnh-grid b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--c); color: #fff; --ico: 18px; }
 .cnh-tag { position: absolute; top: -6px; inset-inline-end: 4px; padding: 0 4px; border-radius: 6px 6px 6px 0; background: #d0021b; color: #fff; font-size: 11px; line-height: 15px; }
 .cnh-dot { position: absolute; top: 0; inset-inline-end: 14px; width: 8px; height: 8px; border: 1.5px solid #fff; border-radius: 50%; background: #d0021b; }
@@ -147,19 +147,19 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .cnh-timer { display: flex; align-items: center; gap: 2px; color: #d0021b; font-size: 12px; font-weight: 700; }
 .cnh-timer span { padding: 0 3px; border-radius: 3px; background: #d0021b; color: #fff; font-variant-numeric: tabular-nums; }
 .cnh-more { margin-inline-start: auto; font-size: 12px; color: #5a6172; }
-.cnh-items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
+.cnh-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
 .cnh-ph { display: grid; place-items: center; aspect-ratio: 1; background: var(--g); color: rgb(255 255 255 / 0.9); --ico: 24px; }
 .cnh-p { margin-top: 2px; color: #d0021b; font-weight: 800; }
 .cnh-items s { font-size: 11px; color: #5a6172; }
-.cnh-feed { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 8px; padding: 0 8px 10px; }
+.cnh-feed { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 8px; padding: 0 8px 10px; }
 .cnh-col { display: flex; flex-direction: column; gap: 8px; }
 .cnh-card { overflow: hidden; border-radius: 10px; background: #fff; }
 .cnh-pic { height: var(--h); background: var(--g); }
 .cnh-t { display: -webkit-box; padding: 6px 8px 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 12.5px; }
 .cnh-card > .cnh-t:last-child { padding-bottom: 8px; }
-.cnh-tags { display: flex; gap: 4px; padding: 4px 8px 0; }
-.cnh-tags span { padding: 0 4px; border: 1px solid #f3b4ae; border-radius: 3px; color: #b3261e; font-size: 11px; line-height: 16px; }
-.cnh-pr { display: flex; align-items: baseline; gap: 6px; padding: 4px 8px 8px; }
+.cnh-tags { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 8px 0; }
+.cnh-tags span { padding: 0 4px; border: 1px solid #f3b4ae; border-radius: 3px; color: #b3261e; font-size: 11px; line-height: 16px; white-space: nowrap; }
+.cnh-pr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; padding: 4px 8px 8px; white-space: nowrap; }
 .cnh-pr b { color: #d0021b; font-size: 15px; }
 .cnh-pr small { font-size: 11px; color: #5a6172; }
 .cnh .mk-tabbar { font-size: 11px; }
@@ -172,13 +172,13 @@ export const CULTURE_PAIRS: CulturePair[] = [
 - **Densité.** L’accueil américain compte cinq blocs et une action principale par bloc. L’accueil chinois aligne plus de vingt points d’entrée sur la même hauteur : l’appli y est un portail où l’on attend tous les services à portée de pouce, et l’écriture chinoise, compacte, loge plus d’information par ligne.
 - **Grille d’accès (金刚区).** Dix icônes sur deux lignes, libellées en 2 à 4 caractères, ouvrent les canaux (supermarché, coupons, live, voyages). Côté américain, quatre catégories en pastilles suffisent.
 - **Flux en cascade (瀑布流).** Des cartes de hauteurs variables sur deux colonnes invitent à défiler et à découvrir ; l’accueil américain propose une sélection courte dans une grille régulière.
-- **Urgence et promotions.** Vente flash avec compte à rebours, remise « 跨店每满300减50 » (50 ¥ de moins par tranche de 300 ¥, tous vendeurs confondus), pastilles rouges : la fête commerciale du 11.11 structure l’écran. Aux États-Unis, la promotion tient dans une bannière.
+- **Urgence et promotions.** Vente flash avec compte à rebours, remise « 跨店每满300减50 » (50\u00a0¥ de moins par tranche de 300\u00a0¥, tous vendeurs confondus), pastilles rouges : la fête commerciale du 11.11 structure l’écran. Aux États-Unis, la promotion tient dans une bannière.
 - **Preuve sociale.** « 1.2万人付款 » (12 000 acheteurs) ou « 已售10万+ » (plus de 100 000 vendus) remplacent la note en étoiles.
 
 ### Comment adapter
 
 - Ne traduis pas un accueil : reconstruis-le avec les points d’entrée qu’attend le marché, puis teste-le avec des utilisateurs locaux.
-- Dans une version dense, garde la lisibilité : blocs nets, libellés courts, icônes reconnaissables, aucun texte sous 11 px, contrastes d’au moins 4,5:1.
+- Dans une version dense, garde la lisibilité : blocs nets, libellés courts, icônes reconnaissables, aucun texte sous 11\u00a0px, contrastes d’au moins 4,5:1.
 - Dans une version épurée, une hiérarchie franche et une seule action par bloc ; les promotions restent ponctuelles.
 - La densité attendue varie aussi selon l’âge, la catégorie de produits et le modèle économique : ce sont des tendances, pas des règles fixes.`,
   },
@@ -274,7 +274,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .jpp-info dt { font-weight: 700; color: #555; }
 .jpp-info dd { margin: 0; }
 .jpp-info dd b { color: #bf0000; }
-.jpp-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.jpp-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .jpp-btns span { display: grid; place-items: center; min-height: 42px; border-radius: 6px; font-size: 13px; font-weight: 700; }
 .jpp-cart { background: #f5a300; color: #222; }
 .jpp-buy { background: #bf0000; color: #fff; }
@@ -377,7 +377,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .cnl-ph { flex: 1; color: #6b7280; }
 .cnl-get { color: #d0021b; font-weight: 600; white-space: nowrap; }
 .cnl-agree { display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: #5a6172; }
-.cnl-agree a { color: #1a6dde; }
+.cnl-agree a { color: #1a6dde; white-space: nowrap; }
 .cnl-box2 { flex: none; width: 14px; height: 14px; margin-top: 2px; border: 1.5px solid #8b92a1; border-radius: 50%; }
 .cnl-cta { display: grid; place-items: center; min-height: 40px; border-radius: 6px; background: #e1251b; color: #fff; font-size: 15px; font-weight: 700; }
 .cnl-small { font-size: 12px; color: #5a6172; }
@@ -460,13 +460,13 @@ ${RADIO('dep', '#1d6b3a')}
   <div class="brp-bar"><i data-icon="arrow-left"></i><p>Pagamento</p><i data-icon="lock"></i></div>
   <div class="brp-body">
     <p class="brp-h">Como você prefere pagar?</p>
-    <div class="brp-opt on"><span class="brp-radio"></span><div class="brp-grow"><b>Pix</b><small>Aprovação na hora · <span class="brp-tag">5% de desconto</span></small></div><span class="brp-amt">R$&nbsp;473,10</span></div>
+    <div class="brp-opt on"><span class="brp-radio"></span><div class="brp-grow"><b>Pix</b><small>Aprovação na hora</small><span class="brp-tag">5% de desconto</span></div><span class="brp-amt">R$&nbsp;473,10</span></div>
     <div class="brp-opt"><span class="brp-radio"></span><div class="brp-grow"><b>Cartão de crédito</b><small>em até 10x de R$&nbsp;49,80 sem juros</small></div><span class="brp-amt">R$&nbsp;498,00</span></div>
     <div class="brp-opt"><span class="brp-radio"></span><div class="brp-grow"><b>Boleto bancário</b><small>Aprovação em até 3 dias úteis</small></div><span class="brp-amt">R$&nbsp;498,00</span></div>
     <div class="mk-field"><span class="mk-label">CPF</span><span class="mk-input">123.456.789-09</span><span class="mk-help">Necessário para emitir a nota fiscal</span></div>
     <p class="brp-pix"><i data-icon="qr-code"></i><span>Ao finalizar, você recebe o QR Code e o código <b>Pix Copia e Cola</b>. Ele vale por 30 minutos.</span></p>
     <span class="mk-btn mk-btn--block brp-cta">Finalizar compra</span>
-    <p class="brp-zap"><i data-icon="message-circle"></i>Ficou com dúvida? Chame no WhatsApp</p>
+    <p class="brp-zap"><i data-icon="message-circle"></i>Dúvidas? Chame no WhatsApp</p>
   </div>
 </div>`,
       css: `.brp { font-size: 13px; color: #1d2230; }
@@ -479,7 +479,7 @@ ${RADIO('dep', '#1d6b3a')}
 ${RADIO('brp', '#c2410c')}
 .brp-grow { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .brp-grow small { font-size: 12px; color: #5a6172; }
-.brp-tag { padding: 0 5px; border-radius: 4px; background: #e3f4f1; color: #0f6b61; font-weight: 700; }
+.brp-tag { align-self: flex-start; margin-top: 3px; padding: 0 6px; border-radius: 4px; background: #e3f4f1; color: #0f6b61; font-size: 12px; font-weight: 700; }
 .brp-amt { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .brp-pix { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; border-radius: 8px; background: #f1f8f6; font-size: 12px; --ico: 18px; }
 .brp-pix svg { color: #0f7a6c; }
@@ -552,14 +552,14 @@ sup { font-size: 0.7em; line-height: 0; }`,
       css: `${ADDRESS_CSS('ara')}
 .ara { font-family: ${AR}; font-size: 14px; line-height: 1.6; }
 .ara .mk-label { font-size: 13px; }
-.ara-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ara-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .ara-three .mk-label { white-space: nowrap; }`,
     },
     notes: `Le même formulaire d’adresse en français et en arabe : en écriture de droite à gauche, la mise en page se retourne, mais pas tout.
 
 - **Ce qui se miroite.** Le titre et la flèche « retour » (vers la droite en arabe), les étapes qui se lisent de droite à gauche, la barre de progression qui se remplit depuis la droite, l’alignement des libellés, la case à cocher placée à droite de son texte, la flèche du bouton « متابعة » (Continuer) qui pointe vers la gauche.
 - **Ce qui ne se miroite pas.** Le numéro de téléphone (+966 50 123 4567) se lit toujours de gauche à droite ; numéro de bâtiment et code postal gardent leurs chiffres dans l’ordre ; la coche reste une coche et l’icône de téléphone n’est pas inversée.
-- **Structure locale.** L’adresse saoudienne suit l’adresse nationale : numéro de bâtiment, rue, quartier, ville, code postal à 5 chiffres et numéro complémentaire ; le nom complet tient dans un seul champ.
+- **Structure locale.** L’adresse saoudienne suit l’adresse nationale : numéro de bâtiment, rue, quartier, ville, code postal à 5\u00a0chiffres et numéro complémentaire ; le nom complet tient dans un seul champ.
 - **Typographie.** Police arabe dédiée, corps et interlignage un peu plus généreux, aucun espacement entre les lettres.
 
 ### Comment adapter
@@ -605,7 +605,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 .frc-h { font-size: 16px; font-weight: 700; }
 .frc-skip { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #1f4fd8; text-decoration: underline; --ico: 14px; }
 .frc-text { max-width: 62ch; color: #3b4252; }
-.frc-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.frc-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .frc-btns span { display: grid; place-items: center; min-height: 42px; border-radius: 8px; background: #1d2230; color: #fff; font-weight: 700; }
 .frc-custom { text-align: center; font-weight: 600; color: #1f4fd8; text-decoration: underline; }`,
     },
@@ -766,7 +766,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 - **Couleurs inversées.** Aux États-Unis comme en Europe, la hausse est verte et la baisse rouge. En Chine continentale, la hausse est **rouge** — la couleur de la prospérité — et la baisse **verte** ; même logique à Taïwan, et en Corée la baisse est bleue.
 - **Conséquence.** Un écran rouge rassure un investisseur chinois et alarme un investisseur américain : une appli internationale qui garde une seule convention trompe une partie de ses utilisateurs.
 - **Codes et vocabulaire.** La liste chinoise affiche les codes des indices (000001, 399001) et des en-têtes « 名称 / 最新价 / 涨跌幅 » (nom, dernier cours, variation) ; le graphique se choisit en « 分时 » (séance) ou « 日K » (chandeliers journaliers).
-- **Signes.** Les deux versions doublent la couleur par un signe (+ ou −) ; la version américaine ajoute des triangles.
+- **Signes.** La version chinoise double la couleur par un signe (+ ou −), la version américaine par des triangles (▲ ▼) : l’information ne repose pas sur la couleur seule.
 
 ### Comment adapter
 
@@ -818,14 +818,14 @@ sup { font-size: 0.7em; line-height: 0; }`,
 .krb-acct { margin: 8px 10px 0; padding: 14px; border-radius: 14px; background: #0d7a5f; color: #fff; }
 .krb-acct-name small { margin-inline-start: 6px; font-size: 11px; opacity: 0.9; }
 .krb-bal { margin: 2px 0 10px; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
-.krb-acct-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.krb-acct-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .krb-acct-btns span { display: grid; place-items: center; min-height: 34px; border-radius: 8px; background: rgb(255 255 255 / 0.2); font-weight: 700; }
-.krb-menu { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 4px; margin: 8px 10px 0; padding: 12px 4px; border-radius: 14px; background: #fff; }
+.krb-menu { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 4px; margin: 8px 10px 0; padding: 12px 4px; border-radius: 14px; background: #fff; }
 .krb-menu span { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; --ico: 20px; }
 .krb-menu svg { color: #0d7a5f; }
 .krb-sec { margin: 8px 10px 0; padding: 10px 12px; border-radius: 14px; background: #fff; }
 .krb-h { margin-bottom: 6px; font-size: 14px; font-weight: 700; }
-.krb-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.krb-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .krb-cards p { display: flex; flex-direction: column; padding: 8px; border-radius: 10px; background: #f2f4f6; line-height: 1.35; }
 .krb-cards b { font-size: 12.5px; }
 .krb-cards small { font-size: 11px; color: #4e5968; }
@@ -863,7 +863,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 .seb-name { font-size: 13px; color: #5a6172; }
 .seb-bal { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 .seb-avail { font-size: 12px; color: #5a6172; }
-.seb-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px 18px; }
+.seb-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 16px 18px; }
 .seb-actions span { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border-radius: 12px; background: #eef2f0; font-size: 13px; font-weight: 600; --ico: 20px; }
 .seb-actions svg { color: #1f5c4a; }
 .seb-sec { padding: 6px 18px 12px; }
@@ -877,7 +877,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 
 - **Densité.** L’accueil coréen superpose bannière d’événement, compte, menu rapide de huit raccourcis, avantages du jour et dernière notification. L’accueil suédois montre un solde, trois actions et les prochains prélèvements.
 - **Pourquoi.** Les portails coréens (Naver, Kakao) ont habitué à tout trouver sur un écran et aux mécaniques d’engagement — points de présence quotidienne (출석체크), événements, avantages. En Suède, faible distance hiérarchique, confiance et sobriété : on va droit au solde et aux paiements.
-- **Ton.** « Hej Anna », familier, en suédois ; formules polies et chaleureuses en coréen.
+- **Ton.** Un « Hej Anna » familier et personnel côté suédois ; côté coréen, l’écran parle surtout en offres et en avantages (« 오늘의 혜택 », les avantages du jour).
 - **Formats.** 1,284,500원 d’un côté ; 24 350,00 kr et des dates courtes (« 28 okt ») de l’autre.
 - **Contre-exemple.** La densité n’est pas une loi : l’appli coréenne Toss s’est imposée avec une interface épurée, une action par écran.
 

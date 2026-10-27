@@ -480,7 +480,7 @@ L’indicateur d’étape, le champ de surface et le bouton sont clairs.`,
 <div class="mk-row mk-between mk-wrap" style="--gap:8px"><div data-hotspot="crumbs"><p class="mk-small mk-muted">Boutique › Commandes</p><p class="mk-h2">Commandes</p></div><span class="db-search" data-hotspot="search"><i data-icon="search" style="--ico:15px"></i>N° ou client</span></div>
 <div class="db-kpis" data-hotspot="kpis"><div class="db-k db-k1"><i data-icon="trending-up"></i><b>128</b><span>Commandes</span></div><div class="db-k db-k2"><i data-icon="euro"></i><b>9 412 €</b><span>Ventes</span></div><div class="db-k db-k3"><i data-icon="truck"></i><b>14</b><span>À expédier</span></div><div class="db-k db-k4"><i data-icon="refresh-cw"></i><b>3</b><span>Retours</span></div></div>
 <div class="mk-tabs" data-hotspot="tabs"><span class="mk-tab mk-tab--on">Toutes</span><span class="mk-tab">À expédier</span><span class="mk-tab">Expédiées</span></div>
-<div class="db-list" data-hotspot="actions"><div class="db-r"><span><b>#1042</b> · Anaïs Roux</span><span class="mk-btn mk-btn--s">Expédier</span></div><div class="db-r"><span><b>#1043</b> · Karim Haddad</span><span class="db-ic"><i data-icon="truck"></i></span></div><div class="db-r"><span><b>#1044</b> · Julie Morel</span><span class="db-ic"><i data-icon="ellipsis"></i></span></div><div class="db-r"><span><b>#1045</b> · Tom Lefèvre</span><span class="db-link">Marquer comme expédiée</span></div></div>
+<div class="db-list" data-hotspot="actions"><div class="db-r"><span><b>#1042</b> · Anaïs Roux</span><span class="mk-btn mk-btn--s">Expédier</span></div><div class="db-r"><span><b>#1043</b> · Karim Haddad</span><span class="db-ic"><i data-icon="truck"></i></span></div><div class="db-r"><span><b>#1044</b> · Julie Morel</span><span class="db-ic"><i data-icon="ellipsis"></i></span></div><div class="db-r"><span><b>#1045</b> · Tom Lefèvre</span><span class="db-link">Marquer expédiée</span></div></div>
 </div>`),
         css: `.db-search { display: flex; align-items: center; gap: 6px; min-height: 34px; min-width: 150px; padding: 0 10px; border: 1px solid #c3c8d3; border-radius: 8px; color: #5a6172; font-size: 13px; }
 .db-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 8px; }
@@ -491,7 +491,8 @@ L’indicateur d’étape, le champ de surface et le bouton sont clairs.`,
 .db-list { display: flex; flex-direction: column; }
 .db-r { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 46px; padding: 6px 2px; border-bottom: 1px solid #eceef2; font-size: 13px; }
 .db-ic { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 6px; color: #3a4152; }
-.db-link { color: #1f4fd8; font-weight: 600; font-size: 12px; text-decoration: underline; }`,
+.db-link { color: #1f4fd8; font-weight: 600; font-size: 12px; text-decoration: underline; white-space: nowrap; }
+.mk-tab { padding: 8px 10px; font-size: 13px; white-space: nowrap; }`,
       },
       hotspots: [
         { id: 'kpis', label: 'Quatre indicateurs qui crient aussi fort', correct: true, why: 'Plancher de bruit visuel : quatre couleurs vives, même taille, même graisse. Rien ne ressort, pas même les 14 commandes à expédier — la seule donnée qui appelle une action.' },

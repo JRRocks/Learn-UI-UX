@@ -234,7 +234,7 @@ Ne suppose pas qu’un ordinateur est puissant ni qu’il n’est pas tactile : 
 
 **Rien d’essentiel ne dépend du survol** : au doigt, il n’existe pas.
 
-**Des cibles faites pour le doigt** : au moins **44 × 44 px** (la recommandation d’impeccable, d’Apple, et du critère WCAG 2.5.5 de niveau AAA), avec de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, espacement compris : c’est un plancher, pas un objectif. L’icône peut rester petite ; c’est la zone touchable qui compte.
+**Des cibles faites pour le doigt** : au moins **44 × 44 px** (la recommandation d’impeccable, d’Apple, et du critère WCAG 2.5.5 de niveau AAA), avec de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, ou un espacement suffisant autour d’une cible plus petite : c’est un plancher, pas un objectif. L’icône peut rester petite ; c’est la zone touchable qui compte.
 
 **La zone du pouce** : à une main, le bas de l’écran s’atteint mieux que le haut. Dans l’étude de Steven Hoober (1 333 observations, 2013), 49 % des personnes qui touchaient leur écran tenaient le téléphone d’une seule main, 36 % le tenaient d’une main et touchaient de l’autre, 15 % le tenaient à deux mains, et toutes changeaient souvent de prise. Place les actions fréquentes à portée de pouce, sans oublier les autres prises.`,
       examples: [

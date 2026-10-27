@@ -81,7 +81,7 @@ const MEMBER_CSS = `
 .pol-foot { background: #f7f8fa; border-radius: 0 0 10px 10px; }
 .pol-more { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; color: #5a6172; }
 .pol-more--on { background: #eef1f7; color: #1d2230; }
-.pol-menu { position: absolute; z-index: 2; top: 40px; inset-inline-end: 10px; width: 200px; display: flex; flex-direction: column; padding: 6px; background: #fff; border: 1px solid #e1e4ea; border-radius: 10px; box-shadow: 0 10px 28px rgb(15 20 35 / 0.16); }
+.pol-menu { position: absolute; z-index: 2; top: calc(100% - 4px); inset-inline-end: 10px; width: 200px; display: flex; flex-direction: column; padding: 6px; background: #fff; border: 1px solid #e1e4ea; border-radius: 10px; box-shadow: 0 10px 28px rgb(15 20 35 / 0.16); }
 .pol-menu > span { padding: 8px 10px; border-radius: 6px; }
 .pol-menu > span:first-child { background: #f1f3f7; }
 .pol-menu-danger { color: #b3261e; }
@@ -583,7 +583,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
         frame: 'browser',
         html: `<div class="mk-pad mk-stack" style="--gap:14px">
   <p class="mk-h2" data-hotspot="title" style="align-self:flex-start">Réglages du compte</p>
-  <div class="mk-tabs" style="align-items:center"><span class="mk-tab mk-tab--on">Profil</span><span class="mk-tab">Sécurité</span><span class="pol-tab-loud" data-hotspot="tab">Notifications</span></div>
+  <div class="mk-tabs" style="align-items:center"><span class="mk-tab mk-tab--on">Profil</span><span class="mk-tab">Sécurité</span><span class="pol-tab-loud" data-hotspot="tab">Alertes</span></div>
   <div class="mk-field" data-hotspot="name"><span class="mk-label">Nom complet</span><span class="mk-input">Camille Moreau</span></div>
   <div class="mk-field" data-hotspot="phone"><span class="mk-label">Téléphone</span><span class="mk-input mk-input--error">06 12 34 5</span></div>
   <div class="mk-row" style="justify-content:flex-end"><span class="mk-btn mk-btn--ghost">Annuler</span><span class="mk-btn" data-hotspot="save">Enregistrer</span></div>
@@ -595,7 +595,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
           id: 'tab',
           label: 'Onglet inactif en couleur pleine',
           correct: true,
-          why: 'L’onglet Notifications, inactif, porte l’accent saturé alors que l’onglet actif reste discret : on ne sait plus quelle page est ouverte. L’accent sert la sélection, pas les états inactifs.',
+          why: 'L’onglet Alertes, inactif, porte l’accent saturé alors que l’onglet actif reste discret : on ne sait plus quelle page est ouverte. L’accent sert la sélection, pas les états inactifs.',
         },
         {
           id: 'phone',
@@ -631,7 +631,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
   <div class="mk-row mk-between"><span class="mk-strong">Total</span><span class="mk-price">89,90&nbsp;€</span></div>
   <div class="pol-paywrap" data-hotspot="promo">
     <span class="mk-btn mk-btn--block">Payer 89,90&nbsp;€</span>
-    <div class="pol-promo"><i data-icon="percent" style="--ico:18px"></i><span class="mk-grow"><strong>−10&nbsp;% sur l’appli</strong><br><span class="mk-small">Code APPLI10 dès la 1re commande</span></span><span class="mk-btn mk-btn--s">Ouvrir</span></div>
+    <div class="pol-promo"><i data-icon="percent" style="--ico:18px"></i><span class="mk-grow"><strong>−10&nbsp;% sur l’appli</strong><br><span class="mk-small">Code APPLI10</span></span><span class="mk-btn mk-btn--s">Ouvrir</span></div>
   </div>
 </div>`,
         css: `.pol-paywrap { position: relative; padding-bottom: 46px; }

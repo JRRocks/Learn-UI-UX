@@ -107,7 +107,14 @@ const notifRows = (sw: (on: boolean) => string) =>
 <div class="m3-row"><div class="mk-grow"><p>Promotions</p><p class="mk-small" style="color:#42474e">Offres des partenaires</p></div>${sw(false)}</div>`);
 
 const TABLET_CSS = `
-.tb-frame { border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #f8f9ff; color: #1a1c1e; font-size: 12px; }
+.tb-frame { width: 440px; margin: 0 auto; border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #f8f9ff; color: #1a1c1e; font-size: 12px; }
+.tz { container-type: inline-size; }
+@container (max-width: 439px) { .tz > * { zoom: 0.9; } }
+@container (max-width: 395px) { .tz > * { zoom: 0.8; } }
+@container (max-width: 351px) { .tz > * { zoom: 0.72; } }
+@container (max-width: 316px) { .tz > * { zoom: 0.63; } }
+@container (max-width: 277px) { .tz > * { zoom: 0.56; } }
+
 .tb-screen { display: flex; height: 236px; }
 .tb-col { display: flex; flex-direction: column; min-width: 0; }
 .tb-list { flex: 1; overflow: hidden; }
@@ -118,11 +125,12 @@ const TABLET_CSS = `
 .tb-bar span, .tb-rail span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .tb-bar .on, .tb-rail .on { color: #00639b; font-weight: 600; }
 .tb-rail { width: 64px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 14px; font-size: 10px; color: #42474e; border-inline-end: 1px solid #e3e6ec; }
-.tb-detail { flex: 1.3; padding: 14px 16px; border-inline-start: 1px solid #e3e6ec; background: #fff; }
+.tb-detail { flex: 1; padding: 14px 16px; border-inline-start: 1px solid #e3e6ec; background: #fff; }
 .tb-h { font-size: 15px; font-weight: 600; padding: 10px 12px 6px; }
 .tb-mc { display: flex; align-items: flex-start; gap: 8px; padding: 7px 10px; border-bottom: 1px solid #e3e6ec; }
 .tb-mc .tb-av { margin-top: 2px; }
-.tb-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tb-sub, .tb-mc .mk-strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tb-mc .mk-row { min-width: 0; }
 `;
 
 const mail = (bg: string, from: string, subject: string, time: string, on = false) =>
@@ -145,7 +153,14 @@ const MAILS =
   mail('#f3e6b8', 'Jeanne Roux', 'Réunion de copropriété', 'Lun.');
 
 const IPAD_CSS = `
-.ip-frame { border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #fff; color: #1d2230; font-size: 12px; }
+.ip-frame { width: 440px; margin: 0 auto; border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #fff; color: #1d2230; font-size: 12px; }
+.tz { container-type: inline-size; }
+@container (max-width: 439px) { .tz > * { zoom: 0.9; } }
+@container (max-width: 395px) { .tz > * { zoom: 0.8; } }
+@container (max-width: 351px) { .tz > * { zoom: 0.72; } }
+@container (max-width: 316px) { .tz > * { zoom: 0.63; } }
+@container (max-width: 277px) { .tz > * { zoom: 0.56; } }
+
 .ip-screen { display: flex; height: 250px; }
 .ip-side { width: 120px; flex: none; padding: 12px 8px; background: #f2f2f7; display: flex; flex-direction: column; gap: 2px; }
 .ip-side span { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; }
@@ -302,21 +317,21 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
           title: 'Restructurer pour la tablette, pas étirer',
           bad: {
             alt: 'Tablette Android en paysage : la liste d’e-mails du téléphone s’étire sur toute la largeur et la barre de navigation à quatre destinations s’étale au bas de l’écran.',
-            html: fr(`<div class="tb-frame"><div class="tb-screen"><div class="tb-col" style="flex:1">
+            html: fr(`<div class="tz"><div class="tb-frame"><div class="tb-screen"><div class="tb-col" style="flex:1">
   <p class="tb-h">Boîte de réception</p>
   <div class="tb-list">${MAILS}</div>
   <div class="tb-bar"><span class="on"><i data-icon="mail" style="--ico:16px"></i>Courrier</span><span><i data-icon="message-circle" style="--ico:16px"></i>Discussions</span><span><i data-icon="users" style="--ico:16px"></i>Contacts</span><span><i data-icon="calendar" style="--ico:16px"></i>Agenda</span></div>
-</div></div></div>`),
+</div></div></div></div>`),
             css: TABLET_CSS,
           },
           badNote: 'L’interface du téléphone, étirée : des lignes interminables et une barre perdue au bas de l’écran.',
           good: {
             alt: 'Même tablette : un rail de navigation vertical à gauche, la liste d’e-mails au centre et l’e-mail sélectionné ouvert à droite.',
-            html: fr(`<div class="tb-frame"><div class="tb-screen">
+            html: fr(`<div class="tz"><div class="tb-frame"><div class="tb-screen">
   <div class="tb-rail"><span class="on"><i data-icon="mail" style="--ico:16px"></i>Courrier</span><span><i data-icon="message-circle" style="--ico:16px"></i>Discussions</span><span><i data-icon="users" style="--ico:16px"></i>Contacts</span><span><i data-icon="calendar" style="--ico:16px"></i>Agenda</span></div>
-  <div class="tb-col" style="flex:1"><p class="tb-h">Réception</p><div class="tb-list">${MAILS_COMPACT}</div></div>
+  <div class="tb-col" style="flex:1.2"><p class="tb-h">Réception</p><div class="tb-list">${MAILS_COMPACT}</div></div>
   <div class="tb-detail mk-stack" style="--gap:6px"><p class="mk-strong" style="font-size:14px">Plans du salon, version finale</p><p class="mk-small mk-muted">Inès Moreau · 10:42</p><p>Voici la dernière version, avec la bibliothèque déplacée contre le mur nord. Dis-moi si la largeur du passage te va.</p></div>
-</div></div>`),
+</div></div></div>`),
             css: TABLET_CSS,
           },
           goodNote: 'Un rail de navigation et une vue maître-détail : la largeur sert à montrer plus.',
@@ -601,14 +616,14 @@ Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, 
           id: 'stretched',
           visual: {
             alt: 'iPad en paysage : la liste de notes de l’iPhone s’étire sur toute la largeur sous un grand titre, avec une barre d’onglets étalée au bas de l’écran.',
-            html: fr(`<div class="ip-frame"><div class="ip-screen" style="flex-direction:column">
+            html: fr(`<div class="tz"><div class="ip-frame"><div class="ip-screen" style="flex-direction:column">
   <p class="ip-lt">Notes</p>
   <div class="ip-row"><span class="mk-strong">Liste de courses</span><span class="mk-grow mk-muted">Lait d’avoine, pommes, pain de campagne, lessive</span><span class="mk-muted">10:42</span></div>
   <div class="ip-row"><span class="mk-strong">Idées cadeaux</span><span class="mk-grow mk-muted">Un livre de cuisine pour Inès, des gants pour Paul</span><span class="mk-muted">Hier</span></div>
   <div class="ip-row"><span class="mk-strong">Réunion de copropriété</span><span class="mk-grow mk-muted">Toiture, ravalement, local à vélos</span><span class="mk-muted">Lun.</span></div>
   <div class="ip-row"><span class="mk-strong">Voyage à Lisbonne</span><span class="mk-grow mk-muted">Vols, quartier de l’Alfama, tram 28</span><span class="mk-muted">Dim.</span></div>
   <div class="ip-tabs"><span class="on"><i data-icon="file-text" style="--ico:16px"></i>Notes</span><span><i data-icon="folder" style="--ico:16px"></i>Dossiers</span><span><i data-icon="search" style="--ico:16px"></i>Rechercher</span></div>
-</div></div>`),
+</div></div></div>`),
             css: IPAD_CSS,
           },
           why: 'L’interface de l’iPhone, simplement agrandie : des lignes interminables et tout l’espace perdu.',
@@ -617,7 +632,7 @@ Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, 
           id: 'split',
           visual: {
             alt: 'iPad en paysage : une barre latérale de dossiers, la liste des notes au centre et la note sélectionnée ouverte à droite.',
-            html: fr(`<div class="ip-frame"><div class="ip-screen">
+            html: fr(`<div class="tz"><div class="ip-frame"><div class="ip-screen">
   <div class="ip-side"><span class="on"><i data-icon="file-text" style="--ico:14px"></i>Toutes</span><span><i data-icon="folder" style="--ico:14px"></i>Maison</span><span><i data-icon="folder" style="--ico:14px"></i>Travail</span><span><i data-icon="folder" style="--ico:14px"></i>Voyages</span></div>
   <div class="ip-list">
     <div class="ip-item on"><p class="mk-strong">Liste de courses</p><p class="mk-muted">10:42 · Lait d’avoine, pommes</p></div>
@@ -626,7 +641,7 @@ Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, 
     <div class="ip-item"><p class="mk-strong">Voyage à Lisbonne</p><p class="mk-muted">Dim. · Vols, Alfama</p></div>
   </div>
   <div class="ip-detail mk-stack" style="--gap:6px"><p class="mk-strong" style="font-size:15px">Liste de courses</p><p>Lait d’avoine</p><p>Pommes Golden × 6</p><p>Pain de campagne</p><p>Lessive</p></div>
-</div></div>`),
+</div></div></div>`),
             css: IPAD_CSS,
           },
           why: 'Une vue partagée : dossiers, liste et note côte à côte. La largeur sert à montrer plus, pas à étirer.',

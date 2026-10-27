@@ -218,7 +218,7 @@ Le **seuil de Doherty** va dans le même sens : sous **400 ms** de réponse, l�
 Ce qu’on montre pendant l’attente change sa perception :
 
 - **Un retour immédiat** à chaque action (bouton enfoncé, état « Envoi… »), même si le travail continue.
-- Sous une seconde environ, **pas d’indicateur** : il clignoterait et ferait paraître l’attente plus longue.
+- Sous une seconde environ, **pas d’indicateur** : il clignoterait sans qu’on ait le temps de le lire, et distrairait plus qu’il n’informe.
 - Pour le **chargement d’une page**, un **squelette** qui reprend la mise en page plutôt qu’un spinner au milieu du contenu : la structure apparaît, l’attente semble plus courte.
 - Pour une attente courte et locale (de 2 à 10 s, dans un seul module), un **spinner** suffit.
 - Au-delà d’une dizaine de secondes, une **progression déterminée** (pourcentage, temps restant) quand on connaît l’avancement. Jamais de progression inventée.`,
@@ -650,7 +650,7 @@ La mesure finale se fait **chez les vrais utilisateurs** (données de terrain), 
         { id: 'nothing', label: 'Rien : c’est trop court pour être perçu', why: 'Sans retour au clic, on doute que l’action ait été prise en compte, et l’on clique une seconde fois.' },
       ],
       answer: 'instant',
-      explanation: `Une action doit répondre **en moins de 0,1 s** pour paraître instantanée, même si le travail continue derrière. Pour une attente de moins d’une seconde, un **indicateur de chargement** n’apporte rien : il apparaîtrait et disparaîtrait aussitôt, ce qui fait paraître l’attente plus longue.
+      explanation: `Une action doit répondre **en moins de 0,1 s** pour paraître instantanée, même si le travail continue derrière. Pour une attente de moins d’une seconde, un **indicateur de chargement** n’apporte rien : il apparaîtrait et disparaîtrait aussitôt, sans qu’on ait le temps de le lire, comme un flash qui distrait.
 
 Le bon retour est **local et immédiat** : le bouton change d’état (« Enregistrement… ») et se désactive, ce qui évite aussi la **double soumission**. Une confirmation brève clôt l’action.`,
       takeaway: 'Attente de moins d’une seconde : un retour immédiat sur le bouton, désactivé pendant l’envoi, sans indicateur qui clignote.',

@@ -511,7 +511,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       bad: v(
         'Deux blocs de fonctionnalités, chacun avec un carré arrondi violet pâle contenant une icône, empilé au-dessus du titre.',
         `<div class="it"><div class="it-f"><span class="it-tile"><i data-icon="refresh-cw" style="--ico:18px"></i></span><b>Synchronisation bancaire</b><span>Tes relevés arrivent chaque nuit.</span></div><div class="it-f"><span class="it-tile"><i data-icon="send" style="--ico:18px"></i></span><b>Relances automatiques</b><span>Un rappel part à J+7.</span></div></div>`,
-        `.it { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px; }
+        `.it { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; padding: 18px; }
 .it-f { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #5a6172; }
 .it-f b { font-size: 15px; color: #1d2230; }
 .it-tile { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #ede9fe, #e0e7ff); color: #6d28d9; }`,
@@ -519,7 +519,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       good: v(
         'Mêmes fonctionnalités en liste, chaque icône posée à côté de son titre, sans conteneur.',
         `<div class="it"><div class="it-f"><b><i data-icon="refresh-cw" style="--ico:16px"></i>Synchronisation bancaire</b><span>Tes relevés arrivent chaque nuit.</span></div><div class="it-f"><b><i data-icon="send" style="--ico:16px"></i>Relances automatiques</b><span>Un rappel part à J+7.</span></div></div>`,
-        `.it { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px; }
+        `.it { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; padding: 18px; }
 .it-f { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #5a6172; }
 .it-f b { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.3; color: #1d2230; }
 .it-f .mk-ico { margin-top: 2px; color: #14532d; }`,
@@ -675,7 +675,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'cliche',
     severity: 'avertissement',
     description:
-      'Trois sections ou plus qui se terminent sur une courte réplique (« X. Pas de Y. », « X. Juste Y. ») ou sur un aphorisme à contraste fabriqué (« Pas une fonctionnalité. Une plateforme. ») sonnent comme une cadence générée, pas comme une voix. Une fois, ça passe ; c’est la répétition qui trahit.',
+      'Trois sections ou plus qui se terminent sur une courte réplique (« X. Pas de Y. », « X. Juste Y. ») ou sur un aphorisme à contraste fabriqué (« Pas une fonctionnalité. Une plateforme. ») sonnent comme une cadence générée, pas comme une voix. Une fois, ça passe ; c’est la répétition qui trahit. Le détecteur repère ces formules en anglais (*Not a…*, *No…*, *Just…*) ; leurs équivalents français relèvent du même tic.',
     fix: 'Termine chaque section par une information utile, et varie la forme et la longueur des phrases.',
     demo: {
       bad: v(
@@ -1037,13 +1037,13 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     fix: 'Applique `text-wrap: pretty` au texte courant (Chrome, Safari) pour ramener un mot à côté. Sinon, retouche la dernière phrase ou lie les deux derniers mots par une espace insécable. Garde-le si la coupure est voulue.',
     demo: {
       bad: v(
-        'Paragraphe de cinq lignes dont la dernière ne contient que le mot « heure. ».',
-        `<div class="sg"><p>Ta commande est préparée le jour même si<br>tu la passes avant 14 h. Elle est ensuite<br>expédiée en colis suivi, et tu reçois le<br>numéro de suivi par e-mail sous une<br>heure.</p></div>`,
+        'Paragraphe de cinq lignes dont la dernière ne contient que le mot « e-mail. ».',
+        `<div class="sg"><p>Ta commande est préparée le jour<br>même si tu la passes avant 14 h.<br>Elle part ensuite en colis suivi,<br>et le numéro de suivi t’arrive par<br>e-mail.</p></div>`,
         `.sg { padding: 18px; } .sg p { font-size: 14px; line-height: 1.6; white-space: nowrap; }`,
       ),
       good: v(
-        'Même paragraphe dont la dernière ligne contient deux mots, « une heure. ».',
-        `<div class="sg"><p>Ta commande est préparée le jour même si<br>tu la passes avant 14 h. Elle est ensuite<br>expédiée en colis suivi, et tu reçois le<br>numéro de suivi par e-mail sous<br>une heure.</p></div>`,
+        'Même paragraphe dont la dernière ligne contient deux mots, « par e-mail. ».',
+        `<div class="sg"><p>Ta commande est préparée le jour<br>même si tu la passes avant 14 h.<br>Elle part ensuite en colis suivi,<br>et le numéro de suivi t’arrive<br>par e-mail.</p></div>`,
         `.sg { padding: 18px; } .sg p { font-size: 14px; line-height: 1.6; white-space: nowrap; }`,
       ),
     },
@@ -1058,10 +1058,10 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     demo: {
       bad: v(
         'Titre sur deux lignes dont la seconde ne contient que le mot « ligne ».',
-        `<div class="ub"><p>Déclarer tes revenus de location en<br>ligne</p></div>`,
+        `<div class="ub"><p>Résilier ton contrat en<br>ligne</p></div>`,
         `.ub { padding: 22px 18px; } .ub p { font-size: 24px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`,
       ),
-      good: v('Même titre réparti sur deux lignes de longueur proche.', `<div class="ub"><p>Déclarer tes revenus<br>de location en ligne</p></div>`, `.ub { padding: 22px 18px; } .ub p { font-size: 24px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`),
+      good: v('Même titre réparti sur deux lignes de longueur proche.', `<div class="ub"><p>Résilier ton contrat<br>en ligne</p></div>`, `.ub { padding: 22px 18px; } .ub p { font-size: 24px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`),
     },
   },
   {
@@ -1091,8 +1091,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `.ux { padding: 16px; }
 .ux-h { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
 .ux table { width: 100%; border-collapse: collapse; font-size: var(--fs); }
-.ux td { padding: 5px 0; border-bottom: 1px solid #edf0f3; }
-.ux .n { text-align: end; font-variant-numeric: tabular-nums; }
+.ux td { padding: 5px 8px 5px 0; border-bottom: 1px solid #edf0f3; }
+.ux .n { padding-inline-end: 0; text-align: end; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ux-a { display: inline-block; margin-top: 6px; font-size: var(--fs); color: #1f4fd8; }`,
       ),
       good: v(
@@ -1101,8 +1101,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `.ux { padding: 16px; }
 .ux-h { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
 .ux table { width: 100%; border-collapse: collapse; font-size: var(--fs); }
-.ux td { padding: 5px 0; border-bottom: 1px solid #edf0f3; }
-.ux .n { text-align: end; font-variant-numeric: tabular-nums; }
+.ux td { padding: 5px 8px 5px 0; border-bottom: 1px solid #edf0f3; }
+.ux .n { padding-inline-end: 0; text-align: end; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ux-a { display: inline-block; margin-top: 6px; font-size: var(--fs); color: #1f4fd8; }`,
       ),
     },
@@ -1269,16 +1269,16 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     demo: {
       bad: v(
         'Trois cartes d’articles de blog, chacune avec une fine bordure grise et une grande ombre diffuse.',
-        `<div class="gp"><div class="gp-c gp-c--ghost"><b>Fixer ses tarifs</b><span>6 min</span></div><div class="gp-c gp-c--ghost"><b>Relancer sans gêne</b><span>4 min</span></div><div class="gp-c gp-c--ghost"><b>Choisir son statut</b><span>9 min</span></div></div>`,
-        `.gp { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 20px 16px 30px; background: #fff; }
+        `<div class="gp"><div class="gp-c gp-c--ghost"><b>Tes tarifs</b><span>6 min</span></div><div class="gp-c gp-c--ghost"><b>Les relances</b><span>4 min</span></div><div class="gp-c gp-c--ghost"><b>Ton statut</b><span>9 min</span></div></div>`,
+        `.gp { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 12px; padding: 20px 16px 30px; background: #fff; }
 .gp-c { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; font-size: 12px; color: #5a6172; background: #fff; }
 .gp-c b { font-size: 13px; color: #1d2230; }
 .gp-c--ghost { border: 1px solid #e5e7eb; box-shadow: 0 22px 48px -12px rgb(15 23 42 / 0.25); }`,
       ),
       good: v(
         'Mêmes trois cartes portées uniquement par une ombre douce et courte, sans bordure.',
-        `<div class="gp"><div class="gp-c"><b>Fixer ses tarifs</b><span>6 min</span></div><div class="gp-c"><b>Relancer sans gêne</b><span>4 min</span></div><div class="gp-c"><b>Choisir son statut</b><span>9 min</span></div></div>`,
-        `.gp { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 20px 16px 30px; background: #f6f7f9; }
+        `<div class="gp"><div class="gp-c"><b>Tes tarifs</b><span>6 min</span></div><div class="gp-c"><b>Les relances</b><span>4 min</span></div><div class="gp-c"><b>Ton statut</b><span>9 min</span></div></div>`,
+        `.gp { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 12px; padding: 20px 16px 30px; background: #f6f7f9; }
 .gp-c { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; font-size: 12px; color: #5a6172; background: #fff; box-shadow: 0 1px 2px rgb(15 23 42 / 0.08), 0 4px 10px rgb(15 23 42 / 0.06); }
 .gp-c b { font-size: 13px; color: #1d2230; }`,
       ),
@@ -1335,7 +1335,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'cliche',
     severity: 'conseil',
     description:
-      'Disqualifier quelque chose en le qualifiant de « théâtre » (« fini le théâtre de la sécurité », « la conformité-théâtre ») est un tic récurrent des textes générés.',
+      'Disqualifier quelque chose en le qualifiant de « théâtre » est un tic récurrent des textes générés. Le détecteur repère la tournure anglaise (*security theater*, *compliance theater*) ; « fini le théâtre de la sécurité » relève du même tic en français.',
     fix: 'Dis simplement ce que la chose fait ou ne fait pas.',
     demo: {
       bad: v(

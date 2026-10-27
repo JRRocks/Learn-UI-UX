@@ -263,7 +263,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
       {
         topic: 'legal',
         title: 'Accessibilité et procès ADA',
-        body: `Les tribunaux appliquent l’Americans with Disabilities Act aux sites et applis de commerce : plusieurs milliers de plaintes sont déposées chaque année. Vise les WCAG 2.1 ou 2.2 niveau AA, la référence des accords transactionnels et de la règle fédérale de 2024 pour les services publics locaux.`,
+        body: `De nombreux tribunaux appliquent l’Americans with Disabilities Act aux sites et applis de commerce : plusieurs milliers de plaintes sont déposées chaque année. Vise les WCAG 2.1 ou 2.2 niveau AA, la référence des accords conclus après procès et de la règle fédérale de 2024 qui s’impose aux États et aux collectivités locales.`,
       },
     ],
     adapt: {
@@ -514,7 +514,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
     context: 'faible',
     hofstede: { pdi: 31, idv: 71, mas: 5, uai: 29, lto: 53, ivr: 78 },
     summary: nb(
-      'Des interfaces épurées, fonctionnelles et informelles, à l’image de sociétés égalitaires où la confiance dans les institutions est forte : distance hiérarchique faible (31), contrôle de l’incertitude faible (29), orientation réussite presque nulle (5). L’identité numérique est centrale : on se connecte et on signe avec BankID (Suède, Norvège) ou MitID (Danemark), et le numéro personnel (personnummer) préremplit l’adresse au paiement. Swish, Vipps MobilePay et la facture remplacent souvent la saisie d’une carte, dans des pays où les espèces ont presque disparu. L’accessibilité et le langage clair sont des attentes, pas des options.',
+      'Des interfaces épurées, fonctionnelles et informelles, à l’image de sociétés égalitaires où la confiance dans les institutions est forte : distance hiérarchique faible (31), contrôle de l’incertitude faible (29), orientation « réussite » très faible (5), au profit de la qualité de vie et du consensus. L’identité numérique est centrale : on se connecte et on signe avec BankID (Suède, Norvège) ou MitID (Danemark), et le numéro personnel (personnummer) préremplit l’adresse au paiement. Swish, Vipps MobilePay et la facture remplacent souvent la saisie d’une carte, dans des pays où les espèces ont presque disparu. L’accessibilité et le langage clair sont des attentes, pas des options.',
     ),
     ecosystem: ['BankID (SE, NO)', 'MitID (DK)', 'Swish', 'Vipps MobilePay', 'Klarna', 'Kivra', 'Blocket', 'Spotify'],
     conventions: [
@@ -611,7 +611,7 @@ Pour un service sensible, un simple couple e-mail et mot de passe paraît daté.
     <div>
       <p class="se-h">Leverans</p>
       <div class="se-opt on"><span class="se-radio"></span><div class="se-grow"><b>Ombud</b><small>Götgatan 45 · tor 29 okt (v. 44)</small></div><span>49&nbsp;kr</span></div>
-      <div class="se-opt"><span class="se-radio"></span><div class="se-grow"><b>Hem till dörren</b><small>2026-10-29, kl. 17–21</small></div><span>99&nbsp;kr</span></div>
+      <div class="se-opt"><span class="se-radio"></span><div class="se-grow"><b>Hem till dörren</b><small>2026-10-29, <span class="se-nw">kl. 17–21</span></small></div><span>99&nbsp;kr</span></div>
     </div>
     <div>
       <p class="se-h">Betalning</p>
@@ -643,6 +643,7 @@ ${RADIO('se', '#1b1f24')}
 .se-radio { margin-top: 0; }
 .se-grow { flex: 1; display: flex; flex-direction: column; }
 .se-grow small { font-size: 12px; color: #5a6172; }
+.se-nw { white-space: nowrap; }
 .se-total { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; }
 .se-total b { font-size: 18px; }
 .se-vat { font-size: 12px; color: #5a6172; text-align: end; }
@@ -777,12 +778,12 @@ Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : u
   <div class="cn-recent"><p>最近使用</p><span>社区团购</span><span>停车缴费</span><span>共享单车</span></div>
   <div class="cn-feed">
     <div class="cn-col">
-      <div class="cn-card"><div class="cn-pic" style="--h:128px;--g:linear-gradient(160deg,#f6d8b8,#e2a06f)"></div><p>秋天的第一杯奶茶，五款新品测评</p><p class="cn-meta"><span class="cn-av" style="--a:#e9a98c"></span>小鹿吃喝<span class="cn-like"><i data-icon="heart"></i>1.2万</span></p></div>
-      <div class="cn-card"><div class="cn-pic" style="--h:76px;--g:linear-gradient(160deg,#d3e7da,#8fbfa5)"></div><p>周末去哪儿｜上海秋日徒步路线</p><p class="cn-meta"><span class="cn-av" style="--a:#94c2a8"></span>城市漫步<span class="cn-like"><i data-icon="heart"></i>3562</span></p></div>
+      <div class="cn-card"><div class="cn-pic" style="--h:128px;--g:linear-gradient(160deg,#f6d8b8,#e2a06f)"></div><p>秋天的第一杯奶茶，五款新品测评</p><p class="cn-meta"><span class="cn-av" style="--a:#e9a98c"></span><span class="cn-user">小鹿吃喝</span><span class="cn-like"><i data-icon="heart"></i>1.2万</span></p></div>
+      <div class="cn-card"><div class="cn-pic" style="--h:76px;--g:linear-gradient(160deg,#d3e7da,#8fbfa5)"></div><p>周末去哪儿｜上海秋日徒步路线</p><p class="cn-meta"><span class="cn-av" style="--a:#94c2a8"></span><span class="cn-user">城市漫步</span><span class="cn-like"><i data-icon="heart"></i>3562</span></p></div>
     </div>
     <div class="cn-col">
-      <div class="cn-card"><div class="cn-pic" style="--h:84px;--g:linear-gradient(160deg,#dbe4f5,#9db3e0)"></div><p>租房改造：花了不到2000元</p><p class="cn-meta"><span class="cn-av" style="--a:#a9bde6"></span>住进小窝<span class="cn-like"><i data-icon="heart"></i>8848</span></p></div>
-      <div class="cn-card"><div class="cn-pic" style="--h:120px;--g:linear-gradient(160deg,#f3dbe7,#d99ab9)"></div><p>通勤穿搭｜一周不重样</p><p class="cn-meta"><span class="cn-av" style="--a:#e2aac4"></span>穿搭日记<span class="cn-like"><i data-icon="heart"></i>2.3万</span></p></div>
+      <div class="cn-card"><div class="cn-pic" style="--h:84px;--g:linear-gradient(160deg,#dbe4f5,#9db3e0)"></div><p>租房改造：花了不到2000元</p><p class="cn-meta"><span class="cn-av" style="--a:#a9bde6"></span><span class="cn-user">住进小窝</span><span class="cn-like"><i data-icon="heart"></i>8848</span></p></div>
+      <div class="cn-card"><div class="cn-pic" style="--h:120px;--g:linear-gradient(160deg,#f3dbe7,#d99ab9)"></div><p>通勤穿搭｜一周不重样</p><p class="cn-meta"><span class="cn-av" style="--a:#e2aac4"></span><span class="cn-user">穿搭日记</span><span class="cn-like"><i data-icon="heart"></i>2.3万</span></p></div>
     </div>
   </div>
   <div class="mk-tabbar"><span class="on"><i data-icon="house"></i>首页</span><span><i data-icon="chart-column"></i>理财</span><span><i data-icon="store"></i>生活</span><span class="cn-msg"><i data-icon="message-circle"></i>消息<span class="cn-badge">3</span></span><span><i data-icon="user"></i>我的</span></div>
@@ -791,28 +792,29 @@ Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : u
 .cn-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #1a6dde; color: #fff; --ico: 20px; }
 .cn-loc { display: flex; align-items: center; gap: 2px; font-weight: 600; --ico: 14px; }
 .cn-search { flex: 1; display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: #fff; color: #6b7280; font-size: 12px; --ico: 14px; }
-.cn-hero { display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 8px 20px; background: #1a6dde; color: #fff; }
+.cn-hero { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 6px 8px 20px; background: #1a6dde; color: #fff; }
 .cn-hero span { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; --ico: 26px; }
-.cn-grid { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px 0; margin: -12px 8px 0; padding: 14px 2px 12px; border-radius: 12px; background: #fff; }
-.cn-grid > span { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; line-height: 1.3; white-space: nowrap; }
+.cn-grid { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px 2px; margin: -12px 6px 0; padding: 14px 4px 12px; border-radius: 12px; background: #fff; }
+.cn-grid > span { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; line-height: 1.3; text-align: center; }
 .cn-grid b { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: var(--c); color: #fff; --ico: 19px; }
 .cn-tag { position: absolute; top: -8px; inset-inline-end: 0; padding: 0 4px; border-radius: 6px 6px 6px 0; background: #d0021b; color: #fff; font-size: 11px; line-height: 16px; }
 .cn-dot { position: absolute; top: -2px; inset-inline-end: 12px; width: 8px; height: 8px; border: 1.5px solid #fff; border-radius: 50%; background: #d0021b; }
 .cn-banner { display: flex; align-items: center; gap: 8px; margin: 10px 8px 0; padding: 10px 12px; border-radius: 12px; background: linear-gradient(90deg, #b8160c, #d0021b); color: #fff; }
-.cn-banner b { font-size: 15px; }
+.cn-banner b { flex: none; font-size: 15px; }
 .cn-banner span { flex: 1; font-size: 12px; }
 .cn-banner .cn-go { flex: none; padding: 2px 10px; border-radius: 999px; background: #ffe7a8; color: #a3290f; font-weight: 700; }
-.cn-recent { display: flex; align-items: center; gap: 6px; margin: 10px 8px 0; font-size: 12px; }
+.cn-recent { display: flex; align-items: center; gap: 6px; margin: 10px 8px 0; overflow: hidden; font-size: 12px; white-space: nowrap; }
 .cn-recent p { color: #5a6172; }
 .cn-recent span { padding: 1px 8px; border: 1px solid #e3e6ec; border-radius: 999px; background: #fff; }
-.cn-feed { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 8px; padding: 10px 8px; }
+.cn-feed { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 8px; padding: 10px 8px; }
 .cn-col { display: flex; flex-direction: column; gap: 8px; }
 .cn-card { overflow: hidden; border-radius: 10px; background: #fff; }
 .cn-pic { height: var(--h); background: var(--g); }
 .cn-card > p:not(.cn-meta) { display: -webkit-box; padding: 6px 8px 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 12.5px; line-height: 1.45; }
-.cn-meta { display: flex; align-items: center; gap: 4px; padding: 6px 8px 8px; font-size: 11px; color: #5a6172; --ico: 12px; }
-.cn-av { width: 16px; height: 16px; border-radius: 50%; background: var(--a); }
-.cn-like { display: flex; align-items: center; gap: 2px; margin-inline-start: auto; }
+.cn-meta { display: flex; align-items: center; gap: 4px; padding: 6px 8px 8px; font-size: 11px; color: #5a6172; white-space: nowrap; --ico: 12px; }
+.cn-user { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.cn-av { flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--a); }
+.cn-like { flex: none; display: flex; align-items: center; gap: 2px; }
 .cn .mk-tabbar { font-size: 11px; }
 .cn .mk-tabbar > .on { color: #1a6dde; }
 .cn-msg { position: relative; }
@@ -966,7 +968,7 @@ Les lectures se notent en \`ruby\` (furigana) ; l’éditorial utilise parfois l
 .jp-req { padding: 0 5px; border-radius: 3px; background: #bf0000; color: #fff; font-size: 11px; line-height: 18px; }
 .jp-req.jp-opt { background: #666; }
 .jp-in { display: flex; align-items: center; justify-content: space-between; min-height: 36px; padding: 6px 10px; border: 1px solid #b5b5b5; border-radius: 4px; background: #fff; }
-.jp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.jp-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .jp-zip { display: flex; gap: 8px; }
 .jp-zip .jp-in { flex: 1; }
 .jp-btn { display: grid; place-items: center; padding: 0 10px; border: 1px solid #bf0000; border-radius: 4px; color: #bf0000; font-size: 12px; font-weight: 700; white-space: nowrap; }
@@ -1048,7 +1050,7 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
       },
       {
         topic: 'formats',
-        title: 'Formats',
+        title: 'Dates, heures et grands nombres',
         body: `2026. 10. 27. (année, mois, jour séparés par des points), 오후 1:30 (horloge 12 h avec 오전/오후), 1,284,500원 ; grands nombres en 만 (10 000) : 1.2만. Adresse du plus grand au plus petit, adresse routière (도로명주소) depuis 2014 et code postal à 5 chiffres depuis 2015.`,
       },
     ],
@@ -1108,7 +1110,7 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
 .kr-body { display: flex; flex-direction: column; gap: 6px; padding: 6px 20px 18px; }
 .kr-title { margin-bottom: 8px; font-size: 20px; font-weight: 700; line-height: 1.4; }
 .kr-label { margin-top: 6px; font-size: 13px; color: #4e5968; }
-.kr-carriers, .kr-easy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.kr-carriers, .kr-easy { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .kr-carriers span { display: grid; place-items: center; min-height: 38px; border: 1px solid #d1d6db; border-radius: 8px; font-size: 13px; font-weight: 600; }
 .kr-carriers .on { border-color: #1a5fd8; background: #eef4ff; color: #1a5fd8; box-shadow: inset 0 0 0 1px #1a5fd8; }
 .kr-in { display: flex; align-items: center; min-height: 40px; padding: 0 4px; border-bottom: 2px solid #d1d6db; font-size: 15px; }
@@ -1257,7 +1259,7 @@ Beaucoup de personnes n’ont pas de nom de famille au sens occidental : un seul
 .in-img { flex: none; width: 64px; height: 64px; display: grid; place-items: center; background: linear-gradient(160deg, #cfd8e8, #9aaacb); color: rgb(255 255 255 / 0.85); --ico: 28px; }
 .in-name { font-weight: 600; }
 .in-mrp { font-size: 12px; color: #5a6172; }
-.in-mrp b { color: #0a7d3c; }
+.in-mrp b { color: #0a7d3c; white-space: nowrap; }
 .in-price { font-size: 18px; font-weight: 800; }
 .in-item small { font-size: 11px; color: #5a6172; }
 .in-h { margin-top: 2px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #5a6172; }
@@ -1316,7 +1318,7 @@ ${RADIO('in', '#1f4fae')}
         title: 'Typographie arabe',
         body: `L’arabe est cursif : les lettres se lient, donc **jamais d’espacement entre les lettres** (\`letter-spacing\`), pas de capitales ni d’italique au sens latin. On met en valeur par la graisse ou la couleur.
 
-Choisis une police arabe dédiée (Noto Naskh Arabic, IBM Plex Sans Arabic, Dubai…), un corps un peu plus grand et un interlignage plus généreux que pour le latin.`,
+Choisis une police arabe dédiée (Noto Naskh Arabic, IBM Plex Sans Arabic, Dubai…), un corps un peu plus grand et un interlignage plus généreux que pour le latin. Si tu sers aussi le persan ou l’ourdou, préserve l’antiliant sans chasse (ZWNJ, U+200C) et traite ي/ی et ك/ک comme équivalents dans la recherche.`,
       },
       {
         topic: 'formulaires',
@@ -1418,7 +1420,8 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
 .ar-rating { display: flex; align-items: center; gap: 4px; font-weight: 700; --ico: 15px; }
 .ar-rating svg { color: #b45309; fill: currentColor; }
 .ar-rating span { font-size: 13px; font-weight: 400; color: #5a6172; }
-.ar-price { display: flex; align-items: baseline; gap: 10px; }
+.ar-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.ar-price > * { white-space: nowrap; }
 .ar-price b { font-size: 22px; }
 .ar-price s { font-size: 13px; color: #5a6172; }
 .ar-off { padding: 0 6px; border-radius: 4px; background: #fde8e8; color: #b3261e; font-size: 12px; font-weight: 700; }
@@ -1429,7 +1432,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
 .ar-facts svg { color: #7a4b12; }
 .ar-pay { display: flex; flex-wrap: wrap; gap: 6px; }
 .ar-pay span { padding: 1px 10px; border: 1px solid #c7cedb; border-radius: 6px; font-size: 12px; font-weight: 700; }
-.ar-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.ar-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 4px; }
 .ar-cta, .ar-buy { display: grid; place-items: center; min-height: 44px; border-radius: 10px; font-weight: 700; }
 .ar-cta { background: #7a4b12; color: #fff; }
 .ar-buy { border: 1.5px solid #7a4b12; color: #7a4b12; }
@@ -1508,7 +1511,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
       },
       {
         topic: 'formats',
-        title: 'Formats',
+        title: 'Réais, dates et téléphones',
         body: `R$ 1.234,56 (point pour les milliers, virgule décimale), 27/10/2026, 13:30 ou 13h30, téléphone (11) 91234-5678 avec l’indicatif régional entre parenthèses. La semaine commence le dimanche dans les calendriers.`,
       },
     ],
@@ -1559,7 +1562,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
     <div class="br-frete">
       <p class="br-label">Calcular frete e prazo</p>
       <div class="br-cep"><span class="br-in">05422-000</span><span class="br-ok">OK</span></div>
-      <p class="br-ship"><i data-icon="truck"></i><span><b>Frete grátis</b> · chega quinta-feira, 29/10</span></p>
+      <p class="br-ship"><i data-icon="truck"></i><span><b>Frete grátis</b> · chega <span class="br-nw">quinta-feira, 29/10</span></span></p>
     </div>
     <span class="mk-btn mk-btn--block br-buy">Comprar agora</span>
     <span class="mk-btn mk-btn--block br-add">Adicionar ao carrinho</span>
@@ -1588,6 +1591,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
 .br-cep { display: flex; gap: 6px; }
 .br-in { flex: 1; padding: 6px 10px; border: 1px solid #c3c8d3; border-radius: 6px; }
 .br-ok { display: grid; place-items: center; padding: 0 14px; border-radius: 6px; background: #1d2230; color: #fff; font-weight: 700; }
+.br-nw { white-space: nowrap; }
 .br-ship { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: #0a7d3c; --ico: 15px; }
 .br-buy { margin-top: 8px; background: #c2410c; }
 .br-add { background: #fff; color: #c2410c; border-color: #c2410c; }
@@ -1862,7 +1866,7 @@ ${RADIO('ke', '#0f5132')}
     <div class="id-days"><span class="done">+5</span><span class="done">+10</span><span class="today">+25</span><span>+10</span><span>+15</span><span>+20</span><span>+50</span></div>
   </div>
   <div class="id-card">
-    <p class="id-flash-h"><b>FLASH SALE</b><span class="id-timer">02 : 14 : 09</span><span class="id-more">Lihat semua</span></p>
+    <p class="id-flash-h"><b>FLASH SALE</b><span class="id-timer">02:14:09</span><span class="id-more">Lihat semua</span></p>
     <div class="id-items">
       <div><div class="mk-img id-ph" style="--g:linear-gradient(160deg,#fde2c8,#f3a86b)"><i data-icon="shirt"></i></div><p class="id-p">Rp49.000</p><s>Rp99.000</s><span class="id-bar"><span class="id-fill" style="width:82%"></span><span class="id-txt">Segera habis</span></span></div>
       <div><div class="mk-img id-ph" style="--g:linear-gradient(160deg,#dbe7f7,#92b0e0)"><i data-icon="headphones"></i></div><p class="id-p">Rp129.000</p><s>Rp259.000</s><span class="id-bar"><span class="id-fill" style="width:64%"></span><span class="id-txt">Terjual 1,2rb</span></span></div>
@@ -1876,32 +1880,32 @@ ${RADIO('ke', '#0f5132')}
 .id-search { flex: 1; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 4px; background: #fff; color: #5a6172; font-size: 12px; --ico: 14px; }
 .id-ico { position: relative; display: flex; }
 .id-n { position: absolute; top: -6px; inset-inline-end: -8px; min-width: 16px; height: 16px; border-radius: 8px; background: #fff; color: #b3261e; font-size: 11px; font-weight: 700; line-height: 16px; text-align: center; }
-.id-wallet { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 6px; margin: 8px; padding: 8px 10px; border-radius: 8px; background: #fff; }
+.id-wallet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; align-items: center; gap: 6px; margin: 8px; padding: 8px 10px; border-radius: 8px; background: #fff; }
 .id-wallet > span { display: flex; flex-direction: column; line-height: 1.3; }
 .id-wallet small { font-size: 11px; color: #5a6172; }
 .id-wallet b { font-size: 13px; }
-.id-wallet .id-qris { flex-direction: row; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 6px; background: #fdecea; color: #b3261e; font-size: 12px; font-weight: 700; --ico: 15px; }
+.id-wallet .id-qris { flex-direction: row; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 6px; background: #fdecea; color: #b3261e; font-size: 12px; font-weight: 700; white-space: nowrap; --ico: 15px; }
 .id-banner { display: flex; flex-direction: column; margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: linear-gradient(90deg, #a61b11, #d73211); color: #fff; }
 .id-banner b { font-size: 15px; }
-.id-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 4px; margin: 8px; padding: 10px 4px; border-radius: 8px; background: #fff; }
+.id-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 4px; margin: 8px; padding: 10px 4px; border-radius: 8px; background: #fff; }
 .id-grid > span { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; line-height: 1.25; text-align: center; }
 .id-grid b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--c); color: #fff; --ico: 18px; }
 .id-card { margin: 0 8px 8px; padding: 8px 10px; border-radius: 8px; background: #fff; }
-.id-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 6px; }
+.id-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
 .id-days span { display: grid; place-items: center; height: 28px; border-radius: 6px; background: #f1f2f4; color: #5a6172; font-size: 11px; font-weight: 700; }
 .id-days .done { background: #fdecea; color: #b3261e; }
 .id-days .today { background: #d73211; color: #fff; }
-.id-flash-h { display: flex; align-items: center; gap: 8px; }
+.id-flash-h { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 .id-flash-h b { color: #d73211; font-size: 14px; letter-spacing: 0.03em; }
 .id-timer { padding: 1px 6px; border-radius: 4px; background: #1d2230; color: #fff; font-size: 12px; font-variant-numeric: tabular-nums; }
-.id-more { margin-inline-start: auto; font-size: 12px; color: #5a6172; }
-.id-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+.id-more { min-width: 0; margin-inline-start: auto; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: #5a6172; }
+.id-items { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
 .id-ph { display: grid; place-items: center; aspect-ratio: 1; background: var(--g); color: rgb(255 255 255 / 0.9); --ico: 30px; }
 .id-p { margin-top: 4px; color: #d73211; font-size: 13px; font-weight: 800; }
 .id-items s { font-size: 11px; color: #5a6172; }
 .id-bar { position: relative; display: block; height: 16px; margin-top: 4px; overflow: hidden; border-radius: 8px; background: #fde2dd; }
 .id-fill { position: absolute; inset-block: 0; inset-inline-start: 0; background: #f4a593; }
-.id-txt { position: relative; display: block; color: #7a1d0e; font-size: 11px; font-weight: 600; line-height: 16px; text-align: center; }
+.id-txt { position: relative; display: block; overflow: hidden; color: #7a1d0e; font-size: 11px; font-weight: 600; line-height: 16px; text-align: center; white-space: nowrap; text-overflow: ellipsis; }
 .id .mk-tabbar { font-size: 11px; }
 .id .mk-tabbar > .on { color: #d73211; }`,
     },

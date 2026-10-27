@@ -47,7 +47,7 @@ La correction n’est pas « une autre couleur à la mode », mais une palette *
           badNote: 'Halo radial violet-cyan et bouton lumineux : le décor « cool » par défaut.',
           good: {
             alt: 'Même page sur un fond encre uni, un titre qui nomme une fonction précise, un bouton orange mat et la liste des émissions suivies.',
-            html: `<div class="pdg"><p class="pdg-h">Reprends chaque épisode à la seconde près, sur tous tes appareils</p><span class="pdg-btn">Importer mes abonnements</span><ul class="pdg-l"><li><b>Les Pieds sur terre</b><span>reprise à 18:42</span></li><li><b>Affaires sensibles</b><span>nouvel épisode</span></li></ul></div>`,
+            html: `<div class="pdg"><p class="pdg-h">Reprends chaque épisode à la seconde près, sur tous tes appareils</p><span class="pdg-btn">Importer mes abonnements</span><ul class="pdg-l"><li><b>Les Carnets du dimanche</b><span>reprise à 18:42</span></li><li><b>Histoires de quartier</b><span>nouvel épisode</span></li></ul></div>`,
             css: `.pdg { padding: 28px 20px; color: #f3efe8; background: #17181c; }
 .pdg-h { font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em; }
 .pdg-btn { display: inline-flex; margin-top: 14px; padding: 9px 16px; border-radius: 8px; background: #e8833a; color: #17181c; font-weight: 700; font-size: 14px; }
@@ -149,7 +149,9 @@ Côté texte, quatre tics de cadence :
 - **le jargon marketing** : *streamline*, *empower*, *supercharge*, *world-class*… Le détecteur cherche ces tournures anglaises ; « boostez », « révolutionnez », « de nouvelle génération » trahissent le même réflexe en français ;
 - **la cadence aphoristique** : trois sections ou plus qui se terminent par « X. Pas de Y. » ou « Pas un outil. Un partenaire. » ;
 - **l’abus de tirets cadratins**, signalé seulement en saturation : au moins 8 tirets, environ un pour 500 caractères ;
-- **le cadrage « théâtre »** : « fini le théâtre de la sécurité ». Dis ce que la chose fait ou ne fait pas.`,
+- **le cadrage « théâtre »** : « fini le théâtre de la sécurité ». Dis ce que la chose fait ou ne fait pas.
+
+Attention : ces règles de rédaction lisent l’anglais (*security theater*, *Not a…*, *Just…*). Sur un texte français, le détecteur ne compte que les tirets cadratins ; le reste, c’est à ton œil de le repérer.`,
       examples: [
         {
           title: 'Le texte d’une page d’accueil',
@@ -296,10 +298,10 @@ Le correctif n’est pas de les atténuer, mais de réécrire : un titre uni qui
 </div>`,
         css: `.ft { padding: 18px; display: flex; flex-direction: column; gap: 10px; background: #f8f9fb; }
 .ft-row { display: flex; align-items: baseline; gap: 10px; }
-.ft-num { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #7c3aed; }
+.ft-num { padding: 4px 6px; margin: -4px -6px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #7c3aed; }
 .ft-h { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; }
 .ft-intro { font-size: 14px; color: #4b5262; }
-.ft-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ft-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
 .ft-card { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 14px; background: #fff; border: 1px solid #e5e7eb; font-size: 13px; color: #5a6172; }
 .ft-card b { font-size: 15px; color: #111827; }
 .ft-tile { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #ede9fe, #e0e7ff); color: #6d28d9; }
@@ -333,7 +335,7 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
       prompt: 'Trouve les trois problèmes de cet écran.',
       visual: {
         alt: 'Tableau de bord sombre avec un menu, un indicateur « En direct » à point lumineux, une carte « Taux d’ouverture 42 % » entourée d’un halo violet, une alerte d’envoi en échec et un tableau des campagnes en très petits caractères.',
-        html: `<div class="db">
+        html: `<div class="db-wrap"><div class="db">
   <nav class="db-nav" data-hotspot="nav"><b>Envoi</b><span class="on">Statistiques</span><span>Campagnes</span><span>Contacts</span></nav>
   <div class="db-main">
     <div class="db-head"><p class="db-h">Statistiques</p><span class="db-live" data-hotspot="pulse"><span class="db-dot"></span>En direct</span></div>
@@ -342,7 +344,7 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
     <p class="db-fail" data-hotspot="fail"><i data-icon="circle-alert" style="--ico:15px"></i>1 envoi en échec : adresse invalide</p>
     <table class="db-t"><thead><tr><th data-hotspot="sort">Campagne <i data-icon="chevron-down" style="--ico:12px"></i></th><th class="n">Ouvertures</th></tr></thead><tbody data-hotspot="tiny"><tr><td>Lettre de mars</td><td class="n">1 204</td></tr><tr><td>Soldes d’hiver</td><td class="n">986</td></tr></tbody></table>
   </div>
-</div>`,
+</div></div>`,
         css: `.db { display: grid; grid-template-columns: minmax(84px, 108px) minmax(0, 1fr); background: #0e0f1a; color: #e6e6ef; font-size: 13px; }
 .db-nav { display: flex; flex-direction: column; gap: 4px; padding: 12px 8px; background: #151626; color: #a9abc2; }
 .db-nav b { padding: 0 6px 8px; color: #fff; }
@@ -365,7 +367,13 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
 .db-t { width: 100%; border-collapse: collapse; }
 .db-t th { text-align: start; padding: 6px 4px; font-size: 12px; font-weight: 600; color: #a9abc2; border-bottom: 1px solid #2a2b40; white-space: nowrap; }
 .db-t td { padding: 4px; font-size: 9px; color: #c9cadb; border-bottom: 1px solid #22233a; }
-.db-t .n { text-align: end; font-variant-numeric: tabular-nums; }`,
+.db-t .n { text-align: end; font-variant-numeric: tabular-nums; }
+.db-wrap { container-type: inline-size; }
+@container (max-width: 440px) {
+  .db { grid-template-columns: 1fr; }
+  .db-nav { flex-direction: row; flex-wrap: wrap; align-items: center; padding: 8px 10px; }
+  .db-nav b { padding: 0 8px 0 4px; }
+}`,
       },
       hotspots: [
         { id: 'pulse', label: 'Point « En direct » qui pulse', correct: true, why: 'La pulsation simule une activité alors que les chiffres datent de 2 h du matin : un indicateur décoratif, et faux.' },
@@ -420,7 +428,7 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
 - **Aphoristic-cadence copy** : une fois, ça passe ; **trois sections ou plus** qui retombent sur « X. Pas de Y. » ou « Pas un outil. Un partenaire. », c’est une cadence, pas une voix ;
 - **Theater framing copy** : dire simplement ce que la chose fait ou ne fait pas.
 
-La phrase sur l’export montre la voie : un verbe précis, un format, un destinataire, une date.`,
+Ces trois règles cherchent des formules anglaises : sur un texte français, le détecteur ne les verra pas, c’est à toi de les repérer. La phrase sur l’export montre la voie : un verbe précis, un format, un destinataire, une date.`,
       takeaway: 'Remplace le jargon, les chutes en formule et le cadrage « théâtre » par des faits précis : verbe, objet, chiffre.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
@@ -467,7 +475,7 @@ La phrase sur l’export montre la voie : un verbe précis, un format, un destin
       answer: 'specific',
       explanation: `La critique d’impeccable commence par une question : **ce design est-il ancré dans ce produit, ou un produit sans rapport pourrait-il le reprendre tel quel ?** Remplace « chantier » par « recrutement » dans la version sombre : rien d’autre ne bouge. C’est la signature du réflexe.
 
-Elle cumule d’ailleurs cinq règles du détecteur : halo radial, pastille eyebrow, texte en dégradé dans la palette « IA », halo lumineux autour du bouton, jargon marketing. La version claire, elle, montre la scène réelle du produit et l’action qu’on vient y faire.`,
+Elle cumule d’ailleurs quatre règles du détecteur (halo radial, pastille eyebrow, texte en dégradé dans la palette « IA », halo lumineux autour du bouton), plus un « révolutionne » qui relève du jargon marketing. La version claire, elle, montre la scène réelle du produit et l’action qu’on vient y faire.`,
       takeaway: 'Masque le nom du produit : si un produit voisin pouvait reprendre la page telle quelle, elle reste générique.',
       sources: ['imp:critique', 'imp:detector'],
     },
@@ -620,7 +628,7 @@ Pour regrouper des informations à l’intérieur d’une carte, impeccable reco
           id: 'plan',
           visual: {
             alt: 'Éditeur de plan d’appartement : barre d’outils Mur, Porte, Fenêtre, puis une toile quadrillée où sont tracées des pièces cotées, avec l’échelle « 1 carreau = 50 cm ».',
-            html: `<div class="pl"><div class="pl-tools"><span class="on">Mur</span><span>Porte</span><span>Fenêtre</span><span class="pl-scale">1 carreau = 50 cm</span></div><div class="pl-canvas"><div class="pl-room pl-r1"><span>Séjour · 18,4 m²</span></div><div class="pl-room pl-r2"><span>Chambre</span></div><span class="pl-dim">3,20 m</span></div></div>`,
+            html: `<div class="pl"><div class="pl-tools"><span class="on">Mur</span><span>Porte</span><span>Fenêtre</span><span class="pl-scale">1 carreau = 50 cm</span></div><div class="pl-canvas"><div class="pl-room pl-r1"><span>Séjour · 12 m²</span></div><div class="pl-room pl-r2"><span>Chambre · 7,5 m²</span></div><span class="pl-dim">4,00 m</span></div></div>`,
             css: `.pl { background: #fff; }
 .pl-tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #dfe3ea; font-size: 12px; }
 .pl-tools span { padding: 4px 10px; border-radius: 6px; border: 1px solid #cfd5df; }
@@ -630,7 +638,7 @@ Pour regrouper des informations à l’intérieur d’une carte, impeccable reco
 .pl-room { position: absolute; border: 3px solid #1d2230; background: rgb(255 255 255 / 0.6); }
 .pl-room span { position: absolute; left: 8px; top: 6px; font-size: 11px; font-weight: 600; }
 .pl-r1 { left: 20px; top: 20px; width: 160px; height: 120px; }
-.pl-r2 { left: 177px; top: 20px; width: 100px; height: 120px; }
+.pl-r2 { left: 177px; top: 20px; width: 103px; height: 120px; }
 .pl-dim { position: absolute; left: 20px; top: 150px; width: 160px; text-align: center; font-size: 11px; color: #1f4fd8; border-top: 1px solid #1f4fd8; }`,
           },
           why: 'Ici la grille est l’outil : elle donne l’échelle et sert à tracer les murs.',

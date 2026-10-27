@@ -104,7 +104,7 @@ Sam n’est pas un cas marginal à traiter en fin de projet : ce qu’il exige (
 - *Questions de test* : que se passe-t-il à 0, à 1 000 éléments, avec un texte très long ? Les erreurs laissent-elles l’interface dans un état propre ? L’état survit-il à un rafraîchissement ? Une fonction semble-t-elle marcher alors qu’elle produit un résultat faux ?
 - *Signaux d’alerte* : fonctions qui échouent en silence, erreurs qui exposent des détails techniques ou cassent l’interface, états vides inutiles (« Aucun résultat » sans piste), données perdues au rafraîchissement, comportements différents pour des interactions semblables.
 
-**Casey, le mobile distrait**, tient son téléphone d’une main, en mouvement, souvent interrompu, parfois sur une connexion lente. L’observation de Steven Hoober (2013) le rappelle : 49 % des personnes observées tenaient leur téléphone d’une seule main.
+**Casey, le mobile distrait**, tient son téléphone d’une main, en mouvement, souvent interrompu, parfois sur une connexion lente. Les observations de Steven Hoober (2013) le rappellent : 49 % des personnes vues en train de toucher leur écran tenaient leur téléphone d’une seule main.
 
 - *Questions de test* : les actions principales sont-elles dans la zone du pouce, la moitié inférieure de l’écran ? L’état est-il conservé si Casey quitte l’appli et revient ? L’écran tient-il sur une connexion lente ? Les formulaires profitent-ils de l’autocomplétion et de valeurs par défaut ? Les cibles tactiles font-elles au moins 44 × 44 pt ?
 - *Signaux d’alerte* : actions importantes placées tout en haut de l’écran, progression perdue à la moindre interruption, longue saisie de texte là où un choix suffirait, ressources lourdes chargées à chaque page, cibles minuscules ou trop serrées.`,
@@ -320,7 +320,7 @@ L’encart « Pour démarrer » aide sans bloquer : il se masque, montre les rac
       answer: 'extend',
       explanation: `Sam met plus de temps qu’un utilisateur à la souris : il parcourt les champs un par un et écoute chaque libellé. Un compte à rebours sans prolongation l’exclut, et c’est l’un de ses signaux d’alerte : **une action limitée dans le temps sans possibilité de prolonger**.
 
-Les WCAG en font un critère de niveau A (2.2.1) : la personne est avertie avant l’expiration et dispose d’au moins 20 secondes pour prolonger d’un geste simple, au moins dix fois. L’avertissement doit aussi être annoncé au lecteur d’écran, pas seulement affiché.`,
+Les WCAG en font un critère de niveau A (2.2.1) : un délai doit pouvoir être désactivé, ajusté ou prolongé — par exemple en avertissant la personne avant l’expiration et en lui laissant au moins 20 secondes pour prolonger d’un geste simple, au moins dix fois. L’avertissement doit aussi être annoncé au lecteur d’écran, pas seulement affiché.`,
       takeaway: 'Tout délai imposé doit pouvoir être prolongé d’un geste simple, avec un avertissement annoncé et sans perte de saisie.',
       sources: ['imp:critique', { label: 'W3C — Comprendre le critère 2.2.1 (délai réglable)', url: 'https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html' }],
     },
@@ -480,7 +480,7 @@ Le correctif : des cases à cocher, un filtre par collection, une action groupé
         { id: 'casey', label: 'Casey, sur mobile', why: 'L’écran est sur mobile, mais le défaut vient des données extrêmes, pas de la prise en main.' },
       ],
       answer: 'riley',
-      explanation: `Riley teste ce que les maquettes oublient : un nom de 50 caractères, une adresse interminable, un historique vide. L’écran échoue aux deux épreuves : le texte est coupé net, sans points de suspension ni retour à la ligne, et « Aucune donnée » n’explique rien ni ne propose de suite.
+      explanation: `Riley teste ce que les maquettes oublient : un nom de plus de 50 caractères, une adresse interminable, un historique vide. L’écran échoue aux deux épreuves : le texte est coupé net, sans points de suspension ni retour à la ligne, et « Aucune donnée » n’explique rien ni ne propose de suite.
 
 Le correctif relève de \`harden\` : laisser le nom passer à la ligne, et transformer l’état vide en invitation, par exemple « Vous n’avez pas encore commandé · Découvrir la boutique ».`,
       takeaway: 'Teste avec des données extrêmes (textes très longs, listes vides, caractères spéciaux) : l’interface doit rester propre et utile.',

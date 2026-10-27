@@ -446,15 +446,15 @@ Chaque étape ajoutée entre l’intention et l’action fait décrocher une par
             alt: 'Écran noir façon terminal : invite de commande verte, tableau en texte aligné, curseur et barre de touches F1 Aide, F2 Filtrer, F3 Exporter, F10 Quitter.',
             html: `<div class="tty">
   <p class="tty-l"><span class="tty-p">ondine@supervision:~$</span> services --etat</p>
-<pre class="tty-out">SERVICE            ÉTAT      P95
-api-paiements      OK        212 ms
-authentification   DÉGRADÉ   1840 ms
-base-clients       OK        38 ms
-file-emails        OK        95 ms</pre>
+<pre class="tty-out">SERVICE        ÉTAT     P95
+auth           DÉGRADÉ  1840 ms
+api-paiements  OK       212 ms
+file-emails    OK       95 ms
+base-clients   OK       38 ms</pre>
   <p class="tty-l"><span class="tty-p">ondine@supervision:~$</span> <span class="tty-cur"></span></p>
   <div class="tty-keys"><span><b>F1</b>Aide</span><span><b>F2</b>Filtrer</span><span><b>F3</b>Exporter</span><span><b>F10</b>Quitter</span></div>
 </div>`,
-            css: `.tty { background: #0c0f0d; color: #7ee2a0; padding: 14px 14px 0; font: 13px/1.5 "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+            css: `.tty { background: #0c0f0d; color: #7ee2a0; padding: 14px 14px 0; font: 12px/1.5 "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
 .tty-p { color: #3fb86b; }
 .tty-out { margin: 8px 0; font: inherit; white-space: pre; overflow: hidden; }
 .tty-cur { display: inline-block; width: 8px; height: 15px; vertical-align: -3px; background: #7ee2a0; }
@@ -466,7 +466,7 @@ file-emails        OK        95 ms</pre>
         {
           id: 'product',
           visual: {
-            alt: 'Écran de supervision avec un en-tête graphite à onglets, un filtre de région, un champ de recherche et un tableau trié par latence avec des pastilles d’état « Dégradé » et « Opérationnel ».',
+            alt: 'Écran de supervision avec un en-tête graphite à onglets, un filtre de région, un champ de recherche et un tableau trié par latence avec des pastilles d’état « Dégradé » et « Normal ».',
             html: `<div class="ond">
   <div class="ond-top"><strong class="ond-brand">Ondine</strong><div class="ond-tabs"><span class="on">Services</span><span>Incidents</span><span>Déploiements</span></div></div>
   <div class="ond-body">
@@ -474,10 +474,10 @@ file-emails        OK        95 ms</pre>
     <table class="ond-table">
       <thead><tr><th>Service</th><th>État</th><th class="num">Latence p95 <i data-icon="chevron-down" style="--ico:12px"></i></th></tr></thead>
       <tbody>
-        <tr><td class="mono">authentification</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num mono">1&#8239;840&nbsp;ms</td></tr>
-        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Opérationnel</span></td><td class="num mono">212&nbsp;ms</td></tr>
-        <tr><td class="mono">file-emails</td><td><span class="ond-st">Opérationnel</span></td><td class="num mono">95&nbsp;ms</td></tr>
-        <tr><td class="mono">base-clients</td><td><span class="ond-st">Opérationnel</span></td><td class="num mono">38&nbsp;ms</td></tr>
+        <tr><td class="mono">auth</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num mono">1&#8239;840&nbsp;ms</td></tr>
+        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Normal</span></td><td class="num mono">212&nbsp;ms</td></tr>
+        <tr><td class="mono">file-emails</td><td><span class="ond-st">Normal</span></td><td class="num mono">95&nbsp;ms</td></tr>
+        <tr><td class="mono">base-clients</td><td><span class="ond-st">Normal</span></td><td class="num mono">38&nbsp;ms</td></tr>
       </tbody>
     </table>
   </div>
@@ -493,8 +493,8 @@ file-emails        OK        95 ms</pre>
 .ond-select, .ond-search { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 10px; border: 1px solid #c4cbc7; border-radius: 6px; background: #fff; font-size: 12px; }
 .ond-search { color: #5b6470; flex: 1; min-width: 130px; }
 .ond-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border: 1px solid #dde2df; border-radius: 8px; }
-.ond-table th { text-align: start; padding: 7px 8px; font-size: 12px; font-weight: 600; color: #4c555b; border-bottom: 1px solid #dde2df; white-space: nowrap; }
-.ond-table td { padding: 7px 8px; border-bottom: 1px solid #edf0ee; }
+.ond-table th { text-align: start; padding: 7px 6px; font-size: 12px; font-weight: 600; color: #4c555b; border-bottom: 1px solid #dde2df; }
+.ond-table td { padding: 7px 6px; border-bottom: 1px solid #edf0ee; }
 .ond-table .num { text-align: end; white-space: nowrap; }
 .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
 .ond-st { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e3f4e8; color: #1d6b3c; }
@@ -550,7 +550,7 @@ Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockp
     </div>
   </div>
 </div>`,
-            css: `.alz { background: #fff; color: #1c2733; }
+            css: `.alz { background: #fff; color: #1c2733; container-type: inline-size; }
 .alz-mast { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 16px; color: #e8f0f6; background-color: #0b2236; background-image: linear-gradient(rgb(143 184 216 / 0.3) 1px, transparent 1px), linear-gradient(90deg, rgb(143 184 216 / 0.3) 1px, transparent 1px); background-size: 18px 18px; }
 .alz-mast strong { font-size: 16px; letter-spacing: .04em; }
 .alz-mast span { font-size: 12px; }
@@ -563,7 +563,11 @@ Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockp
 .alz-h { margin: 4px 0 6px; font-size: 20px; font-weight: 700; line-height: 1.2; }
 .alz-p { font-size: 14px; line-height: 1.6; max-width: 62ch; }
 .alz-code { margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: #0b2236; color: #e8f0f6; font: 12px/1.5 "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; word-break: break-all; }
-.alz-code b { color: #8fd3c0; }`,
+.alz-code b { color: #8fd3c0; }
+@container (max-width: 420px) {
+  .alz-grid { grid-template-columns: 1fr; }
+  .alz-rail { flex-direction: row; flex-wrap: wrap; }
+}`,
           },
           why: 'La carte marine reste dans l’en-tête et le bloc de code ; la colonne garde une police de lecture, un vrai contraste et une navigation standard.',
         },
@@ -683,7 +687,7 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
       prompt: 'Trouve les deux éléments qui sortent du mode Opérer.',
       visual: {
         alt: 'Tableau de bord avec un rail de navigation bleu, un bouton rotatif pour choisir la période, une ligne schématique des stations, une alerte rouge et une liste des stations en italique à empattements.',
-        html: `<div class="vel">
+        html: `<div class="vel-wrap"><div class="vel">
   <nav class="vel-rail" data-hotspot="rail"><strong>Vélo Rade</strong><span class="on"><i data-icon="map-pin" style="--ico:15px"></i>Stations</span><span><i data-icon="bike" style="--ico:15px"></i>Vélos</span><span><i data-icon="settings" style="--ico:15px"></i>Interventions</span></nav>
   <div class="vel-main">
     <div class="vel-head"><p class="vel-h">Stations</p><div class="vel-knob" data-hotspot="knob"><span class="vel-dial"></span><span class="vel-t vel-t1">J</span><span class="vel-t vel-t2">S</span><span class="vel-t vel-t3">M</span></div></div>
@@ -691,7 +695,7 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
     <div class="vel-alert" data-hotspot="alert"><i data-icon="triangle-alert" style="--ico:16px"></i><span>Port de commerce vide depuis 40 min</span><b>Planifier un réassort</b></div>
     <ul class="vel-list" data-hotspot="font"><li><span>Port de commerce</span><b>0 / 20</b></li><li><span>Saint-Martin</span><b>7 / 16</b></li><li><span>Capucins</span><b>12 / 24</b></li></ul>
   </div>
-</div>`,
+</div></div>`,
         css: `.vel { display: grid; grid-template-columns: minmax(92px, 118px) minmax(0, 1fr); background: #f6f8fb; color: #14243a; font-size: 13px; }
 .vel-rail { display: flex; flex-direction: column; gap: 4px; padding: 12px 8px; background: #12355b; color: #c9d7ea; }
 .vel-rail strong { padding: 0 6px 8px; color: #fff; }
@@ -714,7 +718,13 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
 .vel-alert { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; border-radius: 8px; background: #fdecea; color: #8a1f17; border: 1px solid #f3c2bc; font-size: 12px; }
 .vel-alert b { margin-inline-start: auto; text-decoration: underline; text-underline-offset: 2px; }
 .vel-list { list-style: none; padding: 0; margin: 0; font-family: "Playfair Display", Georgia, "Liberation Serif", serif; font-style: italic; font-size: 15px; letter-spacing: .02em; }
-.vel-list li { display: flex; justify-content: space-between; padding: 6px 2px; border-bottom: 1px solid #e3e8ef; }`,
+.vel-list li { display: flex; justify-content: space-between; padding: 6px 2px; border-bottom: 1px solid #e3e8ef; }
+.vel-wrap { container-type: inline-size; }
+@container (max-width: 440px) {
+  .vel { grid-template-columns: 1fr; }
+  .vel-rail { flex-direction: row; flex-wrap: wrap; align-items: center; padding: 8px 10px; }
+  .vel-rail strong { padding: 0 8px 0 4px; }
+}`,
       },
       hotspots: [
         { id: 'knob', label: 'Bouton rotatif de période', correct: true, why: 'Un contrôle réinventé pour le style : un bouton à tourner remplace des onglets ou un sélecteur que tout le monde sait utiliser.' },

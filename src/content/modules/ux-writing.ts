@@ -149,26 +149,26 @@ Pour une **action destructrice**, nomme l’objet et la conséquence : « Suppri
           title: 'Une confirmation qui dit ce qu’elle confirme',
           bad: {
             alt: 'Boîte de dialogue au-dessus d’une liste de projets : titre « Êtes-vous sûr ? », texte « Cette action est irréversible. », boutons « Non » et « Oui ».',
-            height: 280,
+            height: 330,
             html:
               PROJECTS +
               fr(`<div class="mk-overlay"><div class="mk-dialog mk-stack" style="--gap:10px">
   <p class="mk-h3">Êtes-vous sûr ?</p>
   <p class="mk-muted">Cette action est irréversible.</p>
-  <div class="mk-row dl-actions" style="--gap:8px"><span class="mk-btn mk-btn--ghost">Non</span><span class="mk-btn">Oui</span></div>
+  <div class="mk-row dl-actions" style="--gap:8px"><span class="mk-btn mk-btn--ghost mk-btn--s">Non</span><span class="mk-btn mk-btn--s">Oui</span></div>
 </div></div>`),
             css: DIALOG_CSS,
           },
           badNote: 'Rien ne dit ce qui sera supprimé : on répond « Oui » par réflexe.',
           good: {
             alt: 'Même liste avec une boîte de dialogue « Supprimer le projet « Refonte 2026 » ? », qui précise que 48 fichiers et les commentaires seront supprimés pour toute l’équipe, boutons « Annuler » et « Supprimer le projet ».',
-            height: 280,
+            height: 330,
             html:
               PROJECTS +
               fr(`<div class="mk-overlay"><div class="mk-dialog mk-stack" style="--gap:10px">
   <p class="mk-h3">Supprimer le projet « Refonte 2026 » ?</p>
   <p class="mk-muted">Ses 48 fichiers et tous les commentaires seront supprimés pour toute l’équipe. Cette action est définitive.</p>
-  <div class="mk-row dl-actions" style="--gap:8px"><span class="mk-btn mk-btn--ghost">Annuler</span><span class="mk-btn mk-btn--danger">Supprimer le projet</span></div>
+  <div class="mk-row dl-actions" style="--gap:8px"><span class="mk-btn mk-btn--ghost mk-btn--s">Annuler</span><span class="mk-btn mk-btn--danger mk-btn--s">Supprimer le projet</span></div>
 </div></div>`),
             css: DIALOG_CSS,
           },

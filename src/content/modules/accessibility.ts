@@ -78,7 +78,7 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
       id: 'perceptible',
       title: 'Perceptible : contraste, couleur, alternatives',
       body: `- **Contraste du texte** (1.4.3, AA) : **4,5:1** pour le texte courant, **3:1** pour le grand texte (24 px, ou 18,7 px en gras). 7:1 pour viser le niveau AAA. Le ratio ne s’arrondit pas : 4,49:1 échoue.
-- **Contraste non textuel** (1.4.11, AA) : **3:1** contre les couleurs voisines pour ce qui permet de repérer un composant ou son état (bordure de champ, icône sans texte, indicateur de focus) et pour les graphiques utiles. Les composants désactivés en sont exemptés.
+- **Contraste non textuel** (1.4.11, AA) : **3:1** contre les couleurs voisines pour ce qui permet de repérer un composant ou son état (bordure de champ, icône sans texte, indicateur de focus) et pour les éléments graphiques nécessaires à la compréhension (courbes, parts d’un graphique). Les composants désactivés en sont exemptés.
 - **Jamais la couleur seule** (1.4.1, A) : un statut, une erreur, un lien se distinguent aussi par un texte, une icône, un soulignement ou un motif.
 - **Alternatives textuelles** (1.1.1, A) : une image informative décrit son information ou sa fonction ; une image décorative reçoit un \`alt=""\` pour être ignorée.
 - **Agrandissement** (1.4.4, AA) : le texte passe à 200 % sans perte de contenu ni de fonction.
@@ -343,26 +343,29 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
       visual: {
         frame: 'browser',
         alt: 'Liste de commandes : titre, bouton Exporter, champ de recherche étiqueté, colonne de cases à cocher aux bords presque invisibles, colonne N°, client et montant, colonne Statut faite de pastilles vertes, orange et rouges sans texte, et une pagination aux boutons minuscules et serrés.',
-        css: `.od-table { display: flex; align-items: stretch; }
+        css: `.od-wrap { container: od / inline-size; }
+.od-table { display: flex; align-items: stretch; }
 .od-col { display: flex; flex-direction: column; }
 .od-checks { width: 34px; }
 .od-main { flex: 1; min-width: 0; }
 .od-status { width: 76px; padding-inline-start: 16px; }
 .od-cell { height: 38px; display: flex; align-items: center; border-bottom: 1px solid #eceef2; }
 .od-head { font-size: 12px; font-weight: 600; color: #5a6172; }
-.od-grid { display: grid; grid-template-columns: 64px minmax(0, 1fr) 84px; gap: 8px; width: 100%; }
+.od-grid { display: grid; grid-template-columns: 56px minmax(0, 1fr) 76px; gap: 8px; width: 100%; }
+.od-grid > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@container od (max-width: 440px) { .od-num { display: none; } .od-grid { grid-template-columns: minmax(0, 1fr) 66px; } .od-checks { width: 30px; } .od-status { width: 56px; padding-inline-start: 10px; } }
 .od-r { text-align: end; font-variant-numeric: tabular-nums; }
 .od-box { width: 16px; height: 16px; border: 1.5px solid #e3e6ec; border-radius: 4px; margin-inline-start: 8px; }
 .od-dot { width: 12px; height: 12px; border-radius: 50%; margin-inline-start: 12px; }
 .od-pages { display: flex; gap: 2px; align-self: center; }
 .od-pages span { width: 16px; height: 16px; display: grid; place-items: center; font-size: 11px; border-radius: 3px; color: #36405a; }
 .od-pages .on { background: #1f4fd8; color: #fff; }`,
-        html: `<div class="mk-pad mk-stack" style="--gap:12px">
+        html: `<div class="mk-pad mk-stack od-wrap" style="--gap:12px">
   <div class="mk-row mk-between"><p class="mk-h2" data-hotspot="title">Commandes</p><span class="mk-btn mk-btn--ghost mk-btn--s" data-hotspot="export"><i data-icon="download" style="--ico:15px"></i> Exporter</span></div>
   <div class="mk-field" data-hotspot="search"><span class="mk-label">Rechercher une commande</span><div class="mk-input" style="color:#6b7280">N° de commande, client…</div></div>
   <div class="od-table">
     <div class="od-col od-checks" data-hotspot="checks"><span class="od-cell od-head"></span><span class="od-cell"><span class="od-box"></span></span><span class="od-cell"><span class="od-box"></span></span><span class="od-cell"><span class="od-box"></span></span><span class="od-cell"><span class="od-box"></span></span></div>
-    <div class="od-col od-main" data-hotspot="info"><div class="od-cell od-head"><div class="od-grid"><span>N°</span><span>Client</span><span class="od-r">Montant</span></div></div><div class="od-cell"><div class="od-grid"><span>10482</span><span>Léa Martin</span><span class="od-r">64,90 €</span></div></div><div class="od-cell"><div class="od-grid"><span>10481</span><span>Hugo Petit</span><span class="od-r">129,00 €</span></div></div><div class="od-cell"><div class="od-grid"><span>10480</span><span>Inès Barbier</span><span class="od-r">32,50 €</span></div></div><div class="od-cell"><div class="od-grid"><span>10479</span><span>Paul Girard</span><span class="od-r">88,00 €</span></div></div></div>
+    <div class="od-col od-main" data-hotspot="info"><div class="od-cell od-head"><div class="od-grid"><span class="od-num">N°</span><span>Client</span><span class="od-r">Montant</span></div></div><div class="od-cell"><div class="od-grid"><span class="od-num">10482</span><span>Léa Martin</span><span class="od-r">64,90 €</span></div></div><div class="od-cell"><div class="od-grid"><span class="od-num">10481</span><span>Hugo Petit</span><span class="od-r">129,00 €</span></div></div><div class="od-cell"><div class="od-grid"><span class="od-num">10480</span><span>Inès Barbier</span><span class="od-r">32,50 €</span></div></div><div class="od-cell"><div class="od-grid"><span class="od-num">10479</span><span>Paul Girard</span><span class="od-r">88,00 €</span></div></div></div>
     <div class="od-col od-status" data-hotspot="status"><span class="od-cell od-head">Statut</span><span class="od-cell"><span class="od-dot" style="background:#2b8a3e"></span></span><span class="od-cell"><span class="od-dot" style="background:#b45309"></span></span><span class="od-cell"><span class="od-dot" style="background:#c42b2b"></span></span><span class="od-cell"><span class="od-dot" style="background:#2b8a3e"></span></span></div>
   </div>
   <div class="od-pages" data-hotspot="pages"><span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>
