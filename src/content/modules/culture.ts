@@ -196,6 +196,7 @@ Côté rédaction, impeccable demande des messages complets plutôt que des frag
         {
           title: 'Un paiement traduit… mais pas localisé',
           bad: {
+            lang: 'fr',
             alt: 'Récapitulatif de commande en français avec un champ « Code ZIP », un champ « État » réglé sur Californie, un total de $49.99, une livraison estimée le 10/27/2026 et un bouton « Payer avec Venmo ».',
             css: `.lc .sel{display:flex;justify-content:space-between;align-items:center}`,
             html: `<div class="lc mk-pad mk-stack" style="--gap:10px">
@@ -212,6 +213,7 @@ Côté rédaction, impeccable demande des messages complets plutôt que des frag
           },
           badNote: 'Traduit mot à mot : code ZIP, État, dollars, date américaine et un moyen de paiement inconnu en France.',
           good: {
+            lang: 'fr',
             alt: 'Récapitulatif de commande en français avec code postal et ville, un total de 49,99 €, une livraison estimée le mardi 27 octobre, les moyens de paiement Carte bancaire et PayPal et un bouton « Payer 49,99 € ».',
             css: `.lc-pay{display:flex;gap:6px;flex-wrap:wrap}`,
             html: `<div class="lc mk-pad mk-stack" style="--gap:10px">
@@ -531,6 +533,7 @@ Ne formate jamais à la main : \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` (a
         {
           title: 'Demander un nom',
           bad: {
+            lang: 'fr',
             alt: 'Formulaire « Créer votre compte » avec deux champs Prénom (小明) et Nom (王) en erreur, et le message « Utilisez uniquement les lettres de A à Z ».',
             html: `<div class="mk-pad mk-stack" style="--gap:10px">
   <p class="mk-h3">Créer votre compte</p>
@@ -544,6 +547,7 @@ Ne formate jamais à la main : \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` (a
           },
           badNote: 'Deux champs imposés et une validation limitée à l’alphabet latin : le client chinois est refusé chez lui.',
           good: {
+            lang: 'fr',
             alt: 'Formulaire avec un champ « Nom complet » rempli 王小明 et un champ « Comment devons-nous vous appeler ? » rempli 小明.',
             html: `<div class="mk-pad mk-stack" style="--gap:10px">
   <p class="mk-h3">Créer votre compte</p>
@@ -1777,7 +1781,7 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
             alt: 'Écran « Einstellungen » avec trois tuiles de largeur fixe dont les libellés allemands sont tronqués par des points de suspension, et un bouton tronqué lui aussi.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
-.ds-grid{display:grid;grid-template-columns:repeat(3,80px);gap:8px}
+.ds-grid{display:grid;grid-template-columns:repeat(3,76px);gap:6px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
 .ds-tile span{display:block;width:100%;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

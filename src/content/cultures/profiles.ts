@@ -44,7 +44,7 @@ export const CULTURES: CultureProfile[] = [
         title: 'Refuser les cookies aussi simplement que les accepter',
         body: `La CNIL exige qu’on puisse refuser aussi facilement qu’accepter : un bouton « Tout refuser » au même niveau que « Tout accepter », ou un lien « Continuer sans accepter » bien visible.
 
-Elle a sanctionné Google (150 M€) et Facebook (60 M€) fin 2021 parce qu’un clic suffisait pour accepter et qu’il en fallait plusieurs pour refuser, puis TikTok (5 M€, sanction rendue publique en janvier 2023) pour la même raison. En décembre 2024, elle a mis en demeure des éditeurs dont les bannières rendaient le refus plus difficile ou trompeur.`,
+Elle a sanctionné Google (150\u00a0M€) et Facebook (60\u00a0M€) fin 2021 parce qu’un clic suffisait pour accepter et qu’il en fallait plusieurs pour refuser, puis TikTok (5\u00a0M€, sanction rendue publique en janvier 2023) pour la même raison. En décembre 2024, elle a mis en demeure des éditeurs dont les bannières rendaient le refus plus difficile ou trompeur.`,
       },
       {
         topic: 'legal',
@@ -63,7 +63,7 @@ Au-delà de l’obligation, l’anglicisme gratuit (« checkout », « wishlist 
       {
         topic: 'legal',
         title: 'Accessibilité exigée, y compris du privé',
-        body: `Le RGAA s’impose aux services publics et aux entreprises de plus de 250 M€ de chiffre d’affaires ; depuis le 28 juin 2025, l’Acte européen sur l’accessibilité couvre aussi de nombreux services privés (commerce en ligne, banque, transport).
+        body: `Le RGAA s’impose aux services publics et aux entreprises de plus de 250\u00a0M€ de chiffre d’affaires ; depuis le 28 juin 2025, l’Acte européen sur l’accessibilité couvre aussi de nombreux services privés (commerce en ligne, banque, transport).
 
 Publie une déclaration d’accessibilité et vise le niveau AA des WCAG : l’accessibilité devient une question de conformité, plus seulement de qualité.`,
       },
@@ -94,14 +94,14 @@ Prévois l’authentification forte (DSP2) : la validation se fait souvent dans 
       {
         topic: 'typo',
         title: 'Typographie française',
-        body: `Espace insécable avant « : », espace fine insécable avant « ; ! ? » et à l’intérieur des guillemets « », espace fine comme séparateur de milliers et virgule décimale : 1 234,56 €. Sans espaces insécables, un « ? » ou un « € » se retrouve seul en début de ligne.
+        body: `Espace insécable avant « : », espace fine insécable avant « ; ! ? » et à l’intérieur des guillemets « », espace fine comme séparateur de milliers et virgule décimale : 1\u202f234,56\u00a0€. Sans espaces insécables, un « ? » ou un « € » se retrouve seul en début de ligne.
 
 \`Intl.NumberFormat('fr-FR')\` produit les bons séparateurs ; l’apostrophe typographique (’) remplace l’apostrophe droite.`,
       },
       {
         topic: 'formats',
         title: 'Dates, heures, téléphones, adresses',
-        body: `Date jour/mois/année (27/10/2026), heure sur 24 h (14:30, ou 14 h 30 dans un texte soigné), semaine qui commence le lundi. Téléphone par paires : 06 12 34 56 78, ou +33 6 12 34 56 78 à l’international. Adresse : numéro et rue, puis code postal à 5 chiffres avant la ville.`,
+        body: `Date jour/mois/année (27/10/2026), heure sur 24 h (14:30, ou 14 h 30 dans un texte soigné), semaine qui commence le lundi. Téléphone par paires : 06\u00a012\u00a034\u00a056\u00a078, ou +33\u00a06\u00a012\u00a034\u00a056\u00a078 à l’international. Adresse : numéro et rue, puis code postal à 5 chiffres avant la ville.`,
       },
     ],
     adapt: {
@@ -405,7 +405,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
       {
         topic: 'formats',
         title: 'Dates, nombres, adresses',
-        body: `27.10.2026, 13:30 Uhr, 1.234,56 €, semaine ISO qui commence le lundi (« KW 44 »). Adresse : rue puis numéro (Hauptstraße 12), code postal à 5 chiffres avant la ville. Les titres académiques font partie du nom (« Dr. Anna Schmidt ») : prévois un champ « Titel » et une civilité avec « divers » ou « keine Angabe ».`,
+        body: `27.10.2026, 13:30\u00a0Uhr, 1.234,56\u00a0€, semaine ISO qui commence le lundi (« KW 44 »). Adresse : rue puis numéro (Hauptstraße 12), code postal à 5 chiffres avant la ville. Les titres académiques font partie du nom (« Dr. Anna Schmidt ») : prévois un champ « Titel » et une civilité avec « divers » ou « keine Angabe ».`,
       },
       {
         topic: 'typo',
@@ -558,7 +558,7 @@ Pour un service sensible, un simple couple e-mail et mot de passe paraît daté.
       {
         topic: 'formats',
         title: 'Nombres et monnaies',
-        body: `1 234,56 kr en Suède (espace insécable, virgule décimale), heure sur 24 h. Les couronnes suédoise, norvégienne et danoise s’écrivent toutes « kr » : précise la devise (SEK, NOK, DKK) quand un service couvre plusieurs pays.`,
+        body: `1\u00a0234,56\u00a0kr en Suède (espace insécable, virgule décimale), heure sur 24 h. Les couronnes suédoise, norvégienne et danoise s’écrivent toutes « kr » : précise la devise (SEK, NOK, DKK) quand un service couvre plusieurs pays.`,
       },
       {
         topic: 'legal',
@@ -708,7 +708,7 @@ Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : u
       {
         topic: 'formats',
         title: 'Grands nombres en 万 et 亿',
-        body: `On compte par myriades : 1.2万 = 12 000, 3亿 = 300 millions. Ventes, vues et abonnés s’écrivent « 已售1.2万件 » (1,2 万 vendus). \`Intl.NumberFormat('zh-CN', { notation: 'compact' })\` produit « 1.2万 ».`,
+        body: `On compte par myriades : 1.2万 = 12\u00a0000, 3亿 = 300\u00a0millions. Ventes, vues et abonnés s’écrivent « 已售1.2万件 » (12\u00a0000 vendus). \`Intl.NumberFormat('zh-CN', { notation: 'compact' })\` produit « 1.2万 ».`,
       },
       {
         topic: 'confiance',
@@ -1016,7 +1016,7 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
       {
         topic: 'typo',
         title: 'Espaces et coupure des mots',
-        body: `Le coréen sépare les mots par des espaces, mais le navigateur peut couper un mot en fin de ligne au milieu d’une syllabe : \`word-break: keep-all\` garde les mots entiers. Pas d’italique ; polices Pretendard, Apple SD Gothic Neo, Noto Sans KR.`,
+        body: `Le coréen sépare les mots par des espaces, mais le navigateur peut couper un mot entre deux syllabes en fin de ligne : \`word-break: keep-all\` garde les mots entiers. Pas d’italique ; polices Pretendard, Apple SD Gothic Neo, Noto Sans KR.`,
       },
       {
         topic: 'paiement',
@@ -1051,7 +1051,7 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
       {
         topic: 'formats',
         title: 'Dates, heures et grands nombres',
-        body: `2026. 10. 27. (année, mois, jour séparés par des points), 오후 1:30 (horloge 12 h avec 오전/오후), 1,284,500원 ; grands nombres en 만 (10 000) : 1.2만. Adresse du plus grand au plus petit, adresse routière (도로명주소) depuis 2014 et code postal à 5 chiffres depuis 2015.`,
+        body: `2026. 10. 27. (année, mois, jour séparés par des points), 오후 1:30 (horloge 12 h avec 오전/오후), 1,284,500원 ; grands nombres en 만 (10\u00a0000) : 1.2만. Adresse du plus grand au plus petit, adresse routière (도로명주소) depuis 2014 et code postal à 5 chiffres depuis 2015.`,
       },
     ],
     adapt: {
@@ -1160,7 +1160,7 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
       {
         topic: 'formats',
         title: 'Lakh et crore',
-        body: `L’Inde groupe les chiffres par deux après le premier millier : 1,00,000 (1 lakh = 100 000) et 1,00,00,000 (1 crore = 10 millions). \`Intl.NumberFormat('en-IN')\` produit ce groupement ; la presse écrit « ₹2.5 lakh » ou « ₹10 crore ». Un prix « 104,990 » paraît étranger.`,
+        body: `L’Inde groupe les chiffres par deux après le premier millier : 1,00,000 (1 lakh = 100\u00a0000) et 1,00,00,000 (1 crore = 10\u00a0millions). \`Intl.NumberFormat('en-IN')\` produit ce groupement ; la presse écrit « ₹2.5 lakh » ou « ₹10 crore ». Un prix « 104,990 » paraît étranger.`,
       },
       {
         topic: 'ton',
@@ -1512,7 +1512,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
       {
         topic: 'formats',
         title: 'Réais, dates et téléphones',
-        body: `R$ 1.234,56 (point pour les milliers, virgule décimale), 27/10/2026, 13:30 ou 13h30, téléphone (11) 91234-5678 avec l’indicatif régional entre parenthèses. La semaine commence le dimanche dans les calendriers.`,
+        body: `R$\u00a01.234,56 (point pour les milliers, virgule décimale), 27/10/2026, 13:30 ou 13h30, téléphone (11) 91234-5678 avec l’indicatif régional entre parenthèses. La semaine commence le dimanche dans les calendriers.`,
       },
     ],
     adapt: {

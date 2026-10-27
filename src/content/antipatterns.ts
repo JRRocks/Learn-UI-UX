@@ -478,7 +478,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     severity: 'avertissement',
     description:
       'Un contenu qui défile en continu réclame une attention qu’il n’a pas méritée et cache la moitié de son contenu à tout moment.',
-    fix: 'Réserve le mouvement à ce qui change et laisse le lecteur avancer à son rythme : une grille fixe se lit en entier. Un défilement automatique de plus de 5 secondes doit pouvoir être mis en pause (WCAG 2.2.2).',
+    fix: 'Réserve le mouvement à ce qui change et laisse le lecteur avancer à son rythme : une grille fixe se lit en entier. Un défilement automatique de plus de 5 secondes doit pouvoir être mis en pause, arrêté ou masqué (WCAG 2.2.2).',
     demo: {
       bad: v(
         'Bandeau de noms de clients qui défile horizontalement en continu, coupé aux deux bords.',
@@ -698,7 +698,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'cliche',
     severity: 'avertissement',
     description:
-      'Un titre en phrase complète composé en taille d’affichage finit par dominer l’écran et ne laisse place à rien d’autre dans le premier écran. Un titre percutant d’un ou deux mots à cette taille va bien ; le problème, c’est une phrase longue gonflée à l’extrême. Le détecteur vise un h1 d’au moins 72 px et 40 caractères qui occupe une grande part de l’écran.',
+      'Un titre en phrase complète composé en taille d’affichage finit par dominer la fenêtre et ne laisse place à rien d’autre au-dessus de la ligne de flottaison. Un titre percutant d’un ou deux mots à cette taille va bien ; le problème, c’est une phrase longue gonflée à l’extrême. Le détecteur vise un h1 d’au moins 72 px et 40 caractères qui occupe une grande part de l’écran.',
     fix: 'Compose les titres longs plus petits, ou resserre le texte.',
     demo: {
       bad: v(
@@ -898,7 +898,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     severity: 'avertissement',
     description:
       'Le texte n’atteint pas les exigences de contraste WCAG niveau AA : 4,5:1 pour le texte courant, 3:1 pour le grand texte.',
-    fix: 'Augmente le contraste entre le texte et son fond, en assombrissant le texte ou en éclaircissant le fond.',
+    fix: 'Augmente l’écart de clarté entre le texte et son fond, jusqu’à 4,5:1 au moins pour le texte courant.',
     demo: {
       bad: para('Paragraphe sur les retours en gris clair sur fond blanc, contraste d’environ 2,3:1.', 'font-size:14px;line-height:1.6;color:#a8adb7'),
       good: para('Même paragraphe en gris foncé sur fond blanc, contraste d’environ 7,8:1.', 'font-size:14px;line-height:1.6;color:#4b5262'),

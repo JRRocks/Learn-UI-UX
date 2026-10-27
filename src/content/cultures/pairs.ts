@@ -173,7 +173,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
 - **Grille d’accès (金刚区).** Dix icônes sur deux lignes, aux libellés de deux caractères, ouvrent les canaux (supermarché, promotions, coupons, live, voyages). Côté américain, quatre catégories en pastilles suffisent.
 - **Flux en cascade (瀑布流).** Des cartes de hauteurs variables sur deux colonnes invitent à défiler et à découvrir ; l’accueil américain propose une sélection courte dans une grille régulière.
 - **Urgence et promotions.** Vente flash avec compte à rebours, remise « 跨店每满300减50 » (50\u00a0¥ de moins par tranche de 300\u00a0¥, tous vendeurs confondus), pastilles rouges : la fête commerciale du 11.11 structure l’écran. Aux États-Unis, la promotion tient dans une bannière.
-- **Preuve sociale.** « 1.2万人付款 » (12 000 acheteurs) ou « 已售10万+ » (plus de 100 000 vendus) remplacent la note en étoiles.
+- **Preuve sociale.** « 1.2万人付款 » (12\u00a0000 acheteurs) ou « 已售10万+ » (plus de 100\u00a0000 vendus) remplacent la note en étoiles.
 
 ### Comment adapter
 
@@ -289,7 +289,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
 - **Pourquoi.** Le contrôle de l’incertitude atteint 92 au Japon contre 46 aux États-Unis : l’exhaustivité rassure (anshin) et l’omission inquiète. Côté américain, une page aérée qui va à l’essentiel inspire confiance.
 - **Titre.** Le titre japonais aligne les mots-clés (réduction de bruit, autonomie, étanchéité), comme sur les grandes places de marché ; le titre américain nomme simplement le produit.
 - **Actions.** Deux boutons d’achat (« カートに入れる », ajouter au panier, et « 今すぐ買う », acheter maintenant) et les favoris avec leur compteur ; une seule action principale côté américain.
-- **Prix.** 8 980 yens taxe incluse d’un côté ; 99 dollars hors taxes de l’autre, la sales tax s’ajoutant au paiement.
+- **Prix.** 8\u00a0980\u00a0yens taxe incluse d’un côté ; 99\u00a0dollars hors taxes de l’autre, la sales tax s’ajoutant au paiement.
 - **Signaux d’autorité.** Badge de classement, boutique officielle, tableau de caractéristiques.
 
 ### Comment adapter
@@ -490,7 +490,7 @@ ${RADIO('brp', '#c2410c')}
     notes: `Le même dernier écran de commande, deux cultures du paiement.
 
 - **Moyens de paiement.** Allemagne : facture (on paie après réception), PayPal, prélèvement SEPA, puis la carte. Brésil : Pix (instantané, souvent remisé), carte en mensualités sans intérêts, boleto pour qui n’a pas de carte.
-- **Un prix par moyen de paiement.** Au Brésil, le prix Pix (R$ 473,10, soit 5 % de remise) et la mensualité (10x de R$ 49,80) s’affichent à côté de chaque option. En Allemagne, un seul total, avec la TVA incluse détaillée (« inkl. 19 % MwSt. »).
+- **Un prix par moyen de paiement.** Au Brésil, le prix Pix (R$\u00a0473,10, soit 5\u00a0% de remise) et la mensualité (10x de R$\u00a049,80) s’affichent à côté de chaque option. En Allemagne, un seul total, avec la TVA incluse détaillée (« inkl. 19\u00a0% MwSt. »).
 - **Bouton final.** En Allemagne, le libellé est imposé par la loi (§ 312j BGB) : « Zahlungspflichtig bestellen ». Au Brésil, « Finalizar compra » suffit.
 - **Données demandées.** Le Brésil demande le CPF, nécessaire à la facture électronique (nota fiscal), et dit pourquoi. L’Allemagne ne demande pas d’identifiant fiscal au consommateur.
 - **Confiance.** Label de boutique vérifiée et liens vers les AGB, le droit de rétractation et la protection des données en Allemagne ; accès direct à WhatsApp au Brésil.
@@ -644,7 +644,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 
 - **France : consentement préalable.** Le RGPD et les règles de la CNIL imposent de demander l’accord avant de déposer des traceurs non essentiels, et refuser doit être aussi simple qu’accepter : « Tout refuser » et « Tout accepter » ont ici la même taille, la même couleur et le même niveau ; « Continuer sans accepter » est une alternative admise.
 - **États-Unis : droit d’opposition.** La plupart des lois d’État fonctionnent en opt-out : le bandeau informe et renvoie aux préférences. La formule « By continuing to browse, you agree » serait irrégulière en Europe. La Californie exige en plus un lien « Do Not Sell or Share My Personal Information » et le respect du signal Global Privacy Control.
-- **Sanctions.** La CNIL a infligé 150 M€ à Google et 60 M€ à Facebook fin 2021 parce que refuser demandait plusieurs clics contre un seul pour accepter.
+- **Sanctions.** La CNIL a infligé 150\u00a0M€ à Google et 60\u00a0M€ à Facebook fin 2021 parce que refuser demandait plusieurs clics contre un seul pour accepter.
 
 ### Comment adapter
 
@@ -878,7 +878,7 @@ sup { font-size: 0.7em; line-height: 0; }`,
 - **Densité.** L’accueil coréen superpose bannière d’événement, compte, menu rapide de huit raccourcis, avantages du jour et dernière notification. L’accueil suédois montre un solde, trois actions et les prochains prélèvements.
 - **Pourquoi.** Les portails coréens (Naver, Kakao) ont habitué à tout trouver sur un écran et aux mécaniques d’engagement — points de présence quotidienne (출석체크), événements, avantages. En Suède, faible distance hiérarchique, confiance et sobriété : on va droit au solde et aux paiements.
 - **Ton.** Un « Hej Anna » familier et personnel côté suédois ; côté coréen, l’écran parle surtout en offres et en avantages (« 오늘의 혜택 », les avantages du jour).
-- **Formats.** 1,284,500원 d’un côté ; 24 350,00 kr et des dates courtes (« 28 okt ») de l’autre.
+- **Formats.** 1,284,500원 d’un côté ; 24\u00a0350,00\u00a0kr et des dates courtes (« 28 okt ») de l’autre.
 - **Contre-exemple.** La densité n’est pas une loi : l’appli coréenne Toss s’est imposée avec une interface épurée, une action par écran.
 
 ### Comment adapter

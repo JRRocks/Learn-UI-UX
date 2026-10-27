@@ -457,7 +457,7 @@ Impeccable distingue cinq types d’états vides. Pour l’**absence de résulta
             css: `.onb-scene { position: relative; min-height: 230px; }
 .onb-anchor { position: relative; }`,
           },
-          why: 'Une fenêtre qui interrompt la tâche, annonce cinq choses à la fois loin de l’endroit où elles servent — et sera fermée sans être lue.',
+          why: 'Une fenêtre qui interrompt la tâche, annonce cinq choses à la fois loin de l’endroit où elles servent — et risque d’être fermée sans être lue.',
         },
         {
           id: 'tooltip',
@@ -481,7 +481,7 @@ Impeccable distingue cinq types d’états vides. Pour l’**absence de résulta
       answer: 'tooltip',
       explanation: `Une annonce efficace suit les règles de l’infobulle contextuelle : elle **pointe l’élément** concerné, apparaît au **moment pertinent**, dit le **bénéfice** en une phrase, laisse **essayer tout de suite** et se **referme** facilement — avec « Ne plus afficher ».
 
-La fenêtre « Quoi de neuf » au démarrage est une révélation poussée (*push revelation*) : elle interrompt la tâche, présente l’information hors contexte, et la plupart des gens la ferment sans la lire.`,
+La fenêtre « Quoi de neuf » au démarrage est une révélation poussée (*push revelation*) : elle interrompt la tâche, présente l’information hors contexte, et beaucoup de gens la ferment sans la lire.`,
       takeaway: 'Annonce une nouveauté là où elle sert : une infobulle brève, pointée, avec le bénéfice, un essai immédiat et « Ne plus afficher ».',
       sources: ['imp:onboard', NNG_TUTORIALS],
     },

@@ -87,8 +87,12 @@ export const SOURCES: Record<string, SourceRef> = {
   },
   'hall': { label: 'Edward T. Hall — Beyond Culture (1976), contexte fort / faible' },
   'cnil:cookies': {
-    label: 'CNIL — Cookies : refuser doit être aussi simple qu’accepter',
-    url: 'https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies-solutions-pour-les-outils-de-mesure-daudience',
+    label: 'CNIL — Refuser les cookies doit être aussi simple qu’accepter',
+    url: 'https://www.cnil.fr/fr/refuser-les-cookies-doit-etre-aussi-simple-quaccepter-mise-en-conformite-de-tous-les-organismes',
+  },
+  'cnil:banners': {
+    label: 'CNIL — Bannières cookies trompeuses : mise en demeure (décembre 2024)',
+    url: 'https://cnil.fr/fr/bannieres-cookies-trompeuses-la-cnil-met-en-demeure-des-editeurs-de-sites-web',
   },
   'palo-it:china': {
     label: 'PALO IT — The UX design of Chinese and Western apps',

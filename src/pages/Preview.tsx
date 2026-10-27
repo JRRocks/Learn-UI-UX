@@ -74,7 +74,11 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
               <li key={o.id} data-right={right}>
                 <strong>{right ? '✔ recommandé' : '✘'}</strong> {o.label && <MdInline text={o.label} />}
                 {o.visual && <V visual={o.visual} />}
-                {o.why && <p className="preview-why">{o.why}</p>}
+                {o.why && (
+                  <p className="preview-why">
+                    <MdInline text={o.why} />
+                  </p>
+                )}
               </li>
             );
           })}
@@ -90,7 +94,7 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
           <ul>
             {ex.hotspots.map((h) => (
               <li key={h.id}>
-                <strong>{h.correct ? '✔' : '·'} {h.label}</strong> — {h.why}
+                <strong>{h.correct ? '✔' : '·'} {h.label}</strong> — <MdInline text={h.why} />
               </li>
             ))}
           </ul>

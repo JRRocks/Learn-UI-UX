@@ -191,7 +191,7 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
     {
       id: 'adoucir',
       title: 'Adoucir : baisser le volume avec précision',
-      body: `Adoucir demande **plus** de précision qu’intensifier. Le sens dépend du mode : sur une page qui doit convaincre, une palette plus retenue, plus de blanc, plus d’air typographique — le drame baisse sans disparaître ; dans une application, moins de bruit — fonds d’accent, cartes plus plates, moins de couleur et de mouvement.
+      body: `Adoucir demande **plus** de précision qu’intensifier. Le sens dépend du mode : sur une page qui doit convaincre ou une vitrine, une palette plus retenue, plus de blanc, plus d’air typographique — le drame baisse sans disparaître ; dans une application ou une page de lecture, moins de bruit — moins de fonds d’accent, des cartes plus plates, moins de couleur et de mouvement.
 
 - **Couleur** : désature (des teintes pleinement saturées vers 70–85 % de saturation), réduis le nombre de couleurs, laisse les **neutres dominer** et garde la couleur pour les accents (la règle des 10 %). Préfère des gris teintés, chauds ou froids, au gris pur. Garde le contraste fort là où il compte.
 - **Poids** : baisse les graisses (900 → 600, 700 → 500), allège ou supprime les bordures, augmente l’espace.
@@ -387,7 +387,7 @@ La vraie simplification réduit le **nombre** d’actions visibles et regroupe l
       answer: 'decisive',
       explanation: `« Plus audacieux » ne veut pas dire « plus d’effets ». Impeccable demande d’**amplifier ce que le système possède déjà** — ici la police à empattements et le vert sapin — au lieu d’ajouter des couleurs, des dégradés et des ombres que la marque n’a jamais utilisés.
 
-Le principe clé : **s’engager, puis clarifier**. Un geste décisif fait complètement, puis du calme autour pour qu’il se lise. Si chaque élément devient plus fort, la section devient plus plate : c’est l’effet d’isolement (von Restorff) — on remarque ce qui diffère du reste, pas ce qui crie avec tout le monde.`,
+Le principe clé : **s’engager, puis clarifier**. Un geste décisif fait complètement, puis du calme autour pour qu’il se lise. Si chaque élément devient plus fort, la section devient plus plate. L’effet d’isolement (von Restorff) l’explique : on remarque ce qui diffère du reste, pas ce qui crie avec tout le monde.`,
       takeaway: 'Intensifier : un geste décisif avec les moyens du système, puis du calme autour. Si tout monte, rien ne ressort.',
       sources: ['imp:bolder', LAWS_RESTORFF],
     },
@@ -421,7 +421,7 @@ Le principe clé : **s’engager, puis clarifier**. Un geste décisif fait compl
         },
       ],
       answer: 'tinted',
-      explanation: `Sur un fond coloré, un gris neutre se mêle visuellement à la couleur et paraît **sale** ; il manque souvent de contraste, aussi (ici 3:1). Impeccable et *Refactoring UI* donnent la même règle : **jamais de gris sur une couleur**.
+      explanation: `Sur un fond coloré, un gris neutre se mêle visuellement à la couleur et paraît **sale**, et il manque souvent de contraste (ici 3:1). Impeccable et *Refactoring UI* donnent la même règle : **jamais de gris sur une couleur**.
 
 Pour faire reculer un texte secondaire sur un fond coloré, choisis une **nuance de la teinte du fond** — plus claire sur fond foncé, plus foncée sur fond clair — ou du blanc en transparence, puis vérifie le contraste : 4,5:1 pour du texte courant.`,
       takeaway: 'Sur un fond coloré, le texte secondaire prend une nuance de cette couleur, jamais un gris — et garde 4,5:1.',
@@ -579,7 +579,7 @@ Le prix et l’action principale, eux, sont exactement ce qu’une simplificatio
       ],
       explanation: `Les sources d’intensité les plus fréquentes sont la **saturation** et les **effets** : des étiquettes en couleurs pures et en capitales très grasses se disputent l’attention, une lueur colorée sans décalage autour d’une carte décore sans informer.
 
-Pour adoucir : désature les étiquettes (et garde une couleur forte pour le seul statut vraiment urgent), baisse la graisse, passe en casse normale, et remplace la lueur par une élévation sobre — ou rien du tout. Le titre, les filtres et la liste sont déjà calmes : on ne les touche pas.`,
+Pour adoucir : désature les étiquettes (et garde une couleur forte pour le seul statut vraiment urgent), baisse la graisse, passe en casse normale, et remplace la lueur par une élévation sobre — ou rien du tout. Le titre, le sélecteur de dates et la liste sont déjà calmes : on ne les touche pas.`,
       takeaway: 'Pour baisser le volume, commence par la saturation et les effets : couleurs pures, capitales très grasses, lueurs.',
       sources: ['imp:quieter', 'imp:detector'],
     },

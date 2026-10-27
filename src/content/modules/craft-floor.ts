@@ -250,7 +250,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
 .gl-g { width: 20px; text-align: center; font-size: 16px; }
 .gl-g--txt { font-size: 18px; color: #1d2230; }`,
           },
-          badNote: 'Emoji en couleur et glyphes noirs : cinq styles, cinq tailles optiques.',
+          badNote: 'Emoji en couleur et glyphes noirs mélangés : styles, couleurs et tailles optiques incohérents.',
           good: {
             alt: 'Même menu avec des icônes dessinées au trait, toutes de même graisse et de même couleur.',
             html: `<ul class="gl"><li><i data-icon="bell"></i>Notifications</li><li><i data-icon="lock"></i>Sécurité</li><li><i data-icon="credit-card"></i>Paiement</li><li><i data-icon="star"></i>Favoris</li><li><i data-icon="mail"></i>Messages</li></ul>`,
@@ -687,7 +687,7 @@ Réécrits, ces trois textes deviennent : « La date de fin précède la date de
       answer: 'one',
       explanation: `Pour le mouvement, le plancher attend **un seul moment signé**, pas des effets dispersés, et **pas la même entrée sur chaque section**. Ce moment part d’un état par défaut **déjà visible**, avec une **sortie exponentielle** (une décélération franche, comme \`cubic-bezier(0.16, 1, 0.3, 1)\`).
 
-Masquer le contenu en attendant un script est risqué : le détecteur classe « contenu invisible au repos » parmi ses deux règles de sévérité *erreur*. Et les rebonds par réflexe font daté : les objets réels décélèrent sans rebondir.`,
+Masquer le contenu en attendant un script est risqué : le détecteur classe « contenu invisible au repos » parmi ses deux règles de sévérité *erreur*. Et les rebonds par réflexe font daté : les objets réels décélèrent en douceur.`,
       takeaway: 'Un seul moment de mouvement signé, en ease-out exponentiel, depuis une page déjà visible.',
       sources: ['imp:craft-floor', 'imp:animate', 'imp:detector'],
     },

@@ -195,10 +195,10 @@ const modes: ModuleContent = {
 
 - sa page d’accueil et sa page Tarifs : **Persuader**, même si le produit est un outil ;
 - l’application, ses réglages, son tableau de bord : **Opérer** ;
-- sa documentation, son centre d’aide, son journal des modifications : **Lire**. L’index de la documentation reste du Lire, pas du Persuader ;
+- sa documentation, son centre d’aide, son journal des modifications : **Lire**. L’index de la documentation relève lui aussi du mode Lire, pas du mode Persuader ;
 - la galerie des réalisations de ses clients : souvent **Expérience**.
 
-À l’inverse, une maison de couture très expressive publie aussi de la documentation : c’est du **Lire**, et elle doit se lire comme une documentation.
+À l’inverse, une maison de couture très expressive publie aussi de la documentation : elle relève du mode **Lire**, et doit se lire comme une documentation.
 
 ### Les questions qui changent le travail
 
@@ -305,7 +305,7 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
   ],
   rules: [
     { id: 'success', front: 'Que nomme le mode d’une surface ?', back: 'La réussite du visiteur : décider et agir (Persuader), accomplir une tâche (Opérer), comprendre (Lire), être dans l’œuvre (Expérience).' },
-    { id: 'surface', front: 'Sur quoi se choisit le mode ?', back: 'Sur la surface, pas sur le produit : la page d’accueil d’un outil est du Persuader, la documentation d’une maison de mode du Lire.' },
+    { id: 'surface', front: 'Sur quoi se choisit le mode ?', back: 'Sur la surface, pas sur le produit : la page d’accueil d’un outil relève du mode Persuader, la documentation d’une maison de mode du mode Lire.' },
     { id: 'ambition', front: 'Comment l’ambition varie-t-elle selon le mode ?', back: 'Engagement total en Persuader et Expérience ; précision et retenue en Opérer et Lire, où les motifs connus méritent leur place.' },
     { id: 'four', front: 'En mode Opérer, que peut prêter l’univers visuel ?', back: 'Quatre choses : typographie, palette, densité, un geste signature. Jamais la mise en page, la navigation ni les contrôles.' },
     { id: 'costume', front: 'Qu’est-ce qu’un « costume » sur un écran de travail ?', back: 'L’interface d’un outil du monde rejouée à l’écran : touches de fonction, invite de commande, cadran, papier de registre. On n’en garde que typo, palette, densité et un geste.' },
@@ -335,10 +335,10 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
       ],
       explanation: `Le mode se choisit **d’après la surface**, pas d’après le produit ni la marque :
 
-- La page d’accueil d’un outil reste du **Persuader** : le visiteur doit décider d’essayer ou d’acheter.
-- L’écran de réglage est du **Opérer** : on y accomplit une tâche.
-- Le guide d’une maison de couture, aussi expressive soit-elle, est du **Lire** : le visiteur veut savoir comment laver un pull en cachemire.
-- Le portfolio relève de l’**Expérience** : les photographies mènent, l’interface s’efface.`,
+- La page d’accueil d’un outil relève du mode **Persuader** : le visiteur doit décider d’essayer ou d’acheter.
+- L’écran de réglage relève du mode **Opérer** : on y accomplit une tâche.
+- Le guide d’une maison de couture, aussi expressive soit-elle, relève du mode **Lire** : le visiteur veut savoir comment laver un pull en cachemire.
+- Le portfolio relève du mode **Expérience** : les photographies mènent, l’interface s’efface.`,
       takeaway: 'Choisis le mode d’après la surface et la réussite de son visiteur, pas d’après le produit ou la marque.',
       sources: ['imp:skill'],
     },
@@ -347,16 +347,16 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
       type: 'choice',
       difficulty: 1,
       context:
-        'Tu refais la page d’accueil de Relevé, un outil de suivi de chantier utilisé par des artisans. L’équipe produit insiste : « C’est un outil, donc c’est du mode Opérer. »',
+        'Tu refais la page d’accueil de Relevé, un outil de suivi de chantier utilisé par des artisans. L’équipe produit insiste : « C’est un outil, donc on est en mode Opérer. »',
       prompt: 'Quel mode s’applique à cette page ?',
       options: [
         { id: 'persuade', label: 'Persuader : le visiteur doit décider d’essayer ou d’acheter.', why: 'La page d’accueil d’un outil est une surface de décision : le design y est le produit.' },
-        { id: 'operate', label: 'Opérer : le produit est un outil de travail.', why: 'Le mode ne s’hérite pas du produit. L’application est en Opérer, pas sa page d’accueil.' },
-        { id: 'read', label: 'Lire : la page doit surtout expliquer le fonctionnement.', why: 'Expliquer sert ici la décision ; c’est la documentation de Relevé qui serait du Lire.' },
+        { id: 'operate', label: 'Opérer : le produit est un outil de travail.', why: 'Le mode ne s’hérite pas du produit. L’application relève du mode Opérer, pas sa page d’accueil.' },
+        { id: 'read', label: 'Lire : la page doit surtout expliquer le fonctionnement.', why: 'Expliquer sert ici la décision ; c’est la documentation de Relevé qui relèverait du mode Lire.' },
         { id: 'experience', label: 'Expérience : il faut faire vivre l’univers du chantier.', why: 'L’Expérience concerne les surfaces où l’œuvre mène (portfolio, galerie), pas une page qui doit convaincre.' },
       ],
       answer: 'persuade',
-      explanation: `impeccable est explicite : on choisit le mode **d’après la surface demandée, pas d’après le produit**. La page d’accueil d’un outil est du Persuader ; l’index de sa documentation est du Lire ; l’application elle-même est du Opérer.
+      explanation: `impeccable est explicite : on choisit le mode **d’après la surface demandée, pas d’après le produit**. La page d’accueil d’un outil relève du mode Persuader ; l’index de sa documentation, du mode Lire ; l’application elle-même, du mode Opérer.
 
 Concrètement, cette page doit rendre l’offre compréhensible et désirable, exposer une action claire et prouver ce que seul Relevé sait faire, avec un engagement visuel fort qu’un écran de travail ne s’autoriserait pas.`,
       takeaway: 'La page d’accueil d’un outil se conçoit en mode Persuader ; l’outil lui-même, en mode Opérer.',
@@ -472,12 +472,12 @@ base-clients   OK       38 ms</pre>
   <div class="ond-body">
     <div class="ond-tools"><span class="ond-select">Région : Paris-1 <i data-icon="chevron-down" style="--ico:14px"></i></span><span class="ond-search"><i data-icon="search" style="--ico:14px"></i>Filtrer les services</span></div>
     <table class="ond-table">
-      <thead><tr><th>Service</th><th>État</th><th class="num">Latence p95 <i data-icon="chevron-down" style="--ico:12px"></i></th></tr></thead>
+      <thead><tr><th>Service</th><th>État</th><th class="num">Latence p95 (ms) <i data-icon="chevron-down" style="--ico:12px"></i></th></tr></thead>
       <tbody>
-        <tr><td class="mono">auth</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num mono">1&#8239;840&nbsp;ms</td></tr>
-        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Normal</span></td><td class="num mono">212&nbsp;ms</td></tr>
-        <tr><td class="mono">file-emails</td><td><span class="ond-st">Normal</span></td><td class="num mono">95&nbsp;ms</td></tr>
-        <tr><td class="mono">base-clients</td><td><span class="ond-st">Normal</span></td><td class="num mono">38&nbsp;ms</td></tr>
+        <tr><td class="mono">auth</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num mono">1&#8239;840</td></tr>
+        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Normal</span></td><td class="num mono">212</td></tr>
+        <tr><td class="mono">file-emails</td><td><span class="ond-st">Normal</span></td><td class="num mono">95</td></tr>
+        <tr><td class="mono">base-clients</td><td><span class="ond-st">Normal</span></td><td class="num mono">38</td></tr>
       </tbody>
     </table>
   </div>
@@ -495,7 +495,7 @@ base-clients   OK       38 ms</pre>
 .ond-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border: 1px solid #dde2df; border-radius: 8px; }
 .ond-table th { text-align: start; padding: 7px 6px; font-size: 12px; font-weight: 600; color: #4c555b; border-bottom: 1px solid #dde2df; }
 .ond-table td { padding: 7px 6px; border-bottom: 1px solid #edf0ee; }
-.ond-table .num { text-align: end; white-space: nowrap; }
+.ond-table .num { text-align: end; }
 .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
 .ond-st { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e3f4e8; color: #1d6b3c; }
 .ond-st--warn { background: #fdf0d5; color: #7a4b00; }`,
@@ -799,7 +799,7 @@ Tout le reste peut, et doit, porter le monde : l’en-tête, la composition du c
       explanation: `Le mode se choisit d’après **la surface**, pas d’après la marque. impeccable cite justement la documentation d’une maison de mode comme exemple de surface **Lire** : le visiteur y vient pour comprendre (entretenir un tissu, suivre une commande), pas pour être convaincu.
 
 La marque n’en disparaît pas : en mode Lire, son monde possède le cadre (en-tête, rail, fond, ouvertures de section). Seule la colonne de lecture reste calme.`,
-      takeaway: 'Une documentation reste du Lire, même pour une marque très expressive : son monde s’exprime dans le cadre.',
+      takeaway: 'Une documentation relève du mode Lire, même pour une marque très expressive : son monde s’exprime dans le cadre.',
       sources: ['imp:skill', 'imp:mode-read'],
     },
     {

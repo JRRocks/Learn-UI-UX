@@ -182,7 +182,7 @@ Ne perfectionne pas un coin en laissant le reste sous le même niveau d’exigen
 
 - **Survol** : signale que l’élément réagit au pointeur. Il n’existe ni au doigt ni au clavier : l’**affordance** (le signe qu’on peut agir) doit déjà se voir au repos.
 - **Focus** : montre où se trouve le clavier. Un contour plutôt qu’un simple changement de couleur, contrasté d’au moins **3:1** avec ce qui l’entoure. Ne le supprime jamais sans le remplacer.
-- **Actif** : accuse réception du clic sans délai perceptible (Nielsen Norman Group recommande 100 à 150 ms), sinon on clique deux fois.
+- **Actif** : accuse réception du clic en 100 à 150 ms au plus (recommandation de Nielsen Norman Group) ; sinon, on clique une seconde fois.
 - **Désactivé** : indique que l’action n’est pas disponible maintenant — et, si ce n’est pas évident, pourquoi.
 - **Chargement** : garde la largeur du bouton, nomme l’opération (« Envoi… ») et bloque la double soumission.
 - **Erreur** et **succès** : disent ce qui s’est passé, près de l’élément concerné.
@@ -422,7 +422,7 @@ ${SPIN_CSS}`,
         {
           id: 'skeleton',
           visual: {
-            alt: 'Page Factures dont la liste est remplacée par cinq lignes grises qui reprennent la forme des factures à venir.',
+            alt: 'Page Factures dont la liste est remplacée par quatre lignes grises qui reprennent la forme des factures à venir.',
             frame: 'browser',
             html: `<div class="mk-pad mk-stack" style="--gap:12px">
   ${INVOICES_HEAD}
@@ -837,7 +837,7 @@ Mais thématiser n’est pas réinventer. Sur une surface d’application, impec
       difficulty: 1,
       prompt: 'Quand le détecteur d’anti-patterns ne signale plus rien, la passe de finition est terminée.',
       answer: false,
-      explanation: `Faux. Pour impeccable, un résultat du détecteur est une **preuve de défaut, pas une preuve de qualité**. Un scan propre ne voit ni un parcours qui ne se raccorde pas, ni un état trompeur, ni un focus perdu après la fermeture d’une fenêtre.
+      explanation: `Faux. Pour impeccable, un résultat du détecteur est une **preuve de défaut, pas une preuve de qualité**. Un scan propre ne voit ni un parcours qui ne se raccorde pas, ni un état trompeur, ni un focus perdu après la fermeture d’une fenêtre modale.
 
 La finition se vérifie en **utilisant** la fonctionnalité : à la souris, au clavier et au toucher, sur mobile et sur grand écran, avec du contenu long, manquant ou traduit, et dans chaque état.`,
       takeaway: 'Un scan propre ne prouve pas la qualité : parcours le vrai chemin, dans tous ses états et à toutes les tailles.',

@@ -178,7 +178,7 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
 - **Variantes de lettres** : le persan utilise ی (U+06CC) et ک (U+06A9), l’arabe ي (U+064A) et ك (U+0643). Conserve la forme d’origine, mais traite-les comme **équivalentes** pour la recherche et la validation : refuser l’une bloque les gens dont le clavier envoie l’autre.
 - **Chiffres et calendriers** : \`new Intl.NumberFormat('fa-IR').format(1234)\` écrit « ۱٬۲۳۴ », la locale \`ar-SA\` « ١٬٢٣٤ » ; \`Intl.DateTimeFormat\` suit le calendrier persan (hégire solaire) avec \`fa-IR\`, le calendrier hégirien avec \`ar-SA-u-ca-islamic\`.
 
-**Chinois, japonais, coréen (CJK) et emoji** : encodage UTF-8 partout, polices qui couvrent ces écritures, et prudence avec les compteurs de caractères — en JavaScript, \`'😀'.length\` vaut 2, et l’emoji « famille » compte 8 unités pour un seul caractère visible.`,
+**Chinois, japonais, coréen (CJK) et emoji** : encodage UTF-8 partout, polices qui couvrent ces écritures, et prudence avec les compteurs de caractères — en JavaScript, \`'😀'.length\` vaut 2, et un emoji « famille » (homme, femme, fille) en compte 8 pour un seul caractère visible.`,
       examples: [
         {
           title: 'Mettre la mise en page en miroir',
@@ -207,7 +207,7 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
       body: `Les formats changent d’un pays à l’autre ; ne les code jamais à la main.
 
 - **Dates** : le 27 octobre 2026 s’écrit \`10/27/2026\` en \`en-US\`, \`27.10.2026\` en \`de-DE\` et \`27/10/2026\` en \`fr-FR\`. Une date comme 03/04 désigne le 3 avril ou le 4 mars selon le pays.
-- **Nombres** : « 1,000 » (anglais) et « 1.000 » (allemand) valent tous deux mille, mais « 1,5 » et « 1.5 » s’inversent. En français, le séparateur des milliers est une espace fine insécable et la décimale une virgule.
+- **Nombres** : « 1,000 » en anglais et « 1.000 » en allemand valent tous deux mille ; à l’inverse, « 1,500 » vaut mille cinq cents en anglais, mais un et demi en allemand. En français, le séparateur des milliers est une espace fine insécable et la décimale une virgule.
 - **Devises** : le symbole change de place et d’espacement — « €1,234.56 » en \`en-US\`, « 1.234,56 € » en \`de-DE\`, « 1 234,56 € » en \`fr-FR\`.
 - **Pluriels** : \`count !== 1 ? 's' : ''\` ne marche qu’en anglais. L’arabe a **six** catégories de pluriel (zéro, un, deux, quelques, beaucoup, autre) ; le polonais et le russe distinguent « quelques » et « beaucoup » ; en français, les règles CLDR mettent 0 au singulier (« 0 fichier »). Utilise une bibliothèque i18n ou \`Intl.PluralRules\`.
 
@@ -225,7 +225,7 @@ Chaque réponse du serveur appelle une réaction différente :
 - **403** (interdit) : expliquer le refus et comment obtenir l’accès.
 - **404** (introuvable) : un état « introuvable » avec une issue.
 - **429** (trop de requêtes) : expliquer la limite et quand réessayer.
-- **500** (erreur serveur) : un message générique, un bouton « Réessayer », un contact support.
+- **500** (erreur serveur) : un message générique, un bouton « Réessayer », un moyen de contacter le support.
 
 Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’usage s’y prête, et une gestion des délais dépassés. Une panne locale reste **locale** : un composant en erreur ne bloque pas toute l’interface. Et le reste se dégrade avec grâce : images avec texte alternatif, fonctions essentielles sans JavaScript quand c’est possible, détection des fonctionnalités plutôt que des navigateurs.`,
       examples: [

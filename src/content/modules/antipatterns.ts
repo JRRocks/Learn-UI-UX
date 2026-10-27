@@ -98,7 +98,7 @@ La correction n’est pas « une autre couleur à la mode », mais une palette *
       id: 'structure-decor',
       title: 'Structure et décor : cartes, bordures, fonds',
       body: `- **La tuile d’icône** : un carré arrondi contenant une icône au-dessus de chaque titre, le gabarit universel de la « carte de fonctionnalité ». Mets l’icône à côté du titre, ou dans le flux.
-- **La bordure latérale d’accent** : un trait coloré épais sur un côté d’une carte arrondie, selon le détecteur le signe le plus reconnaissable de tous. Sa variante en haut ou en bas se heurte à l’arrondi des coins.
+- **La bordure latérale d’accent** : un trait coloré épais sur un côté d’une carte arrondie, que le détecteur décrit comme le signe le plus reconnaissable des interfaces générées. Sa variante en haut ou en bas se heurte à l’arrondi des coins.
 - **Les cartes imbriquées** et **l’espacement monotone** : de la profondeur sans hiérarchie, une répétition sans rythme.
 - **La carte fantôme** : bordure d’un pixel et large ombre diffuse sur chaque carte d’une rangée. Choisis l’un ou l’autre.
 - **Les rayures et le quadrillage** en fond, sans toile, carte, plan ni outil de mesure dessous.
@@ -319,7 +319,7 @@ Le correctif n’est pas de les atténuer, mais de réécrire : un titre uni qui
       ],
       explanation: `Trois règles de la famille cliché :
 
-- **Tiny numbered section labels** : un petit index numérique à côté de chaque titre de section, répété de section en section (règle consultative, mais très fréquente) ;
+- **Tiny numbered section labels** : un petit index numérique à côté de chaque titre de section, répété de section en section (règle consultative) ;
 - **Icon tile stacked above heading** : le carré arrondi contenant une icône, posé au-dessus du titre ;
 - **Side-tab accent border** : la bordure colorée épaisse sur un côté d’une carte arrondie.
 
@@ -810,7 +810,7 @@ Retirer seulement la forme de pastille ne suffit pas : il reste un sur-titre en 
       ideal: 14,
       explanation: `La règle *Cramped padding* demande **au moins 8 px**, et **idéalement 12 à 16 px**, d’espace entre le texte et la limite visible d’un conteneur bordé, entouré ou coloré.
 
-En dessous, le texte semble pressé contre la bordure et l’œil a du mal à le séparer du cadre. Au-delà d’une vingtaine de pixels pour un encadré de cette taille, il flotte et le bloc prend plus de place que son contenu.`,
+En dessous, le texte semble pressé contre la bordure et l’œil a du mal à le séparer du cadre. Bien au-delà, il flotte et l’encadré prend plus de place que son contenu : la plage de 12 à 16 px est celle que recommande la règle.`,
       takeaway: 'Dans un conteneur bordé ou coloré, laisse au moins 8 px, idéalement 12 à 16 px, entre le texte et la bordure.',
       sources: ['imp:detector'],
     },
