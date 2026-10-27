@@ -723,7 +723,7 @@ Couper avant d’avoir nommé le but, c’est risquer de retirer ce qui comptait
       unit: '%',
       target: [70, 85],
       ideal: 78,
-      explanation: `Des couleurs pleinement saturées crient toutes en même temps. Impeccable conseille de les ramener vers **70 à 85 %** de saturation : les teintes restent reconnaissables — le vert, le bleu et l’orange gardent leur sens — mais cessent de vibrer. L’écart paraît modeste, et c’est voulu : adoucir est un réglage de précision. Ici, désaturer améliore même la lisibilité : à 100 %, le blanc de l’étiquette « Livrée » n’atteint que 4,2:1 de contraste ; vers 78 %, il monte à 5,1:1.
+      explanation: `Des couleurs pleinement saturées crient toutes en même temps. Impeccable conseille de les ramener vers **70 à 85 %** de saturation : les teintes restent reconnaissables — le vert, le bleu et l’orange gardent leur sens — mais cessent de vibrer. L’écart paraît modeste, et c’est voulu : adoucir est un réglage de précision. Ici, désaturer améliore même la lisibilité : à 100 %, le contraste du blanc sur l’étiquette « Livrée » n’atteint que 4,2:1 ; vers 78 %, il monte à 5,1:1.
 
 Plus bas, l’écran reste lisible, mais on retire plus de couleur que nécessaire : la palette se ternit, puis vire au gris ; à 0 %, la couleur ne porte plus aucune information. Calme ≠ niveaux de gris.`,
       takeaway: 'Pour adoucir une palette, désature vers 70–85 % : la couleur garde son sens sans crier. Pas jusqu’au gris.',

@@ -657,16 +657,16 @@ Un badge adossé à des ventes réelles et un rappel avant la fin d’un essai a
       sources: [dp('fake-urgency', 'Fake urgency'), dp('nagging', 'Nagging'), dp('disguised-ads', 'Disguised ads'), DSA],
     },
     {
-      id: 'dark-patterns-precheck-tf',
+      id: 'dark-patterns-friction-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Une case « J’accepte de recevoir les offres de nos partenaires » cochée d’avance vaut consentement si la personne ne la décoche pas.',
+      prompt: 'Ajouter une étape de confirmation avant de partager tes contacts avec une application partenaire est un motif trompeur.',
       answer: false,
-      explanation: `Le consentement exige un **acte positif clair**. Le RGPD l’écrit noir sur blanc : « il ne saurait y avoir de consentement en cas de silence, de cases cochées par défaut ou d’inactivité » (considérant 32). La Cour de justice de l’UE l’a confirmé en 2019 pour les cookies (arrêt Planet49).
+      explanation: `Une friction n’est pas trompeuse en soi : tout dépend de sa **direction**. Le motif trompeur freine ce qui protège la personne — refuser, résilier, régler sa confidentialité. La CNIL range d’ailleurs « créer de la friction aux actions de protection des données » parmi les pratiques de design potentiellement trompeur.
 
-La présélection exploite l’effet de défaut : beaucoup de gens ne lisent pas ou ne décochent pas. C’est précisément pourquoi elle ne prouve rien de leur volonté.`,
-      takeaway: 'Une case cochée d’avance ne vaut jamais consentement : la case part décochée, et c’est la personne qui la coche.',
-      sources: [RGPD, PLANET49, dp('preselection', 'Preselection')],
+Une confirmation avant un partage fait l’inverse : elle ralentit au moment qui engage, pour laisser le temps de comprendre ce qui sera transmis. C’est une **friction désirable** (*La forme des choix*, 2019) : dire non n’y coûte pas plus que dire oui, et la personne l’approuverait si elle voyait tout.`,
+      takeaway: 'Une friction n’est pas trompeuse en soi : ralentir avant un partage de données ou un paiement protège ; freiner le refus ou la sortie piège.',
+      sources: [LINC],
     },
     {
       id: 'dark-patterns-cancel-tf',
@@ -681,27 +681,26 @@ Cette règle ne supprime pas les préavis ou durées d’engagement prévus au c
       sources: [INC, dp('hard-to-cancel', 'Hard to cancel')],
     },
     {
-      id: 'dark-patterns-cancel-order',
-      type: 'order',
+      id: 'dark-patterns-cancel-multi',
+      type: 'multi',
       difficulty: 2,
-      prompt: 'Range les étapes d’une résiliation en ligne conforme au droit français, de la première à la dernière.',
-      items: [
-        { id: 'entry', label: 'Ouvrir la fonction « Résilier votre contrat », gratuite et facile d’accès' },
-        { id: 'info', label: 'Renseigner les informations demandées' },
-        { id: 'recap', label: 'Vérifier le récapitulatif et le valider' },
-        { id: 'notify', label: 'Envoyer la notification de résiliation' },
-        { id: 'ack', label: 'Recevoir l’accusé de réception, puis la date de fin et les effets de la résiliation' },
+      prompt: 'Lesquelles de ces obligations la loi française impose-t-elle à la fonction de résiliation en ligne ?',
+      options: [
+        { id: 'account', label: 'Ne pas imposer la création d’un espace client pour résilier.', why: 'Oui : si la personne n’a pas d’espace client, le professionnel ne peut pas l’obliger à en créer un pour résilier.' },
+        { id: 'recap', label: 'Afficher un récapitulatif modifiable avant l’envoi de la demande.', why: 'Oui : la personne vérifie et corrige le récapitulatif, puis notifie la résiliation par un bouton sans ambiguïté.' },
+        { id: 'confirm', label: 'Confirmer la réception et la date de fin sur un support durable.', why: 'Oui : le professionnel confirme la réception et indique la date de fin et les effets de la résiliation, par exemple par e-mail.' },
+        { id: 'notice', label: 'Supprimer le préavis prévu au contrat dès la demande en ligne.', why: 'Non : c’est un nouveau canal, pas un nouveau droit. Le préavis et les éventuelles indemnités prévus au contrat restent dus.' },
+        { id: 'reason', label: 'Exiger le motif du départ avant l’envoi de la demande.', why: 'Non : aucun motif n’est exigé, et l’imposer ajoute un frein. La personne doit seulement pouvoir préciser un motif légitime si elle en invoque un.' },
       ],
-      explanation: `La « résiliation en trois clics » en vigueur depuis le 1er juin 2023 suit ce chemin :
+      answers: ['account', 'recap', 'confirm'],
+      explanation: `La « résiliation en trois clics » (Code de la consommation, article L215-1-1, en vigueur depuis le 1er juin 2023) encadre tout le parcours :
 
-1. Un accès direct à la fonction de résiliation, **gratuite, permanente et facile d’accès**, clairement signalée.
-2. Les informations nécessaires (identification, contrat concerné).
-3. Un **récapitulatif** à vérifier et valider.
-4. La **notification** de la résiliation, par un bouton explicite.
-5. Le professionnel confirme la réception, puis informe de la **date de fin** du contrat et de ses effets.
+- une fonction « Résilier votre contrat », ou une mention équivalente sans ambiguïté, gratuite et facile d’accès, **sans création de compte imposée** ;
+- un **récapitulatif** que la personne peut vérifier et corriger, puis un bouton qui notifie la résiliation ;
+- une **confirmation** de réception, avec la date de fin et les effets de la résiliation, sur un support durable.
 
-Côté design, chaque étape doit rester sobre : pas de détour, pas de questionnaire obligatoire, pas de contre-offre qui masque le bouton.`,
-      takeaway: 'Résiliation en ligne : accès direct et gratuit, informations, récapitulatif, notification, puis accusé de réception et date de fin.',
+C’est un nouveau canal, pas un nouveau droit : le préavis prévu au contrat reste dû. Côté design, rien ne doit s’intercaler : pas de questionnaire obligatoire, pas de contre-offre qui masque le bouton.`,
+      takeaway: 'Résiliation en ligne : aucun compte imposé, un récapitulatif modifiable, une confirmation durable de la date de fin ; le préavis du contrat, lui, reste dû.',
       sources: [INC],
     },
     {
@@ -716,7 +715,7 @@ Côté design, chaque étape doit rester sobre : pas de détour, pas de question
         { id: 'sneak', left: 'Panier piégé', right: 'Un don de 2 € ajouté au panier sans demande' },
         { id: 'roach', left: 'Résiliation obstruée', right: 'S’abonner en ligne, résilier par lettre recommandée' },
         { id: 'nag', left: 'Harcèlement', right: '« Activer la localisation ? Plus tard », à chaque ouverture' },
-        { id: 'social', left: 'Fausse preuve sociale', right: '« 23 personnes regardent cet hôtel », chiffre tiré au hasard' },
+        { id: 'social', left: 'Fausse preuve sociale', right: '« Julie, de Lyon, vient de réserver », message généré au hasard' },
         { id: 'ads', left: 'Publicité déguisée', right: 'Un faux bouton « Télécharger » qui mène à une publicité' },
         { id: 'subscription', left: 'Abonnement caché', right: 'Un « essai à 1 € » qui devient 29,90 € par mois, sans rappel' },
       ],
@@ -726,10 +725,10 @@ Côté design, chaque étape doit rester sobre : pas de détour, pas de question
 - **Panier piégé** (*sneak into basket*) : on ajoute sans demander.
 - **Résiliation obstruée** (*hard to cancel*) : entrer est facile, sortir est dur.
 - **Harcèlement** (*nagging*) : la demande revient jusqu’à ce qu’on cède.
-- **Fausse preuve sociale** : une popularité inventée.
+- **Fausse preuve sociale** : des avis ou une activité de clients inventés.
 - **Publicité déguisée** : la publicité se fait passer pour l’interface ou le contenu.
 - **Abonnement caché** : un paiement récurrent qu’on n’a pas vu venir.`,
-      takeaway: 'Nommer un motif trompeur, c’est déjà savoir le repérer — et pouvoir argumenter pour le retirer.',
+      takeaway: 'Chaque motif a sa parade : un refus neutre, rien d’ajouté sans demande, une sortie par le même canal, un « non » qui reste un non, une activité réelle, une publicité signalée, un rappel avant la fin d’un essai.',
       sources: ['deceptive'],
     },
   ],
