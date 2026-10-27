@@ -48,7 +48,7 @@ ${inherit ? `.rs-body { background: #fff; }
 .rs-num { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .rs-lab { font-size: 12px; color: #5a6172; }
 .rs-bars span { background: #6b84c4; }
-.rs-days { color: #5a6172; }` :`.rs-body { background: linear-gradient(160deg, #0f1222 0%, #1b1640 100%); color: #e9e7ff; }
+.rs-days { color: #5a6172; }` : `.rs-body { background: linear-gradient(160deg, #0f1222 0%, #1b1640 100%); color: #e9e7ff; }
 .rs-card { padding: 12px; border-radius: 16px; background: rgb(255 255 255 / 0.06); border: 1px solid rgb(167 139 250 / 0.35); box-shadow: 0 0 18px rgb(167 139 250 / 0.35); }
 .rs-num { font-size: 24px; font-weight: 800; color: #c4b5fd; text-shadow: 0 0 12px rgb(167 139 250 / 0.8); }
 .rs-lab { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #a5a8c8; }
@@ -152,7 +152,7 @@ L’entretien d’\`init\` part de ce que le dépôt révèle déjà, pose au pl
       title: 'Systématiser : DESIGN.md, jetons et extraction',
       body: `**DESIGN.md** décrit le système visuel pour que tout nouvel écran reste dans la marque. \`document\` le génère depuis le code existant, ou en pose une version « graine » choisie avec l’utilisateur quand rien n’est encore construit.
 
-Pour un monde neuf ou remplacé, l’ordre compte : \`init\` d’abord (PRODUCT.md), puis le parcours de création, puis la construction ; DESIGN.md s’écrit **à la fin, depuis ce qui a été construit**. Un règlement écrit avant le code finit défendu contre la réalité au lieu de la décrire : la graine ne sert qu’à fixer un monde choisi avant tout code, et se réécrit dès que le code existe.
+Pour un monde neuf ou remplacé, l’ordre compte : \`init\` d’abord si PRODUCT.md manque, puis le parcours de création, puis la construction ; DESIGN.md s’écrit **à la fin, depuis ce qui a été construit**. Un règlement écrit avant le code finit par être défendu contre la réalité au lieu de la décrire : la version graine sert seulement à fixer un monde choisi avant tout code, et se réécrit dès que le code existe.
 
 - **Les jetons font foi, la prose explique** : un en-tête YAML porte les valeurs (couleurs, typographie, arrondis, espacements, composants), puis jusqu’à huit sections dans un ordre fixe : \`## Overview\`, \`## Colors\`, \`## Typography\`, \`## Layout\`, \`## Elevation & Depth\`, \`## Shapes\`, \`## Components\`, \`## Do's and Don'ts\`. Les outils lisent ces titres tels quels.
 - **Décrire avant de chiffrer** : « Bleu d’action (#1f4fd8) : boutons principaux et liens, jamais en décoration » plutôt que « blue-600 ». Un nom descriptif, la valeur exacte entre parenthèses, l’usage et la raison.
@@ -240,11 +240,13 @@ Puis on trie : d’abord les tâches bloquées, les pertes de données, les éta
       prompt: 'Quelle ouverture d’entretien mènera au meilleur écran ?',
       context: 'Tu demandes à un assistant de concevoir l’écran de suivi de commande d’une boutique en ligne. Il ouvre l’entretien de découverte.',
       options: [
-        { id: 'style', visual: chat('Avant de commencer : quelle couleur principale veux-tu ? Plutôt une police à empattements ou sans ? Thème clair ou sombre ? Coins arrondis à 8 ou à 12 px ?'), why: 'Des valeurs de style, posées avant de savoir à qui sert l’écran : elles ne changent pas ce qu’il doit faire.' },
-        { id: 'purpose', visual: chat('Avant de dessiner : qui ouvre cet écran, et dans quel état d’esprit — juste après l’achat, ou inquiet d’un retard ? Que doit-il comprendre en premier ? À quoi verra-t-on que l’écran fait son travail ?'), why: 'Les trois questions du premier tour : les personnes et leur situation, ce qu’il faut comprendre, et le critère de réussite.' },
+        { id: 'style', visual: chat('Avant de commencer : quelle couleur principale veux-tu ? Plutôt une police à empattements ou sans ? Thème clair ou sombre ? Coins arrondis à 8 ou à 12 px ?'), why: 'Des valeurs de style, posées avant de savoir à qui sert l’écran : elles ne changent pas ce qu’il doit faire.' },
+        { id: 'purpose', visual: chat('Avant de dessiner : je pars du principe que c’est un client qui vient de commander, souvent sur mobile, parfois inquiet d’un retard — corrige-moi si besoin. Que doit-on y comprendre en premier ? À quoi verra-t-on que l’écran fait son travail ?'), why: 'Il affirme la lecture probable du public et invite à la corriger, puis pose deux questions du premier tour : ce qu’il faut comprendre, et le critère de réussite.' },
       ],
       answer: 'purpose',
       explanation: `Le premier tour de \`shape\` porte sur **le but, les personnes et le résultat** : à quoi sert l’écran, qui y arrive et dans quel état d’esprit, ce qu’il faut y comprendre ou y faire, à quoi on verra la réussite. Ces réponses changent l’écran ; la couleur des boutons, non.
+
+Ce qui est probable — ici, un client qui vient de commander — ne devient pas un menu : on l’affirme et on invite à corriger, pour garder les deux ou trois questions qui changent le plus le résultat.
 
 Les questions de style sont doublement à côté : \`shape\` ne demande **jamais de valeurs CSS** ni de choix entre des ambiances toutes faites, et la direction visuelle se décide plus tard, à partir de ce que l’entretien a révélé.`,
       takeaway: 'Ouvre un cadrage par le but, les personnes et le résultat attendu ; jamais par des couleurs, des polices ou des valeurs CSS.',
@@ -467,7 +469,7 @@ Séparer ces trois niveaux — produit, système visuel, surface — évite qu�
 
 Toutes passent la main à \`polish\` pour la finition.`,
       takeaway: 'Trop chargé : `distill`. Trop criard : `quieter`. Trop sage : `bolder`. Textes flous : `clarify`. Technique : `audit`. Revue UX : `critique`. Cas réels : `harden`.',
-      sources: ['imp:skill', 'imp:distill', 'imp:quieter', 'imp:bolder', 'imp:clarify', 'imp:harden'],
+      sources: ['imp:skill', 'imp:distill', 'imp:quieter', 'imp:bolder', 'imp:clarify', 'imp:audit', 'imp:critique', 'imp:harden'],
     },
     {
       id: 'process-authority-match',
@@ -499,8 +501,8 @@ Le piège classique : traiter un monde établi comme une page blanche parce qu�
       difficulty: 1,
       prompt: 'Remets dans l’ordre le déroulé de la commande `shape`.',
       items: [
-        { id: 'r1', label: 'Premier tour : à quoi sert la surface, qui y arrive, à quoi verra-t-on la réussite' },
-        { id: 'r2', label: 'Second tour, si un manque important apparaît : contenu réel, états, limites' },
+        { id: 'r1', label: 'Demander à quoi sert la surface, qui y arrive et à quoi on verra la réussite' },
+        { id: 'r2', label: 'Si un manque important subsiste : demander le contenu réel, les états et les limites' },
         { id: 'direction', label: 'Résoudre la direction visuelle quand la surface est nouvelle' },
         { id: 'brief', label: 'Rédiger le brief le plus court qui suffise' },
         { id: 'confirm', label: 'Faire confirmer le brief, puis s’arrêter' },
@@ -521,10 +523,10 @@ Le piège classique : traiter un monde établi comme une page blanche parce qu�
       difficulty: 1,
       prompt: 'Après le premier tour, tu connais le but, le public et le résultat attendu. Quand lancer un second tour de questions ?',
       options: [
-        { id: 'gap', label: 'Seulement si les réponses révèlent un manque important : contenu réel, états, limites, contraintes', why: 'C’est la règle de shape : un tour par défaut, un second pour un manque qui changerait le résultat.' },
-        { id: 'always', label: 'Toujours, pour couvrir toutes les questions du modèle', why: 'Déverser un questionnaire complet épuise la personne et noie les vraies décisions.' },
-        { id: 'style', label: 'Pour demander la palette et la police préférées', why: 'Le cadrage ne demande jamais de valeurs visuelles : la direction se décide ensuite.' },
-        { id: 'never', label: 'Jamais : on passe directement à l’écriture du code', why: 'Le cadrage n’écrit jamais de code ; et un manque important mérite un second tour.' },
+        { id: 'gap', label: 'Seulement si les réponses laissent un manque important : contenu, états ou limites', why: 'C’est la règle de shape : un tour par défaut, un second pour un manque qui changerait le résultat.' },
+        { id: 'vague', label: 'Dès qu’une réponse reste imprécise, pour tout verrouiller avant le brief', why: 'Un flou sans conséquence ne vaut pas un tour de plus : on affirme la lecture probable et on la fait corriger avec le brief.' },
+        { id: 'new-surface', label: 'Systématiquement pour une surface nouvelle, afin de couvrir états et contraintes', why: 'Le second tour n’est jamais automatique, même pour une surface nouvelle : déverser tout le modèle épuise la personne et noie les vraies décisions.' },
+        { id: 'style', label: 'Quand la personne n’a exprimé aucune préférence de palette ou de police', why: 'Le cadrage ne demande jamais de valeurs visuelles : la direction se décide ensuite, dans le parcours de création.' },
       ],
       answer: 'gap',
       explanation: `Le cadrage de \`shape\` avance par tours de **deux ou trois questions liées**. Un seul tour suffit par défaut ; on en ajoute un second **seulement si les réponses révèlent un manque important** — sur le contenu réel et ses plages, les états à prévoir, les limites ou les contraintes.
@@ -564,7 +566,7 @@ Ici, retoucher le bleu sur place soignerait le symptôme ; remplacer la copie pa
       prompt: 'Quelle démarche suivre ?',
       context: 'Une appli de gestion de stock a un monde visuel établi et documenté. On te demande une page entière nouvelle, « Rapports », dont la structure n’est pas encore décidée.',
       options: [
-        { id: 'structures', label: 'Garder le système visuel fixe et explorer plusieurs structures réellement différentes, tirées des données et des tâches, avant d’en retenir une', why: 'C’est le cas « surface entière dans un monde établi » : l’identité est réglée, la composition reste à trouver.' },
+        { id: 'structures', label: 'Garder le système visuel et explorer plusieurs structures avant d’en retenir une', why: 'C’est le cas « surface entière dans un monde établi » : l’identité est réglée, la composition reste à trouver, parmi des structures réellement différentes tirées des données et des tâches.' },
         { id: 'world', label: 'Lancer un atelier de direction visuelle complet pour donner à la page sa propre identité', why: 'Le monde est établi : on ne rouvre pas l’identité pour une surface qui en hérite.' },
         { id: 'copy', label: 'Recopier la mise en page de la page la plus proche, sans explorer d’autres structures', why: 'Ce serait juste pour étendre une surface existante ; pour une page entière à la structure ouverte, il faut explorer.' },
         { id: 'accent', label: 'Ajouter une couleur d’accent propre aux rapports pour qu’ils se distinguent', why: 'Une nouvelle couleur modifie le système : elle exige l’accord explicite de l’utilisateur, pas une initiative locale.' },
@@ -584,19 +586,19 @@ Ici, retoucher le bleu sur place soignerait le symptôme ; remplacer la copie pa
       id: 'process-tokens-multi',
       type: 'multi',
       difficulty: 2,
-      prompt: 'Lesquelles de ces valeurs méritent de devenir un jeton du système ?',
+      prompt: 'Lesquels de ces jetons proposés méritent d’entrer dans le système ?',
       options: [
         { id: 'action', label: 'Le bleu des actions principales, présent sur 14 boutons et liens', why: 'Réutilisé partout avec la même intention : c’est le jeton sémantique « action » par excellence.' },
-        { id: 'gap', label: 'L’espacement de 16 px entre les champs de tous les formulaires', why: 'Un rythme répété avec la même intention : un jeton d’espacement évite les 15 et 17 px qui dérivent.' },
-        { id: 'duration', label: 'La durée de 200 ms des changements d’état, réutilisée partout', why: 'Le mouvement aussi se systématise : une durée partagée garde les transitions cohérentes.' },
+        { id: 'gap', label: 'L’espacement de 16 px entre les champs de tous les formulaires', why: 'Un rythme répété avec la même intention : un jeton d’espacement évite les 15 et 17 px qui dérivent.' },
+        { id: 'duration', label: 'La durée de 200 ms des changements d’état, réutilisée partout', why: 'Le mouvement aussi se systématise : une durée partagée garde les transitions cohérentes.' },
         { id: 'gradient', label: 'Le dégradé de l’unique illustration de la page 404', why: 'Utilisé une seule fois : en faire un jeton pollue le système.' },
-        { id: 'chart', label: 'Le 13 px d’un seul libellé de graphique, par exception', why: 'Une exception locale ne justifie pas une abstraction du système.' },
+        { id: 'merge', label: 'Un jeton commun au bouton Payer et aux badges Info, qui ont le même bleu', why: 'Même valeur, intentions différentes : une action et une information. Un jeton commun lierait leur avenir ; il en faut deux, qui peuvent pointer vers le même primitif.' },
       ],
       answers: ['action', 'gap', 'duration'],
-      explanation: `\`extract\` pose une règle simple : on n’extrait que ce qui revient **au moins trois fois avec la même intention**, et un jeton doit avoir un **sens** (un rôle), pas seulement une valeur. Créer un jeton pour chaque valeur est un écueil cité explicitement.
+      explanation: `\`extract\` pose une règle simple : on n’extrait que ce qui revient **au moins trois fois avec la même intention**, et un jeton doit avoir un **sens** (un rôle), pas seulement une valeur. Créer un jeton pour chaque valeur est un écueil cité explicitement, tout comme réunir deux choses qui se ressemblent mais servent des intentions différentes.
 
-\`polish\` le dit à sa façon : on promeut en jeton les valeurs vraiment réutilisables, mais on ne crée pas d’abstraction pour une exception locale. Couleur d’action, rythme d’espacement, durée de transition : oui. Dégradé unique, taille d’exception : non.`,
-      takeaway: 'Un jeton naît d’une valeur réutilisée au moins trois fois avec la même intention, et il porte un rôle ; les exceptions restent locales.',
+\`polish\` le dit à sa façon : on promeut en jeton les valeurs vraiment réutilisables, mais on ne crée pas d’abstraction pour une exception locale. Couleur d’action, rythme d’espacement, durée de transition : oui. Dégradé unique : non. Un même bleu pour une action et une information : deux jetons sémantiques, pas un.`,
+      takeaway: 'Un jeton naît d’une valeur réutilisée au moins trois fois avec la même intention, et il porte un rôle : une exception reste locale, deux intentions font deux jetons.',
       sources: ['imp:extract', 'imp:polish'],
     },
     {
@@ -607,7 +609,7 @@ Ici, retoucher le bleu sur place soignerait le symptôme ; remplacer la copie pa
       answer: false,
       explanation: `\`extract\` n’extrait que ce qui revient **au moins trois fois avec la même intention**. Son principe : l’**abstraction prématurée est pire que la duplication**. Un composant généralisé trop tôt fige de mauvaises hypothèses et devient si générique qu’il ne sert plus.
 
-Les systèmes de design grandissent par incréments : on extrait ce qui est clairement réutilisable maintenant, pas tout ce qui pourrait l’être un jour.`,
+Les design systems grandissent par incréments : on extrait ce qui est clairement réutilisable maintenant, pas tout ce qui pourrait l’être un jour.`,
       takeaway: 'N’extrais un composant ou un jeton qu’à partir de trois usages avec la même intention : l’abstraction prématurée coûte plus que la duplication.',
       sources: ['imp:extract'],
     },

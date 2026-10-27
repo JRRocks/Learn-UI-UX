@@ -3,13 +3,16 @@ import type { ModuleContent, Visual } from '../../engine/types';
 const WEBAIM = { label: 'WebAIM — The WebAIM Million (rapport 2026)', url: 'https://webaim.org/projects/million/' };
 const USING_ARIA = { label: 'W3C — Using ARIA (première règle d’ARIA)', url: 'https://www.w3.org/TR/using-aria/' };
 const EAA = { label: 'EUR-Lex — Directive (UE) 2019/882, Acte européen sur l’accessibilité', url: 'https://eur-lex.europa.eu/eli/dir/2019/882/oj' };
-const U = (slug: string, label: string) => ({ label: `W3C — Comprendre le critère ${label}`, url: `https://www.w3.org/WAI/WCAG22/Understanding/${slug}.html` });
+const RGAA_LABELS = { label: 'DINUM — RGAA 4.1.2, critère 11.1 (étiquettes des champs)', url: 'https://accessibilite.numerique.gouv.fr/methode/criteres-et-tests/#11.1' };
+const ARIA22 = { label: 'W3C — Technique ARIA22 (role="status")', url: 'https://www.w3.org/WAI/WCAG22/Techniques/aria/ARIA22' };
+const IMP_AUDIT_NATIVE = { label: 'impeccable — audit.native.md', url: 'https://github.com/pbakaus/impeccable/blob/main/skill/reference/audit.native.md' };
+const U =(slug: string, label: string) => ({ label: `W3C — Comprendre le critère ${label}`, url: `https://www.w3.org/WAI/WCAG22/Understanding/${slug}.html` });
 
 /** Lecteur de podcast : commandes en icônes, très pâles ou bien contrastées. */
 const player = (strong: boolean): Visual => ({
   alt: strong
     ? 'Lecteur de podcast : titre, barre de progression bleue et cinq commandes en icônes gris foncé, dont un bouton pause noir.'
-    : 'Lecteur de podcast : titre, barre de progression presque invisible et cinq commandes en icônes gris très pâle sur fond blanc.',
+    : 'Lecteur de podcast : titre, barre de progression gris très clair et cinq commandes en icônes gris très clair sur fond blanc, dont un bouton pause.',
   css: `.pd-bar { height: 6px; border-radius: 3px; background: ${strong ? '#d5dae3' : '#f1f3f6'}; overflow: hidden; }
 .pd-bar span { display: block; width: 45%; height: 100%; background: ${strong ? '#1f4fd8' : '#d5dae3'}; }
 .pd-ctrl { display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
@@ -23,17 +26,18 @@ const delivery = (labels: boolean): Visual => ({
   alt: labels
     ? 'Formulaire d’adresse de livraison : chaque champ a une étiquette visible au-dessus de sa valeur, les champs facultatifs sont signalés.'
     : 'Formulaire d’adresse de livraison sans étiquettes : les champs remplis n’affichent plus que leur valeur (Lucie Martin, 8 rue Oberkampf, 75011, 06 12 34 56 78), les autres un texte indicatif.',
-  css: `.lb-ph { color: #6b7280; } .lb-opt { font-weight: 400; color: #5a6172; }`,
+  css: `.lb-ph { color: #6b7280; } .lb-opt { font-weight: 400; color: #5a6172; }
+.mk-grid.lb-row { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }`,
   html: labels
-    ? `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Adresse de livraison</p><div class="mk-field"><span class="mk-label">Nom complet</span><div class="mk-input">Lucie Martin</div></div><div class="mk-field"><span class="mk-label">Adresse</span><div class="mk-input">8 rue Oberkampf</div></div><div class="mk-field"><span class="mk-label">Complément <span class="lb-opt">(facultatif)</span></span><div class="mk-input lb-ph">Bâtiment, étage, code</div></div><div class="mk-grid" style="--cols:2;--gap:10px"><div class="mk-field"><span class="mk-label">Code postal</span><div class="mk-input">75011</div></div><div class="mk-field"><span class="mk-label">Téléphone</span><div class="mk-input">06 12 34 56 78</div></div></div><span class="mk-btn mk-btn--block">Continuer</span></div>`
-    : `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Adresse de livraison</p><div class="mk-input">Lucie Martin</div><div class="mk-input">8 rue Oberkampf</div><div class="mk-input lb-ph">Complément d’adresse</div><div class="mk-grid" style="--cols:2;--gap:10px"><div class="mk-input">75011</div><div class="mk-input">06 12 34 56 78</div></div><span class="mk-btn mk-btn--block">Continuer</span></div>`,
+    ? `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Adresse de livraison</p><div class="mk-field"><span class="mk-label">Nom complet</span><div class="mk-input">Lucie Martin</div></div><div class="mk-field"><span class="mk-label">Adresse</span><div class="mk-input">8 rue Oberkampf</div></div><div class="mk-field"><span class="mk-label">Complément <span class="lb-opt">(facultatif)</span></span><div class="mk-input lb-ph">Bâtiment, étage, code</div></div><div class="mk-grid lb-row" style="--gap:10px"><div class="mk-field"><span class="mk-label">Code postal</span><div class="mk-input">75011</div></div><div class="mk-field"><span class="mk-label">Téléphone</span><div class="mk-input">06 12 34 56 78</div></div></div><span class="mk-btn mk-btn--block">Continuer</span></div>`
+    : `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Adresse de livraison</p><div class="mk-input">Lucie Martin</div><div class="mk-input">8 rue Oberkampf</div><div class="mk-input lb-ph">Complément d’adresse</div><div class="mk-grid lb-row" style="--gap:10px"><div class="mk-input">75011</div><div class="mk-input">06 12 34 56 78</div></div><span class="mk-btn mk-btn--block">Continuer</span></div>`,
 });
 
 /** Paragraphe de confirmation avec deux liens, soulignés ou non. */
 const linksText = (underline: boolean): Visual => ({
   alt: underline
-    ? 'Paragraphe de confirmation de séjour avec deux liens bleus soulignés.'
-    : 'Paragraphe de confirmation de séjour avec deux liens qui ne se distinguent du texte que par leur couleur bleue, sans soulignement.',
+    ? 'Paragraphe de confirmation de séjour avec deux liens en bleu, soulignés.'
+    : 'Paragraphe de confirmation de séjour avec deux liens en bleu, non soulignés.',
   css: `.ln { color: #1f4fd8; ${underline ? 'text-decoration: underline; text-underline-offset: 2px;' : 'text-decoration: none;'} }`,
   html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h3">Votre séjour est confirmé</p><p style="line-height:1.6">Avant de partir, consultez nos <span class="ln">conditions d’annulation</span> : le remboursement est intégral jusqu’à 48 h avant l’arrivée. Pour venir sans voiture, voyez l’<span class="ln">accès en transports en commun</span> depuis la gare d’Annecy.</p></div>`,
 });
@@ -41,8 +45,8 @@ const linksText = (underline: boolean): Visual => ({
 /** Étape de commande dont le bouton « Continuer » a le focus clavier, visible ou non. */
 const focusStep = (visible: boolean): Visual => ({
   alt: visible
-    ? 'Étape « Mode de livraison » : le bouton Continuer est entouré d’un anneau bleu épais, décalé du bouton : le focus clavier est visible.'
-    : 'Étape « Mode de livraison » : le bouton Continuer a le focus clavier, mais rien ne le distingue de son état normal.',
+    ? 'Étape « Mode de livraison » : deux modes au choix, boutons Retour et Continuer ; le bouton Continuer, qui a le focus clavier, est entouré d’un anneau bleu épais, décalé du bouton.'
+    : 'Étape « Mode de livraison » : deux modes au choix, boutons Retour et Continuer ; le bouton Continuer, qui a le focus clavier, s’affiche sans contour particulier.',
   css: `.fo-opt { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #c7cedb; border-radius: 8px; }
 .fo-opt::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #8b92a1; flex: none; }
 .fo-on { border-color: #1f4fd8; } .fo-on::before { border: 5px solid #1f4fd8; }
@@ -55,10 +59,10 @@ const accessibility: ModuleContent = {
   title: 'Accessibilité et audit',
   category: 'evaluer',
   summary:
-    'Appliquer les critères clés des WCAG 2.2 (contraste, clavier, focus, cibles, sémantique, formulaires, annonces) et mener l’audit technique d’impeccable en cinq dimensions notées sur 20.',
+    'Appliquer les critères clés des WCAG 2.2 (contraste, clavier, focus, cibles, sémantique, formulaires, annonces) et mener l’audit technique d’impeccable : cinq dimensions notées de 0 à 4, soit un total sur 20.',
   minutes: 12,
   commands: ['audit'],
-  sources: ['wcag22', 'wcag:contrast', 'wcag:target', 'imp:audit', 'imp:critique', WEBAIM, USING_ARIA, EAA],
+  sources: ['wcag22', 'wcag:contrast', 'wcag:target', 'imp:audit', IMP_AUDIT_NATIVE, 'imp:critique', WEBAIM, USING_ARIA, EAA],
   sections: [
     {
       id: 'pour',
@@ -72,17 +76,18 @@ const accessibility: ModuleContent = {
 
 Chaque critère a un niveau : **A** (le minimum), **AA** (la cible habituelle, celle que visent la plupart des obligations légales) et **AAA** (renforcé). En Europe, l’Acte européen sur l’accessibilité (directive 2019/882) s’applique depuis le 28 juin 2025 à de nombreux produits et services numériques.
 
-Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un million de pages d’accueil, **95,9 %** présentaient des erreurs détectables automatiquement, et **83,9 %** du texte au contraste insuffisant.`,
+Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un million de pages d’accueil, **95,9 %** présentaient des erreurs détectables automatiquement, et **83,9 %** contenaient du texte au contraste insuffisant.`,
     },
     {
       id: 'perceptible',
       title: 'Perceptible : contraste, couleur, alternatives',
-      body: `- **Contraste du texte** (1.4.3, AA) : **4,5:1** pour le texte courant, **3:1** pour le grand texte (24 px, ou 18,7 px en gras). 7:1 pour viser le niveau AAA. Le ratio ne s’arrondit pas : 4,49:1 échoue.
-- **Contraste non textuel** (1.4.11, AA) : **3:1** contre les couleurs voisines pour ce qui permet de repérer un composant ou son état (bordure de champ, icône sans texte, indicateur de focus) et pour les éléments graphiques nécessaires à la compréhension (courbes, parts d’un graphique). Les composants désactivés en sont exemptés.
+      body: `- **Contraste du texte** (1.4.3, AA) : **4,5:1** pour le texte courant, **3:1** pour le grand texte (24 px, ou 18,7 px en gras). Niveau AAA (1.4.6) : 7:1, et 4,5:1 pour le grand texte. Le ratio ne s’arrondit pas : 4,49:1 échoue.
+- **Contraste non textuel** (1.4.11, AA) : **3:1** par rapport aux couleurs adjacentes pour ce qui permet de repérer un composant ou son état (bordure de champ, icône sans texte, indicateur de focus) et pour les éléments graphiques nécessaires à la compréhension (courbes, parts d’un graphique). Les composants désactivés en sont exemptés.
 - **Jamais la couleur seule** (1.4.1, A) : un statut, une erreur, un lien se distinguent aussi par un texte, une icône, un soulignement ou un motif.
 - **Alternatives textuelles** (1.1.1, A) : une image informative décrit son information ou sa fonction ; une image décorative reçoit un \`alt=""\` pour être ignorée.
 - **Agrandissement** (1.4.4, AA) : le texte passe à 200 % sans perte de contenu ni de fonction.
-- **Redistribution** (1.4.10, AA) : à 320 px de large — un écran de 1 280 px zoomé à 400 % — le contenu tient sans défilement horizontal, sauf ce qui exige deux dimensions (carte, tableau de données, vidéo).`,
+- **Redistribution** (1.4.10, AA) : à 320 px de large — un écran de 1 280 px zoomé à 400 % — le contenu tient sans défilement horizontal, sauf ce qui exige deux dimensions (carte, tableau de données, vidéo).
+- **Contenu au survol ou au focus** (1.4.13, AA) : une info-bulle ou un menu qui apparaît au survol ou au focus peut être masqué sans bouger le pointeur ni le focus (touche Échap), peut être survolé sans disparaître, et reste affiché jusqu’à ce que l’on quitte son déclencheur ou qu’on le masque.`,
       examples: [
         {
           title: 'Redistribution à 320 px de large',
@@ -109,10 +114,11 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
       id: 'utilisable',
       title: 'Utilisable : clavier, focus, cibles, mouvement',
       body: `- **Clavier** (2.1.1 et 2.1.2, A) : tout se fait au clavier, et l’on peut sortir de chaque composant — aucun **piège** où le focus reste bloqué.
-- **Ordre et visibilité du focus** (2.4.3, A ; 2.4.7, AA) : le focus suit l’ordre de lecture et se voit toujours. Ne supprime jamais l’\`outline\` sans le remplacer ; \`:focus-visible\` permet de le styler pour le clavier sans gêner la souris. Depuis WCAG 2.2, l’élément qui a le focus ne doit pas non plus disparaître entièrement sous un bandeau collant (2.4.11, AA).
+- **Ordre et visibilité du focus** (2.4.3, A ; 2.4.7, AA) : le focus suit l’ordre de lecture et se voit toujours. Ne supprime jamais l’\`outline\` sans le remplacer ; \`:focus-visible\` permet de le mettre en forme pour le clavier sans gêner la souris. Depuis WCAG 2.2, l’élément qui a le focus ne doit pas non plus disparaître entièrement sous un bandeau collant (2.4.11, AA).
 - **Taille des cibles** (2.5.8, AA, nouveau en 2.2) : au moins **24 × 24 px CSS**, sauf exceptions — cible assez espacée (un cercle de 24 px centré sur elle ne touche aucune autre cible), fonction équivalente ailleurs dans la page, lien dans une phrase, contrôle natif non modifié, présentation essentielle. Pour le tactile, vise **44 × 44** : c’est le seuil sous lequel l’audit d’impeccable signale une cible, et celui du niveau AAA (2.5.5) ; Apple recommande 44 × 44 pt, Material Design 48 × 48 dp.
+- **Glissement** (2.5.7, AA, nouveau en 2.2) : ce qui se fait en faisant glisser (curseur de valeur, liste triée par glisser-déposer) se fait aussi d’un seul pointeur sans glisser, par des boutons ou un clic, sauf si le glissement est essentiel.
 - **Temps** (2.2.1, A) : un délai imposé peut être désactivé, ajusté ou prolongé.
-- **Mouvement** : respecte \`prefers-reduced-motion\` avec une alternative pensée, qui garde l’information du changement d’état — pas un arrêt brutal de toutes les transitions. Rien ne doit clignoter plus de trois fois par seconde (2.3.1, A).`,
+- **Mouvement** : respecte \`prefers-reduced-motion\` avec une alternative pensée, qui garde l’information du changement d’état — pas un arrêt brutal de toutes les transitions. Rien ne doit clignoter plus de trois fois par seconde, sauf si les flashs restent sous les seuils de flash général et de flash rouge (2.3.1, A) ; le niveau AAA (2.3.2) supprime cette exception.`,
       examples: [
         {
           title: 'Des cibles à la taille du doigt',
@@ -121,15 +127,16 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
             css: `.tb-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid #e1e4ea; border-radius: 12px; }
 .tb-acts { display: flex; gap: 2px; }
 .tb-ico { width: 18px; height: 18px; display: grid; place-items: center; color: #36405a; }`,
-            html: `<div class="mk-pad"><div class="tb-row"><div class="mk-grow"><p class="mk-strong">Facture F-118</p><p class="mk-small mk-muted">Atelier Brune · 1 480,00 €</p></div><div class="tb-acts"><span class="tb-ico"><i data-icon="download" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="share-2" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
+            html: `<div class="mk-pad"><div class="tb-row"><div class="mk-grow"><p class="mk-strong">Facture F-118</p><p class="mk-small mk-muted">Atelier Brune · 1 480,00 €</p></div><div class="tb-acts"><span class="tb-ico"><i data-icon="download" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="share-2" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
           },
           badNote: '18 px séparés de 2 px : sous les 24 px du minimum AA, et la corbeille touche le partage.',
           good: {
             alt: 'Même ligne : les trois icônes restent petites, mais chacune est posée dans une zone tactile de 44 px, légèrement teintée.',
-            css: `.tb-row { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; border: 1px solid #e1e4ea; border-radius: 12px; }
-.tb-acts { display: flex; gap: 4px; }
+            css: `.tb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; border: 1px solid #e1e4ea; border-radius: 12px; }
+.tb-row > .mk-grow { flex: 1 1 150px; padding-block: 4px; }
+.tb-acts { display: flex; gap: 4px; margin-inline-start: auto; }
 .tb-ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; background: #f4f6f9; color: #36405a; }`,
-            html: `<div class="mk-pad"><div class="tb-row"><div class="mk-grow"><p class="mk-strong">Facture F-118</p><p class="mk-small mk-muted">Atelier Brune · 1 480,00 €</p></div><div class="tb-acts"><span class="tb-ico"><i data-icon="download" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="share-2" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
+            html: `<div class="mk-pad"><div class="tb-row"><div class="mk-grow"><p class="mk-strong">Facture F-118</p><p class="mk-small mk-muted">Atelier Brune · 1 480,00 €</p></div><div class="tb-acts"><span class="tb-ico"><i data-icon="download" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="share-2" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
           },
           goodNote: 'L’icône reste discrète ; c’est la zone tactile qui grandit, jusqu’à 44 px.',
         },
@@ -140,8 +147,9 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
       title: 'Compréhensible et robuste : sémantique, formulaires, annonces',
       body: `- **HTML natif d’abord** : un \`<button>\` apporte gratuitement le focus, l’activation par Entrée et Espace et le rôle annoncé ; une \`<div>\` cliquable n’apporte rien de tout cela. C’est la première règle d’ARIA : si un élément natif fait l’affaire, utilise-le plutôt que de détourner un autre élément avec un rôle.
 - **Structure** (1.3.1, A) : ce que la mise en page montre (titres, listes, tableaux, zones) doit exister dans le code. Bonne pratique : des titres hiérarchisés sans saut de niveau (h1 puis h2, pas h1 puis h4) et des **repères** (\`header\`, \`nav\`, \`main\`, \`footer\`) qui permettent au lecteur d’écran de sauter d’une zone à l’autre. Le détecteur d’impeccable signale les niveaux de titre sautés.
-- **Étiquettes** (3.3.2, A) : chaque champ a une étiquette visible et persistante, liée au champ. Un placeholder n’est pas une étiquette : il disparaît dès qu’on tape.
+- **Étiquettes** (3.3.2, A) : toute saisie attendue a une étiquette ou une instruction ; la liaison de l’étiquette au champ dans le code (\`<label for>\`) relève de 1.3.1 et 4.1.2. La bonne pratique : une étiquette visible et persistante. Un placeholder (le texte indicatif grisé affiché dans le champ vide) n’en est pas une : il disparaît dès qu’on tape.
 - **Erreurs** (3.3.1, A ; 3.3.3, AA) : l’erreur est identifiée **en texte**, près du champ, avec une suggestion de correction.
+- **Saisie redondante** (3.3.7, A, nouveau en 2.2) : une information déjà donnée dans le même parcours est préremplie ou proposée, sauf si la ressaisir est essentiel ou exigé pour la sécurité.
 - **Messages d’état** (4.1.3, AA) : une confirmation ou un compteur mis à jour sans rechargement est annoncé grâce à \`role="status"\` (ou \`aria-live="polite"\`), sans déplacer le focus. \`role="alert"\` est réservé à ce qui est important et urgent.
 - **Nom, rôle, valeur** (4.1.2, A) : chaque contrôle sur mesure expose ce qu’il est, son nom et son état (coché, déplié…).
 - **Authentification** (3.3.8, AA, nouveau en 2.2) : se connecter ne doit pas imposer de test cognitif (retenir un mot de passe, recopier des caractères) sans alternative. Bloquer le collage ou les gestionnaires de mots de passe fait échouer le critère, sauf autre méthode proposée.`,
@@ -152,7 +160,7 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
             alt: 'Champ Code postal contenant 6900, simplement encadré de rouge, sans message.',
             html: `<div class="mk-pad mk-stack" style="--gap:10px"><div class="mk-field"><span class="mk-label">Code postal</span><div class="mk-input mk-input--error">6900</div></div><div class="mk-field"><span class="mk-label">Ville</span><div class="mk-input">Lyon</div></div></div>`,
           },
-          badNote: 'Seul le rouge signale l’erreur : invisible pour certains daltoniens, muette pour un lecteur d’écran, et sans piste de correction.',
+          badNote: 'Seul le rouge signale l’erreur : invisible pour certaines personnes daltoniennes, muette pour un lecteur d’écran, et sans piste de correction.',
           good: {
             alt: 'Même champ encadré de rouge, avec une icône et le message « Le code postal compte 5 chiffres, par exemple 69003. »',
             html: `<div class="mk-pad mk-stack" style="--gap:10px"><div class="mk-field"><span class="mk-label">Code postal</span><div class="mk-input mk-input--error">6900</div><p class="mk-error"><i data-icon="circle-alert" style="--ico:13px"></i> Le code postal compte 5 chiffres, par exemple 69003.</p></div><div class="mk-field"><span class="mk-label">Ville</span><div class="mk-input">Lyon</div></div></div>`,
@@ -164,17 +172,19 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
     {
       id: 'audit',
       title: 'L’audit en cinq dimensions',
-      body: `La commande \`audit\` d’impeccable est un **contrôle technique** : elle mesure ce qui se vérifie dans l’implémentation, là où \`critique\` juge l’expérience. Elle note **cinq dimensions de 0 à 4** :
+      body: `La commande \`audit\` d’impeccable est un **contrôle technique** : elle mesure ce qui se vérifie dans l’implémentation, là où \`critique\` juge l’expérience. Elle ne corrige rien : elle documente chaque problème et l’oriente vers la commande qui le traitera. Elle note **cinq dimensions de 0 à 4** :
 
 1. **Accessibilité** : contraste, ARIA, clavier, HTML sémantique, textes alternatifs, formulaires, mouvement. 0 = échoue au niveau A, 1 = lacunes majeures, 2 = efforts partiels, 3 = AA presque atteint, 4 = AA pleinement atteint et proche de AAA.
 2. **Performance** : recalculs de mise en page en boucle, animations coûteuses, images non optimisées, scripts trop lourds.
 3. **Thématisation** : couleurs codées en dur, mode sombre cassé, jetons incohérents.
 4. **Responsive** : largeurs fixes, cibles tactiles, gestes cassés au toucher, défilement horizontal, texte agrandi.
-5. **Intégrité d’implémentation** : raccourcis répétés, dérive du design system, contenu décoratif ou trompeur, vérifiés avec le détecteur.
+5. **Intégrité d’implémentation**, la dimension jugée critique : raccourcis répétés, dérive du design system, contenu décoratif ou trompeur, structure interchangeable avec celle d’un produit sans rapport, vérifiés avec le détecteur. Le rapport commence par ce verdict, réussi ou échoué : l’implémentation forme-t-elle un système propre au produit ?
 
 Le total sur **20** se lit en bandes : **18–20** excellent, **14–17** bon, **10–13** acceptable, **6–9** faible, **0–5** critique. Chaque problème reçoit une sévérité de **P0 à P3**, et une **violation WCAG AA est au moins P1**. Pour chacun : emplacement, catégorie, impact, critère violé, recommandation, commande suggérée.
 
-L’audit relève aussi les **motifs systémiques** (« couleurs codées en dur dans 15 composants »), cite ce qui fonctionne, vérifie ses faux positifs et garde peu de P3 : une longue traîne de détails enterre ce qui compte.`,
+L’audit relève aussi les **motifs systémiques** (« couleurs codées en dur dans 15 composants »), cite ce qui fonctionne, vérifie ses faux positifs et garde peu de P3 : une longue traîne de détails enterre ce qui compte.
+
+Ces cinq dimensions valent pour le **web**. Pour une appli native (iOS, Android ou les deux), l’audit suit sa variante native : accessibilité (VoiceOver, TalkBack), performance, apparence et thèmes, **conformité à la plateforme** (la dimension critique, dont le verdict ouvre le rapport : appli native ou site porté ?) et adaptabilité (tailles d’écran, orientation, clavier, multifenêtre, pliables). Elle se fait sur le code source, sans détecteur ni outil de navigateur, et une violation des guides de la plateforme y est au moins P1.`,
     },
     {
       id: 'tester-comme-sam',
@@ -190,7 +200,7 @@ L’audit relève aussi les **motifs systémiques** (« couleurs codées en dur 
   ],
   rules: [
     { id: 'contrast', front: 'Contraste minimum du texte courant (WCAG AA) ?', back: '4,5:1. Le grand texte (24 px, ou 18,7 px en gras) descend à 3:1 ; 7:1 pour le niveau AAA.' },
-    { id: 'non-text', front: 'Quel contraste pour une bordure de champ, une icône sans texte ou un focus ?', back: '3:1 contre les couleurs voisines (critère 1.4.11). Les composants désactivés sont exemptés.' },
+    { id: 'non-text', front: 'Quel contraste pour une bordure de champ, une icône sans texte ou un focus ?', back: '3:1 par rapport aux couleurs adjacentes (critère 1.4.11). Les composants désactivés sont exemptés.' },
     { id: 'color', front: 'La couleur peut-elle porter seule une information ?', back: 'Non (1.4.1) : double-la d’un texte, d’une icône, d’un soulignement ou d’un motif.' },
     { id: 'alt', front: 'Quel texte alternatif pour une image décorative ?', back: '`alt=""` : le lecteur d’écran l’ignore. Une image informative décrit son information ou sa fonction.' },
     { id: 'target', front: 'Taille minimale d’une cible selon WCAG 2.2 (AA) ?', back: '24 × 24 px CSS (2.5.8), sauf exceptions (espacement, équivalent, lien dans une phrase, contrôle natif, essentiel). Vise 44 × 44 pour le tactile.' },
@@ -200,7 +210,7 @@ L’audit relève aussi les **motifs systémiques** (« couleurs codées en dur 
     { id: 'status', front: 'Comment annoncer « Article ajouté au panier » sans déplacer le focus ?', back: 'Avec une région `role="status"` (ou `aria-live="polite"`) : critère 4.1.3.' },
     { id: 'motion', front: 'Comment respecter `prefers-reduced-motion` ?', back: 'Par une alternative pensée qui garde l’information du changement d’état, pas par un arrêt global de toutes les transitions.' },
     { id: 'reflow', front: 'Zoom et redistribution : quelles exigences ?', back: 'Texte agrandi à 200 % sans perte (1.4.4) ; contenu lisible à 320 px de large sans défilement horizontal (1.4.10).' },
-    { id: 'audit-dims', front: 'Quelles sont les cinq dimensions de l’audit d’impeccable ?', back: 'Accessibilité, performance, thématisation, responsive et intégrité d’implémentation, notées de 0 à 4 chacune.' },
+    { id: 'audit-dims', front: 'Quelles sont les cinq dimensions de l’audit web d’impeccable ?', back: 'Accessibilité, performance, thématisation, responsive et intégrité d’implémentation, notées de 0 à 4 chacune. En natif, conformité à la plateforme et adaptabilité remplacent intégrité et responsive.' },
     { id: 'audit-bands', front: 'Comment lire un total d’audit sur 20 ?', back: '18–20 excellent, 14–17 bon, 10–13 acceptable, 6–9 faible, 0–5 critique.' },
     { id: 'aa-severity', front: 'Une violation WCAG AA, quelle sévérité ?', back: 'Au moins P1 : à corriger avant la mise en production.' },
   ],
@@ -218,7 +228,7 @@ L’audit relève aussi les **motifs systémiques** (« couleurs codées en dur 
       answer: 'strong',
       explanation: `Le critère **1.4.11 (contraste non textuel, AA)** exige **3:1** pour ce qui permet de repérer un composant : bordures de champ, indicateur de focus, et icônes qui portent seules une fonction, comme ici.
 
-Le gris très pâle passe pour « élégant » sur un bon écran, au calme. En plein soleil, avec une basse vision ou un écran bas de gamme, les commandes disparaissent. Seuls les composants désactivés échappent à cette règle.`,
+Le gris très pâle passe pour « élégant » sur un bon écran, au calme. En plein soleil, avec une basse vision ou un écran bas de gamme, les commandes disparaissent. Seuls échappent à cette règle les composants désactivés et les contrôles natifs que l’auteur n’a pas restylés.`,
       takeaway: 'Une icône qui porte seule une fonction doit contraster à 3:1 au moins avec son fond, comme une bordure de champ ou un focus.',
       sources: [U('non-text-contrast', '1.4.11 (contraste non textuel)'), 'imp:audit'],
     },
@@ -232,9 +242,9 @@ Le gris très pâle passe pour « élégant » sur un bon écran, au calme. En p
         { id: 'labels', visual: delivery(true), why: 'Chaque champ garde son étiquette, et les champs facultatifs sont annoncés.' },
       ],
       answer: 'labels',
-      explanation: `Un **placeholder n’est pas une étiquette**. Il disparaît dès qu’on tape : pour relire ou corriger, il faut se souvenir de ce que chaque champ demandait. Les lecteurs d’écran ne le restituent pas toujours comme un nom, et il est souvent trop pâle.
+      explanation: `Un **placeholder**, le texte indicatif affiché dans le champ vide, **n’est pas une étiquette**. Il disparaît dès qu’on tape : pour relire ou corriger, il faut se souvenir de ce que chaque champ demandait. Les lecteurs d’écran ne le restituent pas toujours comme un nom, et il est souvent trop pâle.
 
-Le critère **3.3.2 (A)** demande des étiquettes ou des instructions quand une saisie est attendue. Une étiquette visible, persistante et liée au champ (\`<label for>\`) sert tout le monde — Sam au lecteur d’écran, Jordan qui relit, Casey qui reprend après une interruption.`,
+Le critère **3.3.2 (A)** demande des étiquettes ou des instructions quand une saisie est attendue. Une étiquette visible, persistante et liée au champ (\`<label for>\`) sert tout le monde : Sam au lecteur d’écran, la personne qui découvre le service et relit sa saisie, celle qui reprend après une interruption.`,
       takeaway: 'Chaque champ a une étiquette visible et persistante ; le placeholder ne sert qu’à donner un exemple.',
       sources: [U('labels-or-instructions', '3.3.2 (étiquettes ou instructions)'), 'imp:clarify'],
     },
@@ -261,14 +271,14 @@ Si tu tiens à ne pas souligner, la technique G183 du W3C demande au moins **3:1
       prompt: 'Sur quelle version une personne au clavier sait-elle où elle se trouve ?',
       context: 'Sur les deux maquettes, le focus clavier est sur le bouton « Continuer ».',
       options: [
-        { id: 'none', visual: focusStep(false), why: 'Rien ne distingue le bouton qui a le focus : la personne au clavier appuie sur Entrée à l’aveugle.' },
+        { id: 'none', visual: focusStep(false), why: 'Rien ne distingue le bouton qui a le focus : la personne au clavier valide sans savoir où elle se trouve.' },
         { id: 'ring', visual: focusStep(true), why: 'Un anneau épais, décalé et bien contrasté montre exactement où l’on est.' },
       ],
       answer: 'ring',
       explanation: `Le critère **2.4.7 (focus visible, AA)** exige que l’élément qui a le focus clavier se voie. Supprimer l’\`outline\` par défaut « parce qu’il est laid » sans le remplacer est l’une des erreurs les plus courantes — et elle rend l’interface inutilisable au clavier.
 
 La bonne pratique : un anneau d’au moins 2 px, contrasté à 3:1 avec ce qui l’entoure, décalé du composant (\`outline-offset\`), appliqué via \`:focus-visible\` pour qu’il apparaisse au clavier sans gêner les clics à la souris.`,
-      takeaway: 'Ne supprime jamais le focus sans le remplacer : un anneau contrasté et décalé, appliqué avec `:focus-visible`.',
+      takeaway: 'Ne supprime jamais l’indicateur de focus sans le remplacer : un anneau contrasté et décalé, appliqué avec `:focus-visible`.',
       sources: [U('focus-visible', '2.4.7 (focus visible)'), 'imp:audit'],
     },
     {
@@ -297,8 +307,8 @@ La bonne pratique : un anneau d’au moins 2 px, contrasté à 3:1 avec ce qui l
 - **44 × 44** : le seuil sous lequel l’audit d’impeccable signale une cible tactile, celui du niveau AAA (2.5.5) et des recommandations d’Apple (44 × 44 pt).
 - **48 × 48 dp** : la recommandation de Material Design.
 
-Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. L’icône dessinée peut rester à 16 px : c’est la zone sensible qui doit grandir, pas forcément le dessin.`,
-      takeaway: 'Zone tactile : 24 × 24 px au minimum légal (AA), 44 à 48 px pour un usage confortable au doigt.',
+Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zone : 44 à 48 px suffisent, au-delà chaque ligne s’épaissit et l’écran affiche moins d’éléments. L’icône dessinée peut rester à 16 px : c’est la zone sensible qui doit grandir, pas forcément le dessin.`,
+      takeaway: 'Zone tactile : 24 × 24 px au minimum WCAG 2.2 (AA), 44 à 48 px pour un usage confortable au doigt.',
       sources: ['wcag:target', 'imp:audit', 'hig', 'material3'],
     },
     {
@@ -308,7 +318,7 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
       prompt: 'Trouve les deux défauts d’accessibilité de ce formulaire de connexion.',
       visual: {
         frame: 'browser',
-        alt: 'Formulaire « Espace client » : un premier champ sans étiquette qui affiche seulement le texte indicatif « Identifiant client », un champ Mot de passe accompagné de la mention « Le copier-coller est désactivé pour votre sécurité », un bouton Se connecter et un lien souligné Mot de passe oublié.',
+        alt: 'Formulaire « Espace client » : un champ affichant en gris le texte « Identifiant client », un champ « Mot de passe » avec la mention « Le copier-coller est désactivé pour votre sécurité », une case cochée « Rester connecté sur cet appareil », un bouton Se connecter et un lien souligné « Mot de passe oublié ? ».',
         css: `.lg { max-width: 420px; margin: 0 auto; }
 .lg-ph { color: #6b7280; }
 .lg-link { align-self: center; color: #1f4fd8; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }`,
@@ -322,18 +332,18 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
 </div>`,
       },
       hotspots: [
-        { id: 'id', label: 'Champ sans étiquette', correct: true, why: 'Seul un texte indicatif nomme le champ : il disparaît dès la première frappe et n’est pas une étiquette fiable pour un lecteur d’écran (3.3.2).' },
-        { id: 'paste', label: 'Collage interdit dans le mot de passe', correct: true, why: 'Bloquer le collage empêche les gestionnaires de mots de passe et force à retenir ou recopier : échec du critère 3.3.8 (authentification accessible, AA) faute d’alternative.' },
+        { id: 'id', label: 'Champ sans étiquette', correct: true, why: 'Seul un texte indicatif nomme le champ : il disparaît dès la première frappe et n’est pas une étiquette fiable pour un lecteur d’écran. Il faut une étiquette visible (3.3.2), liée au champ dans le code (1.3.1 et 4.1.2).' },
+        { id: 'paste', label: 'Collage interdit dans le mot de passe', correct: true, why: 'Bloquer le collage empêche de coller le mot de passe depuis un gestionnaire externe et force à le retenir ou le recopier : échec du critère 3.3.8 (authentification accessible, AA) faute d’alternative.' },
         { id: 'title', label: 'Titre « Espace client »', correct: false, why: 'Un titre clair qui annonce la page.' },
         { id: 'submit', label: 'Bouton « Se connecter »', correct: false, why: 'Verbe explicite, blanc sur bleu à 6,6:1, cible pleine largeur.' },
         { id: 'forgot', label: 'Lien « Mot de passe oublié ? »', correct: false, why: 'Souligné, contrasté, libellé explicite : il se repère sans la couleur.' },
       ],
-      explanation: `Deux critères distincts sont en jeu :
+      explanation: `Deux défauts distincts sont en jeu :
 
-- **3.3.2 (A)** : un champ attend une saisie, il lui faut une **étiquette** visible et liée. Le texte indicatif n’en est pas une.
-- **3.3.8 (AA, nouveau en WCAG 2.2)** : se connecter ne doit pas exiger un **test cognitif** — retenir ou recopier un mot de passe — sans alternative. Interdire le collage empêche les gestionnaires de mots de passe de remplir le champ et oblige à recopier : c’est précisément ce que le critère proscrit, faute d’autre méthode (lien de connexion par e-mail, clé d’accès…).`,
-      takeaway: 'Un champ sans étiquette et un collage interdit au mot de passe sont deux échecs WCAG : étiquette visible, collage et gestionnaires autorisés.',
-      sources: [U('accessible-authentication-minimum', '3.3.8 (authentification accessible)'), U('labels-or-instructions', '3.3.2 (étiquettes ou instructions)')],
+- **L’étiquette** : le critère **3.3.2 (A)** demande une étiquette ou une instruction pour toute saisie, et **1.3.1** et **4.1.2** veulent que le nom du champ lui soit lié dans le code. Le texte indicatif disparaît à la première frappe : le RGAA (critère 11.1) ne le compte pas parmi les étiquettes acceptées, et impeccable le réserve aux exemples.
+- **3.3.8 (AA, nouveau en WCAG 2.2)** : se connecter ne doit pas exiger un **test cognitif** — retenir ou recopier un mot de passe — sans alternative. Interdire le collage bloque les personnes qui copient leur mot de passe depuis un gestionnaire externe et les force à le recopier : c’est précisément ce que le critère proscrit, faute d’autre méthode (lien de connexion par e-mail, clé d’accès…).`,
+      takeaway: 'Collage interdit au mot de passe : échec de 3.3.8. Texte indicatif seul : refusé comme étiquette (RGAA 11.1). Il faut une étiquette visible et liée, et le collage autorisé.',
+      sources: [U('accessible-authentication-minimum', '3.3.8 (authentification accessible)'), U('labels-or-instructions', '3.3.2 (étiquettes ou instructions)'), RGAA_LABELS, 'imp:clarify'],
     },
     {
       id: 'accessibility-orders-hotspot',
@@ -342,7 +352,7 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
       prompt: 'Trouve les trois défauts d’accessibilité de ce tableau de commandes.',
       visual: {
         frame: 'browser',
-        alt: 'Liste de commandes : titre, bouton Exporter, champ de recherche étiqueté, colonne de cases à cocher aux bords presque invisibles, colonne N°, client et montant, colonne Statut faite de pastilles vertes, orange et rouges sans texte, et une pagination aux boutons minuscules et serrés.',
+        alt: 'Liste de commandes : titre, bouton Exporter avec icône, champ de recherche avec son étiquette, colonne de cases à cocher à bordure gris très clair, colonnes de données (client et montant), colonne Statut faite de pastilles de couleur verte, orange et rouge, et une pagination en boutons de 16 px espacés de 2 px.',
         css: `.od-wrap { container: od / inline-size; }
 .od-table { display: flex; align-items: stretch; }
 .od-col { display: flex; flex-direction: column; }
@@ -353,11 +363,11 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
 .od-head { font-size: 12px; font-weight: 600; color: #5a6172; }
 .od-grid { display: grid; grid-template-columns: 56px minmax(0, 1fr) 76px; gap: 8px; width: 100%; }
 .od-grid > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@container od (max-width: 440px) { .od-num { display: none; } .od-grid { grid-template-columns: minmax(0, 1fr) 66px; } .od-checks { width: 30px; } .od-status { width: 56px; padding-inline-start: 10px; } }
+@container od (max-width: 440px) { .od-num { display: none; } .od-grid { grid-template-columns: minmax(0, 1fr) 64px; gap: 6px; } .od-grid > span:not(.od-r) { white-space: normal; } .od-cell:not(.od-head) { height: 44px; } .od-checks { width: 28px; } .od-status { width: 48px; padding-inline-start: 8px; } }
 .od-r { text-align: end; font-variant-numeric: tabular-nums; }
 .od-box { width: 16px; height: 16px; border: 1.5px solid #e3e6ec; border-radius: 4px; margin-inline-start: 8px; }
 .od-dot { width: 12px; height: 12px; border-radius: 50%; margin-inline-start: 12px; }
-.od-pages { display: flex; gap: 2px; align-self: center; }
+.od-pages { display: flex; gap: 2px; align-self: center; padding: 6px 10px; }
 .od-pages span { width: 16px; height: 16px; display: grid; place-items: center; font-size: 11px; border-radius: 3px; color: #36405a; }
 .od-pages .on { background: #1f4fd8; color: #fff; }`,
         html: `<div class="mk-pad mk-stack od-wrap" style="--gap:12px">
@@ -376,9 +386,9 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
         { id: 'checks', label: 'Cases à cocher presque invisibles', correct: true, why: 'Bordure #e3e6ec sur blanc, environ 1,3:1 : on ne repère pas le contrôle. Il faut 3:1 au moins (1.4.11).' },
         { id: 'pages', label: 'Pagination minuscule', correct: true, why: 'Des cibles de 16 px séparées de 2 px : sous les 24 × 24 px de 2.5.8, et trop serrées pour profiter de l’exception d’espacement.' },
         { id: 'title', label: 'Titre', correct: false, why: 'Titre clair et contrasté.' },
-        { id: 'export', label: 'Bouton « Exporter »', correct: false, why: 'Icône accompagnée d’un texte, bordure et libellé lisibles.' },
+        { id: 'export', label: 'Bouton « Exporter »', correct: false, why: 'Le libellé « Exporter » et son icône identifient le bouton : sa bordure n’a pas besoin d’atteindre 3:1 (1.4.11), contrairement à celle d’une case à cocher, seul repère du contrôle.' },
         { id: 'search', label: 'Champ de recherche', correct: false, why: 'Étiquette visible et texte indicatif contrasté (4,8:1).' },
-        { id: 'info', label: 'Colonnes N°, client, montant', correct: false, why: 'Texte foncé, en-têtes explicites, montants alignés : rien à signaler.' },
+        { id: 'info', label: 'Données des commandes', correct: false, why: 'Texte foncé, en-têtes explicites, montants alignés : rien à signaler.' },
       ],
       explanation: `Trois critères différents, trois défauts que l’œil pressé ne voit pas :
 
@@ -430,19 +440,21 @@ Un \`<button>\` sait tout faire seul : il entre dans l’ordre de tabulation, s�
       id: 'accessibility-live-choice',
       type: 'choice',
       difficulty: 3,
-      prompt: 'Sur une boutique, « Ajouter au panier » met à jour le compteur sans recharger la page et affiche « Article ajouté » quelques secondes. Comment le rendre perceptible au lecteur d’écran sans déplacer le focus ?',
+      prompt: 'Sur une boutique, « Ajouter au panier » met à jour le compteur sans recharger la page et affiche « Article ajouté » quelques secondes. Comment annoncer cette confirmation au lecteur d’écran ?',
       options: [
-        { id: 'status', label: 'Placer le message dans une région `role="status"` (ou `aria-live="polite"`)', why: 'Le lecteur d’écran annonce le message dès qu’il change, sans interrompre ni déplacer le focus.' },
-        { id: 'focus', label: 'Déplacer le focus sur le message de confirmation', why: 'La personne perd sa place dans la liste de produits ; le critère 4.1.3 demande justement une annonce sans déplacement du focus.' },
-        { id: 'alert', label: 'Ouvrir une fenêtre `alert()` du navigateur', why: 'Elle interrompt tout le monde et vole le focus pour une simple confirmation.' },
-        { id: 'visual', label: 'Rien de plus : la notification visuelle suffit', why: 'Invisible pour un lecteur d’écran : Sam ne sait pas si l’article a été ajouté.' },
+        { id: 'status', label: 'Placer le message dans une région `role="status"` (ou `aria-live="polite"`)', why: 'Le lecteur d’écran annonce le message à la fin de sa phrase en cours, sans interrompre ni déplacer le focus.' },
+        { id: 'focus', label: 'Déplacer le focus sur le message de confirmation', why: 'La personne perd sa place dans la liste de produits pour une simple confirmation : un message d’état (4.1.3) s’annonce sans prendre le focus.' },
+        { id: 'alert', label: 'Afficher le message dans un élément `role="alert"`', why: 'Le message est annoncé, mais de façon assertive : il coupe la lecture en cours. Pour un message ni important ni urgent, le W3C cite cet usage comme un échec de 4.1.3.' },
+        { id: 'label', label: 'Mettre à jour le nom du bouton panier : `aria-label="Panier, 3 articles"`', why: 'Le nouveau nom n’est lu que lorsque le focus revient sur le bouton : au moment de l’ajout, rien n’est annoncé.' },
       ],
       answer: 'status',
       explanation: `Le critère **4.1.3 (messages d’état, AA)** exige qu’un message de statut — succès, résultat, progression — soit exposé par un rôle ou une propriété, pour être annoncé **sans recevoir le focus**.
 
-\`role="status"\` (qui équivaut à une région \`aria-live="polite"\`) attend que le lecteur d’écran ait fini sa phrase, puis annonce « Article ajouté ». \`role="alert"\` (assertif) est réservé à ce qui est important et urgent : l’utiliser pour une confirmation banale est même cité par le W3C comme un échec.`,
+\`role="status"\` (qui équivaut à une région \`aria-live="polite"\`) attend que le lecteur d’écran ait fini sa phrase, puis annonce « Article ajouté ». La région doit exister avant le message, vide au chargement par exemple : une région créée en même temps que son contenu reste souvent muette.
+
+\`role="alert"\` (assertif) est réservé à ce qui est important et urgent : l’utiliser pour une confirmation banale est même cité par le W3C comme un échec. Déplacer le focus, lui, est un changement de contexte : la personne perd sa place pour une simple confirmation.`,
       takeaway: 'Un message d’état s’annonce par `role="status"` sans déplacer le focus ; `role="alert"` reste réservé à l’urgent.',
-      sources: [U('status-messages', '4.1.3 (messages d’état)'), 'imp:harden'],
+      sources: [U('status-messages', '4.1.3 (messages d’état)'), ARIA22, 'imp:harden'],
     },
     {
       id: 'accessibility-target-multi',
@@ -473,7 +485,7 @@ Le critère est un plancher. Pour le tactile, vise 44 × 44.`,
       id: 'accessibility-audit-match',
       type: 'match',
       difficulty: 2,
-      prompt: 'Associe chaque constat d’audit à sa dimension.',
+      prompt: 'Associe chaque constat d’un audit web à sa dimension.',
       leftTitle: 'Dimension',
       rightTitle: 'Constat',
       pairs: [
@@ -483,7 +495,7 @@ Le critère est un plancher. Pour le tactile, vise 44 × 44.`,
         { id: 'resp', left: 'Responsive', right: 'Un défilement horizontal à 375 px de large' },
         { id: 'integrity', left: 'Intégrité d’implémentation', right: 'Le même composant recodé différemment sur quinze écrans' },
       ],
-      explanation: `L’audit d’impeccable note chaque dimension de **0 à 4**, pour un total sur **20** :
+      explanation: `L’audit web d’impeccable note chaque dimension de **0 à 4**, pour un total sur **20** :
 
 - **Accessibilité** : contraste, ARIA, clavier, sémantique, textes alternatifs, formulaires, mouvement.
 - **Performance** : images non optimisées, animations coûteuses, recalculs de mise en page, poids des scripts.
@@ -492,14 +504,14 @@ Le critère est un plancher. Pour le tactile, vise 44 × 44.`,
 - **Intégrité d’implémentation** : dérive du design system et raccourcis répétés, vérifiés avec le détecteur.
 
 Bandes : 18–20 excellent, 14–17 bon, 10–13 acceptable, 6–9 faible, 0–5 critique.`,
-      takeaway: 'L’audit note cinq dimensions sur 4 (accessibilité, performance, thématisation, responsive, intégrité), soit un total sur 20.',
+      takeaway: 'L’audit web note cinq dimensions sur 4 (accessibilité, performance, thématisation, responsive, intégrité), soit un total sur 20.',
       sources: ['imp:audit'],
     },
     {
       id: 'accessibility-keyboard-order',
       type: 'order',
       difficulty: 2,
-      prompt: 'Remets dans l’ordre ce test au clavier d’un formulaire de paiement.',
+      prompt: 'Remets dans l’ordre ce test d’un formulaire de paiement, au clavier et lecteur d’écran allumé.',
       items: [
         { id: 'skip', label: 'Charger la page et appuyer sur Tab : le lien « Aller au contenu » apparaît' },
         { id: 'fields', label: 'Parcourir les champs : chaque focus est visible et suit l’ordre de lecture' },
@@ -515,8 +527,8 @@ Bandes : 18–20 excellent, 14–17 bon, 10–13 acceptable, 6–9 faible, 0–5
 4. **Erreur identifiée en texte** (3.3.1) et rendue perceptible au lecteur d’écran.
 5. **Confirmation annoncée** comme message d’état (4.1.3).
 
-Le même parcours, refait avec VoiceOver ou NVDA, révèle ce que l’œil ne voit pas : noms manquants, ordre de lecture incohérent.`,
-      takeaway: 'Teste au clavier dans l’ordre du parcours : lien d’évitement, focus visible, soumission, erreur annoncée, confirmation annoncée.',
+Le lecteur d’écran (VoiceOver ou NVDA) révèle en chemin ce que l’œil ne voit pas : noms manquants, ordre de lecture incohérent.`,
+      takeaway: 'Teste au clavier, lecteur d’écran allumé, dans l’ordre du parcours : lien d’évitement, focus visible, soumission, erreur annoncée, confirmation annoncée.',
       sources: ['wcag22', 'imp:critique'],
     },
     {
@@ -541,7 +553,7 @@ Les personnes qui activent ce réglage (troubles vestibulaires, migraines) veule
 
 Impeccable le dit de son propre détecteur : un résultat propre est un **indice, pas une preuve**. L’ampleur des défauts détectables est pourtant énorme — 95,9 % des pages d’accueil en présentaient en 2026 selon WebAIM. Un audit sérieux ajoute toujours un parcours au clavier et au lecteur d’écran.`,
       takeaway: 'Un détecteur muet est un indice, pas une preuve : complète toujours par un test au clavier et au lecteur d’écran.',
-      sources: ['imp:audit', WEBAIM],
+      sources: ['imp:polish', 'imp:audit', WEBAIM],
     },
     {
       id: 'accessibility-large-tf',
