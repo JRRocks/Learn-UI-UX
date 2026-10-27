@@ -258,13 +258,13 @@ Les questions de style sont doublement à côté : \`shape\` ne demande **jamais
       context: 'Une appli de réservation de salles de réunion a une identité sobre et cohérente : fond blanc, cartes à bord fin, bleu pour les actions. On y ajoute un écran « Statistiques ».',
       options: [
         { id: 'new-world', visual: statsScreen(false), why: 'Fond sombre, néons violets, cartes translucides, capitales espacées : l’écran ajouté s’invente une autre identité.' },
-        { id: 'inherit', visual: statsScreen(true), why: 'Mêmes cartes, même bleu, même typographie : l’écran prolonge l’appli, et l’effort porte sur les chiffres et leur hiérarchie.' },
+        { id: 'inherit', visual: statsScreen(true), why: 'Mêmes cartes, même typographie, même retenue dans la couleur : l’écran prolonge l’appli, et l’effort porte sur sa structure, ses chiffres et leur hiérarchie.' },
       ],
       answer: 'inherit',
-      explanation: `L’appli a une identité cohérente : l’écran ajouté en **hérite**. Impeccable est explicite : une section, un composant ou un écran ajouté à une surface établie hérite de son monde visuel, et un ajout local ne devient jamais un exercice d’identité.
+      explanation: `L’appli a une identité cohérente : l’écran ajouté en **hérite**. Impeccable distingue deux cas. Une section, un composant ou un état ajouté à une surface établie hérite de son monde *et* de sa composition. Un écran entier dans un monde établi garde le système visuel fixe ; seule sa structure se cherche. Dans les deux cas, l’identité ne se rouvre pas.
 
-La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond, couleurs, matières, typographie. On croit avoir changé d’application. Le vrai travail est ailleurs : choisir les bons chiffres, leur hiérarchie, les états vides et le raccord avec les écrans voisins.`,
-      takeaway: 'Un écran ajouté à une appli établie hérite de son monde visuel : on résout le contenu, la hiérarchie et les états, pas l’identité.',
+La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond, couleurs, matières, typographie. On croit avoir changé d’application. Le vrai travail est ailleurs : trouver la structure de l’écran, choisir les bons chiffres et leur hiérarchie, prévoir les états vides.`,
+      takeaway: 'Un écran ajouté à une appli établie garde son système visuel : on cherche la structure, les bons chiffres et les états, jamais une nouvelle identité.',
       sources: ['imp:new-work'],
     },
     {
@@ -276,9 +276,9 @@ La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond,
         {
           id: 'raw',
           visual: {
-            alt: 'Extrait de DESIGN.md titré « Color Palette & Roles » : une liste de noms techniques (blue-800, gray-500, red-600) avec leurs valeurs, puis « rounded-lg, shadow-md ».',
+            alt: 'Extrait de DESIGN.md titré « Color Palette & Roles » : une liste de noms techniques (blue-600, gray-600, red-600) avec leurs valeurs, puis « rounded-lg, shadow-md ».',
             css: DOC_CSS,
-            html: `<div class="mk-pad"><div class="dm"><p class="dm-file"><i data-icon="file-text" style="--ico:14px"></i> DESIGN.md</p><h4>Color Palette &amp; Roles</h4><p><code>blue-800</code> : #1f4fd8</p><p><code>gray-500</code> : #5a6172</p><p><code>red-600</code> : #b3261e</p><p><code>rounded-lg</code>, <code>shadow-md</code></p></div></div>`,
+            html: `<div class="mk-pad"><div class="dm"><p class="dm-file"><i data-icon="file-text" style="--ico:14px"></i> DESIGN.md</p><h4>Color Palette &amp; Roles</h4><p><code>blue-600</code> : #1f4fd8</p><p><code>gray-600</code> : #5a6172</p><p><code>red-600</code> : #b3261e</p><p><code>rounded-lg</code>, <code>shadow-md</code></p></div></div>`,
           },
           why: 'Des valeurs sans rôle ni usage, des noms de classes bruts et un titre non canonique : rien ne dit quand utiliser quoi.',
         },
@@ -293,9 +293,9 @@ La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond,
         },
       ],
       answer: 'described',
-      explanation: `DESIGN.md sert à ce qu’un nouvel écran — conçu par toi, par un collègue ou par un agent — reste dans la marque. Chaque jeton doit donc dire **ce qu’il est, où il sert et pourquoi** :
+      explanation: `DESIGN.md sert à ce qu’un nouvel écran — conçu par toi, par quelqu’un de l’équipe ou par un agent — reste dans la marque. Chaque jeton doit donc dire **ce qu’il est, où il sert et pourquoi** :
 
-- un **nom descriptif** et la **valeur exacte entre parenthèses** : « Bleu d’action (#1f4fd8) » plutôt que « blue-800 » ;
+- un **nom descriptif** et la **valeur exacte entre parenthèses** : « Bleu d’action (#1f4fd8) » plutôt que « blue-600 », un nom d’échelle qui convient au code mais ne dit rien de l’usage ;
 - son **usage** et ses interdits ;
 - des **règles nommées**, faciles à citer ;
 - les **titres canoniques** du format (« Colors », pas « Color Palette & Roles »), que les outils lisent tels quels.
@@ -364,10 +364,10 @@ Sans cette couche, chaque composant reçoit ses surcharges sombres une par une. 
       type: 'hotspot',
       difficulty: 2,
       prompt: 'Trouve les deux dérives par rapport au système de cet écran.',
-      context: 'Le système de l’appli : cartes à bord fin et coins de 12 px, badges arrondis gris-bleu, titres de carte en 15 px gras.',
+      context: 'Le système de l’appli : cartes à bord fin et coins de 12 px, badges arrondis gris-bleu, titres de carte en 15 px gras.',
       visual: {
         frame: 'browser',
-        alt: 'Écran Projets : titre, bouton Nouveau projet, onglets Actifs et Archivés, puis trois cartes. Deux suivent le système ; l’une affiche un badge « EN PAUSE » orange à angles droits, l’autre est une carte à angles vifs, grosse ombre et titre en italique léger.',
+        alt: 'Écran Projets : titre, bouton Nouveau projet, onglets Actifs et Archivés, puis trois cartes de projet. « Refonte du site » : bord fin, coins arrondis, titre gras, badge gris-bleu « Actif ». « Application mobile » : même carte, avec un badge orange en capitales à angles droits, « EN PAUSE ». « Catalogue printemps » : sans bord, angles vifs, grande ombre, titre en italique léger, badge « Actif ».',
         css: `.pj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .pj-card { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; padding: 14px; }
 .pj-pause { display: inline-block; padding: 3px 6px; border-radius: 2px; background: #fff0e6; color: #b54708; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; }
@@ -385,16 +385,16 @@ Sans cette couche, chaque composant reçoit ses surcharges sombres une par une. 
       },
       hotspots: [
         { id: 'card', label: 'Carte « Catalogue printemps »', correct: true, why: 'Angles vifs, grosse ombre, titre en italique léger : une carte recodée à côté du composant Carte partagé. Implémentation isolée, à remplacer par le composant.' },
-        { id: 'badge', label: 'Badge « EN PAUSE »', correct: true, why: 'Capitales, angle droit, orange absent du système : soit il manque un jeton pour ce statut, soit il faut une variante du badge existant.' },
-        { id: 'card1', label: 'Carte « Refonte du site »', correct: false, why: 'Elle suit le système : bord fin, coins de 12 px, badge arrondi, titre en 15 px gras.' },
+        { id: 'badge', label: 'Badge « EN PAUSE »', correct: true, why: 'Le badge mêle deux dérives. Sa forme (capitales, angle droit) recode le Badge partagé : implémentation isolée, on le remplace par le composant. Son orange, absent du système, révèle un jeton manquant si le statut « en pause » doit vraiment se distinguer.' },
+        { id: 'card1', label: 'Carte « Refonte du site »', correct: false, why: 'Elle suit le système : bord fin, coins de 12 px, badge arrondi, titre en 15 px gras.' },
         { id: 'title', label: 'Titre de la page', correct: false, why: 'Le titre de page suit l’échelle typographique de l’appli.' },
         { id: 'new', label: 'Bouton « Nouveau projet »', correct: false, why: 'C’est le bouton principal standard du système.' },
         { id: 'tabs', label: 'Onglets', correct: false, why: 'Composant d’onglets standard, état actif souligné.' },
       ],
-      explanation: `Un système se lit dans ce qui se répète : ici, la carte à bord fin et coins de 12 px, le badge arrondi gris-bleu, le titre en 15 px gras. Deux éléments s’en écartent :
+      explanation: `Un système se lit dans ce qui se répète : ici, la carte à bord fin et coins de 12 px, le badge arrondi gris-bleu, le titre en 15 px gras. Deux éléments s’en écartent :
 
 - la **carte « Catalogue printemps »** : un composant Carte existe, c’est une **implémentation isolée** — on la remplace par le composant partagé ;
-- le badge **« EN PAUSE »** : si le système n’a aucune valeur pour ce statut, c’est un **jeton manquant** à créer ; sinon, une variante du badge à ajouter.
+- le badge **« EN PAUSE »** mêle deux dérives : sa forme (capitales, angle droit) recode le Badge partagé — **implémentation isolée**, on le remplace par le composant ; sa couleur orange, si le statut « en pause » doit vraiment se distinguer, révèle un **jeton manquant** (un statut d’avertissement) à créer, que consommera une variante du Badge.
 
 Classer la dérive dit où corriger : dans le système, dans le composant, ou sur place.`,
       takeaway: 'Repère le système dans ce qui se répète, puis classe chaque écart : jeton manquant, implémentation isolée, décalage de concept ou défaut local.',
