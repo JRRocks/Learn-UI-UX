@@ -132,6 +132,11 @@ button {
   border-radius: 4px;
 }
 
+/* Headings and landmarks receive focus programmatically after navigation; no ring for those. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
 input[type='range'] {
   accent-color: var(--ink);
 }
@@ -143,7 +148,6 @@ input[type='radio'] {
 
 table {
   border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
 }
 
 .visually-hidden {
@@ -158,6 +162,7 @@ table {
   border: 0;
 }
 
+/* Tabular figures only on integer counters: in this face, tnum also widens the comma and period. */
 .num {
   font-variant-numeric: tabular-nums;
 }

@@ -94,8 +94,8 @@ export function grade(ex: Exercise, answer: Answer): GradeResult {
       const [lo, hi] = ex.target;
       const v = answer.value;
       if (v >= lo && v <= hi) return result(1, 0.5);
-      // Close misses (within one target width, or 10% of the range) earn partial credit.
-      const width = Math.max(hi - lo, (ex.max - ex.min) * 0.1);
+      // Close misses (within half the target width, or 5% of the range) earn partial credit.
+      const width = Math.max((hi - lo) / 2, (ex.max - ex.min) * 0.05);
       const dist = v < lo ? lo - v : v - hi;
       return result(dist <= width ? 0.5 : 0, 0.5);
     }

@@ -9,7 +9,10 @@ import { Md, MdInline } from '../lib/markdown';
  */
 
 const moduleFiles = import.meta.glob<{ default: ModuleContent }>('../content/modules/*.ts');
-const cultureFiles = import.meta.glob<{ CULTURES?: CultureProfile[]; CULTURE_PAIRS?: CulturePair[] }>('../content/cultures/*.ts');
+const cultureFiles = import.meta.glob<{ CULTURES?: CultureProfile[]; CULTURE_PAIRS?: CulturePair[] }>([
+  '../content/cultures/profiles.ts',
+  '../content/cultures/pairs.ts',
+]);
 const catalogFiles = import.meta.glob<{ ANTIPATTERNS?: AntipatternEntry[] }>('../content/antipatterns.ts');
 
 type Loaded =

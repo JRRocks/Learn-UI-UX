@@ -36,7 +36,7 @@ describe('modules', () => {
   });
 });
 
-const cultureFiles = import.meta.glob<{ CULTURES?: CultureProfile[]; CULTURE_PAIRS?: CulturePair[] }>('./cultures/*.ts');
+const cultureFiles = import.meta.glob<{ CULTURES?: CultureProfile[]; CULTURE_PAIRS?: CulturePair[] }>(['./cultures/profiles.ts', './cultures/pairs.ts']);
 
 describe.runIf(!only.length || only.includes('cultures'))('cultures', () => {
   it('profiles and pairs', async () => {

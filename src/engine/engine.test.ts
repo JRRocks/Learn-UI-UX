@@ -59,7 +59,8 @@ describe('grade', () => {
       control: 'Interlignage',
     };
     expect(grade(ex, { type: 'slider', value: 1.5 }).verdict).toBe('correct');
-    expect(grade(ex, { type: 'slider', value: 1.25 }).verdict).toBe('partial');
+    expect(grade(ex, { type: 'slider', value: 1.3 }).verdict).toBe('partial');
+    expect(grade(ex, { type: 'slider', value: 1.05 }).verdict).toBe('wrong');
     expect(grade(ex, { type: 'slider', value: 2.4 }).verdict).toBe('wrong');
   });
 

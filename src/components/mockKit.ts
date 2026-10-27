@@ -120,7 +120,8 @@ a { color: #1f4fd8; }
 :host([data-interactive]) [data-hotspot] { cursor: pointer; }
 :host([data-interactive]:not([data-revealed])) [data-hotspot]:hover { outline: 2px dashed rgb(29 34 48 / 0.4); }
 [data-hotspot]:focus-visible { outline: 3px solid #2f6be0; }
-[data-hotspot][data-state="picked"] { outline: 3px solid #2f6be0; }
+:host([data-interactive]) [data-hotspot][data-state="picked"],
+:host([data-interactive]) [data-hotspot][data-state="picked"]:hover { outline: 3px solid #2f6be0; background-color: rgb(47 107 224 / 0.08); }
 :host([data-revealed]) [data-hotspot] { cursor: default; }
 :host([data-revealed]) [data-hotspot][data-state="wrong"] { outline: 2px dashed #8d93a3; }
 

@@ -29,8 +29,11 @@ export function isDuel(ex: Exercise): boolean {
   return ex.type === 'choice' && ex.options.length >= 2 && ex.options.every((o) => o.visual);
 }
 
+/** "choice" here means the non-visual or 3+ option choices; visual 2-way choices are duels. */
 export function matchesType(ex: Exercise, type: PracticeType): boolean {
-  return type === 'duel' ? isDuel(ex) : ex.type === type;
+  if (type === 'duel') return isDuel(ex);
+  if (type === 'choice') return ex.type === 'choice' && !isDuel(ex);
+  return ex.type === type;
 }
 
 /** 0 = wrong and due, 1 = due, 2 = never seen, 3 = scheduled later. */

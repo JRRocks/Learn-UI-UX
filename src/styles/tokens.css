@@ -3,6 +3,8 @@
  * World: a proofing desk. Cool paper, blue-black ink, and one vermilion
  * correction red that marks what needs attention. Neutrals are tinted toward
  * the ink hue (258). Light/dark follow the system unless the learner picks one.
+ * Type: Schibsted Grotesk (a newspaper grotesk, fitting the printer's-proof
+ * world) for everything; Atkinson Hyperlegible Mono only for code and values.
  */
 :root {
   color-scheme: light;
@@ -16,6 +18,8 @@
   --ink-3: oklch(0.5 0.02 262);
   --rule: oklch(0.885 0.008 258);
   --rule-strong: oklch(0.79 0.012 258);
+  /* Boundaries that identify a control (inputs, option tiles): ≥ 3:1 against the surface. */
+  --control-border: oklch(0.64 0.016 258);
 
   --mark: oklch(0.57 0.19 33);
   --mark-ink: oklch(0.5 0.17 32);
@@ -28,8 +32,10 @@
   --focus: oklch(0.55 0.18 252);
 
   --on-ink: oklch(0.985 0.004 258);
+  --hero-bg: var(--ink);
+  --hero-fg: oklch(0.985 0.004 258);
 
-  --font-sans: 'Atkinson Hyperlegible Next Variable', 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Schibsted Grotesk Variable', 'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Atkinson Hyperlegible Mono Variable', 'Atkinson Hyperlegible Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   /* Type roles (fixed rem scale, ratio ≈ 1.2 for the product UI). */
@@ -79,6 +85,7 @@
     --ink-3: oklch(0.72 0.014 258);
     --rule: oklch(0.33 0.016 262);
     --rule-strong: oklch(0.44 0.018 262);
+    --control-border: oklch(0.55 0.018 262);
     --mark: oklch(0.7 0.16 36);
     --mark-ink: oklch(0.76 0.14 38);
     --mark-wash: oklch(0.29 0.045 36);
@@ -89,6 +96,8 @@
     --partial-wash: oklch(0.3 0.045 80);
     --focus: oklch(0.72 0.15 252);
     --on-ink: oklch(0.2 0.016 262);
+    --hero-bg: oklch(0.3 0.05 262);
+    --hero-fg: oklch(0.96 0.008 258);
     --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
   }
 }
@@ -104,6 +113,7 @@
   --ink-3: oklch(0.72 0.014 258);
   --rule: oklch(0.33 0.016 262);
   --rule-strong: oklch(0.44 0.018 262);
+  --control-border: oklch(0.55 0.018 262);
   --mark: oklch(0.7 0.16 36);
   --mark-ink: oklch(0.76 0.14 38);
   --mark-wash: oklch(0.29 0.045 36);
@@ -114,5 +124,7 @@
   --partial-wash: oklch(0.3 0.045 80);
   --focus: oklch(0.72 0.15 252);
   --on-ink: oklch(0.2 0.016 262);
+  --hero-bg: oklch(0.3 0.05 262);
+  --hero-fg: oklch(0.96 0.008 258);
   --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
 }
