@@ -1401,7 +1401,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
     <p class="ar-rating"><i data-icon="star"></i>4.8 <span>(1,284 تقييم)</span></p>
     <p class="ar-price"><b>349 ر.س</b><s>420 ر.س</s><span class="ar-off">خصم 17%</span></p>
     <p class="ar-vat">السعر شامل ضريبة القيمة المضافة</p>
-    <p class="ar-split">أو قسّمها على 4 دفعات بدون فوائد: <b>87.25 ر.س</b> للدفعة</p>
+    <p class="ar-split">أو قسّمها على 4 دفعات بدون فوائد: <b class="ar-nw">87.25 ر.س</b> للدفعة</p>
     <ul class="ar-facts"><li><i data-icon="truck"></i>التوصيل غدًا إلى الرياض</li><li><i data-icon="wallet"></i>الدفع عند الاستلام متاح</li><li><i data-icon="undo-2"></i>إرجاع مجاني خلال 14 يومًا</li></ul>
     <p class="ar-pay"><span>مدى</span><span>Apple Pay</span><span>تابي</span><span>تمارا</span></p>
     <div class="ar-actions"><span class="ar-cta">أضف إلى السلة</span><span class="ar-buy">اشترِ الآن</span></div>
@@ -1427,6 +1427,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
 .ar-off { padding: 0 6px; border-radius: 4px; background: #fde8e8; color: #b3261e; font-size: 12px; font-weight: 700; }
 .ar-vat { margin-top: -4px; font-size: 12px; color: #5a6172; }
 .ar-split { padding: 8px 10px; border-radius: 8px; background: #f3f0ea; font-size: 13px; }
+.ar-nw { white-space: nowrap; }
 .ar-facts { display: flex; flex-direction: column; gap: 4px; padding: 0; list-style: none; font-size: 13px; }
 .ar-facts li { display: flex; align-items: center; gap: 8px; --ico: 16px; }
 .ar-facts svg { color: #7a4b12; }
