@@ -582,14 +582,14 @@ Impeccable (critique, heuristique 3) demande une « sortie de secours » claire,
       prompt: 'Laquelle de ces façons de recueillir l’accord pour une lettre d’information respecte le RGPD ?',
       options: [
         { id: 'precheck', label: 'Une case cochée d’avance : « J’accepte de recevoir la lettre d’information ».', why: 'Une case cochée par défaut ne vaut pas consentement (considérant 32).' },
-        { id: 'bundled', label: '« En créant un compte, vous acceptez nos conditions générales et l’envoi de notre lettre d’information. »', why: 'Ni spécifique ni libre : l’accord est lié à la création du compte.' },
-        { id: 'browse', label: 'Un message : « En poursuivant votre visite, vous acceptez de recevoir nos offres. »', why: 'L’inactivité n’est pas un acte positif clair.' },
+        { id: 'bundled', label: '« En créant un compte, vous acceptez nos conditions générales et l’envoi de notre lettre d’information. »', why: 'Action forcée par consentement groupé : l’accord est lié à la création du compte, il n’est ni spécifique ni libre.' },
+        { id: 'browse', label: 'Un message : « En poursuivant votre visite, vous acceptez de recevoir nos offres. »', why: 'Continuer sa visite n’exprime aucun accord précis : ce n’est pas un acte positif clair et univoque.' },
         { id: 'optin', label: 'Une case décochée : « Recevoir la lettre d’information (1 e-mail par semaine) », et un lien de désinscription dans chaque e-mail.', why: 'Acte positif, finalité précise, information claire, retrait aussi simple que l’accord.' },
       ],
       answer: 'optin',
       explanation: `Le RGPD définit le consentement comme une manifestation de volonté **libre, spécifique, éclairée et univoque**, exprimée par une déclaration ou un **acte positif clair** (article 4). Chaque version fautive casse un critère :
 
-- la case précochée et la poursuite de la visite ne sont pas des actes positifs (considérant 32 : ni silence, ni case cochée par défaut, ni inactivité) ;
+- la case précochée ne vaut pas accord (considérant 32 : ni silence, ni case cochée par défaut, ni inactivité), et poursuivre sa visite n’est pas un acte positif clair ;
 - l’accord noyé dans les conditions générales n’est ni spécifique ni libre.
 
 L’article 7 ajoute : retirer son consentement doit être aussi simple que le donner — d’où le lien de désinscription dans chaque envoi.`,
@@ -602,15 +602,15 @@ L’article 7 ajoute : retirer son consentement doit être aussi simple que le d
       difficulty: 3,
       prompt: 'Que prévoit l’article 25 du règlement européen sur les services numériques (DSA) ?',
       options: [
-        { id: 'ban', label: 'Les plateformes en ligne ne doivent pas concevoir ou exploiter leurs interfaces de façon à tromper ou manipuler leurs utilisateurs, ou à altérer substantiellement leur capacité à décider librement et en connaissance de cause.', why: 'C’est le principe de l’article 25, applicable à toutes les plateformes en ligne depuis le 17 février 2024.' },
-        { id: 'three-clicks', label: 'Tout site marchand doit proposer une résiliation en trois clics.', why: 'Ce n’est pas l’article 25 du DSA : c’est une règle française (Code de la consommation, depuis juin 2023), qui vise les contrats souscrits en ligne.' },
-        { id: 'timers', label: 'Les comptes à rebours sont interdits sur tous les sites européens.', why: 'Le DSA vise la tromperie, pas un composant : un compte à rebours adossé à une vraie date reste possible.' },
-        { id: 'cookies', label: 'Il remplace le RGPD pour les bandeaux de cookies.', why: 'Au contraire : l’article 25 ne s’applique pas aux pratiques déjà couvertes par le RGPD ou par la directive sur les pratiques commerciales déloyales.' },
+        { id: 'ban', label: 'Il interdit aux plateformes en ligne les interfaces qui trompent ou manipulent.', why: 'C’est le principe de l’article 25, applicable depuis le 17 février 2024 aux plateformes en ligne (sauf micro et petites entreprises).' },
+        { id: 'three-clicks', label: 'Il impose aux plateformes en ligne une fonction de résiliation en trois clics.', why: 'Ce n’est pas l’article 25 du DSA : c’est une règle française (Code de la consommation, article L215-1-1, depuis juin 2023), qui vise les contrats conclus en ligne ou qui peuvent l’être.' },
+        { id: 'timers', label: 'Il interdit les comptes à rebours sur les pages produits des places de marché.', why: 'Le DSA vise la tromperie, pas un composant : un compte à rebours adossé à une vraie date reste possible.' },
+        { id: 'cookies', label: 'Il remplace le RGPD pour les bandeaux de cookies affichés par les plateformes.', why: 'Au contraire : l’article 25 ne s’applique pas aux pratiques déjà couvertes par le RGPD ou par la directive sur les pratiques commerciales déloyales.' },
       ],
       answer: 'ban',
-      explanation: `L’article 25 du DSA (règlement (UE) 2022/2065) interdit aux **plateformes en ligne** les interfaces qui trompent, manipulent ou altèrent substantiellement la liberté de décision. La Commission peut en préciser l’application, notamment pour trois pratiques : mettre davantage en avant certains choix, redemander un choix déjà fait, rendre la résiliation plus compliquée que l’inscription.
+      explanation: `L’article 25 du DSA (règlement (UE) 2022/2065) interdit aux **plateformes en ligne** les interfaces qui trompent, manipulent ou altèrent substantiellement la liberté de décision. La Commission peut publier des lignes directrices sur son application, notamment à trois pratiques : accorder davantage d’importance à certains choix, redemander un choix déjà fait, rendre la désinscription plus compliquée que l’inscription.
 
-Il **complète** les textes existants sans les remplacer : pour les cookies, le RGPD et la loi Informatique et Libertés, sous le contrôle de la CNIL ; pour les pratiques commerciales, le droit de la consommation.`,
+Il **complète** les textes existants sans les remplacer : son interdiction ne s’applique pas aux pratiques déjà couvertes par le RGPD ou par la directive sur les pratiques commerciales déloyales (paragraphe 2). Les bandeaux de cookies restent l’affaire du RGPD et de la loi Informatique et Libertés, sous le contrôle de la CNIL.`,
       takeaway: 'Le DSA (art. 25) interdit aux plateformes les interfaces trompeuses ; il complète le RGPD et le droit de la consommation sans les remplacer.',
       sources: [DSA, INC],
     },
@@ -624,7 +624,7 @@ Il **complète** les textes existants sans les remplacer : pour les cookies, le 
         { id: 'saving', label: 'Mettre en avant la formule annuelle avec l’économie réelle : « 69,90 € par an, soit 2 mois offerts par rapport au mensuel ».', why: 'Une économie vraie, chiffrée et vérifiable : on oriente sans tromper.' },
         { id: 'monthly', label: 'Afficher l’annuel en gros comme « 5,83 € / mois », sans préciser que 69,90 € sont prélevés en une fois.', why: 'Le montant réellement prélevé est masqué : interférence visuelle et coûts cachés.' },
         { id: 'scarcity', label: 'Annoncer « Offre réservée aux 100 premiers inscrits » sans aucune limite réelle.', why: 'Fausse rareté : une limite inventée pour presser la décision.' },
-        { id: 'shame', label: 'Formuler le refus : « Non merci, je n’ai pas besoin de me détendre ».', why: 'Confirmshaming : on culpabilise celui qui refuse.' },
+        { id: 'shame', label: 'Formuler le refus : « Non merci, je n’ai pas besoin de me détendre ».', why: 'Confirmshaming : on culpabilise la personne qui refuse.' },
       ],
       answer: 'saving',
       explanation: `La persuasion honnête utilise les mêmes leviers que la manipulation — mise en avant, cadrage, valeur — mais avec des **informations vraies et complètes**, et un refus qui reste simple et neutre. Le test : la personne serait-elle d’accord si elle voyait tout ?
@@ -641,7 +641,7 @@ Ici, l’économie annoncée est réelle et vérifiable : 12 × 6,99 € = 83,88
       options: [
         { id: 'reset', label: 'Un compte à rebours qui repart à zéro à chaque visite.', why: 'Fausse urgence : la limite de temps est inventée.' },
         { id: 'bestseller', label: 'Un badge « Meilleure vente » calculé sur les ventes réelles du mois.', why: 'Preuve sociale fondée sur des faits : honnête.' },
-        { id: 'notnow', label: '« Activer les notifications ? Plus tard », seul choix proposé, redemandé chaque semaine.', why: 'Harcèlement : il n’y a pas de vrai non, et la demande revient jusqu’à ce qu’on cède.' },
+        { id: 'notnow', label: 'Une demande « Activer les notifications ? » avec « Plus tard » pour seul refus, répétée chaque semaine.', why: 'Harcèlement : il n’y a pas de vrai non, et la demande revient jusqu’à ce qu’on cède.' },
         { id: 'reminder', label: 'Un e-mail de rappel trois jours avant la fin d’un essai gratuit.', why: 'Bonne pratique : c’est l’inverse d’un abonnement caché.' },
         { id: 'ad', label: 'Une publicité mise en forme comme un résultat de recherche, sans mention « Sponsorisé ».', why: 'Publicité déguisée : on clique en croyant ouvrir un contenu.' },
       ],
@@ -649,7 +649,7 @@ Ici, l’économie annoncée est réelle et vérifiable : 12 × 6,99 € = 83,88
       explanation: `Ce qui sépare ces pratiques n’est pas le composant (badge, notification, e-mail) mais la **vérité** et la **symétrie** :
 
 - un compte à rebours qui repart ment sur le temps ;
-- « Plus tard » sans « Jamais » retire le droit de dire non — redemander un choix déjà fait fait partie des pratiques que cite le DSA ;
+- « Plus tard » sans « Jamais » retire le droit de dire non — et le DSA cite le fait de redemander un choix déjà exprimé ;
 - une publicité non signalée ment sur la nature du contenu.
 
 Un badge adossé à des ventes réelles et un rappel avant la fin d’un essai aident au contraire à décider.`,
