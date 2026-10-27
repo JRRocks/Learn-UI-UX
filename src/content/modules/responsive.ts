@@ -3,14 +3,14 @@ import type { ModuleContent, SourceRef } from '../../engine/types';
 /**
  * French typography inside mock markup (the Markdown renderer only handles text fields): thin
  * no-break space before ? ! ; » and after «, no-break space before :, and a number kept with its
- * unit or sign (« 24,90 € », « 82 % », « 35 min », « n° 214 », « × 2 »).
+ * unit or sign (« 24,90 € », « 82 % », « 1 kg », « n° 214 », « × 2 »).
  */
 const fr = (html: string) =>
   html
     .replace(/ ([?!;»])/g, '\u202F$1')
     .replace(/« /g, '«\u202F')
     .replace(/ :/g, '\u00A0:')
-    .replace(/(\d) (?=(?:€|%|px|min|m)(?![\p{L}\d]))/gu, '$1\u00A0')
+    .replace(/(\d) (?=(?:€|%|px|min|kg|m)(?![\p{L}\d]))/gu, '$1\u00A0')
     .replace(/(n°|×) (?=\d)/g, '$1\u00A0');
 
 /** Escapes code shown as text in a mock. */
@@ -23,6 +23,10 @@ const WCAG_TARGET_AAA: SourceRef = {
 const WCAG_REFLOW: SourceRef = {
   label: 'W3C — Comprendre le critère 1.4.10 (redistribution)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/reflow.html',
+};
+const WCAG_RESIZE: SourceRef = {
+  label: 'W3C — Comprendre le critère 1.4.4 (redimensionnement du texte)',
+  url: 'https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html',
 };
 const MDN_POINTER: SourceRef = {
   label: 'MDN — Caractéristique média pointer',
@@ -171,7 +175,7 @@ const responsive: ModuleContent = {
     'Repenser une interface pour chaque contexte (écran, mode de saisie, connexion, usage) au lieu de la mettre à l’échelle : mobile d’abord, points de rupture dictés par le contenu, cibles tactiles, zones sûres et images adaptées.',
   minutes: 11,
   commands: ['adapt'],
-  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', WCAG_REFLOW, MDN_POINTER, MDN_ANY_POINTER, MDN_IMAGES, HOOBER],
+  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', WCAG_REFLOW, WCAG_RESIZE, MDN_POINTER, MDN_HOVER, MDN_ANY_POINTER, MDN_IMAGES, HOOBER],
   sections: [
     {
       id: 'repenser',
@@ -359,7 +363,7 @@ Pour un **contrôle sur mesure** (curseur, surface à glisser), vérifie au doig
     { id: 'adapt', front: 'Adapter une interface au mobile, est-ce la réduire ?', back: 'Non : c’est repenser l’expérience pour le contexte (écran, saisie, connexion, usage), pas mettre les pixels à l’échelle.' },
     { id: 'mobile-first', front: 'Comment écrire un CSS « mobile d’abord » ?', back: 'Des styles de base pour le petit écran, puis des requêtes `min-width` qui ajoutent la complexité.' },
     { id: 'breakpoints', front: 'Où placer un point de rupture ?', back: 'Là où le contenu casse : élargis depuis l’étroit jusqu’à la rupture. Trois points suffisent souvent.' },
-    { id: 'input', front: 'Comment savoir si un écran tactile est disponible ?', back: 'Avec `@media (any-pointer: coarse)`. `pointer` et `hover` ne décrivent que le mode de saisie principal (le pavé tactile d’un portable tactile), et la largeur ne dit rien.' },
+    { id: 'input', front: 'Comment savoir si un écran tactile est disponible ?', back: 'Avec `@media (any-pointer: coarse)` : `pointer` et `hover` ne décrivent que le mode de saisie principal (le pavé tactile d’un portable tactile), et la largeur ne dit rien.' },
     { id: 'hover', front: 'Une fonction peut-elle dépendre du survol ?', back: 'Non : au doigt, le survol n’existe pas. Il peut enrichir, jamais conditionner.' },
     { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 px, avec de l’espace entre les cibles. Le minimum WCAG AA (24 × 24 px) est un plancher, pas un objectif.' },
     { id: 'thumb', front: 'Où placer les actions fréquentes sur téléphone ?', back: 'À portée de pouce, dans la partie basse de l’écran : à une main, le haut est le plus difficile à atteindre.' },
@@ -719,7 +723,7 @@ Les trois autres blocs sont de bons réflexes : une grille intrinsèque (\`auto-
       difficulty: 2,
       prompt: 'Range les étapes de l’adaptation d’une interface à un nouveau contexte.',
       items: [
-        { id: 'contexts', label: 'Diagnostiquer : le contexte d’origine et ses hypothèses, puis le contexte cible (appareil, saisie, connexion, usage)' },
+        { id: 'contexts', label: 'Cerner le contexte d’origine et ses hypothèses, puis le contexte cible (appareil, saisie, connexion, usage)' },
         { id: 'breaks', label: 'Lister ce qui ne tient pas, ne marche pas ou détonne' },
         { id: 'strategy', label: 'Choisir la stratégie : mise en page, interactions, contenu, navigation' },
         { id: 'build', label: 'Implémenter, avec des points de rupture dictés par le contenu' },
