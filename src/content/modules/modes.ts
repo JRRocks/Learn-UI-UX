@@ -247,7 +247,7 @@ Le test : nom du produit masqué, l’écran se lit-il comme un produit de sa ca
 - **Le monde ne fournit jamais l’ordre de lecture** et ne remplace pas la navigation par un dispositif qu’il faudrait apprendre. Code, tableaux, notes et figures gardent les formes que les lecteurs connaissent.
 - **Le geste signature est un système**, utilisé là où il se justifie, pas un cadre répété autour de chaque élément.
 
-Les mondes qui se transfèrent le mieux viennent des traditions éditoriales du public : ouvrages de référence, spécimens typographiques, indicateurs horaires, guides de terrain, manuels techniques, signalétique d’un journal.
+Les mondes qui se transfèrent le mieux viennent des traditions éditoriales du public : ouvrages de référence, spécimens typographiques, indicateurs horaires, guides de terrain, manuels techniques, appareil critique des ouvrages savants, repères de navigation d’un journal.
 
 Double test. Le lecteur sait-il où il se trouve et où aller ensuite, et lit-il le corps sans effort ? Puis, nom masqué : cette documentation pourrait-elle être celle de n’importe quel produit ? Si oui, pousse le cadre plus loin dans le monde. Si la page se lit comme un objet du monde avant de se lire comme un document, le monde a atteint la colonne : ramène-le au cadre.`,
       examples: [

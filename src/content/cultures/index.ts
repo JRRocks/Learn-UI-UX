@@ -80,7 +80,7 @@ export const HOFSTEDE: { key: 'pdi' | 'idv' | 'mas' | 'uai' | 'lto' | 'ivr'; lab
     label: 'Contrôle de l’incertitude',
     low: 'Tolérance',
     high: 'Évitement',
-    ui: 'Score élevé : information complète, navigation prévisible, aide, garanties et réassurance visibles. Score faible : exploration, nouveauté, interfaces plus épurées.',
+    ui: 'Selon Marcus et Gould, un score élevé appelle la simplicité : choix limités, navigation qui évite de se perdre, conséquences annoncées avant d’agir, indices redondants ; un score faible tolère la complexité, le contenu maximal et l’exploration. Paradoxe japonais (92) : la réassurance y passe aussi par une information exhaustive (anshin), d’où des pages denses.',
   },
   {
     key: 'lto',
@@ -94,6 +94,6 @@ export const HOFSTEDE: { key: 'pdi' | 'idv' | 'mas' | 'uai' | 'lto' | 'ivr'; lab
     label: 'Indulgence',
     low: 'Retenue',
     high: 'Indulgence',
-    ui: 'Score élevé : plaisir, ton léger, ludique. Score faible : sobriété, sérieux, normes plus strictes.',
+    ui: 'Dimension ajoutée en 2010, absente du travail de Marcus et Gould : pistes seulement. Score élevé : plaisir, ton léger, ludique. Score faible : sobriété, sérieux, normes plus strictes.',
   },
 ];

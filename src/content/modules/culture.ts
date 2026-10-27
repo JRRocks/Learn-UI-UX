@@ -76,10 +76,6 @@ const S = {
   },
   boleto: { label: 'Stripe — Boleto', url: 'https://docs.stripe.com/payments/boleto' },
   viacep: { label: 'ViaCEP — recherche d’adresse par CEP', url: 'https://viacep.com.br/' },
-  cnilBilan: {
-    label: 'CNIL — Refuser les cookies doit être aussi simple qu’accepter',
-    url: 'https://www.cnil.fr/fr/refuser-les-cookies-doit-etre-aussi-simple-quaccepter-bilan-de-la-deuxieme-campagne-de-mises-en',
-  },
   tiktok: {
     label: 'Hunton — CNIL fines TikTok 5 million euros (2023)',
     url: 'https://huntonak.com/privacy-and-information-security-law/cnil-fines-tiktok-5-million-euros-over-cookie-infringements',
@@ -1647,7 +1643,7 @@ Et depuis le RGPD, le consentement doit résulter d’un **acte positif clair** 
 
 Les sanctions sont lourdes : 150 M€ pour Google et 60 M€ pour Facebook (décembre 2021), 5 M€ pour TikTok, qui demandait plusieurs clics pour refuser contre un seul pour accepter (décembre 2022).`,
       takeaway: 'En France, « Tout refuser » doit être aussi simple et visible que « Tout accepter », et poursuivre la navigation ne vaut pas consentement.',
-      sources: ['cnil:cookies', S.cnilBilan, S.tiktok],
+      sources: ['cnil:cookies', S.tiktok, 'cnil:banners'],
     },
     {
       id: 'culture-fr-toubon-tf',

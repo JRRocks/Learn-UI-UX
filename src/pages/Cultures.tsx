@@ -128,7 +128,9 @@ export function Cultures() {
                   <span className="market-name">
                     {c.name} <code>{c.locale}</code>
                   </span>
-                  <p>{c.summary}</p>
+                  <p>
+                    <MdInline text={c.summary} />
+                  </p>
                   <span className="market-formats">
                     {sampleDate(c.locale)} · {sampleNumber(c.locale)}
                   </span>
@@ -269,7 +271,9 @@ export function CultureDetail({ id }: { id: string }) {
         <h1 id="main-title" tabIndex={-1}>
           {c.name}
         </h1>
-        <p className="lead">{c.summary}</p>
+        <p className="lead">
+          <MdInline text={c.summary} />
+        </p>
         <p className="meta">
           <span>{c.region}</span>
           <span>
