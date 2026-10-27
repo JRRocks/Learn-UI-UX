@@ -1,0 +1,118 @@
+/*
+ * Design tokens — "Épreuves".
+ * World: a proofing desk. Cool paper, blue-black ink, and one vermilion
+ * correction red that marks what needs attention. Neutrals are tinted toward
+ * the ink hue (258). Light/dark follow the system unless the learner picks one.
+ */
+:root {
+  color-scheme: light;
+
+  --paper: oklch(0.984 0.004 258);
+  --paper-2: oklch(0.957 0.008 258);
+  --sheet: oklch(0.996 0.002 258);
+  --stage: oklch(0.935 0.01 258);
+  --ink: oklch(0.24 0.032 262);
+  --ink-2: oklch(0.42 0.026 262);
+  --ink-3: oklch(0.5 0.02 262);
+  --rule: oklch(0.885 0.008 258);
+  --rule-strong: oklch(0.79 0.012 258);
+
+  --mark: oklch(0.57 0.19 33);
+  --mark-ink: oklch(0.5 0.17 32);
+  --mark-wash: oklch(0.955 0.025 35);
+  --ok: oklch(0.6 0.13 158);
+  --ok-ink: oklch(0.46 0.1 160);
+  --ok-wash: oklch(0.955 0.03 160);
+  --partial-ink: oklch(0.5 0.1 70);
+  --partial-wash: oklch(0.96 0.04 85);
+  --focus: oklch(0.55 0.18 252);
+
+  --on-ink: oklch(0.985 0.004 258);
+
+  --font-sans: 'Atkinson Hyperlegible Next Variable', 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Atkinson Hyperlegible Mono Variable', 'Atkinson Hyperlegible Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Type roles (fixed rem scale, ratio ≈ 1.2 for the product UI). */
+  --t-meta: 0.8125rem;
+  --t-small: 0.9375rem;
+  --t-body: 1.0625rem;
+  --t-lead: 1.25rem;
+  --t-h3: 1.1875rem;
+  --t-h2: 1.5rem;
+  --t-h1: 2.125rem;
+  --t-display: 2.75rem;
+
+  /* 4-pt spacing scale. */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s5: 1.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
+  --s8: 4rem;
+  --s9: 6rem;
+
+  --r-control: 6px;
+  --r-panel: 12px;
+  --tap: 44px;
+
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur: 220ms;
+
+  --shadow-float: 0 10px 30px -8px oklch(0.24 0.032 262 / 0.22), 0 2px 6px oklch(0.24 0.032 262 / 0.08);
+  --rail-w: 15rem;
+  --measure: 68ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: oklch(0.195 0.016 262);
+    --paper-2: oklch(0.225 0.018 262);
+    --sheet: oklch(0.235 0.018 262);
+    --stage: oklch(0.27 0.018 262);
+    --ink: oklch(0.935 0.008 258);
+    --ink-2: oklch(0.8 0.012 258);
+    --ink-3: oklch(0.72 0.014 258);
+    --rule: oklch(0.33 0.016 262);
+    --rule-strong: oklch(0.44 0.018 262);
+    --mark: oklch(0.7 0.16 36);
+    --mark-ink: oklch(0.76 0.14 38);
+    --mark-wash: oklch(0.29 0.045 36);
+    --ok: oklch(0.72 0.12 158);
+    --ok-ink: oklch(0.8 0.11 160);
+    --ok-wash: oklch(0.28 0.04 160);
+    --partial-ink: oklch(0.82 0.1 80);
+    --partial-wash: oklch(0.3 0.045 80);
+    --focus: oklch(0.72 0.15 252);
+    --on-ink: oklch(0.2 0.016 262);
+    --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: oklch(0.195 0.016 262);
+  --paper-2: oklch(0.225 0.018 262);
+  --sheet: oklch(0.235 0.018 262);
+  --stage: oklch(0.27 0.018 262);
+  --ink: oklch(0.935 0.008 258);
+  --ink-2: oklch(0.8 0.012 258);
+  --ink-3: oklch(0.72 0.014 258);
+  --rule: oklch(0.33 0.016 262);
+  --rule-strong: oklch(0.44 0.018 262);
+  --mark: oklch(0.7 0.16 36);
+  --mark-ink: oklch(0.76 0.14 38);
+  --mark-wash: oklch(0.29 0.045 36);
+  --ok: oklch(0.72 0.12 158);
+  --ok-ink: oklch(0.8 0.11 160);
+  --ok-wash: oklch(0.28 0.04 160);
+  --partial-ink: oklch(0.82 0.1 80);
+  --partial-wash: oklch(0.3 0.045 80);
+  --focus: oklch(0.72 0.15 252);
+  --on-ink: oklch(0.2 0.016 262);
+  --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
+}
