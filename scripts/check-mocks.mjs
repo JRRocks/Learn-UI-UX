@@ -1,4 +1,4 @@
-// Visual QA without screenshots: finds text and controls cut off inside the mocks.
+// Visual QA without screenshots: finds text and controls cut off, or drawn over each other, inside the mocks.
 //   npm run check:mocks                      → every module, cultures and the catalog
 //   npm run check:mocks -- color layout      → only these targets
 // Checks desktop (1180 px) and mobile (390 px) widths. A mock that clips its own
@@ -21,9 +21,10 @@ const all = [
 ];
 const asked = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const targets = asked.length ? asked : all;
+// Tall viewports: hit-testing (overlaps) needs the whole mock on screen.
 const VIEWPORTS = [
-  { name: 'bureau', width: 1180, height: 900 },
-  { name: 'mobile', width: 390, height: 844 },
+  { name: 'bureau', width: 1180, height: 2200 },
+  { name: 'mobile', width: 390, height: 2400 },
 ];
 
 /** Runs in the page: every clipped text run or control, per mock. */
@@ -53,6 +54,7 @@ function scan() {
     shot.querySelectorAll('.mock').forEach((host, i) => {
       const root = host.shadowRoot;
       if (!root) return;
+      host.scrollIntoView({ block: 'start' }); // hit-testing only works inside the viewport
       const li = host.closest('li[data-right]');
       const cap = host.closest('figure')?.querySelector('figcaption')?.textContent ?? '';
       const where = li
@@ -77,13 +79,56 @@ function scan() {
       };
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       const range = document.createRange();
+      const lines = []; // every rendered line of text, to find texts drawn over each other
       for (let n = walker.nextNode(); n; n = walker.nextNode()) {
         const text = n.textContent.replace(/\s+/g, ' ').trim();
         const el = n.parentElement;
         if (!text || !el || el.closest('style, .mk-marks')) continue;
         range.selectNodeContents(n);
-        check(`« ${text.slice(0, 48)}${text.length > 48 ? '…' : ''} »`, range.getBoundingClientRect(), el, el);
+        const label = `« ${text.slice(0, 48)}${text.length > 48 ? '…' : ''} »`;
+        check(label, range.getBoundingClientRect(), el, el);
+        if (!visible(el) || srOnly(el)) continue;
+        // Only the visible part of a line can collide (an ellipsis hides the rest).
+        const c = clipOf(el)?.getBoundingClientRect();
+        for (const line of range.getClientRects()) {
+          const r = c
+            ? DOMRect.fromRect({
+                x: Math.max(line.left, c.left),
+                y: Math.max(line.top, c.top),
+                width: Math.min(line.right, c.right) - Math.max(line.left, c.left),
+                height: Math.min(line.bottom, c.bottom) - Math.max(line.top, c.top),
+              })
+            : line;
+          if (r.width > 2 && r.height > 2) lines.push({ r, label, el });
+        }
       }
+      for (let a = 0; a < lines.length; a++)
+        for (let b = a + 1; b < lines.length; b++) {
+          const p = lines[a];
+          const q = lines[b];
+          if (p.el === q.el) continue;
+          const w = Math.min(p.r.right, q.r.right) - Math.max(p.r.left, q.r.left);
+          const h = Math.min(p.r.bottom, q.r.bottom) - Math.max(p.r.top, q.r.top);
+          // Line boxes of neighbouring lines touch; real collisions cover a good part of a glyph run.
+          if (w <= 4 || h <= Math.min(p.r.height, q.r.height) * 0.45) continue;
+          // A dialog, toast or tooltip painted over the page hides what is beneath: not a collision.
+          const cx = Math.max(p.r.left, q.r.left) + w / 2;
+          const cy = Math.max(p.r.top, q.r.top) + h / 2;
+          const stack = root.elementsFromPoint(cx, cy);
+          const ip = stack.findIndex((e) => e === p.el || e.contains(p.el));
+          const iq = stack.findIndex((e) => e === q.el || e.contains(q.el));
+          const top = Math.min(ip, iq);
+          const bottom = Math.max(ip, iq);
+          const covered =
+            top >= 0 &&
+            stack.slice(top, bottom).some((e) => {
+              const cs = getComputedStyle(e);
+              const alpha = cs.backgroundColor.match(/[\d.]+(?=\)$)/)?.[0];
+              const opaque = cs.backgroundColor !== 'transparent' && !/rgba\(.*,\s*0\)$/.test(cs.backgroundColor) && (!cs.backgroundColor.startsWith('rgba') || Number(alpha) > 0.85);
+              return (opaque || cs.backgroundImage !== 'none') && !e.contains(p.el === stack[bottom] ? p.el : q.el);
+            });
+          if (!covered) found.push({ label: `${p.label} sur ${q.label}`, x: Math.round(w), y: Math.round(h), how: 'chevauchement' });
+        }
       root.querySelectorAll('button, input, select, textarea, img, svg.mk-ico').forEach((el) => {
         if (el.closest('.mk-marks')) return;
         const label = el.getAttribute('aria-label') || el.getAttribute('placeholder') || el.textContent.trim().slice(0, 30) || el.tagName.toLowerCase();
@@ -128,14 +173,18 @@ try {
         total += r.found.length;
         console.log(`${target} · ${vp.name} · ${r.id} · ${r.where}`);
         for (const f of r.found.slice(0, 6))
-          console.log(`    ${f.how}${f.x > 2 ? ` de ${f.x} px en largeur` : ''}${f.y > 2 ? ` de ${f.y} px en hauteur` : ''} : ${f.label}`);
+          console.log(
+            f.how === 'chevauchement'
+              ? `    textes superposés (${f.x} × ${f.y} px) : ${f.label}`
+              : `    ${f.how}${f.x > 2 ? ` de ${f.x} px en largeur` : ''}${f.y > 2 ? ` de ${f.y} px en hauteur` : ''} : ${f.label}`,
+          );
         if (r.found.length > 6) console.log(`    … et ${r.found.length - 6} autre(s)`);
       }
     }
     if (errors.length) console.log(`Erreurs dans la page (${vp.name}) :\n- ${[...new Set(errors)].join('\n- ')}`);
     await page.close();
   }
-  console.log(total ? `\n${total} élément(s) coupé(s) ou masqué(s) à examiner.` : 'Aucun élément coupé dans les maquettes.');
+  console.log(total ? `\n${total} élément(s) coupé(s), masqué(s) ou superposé(s) à examiner.` : 'Aucun élément coupé ni superposé dans les maquettes.');
 } finally {
   await browser.close();
   await server.close();
