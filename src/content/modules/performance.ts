@@ -19,6 +19,7 @@ const NNG_PROGRESS: SourceRef = {
 const WEBDEV_INP: SourceRef = { label: 'web.dev — Interaction to Next Paint (INP)', url: 'https://web.dev/articles/inp' };
 const WEBDEV_INP_CWV: SourceRef = { label: 'web.dev — L’INP devient une Core Web Vital le 12 mars 2024', url: 'https://web.dev/blog/inp-cwv-march-12' };
 const WEBDEV_LONG_TASKS: SourceRef = { label: 'web.dev — Optimize long tasks', url: 'https://web.dev/articles/optimize-long-tasks' };
+const WEBDEV_RAIL: SourceRef = { label: 'web.dev — Measure performance with the RAIL model', url: 'https://web.dev/articles/rail' };
 const WEBDEV_CLS: SourceRef = { label: 'web.dev — Cumulative Layout Shift (CLS)', url: 'https://web.dev/articles/cls' };
 const WEBDEV_LCP: SourceRef = { label: 'web.dev — Optimize Largest Contentful Paint', url: 'https://web.dev/articles/optimize-lcp' };
 const WEBDEV_LAZY: SourceRef = { label: 'web.dev — The performance effects of too much lazy loading', url: 'https://web.dev/articles/lcp-lazy-loading' };
@@ -34,7 +35,7 @@ const DOHERTY: SourceRef = { label: 'Laws of UX — Doherty Threshold', url: 'ht
 
 /** Two moments of the same page load, side by side. */
 const FRAMES_CSS = `
-.fs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; background: #f4f6f9; }
+.fs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 12px; background: #f4f6f9; }
 .fs > div { display: flex; flex-direction: column; }
 .fs-cap { font-size: 11px; font-weight: 600; color: #5a6172; margin-bottom: 4px; }
 .fs-fr { flex: 1; position: relative; overflow: hidden; padding: 8px 8px 12px; border: 1px solid #d5d9e2; border-radius: 8px; background: #fff; }
@@ -43,8 +44,8 @@ const FRAMES_CSS = `
 .fs-l.m { width: 70%; }
 .fs-img { margin-top: 6px; aspect-ratio: 2 / 1; border-radius: 4px; background: linear-gradient(160deg, #b8c7dc 0%, #dfe6f0 60%, #eef2f7 100%); }
 .fs-slot { margin-top: 6px; aspect-ratio: 2 / 1; border-radius: 4px; background: #eef1f5; }
-.fs-btn { margin-top: 8px; height: 24px; border-radius: 5px; background: #1f4fd8; color: #fff; font-size: 10px; font-weight: 600; display: grid; place-items: center; }
-.fs-ban { height: 24px; margin-bottom: 6px; border-radius: 4px; background: #fff1c9; color: #5c4300; font-size: 10px; font-weight: 600; display: grid; place-items: center; }
+.fs-btn { margin-top: 8px; height: 24px; border-radius: 5px; background: #1f4fd8; color: #fff; font-size: 11px; font-weight: 600; display: grid; place-items: center; }
+.fs-ban { height: 24px; margin-bottom: 6px; border-radius: 4px; background: #fff1c9; color: #5c4300; font-size: 11px; font-weight: 600; display: grid; place-items: center; }
 .fs-res { height: 24px; margin-bottom: 6px; border-radius: 4px; border: 1.5px dashed #c3c8d3; }
 .fs-finger { position: absolute; left: 50%; width: 30px; height: 30px; margin-left: -15px; border-radius: 50%; background: rgb(214 120 90 / 0.3); border: 1.5px dashed #b4553a; }
 `;
@@ -175,10 +176,10 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
     {
       id: 'cwv',
       title: 'Les trois Core Web Vitals',
-      body: `Google résume l’expérience de chargement en trois **Core Web Vitals**, avec des seuils « bons » mesurés au **75e centile** des visites, séparément sur mobile et sur ordinateur :
+      body: `Google résume l’expérience d’une page en trois **Core Web Vitals** : le chargement (LCP), la réactivité (INP) et la stabilité visuelle (CLS). Leurs seuils « bons » se mesurent au **75e centile** des visites, séparément sur mobile et sur ordinateur :
 
-- **LCP** (*Largest Contentful Paint*) **≤ 2,5 s** : le temps d’affichage du plus grand élément visible (image d’en-tête, bloc de titre). On l’améliore en optimisant et en préchargeant l’image principale, en mettant le CSS critique en ligne, avec un CDN ou un rendu côté serveur. Et **jamais de chargement différé au-dessus de la ligne de flottaison** : \`loading="lazy"\` sur l’image d’en-tête retarde le LCP.
-- **INP** (*Interaction to Next Paint*) **≤ 200 ms** : le délai entre une interaction (clic, toucher, frappe) et l’affichage qui suit, sur toute la visite. Il a **remplacé le FID en mars 2024**. On l’améliore en **découpant les tâches longues** (plus de 50 ms sur le fil principal), en différant le JavaScript non critique et en déplaçant les calculs lourds dans un *web worker*.
+- **LCP** (*Largest Contentful Paint*) **≤ 2,5 s** : le temps d’affichage du plus grand élément visible (image d’en-tête, bloc de titre). On l’améliore en optimisant et en préchargeant l’image principale, en mettant le CSS critique en ligne, avec un CDN (réseau de serveurs proches des visiteurs) ou un rendu côté serveur. Et **jamais de chargement différé au-dessus de la ligne de flottaison** : \`loading="lazy"\` sur l’image d’en-tête retarde le LCP.
+- **INP** (*Interaction to Next Paint*) **≤ 200 ms** : le délai entre une interaction (clic, toucher, frappe) et l’affichage qui suit. Il observe toute la visite et retient l’**interaction la plus lente** (en écartant une valeur extrême toutes les 50 interactions). Il a **remplacé en mars 2024 le FID** (*First Input Delay*), qui ne mesurait que le délai avant le traitement de la première interaction. On l’améliore en **découpant les tâches longues** (plus de 50 ms sur le fil principal, celui qui traite aussi les interactions et le rendu), en différant le JavaScript non critique et en déplaçant les calculs lourds dans un *web worker* (un script exécuté en arrière-plan, hors du fil principal).
 - **CLS** (*Cumulative Layout Shift*) **≤ 0,1** : la stabilité visuelle, c’est-à-dire les déplacements inattendus du contenu. On l’améliore en **donnant des dimensions** aux images et vidéos (\`width\` et \`height\`, ou \`aspect-ratio\`), en réservant la place des publicités et intégrations, et en n’insérant jamais de contenu au-dessus de ce qui est déjà affiché.`,
       examples: [
         {
@@ -186,8 +187,8 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
           bad: {
             alt: 'Deux instants du chargement d’un article. À 0,5 s, le titre, le texte et le bouton s’affichent sans image ; à 1,4 s, l’image arrive et repousse le texte et le bouton vers le bas.',
             html: fr(`<div class="fs">
-  ${frame('À 0,5 s', `<p class="fs-t">Les halles rénovées</p>${LINES}<div class="fs-btn">Lire la suite</div>`)}
-  ${frame('À 1,4 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
+  ${frame('À 0,5 s', `<p class="fs-t">Halles rénovées</p>${LINES}<div class="fs-btn">Lire la suite</div>`)}
+  ${frame('À 1,4 s', `<p class="fs-t">Halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -195,8 +196,8 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
           good: {
             alt: 'Les deux mêmes instants : à 0,5 s, un emplacement gris de la taille de l’image est déjà réservé ; à 1,4 s, l’image le remplit et rien ne bouge.',
             html: fr(`<div class="fs">
-  ${frame('À 0,5 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-slot"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
-  ${frame('À 1,4 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
+  ${frame('À 0,5 s', `<p class="fs-t">Halles rénovées</p><div class="fs-slot"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
+  ${frame('À 1,4 s', `<p class="fs-t">Halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -211,7 +212,7 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
 
 - **0,1 s** : la réponse paraît instantanée ;
 - **1 s** : le délai se remarque, mais la personne garde le fil de sa pensée ;
-- **10 s** : la limite de l’attention ; au-delà, elle décroche et fait autre chose.
+- **10 s** : la limite de l’attention ; au-delà, la personne décroche et fait autre chose.
 
 Le **seuil de Doherty** va dans le même sens : sous **400 ms** de réponse, l’échange reste fluide et la productivité grimpe.
 
@@ -219,7 +220,7 @@ Ce qu’on montre pendant l’attente change sa perception :
 
 - **Un retour immédiat** à chaque action (bouton enfoncé, état « Envoi… »), même si le travail continue.
 - Sous une seconde environ, **pas d’indicateur** : il clignoterait sans qu’on ait le temps de le lire, et distrairait plus qu’il n’informe.
-- Pour le **chargement d’une page**, un **squelette** qui reprend la mise en page plutôt qu’un spinner au milieu du contenu : la structure apparaît, l’attente semble plus courte.
+- Pour le **chargement d’une page**, un **squelette** qui reprend la mise en page plutôt qu’un *spinner* (indicateur qui tourne en boucle) au milieu du contenu : la structure apparaît, l’attente semble plus courte.
 - Pour une attente courte et locale (de 2 à 10 s, dans un seul module), un **spinner** suffit.
 - Au-delà d’une dizaine de secondes, une **progression déterminée** (pourcentage, temps restant) quand on connaît l’avancement. Jamais de progression inventée.`,
       examples: [
@@ -250,11 +251,11 @@ Ce qu’on montre pendant l’attente change sa perception :
       title: 'UI optimiste et connexions lentes',
       body: `**L’UI optimiste** affiche le résultat d’une action **tout de suite**, avant la confirmation du serveur : le cœur se remplit, le message apparaît dans la conversation, la tâche se coche. La synchronisation se fait en arrière-plan.
 
-- Elle convient aux actions **fréquentes, réversibles, qui réussissent presque toujours** : aimer, ajouter à une liste, renommer, envoyer un message.
+- Elle convient aux actions **fréquentes, qui réussissent presque toujours et dont l’échec se rattrape sans dommage** : aimer, ajouter à une liste, renommer, envoyer un message.
 - Elle exige un **retour arrière** honnête : si le serveur refuse, l’interface revient à l’état précédent et le dit clairement (« Message non envoyé · Réessayer »).
 - Elle ne convient pas aux actions **coûteuses ou irréversibles** (paiement, virement, suppression définitive) : là, on attend la confirmation réelle.
 
-Pour les **connexions lentes** : chargement progressif des images, squelettes, mise en cache et fonctionnement hors ligne (*service workers*), et protection contre la **double soumission** (bouton désactivé pendant l’envoi). Teste avec une connexion bridée, hors ligne, et en appuyant dix fois de suite sur « Envoyer ».`,
+Pour les **connexions lentes** : chargement progressif des images, squelettes, mise en cache et fonctionnement hors ligne grâce à un *service worker* (un script qui intercepte les requêtes de la page et peut répondre avec une copie en cache), et protection contre la **double soumission** (bouton désactivé pendant l’envoi). Teste avec une connexion bridée, hors ligne, et en appuyant dix fois de suite sur « Envoyer ».`,
       examples: [
         {
           title: 'Répondre tout de suite à un « J’aime »',
@@ -283,9 +284,9 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
       id: 'ressources',
       title: 'Images, polices et JavaScript',
       body: `- **Images** : formats modernes (WebP, AVIF), à la bonne taille (pas une image de 3000 px pour un affichage de 300 px), images adaptatives (\`srcset\`), compression (une qualité de 80 à 85 % passe en général inaperçue), et chargement différé **seulement sous la ligne de flottaison**.
-- **Polices** : \`font-display: swap\` (le texte s’affiche tout de suite dans la police de repli, puis la police web la remplace) ou \`optional\` (la police web n’est utilisée que si elle arrive presque aussitôt) ; sous-ensembles limités aux caractères utiles ; préchargement de la police critique ; seulement les graisses utilisées. Une **police de repli aux métriques proches** (descripteurs \`size-adjust\`, \`ascent-override\`) limite le saut au moment de l’échange.
+- **Polices** : \`font-display: swap\` (le texte s’affiche tout de suite dans la police de repli, puis la police web la remplace) ou \`optional\` (la police web n’est utilisée que si elle arrive presque aussitôt) ; sous-ensembles limités aux caractères utiles ; préchargement de la police critique ; seulement les graisses utilisées. Une **police de repli aux métriques proches** (descripteurs \`size-adjust\`, \`ascent-override\`) limite le saut au moment de l’échange. Quand l’identité le permet, une **pile de polices système** règle tout d’un coup : rien à télécharger, donc ni texte invisible ni saut à l’échange.
 - **JavaScript** : découpage par route et par composant, suppression du code et des dépendances inutiles, chargement différé de ce qui n’est pas critique (\`import()\` dynamique), ménage dans les scripts tiers.
-- **Chargement** : ressources critiques d’abord, \`defer\` ou \`async\` sur les scripts non critiques, préchargement de l’essentiel, préchargement probable de la page suivante, cache HTTP et compression.`,
+- **Chargement** : ressources critiques d’abord, \`defer\` ou \`async\` sur les scripts non critiques, préchargement (\`preload\`) de ce dont la page a besoin tout de suite, prélecture (\`prefetch\`) de la page suivante la plus probable, cache HTTP et compression.`,
     },
     {
       id: 'rendu',
@@ -302,7 +303,7 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
   ],
   rules: [
     { id: 'cwv', front: 'Quels sont les seuils « bons » des Core Web Vitals ?', back: 'LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1, au 75e centile des visites, sur mobile comme sur ordinateur.' },
-    { id: 'inp', front: 'Qu’a remplacé l’INP, et quand ?', back: 'Le FID, en mars 2024. L’INP mesure la réactivité de toutes les interactions de la visite, pas seulement le délai de la première.' },
+    { id: 'inp', front: 'Qu’a remplacé l’INP, et quand ?', back: 'Le FID, en mars 2024. L’INP observe toutes les interactions de la visite et retient la plus lente ; le FID ne mesurait que le délai de la première.' },
     { id: 'cls-img', front: 'Comment éviter le décalage d’une image qui se charge ?', back: 'Lui donner ses dimensions (`width` et `height`) ou un `aspect-ratio` : la place est réservée.' },
     { id: 'lazy-hero', front: 'Faut-il charger en différé l’image d’en-tête ?', back: 'Non : jamais de `loading="lazy"` au-dessus de la ligne de flottaison. L’image principale doit partir au plus tôt.' },
     { id: 'long-task', front: 'Qu’est-ce qu’une tâche longue, et que faire ?', back: 'Une tâche de plus de 50 ms sur le fil principal. La découper, différer le JavaScript non critique, déplacer le calcul dans un web worker.' },
@@ -357,7 +358,7 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
       answer: 'skeleton',
       explanation: `Pour le **chargement d’une page**, le squelette affiche la mise en page à venir : blocs de texte, avatars, images, à leur place définitive. La personne comprend ce qui arrive, l’attente paraît plus courte, et le contenu remplit ensuite les blocs sans tout réorganiser.
 
-Le Nielsen Norman Group réserve le spinner aux attentes courtes **d’un seul module** (une vidéo, une carte), et le squelette aux **pages entières** chargées en moins de 10 s. Impeccable le dit pour les interfaces produit : des squelettes, pas des spinners au milieu du contenu.`,
+Le Nielsen Norman Group conseille plutôt le spinner pour **un seul module** (une vidéo, une carte), et le squelette quand **tout l’écran** se charge, pour une attente de moins de 10 s. Impeccable le dit pour les interfaces produit : des squelettes, pas des spinners au milieu du contenu.`,
       takeaway: 'Pour charger une page, montre un squelette de la mise en page plutôt qu’un spinner au milieu du contenu.',
       sources: ['imp:operate', 'imp:harden', NNG_SKELETON],
     },
@@ -465,13 +466,13 @@ La progression doit refléter l’avancement **réel** (ici, les octets envoyés
       explanation: `L’**UI optimiste** montre le résultat d’une action **avant** la réponse du serveur. Pour une action fréquente qui réussit presque toujours, comme envoyer un message, l’interface paraît instantanée : la réponse visuelle arrive sous le seuil de 0,1 s qui donne l’impression d’immédiateté.
 
 Elle reste **honnête** : un état discret (« Envoi… ») signale que la synchronisation est en cours, et en cas d’échec le message le dit (« Non envoyé · Réessayer ») au lieu de disparaître. On ne l’emploie pas pour un paiement ou une suppression définitive.`,
-      takeaway: 'Pour une action fréquente et réversible, affiche le résultat tout de suite et prévois un retour arrière clair en cas d’échec.',
+      takeaway: 'Pour une action fréquente qui réussit presque toujours, affiche le résultat tout de suite et prévois un retour arrière clair en cas d’échec.',
       sources: ['imp:harden', 'imp:optimize', NNG_RESPONSE],
     },
     {
       id: 'performance-font-duel',
       type: 'choice',
-      difficulty: 3,
+      difficulty: 1,
       prompt: 'Le HTML est arrivé, mais pas encore les polices web. Quelle stratégie de chargement donne la meilleure expérience ?',
       options: [
         {
@@ -577,23 +578,23 @@ Les autres blocs sont de bons réflexes : élévation en \`transform\`, \`font-d
       difficulty: 1,
       prompt: 'Le FID (First Input Delay) est toujours l’indicateur de réactivité des Core Web Vitals.',
       answer: false,
-      explanation: `Depuis le **12 mars 2024**, l’**INP** (*Interaction to Next Paint*) a remplacé le FID parmi les Core Web Vitals. Le FID ne mesurait que le délai avant le traitement de la **première** interaction ; l’INP observe **toutes** les interactions de la visite, jusqu’à l’affichage qui suit.
+      explanation: `Depuis le **12 mars 2024**, l’**INP** (*Interaction to Next Paint*) a remplacé le FID parmi les Core Web Vitals. Le FID ne mesurait que le délai avant le traitement de la **première** interaction ; l’INP observe **toutes** les interactions de la visite, jusqu’à l’affichage qui suit, et retient la **plus lente** (en écartant une valeur extrême toutes les 50 interactions).
 
 Un bon INP est **inférieur ou égal à 200 ms**, au 75e centile des visites. On l’améliore en découpant les tâches longues, en différant le JavaScript non critique et en déplaçant les calculs lourds hors du fil principal.`,
-      takeaway: 'L’INP (≤ 200 ms) a remplacé le FID en mars 2024 : il mesure la réactivité de toutes les interactions.',
+      takeaway: 'L’INP (≤ 200 ms) a remplacé le FID en mars 2024 : il observe toutes les interactions de la visite et retient la plus lente.',
       sources: ['imp:optimize', WEBDEV_INP_CWV, WEBDEV_INP, WEBDEV_LONG_TASKS],
     },
     {
       id: 'performance-frame-budget-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Pour une animation à 60 images par seconde, le navigateur dispose d’environ 16 ms par image pour tout son travail.',
-      answer: true,
-      explanation: `1000 ms ÷ 60 images ≈ **16,7 ms** par image. Ce budget couvre tout : JavaScript, calcul des styles, mise en page, peinture et composition. Sur un écran à 120 Hz, il tombe à environ 8 ms.
+      prompt: 'Pour une animation à 60 images par seconde, le JavaScript de la page dispose à lui seul d’environ 16 ms par image.',
+      answer: false,
+      explanation: `1000 ms ÷ 60 images ≈ **16,7 ms** par image, mais ce budget couvre **tout** le travail du navigateur : JavaScript, calcul des styles, mise en page, peinture et composition. Le navigateur a besoin d’environ 6 ms pour rendre chaque image : web.dev conseille donc de produire chaque image d’une animation en **10 ms** au plus. Sur un écran à 120 Hz, le budget entier tombe à environ 8 ms.
 
 D’où les règles de rendu : animer \`transform\` et \`opacity\` plutôt que des propriétés de mise en page, éviter les tâches JavaScript longues pendant une animation, et utiliser \`requestAnimationFrame\` pour les animations pilotées en JavaScript.`,
-      takeaway: 'À 60 images par seconde, chaque image dispose d’environ 16 ms : anime ce qui ne recalcule pas la mise en page.',
-      sources: ['imp:optimize'],
+      takeaway: 'À 60 images par seconde, les 16 ms de chaque image servent à tout le rendu, pas qu’au script : garde le JavaScript court et anime ce qui ne recalcule pas la mise en page.',
+      sources: ['imp:optimize', WEBDEV_RAIL],
     },
     {
       id: 'performance-thresholds-match',
@@ -611,7 +612,7 @@ D’où les règles de rendu : animer \`transform\` et \`opacity\` plutôt que d
       ],
       explanation: `Les trois **Core Web Vitals** mesurent le chargement (LCP), la réactivité (INP) et la stabilité visuelle (CLS), avec des seuils évalués au 75e centile des visites.
 
-Les deux autres repères viennent de la psychologie de l’attente : sous **0,1 s**, une réponse paraît instantanée (Nielsen) ; sous **400 ms**, l’échange garde son rythme (seuil de Doherty). Au-delà d’**1 s**, la personne remarque le délai ; au-delà de **10 s**, elle décroche.`,
+Les deux autres repères viennent de la psychologie de l’attente : sous **0,1 s**, une réponse paraît instantanée (Nielsen) ; sous **400 ms**, l’échange garde son rythme (seuil de Doherty). Au-delà d’**1 s**, le fil de la pensée se rompt ; au-delà de **10 s**, l’attention décroche.`,
       takeaway: 'LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 ; et côté perception : 0,1 s pour l’instantané, 400 ms pour la fluidité.',
       sources: ['web.dev:cwv', NNG_RESPONSE, DOHERTY],
     },
