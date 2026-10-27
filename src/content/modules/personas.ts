@@ -16,7 +16,7 @@ const bankHome = (labels: boolean): Visual => ({
 .pn-amt { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .pn-bar { font-size: 11px; margin-top: 18px; }
 .pn-bar > span { min-width: 44px; min-height: 40px; justify-content: center; }`,
-  html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Bonjour Lucie</p><div class="pn-card"><p class="mk-small mk-muted">Compte courant</p><p class="pn-amt">1 284,50 €</p></div><div class="pn-card"><p class="mk-small mk-muted">Livret d’épargne</p><p class="pn-amt">6 410,00 €</p></div></div>
+  html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Bonjour Lucie</p><div class="pn-card"><p class="mk-small mk-muted">Compte courant</p><p class="pn-amt">1&nbsp;284,50&nbsp;€</p></div><div class="pn-card"><p class="mk-small mk-muted">Livret d’épargne</p><p class="pn-amt">6&nbsp;410,00&nbsp;€</p></div></div>
 <div class="mk-tabbar pn-bar"><span class="on"><i data-icon="house" style="--ico:22px"></i>${labels ? 'Accueil' : ''}</span><span><i data-icon="wallet" style="--ico:22px"></i>${labels ? 'Comptes' : ''}</span><span><i data-icon="send" style="--ico:22px"></i>${labels ? 'Virements' : ''}</span><span><i data-icon="chart-column" style="--ico:22px"></i>${labels ? 'Budget' : ''}</span><span><i data-icon="user" style="--ico:22px"></i>${labels ? 'Profil' : ''}</span></div>`,
 });
 
@@ -24,17 +24,17 @@ const bankHome = (labels: boolean): Visual => ({
 const slotPicker = (bottom: boolean): Visual => ({
   frame: 'phone',
   alt: bottom
-    ? 'Choix d’un créneau de livraison : liste de créneaux et grand bouton « Valider le créneau » fixé dans le bas de l’écran.'
+    ? 'Choix d’un créneau de livraison : liste de créneaux et grand bouton « Valider · 18:00 – 20:00 » fixé dans le bas de l’écran.'
     : 'Choix d’un créneau de livraison : liste de créneaux et petit lien « Valider » dans l’angle de l’en-tête.',
   css: `.sl-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid #e3e6ec; }
 .sl-ok { font-size: 13px; font-weight: 600; color: #1f4fd8; }
 .sl-opt { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; border: 1px solid #c7cedb; border-radius: 10px; }
 .sl-opt--on { border-color: #1f4fd8; box-shadow: inset 0 0 0 1px #1f4fd8; }
 .sl-foot { padding: 12px 14px 14px; border-top: 1px solid #e3e6ec; }
-.sl-foot .mk-btn { min-height: 48px; }`,
+.sl-foot .mk-btn { min-height: 48px; white-space: normal; text-align: center; }`,
   html: `<div class="sl-head"><i data-icon="chevron-left" style="--ico:20px"></i><span class="mk-strong">Livraison</span>${bottom ? '<span style="width:20px"></span>' : '<span class="sl-ok">Valider</span>'}</div>
-<div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h3">Choisir un créneau</p><p class="mk-small mk-muted">Mardi 17 novembre</p><div class="sl-opt"><span>8:00 – 10:00</span><span class="mk-small mk-muted">Gratuit</span></div><div class="sl-opt sl-opt--on"><span class="mk-strong">18:00 – 20:00</span><span class="mk-small mk-muted">Gratuit</span></div><div class="sl-opt"><span>20:00 – 22:00</span><span class="mk-small mk-muted">2,90 €</span></div></div>
-${bottom ? '<div class="sl-foot"><span class="mk-btn mk-btn--block">Valider le créneau · 18:00 – 20:00</span></div>' : '<div style="height:84px"></div>'}`,
+<div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h3">Choisir un créneau</p><p class="mk-small mk-muted">Mardi 17 novembre</p><div class="sl-opt"><span>8:00 – 10:00</span><span class="mk-small mk-muted">Gratuit</span></div><div class="sl-opt sl-opt--on"><span class="mk-strong">18:00 – 20:00</span><span class="mk-small mk-muted">Gratuit</span></div><div class="sl-opt"><span>20:00 – 22:00</span><span class="mk-small mk-muted">2,90&nbsp;€</span></div></div>
+${bottom ? '<div class="sl-foot"><span class="mk-btn mk-btn--block">Valider · 18:00&nbsp;–&nbsp;20:00</span></div>' : '<div style="height:84px"></div>'}`,
 });
 
 const personas: ModuleContent = {
@@ -52,11 +52,12 @@ const personas: ModuleContent = {
       title: 'Pourquoi tester avec des personas',
       body: `Un seul regard de « directeur artistique » rate des pannes entières : l’expert ne voit pas ce qui perd le novice, et l’évaluateur sur grand écran ne sent pas le pouce qui n’atteint pas le bouton. La critique d’impeccable fait donc parcourir l’interface par **cinq archétypes**, qui exposent chacun d’autres défaillances : Alex, Jordan, Sam, Riley et Casey.
 
-La méthode tient en trois gestes :
+La méthode tient en quatre temps :
 
-1. **Choisir deux ou trois personas** pertinents pour le type d’interface.
-2. **Dérouler l’action principale** dans la peau de chacun.
-3. **Noter des signaux d’alerte précis** : l’élément et l’interaction qui cassent, pas une impression générale.
+1. **Identifier le type d’interface** : tableau de bord, tunnel de commande, formulaire…
+2. **Choisir deux ou trois personas** pertinents pour ce type d’interface.
+3. **Dérouler l’action principale** dans la peau de chacun.
+4. **Noter des signaux d’alerte précis** : l’élément et l’interaction qui cassent, pas une impression générale.
 
 > « Alex : aucun raccourci clavier ; huit clics pour l’action principale ; visite guidée imposée. » plutôt que « Alex aimerait que ce soit plus rapide ».
 
@@ -68,12 +69,12 @@ Ces archétypes servent à **inspecter**. Ils ne remplacent pas les personas iss
       body: `**Alex, l’expert pressé**, connaît les produits du genre, déteste qu’on lui tienne la main, et trouvera un raccourci… ou partira.
 
 - *Comportements* : saute l’onboarding et les instructions, cherche d’emblée les raccourcis clavier, veut sélectionner, éditer par lots et automatiser ; abandonne si c’est lent ou condescendant.
-- *Questions de test* : termine-t-il la tâche principale en moins de 60 secondes ? Existe-t-il des raccourcis pour les actions courantes ? Peut-il passer entièrement l’onboarding ? Les fenêtres se ferment-elles avec Échap ? Y a-t-il un chemin expert (raccourcis, actions groupées) ?
+- *Questions de test* : termine-t-il la tâche principale en moins de 60 secondes ? Existe-t-il des raccourcis pour les actions courantes ? Peut-il passer entièrement l’onboarding ? Les fenêtres se ferment-elles avec Échap ? Y a-t-il un chemin expert (raccourcis, actions groupées) ?
 - *Signaux d’alerte* : tutoriel imposé ou impossible à passer, action principale inaccessible au clavier, animations lentes qu’on ne peut pas sauter, traitement élément par élément là où le lot serait naturel, confirmations redondantes pour des actions sans risque.
 
 **Jordan, le novice perdu**, n’a jamais utilisé ce type de produit. Il lit tout, hésite avant de cliquer, cherche de l’aide et prend chaque libellé au pied de la lettre.
 
-- *Questions de test* : la première action est-elle évidente en 5 secondes ? Toutes les icônes ont-elles un libellé ? Y a-t-il de l’aide aux moments de décision ? Le vocabulaire suppose-t-il des connaissances ? Un retour ou une annulation est-il possible à chaque étape ?
+- *Questions de test* : la première action est-elle évidente en 5 secondes ? Toutes les icônes ont-elles un libellé ? Y a-t-il de l’aide aux moments de décision ? Le vocabulaire suppose-t-il des connaissances ? Un retour ou une annulation est-il possible à chaque étape ?
 - *Signaux d’alerte* : navigation en icônes seules, jargon non expliqué, aucune aide visible, étape suivante ambiguë après une action, aucune confirmation que l’action a réussi.`,
       examples: [
         {
@@ -90,7 +91,7 @@ Ces archétypes servent à **inspecter**. Ils ne remplacent pas les personas iss
       title: 'Sam : l’accessibilité comme condition d’usage',
       body: `**Sam** utilise un lecteur d’écran (VoiceOver, NVDA) et navigue au clavier ; il peut aussi avoir une basse vision, un handicap moteur ou des différences cognitives.
 
-- *Comportements* : parcourt l’interface linéairement avec Tab, s’appuie sur les titres et les noms accessibles, ne voit ni les survols ni les indices purement visuels, a besoin d’un contraste suffisant (4,5:1 au minimum pour le texte), zoome parfois jusqu’à 200 %.
+- *Comportements* : parcourt l’interface linéairement avec Tab, s’appuie sur les titres et les noms accessibles, ne voit ni les survols ni les indices purement visuels, a besoin d’un contraste suffisant (au niveau AA : 4,5:1 pour le texte courant, 3:1 pour le grand texte), zoome parfois jusqu’à 200 %.
 - *Questions de test* : tout le parcours principal se fait-il au clavier ? Chaque élément interactif reçoit-il un focus visible ? Les images ont-elles un texte alternatif pertinent ? Le contraste atteint-il le niveau AA des WCAG ? Le lecteur d’écran annonce-t-il les changements d’état (chargement, succès, erreur) ?
 - *Signaux d’alerte* : interactions à la souris sans alternative au clavier, focus absent ou invisible, sens porté par la seule couleur (rouge = erreur, vert = succès), champs ou boutons sans nom, actions limitées dans le temps sans possibilité de prolonger, composants sur mesure qui cassent la lecture.
 
@@ -101,12 +102,12 @@ Sam n’est pas un cas marginal à traiter en fin de projet : ce qu’il exige (
       title: 'Riley et Casey : les cas limites et la vraie vie',
       body: `**Riley, le testeur de cas limites**, sort méthodiquement du chemin idéal : états vides, textes très longs, caractères spéciaux, émojis, texte de droite à gauche, collage depuis un tableur. Il revient en arrière, rafraîchit en plein parcours, ouvre deux onglets.
 
-- *Questions de test* : que se passe-t-il à 0, à 1 000 éléments, avec un texte très long ? Les erreurs laissent-elles l’interface dans un état propre ? L’état survit-il à un rafraîchissement ? Une fonction semble-t-elle marcher alors qu’elle produit un résultat faux ?
+- *Questions de test* : que se passe-t-il à 0, à 1 000 éléments, avec un texte très long ? Les erreurs laissent-elles l’interface dans un état propre ? L’état survit-il à un rafraîchissement ? Une fonction semble-t-elle marcher alors qu’elle produit un résultat faux ?
 - *Signaux d’alerte* : fonctions qui échouent en silence, erreurs qui exposent des détails techniques ou cassent l’interface, états vides inutiles (« Aucun résultat » sans piste), données perdues au rafraîchissement, comportements différents pour des interactions semblables.
 
-**Casey, le mobile distrait**, tient son téléphone d’une main, en mouvement, souvent interrompu, parfois sur une connexion lente. Les observations de Steven Hoober (2013) le rappellent : 49 % des personnes vues en train de toucher leur écran tenaient leur téléphone d’une seule main.
+**Casey, distrait sur mobile**, tient son téléphone d’une main, en mouvement, souvent interrompu, parfois sur une connexion lente. Les observations de Steven Hoober (2013) le rappellent : 49 % des personnes vues en train de toucher leur écran tenaient leur téléphone d’une seule main.
 
-- *Questions de test* : les actions principales sont-elles dans la zone du pouce, la moitié inférieure de l’écran ? L’état est-il conservé si Casey quitte l’appli et revient ? L’écran tient-il sur une connexion lente ? Les formulaires profitent-ils de l’autocomplétion et de valeurs par défaut ? Les cibles tactiles font-elles au moins 44 × 44 pt ?
+- *Questions de test* : les actions principales sont-elles dans la zone du pouce, la moitié inférieure de l’écran ? L’état est-il conservé si Casey quitte l’appli et revient ? L’écran tient-il sur une connexion lente ? Les formulaires profitent-ils de l’autocomplétion et de valeurs par défaut ? Les cibles tactiles font-elles au moins 44 × 44 pt ?
 - *Signaux d’alerte* : actions importantes placées tout en haut de l’écran, progression perdue à la moindre interruption, longue saisie de texte là où un choix suffirait, ressources lourdes chargées à chaque page, cibles minuscules ou trop serrées.`,
       examples: [
         {
@@ -183,9 +184,9 @@ La règle est stricte : **on n’invente pas de détails sur le public**. Sans c
           id: 'typing',
           visual: {
             frame: 'phone',
-            alt: 'Prise de rendez-vous chez un coiffeur : un champ libre « Date et heure souhaitées » au format JJ/MM/AAAA HH:MM et un champ libre pour le nom du coiffeur.',
+            alt: 'Prise de rendez-vous dans un salon de coiffure : un champ libre « Date et heure souhaitées » au format JJ/MM/AAAA HH:MM et un champ libre « Coiffeur ou coiffeuse » qui attend un nom complet.',
             css: `.pc-ph { color: #6b7280; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-h2">Prendre rendez-vous</p><p class="mk-small mk-muted">Salon Ciseaux d’Or · Coupe et brushing · 45 min</p><div class="mk-field"><span class="mk-label">Date et heure souhaitées</span><div class="mk-input pc-ph">JJ/MM/AAAA HH:MM</div><span class="mk-help">Saisissez une date et une heure d’ouverture du salon.</span></div><div class="mk-field"><span class="mk-label">Coiffeur ou coiffeuse</span><div class="mk-input pc-ph">Nom complet</div></div><span class="mk-btn mk-btn--block">Réserver</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-h2">Prendre rendez-vous</p><p class="mk-small mk-muted">Salon Ciseaux d’Or · Coupe et brushing · 45&nbsp;min</p><div class="mk-field"><span class="mk-label">Date et heure souhaitées</span><div class="mk-input pc-ph">JJ/MM/AAAA HH:MM</div><span class="mk-help">Saisissez une date et une heure d’ouverture du salon.</span></div><div class="mk-field"><span class="mk-label">Coiffeur ou coiffeuse</span><div class="mk-input pc-ph">Nom complet</div></div><span class="mk-btn mk-btn--block">Réserver</span></div>`,
           },
           why: 'Casey doit taper une date au bon format, deviner les horaires d’ouverture et écrire un nom : beaucoup de frappe, beaucoup d’erreurs possibles.',
         },
@@ -200,9 +201,9 @@ La règle est stricte : **on n’invente pas de détails sur le public**. Sans c
 .pc-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .pc-slot { display: grid; place-items: center; min-height: 44px; border: 1px solid #c7cedb; border-radius: 10px; font-weight: 600; }
 .pc-on { border-color: #1f4fd8; box-shadow: inset 0 0 0 1px #1f4fd8; color: #1f4fd8; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Prendre rendez-vous</p><p class="mk-small mk-muted">Salon Ciseaux d’Or · Coupe et brushing · 45 min</p><p class="mk-label">Jour</p><div class="pc-days"><span class="pc-day pc-on">Auj.<b>12</b></span><span class="pc-day">Ven.<b>13</b></span><span class="pc-day">Sam.<b>14</b></span><span class="pc-day">Mar.<b>17</b></span></div><p class="mk-label">Heure</p><div class="pc-slots"><span class="pc-slot">17:30</span><span class="pc-slot pc-on">18:15</span><span class="pc-slot">19:00</span></div><span class="mk-btn mk-btn--block">Réserver jeudi 12 à 18:15</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Prendre rendez-vous</p><p class="mk-small mk-muted">Salon Ciseaux d’Or · Coupe et brushing · 45&nbsp;min</p><p class="mk-label">Jour</p><div class="pc-days"><span class="pc-day pc-on">Auj.<b>12</b></span><span class="pc-day">Ven.<b>13</b></span><span class="pc-day">Sam.<b>14</b></span><span class="pc-day">Mar.<b>17</b></span></div><p class="mk-label">Heure</p><div class="pc-slots"><span class="pc-slot">17:30</span><span class="pc-slot pc-on">18:15</span><span class="pc-slot">19:00</span></div><span class="mk-btn mk-btn--block">Réserver jeudi 12 à 18:15</span></div>`,
           },
-          why: 'Trois touchers dans la zone du pouce, sur des cibles larges, parmi des créneaux réellement libres : aucune frappe.',
+          why: 'Deux ou trois touchers sur des cibles larges, parmi des créneaux réellement libres : aucune frappe.',
         },
       ],
       answer: 'chips',
@@ -233,8 +234,9 @@ Les pastilles transforment la saisie en sélection : quelques touchers, des cibl
             frame: 'phone',
             alt: 'Écran de confirmation : icône de validation, « Demande envoyée », numéro de suivi, délai de réponse par e-mail, bouton Suivre ma demande et lien de retour à l’accueil.',
             css: `.cf-ok { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: #e6f4ea; color: #1e5e33; margin: 8px auto 0; }
-.cf-ref { padding: 10px 12px; border-radius: 10px; background: #f6f7f9; font-variant-numeric: tabular-nums; }`,
-            html: `<div class="mk-pad mk-stack mk-center" style="--gap:10px"><span class="cf-ok"><i data-icon="check" style="--ico:26px"></i></span><p class="mk-h2">Demande envoyée</p><p class="cf-ref">Numéro de suivi : <b>R-2026-0412</b></p><p class="mk-small">Vous recevrez une réponse par e-mail sous 5 jours ouvrés.</p><span class="mk-btn mk-btn--block">Suivre ma demande</span><span class="mk-btn mk-btn--text">Retour à l’accueil</span></div>`,
+.cf-ref { padding: 10px 12px; border-radius: 10px; background: #f6f7f9; font-variant-numeric: tabular-nums; }
+.cf-ref b { white-space: nowrap; }`,
+            html: `<div class="mk-pad mk-stack mk-center" style="--gap:10px"><span class="cf-ok"><i data-icon="check" style="--ico:26px"></i></span><p class="mk-h2">Demande envoyée</p><p class="cf-ref">Numéro de suivi : <b>R-2026-0412</b></p><p class="mk-small">Vous recevrez une réponse par e&#8209;mail sous 5&nbsp;jours ouvrés.</p><span class="mk-btn mk-btn--block">Suivre ma demande</span><span class="mk-btn mk-btn--text">Retour à l’accueil</span></div>`,
           },
           why: 'Ce qui s’est passé, une preuve (le numéro), le délai, et la suite possible : plus aucune question.',
         },
@@ -242,7 +244,7 @@ Les pastilles transforment la saisie en sélection : quelques touchers, des cibl
       answer: 'done',
       explanation: `Jordan prend chaque écran au pied de la lettre. Après « Envoyer », un formulaire vide peut vouloir dire « c’est parti », « ça n’a pas marché » ou « recommencez ». Il hésitera à renvoyer la demande, ou appellera.
 
-Deux signaux d’alerte de Jordan sont en jeu : **aucune confirmation que l’action a réussi** et **une étape suivante ambiguë**. L’écran recommandé dit ce qui s’est passé, donne une trace (le numéro de suivi), fixe une attente (5 jours ouvrés) et propose la suite.`,
+Deux signaux d’alerte de Jordan sont en jeu : **aucune confirmation que l’action a réussi** et **une étape suivante ambiguë**. L’écran recommandé dit ce qui s’est passé, donne une trace (le numéro de suivi), fixe une attente (5 jours ouvrés) et propose la suite.`,
       takeaway: 'Après une action importante, confirme le succès, donne une trace (numéro, délai) et indique la suite.',
       sources: ['imp:critique', 'nng:heuristics'],
     },
@@ -261,8 +263,10 @@ Deux signaux d’alerte de Jordan sont en jeu : **aucune confirmation que l’ac
             css: `.tk-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .tk-col { padding: 8px; border-radius: 10px; background: #f4f6f9; display: flex; flex-direction: column; gap: 6px; }
 .tk-card { padding: 8px; border-radius: 8px; background: #fff; border: 1px solid #e1e4ea; font-size: 12px; }
+.tk-wrap { container-type: inline-size; }
+@container (max-width: 340px) { .tk-board { grid-template-columns: minmax(0, 1fr); } }
 .tk-dots { display: flex; gap: 5px; } .tk-dots span { width: 7px; height: 7px; border-radius: 50%; background: #c7cedb; } .tk-dots .on { background: #1f4fd8; }`,
-            html: `<div style="position:relative"><div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Projet Lancement</p><div class="tk-board"><div class="tk-col"><p class="mk-small mk-strong">À faire</p><div class="tk-card">Brief photographe</div><div class="tk-card">Devis traiteur</div></div><div class="tk-col"><p class="mk-small mk-strong">En cours</p><div class="tk-card">Invitations</div></div><div class="tk-col"><p class="mk-small mk-strong">Fait</p><div class="tk-card">Réserver la salle</div></div></div></div><div class="mk-overlay"><div class="mk-dialog mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Étape 1 sur 7</p><p class="mk-h3">Bienvenue dans Tasko !</p><p class="mk-small">Découvrons ensemble votre tableau, colonne par colonne.</p><div class="mk-row mk-between"><div class="tk-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div><span class="mk-btn mk-btn--s">Suivant</span></div></div></div></div>`,
+            html: `<div style="position:relative"><div class="mk-pad mk-stack tk-wrap" style="--gap:10px"><p class="mk-h2">Projet Lancement</p><div class="tk-board"><div class="tk-col"><p class="mk-small mk-strong">À faire</p><div class="tk-card">Brief photographe</div><div class="tk-card">Devis traiteur</div></div><div class="tk-col"><p class="mk-small mk-strong">En cours</p><div class="tk-card">Invitations</div></div><div class="tk-col"><p class="mk-small mk-strong">Fait</p><div class="tk-card">Réserver la salle</div></div></div></div><div class="mk-overlay"><div class="mk-dialog mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Étape 1 sur 7</p><p class="mk-h3">Bienvenue dans Tasko !</p><p class="mk-small">Découvrons ensemble votre tableau, colonne par colonne.</p><div class="mk-row mk-between"><div class="tk-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div><span class="mk-btn mk-btn--s">Suivant</span></div></div></div></div>`,
           },
           why: 'Sept étapes imposées, sans croix ni « Passer » : Alex est bloqué devant ce qu’il sait déjà faire.',
         },
@@ -270,13 +274,15 @@ Deux signaux d’alerte de Jordan sont en jeu : **aucune confirmation que l’ac
           id: 'skippable',
           visual: {
             frame: 'browser',
-            alt: 'Même tableau, utilisable tout de suite, avec un petit encart « Pour démarrer, 1 sur 4 » qui liste quelques actions et leurs raccourcis, et un lien Masquer.',
+            alt: 'Même tableau, sans fenêtre par-dessus, avec un petit encart « Pour démarrer » (1 sur 4) qui liste deux actions, le raccourci N, l’accès à tous les raccourcis et un lien Masquer.',
             css: `.tk-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .tk-col { padding: 8px; border-radius: 10px; background: #f4f6f9; display: flex; flex-direction: column; gap: 6px; }
 .tk-card { padding: 8px; border-radius: 8px; background: #fff; border: 1px solid #e1e4ea; font-size: 12px; }
+.tk-wrap { container-type: inline-size; }
+@container (max-width: 340px) { .tk-board { grid-template-columns: minmax(0, 1fr); } }
 .tk-start { padding: 10px 12px; border: 1px solid #e1e4ea; border-radius: 10px; font-size: 13px; }
 kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 2px 5px; border: 1px solid #c7cedb; border-bottom-width: 2px; border-radius: 4px; color: #36405a; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Projet Lancement</p><div class="tk-board"><div class="tk-col"><p class="mk-small mk-strong">À faire</p><div class="tk-card">Brief photographe</div><div class="tk-card">Devis traiteur</div></div><div class="tk-col"><p class="mk-small mk-strong">En cours</p><div class="tk-card">Invitations</div></div><div class="tk-col"><p class="mk-small mk-strong">Fait</p><div class="tk-card">Réserver la salle</div></div></div><div class="tk-start mk-stack" style="--gap:6px"><div class="mk-row mk-between"><span class="mk-strong">Pour démarrer · 1/4</span><span class="mk-btn mk-btn--text mk-btn--s">Masquer</span></div><span class="mk-check mk-check--on">Créer une tâche <kbd>N</kbd></span><span class="mk-check">Inviter l’équipe</span><span class="mk-small mk-muted">Tous les raccourcis : <kbd>?</kbd></span></div></div>`,
+            html: `<div class="mk-pad mk-stack tk-wrap" style="--gap:10px"><p class="mk-h2">Projet Lancement</p><div class="tk-board"><div class="tk-col"><p class="mk-small mk-strong">À faire</p><div class="tk-card">Brief photographe</div><div class="tk-card">Devis traiteur</div></div><div class="tk-col"><p class="mk-small mk-strong">En cours</p><div class="tk-card">Invitations</div></div><div class="tk-col"><p class="mk-small mk-strong">Fait</p><div class="tk-card">Réserver la salle</div></div></div><div class="tk-start mk-stack" style="--gap:6px"><div class="mk-row mk-between"><span class="mk-strong">Pour démarrer · 1/4</span><span class="mk-btn mk-btn--text mk-btn--s">Masquer</span></div><span class="mk-check mk-check--on">Créer une tâche <kbd>N</kbd></span><span class="mk-check">Inviter l’équipe</span><span class="mk-small mk-muted">Tous les raccourcis : <kbd>?</kbd></span></div></div>`,
           },
           why: 'Le tableau est utilisable d’emblée ; l’aide se masque d’un clic et expose les raccourcis qu’Alex cherche.',
         },
@@ -312,7 +318,7 @@ L’encart « Pour démarrer » aide sans bloquer : il se masque, montre les rac
             frame: 'browser',
             alt: 'Même formulaire avec un bandeau « Votre session expire dans 2 minutes », un bouton « Prolonger de 20 minutes » et la mention que les réponses sont enregistrées.',
             css: `.to-banner { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 12px; border-radius: 8px; background: #fff4d6; color: #5c4400; font-size: 13px; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="to-banner"><i data-icon="clock" style="--ico:15px"></i><span class="mk-grow"><b>Votre session expire dans 2 minutes.</b> Vos réponses sont enregistrées.</span><span class="mk-btn mk-btn--s">Prolonger de 20 minutes</span></div><p class="mk-h3">Circonstances du sinistre</p><div class="mk-field"><span class="mk-label">Date du dégât des eaux</span><div class="mk-input">03/11/2026</div></div><div class="mk-field"><span class="mk-label">Pièces touchées</span><div class="mk-input">Cuisine, couloir</div></div><span class="mk-btn" style="align-self:flex-start">Étape suivante</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="to-banner"><i data-icon="clock" style="--ico:15px"></i><span class="mk-grow"><b>Votre session expire dans 2&nbsp;minutes.</b> Vos réponses sont enregistrées.</span><span class="mk-btn mk-btn--s">Prolonger de 20&nbsp;minutes</span></div><p class="mk-h3">Circonstances du sinistre</p><div class="mk-field"><span class="mk-label">Date du dégât des eaux</span><div class="mk-input">03/11/2026</div></div><div class="mk-field"><span class="mk-label">Pièces touchées</span><div class="mk-input">Cuisine, couloir</div></div><span class="mk-btn" style="align-self:flex-start">Étape suivante</span></div>`,
           },
           why: 'L’avertissement arrive à temps, la prolongation tient en une action et les réponses ne sont pas perdues.',
         },
@@ -320,7 +326,9 @@ L’encart « Pour démarrer » aide sans bloquer : il se masque, montre les rac
       answer: 'extend',
       explanation: `Sam met plus de temps qu’un utilisateur à la souris : il parcourt les champs un par un et écoute chaque libellé. Un compte à rebours sans prolongation l’exclut, et c’est l’un de ses signaux d’alerte : **une action limitée dans le temps sans possibilité de prolonger**.
 
-Les WCAG en font un critère de niveau A (2.2.1) : un délai doit pouvoir être désactivé, ajusté ou prolongé — par exemple en avertissant la personne avant l’expiration et en lui laissant au moins 20 secondes pour prolonger d’un geste simple, au moins dix fois. L’avertissement doit aussi être annoncé au lecteur d’écran, pas seulement affiché.`,
+Les WCAG en font un critère de niveau A (2.2.1) : un délai doit pouvoir être désactivé, ajusté ou prolongé — par exemple en avertissant la personne avant l’expiration et en lui laissant au moins 20 secondes pour prolonger d’un geste simple, au moins dix fois.
+
+Pour que Sam soit réellement averti, son lecteur d’écran doit annoncer l’avertissement (par exemple grâce à \`role="alert"\`), pas seulement l’afficher.`,
       takeaway: 'Tout délai imposé doit pouvoir être prolongé d’un geste simple, avec un avertissement annoncé et sans perte de saisie.',
       sources: ['imp:critique', { label: 'W3C — Comprendre le critère 2.2.1 (délai réglable)', url: 'https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html' }],
     },
@@ -345,7 +353,7 @@ Les WCAG en font un critère de niveau A (2.2.1) : un délai doit pouvoir être 
         html: `<div class="vl-head"><span class="mk-strong" data-hotspot="title">Réserver un vélo</span><span class="vl-ok" data-hotspot="validate">Valider</span></div>
 <div class="vl-map" data-hotspot="map"><span class="vl-road" style="left:0;right:0;top:52px;height:10px"></span><span class="vl-road" style="top:0;bottom:0;left:120px;width:10px"></span><span class="vl-pin" style="left:96px;top:24px"></span><span class="vl-pin" style="left:190px;top:70px"></span></div>
 <div class="mk-pad mk-stack" style="--gap:10px">
-  <div class="vl-station" data-hotspot="station"><p class="mk-strong">Station Bellecour</p><p class="mk-small mk-muted">7 vélos dont 3 électriques · à 120 m</p></div>
+  <div class="vl-station" data-hotspot="station"><p class="mk-strong">Station Bellecour</p><p class="mk-small mk-muted">7 vélos dont 3 électriques · à 120&nbsp;m</p></div>
   <div class="mk-row mk-between"><span class="mk-small mk-muted">Options</span><div class="vl-tiny" data-hotspot="tiny"><span><i data-icon="bike" style="--ico:12px"></i></span><span><i data-icon="zap" style="--ico:12px"></i></span><span><i data-icon="lock" style="--ico:12px"></i></span><span><i data-icon="heart" style="--ico:12px"></i></span></div></div>
   <p class="vl-warn" data-hotspot="warn"><i data-icon="triangle-alert" style="--ico:14px"></i> Ne quittez pas l’application : la réservation serait annulée.</p>
 </div>
@@ -353,21 +361,21 @@ Les WCAG en font un critère de niveau A (2.2.1) : un délai doit pouvoir être 
       },
       hotspots: [
         { id: 'validate', label: 'Lien « Valider » dans l’angle de l’en-tête', correct: true, why: 'L’action principale est un petit lien tout en haut de l’écran, loin de la zone du pouce : il faut changer de prise ou utiliser l’autre main.' },
-        { id: 'tiny', label: 'Quatre icônes de 18 px collées', correct: true, why: 'Des cibles de 18 px séparées de 2 px : bien en dessous des 44 × 44 pt recommandés, et trop serrées pour un pouce en mouvement.' },
+        { id: 'tiny', label: 'Quatre icônes de 18 px collées', correct: true, why: 'Des cibles de 18 px séparées de 2 px : bien en dessous des 44 × 44 pt recommandés, et trop serrées pour un pouce en mouvement.' },
         { id: 'warn', label: '« Ne quittez pas l’application »', correct: true, why: 'Casey change d’appli sans cesse. L’état doit survivre à l’interruption ; un avertissement ne remplace pas la persistance.' },
         { id: 'title', label: 'Titre de l’écran', correct: false, why: 'Le titre dit clairement ce que l’on fait ; c’est le lien Valider, à côté, qui pose problème.' },
-        { id: 'map', label: 'Carte', correct: false, why: 'La carte situe les stations d’un coup d’œil : utile en déplacement.' },
+        { id: 'map', label: 'Carte', correct: false, why: 'La carte situe les stations d’un coup d’œil : c’est le cœur de la tâche. Elle peut peser lourd, mais rien n’indique ici un chargement lent ; le signal d’alerte serait de la recharger à chaque écran, pas de l’afficher.' },
         { id: 'station', label: 'Fiche de la station', correct: false, why: 'Nom, disponibilité et distance : l’essentiel, lisible en marchant.' },
         { id: 'tabs', label: 'Barre d’onglets', correct: false, why: 'Dans le bas de l’écran, libellée, avec des cibles larges : adaptée à une main.' },
       ],
       explanation: `Trois signaux d’alerte de Casey sur un seul écran :
 
 - **l’action principale hors de portée du pouce** : un petit lien dans l’en-tête, la zone la plus difficile à atteindre d’une main ;
-- **des cibles minuscules et serrées** : 18 px séparés de 2 px, loin des 44 × 44 pt recommandés ;
+- **des cibles minuscules et serrées** : 18 px séparés de 2 px, loin des 44 × 44 pt recommandés ;
 - **une progression perdue à l’interruption** : l’appli avoue qu’elle ne sait pas conserver la réservation.
 
 Le correctif : un bouton « Réserver ce vélo » pleine largeur dans le bas de l’écran, des options en grandes pastilles, et une réservation qui survit à un changement d’appli.`,
-      takeaway: 'Pour Casey : action principale dans la zone du pouce, cibles d’au moins 44 × 44 pt, et un état qui survit quand on quitte l’appli.',
+      takeaway: 'Pour Casey : action principale dans la zone du pouce, cibles d’au moins 44 × 44 pt, et un état qui survit quand on quitte l’appli.',
       sources: ['imp:critique', HOOBER, 'hig'],
     },
     {
@@ -388,7 +396,7 @@ Le correctif : un bouton « Réserver ce vélo » pleine largeur dans le bas de 
   <div class="cr-side" data-hotspot="sidebar"><i data-icon="house" style="--ico:18px"></i><i class="on" data-icon="users" style="--ico:18px"></i><i data-icon="mail" style="--ico:18px"></i><i data-icon="chart-column" style="--ico:18px"></i><i data-icon="settings" style="--ico:18px"></i></div>
   <div class="mk-grow mk-pad mk-stack" style="--gap:12px">
     <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h2" data-hotspot="title">Contacts</p><span class="mk-btn mk-btn--s" data-hotspot="import"><i data-icon="upload" style="--ico:15px"></i> Importer des contacts</span></div>
-    <div class="mk-field" data-hotspot="search"><span class="mk-label">Rechercher un contact</span><div class="mk-input" style="display:flex;align-items:center;gap:6px"><i data-icon="search" style="--ico:15px"></i><span class="mk-muted">Nom, entreprise, e-mail…</span></div></div>
+    <div class="mk-field" data-hotspot="search"><span class="mk-label">Rechercher un contact</span><div class="mk-input" style="display:flex;align-items:center;gap:6px"><i data-icon="search" style="--ico:15px"></i><span class="mk-muted">Nom, entreprise, e&#8209;mail…</span></div></div>
     <p class="cr-err" data-hotspot="error"><i data-icon="circle-alert" style="--ico:15px"></i> Échec du mapping CSV : erreur 422 (champ email_addr non résolu)</p>
     <div data-hotspot="rows"><div class="cr-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Nadia Benali</p><p class="mk-small mk-muted">Atelier Céramique Sud</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Supprimer</span></div><div class="cr-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Paul Girard</p><p class="mk-small mk-muted">Girard &amp; Fils</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Supprimer</span></div></div>
   </div>
@@ -420,7 +428,7 @@ La suppression ligne par ligne est un vrai défaut, mais celui d’Alex. Attribu
       rightTitle: 'Personas',
       pairs: [
         { id: 'dashboard', left: 'Tableau de bord d’administration', right: 'Alex et Sam' },
-        { id: 'onboarding', left: 'Parcours d’inscription et de premier usage', right: 'Jordan et Casey' },
+        { id: 'onboarding', left: 'Parcours d’onboarding au premier lancement', right: 'Jordan et Casey' },
         { id: 'wizard', left: 'Formulaire en plusieurs étapes', right: 'Jordan, Sam et Casey' },
         { id: 'landing', left: 'Page d’accueil marketing', right: 'Jordan, Riley et Casey' },
       ],
@@ -445,7 +453,7 @@ Deux ou trois personas bien choisis valent mieux que cinq survolés.`,
         frame: 'browser',
         alt: 'Liste de 142 produits avec un bouton Archiver sur chaque ligne ; une fenêtre de confirmation « Archiver « Bougie Cèdre 220 g » ? » s’ouvre par-dessus.',
         css: `.pa-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eceef2; }`,
-        html: `<div style="position:relative"><div class="mk-pad mk-stack" style="--gap:8px"><div class="mk-row mk-between"><p class="mk-h2">Produits</p><span class="mk-small mk-muted">142 produits</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Bougie Cèdre 220 g</p><p class="mk-small mk-muted">Hiver 2025 · 24,00 €</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Bougie Figue noire</p><p class="mk-small mk-muted">Hiver 2025 · 24,00 €</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Diffuseur Ambre</p><p class="mk-small mk-muted">Hiver 2025 · 32,00 €</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Savon Verveine</p><p class="mk-small mk-muted">Été 2025 · 9,50 €</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div></div><div class="mk-overlay"><div class="mk-dialog mk-stack" style="--gap:10px"><p class="mk-h3">Archiver « Bougie Cèdre 220 g » ?</p><p class="mk-small mk-muted">Vous pourrez le restaurer depuis les archives.</p><div class="mk-row" style="justify-content:flex-end;--gap:8px"><span class="mk-btn mk-btn--ghost mk-btn--s">Annuler</span><span class="mk-btn mk-btn--s">Archiver</span></div></div></div></div>`,
+        html: `<div style="position:relative"><div class="mk-pad mk-stack" style="--gap:8px"><div class="mk-row mk-between"><p class="mk-h2">Produits</p><span class="mk-small mk-muted">142 produits</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Bougie Cèdre 220&nbsp;g</p><p class="mk-small mk-muted">Hiver 2025 · 24,00&nbsp;€</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Bougie Figue noire</p><p class="mk-small mk-muted">Hiver 2025 · 24,00&nbsp;€</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Diffuseur Ambre</p><p class="mk-small mk-muted">Hiver 2025 · 32,00&nbsp;€</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div><div class="pa-row"><div class="mk-img" style="--ratio:1;width:36px"></div><div class="mk-grow"><p class="mk-strong">Savon Verveine</p><p class="mk-small mk-muted">Été 2025 · 9,50&nbsp;€</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Archiver</span></div></div><div class="mk-overlay"><div class="mk-dialog mk-stack" style="--gap:10px"><p class="mk-h3">Archiver « Bougie Cèdre 220&nbsp;g » ?</p><p class="mk-small mk-muted">Vous pourrez le restaurer depuis les archives.</p><div class="mk-row" style="justify-content:flex-end;--gap:8px"><span class="mk-btn mk-btn--ghost mk-btn--s">Annuler</span><span class="mk-btn mk-btn--s">Archiver</span></div></div></div></div>`,
       },
       options: [
         { id: 'alex', label: 'Alex, l’expert pressé', why: 'Soixante produits un par un, avec une confirmation à chaque fois pour une action réversible : Alex cherche en vain la sélection multiple.' },
@@ -511,24 +519,28 @@ Les trois autres signaux sont réels, mais ils appartiennent à Alex, Casey et R
       sources: ['imp:critique', 'wcag22'],
     },
     {
-      id: 'personas-casey-multi',
+      id: 'personas-riley-multi',
       type: 'multi',
       difficulty: 2,
-      prompt: 'Quelles questions de test poser en priorité pour Casey ?',
+      prompt: 'Lesquels de ces signaux d’alerte concernent d’abord Riley ?',
       options: [
-        { id: 'thumb', label: 'Les actions principales sont-elles dans la zone du pouce ?', why: 'Casey tient son téléphone d’une main : ce qui compte doit être à portée.' },
-        { id: 'state', label: 'Retrouve-t-on sa progression après avoir quitté l’appli ?', why: 'Casey est interrompu sans cesse : l’état doit survivre.' },
-        { id: 'slow', label: 'L’écran reste-t-il utilisable sur une connexion lente ?', why: 'Casey est souvent en déplacement, sur un réseau irrégulier.' },
-        { id: 'targets', label: 'Les cibles tactiles font-elles au moins 44 × 44 pt ?', why: 'Un pouce en mouvement rate les petites cibles.' },
-        { id: 'shortcuts', label: 'Existe-t-il des raccourcis clavier pour les actions courantes ?', why: 'C’est une question pour Alex : Casey n’a pas de clavier physique.' },
-        { id: 'jargon', label: 'Le vocabulaire suppose-t-il des connaissances préalables ?', why: 'Question utile, mais pour Jordan, le novice.' },
+        { id: 'silent', label: 'Un message « Enregistré » s’affiche, mais la liste montre toujours l’ancienne valeur', why: 'Une fonction qui semble marcher mais échoue en silence : Riley vérifie ce qui s’est réellement passé, pas seulement le message.' },
+        { id: 'refresh', label: 'Un formulaire en trois étapes qui repart de zéro quand on rafraîchit la page', why: 'Riley rafraîchit exprès en plein parcours : des données perdues au rafraîchissement font partie de ses signaux d’alerte.' },
+        { id: 'inconsistent', label: 'Supprimer envoie à la corbeille sur un écran, mais efface définitivement sur un autre', why: 'Deux interactions semblables, deux comportements : Riley compare méthodiquement les différentes parties de l’interface.' },
+        { id: 'help', label: 'Aucune aide visible au moment de choisir une formule', why: 'Signal d’alerte de Jordan, qui cherche de l’aide à chaque décision.' },
+        { id: 'typing', label: 'Un long champ de texte là où trois choix suffiraient', why: 'Signal d’alerte de Casey, qui tape le moins possible.' },
+        { id: 'shortcuts', label: 'Aucun raccourci clavier pour les actions courantes', why: 'Signal d’alerte d’Alex, qui veut aller vite.' },
       ],
-      answers: ['thumb', 'state', 'slow', 'targets'],
-      explanation: `Les questions de test de Casey suivent sa situation : **une main, un écran tactile, des interruptions, un réseau incertain**. D’où la zone du pouce, la persistance de l’état, la tenue sur connexion lente, la taille des cibles — et, en plus, l’autocomplétion et les valeurs par défaut pour taper le moins possible.
+      answers: ['silent', 'refresh', 'inconsistent'],
+      explanation: `Riley sort exprès du chemin idéal, puis vérifie que l’interface fait bien ce qu’elle annonce :
 
-Les raccourcis clavier relèvent d’Alex, le vocabulaire de Jordan : chaque persona a ses questions, et c’est ce qui rend le test efficace.`,
-      takeaway: 'Pour Casey, teste la zone du pouce, la reprise après interruption, la connexion lente et des cibles d’au moins 44 × 44 pt.',
-      sources: ['imp:critique', HOOBER],
+- un « Enregistré » démenti par la liste est un **échec silencieux** : tout semble avoir marché, et l’erreur ne se découvre que plus tard ;
+- un formulaire qui se vide au rafraîchissement **perd des données** que la personne croyait acquises ;
+- deux boutons Supprimer aux effets différents forment une **incohérence** : on ne peut plus prévoir ce que fera une action.
+
+Les trois autres signaux sont réels, mais ils appartiennent à Jordan, Casey et Alex.`,
+      takeaway: 'Riley vérifie que l’interface tient ses promesses : aucun échec silencieux, aucune donnée perdue au rafraîchissement, le même effet pour des actions semblables.',
+      sources: ['imp:critique', 'imp:harden'],
     },
     {
       id: 'personas-method-order',
@@ -540,16 +552,14 @@ Les raccourcis clavier relèvent d’Alex, le vocabulaire de Jordan : chaque per
         { id: 'select', label: 'Choisir deux ou trois personas dans le tableau de sélection' },
         { id: 'walk', label: 'Dérouler l’action principale dans la peau de chacun' },
         { id: 'flags', label: 'Noter les signaux d’alerte précis : élément et interaction qui échouent' },
-        { id: 'prioritize', label: 'Classer les problèmes de P0 à P3 et proposer les correctifs' },
       ],
       explanation: `La méthode d’impeccable va du général au précis :
 
 1. Le **type d’interface** détermine les défaillances probables.
 2. Il guide le **choix de deux ou trois personas**, pas cinq.
 3. On **parcourt l’action principale** dans leur peau, pas l’écran en général.
-4. On note des **signaux d’alerte nommés** : « le bouton Payer est hors de portée du pouce ».
-5. On **priorise** avec l’échelle de sévérité et on propose un correctif par problème.`,
-      takeaway: 'Type d’interface, deux ou trois personas, action principale parcourue, signaux précis, puis priorités : la méthode tient en cinq temps.',
+4. On note des **signaux d’alerte nommés** : « le bouton Payer est hors de portée du pouce ».`,
+      takeaway: 'Type d’interface, deux ou trois personas, action principale parcourue dans leur peau, signaux d’alerte précis : la méthode tient en quatre temps.',
       sources: ['imp:critique'],
     },
     {
@@ -583,15 +593,15 @@ Passer les cinq sur chaque écran dilue l’attention et produit des remarques g
       prompt: 'Quel persona propre au projet ajouter aux cinq archétypes ?',
       context: 'Extrait du PRODUCT.md : « Utilisateurs : aides à domicile qui notent leurs interventions chez des personnes âgées, sur un téléphone fourni par l’employeur, souvent avec des gants et entre deux bus. Une partie de l’équipe lit difficilement le français écrit. »',
       options: [
-        { id: 'derived', label: '« Nadia, aide à domicile en tournée » : saisit en marchant, avec des gants ; décroche devant les cibles serrées, les longs textes et la saisie libre', why: 'Profil, comportements et signaux d’alerte sont tous tirés du contexte : c’est le gabarit appliqué sans rien inventer.' },
-        { id: 'casey', label: 'Aucun : Casey, le mobile distrait, couvre déjà les trajets, les gants et la lecture rapide', why: 'Casey couvre le mobile distrait, pas les gants ni la lecture difficile : c’est précisément ce que le contexte ajoute.' },
+        { id: 'derived', label: '« Nadia, aide à domicile » : note ses interventions entre deux bus, avec des gants, et lit difficilement le français ; décroche devant les cibles serrées, les longs textes et la saisie libre', why: 'Profil, comportements et signaux d’alerte sont tous dérivés du contexte : c’est le gabarit appliqué sans rien inventer.' },
+        { id: 'casey', label: 'Aucun : Casey, distrait sur mobile, couvre déjà les trajets, les gants et la lecture difficile', why: 'Casey couvre l’usage mobile et distrait, pas les gants ni la lecture difficile : c’est précisément ce que le contexte ajoute.' },
         { id: 'invented', label: '« Nadia, 34 ans, passionnée de yoga, utilise surtout Instagram et préfère les thèmes sombres »', why: 'Âge, loisirs et applis préférées ne figurent pas dans le contexte : on n’invente pas de détails sur le public.' },
         { id: 'manager', label: '« Le directeur d’agence, qui consulte les rapports d’activité chaque semaine sur ordinateur »', why: 'Le contexte ne mentionne pas ce public : on dérive le persona de l’audience décrite, pas d’une hypothèse.' },
       ],
       answer: 'derived',
       explanation: `Le gabarit d’impeccable pour un persona propre au projet : **Profil** (2 ou 3 traits tirés du contexte), **Comportements** (3 ou 4), **Signaux d’alerte** (3 ou 4). On part de la description du public, et on cherche l’archétype principal **que les cinq personas ne couvrent pas**.
 
-Ici, deux réalités échappent à Casey : les **gants**, qui exigent des cibles larges et espacées, et la **lecture difficile**, qui exige des textes courts, des icônes libellées et des choix plutôt que de la saisie. Le reste (âge, loisirs) n’est pas dans le contexte : l’ajouter, ce serait inventer.`,
+Ici, le contexte dépasse Casey. Avec des **gants**, le toucher devient imprécis, voire impossible avec certains modèles : le minimum de 44 × 44 pt, pensé pour un doigt nu, risque de ne plus suffire ; il faut des cibles plus grandes et des gestes simples. Surtout, aucun des cinq archétypes ne couvre la **lecture difficile du français** : elle exige des textes très courts, des icônes libellées et des choix plutôt que de la saisie. Le reste (âge, loisirs) n’est pas dans le contexte : l’ajouter, ce serait inventer.`,
       takeaway: 'Un persona propre au projet comble ce que les cinq archétypes ne couvrent pas, avec des traits tirés du contexte réel.',
       sources: ['imp:critique', NNG_PERSONA],
     },

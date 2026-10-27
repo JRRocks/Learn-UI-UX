@@ -208,6 +208,14 @@ try {
       }
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(150);
+      // Judge the settled state: finish entrance animations, freeze endless loops.
+      await page.evaluate(() => {
+        for (const host of document.querySelectorAll('.mock'))
+          for (const a of host.shadowRoot?.getAnimations() ?? []) {
+            if (a.effect?.getComputedTiming().iterations === Infinity) a.pause();
+            else a.finish();
+          }
+      });
       const res = await page.evaluate(scan);
       for (const r of res) {
         total += r.found.length;
