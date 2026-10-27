@@ -51,7 +51,7 @@ const delight: ModuleContent = {
   category: 'enrichir',
   summary:
     'Révéler le caractère du produit aux moments qui le méritent, proportionner la célébration à l’effort et à la fréquence, et ne jamais ralentir ni brouiller la tâche.',
-  minutes: 9,
+  minutes: 10,
   commands: ['delight', 'overdrive'],
   sources: ['imp:delight', 'imp:overdrive', 'imp:clarify', 'imp:onboard', 'imp:critique', PEAK_END],
   sections: [
@@ -533,7 +533,7 @@ L’astuce de sélection arrive au moment où la personne fait un geste répéti
       difficulty: 3,
       prompt: 'Dans un logiciel de comptabilité, un tableau affiche 50 000 écritures. Quelle ambition « au-delà des conventions » est la plus juste ?',
       options: [
-        { id: 'fluid', label: 'Un défilement qui reste fluide à 60 images par seconde, et un filtre qui répond sans le moindre à-coup.', why: 'Sur un outil de travail, l’extraordinaire se sent : un tableau énorme qui ne fait jamais hésiter. C’est l’un des exemples qu’impeccable donne pour une interface fonctionnelle.' },
+        { id: 'fluid', label: 'Un défilement qui reste fluide à 60 images par seconde, et un filtre qui répond sans à-coup.', why: 'Sur un outil de travail, l’extraordinaire se sent : un tableau énorme qui ne fait jamais hésiter. C’est l’un des exemples qu’impeccable donne pour une interface fonctionnelle.' },
         { id: 'backdrop', label: 'Un fond animé en 3D derrière le tableau, qui ondule au rythme du défilement.', why: 'Un effet de vitrine : à sa place sur un portfolio, il détourne ici l’attention des chiffres.' },
         { id: 'coedit', label: 'La coédition du tableau en temps réel, avec les curseurs des collègues affichés.', why: 'Tentant, mais c’est une nouvelle capacité, pas une meilleure sensation : overdrive change la façon dont l’interface se ressent, pas ce que fait le produit.' },
         { id: 'cinema', label: 'Une transition cinématographique d’une seconde et demie à chaque changement de page.', why: 'Une mise en scène qui fait attendre à chaque clic : l’inverse d’un outil qui ne fait jamais hésiter.' },
