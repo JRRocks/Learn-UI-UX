@@ -1,0 +1,11 @@
+# Cross-cutting issues to check in the consistency pass
+- Kit fixed (1d7e4b3): .mk-input/.mk-check/.mk-toggle off ≥ 3:1, .mk-tabbar 11px. But many content mocks hard-code `border: 1px solid #c3c8d3` (1.68:1) on inputs/search fields/chips in RECOMMENDED versions (laws .jk-search/.help-search, cognitive-load .db-search/.pm-m, onboarding .onb-f, ux-writing .chip, responsive .pm-size …). Recommended mocks must not carry the defect taught in accessibility/color (1.4.11, 3:1). Use #868d9c (3.33:1 on white, 3.08:1 on #f4f6f9).
+- Functional text under 11px in recommended mocks (check:mocks « texte de N px ») — iOS tab labels, badges, chart axis labels in Préférer versions.
+- Hard-coded #8b92a1 placeholders/text? (#8b92a1 on white = 3.12:1 → fails 4.5:1 for text). grep color: #8b92a1 in good mocks.
+- TRUE/FALSE BIAS (critical, pedagogical): 57 truefalse exercises, only 4 answer « Vrai » (53 « Faux »). Learners (and the Blitz challenge) can game the format by always answering Faux. Rebalance to ~50 %: in each module, turn about half of the T/F into TRUE statements that are counter-intuitive but correct (verified facts), rewriting explanation/takeaway accordingly; keep the misconception-busting false ones where they teach best. culture.ts has 8 (aim 4/4). Script: scratchpad/consistency/tf.mjs prints the balance.
+- Choice exercises with fixedOrder: check answer position bias (options are shuffled at display otherwise).
+- dark-patterns has no order exercise anymore (the only one was guessable); fake reviews (Omnibus directive 2022) have no dedicated exercise.
+- Difficulty distribution drifts per module (platforms 31/50/19; performance only 2 level-3 of 14); guide aims ≈40/40/20.
+- Detector-report wording: antipatterns.ts now says a detector finding is « defect evidence » (polish.md) that must be checked for false positives; craft-floor.ts l.~353 still says « ce qu’il trouve prouve un défaut » → harmonise (craft-floor).
+- culture-identity-match has 4 pairs only (min 3).
+- harden: Arabic/Persian letter pairs « ك/ک », « ي/ی » in LTR French text get reordered by the bidi algorithm and can break at the slash on mobile (takeaway + rule « yeh-kaf ») → isolate each letter (e.g. « ك » et « ک » written with « et », or wrap with U+2068…U+2069 FSI/PDI) so the order is stable.

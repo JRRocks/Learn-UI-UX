@@ -1,0 +1,20 @@
+import { launch, open, go } from './lib.mjs';
+const b = await launch();
+const { page, context } = await open(b);
+await go(page, '/cultures');
+await page.waitForSelector('.market');
+const cards = await page.evaluate(() => [...document.querySelectorAll('.market')].map((m) => { const f = m.querySelector('.market-formats'); const loc = m.querySelector('code')?.textContent; return { loc, text: f.textContent, lang: f.closest('[lang]')?.getAttribute('lang') }; }).filter((x) => /[^\x00-\x7F -ɏ -⁯]/.test(x.text)));
+console.log('market cards with non-Latin formats (lang inherited):');
+for (const c of cards) console.log(`  ${c.loc}: "${c.text}" lang=${c.lang}`);
+// compare page with arab and others
+const ids = await page.evaluate(async () => { const m = await import('/src/content/cultures/index.ts'); return null; }).catch(() => null);
+await go(page, '/cultures/comparer?a=fr&b=arab');
+await page.waitForTimeout(800);
+const codes = await page.evaluate(() => [...document.querySelectorAll('.compare-table code')].map((c) => ({ t: c.textContent, lang: c.closest('[lang]')?.getAttribute('lang') })).filter((x) => /[^\x00-\x7F -ɏ -⁯]/.test(x.t)));
+console.log('compare fr/arab formats code with non-Latin text:', JSON.stringify(codes));
+await go(page, '/cultures/arab');
+await page.waitForTimeout(800);
+const det = await page.evaluate(() => [...document.querySelectorAll('.formats-table td')].slice(0, 3).map((td) => `${td.getAttribute('lang')}:${td.textContent}`));
+console.log('detail /cultures/arab formats td:', JSON.stringify(det));
+await context.close();
+await b.close();

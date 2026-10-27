@@ -1,0 +1,11 @@
+import { launch, open, go, exIndex, save } from './lib.mjs';
+const b = await launch();
+const { page } = await open(b);
+await go(page, '/');
+const idx = await exIndex(page);
+save('ex-index.json', idx);
+const byType = {};
+for (const e of idx) byType[e.type] = (byType[e.type] ?? 0) + 1;
+console.log('total', idx.length, byType, 'withContext', idx.filter((e) => e.context).length);
+console.log('hotspot sample', idx.filter((e) => e.type === 'hotspot').slice(0, 5).map((e) => `${e.id}:${e.needed}/${e.hotspots}`).join(' '));
+await b.close();

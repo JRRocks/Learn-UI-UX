@@ -1,0 +1,10 @@
+import { launch, open, go, SHOTS } from './lib.mjs';
+const b = await launch();
+const { page, context } = await open(b, { width: 320, height: 700, dsf: 2 });
+await go(page, '/');
+const r = await page.evaluate(() => [...document.querySelectorAll('.tabbar a')].map((a) => { const range = document.createRange(); const t = [...a.childNodes].find((n) => n.nodeType === 3); range.selectNodeContents(t); const rr = range.getBoundingClientRect(); return `${t.textContent}: text ${Math.round(rr.left)}–${Math.round(rr.right)} (cell ${Math.round(a.getBoundingClientRect().left)}–${Math.round(a.getBoundingClientRect().right)})`; }));
+console.log(r.join('\n'));
+const tb = await page.locator('.tabbar').boundingBox();
+await page.screenshot({ path: `${SHOTS}/f5-tabbar-320.png`, clip: tb });
+await context.close();
+await b.close();

@@ -1,0 +1,14 @@
+import { launch, open, go, missed } from './lib.mjs';
+const b = await launch();
+const { page, context } = await open(b, { storage: missed(['modes-operate-hotspot']) });
+await go(page, '/session?mode=mistakes');
+await page.waitForSelector('.mock[data-interactive]');
+for (let i = 0; i < 4; i++) await page.keyboard.press('Tab');
+await page.keyboard.press('Enter'); await page.waitForTimeout(150);
+await page.keyboard.press('Tab'); await page.keyboard.press('Enter'); await page.waitForTimeout(150);
+await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Shift+Tab'); await page.waitForTimeout(100);
+const before = await page.evaluate(() => document.querySelector('.hotspot-count')?.textContent);
+await page.keyboard.press('Enter'); await page.waitForTimeout(300);
+console.log('full (', before, '), Enter on unpicked Zone 3 → feedback shown =', await page.evaluate(() => document.querySelectorAll('.feedback').length));
+await context.close();
+await b.close();

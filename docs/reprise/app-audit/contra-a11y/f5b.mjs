@@ -1,0 +1,15 @@
+import { launch, open, go, seeded, SHOTS } from './lib.mjs';
+const b = await launch();
+const { page, context } = await open(b, { width: 390, height: 800, storage: seeded() });
+await go(page, '/entrainement');
+const r = await page.evaluate(() => [...document.querySelectorAll('main *')].filter((e) => e.getBoundingClientRect().right > 391).map((e) => `${e.tagName.toLowerCase()}${e.id ? '#' + e.id : ''}.${String(e.className).split(' ')[0]} w=${Math.round(e.getBoundingClientRect().width)}`).slice(0, 12));
+console.log('/entrainement overflowing:', r.join(' | '));
+const opt = await page.evaluate(() => { const s = document.querySelector('#module-pick'); return [...s.options].map((o) => o.textContent).sort((a, b) => b.length - a.length)[0]; });
+console.log('longest option:', opt);
+await page.screenshot({ path: `${SHOTS}/f5-entrainement-390.png`, fullPage: false });
+await go(page, '/ressources');
+const r2 = await page.evaluate(() => [...document.querySelectorAll('.cheat td')].filter((e) => e.getBoundingClientRect().right > 391).map((e) => `"${e.textContent}" w=${Math.round(e.getBoundingClientRect().width)}`).slice(0, 6));
+console.log('/ressources td overflowing:', r2.join(' | '));
+await page.screenshot({ path: `${SHOTS}/f5-ressources-390.png`, fullPage: false });
+await context.close();
+await b.close();

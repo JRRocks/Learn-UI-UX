@@ -1,0 +1,16 @@
+import { launch, open, go, missed } from './lib.mjs';
+const b = await launch();
+const { page, context } = await open(b, { storage: missed(['ux-writing-signup-hotspot']) });
+await go(page, '/session?mode=mistakes');
+await page.waitForTimeout(300);
+const needed = await page.evaluate(async () => { const m = await import('/src/content/index.ts'); const e = m.EXERCISES.find((x) => x.id === 'ux-writing-signup-hotspot'); return e.hotspots.filter((h) => h.correct).map((h) => h.id); });
+for (const h of needed) await page.evaluate((h) => document.querySelector('.mock').shadowRoot.querySelector(`[data-hotspot="${h}"]`).click(), h);
+await page.click('.task-actions .btn-primary');
+await page.waitForTimeout(500);
+const box = await page.evaluate(() => { const a = document.querySelector('.mock').shadowRoot.querySelector('a[href]'); a.scrollIntoView({ block: 'center' }); const r = a.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
+await page.waitForTimeout(200);
+await page.mouse.click(box.x, box.y);
+await page.waitForTimeout(500);
+console.log('after mouse click on mock link (post-correction): hash=', await page.evaluate(() => location.hash), 'h1=', await page.evaluate(() => document.querySelector('h1')?.textContent.slice(0, 60)));
+await context.close();
+await b.close();

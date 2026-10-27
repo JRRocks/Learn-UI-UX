@@ -1,0 +1,199 @@
+REPRISE DU TRAVAIL — Épreuves (Learn-UI-UX)
+État au 27 octobre 2026, 18 h 10 UTC. À lire en entier avant de relancer.
+Les données de travail citées ici sont dans docs/reprise/ (ce dossier et ce fichier
+pourront être supprimés une fois tout terminé).
+
+======================================================================
+1. LA DEMANDE D’ORIGINE
+======================================================================
+« Crée-moi une application qui a pour but de devenir meilleur en UI/UX. Utilise les
+ressources d’impeccable (https://github.com/pbakaus/impeccable) pour créer entièrement
+tous les onglets et les ressources d’entraînement. Plusieurs systèmes d’entraînement
+(sélectionner un visuel, texte explicatif, choix recommandé, le pourquoi, etc.).
+Inspire-toi aussi d’Internet sur l’UI/UX. Mets en place des règles UI selon les pays
+(l’UI occidentale diffère de l’UI chinoise), avec des entraînements sur les différences
+et la façon de s’adapter. »
+
+Règles de la session :
+- Dépôt principal : JRRocks/Learn-UI-UX ; dépôt annexe : JRRocks/Library.
+- Travailler, commiter et pousser UNIQUEMENT sur la branche claude/charming-bell-vrm1id
+  (dans les deux dépôts) : git push -u origin claude/charming-bell-vrm1id
+  (en cas d’erreur réseau : jusqu’à 4 essais avec attente 2 s, 4 s, 8 s, 16 s).
+- Ne PAS ouvrir de pull request sans demande explicite.
+- Terminer chaque message de commit par les lignes d’attribution que demande la session.
+- Ne jamais écrire de nom de modèle dans le code, les fichiers ou les commits (hors
+  lignes d’attribution imposées).
+- Un hook d’arrêt exige un arbre de travail propre et poussé à chaque fin de tour : pour
+  le contenu en cours d’édition par des agents, utiliser docs/reprise/outils/checkpoint.sh
+  (ne commite un fichier que s’il passe le typage et la validation).
+- Mode « ultracode » activé par l’utilisateur : orchestrer le travail substantiel avec
+  l’outil Workflow (relecture adverse, vérification, réparation).
+
+======================================================================
+2. CE QUI EST FAIT (tout est poussé sur claude/charming-bell-vrm1id)
+======================================================================
+Application complète (Vite 8, React 19, TypeScript, vitest) :
+- Moteur (src/engine) : 8 formats d’épreuves (choice, multi, truefalse, hotspot, order,
+  match, slider, grid) + duels visuels, correction avec crédit partiel, boîtes de Leitner,
+  SM-2 pour les fiches, XP, séries, maîtrise, badges, records, constructeur de sessions
+  (jour, leçon, format, révisions, erreurs, examen, culture).
+- Pages : Accueil, Apprendre (sommaire), Leçon, S’entraîner, Session, Défi chrono,
+  Fiches, Cultures (12 profils de marchés, 8 comparaisons, labo de localisation),
+  Ressources (catalogue des 62 règles du détecteur, aide-mémoire, glossaire),
+  Progression, À propos. Thème clair/sombre, PWA hors ligne, CI GitHub Actions,
+  déploiement GitHub Pages (déclenché sur main).
+- Contenu : 24 leçons (≈ 410 épreuves, ≈ 320 fiches), profils et paires culturels,
+  catalogue. Validation automatique (src/content/validate.ts, npm run validate).
+- Outils d’auteur : npm run shots -- <module> [--mobile] [--dark] (captures) ;
+  npm run check:mocks [-- <ids>] (textes coupés, superposés, < 11 px, contraste < 4,5:1,
+  bureau 1180 px et mobile 390 px ; animations figées avant mesure).
+- Kit des maquettes (src/components/mockKit.ts) : bordures de champs, cases et
+  interrupteurs à 3,33:1, onglets à 11 px (plancher enseigné par les leçons).
+- Typographie (src/lib/markdown.tsx, frenchSpacing) : espaces insécables françaises,
+  plages « 36–40 » insécables (U+2060), nombres collés à leur unité, code court
+  (≤ 20 caractères) insécable.
+- Dépôt Library : moteur réutilisable moteur-entrainement/ (avec setRecord) poussé.
+
+Relecture adverse du contenu (relecture → contradicteur-correcteur), TERMINÉE pour :
+typography, color, layout, motion, delight, heuristics, personas, accessibility, process,
+ux-writing, responsive, platforms, performance, laws, cognitive-load, dark-patterns,
+polish, intensity, harden, onboarding, craft-floor, antipatterns (module), culture,
+cultures (profils + paires). Environ 20 corrections par cible, toutes commitées.
+
+Audit de l’application (5 dimensions, chaque constat reproduit puis vérifié par un
+contradicteur) : 94 constats CONFIRMÉS (logique 27, accessibilité 22, design 26,
+textes 19) ; 7 constats de performance trouvés, vérification en cours au moment de
+l’arrêt.
+
+======================================================================
+3. CE QUI TOURNAIT AU MOMENT DE L’ARRÊT (à vérifier en reprenant)
+======================================================================
+a) Correcteurs de contenu encore actifs : modes (src/content/modules/modes.ts) et
+   catalogue (src/content/antipatterns.ts). Si `git status` montre ces fichiers
+   modifiés et cohérents, commiter. Sinon, relancer la relecture pour ces deux cibles
+   (voir 5.A).
+b) Corrections de l’app, vague 1, dans trois worktrees git du scratchpad
+   (branches locales fix/exercise, fix/pages, fix/styles, base 1665f30) : AUCUN commit
+   n’avait encore été fait. Ces worktrees disparaissent avec le conteneur : refaire la
+   vague 1 (voir 5.B).
+c) Vérification des 7 constats de performance (voir 5.C).
+
+======================================================================
+4. FICHIERS DE REPRISE (docs/reprise/)
+======================================================================
+- app-vague1-exercise.json (35 constats : Mock, mockKit, lecteurs d’épreuves, Session,
+  Défi chrono, Fiches), app-vague1-pages.json (38 : pages, App, routeur, markdown,
+  moteur progress/srs/types, index.html), app-vague1-styles.json (23 : tokens, base,
+  app.css). Chaque constat : id, sévérité, fichier, scénario, preuve, correction
+  proposée, avis du vérificateur.
+- app-vague2-performance.json : 7 constats de performance (non vérifiés) + 3 constats
+  logiques vérifiés réservés à la vague 2 (service worker, useLoad).
+- notes-coherence-contenu.md : problèmes transverses du contenu (voir 5.D).
+- notes-app.md : points d’app relevés par les correcteurs de contenu (déjà intégrés aux
+  constats « note-* » des fichiers app-vague1-*.json).
+- sources-web.md : sources web à citer dans le récapitulatif final.
+- workflows/ : scripts Workflow réutilisables (review-content-v2.js, review-app.js,
+  fix-app.js). Ils attendent args.scratch (dossier scratchpad de la nouvelle session) ;
+  fix-app.js attend aussi args.attribution (lignes d’attribution des commits).
+- outils/ : checkpoint.sh (point d’étape validé), tf.mjs (équilibre vrai/faux),
+  dump-text.mjs (extrait toutes les phrases chiffrées et le plan du contenu).
+- references/ : rules.json (62 règles du détecteur d’impeccable, en anglais) et
+  CULTURE_FACTS.md (fiche de faits culturels vérifiés).
+- app-audit/ : scripts de reproduction des auditeurs (chemins absolus de l’ancienne
+  session à adapter).
+
+Prérequis à recréer dans le scratchpad de la nouvelle session ($S) :
+  git clone https://github.com/pbakaus/impeccable $S/ext/impeccable
+  cp docs/reprise/references/rules.json docs/reprise/references/CULTURE_FACTS.md $S/
+  mkdir -p $S/axe && npm --prefix $S/axe install axe-core
+  mkdir -p $S/appfix && for k in exercise pages styles; do
+    cp docs/reprise/app-vague1-$k.json $S/appfix/$k.json; done
+  cp -r docs/reprise/app-audit $S/app-audit
+
+======================================================================
+5. PROCHAINES ÉTAPES, DANS L’ORDRE
+======================================================================
+A. Contenu restant (si 3.a n’a pas abouti)
+   Workflow({ scriptPath: docs/reprise/workflows/review-content-v2.js copié/édité, ou
+   script inline identique }) avec args :
+   { scratch: "$S", targets: [
+     { id: "modes", file: "src/content/modules/modes.ts", only: "modes", shots: "modes",
+       refs: "skill/SKILL.src.md (Modes, How to design), skill/reference/mode-operate.md, mode-persuade.md, mode-read.md, operate.md, new-work.md (sections 1 à 3)" },
+     { id: "antipatterns-catalog", file: "src/content/antipatterns.ts", only: "antipatterns", shots: "antipatterns-catalog",
+       refs: "rules.json (fidélité de chaque description, id/famille/sévérité identiques à src/content/detectorRules.ts), code Rust du détecteur ($S/ext/impeccable/crates/) pour les seuils cités. NB : ONLY=antipatterns valide aussi le module antipatterns, qui n’est PAS ta cible." } ] }
+
+B. Corrections de l’app, vague 1 (trois groupes en parallèle, worktrees isolés)
+   Lancer fix-app.js deux fois en parallèle (2 agents max par workflow) :
+   args = { scratch: "$S", attribution: "<lignes d’attribution>", base: "<sha HEAD>",
+            groups: [ { key: "exercise", owns: "src/components/**, src/pages/Session.tsx, Blitz.tsx, Cards.tsx" } ] }
+   puis groups: [ { key: "pages", owns: "src/app/App.tsx, router.tsx, src/pages/Home, Learn, Lesson, Practice, Progress, Resources, Cultures, Lab, About, NotFound, Preview, src/lib/markdown.tsx, src/content/resources.ts, src/engine/progress.ts, srs.ts, types.ts, index.html, manifest" },
+                  { key: "styles", owns: "src/styles/tokens.css, base.css, app.css" } ]
+   Chaque groupe : correction (avec tests vitest pour la logique) → contradicteur qui
+   rejoue chaque reproduction et cherche les régressions → réparation.
+   Ensuite : fusionner fix/exercise, fix/pages, fix/styles dans claude/charming-bell-vrm1id
+   (git merge --no-ff), résoudre les conflits, puis tsc, vitest, build, check:mocks,
+   captures 1366/390/360/320 en clair et sombre, axe-core sur toutes les pages ; pousser.
+   Constats majeurs à ne pas perdre : import d’un JSON invalide qui efface toute la
+   progression (logic-3/import-1), débordement horizontal de 8 à 13 pages à 390/360 px
+   (resp-1, a11y-redistribution-320), focus masqué par les barres collantes
+   (a11y-focus-masque), dialogue d’effacement focalisé sur « Effacer » (deux Entrée
+   effacent tout), zones de hotspot annoncées « Zone N » (a11y-hotspot-noms),
+   « Révisions/Mes erreurs » et double comptage d’XP (logic-1, logic-2), paires
+   d’exemples des leçons trop étroites au bureau (~230 px, note-lesson-pairs).
+
+C. Vague 2 — performance (après fusion de la vague 1)
+   Vérifier puis corriger docs/reprise/app-vague2-performance.json :
+   - perf-1 (P1) : tout le contenu (≈ 1,57 Mo, 475 Ko gzip) est chargé à l’ouverture de
+     chaque page. Créer un index léger (métadonnées des modules + liste des épreuves
+     id/type/difficulté/culture, fiches) et charger chaque module à la demande
+     (import.meta.glob paresseux) ; tenir l’index synchronisé par un test.
+   - perf-2 : feuille du kit recopiée dans chaque Shadow DOM → CSSStyleSheet partagée
+     (adoptedStyleSheets) ; rendu paresseux des maquettes hors écran.
+   - sw-1/2/3, logic-13, logic-27 : précache dès la première visite, navigation
+     network-first avec délai maximal puis cache, purge des anciens caches.
+   - delivery-1, logic-14 : chargement paresseux en échec → message et bouton Réessayer.
+   - build-1 : manualChunks qui fait changer les chunks react/icons à chaque contenu.
+
+D. Passe de cohérence du contenu (après A, en workflow)
+   - VRAI/FAUX : 57 épreuves, seulement 7 « Vrai » (culture est à 4/4). On gagne en
+     répondant toujours « Faux » (Défi chrono compris). Viser ≈ 50 % : dans chaque
+     module, transformer environ la moitié des vrai/faux en affirmations VRAIES,
+     contre-intuitives mais exactes, en réécrivant explication et « À retenir »
+     (outils/tf.mjs mesure l’équilibre). Le Défi chrono peut aussi tirer des vrai/faux
+     équilibrés.
+   - Contradictions entre modules : seuils et chiffres (outils/dump-text.mjs →
+     numbers.txt), terminologie, doublons d’épreuves.
+   - Maquettes recommandées qui codent en dur des bordures #c3c8d3 (1,68:1) sur des
+     champs ou des puces : passer à #868d9c ; textes fonctionnels < 11 px dans des
+     versions recommandées (check:mocks).
+   - craft-floor : « ce qu’il trouve prouve un défaut » → un constat du détecteur est
+     un indice de défaut à vérifier (cohérence avec antipatterns et polish.md).
+   - harden : paires de lettres « ك/ک », « ي/ی » réordonnées par l’algorithme
+     bidirectionnel → isoler chaque lettre.
+   - dark-patterns n’a plus d’épreuve d’ordre ; faux avis (directive Omnibus) sans
+     épreuve ; répartition des difficultés (cible ≈ 40/40/20).
+   - Terminer par npm run check:mocks (tout le contenu) et npm run validate.
+
+E. Vérification finale et livraison
+   - tsc, vitest, build, check:mocks, captures bureau/mobile/sombre, axe-core.
+   - Mettre à jour README.md et docs/CONTENU.md si besoin ; supprimer docs/reprise/ et
+     ce fichier quand tout est fait.
+   - Pousser les deux dépôts.
+   - Récapitulatif final en français pour l’utilisateur : ce qui a été construit, les
+     relectures et corrections, les outils (shots, check:mocks), le dépôt Library (le
+     retirer s’il le souhaite), et ceci : le dépôt étant vide au départ, la première
+     branche poussée est devenue la branche par défaut ; le déploiement GitHub Pages se
+     déclenche sur main (Settings → Pages → Source : GitHub Actions). Terminer par la
+     liste « Sources » (docs/reprise/sources-web.md).
+
+======================================================================
+6. LEÇONS APPRISES SUR L’ORCHESTRATION
+======================================================================
+- La limite d’usage a déjà interrompu le travail une fois : garder au plus 8 agents en
+  parallèle ; un workflow plafonne à 2 agents simultanés (4 processeurs).
+- Une reprise de workflow (resumeFromRunId) ne rejoue depuis le cache que le plus long
+  préfixe inchangé d’appels agent() : après un échec, les agents suivants repartent.
+- Les correcteurs de contenu travaillent dans le dépôt principal ; les correcteurs de
+  l’app doivent travailler dans des worktrees git séparés (node_modules en lien
+  symbolique) pour ne pas se gêner, puis on fusionne.
+- Les agents posent parfois des captures à la racine du dépôt : /*.png est ignoré.
