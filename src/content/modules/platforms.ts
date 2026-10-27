@@ -35,6 +35,20 @@ const ANDROID_TARGETS: SourceRef = { label: 'Google — Accessibilité Android :
 const M3_TYPE: SourceRef = { label: 'Material Design 3 — Type scale tokens', url: 'https://m3.material.io/styles/typography/type-scale-tokens' };
 const M3_SNACKBAR: SourceRef = { label: 'Material Design 3 — Snackbar', url: 'https://m3.material.io/components/snackbar/overview' };
 const M3_FAB: SourceRef = { label: 'Material Design 3 — Floating action button', url: 'https://m3.material.io/components/floating-action-button/overview' };
+const M3_SNACKBAR_CODE: SourceRef = {
+  label: 'AndroidX — Snackbar de Compose Material 3 (une snackbar avec action ne se ferme pas seule)',
+  url: 'https://github.com/androidx/androidx/blob/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/Snackbar.kt',
+};
+const M3E_DRAWER: SourceRef = {
+  label: 'Material Components for Android — Navigation drawer (remplacé par le rail étendu dans Material 3 Expressive)',
+  url: 'https://github.com/material-components/material-components-android/blob/master/docs/components/NavigationDrawer.md',
+};
+const M3E_BUTTON_GROUP: SourceRef = {
+  label: 'Material Components for Android — Button groups (le groupe connecté remplace les boutons segmentés)',
+  url: 'https://github.com/material-components/material-components-android/blob/master/docs/components/ButtonGroup.md',
+};
+const HIG_A11Y: SourceRef = { label: 'Apple HIG — Accessibility (taille des contrôles)', url: 'https://developer.apple.com/design/human-interface-guidelines/accessibility' };
+const HIG_POPOVERS: SourceRef = { label: 'Apple HIG — Popovers', url: 'https://developer.apple.com/design/human-interface-guidelines/popovers' };
 
 /* ---------- Shared mock pieces ---------- */
 
@@ -42,8 +56,8 @@ const IOS_CSS = `
 .io-nb { display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 6px; color: #1f4fd8; }
 .io-btn { min-width: 44px; height: 44px; display: grid; place-items: center; }
 .io-lt { font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; padding: 0 16px 10px; }
-.io-tabs { display: flex; justify-content: space-around; margin: 8px 10px 10px; padding: 6px 4px; border-radius: 26px; background: #f2f3f6; border: 1px solid #e3e6ec; font-size: 10px; color: #5a6172; }
-.io-tabs span { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 44px; }
+.io-tabs { display: flex; justify-content: space-around; gap: 4px; margin: 8px 10px 10px; padding: 6px 4px; border-radius: 26px; background: #f2f3f6; border: 1px solid #e3e6ec; font-size: 11px; color: #5a6172; }
+.io-tabs > span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .io-tabs .on { color: #1f4fd8; }
 .io-tabs .act { color: #1f4fd8; }
 .io-tabs .act .io-plus { width: 30px; height: 30px; margin-top: -4px; border-radius: 50%; display: grid; place-items: center; background: #1f4fd8; color: #fff; }
@@ -97,7 +111,7 @@ const M3_CSS = `
 .ios-sw.off::after { right: auto; left: 2px; }
 .ios-back { display: flex; align-items: center; gap: 2px; color: #00639b; font-size: 15px; padding: 0 6px; height: 44px; }
 .ios-head { position: relative; display: flex; align-items: center; height: 44px; }
-.ios-head .ios-title { position: absolute; left: 0; right: 0; text-align: center; font-weight: 600; pointer-events: none; }
+.ios-head .ios-title { position: absolute; left: 96px; right: 96px; text-align: center; white-space: nowrap; font-weight: 600; pointer-events: none; }
 `;
 
 const notifRows = (sw: (on: boolean) => string) =>
@@ -106,77 +120,91 @@ const notifRows = (sw: (on: boolean) => string) =>
 <div class="m3-row"><div class="mk-grow"><p>Rappels de rendez-vous</p><p class="mk-small" style="color:#42474e">La veille, à 18 h</p></div>${sw(true)}</div>
 <div class="m3-row"><div class="mk-grow"><p>Promotions</p><p class="mk-small" style="color:#42474e">Offres des partenaires</p></div>${sw(false)}</div>`);
 
-const TABLET_CSS = `
-.tb-frame { width: 440px; margin: 0 auto; border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #f8f9ff; color: #1a1c1e; font-size: 12px; }
+/**
+ * Landscape tablets (Android and iPad). The frame follows the mock's width from 440 px down to 320 px
+ * of layout; only below that does zoom shrink the whole tablet, in a few steps, so a phone still shows
+ * it in full with readable text (12 px text stays above 10 px down to a 288 px wide mock).
+ */
+const TABLET_FIT = `
 .tz { container-type: inline-size; }
-@container (max-width: 439px) { .tz > * { zoom: 0.9; } }
-@container (max-width: 395px) { .tz > * { zoom: 0.8; } }
-@container (max-width: 351px) { .tz > * { zoom: 0.72; } }
-@container (max-width: 316px) { .tz > * { zoom: 0.63; } }
-@container (max-width: 277px) { .tz > * { zoom: 0.56; } }
-
-.tb-screen { display: flex; height: 236px; }
-.tb-col { display: flex; flex-direction: column; min-width: 0; }
-.tb-list { flex: 1; overflow: hidden; }
-.tb-mail { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #e3e6ec; white-space: nowrap; }
-.tb-mail .mk-grow { overflow: hidden; text-overflow: ellipsis; }
-.tb-av { width: 22px; height: 22px; border-radius: 50%; flex: none; }
-.tb-bar { display: flex; justify-content: space-around; padding: 6px 0 8px; border-top: 1px solid #e3e6ec; font-size: 10px; color: #42474e; }
-.tb-bar span, .tb-rail span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.tb-bar .on, .tb-rail .on { color: #00639b; font-weight: 600; }
-.tb-rail { width: 64px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 14px; font-size: 10px; color: #42474e; border-inline-end: 1px solid #e3e6ec; }
-.tb-detail { flex: 1; padding: 14px 16px; border-inline-start: 1px solid #e3e6ec; background: #fff; }
-.tb-h { font-size: 15px; font-weight: 600; padding: 10px 12px 6px; }
-.tb-mc { display: flex; align-items: flex-start; gap: 8px; padding: 7px 10px; border-bottom: 1px solid #e3e6ec; }
-.tb-mc .tb-av { margin-top: 2px; }
-.tb-sub, .tb-mc .mk-strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tb-mc .mk-row { min-width: 0; }
+.tz > * { width: 100%; min-width: 320px; max-width: 440px; margin: 0 auto; }
+@container (max-width: 319px) { .tz > * { zoom: 0.9; } }
+@container (max-width: 287px) { .tz > * { zoom: 0.8; } }
+@container (max-width: 255px) { .tz > * { zoom: 0.72; } }
+@container (max-width: 229px) { .tz > * { zoom: 0.64; } }
 `;
 
-const mail = (bg: string, from: string, subject: string, time: string, on = false) =>
-  `<div class="tb-mail"${on ? ' style="background:#e8f0fb"' : ''}><span class="tb-av" style="background:${bg}"></span><span class="mk-strong">${from}</span><span class="mk-grow mk-muted">${subject}</span><span class="mk-muted">${time}</span></div>`;
+const TABLET_CSS = `${TABLET_FIT}
+.tb-frame { border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #f8f9ff; color: #1a1c1e; font-size: 12px; }
+.tb-screen { display: flex; height: 240px; }
+.tb-col { display: flex; flex-direction: column; min-width: 0; }
+.tb-list { flex: 1; }
+.tb-mail { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #e3e6ec; white-space: nowrap; }
+.tb-av { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+.tb-bar { display: flex; justify-content: space-around; padding: 6px 0 8px; border-top: 1px solid #e3e6ec; font-size: 11px; color: #42474e; }
+.tb-bar span, .tb-rail span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.tb-bar .on, .tb-rail .on { color: #00639b; font-weight: 600; }
+.tb-rail { width: 56px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 14px; font-size: 11px; color: #42474e; border-inline-end: 1px solid #e3e6ec; }
+.tb-pane { flex: 1 1 0; }
+.tb-h { font-size: 15px; font-weight: 600; padding: 10px 12px 6px; }
+.tb-mc { padding: 7px 10px; border-bottom: 1px solid #e3e6ec; white-space: nowrap; }
+.tb-detail { flex: 1.1 1 0; min-width: 0; padding: 14px 12px; border-inline-start: 1px solid #e3e6ec; background: #fff; }
+`;
 
-const mailCompact = (bg: string, from: string, subject: string, time: string, on = false) =>
-  `<div class="tb-mc"${on ? ' style="background:#e8f0fb"' : ''}><span class="tb-av" style="background:${bg}"></span><div class="mk-grow"><p class="mk-row mk-between" style="--gap:6px"><span class="mk-strong">${from}</span><span class="mk-muted">${time}</span></p><p class="mk-muted tb-sub">${subject}</p></div></div>`;
+/** One inbox row of the phone layout: the subject keeps its length, an empty gap fills the rest of the width. */
+const mail = (bg: string, from: string, subject: string, time: string) =>
+  `<div class="tb-mail"><span class="tb-av" style="background:${bg}"></span><span class="mk-strong">${from}</span><span class="mk-muted">${subject}</span><span class="mk-grow"></span><span class="mk-muted">${time}</span></div>`;
+
+const mailCompact = (from: string, subject: string, on = false) =>
+  `<div class="tb-mc"${on ? ' style="background:#e8f0fb"' : ''}><p class="mk-strong">${from}</p><p class="mk-muted">${subject}</p></div>`;
 
 const MAILS_COMPACT =
-  mailCompact('#f6d7c3', 'Inès Moreau', 'Plans du salon, version finale', '10:42', true) +
-  mailCompact('#cfe3d4', 'Atelier Morel', 'Devis n° 2026-118', '09:15') +
-  mailCompact('#d6dcf5', 'Paul Girard', 'Photos du week-end', 'Hier') +
-  mailCompact('#efd9ef', 'Banque Lumen', 'Votre relevé d’octobre', 'Hier');
+  mailCompact('Inès Moreau', 'Plans du salon', true) +
+  mailCompact('Atelier Morel', 'Devis cuisine') +
+  mailCompact('Paul Girard', 'Photos d’Annecy') +
+  mailCompact('Banque Lumen', 'Votre relevé');
 
 const MAILS =
-  mail('#f6d7c3', 'Inès Moreau', 'Plans du salon, version finale', '10:42', true) +
-  mail('#cfe3d4', 'Atelier Morel', 'Devis n° 2026-118', '09:15') +
-  mail('#d6dcf5', 'Paul Girard', 'Photos du week-end', 'Hier') +
-  mail('#efd9ef', 'Banque Lumen', 'Votre relevé d’octobre', 'Hier') +
-  mail('#f3e6b8', 'Jeanne Roux', 'Réunion de copropriété', 'Lun.');
+  mail('#f6d7c3', 'Inès Moreau', 'Plans du salon', '10:42') +
+  mail('#cfe3d4', 'Atelier Morel', 'Devis cuisine', '09:15') +
+  mail('#d6dcf5', 'Paul Girard', 'Photos d’Annecy', 'Hier') +
+  mail('#efd9ef', 'Banque Lumen', 'Votre relevé', 'Hier');
 
-const IPAD_CSS = `
-.ip-frame { width: 440px; margin: 0 auto; border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #fff; color: #1d2230; font-size: 12px; }
-.tz { container-type: inline-size; }
-@container (max-width: 439px) { .tz > * { zoom: 0.9; } }
-@container (max-width: 395px) { .tz > * { zoom: 0.8; } }
-@container (max-width: 351px) { .tz > * { zoom: 0.72; } }
-@container (max-width: 316px) { .tz > * { zoom: 0.63; } }
-@container (max-width: 277px) { .tz > * { zoom: 0.56; } }
+const TABLET_NAV = (on: string) =>
+  [
+    ['mail', 'Courrier'],
+    ['message-circle', 'Chat'],
+    ['users', 'Contacts'],
+    ['calendar', 'Agenda'],
+  ]
+    .map(([icon, label]) => `<span${label === on ? ' class="on"' : ''}><i data-icon="${icon}" style="--ico:16px"></i>${label}</span>`)
+    .join('');
 
+const IPAD_CSS = `${TABLET_FIT}
+.ip-frame { border: 8px solid #1a1d24; border-radius: 18px; overflow: hidden; background: #fff; color: #1d2230; font-size: 12px; }
 .ip-screen { display: flex; height: 250px; }
-.ip-side { width: 120px; flex: none; padding: 12px 8px; background: #f2f2f7; display: flex; flex-direction: column; gap: 2px; }
-.ip-side span { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; }
-.ip-side .on { background: #1f4fd8; color: #fff; }
-.ip-list { width: 170px; flex: none; border-inline-end: 1px solid #e3e6ec; overflow: hidden; }
-.ip-item { padding: 8px 12px; border-bottom: 1px solid #eceef2; }
+.ip-list { flex: 0 0 40%; border-inline-end: 1px solid #e3e6ec; }
+.ip-lh { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; color: #1f4fd8; }
+.ip-lh .mk-strong { color: #1d2230; font-size: 15px; }
+.ip-sb { position: relative; width: 18px; height: 15px; border: 1.5px solid currentColor; border-radius: 4px; flex: none; }
+.ip-sb::before { content: ""; position: absolute; top: 0; bottom: 0; left: 4px; border-left: 1.5px solid currentColor; }
+.ip-item { padding: 8px 10px; border-bottom: 1px solid #eceef2; white-space: nowrap; }
 .ip-item.on { background: #e8eefc; }
-.ip-item p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ip-detail { flex: 1; padding: 14px 16px; min-width: 0; }
+.ip-detail { flex: 1; min-width: 0; padding: 14px 16px; }
 .ip-lt { font-size: 22px; font-weight: 700; padding: 10px 16px 6px; }
 .ip-row { display: flex; gap: 10px; padding: 8px 16px; border-bottom: 1px solid #eceef2; white-space: nowrap; }
-.ip-row .mk-grow { overflow: hidden; text-overflow: ellipsis; }
-.ip-tabs { display: flex; justify-content: space-around; padding: 6px 0 8px; border-top: 1px solid #e3e6ec; font-size: 10px; color: #5a6172; margin-top: auto; }
+.ip-tabs { display: flex; justify-content: space-around; padding: 6px 0 8px; border-top: 1px solid #e3e6ec; font-size: 11px; color: #5a6172; margin-top: auto; }
 .ip-tabs span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .ip-tabs .on { color: #1f4fd8; }
 `;
+
+/** Notes of the iPad duel: title, first line of the note, date. */
+const NOTES: [string, string, string][] = [
+  ['Liste de courses', 'Lait d’avoine', '10:42'],
+  ['Idées cadeaux', 'Livre de cuisine', 'Hier'],
+  ['AG copropriété', 'Ordre du jour', 'Lun.'],
+  ['Voyage à Porto', 'Vols, Ribeira', 'Dim.'],
+];
 
 const KEYBOARD = `<div class="kb">${['', '', ''].map(() => `<div class="kb-row">${'<span></span>'.repeat(10)}</div>`).join('')}<div class="kb-row kb-last"><span></span><span class="kb-space"></span><span></span></div></div>`;
 
@@ -233,22 +261,22 @@ const platforms: ModuleContent = {
   title: 'iOS et Android',
   category: 'corriger',
   summary:
-    'Concevoir des applis natives qui respectent chaque plateforme : navigation, gestes, cibles, typographie, couleurs et composants d’iOS et d’Android, et la façon de traduire l’un vers l’autre.',
-  minutes: 12,
+    'Concevoir et auditer des applis natives qui respectent chaque plateforme : navigation, gestes, cibles, typographie, couleurs et composants d’iOS et d’Android, et la façon de traduire l’un vers l’autre.',
+  minutes: 15,
   commands: ['adapt', 'audit'],
-  sources: ['imp:ios', 'imp:android', IMP_ADAPT_NATIVE, 'hig', 'material3', HIG_TYPE, HIG_MATERIALS, ANDROID_NAV, ANDROID_ADAPTIVE, ANDROID_SIZES, ANDROID_BACK, ANDROID_TARGETS],
+  sources: ['imp:ios', 'imp:android', IMP_ADAPT_NATIVE, IMP_AUDIT_NATIVE, 'hig', 'material3', HIG_A11Y, HIG_TYPE, HIG_MATERIALS, ANDROID_NAV, ANDROID_ADAPTIVE, ANDROID_SIZES, ANDROID_BACK, ANDROID_TARGETS, M3E_DRAWER],
   sections: [
     {
       id: 'natif',
       title: 'Le test de l’appli « portée depuis le web »',
-      body: `Sur une application native, les conventions de la plateforme gouvernent **la structure, la navigation et l’interaction**, quel que soit le type d’écran. La marque s’exprime dans la couche que la plateforme laisse libre : la couleur d’accent, la typographie d’affichage, le mouvement, le contenu. Sur Android, Material 3 prévoit ce thème de marque : rôles de couleur, échelle typographique, formes, mouvement.
+      body: `Sur une application native, le *mode de visite* (Persuader, Opérer, Lire, Expérience) restreint ce que l’expression a le droit de remplacer : quel que soit le mode, les conventions de la plateforme gouvernent **la structure, la navigation et l’interaction**. La marque s’exprime dans la couche que la plateforme laisse libre : la couleur d’accent, la typographie d’affichage, le mouvement, le contenu. Sur Android, Material 3 prévoit ce thème de marque : rôles de couleur, échelle typographique, formes, mouvement.
 
-Impeccable propose un test simple : **un utilisateur aguerri ferait-il confiance à cette appli, ou buterait-il sur des contrôles hors norme ?**
+Impeccable propose un test simple : **une personne habituée à sa plateforme ferait-elle confiance à cette appli, ou buterait-elle sur des contrôles hors norme ?**
 
 - Sur iPhone, le signe qui trahit, c’est l’appli **« portée depuis le web »** : barre de navigation réinventée, geste de retour maison, boutons en forme de page web, actions cachées derrière un survol qui n’existe pas au doigt.
 - Sur Android, c’est **l’appli iOS déguisée** : navigation copiée de l’iPhone, flèche de retour qui ignore le Retour du système, interrupteurs et boîtes de dialogue à la mode iOS.
 
-Pars des composants de la plateforme, et ne t’en écarte que pour une raison dont l’utilisateur te remercierait.
+Pars des composants de la plateforme, et ne t’en écarte que pour une raison dont la personne te remercierait.
 
 > Attention aux faux amis : sur iOS, la *navigation bar* est la barre du haut (titre, bouton retour) ; sur Android, la *navigation bar* est la barre des destinations au bas de l’écran, à ne pas confondre avec la barre de navigation du système.`,
     },
@@ -257,35 +285,35 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
       title: 'iOS : structure, navigation et cibles',
       body: `- **Zones sûres** : la mise en page reste dans les marges sûres ; aucune commande sous l’encoche, la Dynamic Island, l’indicateur d’accueil ou dans les coins arrondis.
 - **Navigation système** : une **barre d’onglets** pour 2 à 5 sections de premier niveau (des sections, jamais des actions), une **pile de navigation** pour descendre dans la hiérarchie, une **feuille** (*sheet*) pour une tâche autonome. Pas de navigation globale maison, pas de métaphores mélangées.
-- **Des onglets stables** : la barre reste visible quand on change de section ; un onglet ne se désactive pas quand son contenu manque, la section explique plutôt pourquoi elle est vide. Au-delà de cinq onglets sur iPhone, le système replie le reste dans un onglet « Plus », que les gens remarquent mal.
+- **Des onglets stables** : la barre reste visible quand on change de section ; un onglet ne se désactive pas quand son contenu manque, la section explique plutôt pourquoi elle est vide. Au-delà de cinq onglets sur iPhone, le système replie le reste dans un onglet « Plus », où les gens remarquent mal les sections cachées.
 - **Le retour par le bord reste vivant** : le balayage depuis le bord gauche est un réflexe ; ne le désactive jamais et ne le recouvre pas.
 - **Grands titres** sur les écrans de premier niveau, qui se réduisent en titre simple au défilement ; les écrans de détail gardent un titre simple.
-- **Cibles de 44 × 44 pt** au minimum, avec de l’espace entre deux cibles voisines.`,
+- **Cibles de 44 × 44 pt**, avec de l’espace entre deux cibles voisines. C’est la taille par défaut des contrôles d’Apple et le plancher que retient impeccable ; le HIG tolère 28 × 28 pt au strict minimum.`,
       examples: [
         {
           title: 'Des onglets pour des sections, pas pour des actions',
           bad: {
-            alt: 'iPhone, écran « Bibliothèque » d’une appli de musique ; la barre d’onglets mélange des sections (Écouter, Rechercher, Profil) et des actions (Ajouter, Partager).',
+            alt: 'iPhone, écran « Bibliothèque » d’une appli de musique ; la barre d’onglets mélange des sections (Écouter, Bibliothèque, l’onglet actif) et des actions (Ajouter, Partager).',
             frame: 'phone',
             html:
               musicBody('') +
               iosTabs(
-                '<span><i data-icon="play"></i>Écouter</span><span><i data-icon="search"></i>Rechercher</span><span><i data-icon="plus"></i>Ajouter</span><span><i data-icon="share-2"></i>Partager</span><span class="on"><i data-icon="user"></i>Profil</span>',
+                '<span><i data-icon="play"></i>Écouter</span><span><i data-icon="plus"></i>Ajouter</span><span><i data-icon="share-2"></i>Partager</span><span class="on"><i data-icon="music"></i>Bibliothèque</span>',
               ),
             css: MUSIC_CSS,
           },
           badNote: '« Ajouter » et « Partager » sont des actions : on ne sait plus quel onglet mène où.',
           good: {
-            alt: 'iPhone, même écran ; la barre d’onglets ne contient que des sections (Écouter, Explorer, Radio, Bibliothèque, Rechercher) et le bouton d’ajout est dans la barre du haut.',
+            alt: 'iPhone, même écran ; la barre d’onglets ne contient que des sections (Écouter, Explorer, Radio, Bibliothèque) et le bouton d’ajout est dans la barre du haut.',
             frame: 'phone',
             html:
               musicBody('<span class="io-btn"><i data-icon="plus"></i></span>') +
               iosTabs(
-                '<span><i data-icon="play"></i>Écouter</span><span><i data-icon="layout-grid"></i>Explorer</span><span><i data-icon="volume-2"></i>Radio</span><span class="on"><i data-icon="music"></i>Bibliothèque</span><span><i data-icon="search"></i>Rechercher</span>',
+                '<span><i data-icon="play"></i>Écouter</span><span><i data-icon="layout-grid"></i>Explorer</span><span><i data-icon="volume-2"></i>Radio</span><span class="on"><i data-icon="music"></i>Bibliothèque</span>',
               ),
             css: MUSIC_CSS,
           },
-          goodNote: 'Cinq sections dans les onglets ; l’action « Ajouter » vit dans la barre de navigation.',
+          goodNote: 'Quatre sections dans les onglets ; l’action « Ajouter » vit dans la barre de navigation.',
         },
       ],
     },
@@ -307,7 +335,7 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
     {
       id: 'android-structure',
       title: 'Android : navigation, Retour et bord à bord',
-      body: `- **Une navigation Material adaptée à la largeur** : une **barre de navigation** au bas de l’écran pour 3 à 5 destinations quand la fenêtre est compacte (moins de 600 dp, un téléphone en portrait) ; un **rail** ou un **tiroir de navigation** quand elle est plus large, notamment en largeur étendue (840 dp et plus, une tablette en paysage). Ne livre jamais telle quelle la barre d’un téléphone sur une tablette.
+      body: `- **Une navigation Material adaptée à la largeur** : une **barre de navigation** au bas de l’écran pour 3 à 5 destinations quand la fenêtre est compacte (moins de 600 dp, un téléphone en portrait) ; un **rail** ou un **tiroir de navigation** quand elle est plus large, notamment en largeur étendue (840 dp et plus, une tablette en paysage). Depuis Material 3 Expressive (2025), le tiroir est déprécié au profit du rail étendu, qui montre ses libellés à côté des icônes. Ne livre jamais telle quelle la barre d’un téléphone sur une tablette.
 - **Le Retour système fonctionne toujours** : geste ou bouton, il ramène en arrière ; ne piège jamais la personne et ne détourne pas le geste. Le **Retour prédictif** montre un aperçu de la destination pendant le geste ; intercepter le Retour sans nécessité empêche cette animation.
 - **Bord à bord, avec les marges du système** (*insets*) : barre d’état, barre de navigation du système, découpe de l’écran et clavier. Depuis Android 15, une appli qui cible le SDK 35 s’affiche bord à bord par défaut : sans ces marges, son contenu passe sous les barres ou sous le clavier.
 - **Une barre d’application supérieure** pour le contexte de l’écran (titre, retour, actions), et un **bouton d’action flottant** (FAB) quand l’écran a une seule action principale.
@@ -316,11 +344,11 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
         {
           title: 'Restructurer pour la tablette, pas étirer',
           bad: {
-            alt: 'Tablette Android en paysage : la liste d’e-mails du téléphone s’étire sur toute la largeur et la barre de navigation à quatre destinations s’étale au bas de l’écran.',
+            alt: 'Tablette Android en paysage : la liste d’e-mails du téléphone s’étire sur toute la largeur, l’heure rejetée tout au bout de chaque ligne, et la barre de navigation à quatre destinations s’étale au bas de l’écran.',
             html: fr(`<div class="tz"><div class="tb-frame"><div class="tb-screen"><div class="tb-col" style="flex:1">
   <p class="tb-h">Boîte de réception</p>
   <div class="tb-list">${MAILS}</div>
-  <div class="tb-bar"><span class="on"><i data-icon="mail" style="--ico:16px"></i>Courrier</span><span><i data-icon="message-circle" style="--ico:16px"></i>Discussions</span><span><i data-icon="users" style="--ico:16px"></i>Contacts</span><span><i data-icon="calendar" style="--ico:16px"></i>Agenda</span></div>
+  <div class="tb-bar">${TABLET_NAV('Courrier')}</div>
 </div></div></div></div>`),
             css: TABLET_CSS,
           },
@@ -328,9 +356,9 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
           good: {
             alt: 'Même tablette : un rail de navigation vertical à gauche, la liste d’e-mails au centre et l’e-mail sélectionné ouvert à droite.',
             html: fr(`<div class="tz"><div class="tb-frame"><div class="tb-screen">
-  <div class="tb-rail"><span class="on"><i data-icon="mail" style="--ico:16px"></i>Courrier</span><span><i data-icon="message-circle" style="--ico:16px"></i>Discussions</span><span><i data-icon="users" style="--ico:16px"></i>Contacts</span><span><i data-icon="calendar" style="--ico:16px"></i>Agenda</span></div>
-  <div class="tb-col" style="flex:1.2"><p class="tb-h">Réception</p><div class="tb-list">${MAILS_COMPACT}</div></div>
-  <div class="tb-detail mk-stack" style="--gap:6px"><p class="mk-strong" style="font-size:14px">Plans du salon, version finale</p><p class="mk-small mk-muted">Inès Moreau · 10:42</p><p>Voici la dernière version, avec la bibliothèque déplacée contre le mur nord. Dis-moi si la largeur du passage te va.</p></div>
+  <div class="tb-rail">${TABLET_NAV('Courrier')}</div>
+  <div class="tb-col tb-pane"><p class="tb-h">Réception</p>${MAILS_COMPACT}</div>
+  <div class="tb-detail mk-stack" style="--gap:6px"><p class="mk-strong" style="font-size:14px">Plans du salon</p><p class="mk-muted" style="font-size:11px">Inès Moreau · 10:42</p><p>Voici la version finale : la bibliothèque passe contre le mur nord. Le passage te va ?</p></div>
 </div></div></div>`),
             css: TABLET_CSS,
           },
@@ -347,9 +375,9 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
 - **Les rôles de couleur** (\`primary\`, \`onPrimary\`, \`primaryContainer\`, \`surface\`, \`outline\`, \`error\`…) se déclinent seuls en thème clair, sombre et contrasté, là où un hexadécimal codé en dur casse. Le **thème sombre** se conçoit, il ne s’obtient pas par inversion.
 - **Dynamic Color** (Material You) : depuis Android 12, la palette peut dériver du fond d’écran de la personne ; prévois une palette statique de repli.
 - **L’élévation tonale** : une surface plus élevée se distingue par sa teinte (et une ombre là où elle aide), pas par des ombres arbitraires.
-- **Les composants Material** : boutons (plein, tonal, contour, texte), FAB, interrupteurs, chips, snackbars, feuilles inférieures (*bottom sheets*), dialogues, barre, rail et tiroir de navigation. On ne porte pas les contrôles iOS et on n’invente pas d’équivalents.
+- **Les composants Material** : boutons (plein, tonal, contour, texte), FAB, interrupteurs, chips, snackbars, feuilles inférieures (*bottom sheets*), dialogues, barre, rail et tiroir de navigation (Material 3 Expressive remplace le tiroir par le rail étendu, et les boutons segmentés par le groupe de boutons connectés). On ne porte pas les contrôles iOS et on n’invente pas d’équivalents.
 - **Un seul FAB**, pour l’action principale ; jamais de FAB empilés, ni de FAB pour une tâche secondaire.
-- **Les snackbars** pour un retour passager, avec une action comme « Annuler » si elle est utile ; un **dialogue** seulement pour une décision qui doit interrompre.
+- **Les snackbars** pour un retour passager, avec une action comme « Annuler » si elle est utile, jamais un toast pour ça ; un **dialogue** seulement pour une décision qui doit interrompre. Sans action, la snackbar s’efface d’elle-même ; avec une action, elle reste jusqu’à ce que la personne agisse ou passe à autre chose.
 - **Les motifs de mouvement Material** : transformation de conteneur, axe partagé, fondu traversant, avec les courbes et durées standard. Le réglage **Supprimer les animations** est respecté : fondu enchaîné ou coupe franche.`,
     },
     {
@@ -357,17 +385,21 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
       title: 'Traduire les idiomes, pas les transplanter',
       body: `Passer d’iOS à Android, ou l’inverse, c’est **traduire les idiomes** de l’une dans le vocabulaire de l’autre :
 
-- barre d’onglets → barre de navigation, rail ou tiroir ;
+- barre d’onglets → barre de navigation, ou rail sur les fenêtres larges (le rail étendu remplace désormais le tiroir) ;
 - balayage depuis le bord et chevron de retour → Retour prédictif, par geste ou bouton ;
-- interrupteur, contrôle segmenté, sélecteurs système → interrupteur Material, chips ou boutons segmentés, sélecteurs Material ;
+- interrupteur, contrôle segmenté, sélecteurs système → interrupteur Material, chips ou groupe de boutons connectés (ex-boutons segmentés), sélecteurs Material ;
 - feuille d’actions → feuille inférieure ou dialogue Material ;
 - SF Symbols, SF Pro, Dynamic Type → Material Symbols, Roboto, unités sp ;
 - couleurs sémantiques et matériaux → rôles de couleur et élévation tonale ;
 - transitions système → transformation de conteneur, axe partagé, fondu traversant.
 
-La couche expressive de la marque (intention de la palette, accent typographique, personnalité du mouvement) passe par le système de thème de la plateforme cible.
+La couche expressive de la marque (intention de la palette, accent typographique, personnalité du mouvement) passe par le système de thème de la plateforme cible. Et une appli multiplateforme tout-Material (Flutter, React Native…) qui sort aussi sur iPhone doit quand même à iOS ses garanties système : zones sûres, Réduire les animations, retour par le bord.
 
-**Du téléphone à la tablette**, on restructure au lieu d’étirer : classes de taille (iOS) ou de fenêtre (Android), vue maître-détail, barre latérale ou rail. Le multitâche peut donner une fenêtre de largeur téléphone sur une tablette : une mise en page pilotée par ces classes gère ce cas sans effort. **Du web au natif**, on reconstruit avec les conventions de la plateforme au lieu de réagencer la page : navigation native, contrôles natifs, gestes tactiles au lieu du survol, Dynamic Type ou sp au lieu des px.
+**Du téléphone à la tablette**, on restructure au lieu d’étirer : classes de taille (iOS) ou de fenêtre (Android), vue maître-détail, barre latérale ou rail, popovers là où le téléphone utilisait des feuilles. Le multitâche peut donner une fenêtre de largeur téléphone sur une tablette : une mise en page pilotée par ces classes gère ce cas sans effort. À l’inverse, une fonction essentielle ne disparaît pas sur les petits écrans : si elle compte, fais-la marcher.
+
+**En paysage**, on restructure aussi (volets côte à côte, contrôles déplacés), sans rogner le contenu ni l’encadrer de bandes noires. Verrouille l’orientation seulement si la tâche l’exige vraiment, jamais pour esquiver un bug de mise en page. **Les pliables** (Android) changent de posture autour de leur charnière : réagis aux classes de taille de fenêtre, et teste l’appareil plié, déplié et à demi ouvert, posé sur une table.
+
+**Du web au natif**, on reconstruit avec les conventions de la plateforme au lieu de réagencer la page : navigation native, contrôles natifs, gestes tactiles au lieu du survol, Dynamic Type ou sp au lieu des px.
 
 **Vérifie** sur simulateur ou émulateur pour l’étendue, puis sur de vrais appareils pour la vérité (gestes, fluidité, posture), en mode sombre et avec une grande taille de texte.`,
       examples: [
@@ -383,7 +415,7 @@ La couche expressive de la marque (intention de la palette, accent typographique
 </div>`),
             css: M3_CSS,
           },
-          badNote: 'Un écran d’iPhone transplanté : bouton retour textuel, titre centré, interrupteurs iOS.',
+          badNote: 'Un écran d’iPhone transplanté : bouton retour textuel « ‹ Réglages », interrupteurs iOS.',
           good: {
             alt: 'Même écran Android en Material 3 : barre d’application avec flèche de retour et titre aligné au début, interrupteurs Material.',
             frame: 'phone',
@@ -398,20 +430,38 @@ La couche expressive de la marque (intention de la palette, accent typographique
         },
       ],
     },
+    {
+      id: 'audit-natif',
+      title: 'Auditer une appli native',
+      body: `La commande \`audit\` d’impeccable a une variante native : un **contrôle technique** mené dans le code source (SwiftUI, UIKit, Compose, React Native, Flutter), sans navigateur ni détecteur. Il documente chaque problème sans le corriger, d’après les références iOS et Android, et note **cinq dimensions de 0 à 4** :
+
+1. **Accessibilité (VoiceOver, TalkBack)** : chaque contrôle a un libellé (\`accessibilityLabel\` sur iOS, \`contentDescription\` sur Android) et annonce son rôle (bouton, interrupteur) et son état ; l’ordre de lecture et de focus suit la logique de l’écran, sans contrôle inatteignable ni focus perdu en changeant d’écran. S’y ajoutent le texte qui suit Dynamic Type ou les sp sans se couper, les cibles de 44 pt ou 48 dp, Réduire les animations et le contraste dans les deux apparences.
+2. **Performance** : démarrage lent, longues listes non virtualisées (sans \`List\`, \`LazyColumn\` ou \`FlatList\`), travail synchrone pendant un défilement ou un geste, qui fait sauter des images à 60 ou 120 Hz, rendus inutiles, images pleine taille pour des vignettes, appli trop lourde.
+3. **Apparence et thèmes** : hexadécimaux au lieu des couleurs sémantiques ou des rôles Material, apparence sombre cassée, Dynamic Color sans palette de repli, matériaux faits main.
+4. **Conformité à la plateforme**, la dimension critique : gestes système cassés, contenu sous l’encoche, la barre d’état ou le clavier, navigation étrangère à la plateforme, contrôles réinventés ou en forme de page web, jeux d’icônes mélangés.
+5. **Adaptativité** : mise en page de téléphone étirée sur tablette, paysage coupé ou verrouillé sans raison, champs masqués par le clavier, multifenêtre et pliables mal gérés.
+
+Le rapport **commence par le verdict de conformité**, réussi ou échoué : l’appli se lit-elle comme une appli native, ou comme un site porté ? Le total sur 20 se lit avec les mêmes bandes que l’audit web (de 18–20, excellent, à 0–5, critique), et chaque problème reçoit une gravité :
+
+- **P0**, bloquant : la tâche ne peut pas aboutir ; à corriger tout de suite.
+- **P1**, majeur : une vraie difficulté ou une entorse aux guides de la plateforme ; à corriger avant la sortie.
+- **P2**, mineur : une gêne qu’on peut contourner ; pour la passe suivante.
+- **P3**, finition : sans effet réel pour la personne ; si le temps le permet. Garde-les peu nombreux, pour que l’essentiel ne s’y noie pas.`,
+    },
   ],
   rules: [
     { id: 'tabs', front: 'Barre d’onglets iOS : combien d’onglets, et pour quoi faire ?', back: '2 à 5 sections de premier niveau, jamais des actions. Une action va dans la barre de navigation ou une barre d’outils.' },
-    { id: 'targets', front: 'Taille minimale d’une cible tactile sur iOS et sur Android ?', back: '44 × 44 pt sur iOS ; 48 × 48 dp sur Android, avec au moins 8 dp entre deux cibles.' },
+    { id: 'targets', front: 'Quelle taille de cible tactile viser sur iOS et sur Android ?', back: '44 × 44 pt sur iOS (taille par défaut d’Apple, plancher d’impeccable ; le HIG tolère 28 × 28 pt au strict minimum) ; 48 × 48 dp sur Android, avec au moins 8 dp entre deux cibles.' },
     { id: 'ios-type', front: 'Taille du corps de texte et plancher sur iOS ?', back: 'Body fait 17 pt au réglage par défaut ; rien sous 11 pt. Et des styles Dynamic Type plutôt que des tailles figées.' },
-    { id: 'semantic', front: 'Pourquoi des couleurs sémantiques plutôt que des hexadécimaux ?', back: '`label`, `systemBackground` ou les rôles Material s’adaptent au mode sombre et au contraste renforcé ; un hexadécimal codé en dur casse là.' },
+    { id: 'semantic', front: 'Pourquoi des couleurs sémantiques plutôt que des hexadécimaux ?', back: '`label`, `systemBackground` ou les rôles Material s’adaptent au mode sombre et au contraste renforcé ; un hexadécimal codé en dur casse dans ces contextes.' },
     { id: 'ios-back', front: 'Le balayage depuis le bord gauche, sur iOS ?', back: 'C’est le geste de retour : on ne le désactive jamais et on ne le recouvre pas.' },
     { id: 'android-back', front: 'Le Retour système, sur Android ?', back: 'Il fonctionne toujours, par geste ou bouton : on ne piège jamais la personne et on ne détourne pas le geste prédictif.' },
-    { id: 'android-nav', front: 'Quelle navigation Android selon la largeur ?', back: 'Barre de navigation (3 à 5 destinations) en largeur compacte ; rail ou tiroir de navigation sur les fenêtres larges.' },
+    { id: 'android-nav', front: 'Quelle navigation Android selon la largeur ?', back: 'Barre de navigation (3 à 5 destinations) en largeur compacte ; rail ou tiroir de navigation sur les fenêtres larges, le rail étendu remplaçant le tiroir depuis Material 3 Expressive.' },
     { id: 'fab', front: 'Combien de FAB par écran ?', back: 'Un seul, pour l’action principale de l’écran. Jamais de FAB empilés ni pour une tâche secondaire.' },
     { id: 'sp', front: 'Quelle unité pour le texte sur Android ?', back: 'Le `sp`, jamais des px fixes : le texte suit le réglage de taille de police du système.' },
     { id: 'snackbar', front: 'Retour passager après une action sur Android ?', back: 'Une snackbar, avec « Annuler » si utile. Un dialogue seulement pour une décision qui doit interrompre.' },
     { id: 'dynamic-color', front: 'Qu’est-ce que Dynamic Color ?', back: 'Depuis Android 12, une palette dérivée du fond d’écran de la personne. Prévois toujours une palette statique de repli.' },
-    { id: 'slop', front: 'Quel est le test de l’appli « portée depuis le web » ?', back: 'Un utilisateur aguerri lui ferait-il confiance, ou buterait-il sur des contrôles hors norme : barres réinventées, gestes maison, boutons « web », survol ?' },
+    { id: 'slop', front: 'Quel est le test de l’appli « portée depuis le web » ?', back: 'Une personne habituée à la plateforme lui ferait-elle confiance, ou buterait-elle sur des contrôles hors norme : barres réinventées, gestes maison, boutons « web », survol ?' },
     { id: 'tablet', front: 'Passer du téléphone à la tablette ?', back: 'Restructurer, pas étirer : classes de taille, vue maître-détail, barre latérale ou rail de navigation.' },
     { id: 'motion', front: 'Que faire quand « Réduire les animations » est activé ?', back: 'Remplacer la parallaxe et les grands glissements par un fondu enchaîné (ou une coupe franche sur Android).' },
   ],
@@ -453,7 +503,7 @@ La couche expressive de la marque (intention de la palette, accent typographique
         {
           id: 'overflow',
           visual: {
-            alt: 'iPhone, même écran ; la barre d’onglets affiche Comptes, Virements, Cartes, Épargne et un cinquième onglet « Plus » qui cache les autres sections.',
+            alt: 'iPhone, même écran ; la barre d’onglets affiche Comptes, Virements, Cartes, Épargne et un cinquième onglet « Plus ».',
             frame: 'phone',
             html:
               bankBody +
@@ -480,18 +530,18 @@ Au-delà de cinq onglets, l’iPhone replie le reste sous un onglet « Plus », 
       leftTitle: 'iOS',
       rightTitle: 'Android',
       pairs: [
-        { id: 'tabs', left: 'Barre d’onglets', right: 'Barre de navigation, rail ou tiroir selon la largeur' },
-        { id: 'back', left: 'Balayage depuis le bord, chevron de retour', right: 'Retour prédictif, par geste ou bouton' },
-        { id: 'sheet', left: 'Feuille d’actions', right: 'Feuille inférieure ou dialogue Material' },
-        { id: 'type', left: 'SF Symbols, SF Pro, Dynamic Type', right: 'Material Symbols, Roboto, unités sp' },
-        { id: 'color', left: 'Couleurs sémantiques et matériaux', right: 'Rôles de couleur et élévation tonale' },
-        { id: 'target', left: 'Cible de 44 × 44 pt', right: 'Cible de 48 × 48 dp' },
+        { id: 'tabs', left: 'Barre d’onglets', right: 'Navigation au bas de l’écran, ou rail sur les fenêtres larges' },
+        { id: 'back', left: 'Balayage depuis le bord, chevron de retour', right: 'Geste ou bouton système, avec aperçu prédictif de la destination' },
+        { id: 'sheet', left: 'Feuille d’actions', right: 'Panneau qui monte du bas, ou dialogue Material' },
+        { id: 'type', left: 'SF Symbols, SF Pro, Dynamic Type', right: 'Roboto, icônes Material, tailles en sp' },
+        { id: 'color', left: 'Couleurs sémantiques et matériaux', right: 'Rôles `primary`, `surface`, `outline`… et élévation tonale' },
+        { id: 'segmented', left: 'Contrôle segmenté', right: 'Chips, ou groupe de boutons connectés' },
       ],
-      explanation: `Porter une appli d’une plateforme à l’autre, c’est **traduire les idiomes, pas les transplanter**. Chaque fonction a son équivalent natif : une navigation entre sections, un geste de retour, une feuille d’options, un système d’icônes et de texte, des couleurs qui s’adaptent seules, une taille de cible minimale.
+      explanation: `Porter une appli d’une plateforme à l’autre, c’est **traduire les idiomes, pas les transplanter**. Chaque fonction a son équivalent natif : la barre d’onglets devient une **barre de navigation** (ou un rail sur grand écran), le balayage de retour devient le **Retour prédictif**, la feuille d’actions une **feuille inférieure** ou un dialogue, le contrôle segmenté des chips ou un **groupe de boutons connectés**, les couleurs sémantiques des **rôles de couleur** Material.
 
 La marque passe d’une plateforme à l’autre par le système de thème (palette, accent typographique, mouvement), pas en copiant les contrôles de la plateforme d’origine.`,
-      takeaway: 'Entre iOS et Android, on traduit chaque idiome dans le vocabulaire de la plateforme cible ; seule la marque voyage telle quelle.',
-      sources: [IMP_ADAPT_NATIVE, 'imp:ios', 'imp:android'],
+      takeaway: 'Entre iOS et Android, on traduit chaque idiome dans le vocabulaire de la plateforme cible ; seule l’intention de la marque voyage, réexprimée par son thème.',
+      sources: [IMP_ADAPT_NATIVE, 'imp:ios', 'imp:android', M3E_BUTTON_GROUP],
     },
     {
       id: 'platforms-android-hotspot',
@@ -516,13 +566,13 @@ La marque passe d’une plateforme à l’autre par le système de thème (palet
         css: M3_CSS,
       },
       hotspots: [
-        { id: 'back', label: 'Bouton retour « ‹ Listes »', correct: true, why: 'Un chevron suivi du titre précédent, avec un titre centré : c’est l’idiome iOS. Sur Android, la barre d’application porte une flèche de retour et un titre aligné au début, et le Retour système fait le reste.' },
-        { id: 'share', label: 'Interrupteur vert', correct: true, why: 'Un interrupteur à la forme et au vert d’iOS. Material a son propre interrupteur, que les utilisateurs d’Android reconnaissent.' },
+        { id: 'back', label: 'Bouton retour « ‹ Listes »', correct: true, why: 'Un chevron suivi du nom de l’écran précédent : c’est l’idiome iOS. Sur Android, la barre d’application porte une flèche de retour (titre au début ou centré, selon la variante Material), et le Retour système fait le reste.' },
+        { id: 'share', label: 'Interrupteur vert', correct: true, why: 'Un interrupteur à la forme et au vert d’iOS. Material a son propre interrupteur, que les habitués d’Android reconnaissent.' },
         { id: 'menu', label: 'Menu à trois points', correct: false, why: 'Le menu à débordement vertical est l’idiome Material pour les actions secondaires.' },
         { id: 'list', label: 'Liste à cocher', correct: false, why: 'Des lignes de 56 dp avec des cases à cocher : conforme à Material.' },
         { id: 'fab', label: 'Bouton d’action flottant', correct: false, why: 'Un seul FAB, pour l’action principale (ajouter un article) : exactement son usage.' },
       ],
-      explanation: `Le test d’impeccable pour Android : un utilisateur aguerri ferait-il confiance à l’appli ? Le signe le plus courant d’une appli bâclée est **l’appli iOS déguisée** : un bouton retour textuel qui ignore le Retour du système, des interrupteurs et des dialogues à la mode iOS, une navigation copiée de l’iPhone.
+      explanation: `Le test d’impeccable pour Android : une personne habituée à Android ferait-elle confiance à l’appli ? Le signe le plus courant d’une appli bâclée est **l’appli iOS déguisée** : un bouton retour textuel qui ignore le Retour du système, des interrupteurs et des dialogues à la mode iOS, une navigation copiée de l’iPhone.
 
 Material 3 est la référence : barre d’application supérieure avec flèche de retour, interrupteur Material, FAB pour l’action principale. La marque passe par le thème (couleurs, typographie, formes), pas par les contrôles d’une autre plateforme.`,
       takeaway: 'Sur Android, pas de contrôles iOS : barre d’application Material, interrupteur Material et Retour système.',
@@ -535,9 +585,9 @@ Material 3 est la référence : barre d’application supérieure avec flèche d
       prompt: 'Comment présenter ces trois actions ?',
       context: 'Un écran Android liste les notes d’un carnet. Trois actions : créer une note (très fréquente), trier la liste, exporter le carnet en PDF.',
       options: [
-        { id: 'one', label: 'Un FAB « Nouvelle note », et Trier et Exporter dans la barre d’application supérieure (icône ou menu à débordement)', why: 'Un seul FAB pour l’action principale ; les actions secondaires restent accessibles sans concurrencer la création.' },
-        { id: 'three', label: 'Trois FAB empilés, un par action', why: 'Plusieurs FAB se disputent l’attention : aucune action ne ressort plus comme principale.' },
-        { id: 'export', label: 'Le FAB pour Exporter, la création dans un menu', why: 'Le FAB est réservé à l’action principale de l’écran, pas à une tâche occasionnelle.' },
+        { id: 'one', label: 'Un FAB pour créer ; Trier et Exporter dans la barre d’application supérieure', why: 'Un seul FAB, pour l’action fréquente ; les actions secondaires restent à portée sans concurrencer la création.' },
+        { id: 'two', label: 'Deux FAB empilés : « Nouvelle note » en bas, « Exporter » juste au-dessus', why: 'Deux FAB se disputent l’attention, et le second est dépensé pour une tâche occasionnelle : la hiérarchie que le FAB doit créer disparaît.' },
+        { id: 'export', label: 'Un FAB pour Exporter, et « Nouvelle note » dans le menu à débordement', why: 'Le FAB est réservé à l’action principale de l’écran ; ici, la création, la plus fréquente, se retrouve cachée dans un menu.' },
         { id: 'navbar', label: 'Une barre de navigation au bas de l’écran avec Créer, Trier et Exporter', why: 'La barre de navigation mène à des destinations ; elle ne déclenche pas d’actions.' },
       ],
       answer: 'one',
@@ -553,7 +603,7 @@ Les actions secondaires (trier, exporter) vont dans la **barre d’application s
       difficulty: 1,
       prompt: 'Sur iOS, figer le corps de texte à 15 pt garantit une mise en page stable : c’est la bonne pratique.',
       answer: false,
-      explanation: `Sur iOS, le texte doit suivre **Dynamic Type** : la personne règle sa taille de lecture dans les réglages du système, et les styles de texte (Body, Headline, Caption…) s’adaptent. Une taille figée ignore ce réglage, au détriment de ceux qui ont besoin d’un texte plus grand.
+      explanation: `Sur iOS, le texte doit suivre **Dynamic Type** : la personne règle sa taille de lecture dans les réglages du système, et les styles de texte (Body, Headline, Caption…) s’adaptent. Une taille figée ignore ce réglage, au détriment des personnes qui ont besoin d’un texte plus grand.
 
 Le style Body fait **17 pt** au réglage par défaut, et rien ne descend sous **11 pt**. La stabilité vient d’une mise en page qui s’adapte (lignes qui se replient, textes qui ne sont pas tronqués), à vérifier avec une grande taille de texte.`,
       takeaway: 'Sur iOS, utilise les styles Dynamic Type (Body à 17 pt par défaut), jamais des tailles figées.',
@@ -596,15 +646,15 @@ Le style Body fait **17 pt** au réglage par défaut, et rien ne descend sous **
 </div>`),
             css: M3_CSS,
           },
-          why: 'Une snackbar confirme sans interrompre, puis disparaît, avec « Annuler » pour rattraper une erreur.',
+          why: 'Une snackbar confirme sans interrompre et garde « Annuler » à portée jusqu’à la prochaine action.',
         },
       ],
       answer: 'snackbar',
-      explanation: `Sur Android, la **snackbar** est faite pour le **retour passager** : un message bref au bas de l’écran, avec au plus une action (souvent « Annuler »), qui disparaît seul. La personne continue sans être interrompue.
+      explanation: `Sur Android, la **snackbar** est faite pour le **retour passager** : un message bref au bas de l’écran, avec au plus une action (souvent « Annuler »). Sans action, elle s’efface d’elle-même ; avec une action, elle reste jusqu’à ce que la personne agisse ou passe à autre chose, pour lui laisser le temps d’annuler. La personne continue sans être interrompue.
 
 Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, il n’y a rien à décider, et le bouton « OK » ne sert qu’à fermer. En prime, la snackbar offre l’annulation, plus utile qu’une confirmation.`,
       takeaway: 'Retour passager sur Android : une snackbar, avec « Annuler » si utile ; le dialogue est réservé aux décisions qui interrompent.',
-      sources: ['imp:android', M3_SNACKBAR],
+      sources: ['imp:android', M3_SNACKBAR, M3_SNACKBAR_CODE],
     },
     {
       id: 'platforms-ipad-duel',
@@ -615,42 +665,36 @@ Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, 
         {
           id: 'stretched',
           visual: {
-            alt: 'iPad en paysage : la liste de notes de l’iPhone s’étire sur toute la largeur sous un grand titre, avec une barre d’onglets étalée au bas de l’écran.',
+            alt: 'iPad en paysage : la liste de notes occupe toute la largeur sous un grand titre, la date au bout de chaque ligne, avec une barre d’onglets au bas de l’écran.',
             html: fr(`<div class="tz"><div class="ip-frame"><div class="ip-screen" style="flex-direction:column">
   <p class="ip-lt">Notes</p>
-  <div class="ip-row"><span class="mk-strong">Liste de courses</span><span class="mk-grow mk-muted">Lait d’avoine, pommes, pain de campagne, lessive</span><span class="mk-muted">10:42</span></div>
-  <div class="ip-row"><span class="mk-strong">Idées cadeaux</span><span class="mk-grow mk-muted">Un livre de cuisine pour Inès, des gants pour Paul</span><span class="mk-muted">Hier</span></div>
-  <div class="ip-row"><span class="mk-strong">Réunion de copropriété</span><span class="mk-grow mk-muted">Toiture, ravalement, local à vélos</span><span class="mk-muted">Lun.</span></div>
-  <div class="ip-row"><span class="mk-strong">Voyage à Lisbonne</span><span class="mk-grow mk-muted">Vols, quartier de l’Alfama, tram 28</span><span class="mk-muted">Dim.</span></div>
+  ${NOTES.map(([title, first, date]) => `<div class="ip-row"><span class="mk-strong">${title}</span><span class="mk-muted">${first}</span><span class="mk-grow"></span><span class="mk-muted">${date}</span></div>`).join('')}
   <div class="ip-tabs"><span class="on"><i data-icon="file-text" style="--ico:16px"></i>Notes</span><span><i data-icon="folder" style="--ico:16px"></i>Dossiers</span><span><i data-icon="search" style="--ico:16px"></i>Rechercher</span></div>
 </div></div></div>`),
             css: IPAD_CSS,
           },
-          why: 'L’interface de l’iPhone, simplement agrandie : des lignes interminables et tout l’espace perdu.',
+          why: 'L’interface de l’iPhone, simplement agrandie : une seule colonne aux lignes étirées, du vide, et il faut ouvrir chaque note pour la lire.',
         },
         {
           id: 'split',
           visual: {
-            alt: 'iPad en paysage : une barre latérale de dossiers, la liste des notes au centre et la note sélectionnée ouverte à droite.',
+            alt: 'iPad en paysage : à gauche, la liste des notes sous un bouton de barre latérale ; à droite, la note sélectionnée, ouverte.',
             html: fr(`<div class="tz"><div class="ip-frame"><div class="ip-screen">
-  <div class="ip-side"><span class="on"><i data-icon="file-text" style="--ico:14px"></i>Toutes</span><span><i data-icon="folder" style="--ico:14px"></i>Maison</span><span><i data-icon="folder" style="--ico:14px"></i>Travail</span><span><i data-icon="folder" style="--ico:14px"></i>Voyages</span></div>
   <div class="ip-list">
-    <div class="ip-item on"><p class="mk-strong">Liste de courses</p><p class="mk-muted">10:42 · Lait d’avoine, pommes</p></div>
-    <div class="ip-item"><p class="mk-strong">Idées cadeaux</p><p class="mk-muted">Hier · Un livre de cuisine</p></div>
-    <div class="ip-item"><p class="mk-strong">Réunion de copropriété</p><p class="mk-muted">Lun. · Toiture, ravalement</p></div>
-    <div class="ip-item"><p class="mk-strong">Voyage à Lisbonne</p><p class="mk-muted">Dim. · Vols, Alfama</p></div>
+    <div class="ip-lh"><span class="ip-sb"></span><span class="mk-strong">Notes</span></div>
+    ${NOTES.map(([title, first], i) => `<div class="ip-item${i === 0 ? ' on' : ''}"><p class="mk-strong">${title}</p><p class="mk-muted">${first}</p></div>`).join('')}
   </div>
   <div class="ip-detail mk-stack" style="--gap:6px"><p class="mk-strong" style="font-size:15px">Liste de courses</p><p>Lait d’avoine</p><p>Pommes Golden × 6</p><p>Pain de campagne</p><p>Lessive</p></div>
 </div></div></div>`),
             css: IPAD_CSS,
           },
-          why: 'Une vue partagée : dossiers, liste et note côte à côte. La largeur sert à montrer plus, pas à étirer.',
+          why: 'Une vue partagée : la liste et la note côte à côte, la barre latérale des dossiers à portée. La largeur sert à montrer plus, pas à étirer.',
         },
       ],
       answer: 'split',
-      explanation: `Une interface de téléphone agrandie sur une tablette est **l’échec type** de l’adaptation native : des lignes étirées, de grands vides, et autant d’allers-retours qu’au téléphone.
+      explanation: `Une interface de téléphone agrandie sur une tablette est **l’échec type** de l’adaptation native : une seule colonne aux lignes étirées, de grands vides, et autant d’allers-retours qu’au téléphone pour lire chaque note.
 
-On **restructure** : les classes de taille (iOS) déclenchent une vue partagée, avec une barre latérale, la liste et le détail côte à côte. Le multitâche peut ensuite rendre à l’appli une fenêtre étroite, de largeur téléphone : une mise en page pilotée par les classes de taille repasse alors d’elle-même à une seule colonne.`,
+On **restructure** : les classes de taille (iOS) déclenchent une vue partagée, avec la liste et le détail côte à côte, et une barre latérale quand la place le permet. Le multitâche peut ensuite rendre à l’appli une fenêtre étroite, de largeur téléphone : une mise en page pilotée par les classes de taille repasse alors d’elle-même à une seule colonne.`,
       takeaway: 'Du téléphone à la tablette, restructure (barre latérale, maître-détail) au lieu d’étirer ; laisse les classes de taille piloter la mise en page.',
       sources: [IMP_ADAPT_NATIVE, 'imp:ios'],
     },
@@ -727,11 +771,11 @@ Depuis Android 15, une appli qui cible le SDK 35 s’affiche bord à bord par d�
         { id: 'list', label: 'Liste groupée', correct: false, why: 'Une liste groupée avec des lignes de 44 pt : idiome natif.' },
         { id: 'alerts', label: 'Interrupteur d’alertes', correct: false, why: 'Un interrupteur natif dans une liste groupée : rien à corriger.' },
       ],
-      explanation: `Le test d’impeccable pour iOS : un utilisateur aguerri ferait-il confiance à l’appli, ou buterait-il sur des contrôles hors norme ? Le signe qui trahit le plus souvent, c’est l’appli **« portée depuis le web »** :
+      explanation: `Le test d’impeccable pour iOS : une personne habituée à l’iPhone ferait-elle confiance à l’appli, ou buterait-elle sur des contrôles hors norme ? Le signe qui trahit le plus souvent, c’est l’appli **« portée depuis le web »** :
 
 - une **navigation globale réinventée** (menu hamburger) au lieu d’une barre d’onglets ;
 - des **affordances au survol**, qui n’existent pas au doigt ;
-- des **contrôles en forme de page web** (petits liens séparés par des barres) au lieu de boutons, de menus contextuels ou d’actions de balayage de 44 × 44 pt.
+- des **contrôles en forme de page web** (petits liens séparés par des barres) au lieu de boutons de 44 × 44 pt, de menus contextuels ou d’actions de balayage.
 
 Le grand titre, la liste groupée et l’interrupteur montrent au contraire ce qu’il faut garder : les composants de la plateforme.`,
       takeaway: 'Une appli iOS n’est pas un site réduit : barre d’onglets, contrôles natifs de 44 pt, aucune action au survol.',
@@ -756,10 +800,10 @@ Sur Android, le réglage **Supprimer les animations** se respecte par un fondu e
       prompt: 'Quelle correction apporter ?',
       context: 'Une appli iOS code ses couleurs en hexadécimal : texte `#1C1C1E`, fond `#FFFFFF`. En mode sombre, l’écran reste blanc au milieu d’un système sombre, et le réglage « Augmenter le contraste » n’a aucun effet.',
       options: [
-        { id: 'semantic', label: 'Utiliser les couleurs sémantiques du système : `label` pour le texte, `systemBackground` pour le fond', why: 'Elles prévoient déjà les variantes claire, sombre et à contraste renforcé, et suivent les évolutions du système.' },
+        { id: 'semantic', label: 'Passer aux couleurs sémantiques du système, `label` et `systemBackground`', why: 'Elles prévoient déjà les variantes claire, sombre et à contraste renforcé, et suivent les évolutions du système.' },
         { id: 'pairs', label: 'Ajouter, écran par écran, un second hexadécimal pour le mode sombre', why: 'Fragile, facile à oublier sur un écran, et le contraste renforcé reste ignoré.' },
-        { id: 'light', label: 'Forcer l’apparence claire dans toute l’appli', why: 'Le mode sombre est une apparence à part entière : l’ignorer laisse un écran éblouissant à ceux qui l’ont choisi.' },
-        { id: 'black', label: 'Passer tout le texte en noir pur `#000000`', why: 'Plus de contraste en clair, mais un texte invisible le jour où le fond deviendra sombre.' },
+        { id: 'assets', label: 'Des couleurs nommées dans le catalogue d’assets, en version claire et sombre', why: 'Mieux que des hexadécimaux épars : le mode sombre est couvert. Mais sans variante à contraste renforcé, le réglage reste sans effet, et tu recrées à la main ce que `label` et `systemBackground` fournissent déjà.' },
+        { id: 'light', label: 'Forcer l’apparence claire dans toute l’appli, pour garder la charte intacte', why: 'Le mode sombre est une apparence à part entière : l’ignorer laisse un écran éblouissant aux personnes qui l’ont choisi, et le contraste renforcé reste ignoré.' },
       ],
       answer: 'semantic',
       explanation: `Les **couleurs sémantiques** d’iOS sont définies par leur **rôle** (texte principal, fond, séparateur), pas par leur valeur : \`label\` et \`systemBackground\` changent seules entre clair et sombre, et se renforcent quand la personne demande plus de contraste. Un hexadécimal codé en dur reste figé dans tous ces contextes.
@@ -795,19 +839,20 @@ On associe chaque texte à un **rôle** au lieu de choisir une taille écran par
       options: [
         {
           id: 'sheet',
-          label: 'Une feuille avec « Annuler » et « Ajouter » dans sa barre, qu’on ferme d’un balayage, avec une confirmation seulement si des données seraient perdues',
-          why: 'La feuille est faite pour une sous-tâche autonome : on la remplit, on la ferme, on retrouve l’écran d’origine.',
+          label: 'Une feuille avec « Annuler » et « Ajouter », qu’un balayage vers le bas referme',
+          why: 'La feuille est faite pour une sous-tâche autonome : on la remplit, on la ferme, on retrouve l’écran d’origine. Le balayage ne demande confirmation que si des données seraient perdues.',
         },
-        { id: 'push', label: 'Pousser un nouvel écran dans la pile de navigation', why: 'La pile sert à descendre dans une hiérarchie de contenus ; créer un rappel n’est pas un niveau de plus.' },
+        { id: 'push', label: 'Pousser un écran « Nouveau rappel » dans la pile de navigation, comme un détail', why: 'La pile sert à descendre dans une hiérarchie de contenus ; créer un rappel n’est pas un niveau de plus.' },
         { id: 'full', label: 'Un écran plein, sans bouton de fermeture tant que le rappel n’est pas enregistré', why: 'Aucune sortie sans valider : la personne se sent piégée. Une feuille garde toujours « Annuler ».' },
-        { id: 'alert', label: 'Une alerte du système avec trois champs de saisie', why: 'Une alerte sert à informer ou à faire choisir rapidement, pas à remplir un formulaire.' },
+        { id: 'popover', label: 'Un popover ancré au bouton +, qui contient les trois champs du rappel', why: 'Sur iPhone, en largeur compacte, le HIG demande d’éviter les popovers et de présenter plutôt une feuille : le popover est un idiome des grands écrans, comme l’iPad.' },
+        { id: 'alert', label: 'Une alerte du système avec trois champs de saisie : titre, date et liste', why: 'Une alerte sert à informer ou à faire choisir rapidement, pas à remplir un formulaire.' },
       ],
       answer: 'sheet',
-      explanation: `Sur iOS, la modalité se choisit : une **feuille** (*sheet*) pour une sous-tâche ciblée et autonome, un écran plein pour une expérience immersive, la **pile de navigation** pour descendre dans une hiérarchie.
+      explanation: `Sur iOS, la modalité se choisit : une **feuille** (*sheet*) pour une sous-tâche ciblée et autonome, un écran plein pour une expérience immersive, la **pile de navigation** pour descendre dans une hiérarchie. Le popover, lui, est réservé aux grandes largeurs, comme celle de l’iPad.
 
 Les guides d’Apple placent « Annuler » au début de la barre de la feuille et le bouton de validation à la fin, et demandent de toujours offrir une sortie sans enregistrer. Le balayage vers le bas ferme la feuille, sauf si des données seraient perdues : on demande alors confirmation.`,
       takeaway: 'Tâche courte et autonome sur iOS : une feuille avec « Annuler » et une validation claire, fermable par balayage.',
-      sources: ['imp:ios', HIG_SHEETS],
+      sources: ['imp:ios', HIG_SHEETS, HIG_POPOVERS],
     },
     {
       id: 'platforms-verify-multi',
@@ -833,6 +878,27 @@ Les simulateurs donnent l’étendue ; le matériel donne la vérité. Quand une
       sources: ['imp:ios', 'imp:android'],
     },
     {
+      id: 'platforms-audit-multi',
+      type: 'multi',
+      difficulty: 2,
+      context: 'Tu audites une appli bancaire pour iPhone. Chaque constat doit entrer dans l’une des cinq dimensions de l’audit natif.',
+      prompt: 'Lesquels de ces constats relèvent de la conformité à la plateforme ?',
+      options: [
+        { id: 'swipe', label: 'Le balayage depuis le bord gauche ne ramène plus à l’écran précédent', why: 'Un geste système cassé : c’est la conformité, la dimension critique de l’audit natif.' },
+        { id: 'toggles', label: 'Des interrupteurs carrés, dessinés à la main, dans les réglages', why: 'Un contrôle réinventé à la place de l’interrupteur du système : conformité.' },
+        { id: 'icons', label: 'Des icônes Material mêlées aux SF Symbols dans les barres', why: 'Deux jeux d’icônes mélangés : une dérive que l’audit range sous la conformité.' },
+        { id: 'label', label: 'Un bouton-icône que VoiceOver annonce « bouton », sans nom', why: 'Un libellé d’accessibilité manquant (`accessibilityLabel`) : dimension accessibilité.' },
+        { id: 'list', label: 'Un historique de 2 000 opérations non virtualisé, qui saccade', why: 'Une longue liste chargée d’un bloc, qui fait sauter des images au défilement : dimension performance.' },
+        { id: 'hex', label: 'Un fond `#FFFFFF` codé en dur, qui reste blanc en mode sombre', why: 'Une couleur codée en dur au lieu d’une couleur sémantique : dimension apparence et thèmes.' },
+      ],
+      answers: ['swipe', 'toggles', 'icons'],
+      explanation: `L’audit natif d’impeccable note cinq dimensions de 0 à 4 : accessibilité (VoiceOver, TalkBack), performance, apparence et thèmes, **conformité à la plateforme** et adaptativité. La conformité est la dimension critique : son verdict ouvre le rapport, réussi ou échoué. L’appli se lit-elle comme une appli native, ou comme un site porté ?
+
+Elle regroupe ce qui trahit une appli étrangère à sa plateforme : **gestes système cassés**, contenu sous les zones réservées, navigation hors norme, **contrôles réinventés** ou en forme de page web, **jeux d’icônes mélangés**. Le libellé manquant relève de l’accessibilité, la liste qui saccade de la performance, le fond codé en dur de l’apparence.`,
+      takeaway: 'Audit natif : cinq dimensions notées de 0 à 4 ; la conformité à la plateforme (gestes, navigation, contrôles, icônes) est critique, et son verdict ouvre le rapport.',
+      sources: [IMP_AUDIT_NATIVE, 'imp:ios'],
+    },
+    {
       id: 'platforms-grouped-list-duel',
       type: 'choice',
       difficulty: 1,
@@ -841,7 +907,7 @@ Les simulateurs donnent l’étendue ; le matériel donne la vérité. Quand une
         {
           id: 'cards',
           visual: {
-            alt: 'iPhone : réglages présentés en cartes flottantes séparées, chacune avec une tuile d’icône colorée et un interrupteur rectangulaire maison.',
+            alt: 'iPhone : réglages présentés en cartes flottantes séparées, chacune avec une tuile d’icône colorée et un interrupteur rectangulaire bleu.',
             frame: 'phone',
             html: fr(`<div class="cs">
   <p class="io-lt" style="padding:6px 0 0">Réglages</p>
@@ -856,7 +922,7 @@ Les simulateurs donnent l’étendue ; le matériel donne la vérité. Quand une
         {
           id: 'grouped',
           visual: {
-            alt: 'iPhone : réglages en liste groupée à coins arrondis sur fond gris clair, avec des en-têtes de groupe, des interrupteurs natifs et des chevrons.',
+            alt: 'iPhone : réglages en liste groupée à coins arrondis sur fond gris clair, avec des en-têtes de groupe, des interrupteurs ronds verts et des chevrons.',
             frame: 'phone',
             html: fr(`<div class="gp">
   <p class="io-lt" style="padding-top:6px">Réglages</p>

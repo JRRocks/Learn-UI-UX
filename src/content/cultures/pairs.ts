@@ -560,14 +560,14 @@ sup { font-size: 0.7em; line-height: 0; }`,
     notes: `Le même formulaire d’adresse en français et en arabe : en écriture de droite à gauche, la mise en page se retourne, mais pas tout.
 
 - **Ce qui se miroite.** Le titre et la flèche « retour » (vers la droite en arabe), les étapes qui se lisent de droite à gauche, la barre de progression qui se remplit depuis la droite, l’alignement des libellés, la case à cocher placée à droite de son texte, la flèche du bouton « متابعة » (Continuer) qui pointe vers la gauche.
-- **Ce qui ne se miroite pas.** Le numéro de téléphone (+966 50 123 4567) se lit toujours de gauche à droite ; numéro de bâtiment et code postal gardent leurs chiffres dans l’ordre ; la coche reste une coche et l’icône de téléphone n’est pas inversée.
+- **Ce qui ne se miroite pas.** Le numéro de téléphone (+966\u00a050\u00a0123\u00a04567) se lit toujours de gauche à droite ; numéro de bâtiment et code postal gardent leurs chiffres dans l’ordre ; la coche reste une coche et l’icône de téléphone n’est pas inversée.
 - **Structure locale.** L’adresse saoudienne suit l’adresse nationale : numéro de bâtiment, rue, quartier, ville, code postal à 5\u00a0chiffres et numéro complémentaire ; le nom complet tient dans un seul champ.
 - **Typographie.** Police arabe dédiée, corps et interlignage un peu plus généreux, aucun espacement entre les lettres.
 
 ### Comment adapter
 
 - Mets \`dir="rtl"\` et \`lang="ar"\` sur la racine, et écris le CSS en propriétés logiques (\`margin-inline-start\`, \`padding-inline\`, \`inset-inline-end\`) : le miroir devient automatique.
-- Isole les contenus latins et les numéros (\`dir="ltr"\` sur le champ, \`bdi\`) pour éviter l’affichage « 4567 123 50 966+ ».
+- Isole les contenus latins et les numéros (\`dir="ltr"\` sur le champ, \`bdi\`) pour éviter l’affichage « 4567\u00a0123\u00a050\u00a0966+ ».
 - Fixe une règle pour les icônes (directionnelles : oui ; objets, coches, médias, horloges : non) et applique-la partout au lieu de décider à l’œil.
 - Choisis un système de chiffres (ici les chiffres occidentaux, courants dans le Golfe) et tiens-t’y.`,
   },

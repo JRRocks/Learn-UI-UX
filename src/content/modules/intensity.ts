@@ -14,7 +14,7 @@ const SAINT_EX: SourceRef = { label: 'Antoine de Saint-Exupéry — Terre des ho
 
 /* ---------- Shared mock pieces ---------- */
 
-const INVOICE_HEAD = `<div class="mk-row" style="--gap:8px"><p class="mk-h2">Facture F-2026-118</p><span class="mk-badge">Brouillon</span></div>
+const INVOICE_HEAD = `<div class="mk-row" style="--gap:8px"><p class="mk-h2">Facture <span style="white-space:nowrap">F-2026-118</span></p><span class="mk-badge">Brouillon</span></div>
   <p class="mk-small mk-muted">Studio Lumen · 2 400,00&nbsp;€ HT · échéance le 30 novembre</p>`;
 
 const INVOICE_LINES = `<div class="mk-divider"></div>
@@ -34,6 +34,17 @@ const EDITOR_CSS = `
 `;
 
 const SERIF = `Charter, 'Bitstream Charter', 'Iowan Old Style', Georgia, serif`;
+
+/* Skeleton test: a page of three stacked sections, the neighbours drawn paler than the target. */
+const SK_COL = `<div class="int-col"><span class="int-sk" style="width:60%;height:12px"></span><span class="int-sk"></span><span class="int-sk" style="width:80%"></span></div>`;
+const skSection = (modifier = '') =>
+  `<div class="int-sec${modifier}"><span class="int-sk" style="width:38%;height:10px"></span><div class="int-cols">${SK_COL}${SK_COL}${SK_COL}</div></div>`;
+const SK_CSS = `.int-page { display: flex; flex-direction: column; gap: 18px; padding: 18px 16px; }
+.int-sec { display: flex; flex-direction: column; gap: 10px; }
+.int-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.int-col { display: flex; flex-direction: column; gap: 6px; }
+.int-sk { display: block; height: 6px; border-radius: 3px; background: #cdd3dd; }
+.int-sec--n .int-sk { background: #e8ebf0; }`;
 
 const intensity: ModuleContent = {
   id: 'intensity',
@@ -63,14 +74,15 @@ Dans les trois cas, l’identité en place est préservée, et une passe de fini
     {
       id: 'simplifier',
       title: 'Simplifier : un but, une action principale',
-      body: `Commence par l’**essentiel** : quel est l’objectif principal de l’utilisateur sur cet écran ? Il n’y en a qu’**un**. Qu’est-ce qui est nécessaire, qu’est-ce qui est seulement agréable ? Quels sont les 20 % qui apportent 80 % de la valeur ? Attends-toi à dire non à de bonnes idées pour faire de la place à une exécution excellente.
+      body: `Commence par l’**essentiel** : quel est l’objectif principal de l’utilisateur sur cet écran ? Il n’y en a qu’**un** ; s’il n’est pas clair, demande plutôt que de deviner. Qu’est-ce qui est nécessaire, qu’est-ce qui est seulement agréable ? Quels sont les 20 % qui apportent 80 % de la valeur ? Attends-toi à dire non à de bonnes idées pour faire de la place à une exécution excellente.
 
 - **Une action principale**, quelques actions secondaires, tout le reste en tertiaire ou masqué. La loi de Hick le rappelle : le temps de décision augmente avec le nombre et la complexité des choix.
 - **Divulgation progressive** : montre d’abord l’essentiel et range la complexité derrière des points d’entrée clairs (accordéon, « Options avancées », étape suivante).
 - **Budget visuel** : 1 à 2 couleurs plus des neutres, une seule famille de police, 3 à 4 tailles, 2 à 3 graisses, une seule échelle d’espacement.
 - **Moins de contenants** : supprime les bordures, ombres et fonds qui ne servent ni la hiérarchie ni la fonction. Pas de carte pour une simple mise en page — l’espacement et l’alignement suffisent — et jamais de cartes imbriquées.
+- **Mise en page plus simple** : un flux vertical plutôt qu’une grille complexe, le contenu secondaire dans le flux plutôt qu’en barre latérale, un seul alignement, de l’air.
 - **Moins d’étapes** : valeurs par défaut intelligentes, édition en place plutôt qu’en fenêtre modale, une étape de moins quand c’est possible.
-- **Moins de mots** : coupe le remplissage, pas le sens ; voix active (« Enregistrer » plutôt que « Les modifications seront enregistrées ») ; dis chaque chose une seule fois.
+- **Moins de mots** : coupe le remplissage, pas le sens ; voix active (« Enregistrer » plutôt que « Les modifications seront enregistrées ») ; pas de jargon ; des paragraphes courts et des titres clairs, faciles à parcourir ; dis chaque chose une seule fois.
 
 > « Il semble que la perfection soit atteinte non quand il n’y a plus rien à ajouter, mais quand il n’y a plus rien à retrancher. » — Antoine de Saint-Exupéry, *Terre des hommes* (1939)`,
       examples: [
@@ -94,7 +106,7 @@ Dans les trois cas, l’identité en place est préservée, et une passe de fini
   <p class="mk-small mk-muted">Samedi 15 novembre · 14 h</p>
   <p>Tournage, émaillage et cuisson : repartez avec deux bols faits main.</p>
   <div class="mk-row mk-between"><span class="mk-price" style="font-size:18px">65&nbsp;€</span><span class="mk-small mk-muted">Plus que 3 places</span></div>
-  <div class="mk-row mk-between"><span class="mk-btn mk-btn--text">Offrir cet atelier</span><span class="mk-btn">Réserver</span></div>
+  <div class="mk-row mk-between mk-wrap" style="--gap:8px"><span class="mk-btn mk-btn--text">Offrir cet atelier</span><span class="mk-btn">Réserver</span></div>
 </div></div>`,
           },
           goodNote: 'Une famille, un bleu d’action plus des neutres, trois tailles : la réservation saute aux yeux.',
@@ -144,7 +156,7 @@ Vérifie ensuite que la simplification améliore vraiment l’usage : tâche plu
       title: 'Intensifier : un geste décisif, dans le système',
       body: `« Plus audacieux » est presque toujours une demande d’**amplification ciblée** : une section existe, et le reste de la page et son système sont donnés.
 
-- **Le périmètre est souverain** : « tout le reste ne bouge pas » s’entend littéralement. Ne restyle pas les voisines ; n’ajoute ni couleur, ni police, ni rayon, ni ombre, ni primitive que la surface ne possède pas. Si le système ne peut vraiment pas exprimer la direction, demande, en nommant l’ajout précis et son rôle.
+- **Le périmètre est souverain** : « tout le reste ne bouge pas » s’entend littéralement. Ne restyle pas les voisines ; n’ajoute ni couleur, ni police, ni rayon, ni ombre, ni primitive (une brique de base du système, comme un type de composant ou de motif) que la surface ne possède pas. Si le système ne peut vraiment pas exprimer la direction, demande, en nommant l’ajout précis et son rôle.
 - **Pourquoi c’est plat** : une section terne est souvent celle qui n’utilise pas les gestes forts que ses voisines utilisent déjà — la typo d’affichage à pleine puissance, le motif signature, la densité, le rythme.
 - **Amplifie ce que le système possède** : la version audacieuse doit ressembler *davantage* à la même marque, pas moins.
 - **Engage-toi, puis clarifie** : fais un geste décisif complètement, puis calme tout ce qui l’entoure pour qu’il se lise. Si tout devient plus fort, la section devient plus plate.
@@ -158,45 +170,47 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
         {
           title: 'Le test du squelette',
           bad: {
-            alt: 'Squelette gris d’une section : une barre de titre et trois colonnes identiques de lignes grises.',
-            html: `<div class="mk-pad-l mk-stack" style="--gap:16px">
-  <span class="int-sk" style="width:40%;height:14px"></span>
-  <div class="mk-grid" style="--cols:3;--gap:14px">
-    <div class="mk-stack" style="--gap:8px"><span class="int-sk" style="height:18px;width:60%"></span><span class="int-sk"></span><span class="int-sk" style="width:80%"></span></div>
-    <div class="mk-stack" style="--gap:8px"><span class="int-sk" style="height:18px;width:60%"></span><span class="int-sk"></span><span class="int-sk" style="width:80%"></span></div>
-    <div class="mk-stack" style="--gap:8px"><span class="int-sk" style="height:18px;width:60%"></span><span class="int-sk"></span><span class="int-sk" style="width:80%"></span></div>
-  </div>
+            alt: 'Squelette gris d’une page : trois sections empilées, chacune faite d’une barre de titre et de trois colonnes identiques de lignes. La section du milieu, d’un gris plus soutenu, a exactement la même structure que ses deux voisines, plus pâles.',
+            html: `<div class="int-page">
+  ${skSection(' int-sec--n')}
+  ${skSection()}
+  ${skSection(' int-sec--n')}
 </div>`,
-            css: `.int-sk { display: block; height: 8px; border-radius: 4px; background: #d9dee6; }`,
+            css: SK_CSS,
           },
           badNote: 'Sans le texte, la section est identique à ses voisines : son « audace » ne tenait qu’à des mots plus gros.',
           good: {
-            alt: 'Squelette d’une section sur un aplat sombre : un très grand bloc à gauche, une courte ligne à côté, puis deux petits éléments en dessous.',
-            html: `<div class="int-band">
-  <div class="mk-row" style="--gap:18px;align-items:flex-end">
-    <span class="int-sk int-sk--hero"></span>
-    <div class="mk-stack mk-grow" style="--gap:8px;padding-bottom:6px"><span class="int-sk int-sk--d"></span><span class="int-sk int-sk--d" style="width:70%"></span></div>
+            alt: 'Squelette de la même page : entre deux sections pâles à trois colonnes, la section du milieu forme un aplat vert sombre sur toute la largeur, avec deux lignes de titre très épaisses puis, décalé vers la droite, un court bloc de texte.',
+            html: `<div class="int-page">
+  ${skSection(' int-sec--n')}
+  <div class="int-band">
+    <span class="int-sk int-sk--display" style="width:90%"></span>
+    <span class="int-sk int-sk--display" style="width:58%"></span>
+    <div class="int-band-text"><span class="int-sk int-sk--d"></span><span class="int-sk int-sk--d"></span><span class="int-sk int-sk--d" style="width:55%"></span></div>
   </div>
-  <div class="mk-row" style="--gap:28px"><span class="int-sk int-sk--d" style="width:70px;height:12px"></span><span class="int-sk int-sk--d" style="width:90px;height:12px"></span></div>
+  ${skSection(' int-sec--n')}
 </div>`,
-            css: `.int-band { display: flex; flex-direction: column; gap: 22px; padding: 26px 24px; background: #1e5b4a; border-radius: 10px; }
-.int-sk { display: block; height: 8px; border-radius: 4px; }
-.int-sk--hero { width: 46%; height: 64px; border-radius: 8px; background: rgb(255 255 255 / 0.85); flex: none; }
-.int-sk--d { background: rgb(255 255 255 / 0.35); }`,
+            css: `${SK_CSS}
+.int-band { display: flex; flex-direction: column; gap: 9px; margin-inline: -16px; padding: 24px 16px 26px; background: #1e5b4a; }
+.int-sk--display { height: 20px; border-radius: 5px; background: rgb(255 255 255 / 0.88); }
+.int-band-text { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; margin-inline-start: 40%; }
+.int-band .int-sk--d { background: rgb(255 255 255 / 0.4); }`,
           },
-          goodNote: 'Même sans texte, la structure dit ce qui compte : un chiffre géant, un changement de densité, un pic dans le défilement.',
+          goodNote: 'Même sans texte, la section se détache de ses voisines : un titre d’affichage à pleine échelle, une composition décalée, un changement de densité. C’est un pic dans le défilement.',
         },
       ],
     },
     {
       id: 'adoucir',
       title: 'Adoucir : baisser le volume avec précision',
-      body: `Adoucir demande **plus** de précision qu’intensifier. Le sens dépend du mode : sur une page qui doit convaincre ou une vitrine, une palette plus retenue, plus de blanc, plus d’air typographique — le drame baisse sans disparaître ; dans une application ou une page de lecture, moins de bruit — moins de fonds d’accent, des cartes plus plates, moins de couleur et de mouvement.
+      body: `Adoucir demande **plus** de précision qu’intensifier. Avant de baisser le volume, comprends le contexte : à quoi sert l’écran, pour qui (certains contextes ont besoin d’énergie), ce qui fonctionne déjà et le message à préserver. Si ce n’est pas clair, demande plutôt que de deviner.
+
+Le sens dépend aussi du mode : sur une page qui doit convaincre ou une vitrine, une palette plus retenue, plus de blanc, plus d’air typographique — le spectaculaire s’atténue sans disparaître ; dans une application ou une page de lecture, moins de bruit — moins de fonds d’accent, des cartes plus plates, moins de couleur et de mouvement.
 
 - **Couleur** : désature (des teintes pleinement saturées vers 70–85 % de saturation), réduis le nombre de couleurs, laisse les **neutres dominer** et garde la couleur pour les accents (la règle des 10 %). Préfère des gris teintés, chauds ou froids, au gris pur. Garde le contraste fort là où il compte.
 - **Poids** : baisse les graisses (900 → 600, 700 → 500), allège ou supprime les bordures, augmente l’espace.
 - **Effets** : retire dégradés, ombres multiples, lueurs et motifs qui ne servent à rien.
-- **Mouvement** : distances plus courtes (10 à 20 px plutôt que 40), une décélération douce (*ease-out*), jamais de rebond ni d’élastique ; supprime les animations sans rôle.
+- **Mouvement** : distances plus courtes (10 à 20 px plutôt que 40), une décélération douce (courbe *ease-out-quart* : départ vif, arrivée tout en douceur), jamais d’effet de rebond ni d’effet élastique ; supprime les animations sans rôle.
 - **Composition** : écarts d’échelle plus faibles, alignement sur la grille, rythme d’espacement régulier.
 - **Jamais de gris sur une couleur** : sur un fond coloré, le texte secondaire prend une nuance de cette couleur (ou du blanc en transparence), pas un gris qui paraît sale.`,
       examples: [
@@ -206,7 +220,7 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
             alt: 'Alerte de paiement en retard sur fond rouge vif, texte blanc très gras en capitales avec points d’exclamation, épaisse bordure jaune et halo rouge.',
             html: `<div class="mk-pad"><div class="int-alarm">
   <p class="int-alarm-h">PAIEMENT EN RETARD&#8239;!!!</p>
-  <p>LA FACTURE F-2026-097 DE 1 240,00&nbsp;€ AURAIT DÛ ÊTRE RÉGLÉE LE 15 OCTOBRE.</p>
+  <p>LA FACTURE <span style="white-space:nowrap">F-2026-097</span> DE 1 240,00&nbsp;€ AURAIT DÛ ÊTRE RÉGLÉE LE 15 OCTOBRE.</p>
   <span class="int-alarm-btn">RELANCER MAINTENANT</span>
 </div></div>`,
             css: `.int-alarm { display: flex; flex-direction: column; gap: 8px; padding: 16px; background: #ff0000; color: #fff; border: 4px solid #ffd400; border-radius: 12px; box-shadow: 0 0 24px 6px rgb(255 0 0 / 0.55); font-weight: 800; }
@@ -220,7 +234,7 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
   <i data-icon="circle-alert" style="--ico:20px"></i>
   <div class="mk-stack" style="--gap:6px">
     <p class="int-calm-h">Paiement en retard</p>
-    <p>La facture F-2026-097 de 1 240,00&nbsp;€ aurait dû être réglée le 15 octobre.</p>
+    <p>La facture <span style="white-space:nowrap">F-2026-097</span> de 1 240,00&nbsp;€ aurait dû être réglée le 15 octobre.</p>
     <span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start">Relancer le client</span>
   </div>
 </div></div>`,

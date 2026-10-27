@@ -951,7 +951,7 @@ Les lectures se notent en \`ruby\` (furigana) ; l’éditorial utilise parfois l
     formats: [
       { label: 'Date', value: '2026/10/27' },
       { label: 'Date longue', value: '2026年10月27日火曜日' },
-      { label: 'Ère impériale (Reiwa 8)', value: '令和8年10月27日' },
+      { label: 'Ère impériale (Reiwa\u00a08)', value: '令和8年10月27日' },
       { label: 'Heure', value: '13:30 · 午後1時30分' },
       { label: 'Grands nombres (12\u00a0000)', value: '1.2万' },
       { label: 'Monnaie (taxe incluse)', value: '8,980円（税込） · ￥8,980' },
@@ -1366,7 +1366,7 @@ Choisis une police arabe dédiée (Noto Naskh Arabic, IBM Plex Sans Arabic, Duba
       {
         topic: 'formulaires',
         title: 'Bidirectionnalité dans les champs',
-        body: `Un numéro de téléphone, un e-mail ou une référence latine dans un texte arabe doit rester lisible : isole-le (\`dir="ltr"\` sur le champ, \`bdi\`, \`unicode-bidi: isolate\`) pour éviter que « +966 50 123 4567 » ne s’affiche « 4567 123 50 966+ ». C’est le défaut le plus fréquent selon les praticiens.
+        body: `Un numéro de téléphone, un e-mail ou une référence latine dans un texte arabe doit rester lisible : isole-le (\`dir="ltr"\` sur le champ, \`bdi\`, \`unicode-bidi: isolate\`) pour éviter que « +966\u00a050\u00a0123\u00a04567 » ne s’affiche « 4567\u00a0123\u00a050\u00a0966+ ». C’est le défaut le plus fréquent selon les praticiens.
 
 Les adresses saoudiennes suivent l’adresse nationale : numéro de bâtiment, rue, quartier, ville, code postal à 5 chiffres et numéro complémentaire. Le nom complet enchaîne souvent prénom, prénom du père, prénom du grand-père et nom de famille : prévois un champ unique « الاسم الكامل » assez long.`,
       },
@@ -1420,7 +1420,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
     formats: [
       { label: 'Date (chiffres occidentaux)', value: '27/10/2026' },
       { label: 'Date (ar-SA par défaut)', value: '٢٧\u200f/١٠\u200f/٢٠٢٦' },
-      { label: 'Date hégirienne (16 joumada al-oula 1448)', value: '١٦ جمادى الأولى ١٤٤٨ هـ' },
+      { label: 'Date hégirienne (16\u00a0joumada al-oula\u00a01448)', value: '١٦ جمادى الأولى ١٤٤٨ هـ' },
       { label: 'Heure (13\u00a0h\u00a030, horloge 12\u00a0h)', value: keep('١:٣٠ م') },
       { label: 'Nombre (chiffres arabes orientaux)', value: '١٬٢٣٤٬٥٦٧٫٨٩' },
       { label: 'Monnaie (chiffres occidentaux)', value: keep('1,234.56 ر.س') },
@@ -1740,7 +1740,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
       { label: 'Nombre', value: '1,234,567.89' },
       { label: 'Monnaie', value: keep('KSh 1,250 · KES 1,250.00') },
       { label: 'Téléphone', value: keep('0712 345 678 · +254 712 345 678') },
-      { label: 'Paiement M-Pesa (Paybill et numéro de compte, ou Till)', value: `${keep('Paybill 567890')}, ${keep('account SOKO4821 · Till 123456')}` },
+      { label: 'Paiement M-\u2060Pesa (Paybill et numéro de compte, ou Till)', value: `${keep('Paybill 567890')}, ${keep('account SOKO4821 · Till 123456')}` },
       { label: 'Code USSD de M-Pesa', value: '*334#' },
       { label: 'Adresse postale', value: `${keep('P.O. Box 12345-00100')}, Nairobi` },
     ],
