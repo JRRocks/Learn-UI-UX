@@ -1,6 +1,6 @@
 import { Link } from '../app/router';
 import { EXERCISES, MODULES, RULE_CARDS } from '../content';
-import { CULTURES } from '../content/cultures';
+import { CULTURE_NAMES } from '../content/cultures';
 
 export function About() {
   return (
@@ -11,7 +11,7 @@ export function About() {
         </h1>
         <p className="lead">
           Épreuves est un atelier pour progresser en UI/UX : {MODULES.length} leçons, {EXERCISES.length} épreuves, {RULE_CARDS.length} fiches
-          et {CULTURES.length} profils de marchés.
+          et {Object.keys(CULTURE_NAMES).length} profils de marchés.
         </p>
       </header>
 

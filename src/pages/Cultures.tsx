@@ -3,7 +3,7 @@ import { useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate } from '../app/router';
 import { Mock } from '../components/Mock';
 import { EXERCISES, MODULE_BY_ID } from '../content';
-import { CULTURES, CULTURE_BY_ID, CULTURE_PAIRS, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL } from '../content/cultures';
+import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, useCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
 import { resolveSource } from '../content/sources';
 import type { CulturePair, CultureProfile } from '../engine/types';
@@ -53,9 +53,22 @@ function Sources({ list }: { list: CultureProfile['sources'] }) {
 
 /* ------------------------------------------------------------------ overview */
 
+function Loading() {
+  return (
+    <div className="page">
+      <p className="muted" role="status">
+        Chargement des marchés…
+      </p>
+    </div>
+  );
+}
+
 export function Cultures() {
+  const data = useCultures();
   const [a, setA] = useState('fr');
   const [b, setB] = useState('cn');
+  if (!data) return <Loading />;
+  const { profiles: CULTURES, pairs: CULTURE_PAIRS } = data;
   const lesson = MODULE_BY_ID.get('culture');
   const count = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
 
@@ -175,7 +188,7 @@ export function Cultures() {
                 <Link to={`/cultures/paire/${p.id}`}>
                   <span className="toc-title">{p.title}</span>
                   <span className="toc-summary">
-                    {CULTURE_BY_ID.get(p.a)?.name ?? p.a} / {CULTURE_BY_ID.get(p.b)?.name ?? p.b}
+                    {CULTURE_NAMES[p.a] ?? p.a} / {CULTURE_NAMES[p.b] ?? p.b}
                   </span>
                 </Link>
               </li>
@@ -239,10 +252,12 @@ function Dims({ c }: { c: CultureProfile }) {
 }
 
 export function CultureDetail({ id }: { id: string }) {
-  const c = CULTURE_BY_ID.get(id);
+  const data = useCultures();
+  if (!data) return <Loading />;
+  const c = data.byId.get(id);
   if (!c) return <NotFound />;
   const exercises = EXERCISES.filter((e) => e.culture === c.id);
-  const pairs = CULTURE_PAIRS.filter((p) => p.a === c.id || p.b === c.id);
+  const pairs = data.pairs.filter((p) => p.a === c.id || p.b === c.id);
   const topics = [...new Set(c.conventions.map((x) => x.topic))];
 
   return (
@@ -391,11 +406,18 @@ export function CultureDetail({ id }: { id: string }) {
 /* ------------------------------------------------------------------ compare */
 
 export function CultureCompare({ query }: { query: URLSearchParams }) {
-  const a = CULTURE_BY_ID.get(query.get('a') ?? '') ?? CULTURES[0];
-  const b = CULTURE_BY_ID.get(query.get('b') ?? '') ?? CULTURES[1];
+  const data = useCultures();
+  if (!data) return <Loading />;
+  return <Compare data={data} query={query} />;
+}
+
+function Compare({ data, query }: { data: CultureData; query: URLSearchParams }) {
+  const CULTURES = data.profiles;
+  const a = data.byId.get(query.get('a') ?? '') ?? CULTURES[0];
+  const b = data.byId.get(query.get('b') ?? '') ?? CULTURES[1];
   const pair = useMemo(
-    () => CULTURE_PAIRS.find((p) => (p.a === a?.id && p.b === b?.id) || (p.a === b?.id && p.b === a?.id)),
-    [a, b],
+    () => data.pairs.find((p) => (p.a === a?.id && p.b === b?.id) || (p.a === b?.id && p.b === a?.id)),
+    [a, b, data.pairs],
   );
   if (!a || !b) return <NotFound />;
   const topics = [...new Set([...a.conventions, ...b.conventions].map((x) => x.topic))];
@@ -528,8 +550,8 @@ export function CultureCompare({ query }: { query: URLSearchParams }) {
 /* ------------------------------------------------------------------ pair */
 
 function PairBlock({ pair, main = false }: { pair: CulturePair; main?: boolean }) {
-  const a = CULTURE_BY_ID.get(pair.a);
-  const b = CULTURE_BY_ID.get(pair.b);
+  const a = { name: CULTURE_NAMES[pair.a] };
+  const b = { name: CULTURE_NAMES[pair.b] };
   const Heading = main ? 'h1' : 'h2';
   return (
     <section className="section" aria-labelledby={main ? 'main-title' : `pair-${pair.id}`}>
@@ -556,7 +578,9 @@ function PairBlock({ pair, main = false }: { pair: CulturePair; main?: boolean }
 }
 
 export function CulturePairPage({ id }: { id: string }) {
-  const pair = CULTURE_PAIRS.find((p) => p.id === id);
+  const data = useCultures();
+  if (!data) return <Loading />;
+  const pair = data.pairs.find((p) => p.id === id);
   if (!pair) return <NotFound />;
   return (
     <div className="page">

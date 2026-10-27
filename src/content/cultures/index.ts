@@ -1,12 +1,41 @@
 import type { CulturePair, CultureProfile } from '../../engine/types';
+import { useLoad } from '../../lib/useLoad';
 
-const files = import.meta.glob<{ CULTURES?: CultureProfile[]; CULTURE_PAIRS?: CulturePair[] }>(['./profiles.ts', './pairs.ts'], {
-  eager: true,
-});
+/** Market ids and names, available without loading the (heavy) profiles. */
+export const CULTURE_NAMES: Record<string, string> = {
+  fr: 'France',
+  us: 'États-Unis',
+  de: 'Allemagne',
+  nordics: 'Pays nordiques',
+  cn: 'Chine continentale',
+  jp: 'Japon',
+  kr: 'Corée du Sud',
+  in: 'Inde',
+  arab: 'Monde arabe (Golfe)',
+  br: 'Brésil',
+  ke: 'Afrique de l’Est (Kenya)',
+  sea: 'Asie du Sud-Est',
+};
 
-export const CULTURES: CultureProfile[] = Object.values(files).flatMap((f) => f.CULTURES ?? []);
-export const CULTURE_PAIRS: CulturePair[] = Object.values(files).flatMap((f) => f.CULTURE_PAIRS ?? []);
-export const CULTURE_BY_ID = new Map(CULTURES.map((c) => [c.id, c]));
+export interface CultureData {
+  profiles: CultureProfile[];
+  pairs: CulturePair[];
+  byId: Map<string, CultureProfile>;
+}
+
+const files = import.meta.glob<{ CULTURES?: CultureProfile[]; CULTURE_PAIRS?: CulturePair[] }>(['./profiles.ts', './pairs.ts']);
+
+/** Profiles and side-by-side pairs live in their own chunk, fetched when the Cultures tab opens. */
+export async function loadCultures(): Promise<CultureData> {
+  const mods = await Promise.all(Object.values(files).map((load) => load()));
+  const profiles = mods.flatMap((m) => m.CULTURES ?? []);
+  const pairs = mods.flatMap((m) => m.CULTURE_PAIRS ?? []);
+  return { profiles, pairs, byId: new Map(profiles.map((c) => [c.id, c])) };
+}
+
+export function useCultures(): CultureData | undefined {
+  return useLoad('cultures', loadCultures);
+}
 
 export const REGIONS_ORDER = ['Europe', 'Amériques', 'Asie de l’Est', 'Asie du Sud', 'Asie du Sud-Est', 'Moyen-Orient', 'Afrique'];
 

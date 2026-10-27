@@ -2,7 +2,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from '../app/router';
 import { Mock } from '../components/Mock';
-import { CULTURE_BY_ID } from '../content/cultures';
+import { CULTURE_NAMES } from '../content/cultures';
 import { LAB_LOCALES, type LabLocale } from '../content/cultures/lab';
 import type { Visual } from '../engine/types';
 
@@ -65,7 +65,7 @@ export function Lab() {
   const visual = useMemo(() => cartVisual(l), [l]);
   const length = (x: LabLocale) => Object.values(x.strings).join('').length;
   const ratio = length(l) / length(en);
-  const culture = l.culture ? CULTURE_BY_ID.get(l.culture) : undefined;
+  const culture = l.culture ? { id: l.culture, name: CULTURE_NAMES[l.culture] ?? l.culture } : undefined;
 
   const plural = safe(() => {
     const pr = new Intl.PluralRules(l.locale);

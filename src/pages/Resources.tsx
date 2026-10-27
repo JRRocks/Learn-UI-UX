@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLoad } from '../lib/useLoad';
 import { Link } from '../app/router';
 import { Mock } from '../components/Mock';
 import { DETECTOR_RULES } from '../content/detectorRules';
@@ -6,8 +7,12 @@ import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '
 import { SOURCES, resolveSource } from '../content/sources';
 import type { AntipatternEntry } from '../engine/types';
 
-const catalogFile = import.meta.glob<{ ANTIPATTERNS?: AntipatternEntry[] }>('../content/antipatterns.ts', { eager: true });
-const ANTIPATTERNS: AntipatternEntry[] = Object.values(catalogFile)[0]?.ANTIPATTERNS ?? [];
+// The catalog (with its demo mocks) is its own chunk, fetched when the tab opens.
+const catalogFile = import.meta.glob<{ ANTIPATTERNS?: AntipatternEntry[] }>('../content/antipatterns.ts');
+const loadCatalog = async (): Promise<AntipatternEntry[]> => {
+  const [load] = Object.values(catalogFile);
+  return load ? ((await load()).ANTIPATTERNS ?? []) : [];
+};
 
 const TABS = [
   { id: 'aide-memoire', label: 'Aide-mémoire' },
@@ -56,12 +61,13 @@ function Cheatsheet() {
   );
 }
 
+const FALLBACK: AntipatternEntry[] = DETECTOR_RULES.map((r) => ({ ...r, description: '', fix: '' }));
+
 function Catalog() {
   const [q, setQ] = useState('');
   const [family, setFamily] = useState<'all' | 'cliche' | 'qualite'>('all');
-  const list = ANTIPATTERNS.length
-    ? ANTIPATTERNS
-    : DETECTOR_RULES.map((r) => ({ ...r, description: '', fix: '' }) as AntipatternEntry);
+  const loaded = useLoad('catalog', loadCatalog);
+  const list = loaded?.length ? loaded : FALLBACK;
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return list.filter(

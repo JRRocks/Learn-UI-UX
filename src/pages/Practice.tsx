@@ -20,7 +20,7 @@ import { useState } from 'react';
 import { Link, navigate } from '../app/router';
 import { useProgress } from '../app/store';
 import { EXERCISES, MODULES, RULE_CARDS } from '../content';
-import { CULTURES } from '../content/cultures';
+import { CULTURE_NAMES } from '../content/cultures';
 import { dayKey } from '../engine/dates';
 import { dueCardKeys } from '../engine/progress';
 import { matchesType, type PracticeType } from '../engine/session';
@@ -150,7 +150,7 @@ export function Practice() {
         <section className="section" aria-labelledby="culture-title">
           <h2 id="culture-title">Cultures</h2>
           <p className="muted">
-            {cultureCount} épreuves sur les différences d’interface entre {CULTURES.length || 'plusieurs'} marchés et la façon de s’y adapter.
+            {cultureCount} épreuves sur les différences d’interface entre {Object.keys(CULTURE_NAMES).length} marchés et la façon de s’y adapter.
           </p>
           <div className="btn-row">
             <Link to="/session?mode=culture" className="btn btn-secondary">

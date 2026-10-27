@@ -4,7 +4,7 @@ import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
 import { ExerciseView, TYPE_LABEL } from '../components/exercise/ExerciseView';
 import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID } from '../content';
-import { CULTURE_BY_ID } from '../content/cultures';
+import { CULTURE_NAMES } from '../content/cultures';
 import type { Verdict } from '../engine/grade';
 import { addSession, recordAttempt } from '../engine/progress';
 import { buildSession, isDuel, type PracticeType, type SessionSpec } from '../engine/session';
@@ -49,7 +49,7 @@ export function specLabel(spec: SessionSpec): string {
     case 'exam':
       return 'Examen blanc';
     case 'culture':
-      return spec.cultureId ? `Cultures — ${CULTURE_BY_ID.get(spec.cultureId)?.name ?? spec.cultureId}` : 'Cultures';
+      return spec.cultureId ? `Cultures — ${CULTURE_NAMES[spec.cultureId] ?? spec.cultureId}` : 'Cultures';
   }
 }
 
