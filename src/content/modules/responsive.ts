@@ -1,8 +1,17 @@
 import type { ModuleContent, SourceRef } from '../../engine/types';
 
-/** French punctuation inside mock markup: thin no-break space before ? ! ; » and after «, no-break space before :. */
+/**
+ * French typography inside mock markup (the Markdown renderer only handles text fields): thin
+ * no-break space before ? ! ; » and after «, no-break space before :, and a number kept with its
+ * unit or sign (« 24,90 € », « 82 % », « 35 min », « n° 214 », « × 2 »).
+ */
 const fr = (html: string) =>
-  html.replace(/ ([?!;»])/g, ' $1').replace(/« /g, '« ').replace(/ :/g, ' :');
+  html
+    .replace(/ ([?!;»])/g, '\u202F$1')
+    .replace(/« /g, '«\u202F')
+    .replace(/ :/g, '\u00A0:')
+    .replace(/(\d) (?=(?:€|%|px|min|m)(?![\p{L}\d]))/gu, '$1\u00A0')
+    .replace(/(n°|×) (?=\d)/g, '$1\u00A0');
 
 /** Escapes code shown as text in a mock. */
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -11,9 +20,21 @@ const WCAG_TARGET_AAA: SourceRef = {
   label: 'W3C — Comprendre le critère 2.5.5 (taille des cibles, renforcé)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html',
 };
+const WCAG_REFLOW: SourceRef = {
+  label: 'W3C — Comprendre le critère 1.4.10 (redistribution)',
+  url: 'https://www.w3.org/WAI/WCAG22/Understanding/reflow.html',
+};
 const MDN_POINTER: SourceRef = {
-  label: 'MDN — Caractéristiques média pointer et hover',
+  label: 'MDN — Caractéristique média pointer',
   url: 'https://developer.mozilla.org/fr/docs/Web/CSS/Reference/At-rules/@media/pointer',
+};
+const MDN_HOVER: SourceRef = {
+  label: 'MDN — Caractéristique média hover',
+  url: 'https://developer.mozilla.org/fr/docs/Web/CSS/Reference/At-rules/@media/hover',
+};
+const MDN_ANY_POINTER: SourceRef = {
+  label: 'MDN — Caractéristique média any-pointer',
+  url: 'https://developer.mozilla.org/fr/docs/Web/CSS/Reference/At-rules/@media/any-pointer',
 };
 const MDN_ENV: SourceRef = {
   label: 'MDN — env() et les zones sûres',
@@ -52,11 +73,13 @@ const PRODUCT_MOBILE_CSS = `
 `;
 
 const TARGETS_CSS = `
-.tg-bar { position: relative; display: flex; align-items: center; }
-.tg-s { width: 24px; height: 24px; display: grid; place-items: center; }
+.tg-bar { display: flex; align-items: center; justify-content: flex-end; }
+.tg-s, .tg-l { position: relative; flex: none; display: grid; place-items: center; }
+.tg-s { width: 24px; height: 24px; }
 .tg-s .mk-ico { width: 16px; height: 16px; }
-.tg-l { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; background: #f0f2f6; }
-.tg-finger { position: absolute; width: 44px; height: 44px; border-radius: 50%; background: rgb(214 120 90 / 0.28); border: 1.5px dashed #b4553a; top: 50%; margin-top: -22px; }
+.tg-l { width: 44px; height: 44px; border-radius: 10px; background: #f0f2f6; }
+.tg-pair { position: relative; display: flex; flex: none; }
+.tg-finger { position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgb(214 120 90 / 0.28); border: 1.5px dashed #b4553a; }
 `;
 
 const SAFE_CSS = `
@@ -83,9 +106,9 @@ const NAV_CSS = `
 `;
 
 const RECIPE = fr(`<div class="mk-img" style="--ratio:16/9"></div>
-  <p class="mk-h3">Tarte fine aux poireaux et chèvre</p>
-  <p class="mk-small mk-muted">35 min · Facile · 4 personnes</p>
-  <p class="mk-small">Une pâte feuilletée, trois poireaux fondus au beurre, un crottin de chèvre et un filet de miel.</p>`);
+  <p class="mk-h2">Tarte fine aux poireaux et chèvre</p>
+  <p class="mk-muted">35 min · Facile · 4 personnes</p>
+  <p style="font-size:16px;line-height:1.5">Une pâte feuilletée, trois poireaux fondus au beurre, un crottin de chèvre et un filet de miel.</p>`);
 
 const TABLE_CSS = `
 .tb-wrap { overflow: hidden; }
@@ -108,8 +131,8 @@ const THUMB_CSS = `
 
 const BIKE_INFO = fr(`<div class="mk-pad mk-stack" style="--gap:4px">
   <p class="mk-h3">Station Bastille</p>
-  <p class="mk-small mk-muted">Vélo électrique · batterie 82 % · à 120 m</p>
-  <p class="mk-small">0,25 € la minute, déverrouillage 1 €</p>
+  <p class="mk-muted">Vélo électrique · batterie 82 % · à 120 m</p>
+  <p>0,25 € la minute, déverrouillage 1 €</p>
 </div>`);
 
 const HERO_CSS = `
@@ -148,7 +171,7 @@ const responsive: ModuleContent = {
     'Repenser une interface pour chaque contexte (écran, mode de saisie, connexion, usage) au lieu de la mettre à l’échelle : mobile d’abord, points de rupture dictés par le contenu, cibles tactiles, zones sûres et images adaptées.',
   minutes: 11,
   commands: ['adapt'],
-  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', MDN_POINTER, MDN_IMAGES, HOOBER],
+  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', WCAG_REFLOW, MDN_POINTER, MDN_ANY_POINTER, MDN_IMAGES, HOOBER],
   sections: [
     {
       id: 'repenser',
@@ -210,7 +233,7 @@ Deux garde-fous : **ne cache jamais une fonction essentielle** sur mobile (si el
 - **Impression** : sans navigation ni éléments interactifs, sauts de page aux endroits logiques, URL complètes affichées, numéros de page et date d’impression.
 - **E-mail** : 600 px de large au plus, une seule colonne, CSS en ligne et tableaux de mise en page (pour la compatibilité des logiciels de messagerie), gros boutons plutôt que liens, pas de survol, et des liens vers l’application pour les tâches complexes.
 
-Ne suppose pas qu’un ordinateur est puissant ni qu’il n’est pas tactile : beaucoup le sont.`,
+Ne suppose pas qu’un ordinateur est puissant (il peut être ancien ou modeste), ni qu’il n’a pas d’écran tactile : beaucoup en ont un.`,
     },
     {
       id: 'mobile-first',
@@ -229,21 +252,23 @@ Ne suppose pas qu’un ordinateur est puissant ni qu’il n’est pas tactile : 
       title: 'La saisie compte plus que la taille d’écran',
       body: `**La taille d’écran ne dit pas le mode de saisie** : un ordinateur portable peut être tactile, une tablette peut avoir un clavier et une souris. Interroge directement les capacités :
 
-- \`@media (pointer: coarse)\` (doigt, stylet) : agrandis les cibles ; \`(pointer: fine)\` (souris, pavé tactile) : tu peux densifier.
+- \`@media (pointer: coarse)\` (doigt sur un écran tactile) : agrandis les cibles ; \`(pointer: fine)\` (souris, pavé tactile, stylet) : tu peux densifier.
 - \`@media (hover: hover)\` : le survol existe, il peut enrichir (aperçu, légère élévation) ; \`(hover: none)\` : tout ce qui passait par le survol doit être visible ou accessible au toucher.
 
-**Rien d’essentiel ne dépend du survol** : au doigt, il n’existe pas.
+Ces deux requêtes ne décrivent que le mode de saisie **principal**. Sur un portable tactile, c’est le pavé tactile : \`(pointer: fine)\` et \`(hover: hover)\` sont vrais, même quand la personne touche l’écran. Pour savoir si un écran tactile est aussi présent, teste \`(any-pointer: coarse)\` avant de densifier ; \`any-hover\` fait de même pour le survol.
+
+**Rien d’essentiel ne dépend du survol** : au doigt, il n’existe pas. Remplace-le par un **retour au toucher** : un état \`:active\` visible (léger assombrissement, enfoncement) confirme que le doigt a atteint la bonne cible.
 
 **Des cibles faites pour le doigt** : au moins **44 × 44 px** (la recommandation d’impeccable, d’Apple, et du critère WCAG 2.5.5 de niveau AAA), avec de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, ou un espacement suffisant autour d’une cible plus petite : c’est un plancher, pas un objectif. L’icône peut rester petite ; c’est la zone touchable qui compte.
 
-**La zone du pouce** : à une main, le bas de l’écran s’atteint mieux que le haut. Dans l’étude de Steven Hoober (1 333 observations, 2013), 49 % des personnes qui touchaient leur écran tenaient le téléphone d’une seule main, 36 % le tenaient d’une main et touchaient de l’autre, 15 % le tenaient à deux mains, et toutes changeaient souvent de prise. Place les actions fréquentes à portée de pouce, sans oublier les autres prises.`,
+**La zone du pouce** : à une main, le bas de l’écran s’atteint mieux que le haut. Dans l’étude de Steven Hoober (1 333 observations, 2013), parmi les personnes qui touchaient leur écran, 49 % tenaient et touchaient le téléphone d’une seule main, 36 % le tenaient à deux mains mais ne touchaient l’écran que d’une (le plus souvent avec le pouce), et 15 % tapaient des deux pouces. Les prises changent très souvent, parfois en quelques secondes. Place les actions fréquentes à portée de pouce, sans oublier les autres prises.`,
       examples: [
         {
           title: 'Des cibles à la taille du doigt',
           bad: {
-            alt: 'Barre d’outils d’un e-mail avec quatre icônes de 24 pixels collées les unes aux autres ; un disque en pointillés de la taille d’un doigt en recouvre deux à la fois.',
+            alt: 'Barre d’outils d’un e-mail avec trois icônes de 24 pixels collées les unes aux autres ; un disque en pointillés de la taille d’un doigt en recouvre deux à la fois.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
-  <div class="tg-bar"><span class="tg-s"><i data-icon="arrow-left"></i></span><span class="mk-grow"></span><span class="tg-s"><i data-icon="folder"></i></span><span class="tg-s"><i data-icon="trash"></i></span><span class="tg-s"><i data-icon="mail"></i></span><span class="tg-s"><i data-icon="ellipsis"></i></span><span class="tg-finger" style="right:46px"></span></div>
+  <div class="tg-bar"><span class="tg-pair"><span class="tg-s"><i data-icon="folder"></i></span><span class="tg-s"><i data-icon="trash"></i></span><span class="tg-finger"></span></span><span class="tg-s"><i data-icon="mail"></i></span></div>
   <div><p class="mk-h3">Votre billet pour Lyon</p><p class="mk-small mk-muted">Rail Express · aujourd’hui, 08:12</p></div>
 </div>`),
             css: TARGETS_CSS,
@@ -252,7 +277,7 @@ Ne suppose pas qu’un ordinateur est puissant ni qu’il n’est pas tactile : 
           good: {
             alt: 'Même barre avec des boutons de 44 pixels espacés de 8 pixels ; le disque de la taille d’un doigt tient dans un seul bouton.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
-  <div class="tg-bar" style="gap:8px"><span class="tg-l"><i data-icon="arrow-left"></i></span><span class="mk-grow"></span><span class="tg-l"><i data-icon="folder"></i></span><span class="tg-l"><i data-icon="trash"></i></span><span class="tg-l"><i data-icon="mail"></i></span><span class="tg-l"><i data-icon="ellipsis"></i></span><span class="tg-finger" style="right:104px"></span></div>
+  <div class="tg-bar" style="gap:8px"><span class="tg-l"><i data-icon="folder"></i></span><span class="tg-l"><i data-icon="trash"></i><span class="tg-finger"></span></span><span class="tg-l"><i data-icon="mail"></i></span></div>
   <div><p class="mk-h3">Votre billet pour Lyon</p><p class="mk-small mk-muted">Rail Express · aujourd’hui, 08:12</p></div>
 </div>`),
             css: TARGETS_CSS,
@@ -325,6 +350,8 @@ Ne suppose pas qu’un ordinateur est puissant ni qu’il n’est pas tactile : 
 
 Teste au minimum sur **un vrai iPhone et un vrai Android**, et sur une tablette si elle fait partie de la cible. Un Android d’entrée de gamme révèle des problèmes de performance qu’aucun simulateur ne montre. Passe aussi en **paysage**, sur plusieurs navigateurs (Safari, Chrome, Firefox, Edge), au clavier, sur un très petit écran (320 px) comme sur un très grand, et avec une connexion bridée.
 
+Sur le très petit écran, vérifie que rien n’oblige à défiler horizontalement : à 320 px de large, c’est le critère WCAG 1.4.10 (redistribution, niveau AA), hors contenus qui exigent deux dimensions, comme un plan ou un schéma. Agrandis aussi le texte à **200 %** (critère 1.4.4, niveau AA) : rien ne doit être coupé ni se chevaucher. Le coupable habituel : une largeur ou une hauteur fixe sur un conteneur de texte.
+
 Pour un **contrôle sur mesure** (curseur, surface à glisser), vérifie au doigt que le glissement va jusqu’au bout, et qu’un balayage qui traverse le contrôle fait défiler la page sans l’activer. Une capture d’écran vérifie une mise en page, jamais un geste : dis ce qui a produit la preuve, et ce qui n’a pas été testé.`,
     },
   ],
@@ -332,7 +359,7 @@ Pour un **contrôle sur mesure** (curseur, surface à glisser), vérifie au doig
     { id: 'adapt', front: 'Adapter une interface au mobile, est-ce la réduire ?', back: 'Non : c’est repenser l’expérience pour le contexte (écran, saisie, connexion, usage), pas mettre les pixels à l’échelle.' },
     { id: 'mobile-first', front: 'Comment écrire un CSS « mobile d’abord » ?', back: 'Des styles de base pour le petit écran, puis des requêtes `min-width` qui ajoutent la complexité.' },
     { id: 'breakpoints', front: 'Où placer un point de rupture ?', back: 'Là où le contenu casse : élargis depuis l’étroit jusqu’à la rupture. Trois points suffisent souvent.' },
-    { id: 'input', front: 'Comment savoir si l’on peut compter sur le survol ?', back: 'Avec `@media (hover: hover)` et `(pointer: fine)`, pas avec la largeur de l’écran.' },
+    { id: 'input', front: 'Comment savoir si un écran tactile est disponible ?', back: 'Avec `@media (any-pointer: coarse)`. `pointer` et `hover` ne décrivent que le mode de saisie principal (le pavé tactile d’un portable tactile), et la largeur ne dit rien.' },
     { id: 'hover', front: 'Une fonction peut-elle dépendre du survol ?', back: 'Non : au doigt, le survol n’existe pas. Il peut enrichir, jamais conditionner.' },
     { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 px, avec de l’espace entre les cibles. Le minimum WCAG AA (24 × 24 px) est un plancher, pas un objectif.' },
     { id: 'thumb', front: 'Où placer les actions fréquentes sur téléphone ?', back: 'À portée de pouce, dans la partie basse de l’écran : à une main, le haut est le plus difficile à atteindre.' },
@@ -390,19 +417,19 @@ La version recommandée **repense** la navigation : les rubriques passent dans u
       options: [
         {
           id: 'capability',
-          label: 'Afficher les boutons en permanence quand `@media (hover: none)`, et garder l’apparition au survol comme confort quand `(hover: hover)`',
-          why: 'La règle suit la capacité réelle de l’appareil, quelle que soit sa taille.',
+          label: 'Afficher les boutons en permanence quand `@media (hover: none), (any-pointer: coarse)`',
+          why: '`hover: none` couvre les tablettes, dont la saisie principale est le doigt ; `any-pointer: coarse` repère l’écran tactile du portable, dont la saisie principale reste le pavé tactile. Ailleurs, l’apparition au survol reste un confort.',
         },
-        { id: 'ua', label: 'Détecter les téléphones avec le *user agent* et n’afficher les boutons que pour eux', why: 'La détection d’appareil se trompe : les tablettes et les portables tactiles du scénario restent sans boutons.' },
-        { id: 'width', label: 'Afficher les boutons en permanence sous 768 px de largeur', why: 'La largeur ne dit rien du mode de saisie : un portable tactile de 1366 px n’aura toujours pas de survol.' },
+        { id: 'ua', label: 'Détecter les téléphones avec le *user agent* et n’afficher les boutons que pour eux', why: 'Même sans erreur de détection, seuls les téléphones auraient les boutons : les tablettes et les portables tactiles du scénario restent sans.' },
+        { id: 'width', label: 'Afficher les boutons en permanence sous 768 px de largeur', why: 'La largeur ne dit rien du mode de saisie : au-dessus de 768 px, un portable tactile ou une tablette en paysage, touchés au doigt, cachent toujours les boutons.' },
         { id: 'hint', label: 'Ajouter le texte « Survolez une carte pour voir les actions »', why: 'Au doigt, le survol n’existe pas : la consigne est impossible à suivre.' },
       ],
       answer: 'capability',
-      explanation: `**La taille d’écran ne dit pas le mode de saisie.** Une tablette peut avoir une souris, un ordinateur portable peut être tactile. Les caractéristiques média \`hover\` et \`pointer\` interrogent directement la capacité de l’appareil.
+      explanation: `**La taille d’écran ne dit pas le mode de saisie.** Une tablette peut avoir une souris, un ordinateur portable peut être tactile. Les caractéristiques média interrogent la capacité de l’appareil, mais \`hover\` et \`pointer\` ne décrivent que son mode de saisie **principal**. Sur un portable tactile, c’est le pavé tactile, qui sait survoler : \`(any-pointer: coarse)\` révèle que l’écran tactile est aussi là.
 
 Règle de fond : **rien d’essentiel ne dépend du survol**. Le survol peut enrichir (aperçu, légère élévation) là où il existe ; une action comme « Ajouter au panier » doit rester visible ou atteignable au toucher partout.`,
-      takeaway: 'Détecte la saisie (`hover`, `pointer`), pas la taille d’écran ; aucune action essentielle ne dépend du survol.',
-      sources: ['imp:adapt', MDN_POINTER],
+      takeaway: 'Détecte la saisie (`hover`, `any-pointer`), pas la taille d’écran ; aucune action essentielle ne dépend du survol.',
+      sources: ['imp:adapt', MDN_HOVER, MDN_ANY_POINTER],
     },
     {
       id: 'responsive-target-slider',
@@ -467,7 +494,7 @@ Envelopper la valeur dans \`max(1rem, …)\` garde une marge minimale sur les ap
         },
         {
           id: 'max',
-          label: '`.grille { grid-template-columns: repeat(3, 1fr); }` puis `@media (max-width: 767px) { .grille { grid-template-columns: 1fr; } }`',
+          label: '`.grille { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }` puis `@media (max-width: 767px) { .grille { grid-template-columns: 1fr; } }`',
           why: '« Ordinateur d’abord » : le mobile hérite de la mise en page large, puis doit la défaire.',
         },
         {
@@ -546,7 +573,7 @@ Impeccable recommande de **transformer chaque ligne en carte** sur mobile : en C
         {
           id: 'nosizes',
           label: 'Le même `srcset`, sans l’attribut `sizes`',
-          why: 'Sans `sizes`, le navigateur suppose que l’image occupe toute la fenêtre (`100vw`) : sur ordinateur, il télécharge un fichier deux fois trop large.',
+          why: 'Sans `sizes`, le navigateur suppose que l’image occupe toute la fenêtre (`100vw`) : sur ordinateur, il vise une image deux fois plus large qu’affichée et télécharge un fichier trop lourd (1200 px au lieu de 800 sur un écran standard de 1 366 px).',
         },
         {
           id: 'single',
@@ -635,7 +662,7 @@ Le bouton de réservation, lui, est bien adapté : pleine largeur, assez haut, �
       visual: {
         alt: 'Extrait de feuille de style en six blocs : une grille automatique, un sous-menu au survol, des images fluides, un bouton d’icône de 28 pixels, des champs en 13 pixels et une barre fixée avec une marge de zone sûre.',
         html: `<div class="cd">
-${block('grid', ['.grille {', '  display: grid;', '  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));', '}'])}
+${block('grid', ['.grille {', '  display: grid;', '  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));', '}'])}
 ${block('hover', ['.menu li:hover > .sous-menu {', '  display: block;', '}'])}
 ${block('img', ['img {', '  max-width: 100%;', '  height: auto;', '}'])}
 ${block('icon', ['.bouton-icone {', '  width: 28px;', '  height: 28px;', '}'])}
@@ -645,22 +672,22 @@ ${block('safe', ['.barre-bas {', '  padding-bottom: max(1rem, env(safe-area-inse
         css: CODE_CSS,
       },
       hotspots: [
-        { id: 'hover', label: 'Sous-menu au survol', correct: true, why: 'Au doigt, le sous-menu ne s’ouvre jamais : il faut une ouverture au toucher (bouton, `details`) ou un menu visible.' },
+        { id: 'hover', label: 'Sous-menu au survol', correct: true, why: 'Au doigt, le survol n’est qu’émulé, et chaque navigateur le fait à sa façon : le premier toucher ouvre le sous-menu ici, suit le lien là, et le menu se referme mal. Il faut une ouverture explicite (bouton, `details`) ou un menu visible.' },
         { id: 'icon', label: 'Bouton d’icône de 28 px', correct: true, why: 'Sous les 44 × 44 px recommandés : agrandis la zone touchable, quitte à garder l’icône petite.' },
         { id: 'input', label: 'Champs en 13 px', correct: true, why: 'Sous 16 px, Safari sur iPhone zoome de force au moment de la saisie et casse la mise en page.' },
-        { id: 'grid', label: 'Grille auto-fit', correct: false, why: 'Une grille qui choisit seule son nombre de colonnes selon la place : bonne pratique.' },
+        { id: 'grid', label: 'Grille auto-fit', correct: false, why: 'Une grille qui choisit seule son nombre de colonnes selon la place, sans jamais déborder grâce à `min(16rem, 100%)` : bonne pratique.' },
         { id: 'img', label: 'Images fluides', correct: false, why: 'Les images ne débordent jamais de leur conteneur : bonne pratique.' },
         { id: 'safe', label: 'Marge de zone sûre', correct: false, why: 'La barre s’écarte de la barre d’accueil, avec 1rem au minimum : bonne pratique.' },
       ],
       explanation: `Trois règles supposent une souris et un grand écran :
 
-- **Un sous-menu ouvert au survol** : sur un écran tactile, il reste fermé. Rien d’essentiel ne doit dépendre du survol.
+- **Un sous-menu ouvert au survol** : sur un écran tactile, son ouverture devient imprévisible. Rien d’essentiel ne doit dépendre du survol.
 - **Une cible de 28 px** : en dessous des 44 × 44 px qui se touchent sans viser.
 - **Des champs en 13 px** : sous 16 px, Safari sur iPhone zoome à la saisie.
 
-Les trois autres blocs sont de bons réflexes : une grille intrinsèque (\`auto-fit\` et \`minmax\`), des images fluides, et une marge \`env(safe-area-inset-bottom)\` avec un minimum.`,
+Les trois autres blocs sont de bons réflexes : une grille intrinsèque (\`auto-fit\` et \`minmax\`, avec \`min()\` pour ne jamais déborder), des images fluides, et une marge \`env(safe-area-inset-bottom)\` avec un minimum.`,
       takeaway: 'Pas de fonction au survol, des cibles de 44 px, des champs en 16 px : les trois réflexes tactiles à vérifier dans le CSS.',
-      sources: ['imp:adapt', 'imp:harden'],
+      sources: ['imp:adapt', 'imp:harden', MDN_HOVER],
     },
     {
       id: 'responsive-contexts-match',
@@ -692,8 +719,7 @@ Les trois autres blocs sont de bons réflexes : une grille intrinsèque (\`auto-
       difficulty: 2,
       prompt: 'Range les étapes de l’adaptation d’une interface à un nouveau contexte.',
       items: [
-        { id: 'source', label: 'Identifier le contexte d’origine et ses hypothèses (grand écran, souris, bonne connexion)' },
-        { id: 'target', label: 'Décrire le contexte cible : appareil, saisie, connexion, usage' },
+        { id: 'contexts', label: 'Diagnostiquer : le contexte d’origine et ses hypothèses, puis le contexte cible (appareil, saisie, connexion, usage)' },
         { id: 'breaks', label: 'Lister ce qui ne tient pas, ne marche pas ou détonne' },
         { id: 'strategy', label: 'Choisir la stratégie : mise en page, interactions, contenu, navigation' },
         { id: 'build', label: 'Implémenter, avec des points de rupture dictés par le contenu' },
@@ -714,7 +740,7 @@ Vient ensuite la **stratégie** (mise en page, interactions, contenu, navigation
         {
           id: 'top',
           visual: {
-            alt: 'Téléphone : en-tête avec un bouton retour, le titre « Vélo n° 214 » et un petit lien « Réserver » dans le coin opposé, puis une carte et les informations de la station.',
+            alt: 'Téléphone : en-tête avec un bouton retour, le titre « Vélo n° 214 » et un petit lien « Réserver » en haut à droite, puis une carte et les informations de la station.',
             frame: 'phone',
             html: fr(`<div class="th-bar"><span class="th-ico"><i data-icon="arrow-left"></i></span><p class="mk-strong">Vélo n° 214</p><span class="mk-btn mk-btn--text mk-btn--s">Réserver</span></div>
 <div class="th-map"><i data-icon="map-pin" style="--ico:30px"></i></div>
@@ -722,7 +748,7 @@ ${BIKE_INFO}
 <div style="height:64px"></div>`),
             css: THUMB_CSS,
           },
-          why: 'L’action principale est un petit lien dans le coin le plus éloigné du pouce : il faut changer de prise pour réserver.',
+          why: 'L’action principale est un petit lien tout en haut de l’écran, hors de portée du pouce : il faut changer de prise pour réserver.',
         },
         {
           id: 'bottom',
@@ -739,7 +765,7 @@ ${BIKE_INFO}
         },
       ],
       answer: 'bottom',
-      explanation: `À une main, le pouce atteint facilement la **partie basse et centrale** de l’écran ; le coin opposé, au sommet de l’écran, oblige à changer de prise. Dans l’étude de Steven Hoober (1 333 observations), 49 % des personnes qui touchaient leur écran le tenaient d’une seule main.
+      explanation: `À une main, le pouce atteint facilement la **partie basse et centrale** de l’écran ; le haut de l’écran, surtout le coin opposé à la main qui tient le téléphone, oblige à changer de prise. Dans l’étude de Steven Hoober (1 333 observations), 49 % des personnes qui touchaient leur écran le tenaient d’une seule main.
 
 Impeccable demande donc des **commandes à portée de pouce** et des cibles généreuses (44 px au moins). L’action principale, ici « Réserver », mérite un bouton large dans la partie basse ; les commandes rares peuvent rester dans la partie haute.`,
       takeaway: 'Place l’action principale d’un écran mobile dans la partie basse, à portée de pouce, en grand.',
@@ -755,7 +781,7 @@ Impeccable demande donc des **commandes à portée de pouce** et des cibles gén
         {
           id: 'wide',
           visual: {
-            alt: 'Téléphone : photo panoramique très étirée, où le cycliste n’est qu’un point au milieu du paysage, au-dessus du titre de l’article.',
+            alt: 'Téléphone : photo panoramique très large, où le cycliste n’est qu’un point au milieu du paysage, au-dessus du titre de l’article.',
             frame: 'phone',
             html: fr(`<div class="ad-hero ad-wide"><i data-icon="bike" style="--ico:20px"></i></div>
 <div class="mk-pad mk-stack" style="--gap:6px"><p class="mk-h3">Traverser le Vercors à vélo en trois jours</p><p class="mk-small mk-muted">Carnet de route · 8 min de lecture</p></div>`),
@@ -776,7 +802,7 @@ Impeccable demande donc des **commandes à portée de pouce** et des cibles gén
         },
       ],
       answer: 'crop',
-      explanation: `Réduire un panorama à la largeur d’un téléphone garde tous les pixels utiles… et fait disparaître le sujet. C’est une question de **direction artistique**, pas de résolution : il faut un autre cadrage.
+      explanation: `Réduire un panorama à la largeur d’un téléphone garde tout le cadre… et réduit le sujet à quelques pixels. C’est une question de **direction artistique**, pas de résolution : il faut un autre cadrage.
 
 En HTML, \`<picture>\` sert exactement à cela : des \`<source media="…">\` proposent un cadrage serré pour les petits écrans et le panorama pour les grands. Pour la même image en plusieurs tailles, \`srcset\` et \`sizes\` suffisent.`,
       takeaway: 'Quand le cadrage doit changer selon l’écran, utilise `<picture>` (direction artistique), pas une simple réduction.',
