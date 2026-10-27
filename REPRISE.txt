@@ -58,7 +58,7 @@ Relecture adverse du contenu (relecture → contradicteur-correcteur), TERMINÉE
 typography, color, layout, motion, delight, heuristics, personas, accessibility, process,
 ux-writing, responsive, platforms, performance, laws, cognitive-load, dark-patterns,
 polish, intensity, harden, onboarding, craft-floor, antipatterns (module), culture,
-cultures (profils + paires), modes. Environ 20 corrections par cible, toutes commitées.
+cultures (profils + paires), modes, catalogue des 62 règles (src/content/antipatterns.ts). Environ 20 corrections par cible, toutes commitées.
 
 Audit de l’application (5 dimensions, chaque constat reproduit puis vérifié par un
 contradicteur) : 94 constats CONFIRMÉS (logique 27, accessibilité 22, design 26,
@@ -68,10 +68,9 @@ l’arrêt.
 ======================================================================
 3. CE QUI TOURNAIT AU MOMENT DE L’ARRÊT (à vérifier en reprenant)
 ======================================================================
-a) modes : TERMINÉ et poussé. Seul le correcteur du catalogue
-   (src/content/antipatterns.ts) tournait encore. Si `git status` montre ce fichier
-   modifié et cohérent, commiter ; sinon relancer la relecture du catalogue (voir 5.A,
-   cible antipatterns-catalog seulement).
+a) Contenu : les 26 relectures et corrections sont TERMINÉES et poussées (modes et le
+   catalogue des 62 règles compris). Typage propre, 47 tests verts. L’étape 5.A n’est
+   plus nécessaire.
 b) Corrections de l’app, vague 1 : lancées dans trois worktrees git du scratchpad
    (branches locales fix/exercise, fix/pages, fix/styles, base 1665f30), puis ARRÊTÉES
    volontairement pour économiser le quota, avant tout commit. Rien n’est perdu : refaire
