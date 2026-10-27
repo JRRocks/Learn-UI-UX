@@ -54,7 +54,7 @@ const BOOKING: Visual = {
       <div class="mk-field"><span class="mk-label">Prénom</span><div class="mk-input">Camille</div></div>
       <div class="mk-field"><span class="mk-label">Nom</span><div class="mk-input">Durand</div></div>
       <div class="mk-field"><span class="mk-label">Date de naissance</span><div class="mk-input bk-ph">JJ/MM/AAAA</div></div>
-      <div class="mk-field"><span class="mk-label">Carte de réduction</span><div class="mk-input mk-row mk-between">CR-AV <i data-icon="chevron-down" style="--ico:14px"></i></div><span class="bk-help"><i data-icon="info" style="--ico:12px"></i> Quelle carte choisir ?</span></div>
+      <div class="mk-field"><span class="mk-label">Carte de réduction</span><div class="mk-input" style="display:flex;align-items:center;justify-content:space-between;gap:8px">CR-AV <i data-icon="chevron-down" style="--ico:14px"></i></div><span class="bk-help"><i data-icon="info" style="--ico:12px"></i> Quelle carte choisir ?</span></div>
     </div>
     <div class="bk-promo mk-row"><i data-icon="car" style="--ico:18px"></i><span class="mk-grow">Location de voiture : −20 % à l’arrivée !</span><span class="mk-strong">Découvrir</span></div>
     <span class="bk-add">+ Ajouter un passager</span>
@@ -201,10 +201,10 @@ Une **évaluation heuristique** est une inspection par des experts, pas un test 
         {
           title: 'Un message d’erreur qui répare (heuristique 9)',
           bad: {
-            alt: 'Formulaire d’inscription avec un bandeau « Saisie invalide. » au-dessus des champs, sans indiquer lequel.',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-error" style="padding:8px 10px;border-radius:6px;background:#fdecea">Saisie invalide.</p><div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input">camille.durand.exemple.fr</div></div><div class="mk-field"><span class="mk-label">Mot de passe</span><div class="mk-input">••••••••••</div></div><span class="mk-btn" style="align-self:flex-start">Créer mon compte</span></div>`,
+            alt: 'Formulaire d’inscription avec un bandeau « Saisie invalide. » au-dessus des champs, sans indiquer lequel, et un mot de passe vidé.',
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-error" style="padding:8px 10px;border-radius:6px;background:#fdecea">Saisie invalide.</p><div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input">camille.durand.exemple.fr</div></div><div class="mk-field"><span class="mk-label">Mot de passe</span><div class="mk-input"></div></div><span class="mk-btn" style="align-self:flex-start">Créer mon compte</span></div>`,
           },
-          badNote: 'Quel champ ? Quelle erreur ? Quelle correction ? L’utilisateur doit tout deviner.',
+          badNote: 'Quel champ ? Quelle erreur ? Quelle correction ? Et le mot de passe a été effacé : tout est à refaire.',
           good: {
             alt: 'Même formulaire : le champ e-mail est encadré en rouge et un message dessous explique qu’il manque le @, avec un exemple.',
             html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input mk-input--error">camille.durand.exemple.fr</div><p class="mk-error">Il manque le « @ ». Exemple : camille.durand@exemple.fr</p></div><div class="mk-field"><span class="mk-label">Mot de passe</span><div class="mk-input">••••••••••</div></div><span class="mk-btn" style="align-self:flex-start">Créer mon compte</span></div>`,
