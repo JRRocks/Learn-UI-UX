@@ -62,7 +62,9 @@ a { color: #1f4fd8; }
 .mk-strong { font-weight: 700; }
 .mk-price { font-weight: 700; font-variant-numeric: tabular-nums; }
 
-/* ---------- Controls ---------- */
+/* ---------- Controls ----------
+   Defaults meet the floor the lessons teach: control boundaries ≥ 3:1 on white
+   and on .mk-surface (WCAG 1.4.11), functional text ≥ 11px (undersized-ui-text). */
 .mk-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   min-height: 38px; padding: 0 16px; border-radius: 8px; border: 1px solid transparent;
@@ -80,13 +82,13 @@ a { color: #1f4fd8; }
 .mk-error { font-size: 12px; color: #b3261e; font-weight: 600; }
 .mk-input {
   display: block; width: 100%; min-height: 38px; padding: 8px 10px;
-  border: 1px solid #c3c8d3; border-radius: 6px; background: #fff;
+  border: 1px solid #868d9c; border-radius: 6px; background: #fff;
 }
 .mk-input--error { border-color: #b3261e; box-shadow: 0 0 0 1px #b3261e; }
 .mk-check { display: inline-flex; align-items: center; gap: 8px; }
-.mk-check::before { content: ""; width: 16px; height: 16px; border: 1.5px solid #8b92a1; border-radius: 4px; flex: none; }
+.mk-check::before { content: ""; width: 16px; height: 16px; border: 1.5px solid #868d9c; border-radius: 4px; flex: none; }
 .mk-check--on::before { background: #1f4fd8; border-color: #1f4fd8; }
-.mk-toggle { width: 36px; height: 20px; border-radius: 999px; background: #c3c8d3; position: relative; flex: none; }
+.mk-toggle { width: 36px; height: 20px; border-radius: 999px; background: #868d9c; position: relative; flex: none; }
 .mk-toggle::after { content: ""; position: absolute; top: 2px; inset-inline-start: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
 .mk-toggle--on { background: #1f4fd8; }
 .mk-toggle--on::after { inset-inline-start: 18px; }
@@ -106,7 +108,7 @@ a { color: #1f4fd8; }
 .mk-list { list-style: none; padding: 0; display: flex; flex-direction: column; }
 .mk-list > li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eceef2; }
 .mk-toast { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; background: #1f2433; color: #fff; box-shadow: 0 8px 24px rgb(15 20 35 / 0.18); }
-.mk-tabbar { display: flex; justify-content: space-around; border-top: 1px solid #e3e6ec; padding: 6px 0 10px; font-size: 10px; color: #5a6172; background: #fff; }
+.mk-tabbar { display: flex; justify-content: space-around; border-top: 1px solid #e3e6ec; padding: 6px 0 10px; font-size: 11px; color: #5a6172; background: #fff; }
 .mk-tabbar > span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .mk-tabbar > .on { color: #1f4fd8; }
 .mk-overlay { position: absolute; inset: 0; background: rgb(15 20 35 / 0.45); display: grid; place-items: center; padding: 16px; }
