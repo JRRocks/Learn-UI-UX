@@ -283,14 +283,14 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
   rules: [
     { id: 'expansion', front: 'Quelle marge prévoir pour les traductions ?', back: '30 à 40 % d’espace en plus, avec des conteneurs qui s’adaptent ; l’allemand est souvent ~30 % plus long que l’anglais, et les chaînes courtes gonflent le plus.' },
     { id: 'min-width', front: 'Un texte long pousse les boutons hors d’une rangée flex : que faire ?', back: '`min-width: 0` sur l’enfant flex (et `min-height: 0` en grille) : par défaut, il ne rétrécit pas sous la largeur de son contenu.' },
-    { id: 'numbers', front: 'Peut-on tronquer un montant trop long ?', back: "Non : un nombre tronqué devient faux. Notation compacte (`Intl.NumberFormat`, `notation: 'compact'`) et valeur exacte accessible." },
+    { id: 'numbers', front: 'Peut-on tronquer un montant trop long ?', back: "Non : un nombre tronqué devient faux. Dans un tableau, on élargit la colonne ; dans une tuile, notation compacte (`Intl.NumberFormat`, `notation: 'compact'`) et valeur exacte accessible." },
     { id: 'rtl', front: 'Comment préparer une mise en page pour l’arabe ou l’hébreu ?', back: '`dir="rtl"` et propriétés logiques (`margin-inline-start`, `padding-inline`…) ; on retourne les icônes directionnelles.' },
     { id: 'zwnj', front: 'Pourquoi ne jamais supprimer le ZWNJ (U+200C) d’un texte persan ?', back: 'Il coupe la liaison cursive à l’intérieur d’un mot composé : le retirer change l’orthographe, voire le sens.' },
     { id: 'yeh-kaf', front: 'Recherche en persan : que faire des variantes ي/ی et ك/ک ?', back: 'Conserver la forme d’origine en base, mais les traiter comme équivalentes pour la recherche et la validation.' },
     { id: 'intl', front: 'Comment afficher dates, nombres et devises selon la langue ?', back: 'Avec `Intl.DateTimeFormat` et `Intl.NumberFormat` et la locale de l’utilisateur (voire son calendrier), jamais à la main.' },
     { id: 'plural', front: 'Pourquoi un « s » ajouté quand le nombre est différent de 1 ne suffit-il pas ?', back: 'Les pluriels varient : six catégories en arabe, « quelques » et « beaucoup » en polonais, 0 au singulier en français. `Intl.PluralRules` ou une bibliothèque i18n.' },
     { id: 'http', front: '401 ou 403 : quelle différence pour l’interface ?', back: '401 : pas (ou plus) connecté — reconnexion, en gardant le travail. 403 : connecté mais pas autorisé — expliquer et dire comment obtenir l’accès.' },
-    { id: 'error-msg', front: 'Que doit dire un message d’erreur ?', back: 'Ce qui a échoué, pourquoi (si c’est connu et utile) et comment s’en sortir — en conservant la saisie.' },
+    { id: 'local-failure', front: 'Un seul composant ne se charge pas : que devient le reste de l’écran ?', back: 'Il continue de fonctionner. La panne reste locale : le composant dit ce qui a échoué et propose de réessayer.' },
     { id: 'double', front: 'Comment empêcher une double commande ?', back: 'Bouton désactivé avec un état explicite pendant l’envoi, et opération idempotente côté serveur.' },
     { id: 'validation', front: 'La validation côté client suffit-elle ?', back: 'Non : elle sert le confort. La validation et l’assainissement côté serveur sont toujours obligatoires.' },
     { id: 'ios16', front: 'Pourquoi 16 px minimum dans les champs sur mobile ?', back: 'Safari sur iOS zoome de force sur un champ focalisé dont le texte fait moins de 16 px. Et on ne bloque jamais le zoom pour l’éviter.' },
@@ -338,7 +338,7 @@ La version robuste donne \`min-width: 0\` au bloc de texte pour qu’il puisse r
         {
           id: 'fixed',
           visual: {
-            alt: 'Fenêtre en allemand « Änderungen speichern? » dont les deux boutons ont la même largeur fixe : le libellé du bouton principal, « Änderungen speichern », est coupé : seul son début est visible.',
+            alt: 'Fenêtre en allemand « Änderungen speichern? » dont les deux boutons ont la même largeur fixe ; le libellé du bouton principal, « Änderungen speichern », est coupé et seul son début est visible.',
             lang: 'de',
             html: `<div class="mk-pad"><div class="har-dialog">
   <p class="mk-h3">Änderungen speichern?</p>

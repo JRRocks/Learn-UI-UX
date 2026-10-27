@@ -59,7 +59,7 @@ const onboarding: ModuleContent = {
   category: 'affiner',
   summary:
     'Amener les nouveaux utilisateurs le plus vite possible au moment qui prouve la valeur du produit, concevoir des états vides qui enseignent, et doser l’aide contextuelle sans l’imposer.',
-  minutes: 11,
+  minutes: 13,
   commands: ['onboard'],
   sources: ['imp:onboard', 'imp:clarify', 'imp:delight', NNG_TUTORIALS, NNG_MOBILE_ONBOARDING, NNG_MOBILE_TUTORIALS, NNG_EMPTY, MATERIAL_EMPTY],
   sections: [
@@ -264,7 +264,7 @@ Un état vide dit aussi la **vérité sur le système** : la page a-t-elle fini 
 
 **Aide dans le produit** : une icône \`?\` près des fonctions complexes, des liens « En savoir plus », les raccourcis clavier affichés (⌘K sur le champ de recherche).
 
-**Au clavier et au lecteur d’écran** : une visite ou une annonce reste utilisable sans souris. Le focus (l’élément qui reçoit les frappes du clavier) va dans la bulle, Échap la ferme, puis le focus revient à l’élément d’origine ; dans une fenêtre modale, il reste piégé tant qu’elle est ouverte. Et une infobulle n’est jamais la seule source d’une information indispensable : sur un écran tactile, rien ne la déclenche au survol.`,
+**Accessibilité** : une visite ou une annonce reste utilisable sans souris. Le focus (l’élément qui reçoit les frappes du clavier) va dans la bulle, Échap la ferme, puis le focus revient à l’élément d’origine ; dans une fenêtre modale, il reste piégé tant qu’elle est ouverte. Et une infobulle n’est jamais la seule source d’une information indispensable : sur un écran tactile, rien ne la déclenche au survol.`,
     },
     {
       id: 'memoire',
@@ -607,7 +607,7 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h2">Rapports</p><span class="mk-btn mk-btn--s" data-hotspot="import"><i data-icon="upload" style="--ico:14px"></i>Importer des données</span></div>
   <div class="onb-astuce" data-hotspot="tip"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Astuce&nbsp;: cliquez sur un bouton pour effectuer une action.</span><i data-icon="x" style="--ico:14px"></i></div>
-  <div class="mk-tabs"><span class="mk-tab mk-tab--on">Synthèse</span><span class="mk-tab mk-row" style="--gap:5px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
+  <div class="mk-tabs mk-wrap"><span class="mk-tab mk-tab--on">Bilan</span><span class="mk-tab mk-row" style="--gap:5px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
   <div class="mk-grid" style="--gap:10px">
     <div class="onb-metric"><span class="mk-small mk-muted mk-row" style="--gap:6px">Taux de rétention<span class="onb-help" data-hotspot="help">?</span></span><b>—</b></div>
     <div class="onb-metric"><span class="mk-small mk-muted">Chiffre d’affaires</span><b>—</b></div>
@@ -615,7 +615,7 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
   <div class="onb-chart" data-hotspot="empty"><span class="mk-muted">Aucune donnée</span></div>
 </div>`,
         css: `.onb-astuce { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; background: #fff7e0; color: #6b4a00; font-size: 13px; }
-.mk-tab { padding: 8px 10px; white-space: nowrap; }
+.mk-tab { padding: 8px; white-space: nowrap; }
 .onb-new { padding: 1px 7px; border-radius: 999px; background: #e8eefc; color: #1a3a99; font-size: 11px; font-weight: 700; }
 .onb-metric { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid #e1e4ea; border-radius: 10px; }
 .onb-metric b { font-size: 20px; }
@@ -658,7 +658,7 @@ Les trois autres zones sont, elles, de bonnes pratiques : une aide au point d’
         alt: 'Visite guidée d’un outil de planification : le bouton Nouveau planning est mis en lumière, le reste de la page assombri, et une bulle ancrée au bouton affiche le compteur « Étape 1 sur N », une rangée de points, le titre Créez votre premier planning, et les boutons Passer la visite et Suivant.',
         html: `<div class="onb-tour">
   <div class="mk-pad mk-stack" style="--gap:12px">
-    <div class="mk-row mk-between"><p class="mk-h3">Plannings</p><span class="mk-btn mk-btn--s onb-spot"><i data-icon="plus" style="--ico:14px"></i>Nouveau planning</span></div>
+    <div class="mk-row mk-between"><p class="mk-h3">Plannings</p><span class="mk-btn mk-btn--s onb-spot">Nouveau planning</span></div>
     <div class="onb-days"><span></span><span></span><span></span><span></span><span></span></div>
   </div>
   <div class="onb-bubble">
