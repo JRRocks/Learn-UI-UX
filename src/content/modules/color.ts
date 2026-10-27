@@ -70,14 +70,32 @@ const color: ModuleContent = {
   category: 'enrichir',
   summary:
     'Construire une palette par rôles, vérifier les contrastes au calcul près, ne jamais coder une information par la seule couleur et composer un thème sombre au lieu de l’inverser.',
-  minutes: 11,
+  minutes: 12,
   commands: ['colorize', 'quieter'],
-  sources: ['imp:colorize', 'imp:craft-floor', 'imp:quieter', 'imp:operate', 'imp:new-work', 'imp:detector', 'wcag:contrast', 'wcag22', WCAG_141, CBA, MATERIAL_DARK, MDN_OKLCH],
+  sources: ['imp:colorize', 'imp:craft-floor', 'imp:quieter', 'imp:operate', 'imp:mode-operate', 'imp:new-work', 'imp:detector', 'wcag:contrast', 'wcag22', WCAG_141, WCAG_1411, CBA, MATERIAL_DARK, MDN_OKLCH],
   sections: [
+    {
+      id: 'dosage',
+      title: 'Une stratégie, puis un dosage',
+      body: `La couleur porte trois choses : la **hiérarchie**, le **sens** et l’**atmosphère**. Avant de toucher une couleur, audite l’existant (couleurs de marque déjà établies, rôles actuels, échecs de contraste), puis nomme ta **stratégie** : la température émotionnelle, la relation dominante entre les couleurs (comment elles s’accordent ou s’opposent), l’amplitude de contraste et le **dosage**. Impeccable distingue quatre stratégies :
+
+- **Retenue** : des neutres légèrement teintés et un seul accent. C’est le plancher des surfaces *Opérer* (applications) et un choix courant pour *Lire* (documentation), où la couleur garde de vrais rôles.
+- **Engagée** : une couleur saturée couvre 30 à 60 % de la surface.
+- **Palette complète** : 3 ou 4 rôles colorés nommés.
+- **Immersion** : la surface *est* la couleur.
+
+**Retenue ne veut pas dire générique.** Un écran gris avec un accent posé par habitude n’est pas de la retenue, mais l’absence de décision : les neutres et l’accent doivent appartenir à l’univers du produit.
+
+Les surfaces *Persuader* et *Expérience* ont droit aux stratégies audacieuses ; dans une application, l’accent sert l’action principale, la sélection et les états — pas la décoration.
+
+**L’accent tire sa force de sa rareté.** Une couleur qui apparaît partout n’attire plus l’œil nulle part ; laisse la plus forte posséder une région ou un rôle délibéré plutôt que la saupoudrer en petites touches.
+
+La « règle des 10 % » que cite la commande *quieter* (laisser les neutres dominer, l’accent autour de 10 %) est une **heuristique** pour calmer une interface criarde, pas une loi : *colorize* refuse explicitement les pourcentages fixes. Pour calmer une palette, *quieter* propose aussi de baisser la saturation (vers 70–85 %), de réduire le nombre de teintes et de garder le contraste fort là où il compte.`,
+    },
     {
       id: 'roles',
       title: 'Des rôles, pas un nuancier',
-      body: `La couleur porte trois choses : la **hiérarchie**, le **sens** et l’**atmosphère**. Avant de choisir une teinte, liste les rôles que l’interface doit tenir :
+      body: `Une fois la stratégie nommée, et avant de choisir une teinte, liste les rôles que l’interface doit tenir :
 
 - **fond et surfaces** : le canevas, puis les surfaces surélevées (menus, panneaux, modales) ;
 - **textes** principal et secondaire ;
@@ -86,9 +104,13 @@ const color: ModuleContent = {
 - **états** : succès, avertissement, erreur, information ;
 - **données** : catégories ou échelles d’un graphique, quand il y en a.
 
-Chaque couleur reçoit un rôle stable, nommé par sa fonction (\`--color-action\`, \`--color-danger\`) et non par sa valeur (\`--blue-600\`). Un changement de thème remappe alors les rôles sans toucher aux composants.
+Chaque couleur reçoit un rôle stable. Dans un système de **jetons** (les variables de design partagées par tout le produit), les composants n’utilisent que des jetons **sémantiques**, nommés par leur fonction (\`--color-action\`, \`--color-danger\`), qui pointent vers des valeurs **primitives** (\`--blue-600\`). Changer de thème, c’est réaffecter les rôles à d’autres primitives, sans toucher aux composants.
 
-La **teinte** se choisit d’après le sens du produit et sa direction visuelle, jamais par réflexe de catégorie (« une banque, donc du bleu »). Et une couleur de marque déjà engagée se respecte : coloriser n’est pas remplacer un univers.`,
+Garde un sens stable à chaque couleur d’état, mais respecte les conventions du domaine et du marché au lieu de supposer des teintes fixes : en Chine continentale, la Bourse affiche la hausse en rouge et la baisse en vert (voir le module « UI interculturelle »).
+
+Donne aussi la palette aux surfaces que dessine le navigateur : la sélection de texte (\`::selection\`), le curseur d’insertion (\`caret-color\`), les barres de défilement (\`scrollbar-color\`) et l’anneau de focus. Laissées par défaut, elles n’appartiennent à aucune palette.
+
+La **teinte** se choisit d’après le sens du produit et sa direction visuelle, jamais par réflexe de catégorie (« une banque, donc du bleu »). Et une couleur de marque déjà établie se respecte : coloriser n’est pas remplacer un univers.`,
       examples: [
         {
           title: 'Un nuancier ou des rôles',
@@ -111,7 +133,7 @@ La **teinte** se choisit d’après le sens du produit et sa direction visuelle,
           },
           badNote: 'Cinq teintes vives sans rôle : elles décorent, « En retard » est en vert et l’action principale est grisée.',
           good: {
-            alt: 'Même écran : tuiles neutres, chiffre des retards en rouge, statuts avec icône et libellé, bouton d’action bleu.',
+            alt: 'Même écran : tuiles neutres, chiffre des retards en rouge, statuts « Payée » et « En retard » avec icône et libellé, « Envoyée » en pastille neutre, bouton d’action bleu.',
             html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between"><p class="mk-h3">Factures · mars</p><span class="mk-btn mk-btn--s">Nouvelle facture</span></div>
   <div class="mk-grid" style="--cols:3;--gap:8px">
@@ -132,33 +154,17 @@ La **teinte** se choisit d’après le sens du produit et sa direction visuelle,
       ],
     },
     {
-      id: 'dosage',
-      title: 'Une stratégie, puis un dosage',
-      body: `Avant de toucher une couleur, nomme la **stratégie** : la température émotionnelle, la couleur dominante, l’amplitude de contraste et le **dosage**. Impeccable en distingue quatre :
-
-- **Retenue** : des neutres légèrement teintés et un seul accent. C’est le plancher des surfaces *Opérer* et *Lire* (applications, documentation).
-- **Engagée** : une couleur saturée couvre 30 à 60 % de la surface.
-- **Palette complète** : 3 ou 4 rôles colorés nommés.
-- **Immersion** : la surface *est* la couleur.
-
-Les surfaces *Persuader* et *Expérience* ont le droit aux stratégies audacieuses ; dans une application, l’accent sert l’action principale, la sélection et les états — pas la décoration.
-
-**L’accent tire sa force de sa rareté.** Une couleur qui apparaît partout n’attire plus l’œil nulle part ; laisse la plus forte posséder une région ou un rôle délibéré plutôt que la saupoudrer en petites touches.
-
-La « règle des 10 % » que cite la commande *quieter* (laisser les neutres dominer, l’accent autour de 10 %) est une **heuristique** pour calmer une interface criarde, pas une loi : *colorize* refuse explicitement les pourcentages fixes. Pour calmer une palette, *quieter* propose aussi de baisser la saturation (vers 70–85 %), de réduire le nombre de teintes et de garder le contraste fort là où il compte.`,
-    },
-    {
       id: 'contraste',
       title: 'Contraste : des seuils et un calcul',
       body: `Le contraste se **calcule** ; il ne s’estime pas à l’œil. Le WCAG 2.2 fixe des minimums (niveau AA) entre une couleur et son fond :
 
-- **Texte courant : 4,5:1** — placeholders et textes d’aide compris.
+- **Texte courant : 4,5:1** — textes d’exemple dans les champs (placeholders) et textes d’aide compris.
 - **Grand texte : 3:1** — au moins 24 px, ou 18,7 px en gras (18 pt, ou 14 pt gras).
-- **Composants d’interface, icônes utiles, indicateurs de focus : 3:1** contre les couleurs voisines (critère 1.4.11).
+- **Composants d’interface, icônes et graphiques utiles, indicateurs de focus : 3:1** contre les couleurs voisines (critère 1.4.11).
 
 Le niveau AAA monte à 7:1 pour le texte courant.
 
-Quelques repères sur fond blanc : \`#767676\` est le gris neutre le plus clair qui passe (4,54:1), \`#999999\` n’atteint que 2,85:1. Le blanc sur un vert franc (\`#16a34a\`) ou un orange (\`#f59e0b\`) échoue aussi pour un texte courant : 3,3:1 et 2,2:1.
+Quelques repères sur fond blanc : \`#767676\` est le gris neutre le plus clair qui passe (4,54:1), \`#999999\` n’atteint que 2,85:1. Le blanc sur un vert franc (\`#16a34a\`) ou un orange (\`#f59e0b\`) échoue aussi pour un texte courant : 3,3:1 et 2,1:1.
 
 Vérifie **tous les états** — survol, focus, erreur, désactivé —, le texte posé sur une image, les superpositions et **les deux thèmes**. Le WCAG exempte les composants désactivés et le purement décoratif ; impeccable demande tout de même de contrôler les états désactivés.
 
@@ -235,7 +241,7 @@ La même logique vaut pour les bordures et les icônes secondaires posées sur l
       body: `Un thème sombre n’est pas le thème clair inversé. Il se **compose** :
 
 - **Choisis clair ou sombre d’après la scène d’usage** — qui, où, sous quelle lumière —, pas d’après la catégorie (« outil de développeur, donc sombre »).
-- **Évite le noir pur** : un gris très sombre (Material Design recommande \`#121212\`) laisse de la place pour étager les surfaces.
+- **Évite le noir pur** : un gris très sombre (Material Design recommande \`#121212\`) laisse mieux voir les ombres et adoucit le contraste du texte clair, ce qui fatigue moins les yeux.
 - **L’élévation s’éclaircit** : une ombre se voit mal sur fond sombre ; une surface surélevée (carte, menu, modale) devient un peu plus claire que le fond.
 - **Désature les accents** : une couleur saturée vibre sur fond sombre ; prends une version plus claire et moins intense de la teinte.
 - **Revérifie chaque contraste** : le bleu \`#1f4fd8\` fait 6,6:1 sur blanc, mais 3,2:1 sur noir.
@@ -277,14 +283,14 @@ Le détecteur relève aussi les réflexes du « sombre qui fait chic » : lueurs
 Pour une rampe, du très clair au très foncé :
 
 - fais varier **L** par pas réguliers ;
-- **réduis la chroma près du blanc et du noir** : l’écran n’y affiche pas de couleurs intenses. Pour un bleu (teinte 255), l’espace sRGB n’offre qu’environ 0,014 de chroma à 97 % de luminosité, contre près de 0,19 vers 65 % ;
+- **réduis la chroma près du blanc et du noir** : l’écran n’y affiche pas de couleurs intenses. Pour un bleu (teinte 255), l’espace sRGB (la gamme de couleurs standard des écrans courants) n’offre qu’environ 0,014 de chroma à 97 % de luminosité, contre près de 0,19 vers 65 % ;
 - garde la teinte stable, quitte à la décaler légèrement si la couleur vire.
 
 Par exemple : \`oklch(97% 0.012 255)\` pour un fond teinté, \`oklch(55% 0.17 255)\` pour l’action, \`oklch(25% 0.07 255)\` pour un texte foncé. Si le projet a déjà un espace colorimétrique, reste dedans.`,
     },
   ],
   rules: [
-    { id: 'roles', front: 'Par quoi commencer une palette ?', back: 'Par les rôles : fond et surfaces, textes, action, focus, sélection, bordures, états, données. Pas par un nuancier.' },
+    { id: 'roles', front: 'Que faire avant de choisir une teinte ?', back: 'Auditer l’existant, nommer la stratégie, puis définir des rôles (surfaces, textes, action, focus, états, données) plutôt qu’un nuancier.' },
     { id: 'strategy', front: 'Quelles sont les quatre stratégies de couleur d’impeccable ?', back: 'Retenue (neutres et un accent), engagée (une couleur sur 30 à 60 % de la surface), palette complète (3–4 rôles), immersion (la surface est la couleur).' },
     { id: 'aa-text', front: 'Contraste minimal d’un texte courant (WCAG AA) ?', back: '4,5:1, placeholders compris. Le grand texte (24 px, ou 18,7 px en gras) descend à 3:1.' },
     { id: 'non-text', front: 'Contraste minimal d’un contrôle, d’une icône utile ou d’un focus ?', back: '3:1 contre les couleurs voisines (critère 1.4.11).' },
@@ -296,7 +302,7 @@ Par exemple : \`oklch(97% 0.012 255)\` pour un fond teinté, \`oklch(55% 0.17 25
     { id: 'ten-percent', front: 'Les « 10 % d’accent » sont-ils une règle ?', back: 'Une heuristique de *quieter* pour calmer une interface criarde. *colorize* refuse les pourcentages fixes : le dosage suit la stratégie.' },
     { id: 'hue', front: 'Comment choisir la teinte principale ?', back: 'D’après le sens du produit et sa direction visuelle, jamais par réflexe de catégorie (« finance = bleu »).' },
     { id: 'oklch', front: 'Pourquoi construire une rampe en OKLCH ?', back: 'Sa luminosité est perceptive : des pas réguliers de L paraissent réguliers. On réduit la chroma près du blanc et du noir.' },
-    { id: 'alpha', front: 'Couleur translucide ou explicite pour un texte ?', back: 'Explicite : avec l’alpha, le contraste dépend du fond, et il s’effondre sur une surface inattendue.' },
+    { id: 'alpha', front: 'Couleur translucide ou explicite pour un texte ?', back: 'Explicite dès que le texte peut changer de fond : l’alpha rend le contraste dépendant de ce qu’il y a dessous. Un blanc translucide sur une surface fixe et connue reste possible, contraste vérifié.' },
   ],
   exercises: [
     {
@@ -353,10 +359,10 @@ La correction d’impeccable : **dériver le texte secondaire de la teinte de la
       readout: { kind: 'contrast', background: '#ffffff' },
       explanation: `Le contraste se calcule avec la formule du WCAG, à partir de la luminance relative des deux couleurs. Pour un gris neutre sur blanc, la limite tombe entre deux valeurs voisines : à **46 %** de luminosité (\`#757575\`), le ratio vaut **4,6:1** et le texte passe ; à **47 %** (\`#787878\`), il tombe à **4,4:1** et échoue.
 
-Un texte d’aide doit aussi rester secondaire : en dessous d’environ 30 %, il se rapproche trop du texte principal (\`#1d2230\`) et la hiérarchie s’aplatit. Vers 44 % (\`#707070\`, 4,9:1), tu gardes une marge de sécurité sans perdre la discrétion.
+Un texte d’aide doit aussi rester secondaire : en dessous d’environ 30 %, il se rapproche trop du texte principal (\`#1d2230\`) et la hiérarchie s’aplatit. Vers 44 % (\`#707070\`, 4,95:1), tu gardes une marge de sécurité sans perdre la discrétion.
 
 Le texte d’exemple dans le champ (placeholder) obéit à la même règle : c’est du texte, il lui faut 4,5:1.`,
-      takeaway: 'Aide et placeholder : au moins 4,5:1. Sur blanc, un gris neutre ne dépasse pas 46 % de luminosité (#757575).',
+      takeaway: 'Aide et placeholder : au moins 4,5:1. Sur blanc, le gris neutre le plus clair qui passe est `#767676` (≈ 46 %).',
       sources: ['wcag:contrast', 'imp:craft-floor', 'imp:colorize'],
     },
     {
@@ -544,7 +550,7 @@ La version arc-en-ciel décore sans rien signifier ; la version toute grise reno
             css: `.pd-img { height: 92px; border-radius: 10px; background: #fff7ed; border: 2px solid #c2410c; }
 .pd-badge { padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #c2410c; color: #fff; }
 .pd-title { font-size: 16px; font-weight: 700; color: #c2410c; }
-.pd-stars { color: #c2410c; } .pd-price { font-size: 18px; color: #c2410c; }
+.pd-stars { color: #c2410c; } .pd-stars svg { fill: currentColor; } .pd-price { font-size: 18px; color: #c2410c; }
 .pd-buy { background: #c2410c; align-self: flex-start; }
 .pd-link { color: #c2410c; text-decoration: underline; }`,
           },
@@ -558,7 +564,7 @@ La version arc-en-ciel décore sans rien signifier ; la version toute grise reno
             css: `.pd-img { height: 92px; border-radius: 10px; background: linear-gradient(160deg, #d9dee6, #eef1f5); }
 .pd-badge { padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #eef1f7; color: #36405a; }
 .pd-title { font-size: 16px; font-weight: 700; }
-.pd-stars { color: #36405a; } .pd-price { font-size: 18px; }
+.pd-stars { color: #36405a; } .pd-stars svg { fill: currentColor; } .pd-price { font-size: 18px; }
 .pd-buy { background: #c2410c; align-self: flex-start; }
 .pd-link { color: #36405a; text-decoration: underline; }`,
           },
@@ -578,15 +584,17 @@ Garde l’accent pour l’action principale, la sélection et les états. Le res
       difficulty: 3,
       prompt: 'Tu crées l’identité d’une application d’épargne pour artisans indépendants. Comment choisir sa teinte principale ?',
       options: [
-        { id: 'meaning', label: 'Partir du sens du produit et de son univers (le métier, ses matières, son public), puis éprouver la teinte dans tous ses rôles et contrastes.', why: 'C’est la démarche d’impeccable : la teinte découle du sens du produit et de la direction visuelle, puis passe l’épreuve des rôles et du contraste.' },
-        { id: 'blue', label: 'Du bleu : c’est la couleur de la confiance, donc celle de la finance.', why: 'Réflexe de catégorie : il rend le produit interchangeable avec tous ses concurrents.' },
-        { id: 'ai', label: 'Un dégradé du violet au cyan, qui fait moderne et technologique.', why: 'C’est la palette la plus reconnaissable des interfaces générées (règle « AI color palette » du détecteur).' },
-        { id: 'cream', label: 'Un fond crème et des tons beiges, chaleureux et élégants par défaut.', why: 'Le crème par défaut est devenu le « bon goût » réflexe des interfaces générées (règle « cream palette »).' },
+        { id: 'meaning', label: 'Partir de l’univers du produit (le métier, ses matières, son public), puis éprouver la teinte dans tous ses rôles.', why: 'C’est la démarche d’impeccable : la teinte découle du sens du produit et de la direction visuelle, puis passe l’épreuve des rôles et du contraste.' },
+        { id: 'blue', label: 'S’appuyer sur la psychologie des couleurs : le bleu inspire confiance, c’est la teinte attendue pour l’épargne.', why: 'Un réflexe de catégorie présenté comme une méthode : « finance = bleu » rend le produit interchangeable avec ses concurrents.' },
+        { id: 'contrast', label: 'Prendre la teinte qui contraste le mieux avec le blanc, puis construire le reste de la palette autour d’elle.', why: 'Le contraste dépend surtout de la luminosité, pas de la teinte : presque toute teinte, assez assombrie, atteint 4,5:1 sur blanc. Il se vérifie dans chaque rôle ; il ne choisit pas la teinte.' },
+        { id: 'cream', label: 'Suivre la tendance du moment : un fond crème et des tons beiges, chaleureux et élégants sans prendre de risque.', why: 'Le crème par défaut est devenu le « bon goût » réflexe des interfaces générées (règle « cream palette » du détecteur).' },
       ],
       answer: 'meaning',
-      explanation: `Impeccable demande de choisir la teinte **d’après le sens du produit et la direction visuelle, jamais par association de catégorie**. « Finance = bleu », « écologie = vert », « tech = violet » donnent des produits interchangeables.
+      explanation: `Impeccable demande de choisir la teinte **d’après le sens du produit et la direction visuelle, jamais par association de catégorie**. « Finance = bleu », « écologie = vert », « tech = violet » donnent des produits interchangeables ; suivre la tendance du moment aussi.
 
-Pars de ce qui rend ce produit singulier — ici le monde de l’atelier, ses matières, son public —, puis vérifie la teinte dans chacun de ses rôles (action, surfaces, états) et dans les deux thèmes. Une couleur de marque déjà engagée reste prioritaire : on ne remplace pas un univers sous prétexte de le coloriser.`,
+Le contraste, lui, ne choisit pas la teinte : il dépend surtout de la luminosité et se règle ensuite, rôle par rôle.
+
+Pars de ce qui rend ce produit singulier — ici le monde de l’atelier, ses matières, son public —, puis vérifie la teinte dans chacun de ses rôles (action, surfaces, états) et dans les deux thèmes. Une couleur de marque déjà établie reste prioritaire : on ne remplace pas un univers sous prétexte de le coloriser.`,
       takeaway: 'Choisis la teinte d’après le sens du produit et son univers, puis éprouve-la dans les rôles et les contrastes.',
       sources: ['imp:colorize', 'imp:detector', 'imp:new-work'],
     },
@@ -599,7 +607,7 @@ Pars de ce qui rend ce produit singulier — ici le monde de l’atelier, ses ma
         { id: 'taper', label: 'Je la réduis près du blanc et du noir, et la garde plus forte au milieu de la rampe.', why: 'C’est la consigne d’impeccable : l’écran n’affiche pas de couleurs intenses aux extrémités.' },
         { id: 'constant', label: 'Je la garde constante sur toute la rampe : c’est mathématiquement uniforme.', why: 'Aux extrémités, une chroma élevée sort de l’espace affichable : les couleurs sont rognées et les pas deviennent irréguliers.' },
         { id: 'boost', label: 'Je l’augmente près du blanc et du noir pour que ces nuances restent vives.', why: 'C’est l’inverse de ce que permet l’écran : la place disponible en chroma se réduit justement à ces endroits.' },
-        { id: 'hsl', label: 'Je passe en HSL : saturation fixe et luminosité par pas de 10 %.', why: 'La luminosité HSL n’est pas perceptive : à 50 %, le jaune contraste à 1,07:1 avec le blanc, le bleu à 8,6:1.' },
+        { id: 'hsl', label: 'Je passe en HSL : saturation fixe et luminosité par pas de 10 %.', why: 'Changer d’espace ne règle rien. Même sur une seule teinte, des pas de 10 % en HSL ne paraissent pas réguliers : pour le bleu pur, l’écart perçu varie du simple au triple d’un pas à l’autre.' },
       ],
       answer: 'taper',
       explanation: `OKLCH sépare la **luminosité perceptive** (L), la **chroma** (C, l’intensité) et la **teinte** (H). On fait varier L par pas réguliers et l’on obtient des nuances qui paraissent réellement espacées.
@@ -659,6 +667,58 @@ Pour un texte courant (moins de 24 px, ou moins de 18,7 px en gras), le WCAG AA 
       sources: ['wcag:contrast', WCAG_1411],
     },
     {
+      id: 'color-non-text-multi',
+      type: 'multi',
+      difficulty: 2,
+      prompt: 'Sur fond blanc, lesquels de ces éléments non textuels atteignent le minimum AA (3:1) ?',
+      options: [
+        {
+          id: 'trash',
+          label: 'Icône seule du bouton « Supprimer », `#aaaaaa`',
+          visual: {
+            alt: 'Ligne de facture avec, à droite, un bouton de suppression réduit à une icône de corbeille gris clair.',
+            html: `<div class="mk-pad mk-row mk-between"><span>Facture F-2041 · 320 €</span><span class="nt-ico" style="color:#aaaaaa"><i data-icon="trash" style="--ico:18px"></i></span></div>`,
+            css: `.nt-ico { width: 36px; height: 36px; display: grid; place-items: center; flex: none; }`,
+          },
+          why: '2,3:1 : l’icône est le seul indice de ce bouton, elle doit atteindre 3:1.',
+        },
+        {
+          id: 'line',
+          label: 'Courbe d’un graphique, `#f59e0b`',
+          visual: {
+            alt: 'Petit graphique des visites sur sept jours : une seule courbe orange sur fond blanc.',
+            html: `<div class="mk-pad mk-stack" style="--gap:6px"><p class="mk-small mk-muted">Visites, 7 derniers jours</p><svg viewBox="0 0 200 56" style="width:100%;max-width:240px"><polyline points="4,46 36,38 68,42 100,24 132,28 164,16 196,10" fill="none" stroke="#f59e0b" stroke-width="2.5"/></svg></div>`,
+          },
+          why: '2,1:1 : la courbe porte la donnée, elle doit atteindre 3:1. Un orange vif reste trop clair sur blanc.',
+        },
+        {
+          id: 'focus',
+          label: 'Anneau de focus `#1f4fd8`',
+          visual: {
+            alt: 'Bouton « Annuler » entouré d’un anneau de focus bleu.',
+            html: `<div class="mk-pad"><span class="mk-btn mk-btn--ghost nt-focus">Annuler</span></div>`,
+            css: `.nt-focus { outline: 2px solid #1f4fd8; outline-offset: 2px; }`,
+          },
+          why: '6,6:1 contre le blanc qui l’entoure : le focus se repère sans effort.',
+        },
+        {
+          id: 'toggle',
+          label: 'Interrupteur activé `#16a34a`',
+          visual: {
+            alt: 'Réglage « Notifications par e-mail » avec un interrupteur activé vert à pastille blanche.',
+            html: `<div class="mk-pad mk-row mk-between"><span>Notifications par e-mail</span><span class="mk-toggle mk-toggle--on" style="background:#16a34a"></span></div>`,
+          },
+          why: '3,3:1 contre le blanc de la page et de la pastille : trop peu pour un texte de 14 px, assez pour un composant.',
+        },
+      ],
+      answers: ['focus', 'toggle'],
+      explanation: `Le critère 1.4.11 du WCAG (niveau AA) exige **3:1** contre les couleurs voisines pour tout ce qui permet de repérer un composant et son état — l’icône d’un bouton sans libellé, la forme d’un interrupteur ou d’une case à cocher, l’anneau de focus — et pour les parties d’un graphique nécessaires à sa lecture.
+
+Ce seuil est plus bas que pour le texte : le vert \`#16a34a\`, qui échoue sous un texte de 14 px, suffit pour un interrupteur. Mais un gris clair ou un orange vif restent sous 3:1 sur blanc, même quand ils « se voient ». Le décoratif et les composants désactivés en sont exemptés.`,
+      takeaway: 'Icônes utiles, contrôles, focus et courbes de graphique : au moins 3:1 contre les couleurs voisines, un seuil plus bas que pour le texte mais tout aussi obligatoire.',
+      sources: [WCAG_1411, 'imp:colorize'],
+    },
+    {
       id: 'color-invert-tf',
       type: 'truefalse',
       difficulty: 1,
@@ -666,7 +726,7 @@ Pour un texte courant (moins de 24 px, ou moins de 18,7 px en gras), le WCAG AA 
       answer: false,
       explanation: `Une inversion mécanique casse presque tout :
 
-- le blanc devient noir pur, qui ne laisse aucune marge pour étager les surfaces ;
+- le blanc devient noir pur : un texte clair y contraste plus durement que sur un gris très sombre (jusqu’à 21:1 pour du blanc), ce qui fatigue les yeux ;
 - les ombres, qui créaient l’élévation, deviennent invisibles ;
 - les accents saturés vibrent sur le fond sombre ;
 - des contrastes qui passaient échouent : le bleu \`#1f4fd8\` fait 6,6:1 sur blanc, 3,2:1 sur noir.
@@ -693,15 +753,15 @@ La commande *colorize* refuse explicitement les pourcentages fixes : la stratég
       difficulty: 2,
       prompt: 'Range dans l’ordre les étapes pour coloriser une interface existante.',
       items: [
-        { id: 'audit', label: 'Auditer l’existant : couleurs de marque engagées, rôles actuels, échecs de contraste' },
-        { id: 'strategy', label: 'Choisir une stratégie : température, couleur dominante, dosage' },
+        { id: 'audit', label: 'Auditer l’existant : couleurs de marque déjà établies, rôles actuels, échecs de contraste' },
+        { id: 'strategy', label: 'Choisir une stratégie : température, relation dominante, dosage' },
         { id: 'roles', label: 'Définir les rôles : surfaces, textes, action, focus, états, données' },
         { id: 'apply', label: 'Appliquer à l’échelle du système, avec des jetons sémantiques' },
         { id: 'verify', label: 'Vérifier contrastes, indices non colorés et deux thèmes, dans chaque état' },
       ],
       explanation: `C’est la démarche de la commande *colorize* :
 
-1. on **audite** avant de choisir, pour ne pas écraser une marque engagée ;
+1. on **audite** avant de choisir, pour ne pas écraser une marque déjà établie ;
 2. on nomme une **stratégie** avant de toucher une teinte ;
 3. on construit des **rôles** plutôt qu’un nuancier ;
 4. on les applique au **système** (jetons sémantiques, pas de valeurs isolées) ;
@@ -718,7 +778,7 @@ La commande *colorize* refuse explicitement les pourcentages fixes : la stratég
       rightTitle: 'Solution',
       pairs: [
         { id: 'chart', left: 'Distinguer quatre séries dans un graphique', right: 'Teintes de luminosités distinctes, étiquettes directes ou motifs' },
-        { id: 'ongreen', left: 'Texte secondaire sur un bandeau vert sapin', right: 'Un vert très pâle dérivé de la teinte du bandeau' },
+        { id: 'onyellow', left: 'Texte secondaire sur un encart jaune pâle', right: 'Un brun ambré, nuance plus foncée de la même teinte' },
         { id: 'ramp', left: 'Une rampe de nuances aux pas réguliers', right: 'OKLCH, chroma réduite près du blanc et du noir' },
         { id: 'elevated', left: 'Une carte surélevée en thème sombre', right: 'Une surface un peu plus claire que le fond' },
         { id: 'error', left: 'Signaler un champ invalide', right: 'Bordure rouge, icône et message qui dit quoi corriger' },
@@ -727,12 +787,12 @@ La commande *colorize* refuse explicitement les pourcentages fixes : la stratég
       explanation: `Chaque problème a sa technique :
 
 - un graphique ne repose jamais sur la seule teinte ;
-- sur une surface colorée, le texte secondaire se dérive de la teinte du fond ;
+- sur une surface colorée, le texte secondaire se dérive de la teinte du fond : plus foncé sur un fond clair, très clair sur un fond foncé ;
 - OKLCH rend les pas de luminosité prévisibles, à condition de réduire la chroma aux extrémités ;
 - en sombre, l’élévation passe par la luminosité de la surface, pas par l’ombre ;
 - une erreur se dit avec des mots, pas seulement en rouge ;
 - sur une image, on vérifie le contraste là où le fond est le plus clair.`,
-      takeaway: 'Rôles, teinte dérivée, OKLCH, élévation par la luminosité, indices doublés : chaque besoin a sa réponse.',
+      takeaway: 'Double la couleur d’un autre indice (graphique, erreur), dérive le texte de la teinte du fond, bâtis tes rampes en OKLCH, élève par la luminosité en sombre et voile une photo sous un titre.',
       sources: ['imp:colorize', 'imp:craft-floor', WCAG_141],
     },
     {
@@ -743,14 +803,14 @@ La commande *colorize* refuse explicitement les pourcentages fixes : la stratég
       options: [
         { id: 'explicit', label: 'Le contraste s’effondre : il faut une couleur explicite dérivée de la teinte du bandeau, par exemple un bleu très pâle.', why: 'Sur le marine, le noir à 60 % donne 1,7:1 ; un bleu pâle comme #c7d7fe atteint 7,2:1.' },
         { id: 'same', label: 'Rien : l’opacité garantit le même contraste sur tous les fonds.', why: 'C’est l’inverse : une couleur translucide se mélange au fond. Sur ce marine, elle devient un bleu nuit à 1,7:1.' },
-        { id: 'more', label: 'Passer l’opacité à 0,8 règle le problème partout.', why: 'Plus d’opacité rend le texte encore plus sombre : sur un fond foncé, c’est pire.' },
+        { id: 'more', label: 'Passer l’opacité à 0,8 règle le problème partout.', why: 'Plus d’opacité rapproche le texte du noir : 1,9:1 à 0,8, et même un noir opaque plafonne à 2,0:1 sur ce marine. Le problème n’est pas le dosage mais le sens : un texte foncé sur un fond foncé.' },
         { id: 'gray', label: 'Le remplacer par un gris opaque `#666666`, qui fait aussi 5,7:1 sur blanc.', why: 'Sur le marine, ce gris ne fait que 1,8:1, avec l’aspect délavé du gris sur couleur.' },
       ],
       answer: 'explicit',
       explanation: `Une couleur translucide n’a pas de contraste propre : elle se **mélange** à ce qu’il y a dessous. \`rgba(0, 0, 0, 0.6)\` donne \`#666666\` sur blanc (5,7:1), mais \`#0c1737\` sur \`#1e3a8a\` : 1,7:1.
 
 Impeccable recommande des **couleurs explicites** plutôt que des empilements de transparences quand l’alpha rend le contraste dépendant du contexte. Sur une surface colorée, dérive le texte secondaire de sa teinte, puis vérifie la paire.`,
-      takeaway: 'Pour le texte, préfère des couleurs explicites à l’alpha : la transparence rend le contraste dépendant du fond.',
+      takeaway: 'Dès qu’un texte peut changer de fond, préfère une couleur explicite à l’alpha : la transparence rend le contraste dépendant de ce qu’il y a dessous.',
       sources: ['imp:colorize', 'wcag:contrast'],
     },
   ],
