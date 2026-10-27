@@ -318,14 +318,14 @@ La **validation** dit ce qui demande de l’attention et comment le corriger, sa
       title: 'Une voix constante, un ton qui s’adapte',
       body: `La **voix** est la personnalité du produit : elle reste la même partout. Le **ton** s’adapte au moment : léger pour un premier succès, sobre et précis pour un paiement refusé.
 
-- **Langage simple**, sans aplatir les termes que le public connaît vraiment : un comptable sait ce qu’est un « lettrage », inutile de le remplacer par une périphrase.
-- **Terminologie cohérente** : tiens un court glossaire dès que plusieurs personnes écrivent. En interface, on ne varie pas les mots pour le style ; si « espace de travail », « workspace » et « organisation » désignent la même chose, la personne croit à trois choses différentes.
+- **Langage simple**, sans aplatir les termes que le public connaît vraiment : les comptables savent ce qu’est un « lettrage », inutile de le remplacer par une périphrase.
+- **Terminologie cohérente** : tiens un court glossaire dès que plusieurs personnes écrivent. En interface, on ne varie pas les mots pour le style ; si « projet », « dossier » et « board » désignent la même chose, la personne croit à trois choses différentes.
 - **Tu ou vous** : en français, le registre fait partie de la voix. Banques, assurances et administrations vouvoient le plus souvent ; beaucoup d’applications grand public tutoient. Choisis selon ton public, puis **tiens-le partout** : écrans, e-mails, notifications, aide et support.
 
-Le détecteur d’impeccable signale aussi les **tics du texte généré**, qui donnent une voix interchangeable :
+Le détecteur d’impeccable repère aussi quatre **tics du texte généré**, qui donnent une voix interchangeable. Ses règles de texte lisent l’anglais (*next-generation*, *Not a…*, *compliance theater*) ; seuls les tirets cadratins sont comptés quelle que soit la langue. En français, les mêmes réflexes trahissent le texte :
 
-- les mots-valises du marketing (« nouvelle génération », « révolutionner », « booster ») au lieu d’un verbe et d’un nom qui disent ce que fait le produit ;
-- la cadence d’aphorisme répétée de section en section (« Pas un outil. Un allié. ») : une fois passe, le motif trahit ;
+- le jargon marketing (« nouvelle génération », « révolutionner », « booster ») au lieu d’un verbe et d’un nom qui disent ce que fait le produit ;
+- la cadence aphoristique répétée de section en section (« Pas un outil. Un allié. ») : une fois, ça passe ; c’est la répétition qui trahit ;
 - le cadrage en « théâtre » (« fini le théâtre de la conformité ») au lieu de dire ce que la chose fait ou ne fait pas ;
 - la saturation de tirets cadratins dans le corps du texte : virgules, deux-points et parenthèses font souvent mieux.`,
     },
@@ -334,17 +334,18 @@ Le détecteur d’impeccable signale aussi les **tics du texte généré**, qui 
       title: 'Lisible par tous, traduisible partout',
       body: `Un texte d’interface sera lu à 200 % de zoom, par un lecteur d’écran, dans d’autres langues, avec des valeurs réelles. Écris pour ces conditions :
 
-- **Des messages complets, pas des fragments concaténés.** \`"Vous avez " + n + " message"\` empêche le traducteur de réordonner la phrase et d’accorder les mots.
+- **Des messages complets, pas des fragments concaténés.** \`"Vous avez " + n + " message"\` empêche de réordonner la phrase et d’accorder les mots à la traduction.
 - **Des variables nommées et des pluriels gérés** par la bibliothèque d’internationalisation (ICU MessageFormat, \`Intl.PluralRules\`) : le français met 0 et 1 au singulier, l’anglais met 0 au pluriel, le polonais choisit sa forme selon la terminaison du nombre, l’arabe distingue six catégories.
 - **De la place pour l’expansion** : une traduction allemande est souvent 30 % plus longue que l’anglais. Pas d’abréviation prématurée, pas de largeur fixe sur un bouton.
 - **Des liens qui ont du sens hors contexte** : un lecteur d’écran peut lister tous les liens d’une page, et dix « En savoir plus » y sont indiscernables. Préfère « Consulter les délais de remboursement ».
-- **Des noms accessibles** pour les commandes à icône seule, un texte alternatif qui transmet l’information d’une image (vide si elle est décorative), et jamais un message porté par la seule couleur, une icône ou une ponctuation.
+- **Des noms accessibles** pour les commandes à icône seule. Pour les autres, le nom lu par le lecteur d’écran reprend le libellé visible : un bouton affiché « Envoyer la candidature » ne s’annonce pas « Soumettre ».
+- **Un texte alternatif** qui transmet l’information d’une image (vide si elle est décorative), et jamais un message porté par la seule couleur, une icône ou une ponctuation.
 
 Vérifie enfin avec de vrais contenus : noms très longs, montants, dates, pluriels, zoom à 200 %.`,
     },
   ],
   rules: [
-    { id: 'label', front: 'Comment écrire le libellé d’un bouton ?', back: 'Un verbe et un objet qui décrivent le résultat : « Enregistrer le brouillon », « Payer 89,00 € ». Jamais « Cliquez ici » ni « OK ».' },
+    { id: 'label', front: 'Comment écrire le libellé d’un bouton ?', back: 'Un verbe et un objet qui décrivent le résultat quand il n’est pas évident : « Enregistrer le brouillon », « Payer 89,00 € ». Pas de « Cliquez ici » ; « OK » seulement pour refermer un message purement informatif.' },
     { id: 'valider', front: 'Pourquoi éviter « Valider » sur un bouton ?', back: 'C’est le *Submit* français : il ne dit pas ce qui va se passer. Nomme le résultat : « Envoyer la demande », « Payer 89,00 € ».' },
     { id: 'destructive', front: 'Que doit dire une confirmation de suppression ?', back: 'L’objet et la conséquence (« 40 fichiers supprimés définitivement »), et un bouton qui répète l’action : « Vider la corbeille » face à « Annuler ».' },
     { id: 'undo', front: 'Confirmer ou permettre d’annuler ?', back: 'Si la récupération est sûre, agis et propose « Annuler ». Réserve la confirmation aux actions irréversibles ou coûteuses, sinon elle devient un réflexe.' },
@@ -470,7 +471,7 @@ Une confirmation systématique a un coût caché : à force d’apparaître pour
         {
           id: 'vague',
           visual: {
-            alt: 'Formulaire de création de compte : champ mot de passe encadré de rouge avec le message « Mot de passe non valide. Veuillez recommencer. ».',
+            alt: 'Formulaire de création de compte : champ mot de passe encadré de rouge avec le message « Mot de passe non valide. Veuillez recommencer. »',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
   <p class="mk-h3">Créer un compte</p>
   <div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input">camille.durand@exemple.fr</div></div>
@@ -484,7 +485,7 @@ Une confirmation systématique a un coût caché : à force d’apparaître pour
         {
           id: 'precise',
           visual: {
-            alt: 'Même formulaire : la règle « 8 caractères minimum, dont au moins un chiffre » est écrite sous l’étiquette, et le champ en rouge affiche « Ajoutez au moins un chiffre. ».',
+            alt: 'Même formulaire : la règle « 8 caractères minimum, dont au moins un chiffre » est écrite sous l’étiquette, et le champ en rouge affiche « Ajoutez au moins un chiffre. »',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
   <p class="mk-h3">Créer un compte</p>
   <div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input">camille.durand@exemple.fr</div></div>
@@ -513,7 +514,7 @@ La version recommandée fait deux choses : elle annonce l’exigence **avant** l
         {
           id: 'bare',
           visual: {
-            alt: 'Téléphone : champ de recherche « vélo cargo », trois filtres actifs, et sous eux la seule mention grise « Aucun résultat. ».',
+            alt: 'Téléphone : champ de recherche « vélo cargo », trois filtres actifs, et sous eux la seule mention grise « Aucun résultat. »',
             frame: 'phone',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:10px">
   <div class="srch"><i data-icon="search" style="--ico:16px"></i>vélo cargo</div>
@@ -555,12 +556,12 @@ La version recommandée explique l’état et offre **l’action suivante utile*
       id: 'ux-writing-loading-choice',
       type: 'choice',
       difficulty: 2,
-      prompt: 'La génération d’une facture en PDF prend une dizaine de secondes. Quel texte d’attente afficher ?',
+      prompt: 'La génération d’une facture en PDF prend environ 5 secondes. Quel texte d’attente afficher ?',
       options: [
         {
           id: 'generic',
           visual: {
-            alt: 'Carte de facture avec un indicateur rotatif et le texte « Chargement… ».',
+            alt: 'Carte de facture avec un indicateur rotatif et le texte « Chargement… »',
             html: invoice('Chargement…'),
             css: LOADING_CSS,
           },
@@ -569,7 +570,7 @@ La version recommandée explique l’état et offre **l’action suivante utile*
         {
           id: 'cute',
           visual: {
-            alt: 'Carte de facture avec un indicateur rotatif et le texte « Un peu de patience, la magie opère ! ».',
+            alt: 'Carte de facture avec un indicateur rotatif et le texte « Un peu de patience, la magie opère ! »',
             html: invoice('Un peu de patience, la magie opère !'),
             css: LOADING_CSS,
           },
@@ -578,8 +579,8 @@ La version recommandée explique l’état et offre **l’action suivante utile*
         {
           id: 'honest',
           visual: {
-            alt: 'Carte de facture avec un indicateur rotatif et le texte « Génération du PDF… environ 10 secondes ».',
-            html: invoice('Génération du PDF… environ 10 secondes'),
+            alt: 'Carte de facture avec un indicateur rotatif et le texte « Génération du PDF… environ 5 secondes ».',
+            html: invoice('Génération du PDF… environ 5 secondes'),
             css: LOADING_CSS,
           },
           why: 'Il nomme l’opération réelle et donne une attente honnête : on sait ce qui se passe et quand s’inquiéter.',
