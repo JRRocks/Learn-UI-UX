@@ -587,11 +587,46 @@ La version recommandée explique l’état et offre **l’action suivante utile*
         },
       ],
       answer: 'honest',
-      explanation: `Un texte de chargement dit **ce qui se passe vraiment** et fixe une **attente honnête** quand l’attente compte. « Génération du PDF » explique pourquoi ça prend du temps ; « environ 10 secondes » dit quand commencer à s’inquiéter.
+      explanation: `Un texte de chargement dit **ce qui se passe vraiment** et fixe une **attente honnête** quand l’attente compte. « Génération du PDF » explique pourquoi ça prend du temps ; « environ 5 secondes » dit quand commencer à s’inquiéter.
 
-Pour quelques secondes, une animation en boucle suffit ; au-delà d’une dizaine de secondes, montre une progression réelle (pourcentage, étapes). Mais **n’invente jamais de progression** : une barre qui avance sans lien avec le travail réel est un mensonge que la personne finit par découvrir.`,
+De 2 à 9 secondes, une animation en boucle suffit ; à partir de 10 secondes, montre une progression réelle (pourcentage, étapes). Mais **n’invente jamais de progression** : une barre qui avance sans lien avec le travail réel est un mensonge que la personne finit par découvrir.`,
       takeaway: 'Le texte d’attente nomme l’opération réelle et annonce une durée honnête ; jamais de progression inventée.',
       sources: ['imp:clarify', NNG_PROGRESS],
+    },
+    {
+      id: 'ux-writing-success-choice',
+      type: 'choice',
+      difficulty: 2,
+      prompt: 'Quel message afficher après ce changement de mot de passe ?',
+      context: 'Réglages d’un service de messagerie. Le nouveau mot de passe est enregistré ; par sécurité, le téléphone et la tablette de la personne ont été déconnectés.',
+      options: [
+        {
+          id: 'thanks',
+          label: '« Votre mot de passe a bien été modifié avec succès ! Merci de votre vigilance. »',
+          why: '« Bien » et « avec succès » disent deux fois la même chose, le remerciement n’apprend rien, et la conséquence qui compte manque : les appareils déconnectés.',
+        },
+        {
+          id: 'bare',
+          label: '« Mot de passe modifié. »',
+          why: 'Bref et exact, mais il tait la seule conséquence qui change la suite : la personne découvrira plus tard, sans comprendre pourquoi, que son téléphone est déconnecté.',
+        },
+        {
+          id: 'next',
+          label: '« Mot de passe modifié. Votre téléphone et votre tablette ont été déconnectés : reconnectez-les avec le nouveau. »',
+          why: 'Le résultat, puis la seule conséquence qui change ce que la personne doit faire, avec l’action à mener.',
+        },
+        {
+          id: 'extra',
+          label: '« Mot de passe modifié le 27 octobre à 14 h 32 depuis Chrome sur Windows. Pour mieux protéger votre compte, activez la double authentification et consultez nos conseils. »',
+          why: 'Long mais à côté : l’heure et le navigateur n’apprennent rien à qui vient d’agir, le conseil peut attendre, et la déconnexion des appareils n’est pas mentionnée.',
+        },
+      ],
+      answer: 'next',
+      explanation: `Un message de succès confirme **le résultat obtenu**, puis mentionne la conséquence suivante **seulement si elle change ce que la personne doit faire**. Ici, la déconnexion du téléphone et de la tablette en est une : sans le message, la personne trouvera une session fermée sans savoir pourquoi, et pourra craindre un piratage.
+
+Le reste se retire. « Bien » et « avec succès » disent deux fois la même chose, et un remerciement n’apprend rien : **dis chaque idée une fois**. L’heure, le navigateur ou un conseil de sécurité ne changent rien à la suite immédiate. Sans appareil déconnecté, ce succès de routine tiendrait en trois mots : « Mot de passe modifié ».`,
+      takeaway: 'Un succès confirme le résultat, puis la conséquence qui change la suite, et rien d’autre : chaque idée une fois, sans remerciement ni détail inutile.',
+      sources: ['imp:clarify'],
     },
     {
       id: 'ux-writing-payment-error-choice',
@@ -600,8 +635,13 @@ Pour quelques secondes, une animation en boucle suffit ; au-delà d’une dizain
       prompt: 'La banque d’un client refuse son paiement par carte. Quel message afficher ?',
       options: [
         { id: 'code', label: '« Erreur 402 : CARD_DECLINED »', why: 'Un code interne en message principal : rien sur la cause en clair ni sur la marche à suivre.' },
-        { id: 'joke', label: '« Oups ! Votre carte fait grève aujourd’hui. Réessayez plus tard ! »', why: 'Une blague sur un paiement refusé, et un conseil faux : la carte ne passera pas mieux « plus tard ».' },
+        { id: 'joke', label: '« Oups ! Votre carte fait grève aujourd’hui. Réessayez plus tard ! »', why: 'Une blague sur un paiement refusé, et une promesse que le système ne peut pas tenir : rien ne dit que la carte passera plus tard.' },
         { id: 'blame', label: '« Paiement refusé. Vérifiez vos informations. »', why: 'Il sous-entend une faute de saisie alors que c’est la banque qui refuse, et ne dit pas quoi vérifier.' },
+        {
+          id: 'generic',
+          label: '« Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer ultérieurement ou contacter notre service client si le problème persiste. »',
+          why: 'Long mais générique : il tait la cause connue (le refus de la banque), ne dit pas si un montant a été débité, et pousse à réessayer avec la même carte.',
+        },
         {
           id: 'clear',
           label: '« Votre banque a refusé le paiement. Aucun montant n’a été débité. Essayez une autre carte ou contactez votre banque. »',
@@ -611,7 +651,7 @@ Pour quelques secondes, une animation en boucle suffit ; au-delà d’une dizain
       answer: 'clear',
       explanation: `Un message d’erreur actionnable répond à trois questions : **qu’est-ce qui a échoué** (le paiement), **pourquoi** quand on le sait (la banque l’a refusé), **comment s’en sortir** (autre carte, contacter la banque).
 
-Le paiement fait partie des moments à traiter avec sérieux : la chaleur est bienvenue, les blagues non. Ajouter « Aucun montant n’a été débité » répond à l’inquiétude principale du moment. Enfin, ne promets pas une cause que le système ignore et n’accuse pas la personne d’une erreur qu’elle n’a pas commise.`,
+Le paiement fait partie des moments à traiter avec sérieux : la chaleur est bienvenue, les blagues non. Ajouter « Aucun montant n’a été débité » répond à l’inquiétude principale du moment. Enfin, ne promets pas une cause que le système ignore, ne tais pas celle qu’il connaît, et n’accuse pas la personne d’une erreur qu’elle n’a pas commise.`,
       takeaway: 'Une erreur dit ce qui a échoué, pourquoi si c’est utile, et comment s’en sortir, sur un ton sérieux quand l’argent est en jeu.',
       sources: ['imp:clarify', NNG_ERRORS],
     },
@@ -627,9 +667,10 @@ Le paiement fait partie des moments à traiter avec sérieux : la chaleur est bi
         { id: 'pay', label: '« Payer 89,00 € »', why: 'Il nomme le résultat et le montant : on sait exactement ce que déclenche le bouton.' },
         { id: 'ok', label: '« OK »', why: 'Un acquiescement, pas une action : rien n’indique qu’un paiement va partir.' },
         { id: 'next', label: '« Suivant »', why: 'Trompeur sur le dernier écran : on s’attend à une étape de plus, et l’argent part sans prévenir.' },
+        { id: 'confirm', label: '« Confirmer et continuer »', why: 'Deux verbes flous : confirmer quoi ? Et « continuer » annonce une étape de plus, alors que ce bouton déclenche le paiement.' },
       ],
       answer: 'pay',
-      explanation: `Un bouton décrit **le résultat**, pas le geste. « Valider », l’équivalent français de *Submit*, est le réflexe le plus courant des interfaces francophones : il oblige à relire tout l’écran pour comprendre ce qui va se passer.
+      explanation: `Un bouton décrit **le résultat**, pas le geste. « Valider », l’équivalent français de *Submit*, est un réflexe très répandu des interfaces francophones : il oblige à relire tout l’écran pour comprendre ce qui va se passer.
 
 « Payer 89,00 € » dit l’action (payer) et son objet (le montant). Au moment d’engager de l’argent, le montant sur le bouton rassure et évite les surprises.`,
       takeaway: 'Remplace « Valider » par le résultat de l’action : « Payer 89,00 € », « Envoyer la demande », « Enregistrer ».',
@@ -640,14 +681,18 @@ Le paiement fait partie des moments à traiter avec sérieux : la chaleur est bi
       type: 'choice',
       difficulty: 3,
       prompt: 'Que recommander à l’équipe pour ce message ?',
-      context: 'Un développeur assemble la notification ainsi : `"Vous avez " + n + " nouveau" + (n > 1 ? "x" : "") + " message" + (n > 1 ? "s" : "")`. L’application va être traduite en anglais, en polonais et en arabe.',
+      context: 'Le code assemble la notification ainsi : `"Vous avez " + n + " nouveau" + (n > 1 ? "x" : "") + " message" + (n > 1 ? "s" : "")`. L’application va être traduite en anglais, en polonais et en arabe.',
       options: [
         {
           id: 'icu',
           label: 'Un message complet par forme, avec une variable nommée : `{n, plural, =0 {Aucun nouveau message} one {# nouveau message} other {# nouveaux messages}}`',
-          why: 'Le traducteur réécrit des phrases entières et la bibliothèque choisit la bonne forme selon les règles de chaque langue.',
+          why: 'La traduction porte sur des phrases entières, et la bibliothèque choisit la bonne forme selon les règles de chaque langue.',
         },
-        { id: 'fragments', label: 'Garder les fragments et faire traduire chacun séparément', why: 'Hors contexte, un fragment comme « nouveau » ne se traduit pas : l’ordre des mots et les accords changent selon la langue.' },
+        {
+          id: 'fragments',
+          label: 'Extraire chaque fragment (« Vous avez », « nouveau », « message ») dans le fichier de traduction, avec un commentaire qui explique où il s’insère dans la phrase',
+          why: 'Même commenté, un fragment ne se traduit pas seul : l’ordre des mots et les accords changent selon la langue, et la phrase ne peut pas être réordonnée.',
+        },
         { id: 'parens', label: 'Écrire « Nouveau(x) message(s) : 3 » pour contourner le problème', why: 'Lourd à lire, mal prononcé par les lecteurs d’écran, et cela ne règle rien pour les langues à plusieurs pluriels.' },
         { id: 'plural', label: 'Toujours mettre le pluriel, c’est plus simple', why: 'On obtient « 1 nouveaux messages », et la règle française n’est même pas celle des autres langues.' },
       ],
@@ -655,7 +700,7 @@ Le paiement fait partie des moments à traiter avec sérieux : la chaleur est bi
       explanation: `Les règles de pluriel varient d’une langue à l’autre : le français met **0 et 1 au singulier**, l’anglais met **0 au pluriel** (« 0 messages »), le polonais choisit sa forme selon la terminaison du nombre, et l’arabe distingue **six catégories**. Une concaténation codée pour le français casse dès qu’on traduit.
 
 La règle d’impeccable : écrire des **messages complets** plutôt que des fragments, et garder les variables structurées pour que les traducteurs puissent réordonner la phrase. Les formats ICU MessageFormat ou \`Intl.PluralRules\` choisissent la forme selon la langue ; le cas \`=0\` permet en plus un vrai texte pour zéro.`,
-      takeaway: 'Écris des messages complets avec des variables nommées et des pluriels gérés par l’i18n, jamais des fragments concaténés.',
+      takeaway: 'Écris des messages complets avec des variables nommées et des pluriels gérés par la bibliothèque d’internationalisation, jamais des fragments concaténés.',
       sources: ['imp:clarify', 'imp:harden', 'mdn:intl', CLDR_PLURALS],
     },
     {
@@ -667,7 +712,7 @@ La règle d’impeccable : écrire des **messages complets** plutôt que des fra
       context: 'Une banque en ligne française tutoie ses clients dans toute son application. L’équipe rédige maintenant les e-mails de sécurité et les messages d’incident de paiement.',
       options: [
         { id: 'keep', label: 'Le tutoiement, comme partout ailleurs, avec un ton plus sobre et plus précis pour ces moments sensibles', why: 'La voix reste la même ; c’est le ton qui s’adapte à la gravité du moment.' },
-        { id: 'switch', label: 'Le vouvoiement, pour marquer le sérieux de la situation', why: 'Changer de registre au pire moment donne l’impression de parler à une autre entreprise. Le sérieux passe par le ton, pas par le registre.' },
+        { id: 'switch', label: 'Le vouvoiement dans les e-mails de sécurité et les incidents de paiement, pour marquer le sérieux ; le tutoiement partout ailleurs', why: 'Changer de registre au pire moment donne l’impression de parler à une autre entreprise. Le sérieux passe par le ton, pas par le registre.' },
         { id: 'writer', label: 'Au choix de la personne qui rédige chaque message', why: 'C’est ainsi qu’un produit finit par mélanger tu et vous sur un même écran.' },
         { id: 'impersonal', label: 'Uniquement des tournures impersonnelles, pour ne pas avoir à choisir', why: 'Un titre peut être impersonnel (« Paiement refusé »), mais les consignes s’adressent à quelqu’un : il faut un registre.' },
       ],
@@ -685,21 +730,21 @@ Ce qui change selon le moment, c’est le **ton** : plus sobre, plus factuel, sa
       prompt: 'Lesquelles de ces phrases de page d’accueil sont des tics de texte généré à réécrire ?',
       context: 'Site d’un logiciel de comptabilité pour indépendants.',
       options: [
-        { id: 'buzz', label: '« Une plateforme nouvelle génération qui révolutionne votre productivité. »', why: 'Mots-valises du marketing : ni le verbe ni le nom ne disent ce que fait le produit.' },
-        { id: 'aphorism', label: '« Pas un outil. Un allié. », puis « Pas une option. Un réflexe. » en fin de chaque section', why: 'La cadence d’aphorisme répétée de section en section : une fois passe, le motif trahit le texte généré.' },
-        { id: 'theater', label: '« Fini le théâtre de la conformité. »', why: 'Le cadrage en « théâtre » est un tic : il vaut mieux dire ce que l’outil fait concrètement pour la conformité.' },
+        { id: 'buzz', label: '« Propulsez votre trésorerie au niveau supérieur avec une solution de pointe. »', why: 'Jargon marketing : « propulser », « au niveau supérieur » et « de pointe » promettent sans dire ce que fait le produit.' },
+        { id: 'aphorism', label: '« Pas une appli. Une méthode. », puis « Pas une corvée. Un réflexe. » en fin de chaque section', why: 'La cadence aphoristique répétée de section en section : une fois, ça passe ; c’est la répétition qui trahit le texte généré.' },
+        { id: 'theater', label: '« Fini le théâtre administratif. »', why: 'Le cadrage en « théâtre » est un tic : il vaut mieux dire quelles démarches l’outil prend en charge.' },
         { id: 'concrete', label: '« Importez vos relevés bancaires et classez 200 opérations en cinq minutes. »', why: 'Un verbe, un objet, un chiffre : on comprend ce que fait le produit.' },
         { id: 'specific', label: '« Les factures impayées sont relancées automatiquement à J+7, J+15 et J+30. »', why: 'Précis et vérifiable : rien à réécrire.' },
       ],
       answers: ['buzz', 'aphorism', 'theater'],
-      explanation: `Le détecteur d’impeccable signale plusieurs **tics de texte généré** :
+      explanation: `Le détecteur d’impeccable repère plusieurs **tics de texte généré**. Ses règles lisent l’anglais, mais les mêmes réflexes trahissent un texte français :
 
-- **Mots-valises du marketing** (*streamline*, *empower*, *next-generation*, *cutting-edge*… et leurs équivalents français) : ils remplacent ce que le produit fait par une promesse vague.
-- **Cadence d’aphorisme** : trois sections ou plus qui finissent sur « X. Pas Y. » ou un contraste fabriqué. Une fois passe ; le motif trahit.
-- **Cadrage en « théâtre »** : qualifier quelque chose de théâtre au lieu de dire ce qu’il fait ou ne fait pas.
+- **Jargon marketing** (*streamline*, *empower*, *next-generation*… : le détecteur cherche ces tournures anglaises ; « nouvelle génération » ou « de pointe » relèvent du même réflexe) : il remplace ce que le produit fait par une promesse vague.
+- **Cadence aphoristique** : trois sections ou plus qui finissent sur une courte réplique (« X. Pas de Y. ») ou un contraste fabriqué (*Not a…*). Une fois, ça passe ; c’est la répétition qui trahit.
+- **Cadrage en « théâtre »** (*compliance theater*) : qualifier quelque chose de théâtre au lieu de dire ce qu’il fait ou ne fait pas.
 
 Le remède est toujours le même : **un verbe et un nom précis** qui disent ce que le produit fait littéralement, avec un chiffre quand il existe.`,
-      takeaway: 'Remplace les mots-valises et les formules par un verbe et un nom qui disent ce que le produit fait réellement.',
+      takeaway: 'Remplace le jargon marketing et les formules toutes faites par un verbe et un nom qui disent ce que le produit fait réellement.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
     {
@@ -708,19 +753,20 @@ Le remède est toujours le même : **un verbe et un nom précis** qui disent ce 
       difficulty: 2,
       prompt: 'Trouve les deux textes qui n’aident pas la personne dans ce formulaire d’inscription.',
       visual: {
-        alt: 'Formulaire « Créer votre compte » : champ adresse e-mail avec un texte d’aide, champ mot de passe avec sa règle, case des conditions d’utilisation avec un lien, case de lettre d’information et bouton « Créer mon compte ».',
+        alt: 'Formulaire « Créer un compte » : champ adresse e-mail avec un texte d’aide, champ mot de passe avec sa règle, case des conditions d’utilisation avec un lien, case de lettre d’information et bouton « Créer mon compte ».',
         frame: 'browser',
         html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
-  <p class="mk-h2" data-hotspot="title">Créer votre compte</p>
-  <div class="mk-field"><span class="mk-label">Adresse e-mail</span><span class="mk-help" data-hotspot="help">Saisissez votre adresse e-mail.</span><div class="mk-input">camille.durand@exemple.fr</div></div>
-  <div class="mk-field"><span class="mk-label">Mot de passe</span><span class="mk-help" data-hotspot="pwd">8 caractères minimum, dont au moins un chiffre.</span><div class="mk-input">••••••••••</div></div>
+  <p class="mk-h2" data-hotspot="title">Créer un compte</p>
+  <div class="mk-field"><span class="mk-label">Adresse e-mail</span><span class="mk-help su-hint" data-hotspot="help">Saisissez une adresse e-mail valide.</span><div class="mk-input">camille.durand@exemple.fr</div></div>
+  <div class="mk-field"><span class="mk-label">Mot de passe</span><span class="mk-help su-hint" data-hotspot="pwd">8 caractères minimum, dont au moins un chiffre.</span><div class="mk-input">••••••••••</div></div>
   <p class="mk-check mk-check--on" data-hotspot="terms"><span>J’accepte les conditions d’utilisation. Pour les lire, <a href="#">cliquez ici</a>.</span></p>
   <p class="mk-check" data-hotspot="news"><span>Recevoir la lettre mensuelle (un e-mail par mois, désinscription en un clic)</span></p>
   <span class="mk-btn" data-hotspot="cta" style="align-self:flex-start">Créer mon compte</span>
 </div>`),
+        css: `.su-hint { margin-block: 6px; }`,
       },
       hotspots: [
-        { id: 'help', label: 'Aide sous l’adresse e-mail', correct: true, why: 'Elle répète l’étiquette. La question implicite est « à quoi va servir mon adresse ? » : « Nous l’utilisons uniquement pour vos factures. »' },
+        { id: 'help', label: 'Aide sous l’adresse e-mail', correct: true, why: 'Elle répète l’étiquette : « valide » n’apprend rien. La question implicite est « à quoi va servir mon adresse ? » : « Nous l’utilisons uniquement pour vos factures. »' },
         { id: 'terms', label: 'Lien « cliquez ici »', correct: true, why: 'Hors contexte, « cliquez ici » ne dit pas où mène le lien. Le lien doit porter sur « les conditions d’utilisation ».' },
         { id: 'title', label: 'Titre', correct: false, why: 'Il dit clairement ce que l’on est en train de faire.' },
         { id: 'pwd', label: 'Règle du mot de passe', correct: false, why: 'Une bonne aide : elle annonce l’exigence avant la saisie.' },
@@ -729,10 +775,12 @@ Le remède est toujours le même : **un verbe et un nom précis** qui disent ce 
       ],
       explanation: `Deux règles de rédaction sont enfreintes :
 
-- **Le texte d’aide répète l’étiquette** au lieu de répondre à une question implicite. Sous « Adresse e-mail », la vraie question est « à quoi va-t-elle servir ? », ou « qui la verra ? ».
-- **« Cliquez ici » n’a aucun sens hors contexte.** Un lecteur d’écran qui liste les liens de la page annonce « cliquez ici », sans dire vers quoi ; l’œil qui balaie la page ne trouve pas non plus la destination. Le lien porte sur les mots qui la décrivent : « les conditions d’utilisation ».`,
+- **Le texte d’aide répète l’étiquette** au lieu de répondre à une question implicite. Sous « Adresse e-mail », la vraie question est « à quoi va-t-elle servir ? », ou « qui la verra ? »
+- **« Cliquez ici » n’a aucun sens hors contexte.** Un lecteur d’écran qui liste les liens de la page annonce « cliquez ici », sans dire vers quoi ; l’œil qui balaie la page ne trouve pas non plus la destination. Le lien porte sur les mots qui la décrivent : « les conditions d’utilisation ».
+
+Le critère WCAG 2.4.4 (niveau A) tolère un lien éclairé par sa phrase ; impeccable vise plus haut, comme le critère 2.4.9 (niveau AAA) : un lien compréhensible seul.`,
       takeaway: 'Une aide répond à une question implicite (format, usage, visibilité) ; un lien décrit sa destination, jamais « cliquez ici ».',
-      sources: ['imp:clarify', WCAG_LINK],
+      sources: ['imp:clarify', WCAG_LINK_ONLY, WCAG_LINK],
     },
     {
       id: 'ux-writing-terms-hotspot',
