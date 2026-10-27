@@ -76,7 +76,8 @@ b) Corrections de l’app, vague 1 : lancées dans trois worktrees git du scratc
    (branches locales fix/exercise, fix/pages, fix/styles, base 1665f30), puis ARRÊTÉES
    volontairement pour économiser le quota, avant tout commit. Rien n’est perdu : refaire
    la vague 1 depuis le début (voir 5.B).
-c) Vérification des 7 constats de performance (voir 5.C).
+c) Vérification des 7 constats de performance : TERMINÉE, les 7 sont confirmés
+   (perf-1 et perf-2 rétrogradés en P2) ; détails dans app-vague2-performance.json.
 
 ======================================================================
 4. FICHIERS DE REPRISE (docs/reprise/)
@@ -86,8 +87,8 @@ c) Vérification des 7 constats de performance (voir 5.C).
   moteur progress/srs/types, index.html), app-vague1-styles.json (23 : tokens, base,
   app.css). Chaque constat : id, sévérité, fichier, scénario, preuve, correction
   proposée, avis du vérificateur.
-- app-vague2-performance.json : 7 constats de performance (non vérifiés) + 3 constats
-  logiques vérifiés réservés à la vague 2 (service worker, useLoad).
+- app-vague2-performance.json : 7 constats de performance vérifiés (champ real) + 3
+  constats logiques vérifiés réservés à la vague 2 (service worker, useLoad).
 - notes-coherence-contenu.md : problèmes transverses du contenu (voir 5.D).
 - notes-app.md : points d’app relevés par les correcteurs de contenu (déjà intégrés aux
   constats « note-* » des fichiers app-vague1-*.json).
@@ -142,8 +143,8 @@ B. Corrections de l’app, vague 1 (trois groupes en parallèle, worktrees isol�
    d’exemples des leçons trop étroites au bureau (~230 px, note-lesson-pairs).
 
 C. Vague 2 — performance (après fusion de la vague 1)
-   Vérifier puis corriger docs/reprise/app-vague2-performance.json :
-   - perf-1 (P1) : tout le contenu (≈ 1,57 Mo, 475 Ko gzip) est chargé à l’ouverture de
+   Corriger docs/reprise/app-vague2-performance.json (déjà vérifié) :
+   - perf-1 (P2) : tout le contenu (≈ 1,57 Mo, 475 Ko gzip) est chargé à l’ouverture de
      chaque page. Créer un index léger (métadonnées des modules + liste des épreuves
      id/type/difficulté/culture, fiches) et charger chaque module à la demande
      (import.meta.glob paresseux) ; tenir l’index synchronisé par un test.
