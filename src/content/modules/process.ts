@@ -2,9 +2,12 @@ import type { ModuleContent, Visual } from '../../engine/types';
 
 const INIT = { label: 'impeccable — init.md (PRODUCT.md)', url: 'https://github.com/pbakaus/impeccable/blob/main/skill/reference/init.md' };
 
+/* `.cd-fit` : une déclaration par ligne, jamais coupée au milieu d’un nom de jeton (lignes de 30 caractères au plus). */
 const CODE_CSS = `.cd { margin: 0; padding: 12px 14px; border-radius: 10px; background: #f6f7f9; border: 1px solid #e1e4ea; font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: #1d2230; white-space: pre-wrap; word-break: break-word; }
+.cd-fit { white-space: pre; word-break: normal; overflow-x: auto; }
 .cd .c { color: #5a6172; }
-.cd-file { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5a6172; }`;
+.cd-file { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5a6172; }
+@media (max-width: 480px) { .cd { padding: 10px 12px; font-size: 11px; } }`;
 
 const DOC_CSS = `.dm { padding: 14px; border: 1px solid #e1e4ea; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
 .dm-file { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5a6172; }
@@ -26,13 +29,16 @@ const chat = (question: string): Visual => ({
 const statsScreen = (inherit: boolean): Visual => ({
   frame: 'browser',
   alt: inherit
-    ? 'Appli de réservation de salles : même en-tête blanc à onglets, et un écran Statistiques en cartes blanches à bord fin, chiffres en gris foncé, barres bleues.'
-    : 'Appli de réservation de salles : même en-tête blanc à onglets, mais l’écran Statistiques passe sur un fond presque noir, avec des chiffres violets lumineux, des cartes translucides et des libellés en capitales espacées.',
-  css: `.rs-top { display: flex; align-items: center; gap: 14px; padding: 0 16px; border-bottom: 1px solid #e3e6ec; }
+    ? 'Appli de réservation de salles Quorum : même en-tête blanc à onglets, et un écran Statistiques en cartes blanches à bord fin, chiffres en gris foncé, barres bleu ardoise.'
+    : 'Appli de réservation de salles Quorum : même en-tête blanc à onglets, mais l’écran Statistiques passe sur un fond presque noir, avec des chiffres violets lumineux, des cartes translucides et des libellés en capitales espacées.',
+  css: `.rs { container-type: inline-size; }
+.rs-top { display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; padding: 0 16px; border-bottom: 1px solid #e3e6ec; }
 .rs-logo { font-weight: 800; color: #1f4fd8; }
 .rs-tab { padding: 10px 2px; font-size: 13px; font-weight: 600; color: #5a6172; }
 .rs-on { color: #1d2230; box-shadow: inset 0 -2px 0 #1f4fd8; }
+@container (max-width: 400px) { .rs-logo { flex-basis: 100%; padding-top: 10px; } }
 .rs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.rs-card { display: flex; flex-direction: column; justify-content: space-between; }
 .rs-bars { display: flex; align-items: flex-end; gap: 8px; height: 70px; }
 .rs-bars span { flex: 1; border-radius: 4px 4px 0 0; }
 .rs-days { display: flex; gap: 8px; font-size: 11px; }
@@ -41,15 +47,15 @@ ${inherit ? `.rs-body { background: #fff; }
 .rs-card { padding: 12px; border: 1px solid #e1e4ea; border-radius: 12px; }
 .rs-num { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .rs-lab { font-size: 12px; color: #5a6172; }
-.rs-bars span { background: #1f4fd8; }
-.rs-days { color: #5a6172; }` : `.rs-body { background: linear-gradient(160deg, #0f1222 0%, #1b1640 100%); color: #e9e7ff; }
+.rs-bars span { background: #6b84c4; }
+.rs-days { color: #5a6172; }` :`.rs-body { background: linear-gradient(160deg, #0f1222 0%, #1b1640 100%); color: #e9e7ff; }
 .rs-card { padding: 12px; border-radius: 16px; background: rgb(255 255 255 / 0.06); border: 1px solid rgb(167 139 250 / 0.35); box-shadow: 0 0 18px rgb(167 139 250 / 0.35); }
 .rs-num { font-size: 24px; font-weight: 800; color: #c4b5fd; text-shadow: 0 0 12px rgb(167 139 250 / 0.8); }
 .rs-lab { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #a5a8c8; }
 .rs-bars span { background: linear-gradient(180deg, #a78bfa, #22d3ee); box-shadow: 0 0 10px rgb(34 211 238 / 0.5); }
 .rs-days { color: #a5a8c8; }`}`,
-  html: `<div class="rs-top"><span class="rs-logo">Salles</span><span class="rs-tab">Réservations</span><span class="rs-tab">Salles</span><span class="rs-tab rs-on">Statistiques</span></div>
-<div class="rs-body mk-pad mk-stack" style="--gap:12px"><p class="mk-h2">Statistiques · novembre</p><div class="rs-grid"><div class="rs-card"><p class="rs-lab">Taux d’occupation</p><p class="rs-num">72 %</p></div><div class="rs-card"><p class="rs-lab">Réservations</p><p class="rs-num">318</p></div><div class="rs-card"><p class="rs-lab">Salle la plus demandée</p><p class="rs-num" style="font-size:17px">Galilée</p></div></div><div class="rs-card"><p class="rs-lab" style="margin-bottom:8px">Occupation par jour</p><div class="rs-bars"><span style="height:55%"></span><span style="height:80%"></span><span style="height:92%"></span><span style="height:74%"></span><span style="height:40%"></span></div><div class="rs-days"><span>Lun.</span><span>Mar.</span><span>Mer.</span><span>Jeu.</span><span>Ven.</span></div></div></div>`,
+  html: `<div class="rs"><div class="rs-top"><span class="rs-logo">Quorum</span><span class="rs-tab">Réservations</span><span class="rs-tab">Salles</span><span class="rs-tab rs-on">Statistiques</span></div>
+<div class="rs-body mk-pad mk-stack" style="--gap:12px"><p class="mk-h2">Statistiques · novembre</p><div class="rs-grid"><div class="rs-card"><p class="rs-lab">Taux d’occupation</p><p class="rs-num">72 %</p></div><div class="rs-card"><p class="rs-lab">Réservations</p><p class="rs-num">318</p></div><div class="rs-card"><p class="rs-lab">Salle la plus demandée</p><p class="rs-num" style="font-size:17px">Galilée</p></div></div><div class="rs-card"><p class="rs-lab" style="margin-bottom:8px">Occupation par jour</p><div class="rs-bars"><span style="height:55%"></span><span style="height:80%"></span><span style="height:92%"></span><span style="height:74%"></span><span style="height:40%"></span></div><div class="rs-days"><span>Lun.</span><span>Mar.</span><span>Mer.</span><span>Jeu.</span><span>Ven.</span></div></div></div></div>`,
 });
 
 const processModule: ModuleContent = {
@@ -58,21 +64,21 @@ const processModule: ModuleContent = {
   category: 'construire',
   summary:
     'Cadrer un écran avant de le dessiner, consigner la vérité produit et le système visuel, décider ce qui fait autorité, et choisir la bonne commande d’impeccable pour chaque problème.',
-  minutes: 11,
+  minutes: 12,
   commands: ['shape', 'init', 'document', 'extract'],
-  sources: ['imp:skill', 'imp:shape', INIT, 'imp:new-work', 'imp:document', 'imp:extract', 'imp:polish'],
+  sources: ['imp:skill', 'imp:shape', INIT, 'imp:new-work', 'imp:document', 'imp:extract', 'imp:polish', 'imp:colorize', 'imp:audit', 'imp:critique'],
   sections: [
     {
       id: 'carte',
       title: 'La carte des commandes',
       body: `Impeccable propose **24 commandes**, rangées en six familles. Les connaître, c’est savoir **nommer le problème** avant de le traiter :
 
-- **Construire** : \`shape\` (cadrer l’UX avant le code), \`init\` (consigner la vérité produit dans PRODUCT.md), \`document\` (générer DESIGN.md depuis le code existant), \`extract\` (sortir jetons et composants réutilisables vers le design system). \`craft\` n’est plus qu’un alias déprécié d’une demande de création ordinaire.
+- **Construire** : \`shape\` (cadrer l’UX avant le code), \`init\` (consigner la vérité produit dans PRODUCT.md), \`document\` (générer DESIGN.md depuis le code existant), \`extract\` (sortir jetons et composants réutilisables vers le design system). \`craft\` n’est plus qu’un alias obsolète d’une demande de création ordinaire.
 - **Évaluer** : \`critique\` (revue UX notée sur les heuristiques, avec personas), \`audit\` (contrôles techniques — accessibilité, performance, responsive — notés sur 20).
 - **Affiner** : \`polish\` (passe finale avant la mise en ligne), \`bolder\` (amplifier un design trop sage), \`quieter\` (calmer un design criard ou surstimulant), \`distill\` (ramener à l’essentiel), \`harden\` (erreurs, traductions, cas limites), \`onboard\` (premiers usages, états vides, activation).
 - **Enrichir** : \`animate\` (mouvement utile), \`colorize\` (couleur stratégique), \`typeset\` (typographie), \`layout\` (espacement, rythme, hiérarchie), \`delight\` (personnalité, moments mémorables), \`overdrive\` (effets techniques hors norme).
 - **Corriger** : \`clarify\` (textes, libellés, messages d’erreur), \`adapt\` (autres écrans et appareils), \`optimize\` (performance).
-- **Itérer** : \`live\` (variantes à choisir dans le navigateur), \`generate\` (variantes d’un élément nommé, sans sélection manuelle).
+- **Itérer** : \`live\` (variantes à choisir dans le navigateur), \`generate\` (variantes d’un élément nommé dans la demande, sans avoir à le pointer dans le navigateur ; on choisit ensuite parmi elles).
 
 Une revue (\`critique\` ou \`audit\`) se conclut par les commandes à lancer, par ordre de priorité, et se termine par \`polish\` dès qu’il y a des corrections.`,
     },
@@ -89,6 +95,10 @@ Deux ou trois questions liées par tour, puis on attend les réponses. Un tour s
 - **Tour 2 — matière, comportement, limites** : quel contenu réel, avec quelles plages (minimum, typique, maximum) ? Quels états comptent (premier usage, vide, chargement, erreur, succès, permissions, débordement, usage expert) ? Quel niveau de fidélité ? Que faut-il ne pas toucher ? Quelles contraintes de plateforme, de performance, d’accessibilité, de traduction ?
 
 On ne demande **jamais de valeurs CSS** ni de choisir parmi des « ambiances » toutes faites : la direction visuelle se décide ensuite.
+
+### Résoudre la direction
+
+Pour une surface nouvelle, une extension de marque ou un remplacement, \`shape\` passe ensuite par le parcours de création : autorité visuelle, atelier de monde s’il le faut, choix de concept. Puis il revient, avant tout contrat ou code. Dans un monde établi, ce détour ne sert que si la composition ou l’interaction reste réellement ouverte.
 
 ### Le brief
 
@@ -116,7 +126,7 @@ Le plus court qui suffise : public et situation, résultat attendu et preuves, d
       title: 'La vérité produit : PRODUCT.md',
       body: `\`init\` consigne la **vérité produit durable** dans PRODUCT.md : ce qui restera vrai, quel que soit l’écran à concevoir.
 
-- **Ce qui y va** : les utilisateurs, leur situation et leur tâche ; l’objectif du produit et ce que veut dire réussir ; son positionnement (ce qu’un produit voisin ne pourrait pas revendiquer) ; le contexte d’usage ; les capacités et contraintes ; les engagements de marque confirmés (nom, voix, éléments imposés) ; les **preuves disponibles** — contenus, données, témoignages réels — et celles qui manquent ; trois à cinq principes produit ; les besoins d’accessibilité.
+- **Ce qui y va** : la plateforme (web, ios, android ou adaptive), qui décide des conventions natives à suivre, et, pour un projet neuf, la pile technique choisie par l’utilisateur (section Stack) ; les utilisateurs, leur situation et leur tâche ; l’objectif du produit et ce que veut dire réussir ; son positionnement (ce qu’un produit voisin ne pourrait pas revendiquer) ; le contexte d’usage ; les capacités et contraintes ; les engagements de marque confirmés (nom, voix, éléments imposés) ; les **preuves disponibles** — contenus, données, témoignages réels — et celles qui manquent ; trois à cinq principes produit ; les besoins d’accessibilité.
 - **Ce qui n’y va pas** : palette, typographie, composants, concepts de page ; la stratégie d’une surface (mode de visite, enchaînement des sections, appels à l’action) ; tout témoignage, client, chiffre ou tarif **inventé**.
 
 L’entretien d’\`init\` part de ce que le dépôt révèle déjà, pose au plus trois questions par tour et ne demande ni couleurs, ni polices, ni ambiance. Ce qui n’est pas décidé est noté comme tel, jamais inventé.`,
@@ -134,7 +144,7 @@ L’entretien d’\`init\` part de ce que le dépôt révèle déjà, pose au pl
 ### Le bon dosage d’invention
 
 - **Étendre une surface existante** (une section, un composant, un état) : on hérite du monde *et* de la composition ; on ne résout que le nouveau contenu, la hiérarchie, les états et le raccord. Un ajout local ne devient jamais un exercice d’identité.
-- **Créer une surface entière dans un monde établi** : le système visuel reste fixe ; on explore cinq à sept structures réellement différentes, tirées du contenu, de la tâche et des comportements, avant d’en retenir une.
+- **Créer une surface entière dans un monde établi** (une page, un écran, un parcours) : le système visuel reste fixe ; quand la structure n’est pas encore décidée, on explore cinq à sept structures réellement différentes, tirées du contenu, de la tâche et des comportements, avant d’en retenir une.
 - **Créer ou remplacer le monde visuel** : là seulement, on cherche une direction visuelle neuve.`,
     },
     {
@@ -142,17 +152,24 @@ L’entretien d’\`init\` part de ce que le dépôt révèle déjà, pose au pl
       title: 'Systématiser : DESIGN.md, jetons et extraction',
       body: `**DESIGN.md** décrit le système visuel pour que tout nouvel écran reste dans la marque. \`document\` le génère depuis le code existant, ou en pose une version « graine » choisie avec l’utilisateur quand rien n’est encore construit.
 
-- **Les jetons font foi, la prose explique** : un en-tête YAML porte les valeurs (couleurs, typographie, arrondis, espacements, composants), puis jusqu’à huit sections dans un ordre fixe — *Overview, Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Do’s and Don’ts*.
-- **Décrire avant de chiffrer** : « Bleu d’action (#1f4fd8) : boutons principaux et liens, jamais en décoration » plutôt que « blue-800 ». Un nom descriptif, la valeur exacte entre parenthèses, l’usage et la raison.
-- **Strictement visuel** : rien de PRODUCT.md n’y est recopié, et aucun composant ni jeton inexistant n’y est inventé.
+Pour un monde neuf ou remplacé, l’ordre compte : \`init\` d’abord (PRODUCT.md), puis le parcours de création, puis la construction ; DESIGN.md s’écrit **à la fin, depuis ce qui a été construit**. Un règlement écrit avant le code finit défendu contre la réalité au lieu de la décrire : la graine ne sert qu’à fixer un monde choisi avant tout code, et se réécrit dès que le code existe.
+
+- **Les jetons font foi, la prose explique** : un en-tête YAML porte les valeurs (couleurs, typographie, arrondis, espacements, composants), puis jusqu’à huit sections dans un ordre fixe : \`## Overview\`, \`## Colors\`, \`## Typography\`, \`## Layout\`, \`## Elevation & Depth\`, \`## Shapes\`, \`## Components\`, \`## Do's and Don'ts\`. Les outils lisent ces titres tels quels.
+- **Décrire avant de chiffrer** : « Bleu d’action (#1f4fd8) : boutons principaux et liens, jamais en décoration » plutôt que « blue-600 ». Un nom descriptif, la valeur exacte entre parenthèses, l’usage et la raison.
+- **Strictement visuel** : on n’y recopie pas PRODUCT.md, sauf un engagement de marque durable qui contraint réellement le visuel (logo imposé, besoin d’accessibilité), et aucun composant ni jeton inexistant n’y est inventé.
+- **Jamais d’écrasement silencieux** : un DESIGN.md existant se montre d’abord, puis on propose de le rafraîchir, de l’écraser ou de fusionner.
 
 ### Jetons primitifs et sémantiques
 
-Un **jeton primitif** nomme une valeur (\`blue-600: #1f4fd8\`). Un **jeton sémantique** nomme une fonction (\`color-action\`, \`color-text-muted\`, \`space-field-gap\`) et pointe vers un primitif. Les composants consomment les jetons sémantiques ; un thème sombre se contente alors de rebrancher ces rôles sur d’autres primitifs.
+Un **jeton primitif** nomme une valeur (\`blue-600: #1f4fd8\`). Un **jeton sémantique** nomme une fonction (\`action\`, \`text-muted\`, \`field-gap\`) et pointe vers un primitif. Dans le code, un primitif peut porter un nom d’échelle comme \`blue-600\` ; dans DESIGN.md, chaque couleur reçoit un nom descriptif, valeur entre parenthèses.
+
+Les composants consomment les jetons sémantiques ; un thème sombre rebranche alors ces rôles sur des valeurs sombres composées — élévation des surfaces, contrastes revérifiés —, jamais sur une simple inversion du thème clair.
 
 ### Extraire au bon moment
 
-\`extract\` ne sort un motif vers le design system que s’il revient **au moins trois fois avec la même intention**. L’abstraction prématurée coûte plus cher que la duplication, et deux boutons qui se ressemblent mais servent des intentions différentes restent séparés.`,
+\`extract\` ne sort un motif vers le design system que s’il revient **au moins trois fois avec la même intention**. L’abstraction prématurée coûte plus cher que la duplication, et deux boutons qui se ressemblent mais servent des intentions différentes restent séparés.
+
+Sans design system, \`extract\` n’en crée pas d’office : il demande d’abord où et comment le bâtir. Et une extraction ne s’arrête pas au nouveau composant : on migre toutes les occurrences, puis on supprime l’ancien code.`,
       examples: [
         {
           title: 'Nommer par la fonction',
@@ -169,16 +186,18 @@ Un **jeton primitif** nomme une valeur (\`blue-600: #1f4fd8\`). Un **jeton séma
           good: {
             alt: 'Feuille de style en deux couches : des jetons primitifs qui nomment des valeurs, puis des jetons sémantiques qui nomment des rôles, utilisés par les composants.',
             css: CODE_CSS,
-            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd"><span class="c">/* Primitifs : des valeurs */</span>
+            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd cd-fit"><span class="c">/* Primitifs : des valeurs */</span>
 --blue-600: #1f4fd8;
 --gray-600: #5a6172;
 --space-4: 16px;
 <span class="c">/* Sémantiques : des rôles */</span>
---color-action: var(--blue-600);
---color-text-muted: var(--gray-600);
---space-field-gap: var(--space-4);
+--action: var(--blue-600);
+--text-muted: var(--gray-600);
+--field-gap: var(--space-4);
 
-.btn-primary { background: var(--color-action); }</pre></div>`,
+.btn-primary {
+  background: var(--action);
+}</pre></div>`,
           },
           goodNote: 'Le composant demande un rôle, pas une couleur : changer la marque ou le thème se fait en un seul endroit.',
         },
@@ -194,20 +213,20 @@ Un **jeton primitif** nomme une valeur (\`blue-600: #1f4fd8\`). Un **jeton séma
 - **Décalage de concept** : le parcours, l’architecture de l’information ou la hiérarchie diffèrent des zones comparables du produit.
 - **Défaut local** : l’implémentation est simplement incomplète ou incohérente.
 
-Puis on trie : d’abord les tâches bloquées, les pertes de données, les états trompeurs et les parcours inaccessibles ; ensuite les états manquants (chargement, vide, erreur, succès, désactivé) ; puis les dérives de parcours, de hiérarchie, de responsive et de système ; puis les incohérences visuelles et de mouvement ; enfin le ménage dans le code.
+Puis on trie : d’abord les tâches bloquées, les pertes de données, les états trompeurs et les parcours inaccessibles ; ensuite les états manquants (chargement, vide, erreur, succès, désactivé, permissions) ; puis les dérives de parcours, de hiérarchie, de responsive et de système ; puis les incohérences visuelles et de mouvement ; enfin le ménage dans le code et les ressources.
 
-\`polish\` affine sans jamais refaire en douce : si le concept lui-même est faux, on le dit et on recommande une refonte.`,
+\`polish\` affine sans jamais refaire en douce : si le concept lui-même est faux, on le dit et on recommande une refonte ou \`bolder\`.`,
     },
   ],
   rules: [
     { id: 'shape', front: 'Que produit la commande `shape` ?', back: 'Un entretien de découverte puis un brief confirmé. Jamais de code.' },
     { id: 'rounds', front: 'Sur quoi portent les deux tours de questions de `shape` ?', back: 'Tour 1 : but, personnes, résultat. Tour 2, seulement si un manque important apparaît : matière, comportement, limites.' },
     { id: 'never-ask', front: 'Que ne demande-t-on jamais pendant un cadrage ?', back: 'Des valeurs CSS ou un choix entre des « ambiances » toutes faites : la direction visuelle se décide ensuite.' },
-    { id: 'product', front: 'Que contient PRODUCT.md ?', back: 'La vérité produit durable : utilisateurs, objectif, positionnement, contexte d’usage, contraintes, engagements de marque, preuves disponibles, accessibilité.' },
+    { id: 'product', front: 'Que contient PRODUCT.md ?', back: 'La vérité produit durable : plateforme, utilisateurs, objectif, positionnement, contexte d’usage, contraintes, engagements de marque, preuves disponibles, accessibilité.' },
     { id: 'not-product', front: 'Qu’est-ce qui n’a rien à faire dans PRODUCT.md ?', back: 'Palette, typographie, composants, stratégie d’une page, et toute preuve inventée (témoignage, client, chiffre).' },
     { id: 'established', front: 'Pas de DESIGN.md, mais une identité cohérente dans le code : que faire ?', back: 'C’est un monde établi : on en hérite et on le documente (`document`), on n’en invente pas un autre.' },
     { id: 'extension', front: 'Une nouvelle section dans une appli existante : quelle part d’invention ?', back: 'Aucune pour l’identité : elle hérite du monde et de la composition. On résout le contenu, la hiérarchie, les états et le raccord.' },
-    { id: 'tokens', front: 'Jeton primitif ou jeton sémantique ?', back: 'Le primitif nomme une valeur (`blue-600`), le sémantique nomme un rôle (`color-action`). Les composants consomment les sémantiques ; un thème les rebranche.' },
+    { id: 'tokens', front: 'Jeton primitif ou jeton sémantique ?', back: 'Le primitif nomme une valeur (`blue-600`), le sémantique nomme un rôle (`action`). Les composants consomment les sémantiques ; un thème les rebranche sur ses propres valeurs.' },
     { id: 'extract', front: 'Quand extraire un motif dans le design system ?', back: 'Quand il revient au moins trois fois avec la même intention. L’abstraction prématurée coûte plus cher que la duplication.' },
     { id: 'drift', front: 'Quelles sont les quatre catégories de dérive selon `polish` ?', back: 'Jeton manquant, implémentation isolée, décalage de concept, défaut local. On corrige la cause au niveau le plus étroit.' },
     { id: 'commands-refine', front: 'Interface trop chargée, trop criarde, trop sage : quelles commandes ?', back: '`distill` pour ramener à l’essentiel, `quieter` pour calmer, `bolder` pour amplifier.' },
@@ -309,29 +328,35 @@ Les noms de classes bruts (\`rounded-lg\`, \`shadow-md\`) n’apprennent rien : 
         {
           id: 'semantic',
           visual: {
-            alt: 'Feuille de style où des jetons sémantiques (surface, texte, action) pointent vers des primitifs, et où le thème sombre se contente de les rebrancher en trois lignes.',
+            alt: 'Feuille de style où des jetons sémantiques (surface, surface surélevée, texte, action) pointent vers des primitifs ; le thème sombre leur attribue ses propres valeurs, choisies une à une.',
             css: CODE_CSS,
-            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd"><span class="c">/* Primitifs déclarés plus haut : --gray-*, --blue-* */</span>
+            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd cd-fit"><span class="c">/* Rôles → primitifs */</span>
 :root {
   --surface: var(--gray-50);
+  --raised: var(--white);
   --text: var(--gray-900);
   --action: var(--blue-600);
 }
 [data-theme="dark"] {
   --surface: var(--gray-900);
-  --text: var(--gray-50);
+  --raised: var(--gray-800);
+  --text: var(--gray-100);
   --action: var(--blue-300);
 }
-.btn-primary { background: var(--action); }</pre></div>`,
+.btn-primary {
+  background: var(--action);
+}</pre></div>`,
           },
-          why: 'Les composants ne connaissent que des rôles ; le thème rebranche trois jetons et tout suit, y compris les composants à venir.',
+          why: 'Les composants ne connaissent que des rôles ; le thème sombre les rebranche sur des valeurs composées pour lui (surface surélevée plus claire que le fond, bleu éclairci), et tout suit, y compris les composants à venir.',
         },
       ],
       answer: 'semantic',
-      explanation: `Avec une couche de **jetons sémantiques**, les composants ne connaissent que des rôles (\`--surface\`, \`--text\`, \`--action\`). Le thème sombre consiste alors à **rebrancher ces rôles** sur d’autres primitifs : quelques lignes, et chaque composant suit — y compris ceux qui n’existent pas encore.
+      explanation: `Avec une couche de **jetons sémantiques**, les composants ne connaissent que des rôles (\`--surface\`, \`--raised\`, \`--text\`, \`--action\`). Le thème sombre **rebranche ces rôles** sur d’autres primitifs : quelques lignes, et chaque composant suit — y compris ceux qui n’existent pas encore.
 
-Sans cette couche, chaque composant reçoit ses surcharges sombres une par une. Le moindre nouveau bouton oublie sa variante, et le thème se délite. C’est la recommandation d’impeccable : des valeurs primitives, des jetons sémantiques, et des thèmes qui remappent les rôles.`,
-      takeaway: 'Les composants consomment des jetons sémantiques ; un thème ne fait que rebrancher ces rôles sur d’autres valeurs primitives.',
+Rebrancher n’est pas inverser : les valeurs sombres se **composent**. Ici, la surface surélevée reste plus claire que le fond, comme en clair, et le bleu d’action s’éclaircit pour rester lisible sur le sombre ; chaque contraste se revérifie.
+
+Sans cette couche, chaque composant reçoit ses surcharges sombres une par une. Le moindre nouveau bouton oublie sa variante, et le thème se délite. C’est la recommandation d’impeccable : des valeurs primitives, des jetons sémantiques, et des thèmes qui rebranchent les rôles — chacun composé, jamais inversé mécaniquement.`,
+      takeaway: 'Les composants consomment des jetons sémantiques ; un thème rebranche ces rôles sur des valeurs composées pour lui, jamais sur une simple inversion du thème clair.',
       sources: ['imp:colorize', 'imp:extract'],
     },
     {
