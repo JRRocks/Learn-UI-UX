@@ -207,7 +207,7 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
 
 Le sens dépend aussi du mode : sur une page qui doit convaincre ou une vitrine, une palette plus retenue, plus de blanc, plus d’air typographique — le spectaculaire s’atténue sans disparaître ; dans une application ou une page de lecture, moins de bruit — moins de fonds d’accent, des cartes plus plates, moins de couleur et de mouvement.
 
-- **Couleur** : désature (des teintes pleinement saturées vers 70–85 % de saturation), réduis le nombre de couleurs, laisse les **neutres dominer** et garde la couleur pour les accents (la règle des 10 %). Préfère des gris teintés, chauds ou froids, au gris pur. Garde le contraste fort là où il compte.
+- **Couleur** : désature (des teintes pleinement saturées vers 70–85 % de saturation), réduis le nombre de couleurs, laisse les **neutres dominer** et garde la couleur pour les accents (la « règle des 10 % » : l’accent autour de 10 % de la surface, une heuristique plutôt qu’une loi). Préfère des gris teintés, chauds ou froids, au gris pur. Garde le contraste fort là où il compte.
 - **Poids** : baisse les graisses (900 → 600, 700 → 500), allège ou supprime les bordures, augmente l’espace.
 - **Effets** : retire dégradés, ombres multiples, lueurs et motifs qui ne servent à rien.
 - **Mouvement** : distances plus courtes (10 à 20 px plutôt que 40), une décélération douce (courbe *ease-out-quart* : départ vif, arrivée tout en douceur), jamais d’effet de rebond ni d’effet élastique ; supprime les animations sans rôle.
@@ -265,14 +265,14 @@ Vérifie à la fin : est-ce toujours fonctionnel ? toujours reconnaissable ? plu
     { id: 'not-amputate', front: 'Simplifier, est-ce retirer des fonctions ?', back: 'Non : on retire les obstacles entre l’utilisateur et son but, pas les fonctions dont il a besoin.' },
     { id: 'mystery', front: 'Où passe la limite entre minimalisme et mystère ?', back: 'Dès que l’utilisateur doit deviner — icône sans libellé, action cachée sans indice —, ce n’est plus du minimalisme mais du mystère.' },
     { id: 'saint-ex', front: 'Selon Saint-Exupéry, quand la perfection est-elle atteinte ?', back: 'Non quand il n’y a plus rien à ajouter, mais quand il n’y a plus rien à retrancher (Terre des hommes, 1939).' },
-    { id: 'scope', front: 'On te demande une section « plus audacieuse » : que peux-tu modifier ?', back: 'Seulement la cible nommée, avec les moyens du système : ni les voisines, ni nouvelle couleur, police ou primitive sans le demander.' },
+    { id: 'scope', front: 'On te demande une section « plus audacieuse » : que peux-tu modifier ?', back: 'Seulement la cible nommée, avec les moyens du système : ni les voisines, ni nouvelle couleur, police ou primitive (type de composant, motif) sans le demander.' },
     { id: 'commit', front: 'Pourquoi « tout rendre plus fort » échoue-t-il ?', back: 'Si tout monte, rien ne ressort et la section devient plus plate. Un geste décisif, puis du calme autour.' },
     { id: 'skeleton', front: 'Qu’est-ce que le test du squelette ?', back: 'Retirer le texte et regarder la structure nue : si elle ne dit plus pourquoi la section compte, l’audace n’est que dans la taille du texte.' },
     { id: 'desaturate', front: 'Comment adoucir une palette criarde ?', back: 'Désaturer vers 70–85 %, réduire le nombre de couleurs, laisser dominer des neutres teintés et garder la couleur pour les accents.' },
-    { id: 'weights', front: 'Comment alléger les graisses sans perdre la hiérarchie ?', back: 'Descendre d’un ou deux crans (900 → 600, 700 → 500) en gardant quelques ancres fortes.' },
+    { id: 'weights', front: 'Comment alléger les graisses sans perdre la hiérarchie ?', back: 'Descendre de deux ou trois crans (900 → 600, 700 → 500) en gardant quelques ancres fortes.' },
     { id: 'gray-on-color', front: 'Texte secondaire sur fond coloré : quelle couleur ?', back: 'Jamais du gris : une nuance de la couleur du fond (ou du blanc en transparence), avec au moins 4,5:1.' },
     { id: 'generic', front: 'À quoi ressemble un calme générique ?', back: 'Du gris sur blanc, une seule graisse partout, une grille de cartes identiques : de la retenue sans point de vue.' },
-    { id: 'quiet-motion', front: 'Comment adoucir une animation ?', back: 'Distances plus courtes (10 à 20 px), décélération douce, jamais de rebond ni d’élastique — ou pas d’animation si elle ne sert à rien.' },
+    { id: 'quiet-motion', front: 'Comment adoucir une animation ?', back: 'Distances plus courtes (10 à 20 px), décélération douce (*ease-out-quart*), jamais d’effet de rebond ni d’effet élastique — ou pas d’animation si elle ne sert à rien.' },
   ],
   exercises: [
     {
@@ -401,9 +401,11 @@ La vraie simplification réduit le **nombre** d’actions visibles et regroupe l
       answer: 'decisive',
       explanation: `« Plus audacieux » ne veut pas dire « plus d’effets ». Impeccable demande d’**amplifier ce que le système possède déjà** — ici la police à empattements et le vert sapin — au lieu d’ajouter des couleurs, des dégradés et des ombres que la marque n’a jamais utilisés.
 
-Le principe clé : **s’engager, puis clarifier**. Un geste décisif fait complètement, puis du calme autour pour qu’il se lise. Si chaque élément devient plus fort, la section devient plus plate. L’effet d’isolement (von Restorff) l’explique : on remarque ce qui diffère du reste, pas ce qui crie avec tout le monde.`,
+Le principe clé : **s’engager, puis clarifier**. Un geste décisif fait complètement, puis du calme autour pour qu’il se lise. Si chaque élément devient plus fort, la section devient plus plate. L’effet d’isolement (von Restorff) va dans le même sens : parmi des éléments semblables, on retient celui qui diffère, d’où le conseil de doser l’emphase plutôt que de tout souligner.
+
+Attention au gabarit « grand chiffre, petit libellé, chiffres secondaires, accent » : impeccable le range parmi les réflexes à refuser quand rien ne le justifie. Ici, c’est le brief qui le justifie : la section s’appelle « Chiffres clés » et ses chiffres existent déjà.`,
       takeaway: 'Intensifier : un geste décisif avec les moyens du système, puis du calme autour. Si tout monte, rien ne ressort.',
-      sources: ['imp:bolder', LAWS_RESTORFF],
+      sources: ['imp:bolder', 'imp:craft-floor', LAWS_RESTORFF],
     },
     {
       id: 'intensity-gray-on-color-duel',
@@ -452,7 +454,7 @@ Pour faire reculer un texte secondaire sur un fond coloré, choisis une **nuance
         {
           id: 'generic',
           visual: {
-            alt: 'Tableau de bord où tout le texte est gris, de même graisse et presque de même taille, réparti dans quatre cartes identiques.',
+            alt: 'Tableau de bord où tout le texte est gris, de même graisse et de même taille, réparti dans quatre cartes identiques.',
             frame: 'browser',
             html: `<div class="mk-pad mk-stack int-gen" style="--gap:12px">
   <p>Consommation d’énergie</p>
@@ -463,8 +465,8 @@ Pour faire reculer un texte secondaire sur un fond coloré, choisis une **nuance
     <div class="int-gen-card"><span>Pic de puissance</span><span>6,2 kVA</span></div>
   </div>
 </div>`,
-            css: `.int-gen { color: #6b7280; font-weight: 400; }
-.int-gen-card { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; }`,
+            css: `.int-gen { color: #737373; font-weight: 400; }
+.int-gen-card { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; }`,
           },
           why: 'Tout est gris, d’une seule graisse, en cartes identiques : c’est calme, mais plus rien ne guide l’œil ni ne ressemble à un produit.',
         },
@@ -513,7 +515,7 @@ La version réussie garde des **ancres** : la donnée principale reste plus gran
         frame: 'browser',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between"><p class="mk-h2" data-hotspot="title">Offre Équipe</p><span class="mk-badge">Active</span></div>
-  <p class="mk-muted" data-hotspot="redundant">Vous êtes abonné à l’offre Équipe. Votre offre actuelle est l’offre Équipe.</p>
+  <p class="mk-muted" data-hotspot="redundant">Vous avez souscrit à l’offre Équipe. Votre offre actuelle est l’offre Équipe.</p>
   <p data-hotspot="price" style="align-self:flex-start"><span class="mk-price" style="font-size:22px">49,00&nbsp;€</span> <span class="mk-small mk-muted">par mois · 10 sièges</span></p>
   <div class="int-nest" data-hotspot="nested"><div class="int-nest"><div class="int-nest"><p class="mk-small mk-muted">Prochain prélèvement</p><p class="mk-strong">12 novembre 2026</p></div></div></div>
   <span class="mk-btn" data-hotspot="cta" style="align-self:flex-start">Gérer les sièges</span>
@@ -585,16 +587,16 @@ Le prix et l’action principale, eux, sont exactement ce qu’une simplificatio
           id: 'tags',
           label: 'Étiquettes en couleurs pures',
           correct: true,
-          why: 'Rouge, jaune et vert à pleine saturation, en capitales très grasses : les trois statuts hurlent en même temps et plus aucun ne ressort.',
+          why: 'Rouge, jaune et vert à pleine saturation, en capitales très grasses : les trois statuts hurlent en même temps et plus aucun ne ressort. Le blanc sur ce rouge pur tombe même à 3,8:1, sous le seuil de 4,5:1.',
         },
         { id: 'title', label: 'Titre de la page', correct: false, why: 'Titre sobre et lisible : rien à adoucir.' },
         { id: 'range', label: 'Sélecteur de dates', correct: false, why: 'Bouton secondaire discret, à sa juste place.' },
         { id: 'table', label: 'Liste des commandes', correct: false, why: 'Liste neutre et dense : elle est déjà calme.' },
       ],
-      explanation: `Les sources d’intensité les plus fréquentes sont la **saturation** et les **effets** : des étiquettes en couleurs pures et en capitales très grasses se disputent l’attention, une lueur colorée sans décalage autour d’une carte décore sans informer.
+      explanation: `Ici, l’intensité vient de la **saturation**, du **poids** et des **effets** : des étiquettes en couleurs pures et en capitales très grasses se disputent l’attention, une lueur colorée sans décalage autour d’une carte décore sans informer.
 
 Pour adoucir : désature les étiquettes (et garde une couleur forte pour le seul statut vraiment urgent), baisse la graisse, passe en casse normale, et remplace la lueur par une élévation sobre — ou rien du tout. Le titre, le sélecteur de dates et la liste sont déjà calmes : on ne les touche pas.`,
-      takeaway: 'Pour baisser le volume, commence par la saturation et les effets : couleurs pures, capitales très grasses, lueurs.',
+      takeaway: 'Pour baisser le volume, traque la saturation, le poids et les effets : couleurs pures, capitales très grasses, lueurs.',
       sources: ['imp:quieter', 'imp:detector'],
     },
     {
@@ -607,7 +609,7 @@ Pour adoucir : désature les étiquettes (et garde une couleur forte pour le seu
       options: [
         {
           id: 'amplify',
-          label: 'Passer la citation principale dans la police de titre à pleine taille, poser un aplat vert sapin sur cette seule section et réduire les témoignages secondaires.',
+          label: 'Passer la citation principale dans la police de titre à pleine taille, poser un aplat vert sapin sur cette seule section et passer les témoignages secondaires en plus petit.',
           why: 'Elle amplifie ce que le système possède déjà, dans le périmètre, en calmant le reste de la section.',
         },
         {
@@ -627,7 +629,7 @@ Pour adoucir : désature les étiquettes (et garde une couleur forte pour le seu
         },
       ],
       answer: 'amplify',
-      explanation: `Le **périmètre est souverain** : on ne touche que la cible nommée, et on n’ajoute ni couleur, ni police, ni primitive que le système ne possède pas. Si le système ne peut vraiment pas exprimer la direction, on **demande**, en nommant l’ajout précis et le rôle qu’il jouerait.
+      explanation: `Le **périmètre est souverain** : on ne touche que la cible nommée, et on n’ajoute ni couleur, ni police, ni primitive (type de composant, motif) que le système ne possède pas. Si le système ne peut vraiment pas exprimer la direction, on **demande**, en nommant l’ajout précis et le rôle qu’il jouerait.
 
 L’audace vient alors de ce que la marque possède déjà, utilisé à pleine puissance — la typo de titre, l’accent en aplat — et du calme créé autour. Le contenu reste vrai : pas de nouvelle affirmation (« Avis vérifié ») sans preuve fournie par le client.`,
       takeaway: 'Intensifier, c’est amplifier les moyens du système dans le périmètre demandé — sans nouvelle couleur, police ou affirmation.',
@@ -683,24 +685,23 @@ Elle a aussi des **limites** : ne pas sacrifier l’accessibilité (les libellé
       difficulty: 2,
       prompt: 'Range les étapes d’une passe de simplification dans l’ordre.',
       items: [
-        { id: 'assess', label: 'Repérer les sources de complexité : éléments en trop, variations, bruit, hiérarchie confuse' },
-        { id: 'essence', label: 'Nommer le but principal et séparer l’indispensable de l’agréable' },
-        { id: 'plan', label: 'Décider ce qui part, ce qui se regroupe et ce qui passe en divulgation progressive' },
+        { id: 'assess', label: 'Repérer les sources de complexité et nommer le but principal de l’écran' },
+        { id: 'plan', label: 'Décider ce qui reste, ce qui part, ce qui se regroupe et ce qui passe en divulgation progressive' },
         { id: 'simplify', label: 'Simplifier l’architecture, le visuel, la mise en page, les interactions et le texte' },
         { id: 'verify', label: 'Vérifier : tâche plus rapide, charge mentale réduite, rien d’indispensable perdu' },
         { id: 'document', label: 'Documenter ce qui a été retiré et prévoir un autre point d’accès si besoin' },
       ],
-      explanation: `La démarche d’impeccable suit cet ordre : **évaluer** (les sources de complexité, puis l’essentiel), **planifier** (but unique, éléments indispensables, divulgation progressive, regroupements), **simplifier** dimension par dimension, **vérifier** que l’usage s’améliore vraiment, puis **documenter** ce qui a été retiré.
+      explanation: `La démarche d’impeccable suit cet ordre : **évaluer** (repérer les sources de complexité et trouver l’essentiel : le but unique de l’écran), **planifier** (ce qui reste, ce qui part, ce qui se regroupe, ce qui passe en divulgation progressive), **simplifier** dimension par dimension, **vérifier** que l’usage s’améliore vraiment, puis **documenter** ce qui a été retiré.
 
 Couper avant d’avoir nommé le but, c’est risquer de retirer ce qui comptait. Ne pas vérifier, c’est confondre « moins d’éléments » et « plus simple à utiliser ».`,
-      takeaway: 'Évaluer, nommer le but, planifier, simplifier, vérifier, documenter : on coupe après avoir compris, on mesure après avoir coupé.',
+      takeaway: 'Évaluer (sources et but), planifier, simplifier, vérifier, documenter : on coupe après avoir compris, on mesure après avoir coupé.',
       sources: ['imp:distill', NNG_PROGRESSIVE],
     },
     {
       id: 'intensity-saturation-slider',
       type: 'slider',
       difficulty: 2,
-      prompt: 'Désature ce bandeau et ces étiquettes pour calmer l’écran sans le rendre gris.',
+      prompt: 'Désature ce bandeau et ces étiquettes jusqu’à la plage que recommande impeccable pour adoucir une palette.',
       visual: {
         alt: 'Bandeau promotionnel rouge et trois commandes avec des étiquettes de statut verte, bleue et orange, dont la saturation varie avec le curseur.',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
@@ -722,9 +723,9 @@ Couper avant d’avoir nommé le but, c’est risquer de retirer ce qui comptait
       unit: '%',
       target: [70, 85],
       ideal: 78,
-      explanation: `Des couleurs pleinement saturées crient toutes en même temps. Impeccable conseille de les ramener vers **70 à 85 %** de saturation : les teintes restent reconnaissables — le vert, le bleu et l’orange gardent leur sens — mais cessent de vibrer.
+      explanation: `Des couleurs pleinement saturées crient toutes en même temps. Impeccable conseille de les ramener vers **70 à 85 %** de saturation : les teintes restent reconnaissables — le vert, le bleu et l’orange gardent leur sens — mais cessent de vibrer. L’écart paraît modeste, et c’est voulu : adoucir est un réglage de précision. Ici, désaturer améliore même la lisibilité : à 100 %, le blanc de l’étiquette « Livrée » n’atteint que 4,2:1 de contraste ; vers 78 %, il monte à 5,1:1.
 
-Descendre beaucoup plus bas fait basculer dans l’autre piège : les statuts deviennent ternes et finissent par se confondre ; à 0 %, tout est gris et la couleur ne porte plus aucune information. Calme ≠ niveaux de gris.`,
+Plus bas, l’écran reste lisible, mais on retire plus de couleur que nécessaire : la palette se ternit, puis vire au gris ; à 0 %, la couleur ne porte plus aucune information. Calme ≠ niveaux de gris.`,
       takeaway: 'Pour adoucir une palette, désature vers 70–85 % : la couleur garde son sens sans crier. Pas jusqu’au gris.',
       sources: ['imp:quieter'],
     },
@@ -746,7 +747,7 @@ On adoucit en **désaturant** (vers 70–85 %), en réduisant le nombre de cou
       difficulty: 1,
       prompt: 'Pour rendre une section plus audacieuse, il faut renforcer chacun de ses éléments.',
       answer: false,
-      explanation: `Faux. « Si tout devient plus fort, la section devient plus plate » : quand tous les éléments montent ensemble, les écarts entre eux restent les mêmes et rien ne ressort. L’effet d’isolement (von Restorff) va dans le même sens : on remarque ce qui diffère du reste.
+      explanation: `Faux. « Si tout devient plus fort, la section devient plus plate » : quand tout monte, les écarts se resserrent — on bute vite sur la graisse maximale, la saturation pleine, la place disponible — et chaque renfort ajoute du bruit. Le geste principal ne se lit plus. L’effet d’isolement (von Restorff) va dans le même sens : on retient ce qui diffère du reste.
 
 Impeccable demande de **s’engager, puis clarifier** : un geste décisif fait complètement, puis du calme autour pour qu’il se lise.`,
       takeaway: 'Audace = un geste décisif + du calme autour. Tout renforcer aplatit.',
@@ -762,25 +763,29 @@ Impeccable demande de **s’engager, puis clarifier** : un geste décisif fait c
       options: [
         {
           id: 'structure',
-          label: 'L’audace est dans la taille du texte, pas dans le design : il faut un geste structurel avec les moyens du système (échelle, densité, motif, rythme).',
-          why: 'C’est exactement ce que le test révèle : la structure ne dit pas encore pourquoi cette section compte.',
+          label: 'Le geste n’est pas encore fait : il faut changer la structure de la section avec ce que le système possède déjà (échelle d’affichage, densité, motif, rythme).',
+          why: 'C’est ce que révèle le test : sans les mots, rien ne dit pourquoi cette section compte. L’audace doit passer dans la structure.',
         },
-        { id: 'fine', label: 'C’est normal : le texte agrandi suffit à porter l’audace.', why: 'Le test du squelette sert précisément à détecter cette illusion.' },
+        {
+          id: 'bigger',
+          label: 'Le geste n’est pas assez fort : il faut pousser les textes jusqu’à 32 px et passer les titres en graisse 800 pour creuser l’écart.',
+          why: 'Toujours de la taille de texte : le squelette resterait identique à celui des voisines.',
+        },
         {
           id: 'photo',
-          label: 'Il faut ajouter une photo décorative pour remplir la structure.',
-          why: 'Un emplacement d’image doit tenir un rôle (ancre, preuve), pas servir de décor.',
+          label: 'La structure manque d’un point d’appui : il faut ajouter une grande photo d’ambiance en tête de section pour attirer l’œil.',
+          why: 'Un emplacement d’image doit tenir un rôle (ancre, preuve) ; une photo d’ambiance ajoutée pour attirer l’œil n’est qu’un décor.',
         },
         {
-          id: 'motion',
-          label: 'Il faut ajouter une animation d’entrée pour que la section se remarque.',
-          why: 'Plus d’effets n’est pas plus d’audace, et la structure n’a toujours pas changé.',
+          id: 'consistent',
+          label: 'Le résultat est sain : une structure identique à celle des voisines prouve que la section respecte le système, et le texte agrandi porte l’audace.',
+          why: 'Respecter le système, ce n’est pas copier la structure des voisines, c’est utiliser ses moyens à pleine puissance. Ici, l’audace ne tient qu’aux mots.',
         },
       ],
       answer: 'structure',
-      explanation: `Le **test du squelette** consiste à retirer le texte et à regarder la structure nue. Si elle dit encore ce qu’est la section et pourquoi elle compte — par la hiérarchie et les procédés du système —, l’audace est dans le design. Si tout repose sur des mots plus gros, elle ne tient qu’à la taille du texte.
+      explanation: `Le **test du squelette** consiste à retirer le texte et à regarder la structure nue. Si elle dit encore ce qu’est la section et pourquoi elle compte — par la hiérarchie et les procédés du système —, l’audace est dans le design. Si tout repose sur des mots plus gros, elle ne tient qu’à la taille du texte, et grossir encore les mots n’y change rien.
 
-Un emplacement d’image, lui, nomme un **rôle** — une ancre, une preuve — et se remplit avec ce que le sujet possède vraiment, pas avec une photo décorative.`,
+Respecter le système ne veut pas dire copier la structure des voisines : c’est utiliser ses moyens (échelle, densité, motif, rythme) à pleine puissance, pour que la section devienne un pic dans le défilement. Un emplacement d’image, lui, nomme un **rôle** — une ancre, une preuve — et se remplit avec ce que le sujet possède vraiment, pas avec une photo d’ambiance.`,
       takeaway: 'Test du squelette : sans le texte, la structure doit encore dire ce qu’est la section et pourquoi elle compte.',
       sources: ['imp:bolder'],
     },

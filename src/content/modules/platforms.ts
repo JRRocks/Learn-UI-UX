@@ -111,7 +111,7 @@ const M3_CSS = `
 .ios-sw.off::after { right: auto; left: 2px; }
 .ios-back { display: flex; align-items: center; gap: 2px; color: #00639b; font-size: 15px; padding: 0 6px; height: 44px; }
 .ios-head { position: relative; display: flex; align-items: center; height: 44px; }
-.ios-head .ios-title { position: absolute; left: 96px; right: 96px; text-align: center; white-space: nowrap; font-weight: 600; pointer-events: none; }
+.ios-head .ios-title { position: absolute; left: 104px; right: 104px; text-align: center; white-space: nowrap; font-weight: 600; pointer-events: none; }
 `;
 
 const notifRows = (sw: (on: boolean) => string) =>
