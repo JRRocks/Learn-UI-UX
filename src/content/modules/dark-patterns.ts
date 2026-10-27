@@ -18,7 +18,7 @@ const RGPD: SourceRef = {
   url: 'https://www.cnil.fr/fr/reglement-europeen-protection-donnees',
 };
 const CNIL_REFUS: SourceRef = {
-  label: 'CNIL — Cookies : refuser doit être aussi simple qu’accepter (février 2021)',
+  label: 'CNIL — Cookies : la CNIL incite les organismes privés et publics à auditer leurs sites web et applications mobiles (4 février 2021)',
   url: 'https://www.cnil.fr/fr/cookies-la-cnil-incite-les-organismes-prives-et-publics-auditer-leurs-sites-web-et-applications',
 };
 const CNIL_GOOGLE_FB: SourceRef = {
@@ -38,7 +38,7 @@ const DSA: SourceRef = {
   url: 'https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32022R2065',
 };
 const UCPD: SourceRef = {
-  label: 'Directive 2005/29/CE sur les pratiques commerciales déloyales, annexe I',
+  label: 'Directive 2005/29/CE sur les pratiques commerciales déloyales (article 9 et annexe I)',
   url: 'https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32005L0029',
 };
 const OMNIBUS: SourceRef = {
@@ -54,8 +54,8 @@ const INC: SourceRef = {
   url: 'https://www.inc-conso.fr/content/vous-pouvez-resilier-votre-contrat-dabonnement-en-quelques-clics',
 };
 const LINC: SourceRef = {
-  label: 'CNIL / LINC — La forme des choix (cahier Innovation et prospective n° 6, 2019)',
-  url: 'https://linc.cnil.fr/ip-report-shaping-choices-digital-world',
+  label: 'CNIL / LINC — La forme des choix : données personnelles, design et frictions désirables (cahier Innovation et prospective n° 6, janvier 2019)',
+  url: 'https://www.cnil.fr/sites/cnil/files/atoms/files/cnil_cahiers_ip6.pdf',
 };
 
 /* ---------- Shared mock pieces ---------- */
@@ -87,8 +87,8 @@ const darkPatterns: ModuleContent = {
   summary:
     'Reconnaître les motifs trompeurs — fausse urgence, présélection, résiliation obstruée… —, savoir ce qu’en disent le RGPD, la CNIL et le DSA, et concevoir des choix honnêtes.',
   minutes: 13,
-  commands: ['clarify', 'critique'],
-  sources: ['deceptive', 'cnil:cookies', CNIL_REFUS, RGPD, PLANET49, DSA, UCPD, OMNIBUS, CRD, INC, LINC, CNIL_GOOGLE_FB, CNIL_TIKTOK, 'imp:clarify', 'imp:delight'],
+  commands: ['clarify', 'critique', 'delight'],
+  sources: ['deceptive', 'cnil:cookies', CNIL_REFUS, RGPD, PLANET49, DSA, UCPD, OMNIBUS, CRD, INC, LINC, CNIL_GOOGLE_FB, CNIL_TIKTOK, 'imp:clarify', 'imp:critique', 'imp:delight'],
   sections: [
     {
       id: 'definition',
@@ -100,6 +100,8 @@ Ils exploitent les mêmes mécanismes que les lois de l’UX, mais **contre** la
 - **Est-ce vrai ?** Une échéance, un stock, un avis, un prix total vérifiables.
 - **Est-ce symétrique ?** Dire non demande-t-il le même effort que dire oui ?
 - **La personne serait-elle d’accord si elle voyait tout ?** Si le design ne fonctionne que parce qu’elle ne voit pas, ne lit pas ou se lasse, c’est une tromperie.
+
+Les familles décrites ci-dessous suivent la typologie de Brignull, qui compte aussi la **conception addictive** (*addictive design* : récompenses aléatoires, défilement infini, séries à ne pas interrompre, pour faire rester au-delà de ce qu’on voulait) et la **confusion monétaire** (*currency confusion* : des jetons ou des gemmes achetés en euros, qui masquent le prix réel).
 
 Les motifs trompeurs rapportent à court terme et coûtent ensuite : remboursements, désabonnements, réputation — et sanctions, car le droit européen et français en interdit une bonne partie.`,
     },
@@ -170,9 +172,10 @@ Les motifs trompeurs rapportent à court terme et coûtent ensuite : rembourseme
 - **Comparaison empêchée** (*comparison prevention*) : prix et caractéristiques présentés de façon incomparable — unités différentes, critères qui changent d’une offre à l’autre, détails cachés — pour orienter vers l’offre la plus chère.
 - **Questions pièges** (*trick wording*) : double négation, cases dont le sens alterne, phrases qui disent l’inverse de ce qu’elles semblent dire à la lecture rapide. Ryanair a longtemps caché le refus de son assurance voyage dans la liste des pays de résidence, entre la Lettonie et la Lituanie.
 - **Présélection** (*preselection*) : une option avantageuse pour le service, cochée d’avance — on exploite l’effet de défaut et l’inattention.
+- **Action forcée** (*forced action*) : exiger en échange une action dont la personne ne veut pas — créer un compte, accepter la prospection, consentir à tout en bloc — pour lui donner ce qu’elle est venue chercher.
 - **Obstruction** en général : des obstacles posés pour épuiser et faire renoncer.
 
-Le DSA cite trois de ces pratiques parmi celles que la Commission peut encadrer : mettre davantage en avant certains choix, redemander un choix déjà fait, rendre la résiliation plus compliquée que l’inscription.`,
+Dans l’UE, pour juger si une pratique commerciale est agressive, la directive sur les pratiques commerciales déloyales tient déjà compte de tout obstacle non contractuel important ou disproportionné mis à la résiliation d’un contrat (article 9). Pour les plateformes en ligne, le règlement européen sur les services numériques (DSA) cite deux de ces freins — redemander un choix déjà fait, rendre la désinscription plus compliquée que l’inscription — parmi les pratiques sur lesquelles la Commission peut publier des lignes directrices, avec une troisième : accorder davantage d’importance à certains choix (l’interférence visuelle).`,
       examples: [
         {
           title: 'Un vrai « non », qui reste un non',
@@ -196,21 +199,21 @@ Le DSA cite trois de ces pratiques parmi celles que la Commission peut encadrer 
       id: 'consentement',
       title: 'Consentement et cookies : ce que dit le droit',
       body: `### Le RGPD
-Le consentement est une « manifestation de volonté, **libre, spécifique, éclairée et univoque** », donnée « par une déclaration ou par un acte positif clair » (article 4).
+Le règlement général sur la protection des données (RGPD) définit le consentement comme une « manifestation de volonté, **libre, spécifique, éclairée et univoque** », donnée « par une déclaration ou par un acte positif clair » (article 4).
 
 - **Libre** : refuser ne doit pas pénaliser. Subordonner un service à un consentement qui ne lui est pas nécessaire compromet ce caractère libre (article 7).
 - **Spécifique** : une case par finalité, pas un accord global noyé dans les conditions générales.
 - **Éclairé** : on sait qui collecte, quoi, et pour quoi faire.
-- **Univoque** : un acte positif. « Il ne saurait y avoir de consentement en cas de silence, de cases cochées par défaut ou d’inactivité » (considérant 32) ; la Cour de justice de l’UE l’a confirmé pour les cookies (arrêt Planet49, 2019).
+- **Univoque** : un acte positif. « Il ne saurait dès lors y avoir de consentement en cas de silence, de cases cochées par défaut ou d’inactivité » (considérant 32) ; la Cour de justice de l’UE l’a confirmé pour les cookies (arrêt Planet49, 2019).
 - Et « il est aussi simple de retirer que de donner son consentement » (article 7).
 
 ### La CNIL et les cookies
-« L’utilisateur doit pouvoir accepter ou refuser les cookies avec le même degré de simplicité. » Un bouton « Tout refuser » **au même niveau et au même format** que « Tout accepter » y répond ; un simple bouton « Paramétrer » à côté de « Tout accepter » ne suffit pas. Depuis ses lignes directrices de 2019, poursuivre sa navigation ne vaut plus consentement.
+La Commission nationale de l’informatique et des libertés (CNIL) le résume ainsi : « L’utilisateur doit pouvoir accepter ou refuser les cookies avec le même degré de simplicité. » Un bouton « Tout refuser » **au même niveau et au même format** que « Tout accepter » y répond ; un simple bouton « Paramétrer » à côté de « Tout accepter » ne suffit pas. Depuis ses lignes directrices de 2019, poursuivre sa navigation ne vaut plus consentement.
 
 Fin 2021, la CNIL a sanctionné **Google (150 M€)** et **Facebook (60 M€)** : refuser les cookies demandait plusieurs clics, les accepter un seul. **TikTok** a écopé de **5 M€** pour le même motif, entre autres (décision rendue publique en janvier 2023).
 
 ### Le DSA
-Le règlement sur les services numériques (2022), applicable à toutes les plateformes en ligne depuis le 17 février 2024, interdit à son **article 25** de concevoir, d’organiser ou d’exploiter des interfaces « de façon à tromper ou à manipuler » leurs utilisateurs, ou d’altérer substantiellement leur capacité à prendre des décisions libres et éclairées. Il complète le RGPD et le droit de la consommation, qui continuent de s’appliquer à ce qu’ils couvrent.`,
+Le règlement sur les services numériques (2022), applicable depuis le 17 février 2024 aux plateformes en ligne autres que les micro et petites entreprises, interdit à son **article 25** de concevoir, d’organiser ou d’exploiter des interfaces « de façon à tromper ou à manipuler » leurs utilisateurs, ou d’altérer substantiellement leur capacité à prendre des décisions libres et éclairées. Cette interdiction ne s’applique pas aux pratiques déjà couvertes par la directive sur les pratiques commerciales déloyales ou par le RGPD (article 25, paragraphe 2) : le DSA comble les vides de ces textes.`,
       examples: [
         {
           title: 'Refuser aussi simplement qu’accepter',
