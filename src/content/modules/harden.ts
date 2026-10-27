@@ -56,7 +56,7 @@ const SEARCH_HEAD = `<span class="mk-input" style="display:flex;align-items:cent
   <div class="har-tr har-th"><span>Client</span><span>Ville</span><span class="har-num">Commandes</span></div>`;
 
 /** Family emoji (man, woman, girl): 8 UTF-16 code units, a single grapheme. */
-const FAMILY = '\u{1F468}‍\u{1F469}‍\u{1F467}';
+const FAMILY = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}';
 
 /** Profile status limited to 30 characters; only the counter (and what it blocks) differs between versions. */
 const STATUS_FIELD = (count: number) => {
@@ -257,7 +257,7 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
     },
     {
       id: 'concurrence',
-      title: 'Double clic, gestes interrompus, permissions, validation',
+      title: 'Actions simultanées, gestes interrompus, permissions, validation',
       body: `**Double soumission.** Sur une connexion lente, sans retour visible, les gens recliquent. Désactive le bouton pendant l’envoi en le disant (« Paiement en cours… »), gère les situations de concurrence (*race conditions*), et côté serveur rends l’opération **idempotente** : rejouée deux fois, elle produit le même résultat. Les mises à jour optimistes prévoient un retour arrière si le serveur refuse.
 
 **Modifications simultanées.** Quand deux personnes modifient la même donnée en même temps, détecte le **conflit** (avec un numéro de version, par exemple) plutôt que de laisser le second enregistrement écraser le premier en silence ; montre les deux versions et laisse choisir celle à garder, ou fusionner.
@@ -635,7 +635,7 @@ Passer la locale de l’utilisateur à ces API règle d’un coup toutes les lan
         },
         {
           id: 'disable-only',
-          label: 'Désactiver le bouton dès le premier appui, avec le libellé « Paiement en cours… ».',
+          label: 'Désactiver le bouton dès le premier appui et remplacer son libellé par « Paiement en cours… ».',
           why: 'Bon réflexe côté interface, mais insuffisant : la requête peut aussi partir deux fois à cause du réseau ou d’un rechargement de page. Sans idempotence côté serveur, la seconde commande est créée.',
         },
         {
@@ -731,7 +731,7 @@ La correction est simple : **16 px minimum** dans les champs sur mobile — le 
       options: [
         {
           id: 'equiv',
-          label: 'Garder le texte d’origine en base et traiter ك/ک et ي/ی comme équivalents pour chercher et valider.',
+          label: 'Stocker le texte tel quel et rendre ك/ک et ي/ی équivalents pour chercher et valider.',
           why: 'La recherche trouve le livre quel que soit le clavier, et le texte stocké reste fidèle.',
         },
         {
@@ -812,7 +812,7 @@ Dans tous les cas, on vérifie que le geste suivant marche sans rechargement, en
         { id: 'restore', label: 'Après la connexion, rouvrir la note avec son texte intact' },
         { id: 'retry', label: 'Relancer l’enregistrement et confirmer « Note enregistrée »' },
       ],
-      explanation: `Un **401** signifie que le serveur ne sait plus qui écrit : la session a expiré. Impeccable demande de renvoyer vers la connexion, sans jamais perdre la saisie.
+      explanation: `Un **401** signifie que le serveur ne reconnaît plus la personne : sa session a expiré. Impeccable demande de renvoyer vers la connexion, sans jamais perdre la saisie.
 
 - Le texte se sauvegarde **avant** de quitter l’écran : après la redirection, il serait perdu.
 - La connexion vient ensuite ; une fois connectée, la personne retrouve sa note telle qu’elle l’avait laissée.

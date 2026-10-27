@@ -702,15 +702,15 @@ Dans cette limite, le bon nombre est celui du **parcours** visé, pas celui des 
       leftTitle: 'Situation',
       rightTitle: 'Réponse',
       pairs: [
-        { id: 'first', left: 'Premier usage : la fonction n’a jamais servi', right: 'Montrer la valeur et proposer un modèle pour démarrer' },
-        { id: 'cleared', left: 'Vidé par l’utilisateur : il a tout supprimé volontairement', right: 'Un message bref et un moyen simple de recréer' },
-        { id: 'noresults', left: 'Aucun résultat : la recherche ou le filtre ne renvoie rien', right: 'Suggérer une autre requête et effacer les filtres' },
-        { id: 'permission', left: 'Pas de permission : le contenu existe mais n’est pas accessible', right: 'Expliquer pourquoi et comment obtenir l’accès' },
-        { id: 'error', left: 'Erreur : le chargement a échoué', right: 'Dire ce qui s’est passé et proposer de réessayer' },
+        { id: 'first', left: 'Première visite sur la page Projets d’un compte tout neuf', right: 'Montrer la valeur et proposer un modèle pour démarrer' },
+        { id: 'cleared', left: 'Lina vient d’effacer un à un tous ses brouillons', right: 'Un message bref et un moyen simple de recréer' },
+        { id: 'noresults', left: '« facture mars » parmi les factures payées : rien ne s’affiche', right: 'Suggérer une autre requête et effacer les filtres' },
+        { id: 'permission', left: 'Une stagiaire ouvre le dossier Paie, réservé aux RH', right: 'Expliquer pourquoi et comment obtenir l’accès' },
+        { id: 'error', left: 'Le serveur ne répond pas quand on ouvre la page Commandes', right: 'Dire ce qui s’est passé et proposer de réessayer' },
       ],
-      explanation: `Chaque vide raconte une histoire différente, et la mauvaise réponse est souvent **trompeuse** : un discours de bienvenue à quelqu’un qui vient de tout supprimer, un « aucun élément » alors qu’on n’a simplement pas le droit de voir, un vide affiché à la place d’une erreur de chargement.
+      explanation: `Ces cinq situations sont les cinq types d’états vides d’impeccable : **premier usage** (le compte tout neuf), **vidé par l’utilisateur** (les brouillons effacés), **aucun résultat** (la recherche filtrée), **pas de permission** (le dossier Paie) et **erreur** (le serveur muet).
 
-L’état vide dit d’abord **la vérité** sur ce qui se passe, puis offre l’action utile pour ce cas précis.`,
+Chaque vide raconte une histoire différente, et la mauvaise réponse est souvent **trompeuse** : un discours de bienvenue à quelqu’un qui vient de tout supprimer, un « aucun élément » alors qu’on n’a simplement pas le droit de voir, un vide affiché à la place d’une erreur de chargement. L’état vide dit d’abord **la vérité** sur ce qui se passe, puis offre l’action utile pour ce cas précis.`,
       takeaway: 'Premier usage, vidé, aucun résultat, pas de permission, erreur : cinq vides, cinq messages et cinq actions différentes.',
       sources: ['imp:onboard', 'imp:clarify'],
     },
@@ -720,39 +720,42 @@ L’état vide dit d’abord **la vérité** sur ce qui se passe, puis offre l�
       difficulty: 2,
       prompt: 'Range les étapes de conception d’un onboarding dans l’ordre.',
       items: [
-        { id: 'aha', label: 'Identifier le moment « aha » visé et les endroits où les gens bloquent aujourd’hui' },
-        { id: 'users', label: 'Comprendre les utilisateurs : niveau, motivation, temps disponible' },
+        { id: 'understand', label: 'Comprendre le défi et les gens : moment « aha » visé, blocages actuels, niveau, motivation, temps disponible' },
         { id: 'success', label: 'Définir le succès : l’action clé et la façon de la mesurer' },
         { id: 'design', label: 'Concevoir le chemin le plus court vers cette action' },
         { id: 'test', label: 'Tester avec de vraies personnes : temps jusqu’à la valeur, achèvement, abandons' },
       ],
-      explanation: `On ne conçoit pas un onboarding à partir des fonctions à montrer, mais du **résultat** à obtenir. D’abord le défi (le moment « aha », les blocages), puis les gens (leur niveau, leur motivation, leur temps), puis la définition du succès — l’action clé et sa mesure.
+      explanation: `On ne conçoit pas un onboarding à partir des fonctions à montrer, mais du **résultat** à obtenir. Chaque étape a besoin de la précédente :
 
-Seulement ensuite, on dessine le chemin le plus court vers cette action, et on le **vérifie** avec de vraies personnes : beaucoup de « Passer » signale un parcours trop long ou peu utile ; un faible taux d’achèvement demande de simplifier.`,
-      takeaway: 'Défi et moment « aha », utilisateurs, succès mesurable, chemin le plus court, test réel : dans cet ordre.',
+- pas de **définition du succès** sans savoir quel moment « aha » viser, où les gens bloquent et ce qu’ils savent déjà : c’est ce qui fixe l’action clé et le minimum à apprendre ;
+- pas de **chemin le plus court** sans action clé vers laquelle il mène ;
+- pas de **test** sans parcours à faire essayer.
+
+Le test boucle la méthode : beaucoup de « Passer » signale un parcours trop long ou peu utile ; un faible taux d’achèvement demande de simplifier.`,
+      takeaway: 'Comprendre le défi et les gens, définir un succès mesurable, concevoir le chemin le plus court, tester : chaque étape s’appuie sur la précédente.',
       sources: ['imp:onboard'],
     },
     {
-      id: 'onboarding-forced-tf',
+      id: 'onboarding-carousel-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un bon onboarding oblige chaque nouvel utilisateur à terminer la visite guidée avant d’accéder au produit, pour être sûr qu’il a tout vu.',
+      prompt: 'Un carrousel de présentation au premier lancement améliore la réussite des tâches : les gens savent ensuite où trouver les fonctions.',
       answer: false,
-      explanation: `Faux. Impeccable demande de rendre l’onboarding **facultatif** autant que possible : un « Passer » visible, et jamais d’accès au produit bloqué. Les personnes expérimentées n’en ont pas besoin, et les autres retiennent mal ce qu’on leur montre hors contexte.
+      explanation: `Faux. Dans une étude de Nielsen Norman Group sur quatre applications mobiles, les personnes qui avaient lu le carrousel n’ont pas mieux réussi les tâches qu’il expliquait (91 % contre 94 % pour celles qui l’avaient passé, un écart non significatif), n’ont pas été plus rapides, et les ont même jugées plus difficiles.
 
-« Avoir tout vu » n’est d’ailleurs pas l’objectif : l’objectif est d’**atteindre la valeur**. Le reste se découvre au moment où il sert.`,
-      takeaway: 'L’onboarding reste facultatif : un « Passer » visible, et jamais d’accès au produit bloqué.',
-      sources: ['imp:onboard', NNG_TUTORIALS],
+Le mécanisme : ce qu’on lit avant d’agir, hors contexte, n’est plus là au moment d’en avoir besoin — et beaucoup passent ces écrans sans les lire. D’où la règle d’impeccable : montrer plutôt que dire, et placer l’aide au point d’usage (état vide, infobulle) plutôt qu’en préambule.`,
+      takeaway: 'Un carrousel au premier lancement ne rend pas les gens plus efficaces : montre le vrai produit et place l’aide au point d’usage.',
+      sources: [NNG_MOBILE_TUTORIALS, NNG_TUTORIALS, 'imp:onboard'],
     },
     {
       id: 'onboarding-cleared-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Quand un utilisateur a volontairement supprimé tous ses éléments, il faut lui remontrer l’état vide de premier usage, avec sa présentation complète.',
+      prompt: 'Quand quelqu’un a volontairement supprimé tous ses éléments, il faut lui remontrer l’état vide de premier usage, avec sa présentation complète.',
       answer: false,
       explanation: `Faux. La personne connaît déjà la fonction : elle vient de s’en servir. Lui remontrer la présentation de bienvenue est au mieux inutile, au pire infantilisant.
 
-Pour un vide **choisi par l’utilisateur**, impeccable recommande une **touche légère** : un message bref (« Tout est fait pour aujourd’hui ») et un moyen simple de recréer.`,
+Pour un vide **choisi par la personne**, impeccable recommande une **touche légère** : un message bref (« Aucune tâche pour l’instant ») et un bouton « Ajouter une tâche » pour recréer en un geste.`,
       takeaway: 'Vide créé par l’utilisateur : message bref et moyen de recréer, pas le discours du premier usage.',
       sources: ['imp:onboard'],
     },
@@ -760,36 +763,36 @@ Pour un vide **choisi par l’utilisateur**, impeccable recommande une **touche 
       id: 'onboarding-aha-choice',
       type: 'choice',
       difficulty: 2,
-      context: 'Tu conçois l’onboarding d’une application de facturation pour indépendants.',
+      context: 'Tu conçois l’onboarding d’un agenda en ligne pour kinésithérapeutes : leur patientèle y réserve elle-même ses rendez-vous.',
       prompt: 'Quel moment « aha » viser en priorité ?',
       options: [
         {
-          id: 'invoice',
-          label: 'L’envoi de sa première facture à un vrai client',
-          why: 'C’est la preuve concrète de la valeur : le produit a fait gagner du temps sur une vraie tâche.',
+          id: 'booking',
+          label: 'Un premier vrai rendez-vous réservé en ligne, sans un seul appel',
+          why: 'C’est la promesse du produit tenue sur l’activité réelle du cabinet : un créneau rempli sans décrocher le téléphone.',
         },
-        { id: 'tour', label: 'La fin de la visite guidée de toutes les fonctions', why: 'Avoir vu des fonctions ne prouve rien : c’est de la cérémonie, pas de la valeur.' },
-        { id: 'profile', label: 'Un profil complété à 100 %', why: 'Une étape de configuration, pas un bénéfice : la personne n’a encore rien obtenu.' },
-        { id: 'video', label: 'Le visionnage de la vidéo de présentation', why: 'Regarder n’est pas faire : on retient peu d’une présentation hors contexte.' },
+        { id: 'hours', label: 'Des horaires de consultation entièrement réglés', why: 'Une étape d’installation nécessaire, mais rien n’a encore changé dans la journée du cabinet.' },
+        { id: 'import', label: 'Le fichier patients importé depuis l’ancien logiciel', why: 'Utile pour la suite, mais retrouver ses données ailleurs n’apporte encore aucun bénéfice nouveau.' },
+        { id: 'sync', label: 'L’agenda personnel connecté, pour éviter les doubles réservations', why: 'Une protection utile, qui ne prouve pas encore que la patientèle réserve en ligne.' },
       ],
-      answer: 'invoice',
-      explanation: `Le moment « aha » est celui où la personne **constate** la valeur du produit sur sa propre tâche. Pour un outil de facturation, c’est une facture envoyée — pas une visite terminée, un profil complet ou une vidéo vue.
+      answer: 'booking',
+      explanation: `Le moment « aha » est celui où la personne **constate** la valeur du produit sur sa propre activité. Ici, la promesse est que la patientèle réserve seule : la preuve, c’est un premier rendez-vous pris en ligne — pas des horaires réglés, un fichier importé ou un agenda connecté, si utiles soient-ils.
 
-Une fois ce moment identifié, tout l’onboarding se mesure à une seule question : combien de temps et d’étapes faut-il pour l’atteindre ? Modèles de facture préremplis, client d’exemple et valeurs par défaut servent à raccourcir ce chemin.`,
-      takeaway: 'Vise le moment « aha » : une vraie réussite sur la tâche de la personne, pas la consommation de tutoriels.',
+Une fois ce moment identifié, tout l’onboarding se mesure à une seule question : combien de temps et d’étapes faut-il pour l’atteindre ? Horaires proposés par défaut, page de réservation prête à partager, import repoussé à plus tard : tout sert à raccourcir ce chemin.`,
+      takeaway: 'Vise le moment « aha » : la première preuve de valeur sur l’activité de la personne, pas une étape d’installation ni un tutoriel.',
       sources: ['imp:onboard'],
     },
     {
       id: 'onboarding-account-multi',
       type: 'multi',
       difficulty: 3,
-      prompt: 'Lesquelles de ces pratiques allègent la création de compte ?',
+      prompt: 'Lesquelles de ces pratiques sont recommandées pour la création de compte ?',
       options: [
         { id: 'minimal', label: 'Ne demander que l’e-mail et un mot de passe, le reste plus tard', why: 'Le minimum requis : le reste se collecte quand il sert.' },
         {
           id: 'explain',
-          label: 'Expliquer pourquoi on demande le numéro de téléphone (double authentification)',
-          why: 'Une raison claire lève la méfiance face à une donnée sensible.',
+          label: 'Si le téléphone est indispensable dès l’inscription (double authentification), dire pourquoi on le demande',
+          why: 'Une donnée sensible dont l’usage n’a rien d’évident : une raison claire lève la méfiance.',
         },
         { id: 'defaults', label: 'Préremplir le fuseau horaire d’après l’appareil, en le laissant modifiable', why: 'Une valeur par défaut intelligente épargne une question.' },
         {
@@ -809,21 +812,21 @@ Une fois ce moment identifié, tout l’onboarding se mesure à une seule questi
         },
       ],
       answers: ['minimal', 'explain', 'defaults'],
-      explanation: `La création de compte d’impeccable tient en quatre principes : **le minimum d’informations** (le reste plus tard), **une explication** pour chaque donnée demandée, des **valeurs par défaut intelligentes**, et une connexion via un compte existant quand c’est pertinent.
+      explanation: `La création de compte d’impeccable tient en quatre principes : **le minimum d’informations** (le reste plus tard), **la raison** d’une demande quand elle n’est pas évidente, des **valeurs par défaut intelligentes**, et une connexion via un compte existant quand c’est pertinent. Justifier l’e-mail ou le mot de passe serait en revanche du bruit : on n’explique pas l’évident.
 
 Tout ce qui s’ajoute avant une première réussite — questions de qualification, formulaires exhaustifs, visite obligatoire — repousse le moment où la personne constate la valeur du produit.`,
-      takeaway: 'Compte minimal : le strict nécessaire, une raison pour chaque donnée, des valeurs par défaut — rien d’autre avant la première réussite.',
-      sources: ['imp:onboard'],
+      takeaway: 'Compte minimal : le strict nécessaire, une raison pour toute donnée dont l’usage n’est pas évident, des valeurs par défaut — rien d’autre avant la première réussite.',
+      sources: ['imp:onboard', 'imp:clarify'],
     },
     {
       id: 'onboarding-dismiss-choice',
       type: 'choice',
       difficulty: 1,
-      context: 'Hier, un utilisateur a refermé l’infobulle « Exportez vos factures en CSV ». Il revient aujourd’hui.',
+      context: 'Hier, une utilisatrice a refermé l’infobulle « Exportez vos factures en CSV ». Elle revient aujourd’hui.',
       prompt: 'Que doit faire l’interface ?',
       options: [
         { id: 'remember', label: 'Ne plus l’afficher : la fermeture a été mémorisée.', why: 'On respecte la décision ; l’information reste retrouvable dans l’aide.' },
-        { id: 'again', label: 'La réafficher à chaque visite tant qu’il n’a pas utilisé l’export.', why: 'Répéter une infobulle refermée transforme l’aide en harcèlement.' },
+        { id: 'again', label: 'La réafficher à chaque visite tant qu’elle n’a pas utilisé l’export.', why: 'Répéter une infobulle refermée transforme l’aide en harcèlement.' },
         { id: 'modal', label: 'La remplacer par une fenêtre modale, plus difficile à ignorer.', why: 'On escalade l’interruption au lieu de respecter un choix.' },
         { id: 'reset', label: 'Réinitialiser toutes les infobulles à chaque nouvelle version.', why: 'Tout le monde revoit des aides déjà refermées, même sur les fonctions inchangées.' },
       ],

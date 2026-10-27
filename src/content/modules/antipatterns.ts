@@ -15,7 +15,7 @@ const antipatterns: ModuleContent = {
       title: 'Pourquoi les interfaces générées se ressemblent',
       body: `Demande une page d’accueil à un générateur d’interfaces : tu obtiendras souvent la même. Une pastille « Nouveau » au-dessus d’un titre géant en dégradé violet, trois cartes à icône, une lueur dans le fond. Aucun de ces choix n’est absurde isolément. Le problème, c’est qu’ils sont **choisis par réflexe** : la moyenne de milliers de pages, pas une décision prise pour ce produit.
 
-impeccable appelle ces tics le *slop* (la bouillie générée) et en a tiré un **détecteur déterministe de 62 règles**, qui tourne sans IA ni clé d’API, en deux familles égales :
+impeccable appelle ces tics le *slop* (la bouillie générée) et en a tiré un **détecteur déterministe de 62 règles**, réparties en deux familles égales, qui tourne sans IA ni clé d’API :
 
 - **les clichés** (31 règles) : des choix devenus la signature des interfaces générées, donc de l’absence de décision ;
 - **la qualité** (31 règles) : des défauts mesurables qui gênent tout le monde, interface générée ou non (contraste, mesure, débordements, images cassées).
@@ -29,7 +29,7 @@ Le test qui résume tout vient de la critique d’impeccable : **ce design est-i
       title: 'Couleur et lumière : violet, dégradés, halos',
       body: `- **La palette « IA »** : les dégradés violets et le cyan sur fond sombre sont, selon le détecteur, les signes les plus reconnaissables. Un dégradé dans ces teintes suffit à trahir le réflexe ; une encre néon unie sur fond sombre devient suspecte dès qu’une deuxième teinte de la liste la rejoint.
 - **Le texte en dégradé**, surtout sur les titres et les chiffres clés : décoratif, jamais porteur de sens. L’emphase vient de la graisse ou de la taille.
-- **Les halos lumineux** : une ombre colorée sans décalage, ou toute ombre colorée floue sur fond sombre. Leurs cousins dessinés en dégradé radial : le **halo** saturé derrière un héros sombre, et le **projecteur** translucide qui flotte comme un nuage au-dessus du texte.
+- **Les halos lumineux** : une ombre colorée sans décalage, ou toute ombre colorée floue sur fond sombre. Leurs cousins dessinés en dégradé radial : le **halo** saturé en fond d’une page sombre, et le **projecteur** translucide posé derrière un héros ou une section, qui flotte comme un nuage au-dessus du texte.
 - **La palette crème** : le fond beige chaud est devenu la surface « de bon goût » par défaut.
 
 La correction n’est pas « une autre couleur à la mode », mais une palette **tirée du produit et de son monde**, et une lumière motivée : des ombres d’élévation neutres, des surfaces unies ou très légèrement nuancées.`,
@@ -47,7 +47,7 @@ La correction n’est pas « une autre couleur à la mode », mais une palette *
           badNote: 'Halo radial violet-cyan et bouton lumineux : le décor « cool » par défaut.',
           good: {
             alt: 'Même page sur un fond encre uni, un titre qui nomme une fonction précise, un bouton orange mat et la liste des émissions suivies.',
-            html: `<div class="pdg"><p class="pdg-h">Reprends chaque épisode à la seconde près, sur tous tes appareils</p><span class="pdg-btn">Importer mes abonnements</span><ul class="pdg-l"><li><b>Les Carnets du dimanche</b><span>reprise à 18:42</span></li><li><b>Histoires de quartier</b><span>nouvel épisode</span></li></ul></div>`,
+            html: `<div class="pdg"><p class="pdg-h">Reprenez chaque épisode à la seconde près, sur tous vos appareils</p><span class="pdg-btn">Importer mes abonnements</span><ul class="pdg-l"><li><b>Les Carnets du dimanche</b><span>reprise à 18:42</span></li><li><b>Histoires de quartier</b><span>nouvel épisode</span></li></ul></div>`,
             css: `.pdg { padding: 28px 20px; color: #f3efe8; background: #17181c; }
 .pdg-h { font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em; }
 .pdg-btn { display: inline-flex; margin-top: 14px; padding: 9px 16px; border-radius: 8px; background: #e8833a; color: #17181c; font-weight: 700; font-size: 14px; }
@@ -64,7 +64,7 @@ La correction n’est pas « une autre couleur à la mode », mais une palette *
       title: 'Typographie : la pastille, le sur-titre et le titre géant',
       body: `- **La pastille *eyebrow* du héros** : un minuscule libellé en capitales espacées, ou une pastille arrondie, juste au-dessus d’un très grand titre. C’est devenu le héros SaaS généré par défaut.
 - **Le sur-titre** (*kicker*) au-dessus de n’importe quel titre de section : interdit sans exception par impeccable, répété ou non. Le titre porte son propre poids.
-- **Les petits numéros de section** (01, 02, 03) répétés de section en section : une page qui numérote ses chapitres au lieu de mériter sa structure.
+- **Les petits numéros de section** (01, 02, 03) répétés de section en section : une page qui numérote ses chapitres au lieu de laisser la hiérarchie porter sa structure.
 - **Le titre italique à empattements** (Fraunces, Recoleta, Playfair) en héros de startup. Le registre éditorial peut le vouloir : juge selon le contexte.
 - **Le titre surdimensionné** : une phrase entière en taille d’affichage, qui mange tout le premier écran.
 - **L’approche écrasée** : des lettres resserrées jusqu’à se toucher.
@@ -85,7 +85,7 @@ La correction n’est pas « une autre couleur à la mode », mais une palette *
           badNote: 'Pastille en capitales, dégradé sur le titre : deux tics, aucune information.',
           good: {
             alt: 'Même héros sans pastille, avec un titre uni qui dit ce que fait le produit et un texte qui précise la nouveauté.',
-            html: `<div class="eg"><p class="eg-h">Le planning de la semaine se fait en dix minutes, coupures comprises</p><p class="eg-p">Nouveau : Brigade propose un planning qui respecte les repos de chacun ; tu n’as plus qu’à ajuster et publier.</p></div>`,
+            html: `<div class="eg"><p class="eg-h">Le planning de la semaine se fait en dix minutes, coupures comprises</p><p class="eg-p">Nouveau&nbsp;: Brigade propose un planning qui respecte les repos de chacun&#8239;; vous n’avez plus qu’à ajuster et publier.</p></div>`,
             css: `.eg { padding: 26px 18px; }
 .eg-h { font-size: 24px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; color: #1f2a24; }
 .eg-p { margin-top: 10px; max-width: 46ch; font-size: 14px; line-height: 1.55; color: #45514a; }`,
@@ -122,7 +122,7 @@ Quelques règles voisines appartiennent à la famille qualité : l’**ombre dur
           badNote: 'Tuiles d’icônes empilées sur les titres et trait latéral violet : le gabarit généré.',
           good: {
             alt: 'Même section en liste : chaque fonctionnalité a son icône à côté du titre et une phrase précise ; la nouveauté est signalée par une petite pastille.',
-            html: `<ul class="fg"><li><i data-icon="calendar" style="--ico:18px"></i><div><b>Le planning respecte les repos</b><span>11 heures entre deux services, deux jours de repos par semaine : Brigade te prévient avant de publier.</span></div></li><li><i data-icon="users" style="--ico:18px"></i><div><b>Les échanges se règlent entre collègues</b><span>Un serveur propose son service du samedi, un autre l’accepte, tu valides.</span></div></li><li><i data-icon="file-text" style="--ico:18px"></i><div><b>Les heures partent à la paie <em>Nouveau</em></b><span>Export mensuel au format de ton cabinet comptable.</span></div></li></ul>`,
+            html: `<ul class="fg"><li><i data-icon="calendar" style="--ico:18px"></i><div><b>Le planning respecte les repos</b><span>11&nbsp;heures entre deux services, deux jours de repos par semaine&nbsp;: Brigade vous prévient avant de publier.</span></div></li><li><i data-icon="users" style="--ico:18px"></i><div><b>Les échanges se règlent entre collègues</b><span>Un serveur propose son service du samedi, un autre l’accepte, vous validez.</span></div></li><li><i data-icon="file-text" style="--ico:18px"></i><div><b>Les heures partent à la paie <em>Nouveau</em></b><span>Export mensuel au format de votre cabinet comptable.</span></div></li></ul>`,
             css: `.fg { list-style: none; margin: 0; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
 .fg li { display: flex; gap: 10px; align-items: flex-start; }
 .fg .mk-ico { margin-top: 2px; color: #1f6b4f; }
@@ -144,7 +144,7 @@ Quelques règles voisines appartiennent à la famille qualité : l’**ombre dur
 - **le curseur clignotant** décoratif simule une saisie là où aucun champ n’existe ;
 - **le bandeau défilant** réclame une attention qu’il n’a pas méritée et cache la moitié de son contenu à tout moment.
 
-Côté texte, quatre tics de cadence :
+Côté texte, quatre tics de rédaction :
 
 - **le jargon marketing** : *streamline*, *empower*, *supercharge*, *world-class*… Le détecteur cherche ces tournures anglaises ; « boostez », « révolutionnez », « de nouvelle génération » trahissent le même réflexe en français ;
 - **la cadence aphoristique** : trois sections ou plus qui se terminent par « X. Pas de Y. » ou « Pas un outil. Un partenaire. » ;
@@ -165,7 +165,7 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
           badNote: 'Un verbe creux, puis la même chute trois fois : la cadence trahit le texte généré.',
           good: {
             alt: 'Même bloc réécrit : accroche précise sur le planning de la semaine, et trois arguments qui se terminent par un fait concret.',
-            html: `<div class="cb"><p class="cb-h">Le planning de la semaine en dix minutes, repos compris</p><p><b>Planning</b> Brigade propose un planning qui respecte les 11 heures de repos entre deux services.</p><p><b>Équipe</b> Les échanges de service se font entre collègues ; tu valides d’un geste.</p><p><b>Paie</b> Le 1er du mois, les heures partent à ton cabinet comptable.</p></div>`,
+            html: `<div class="cb"><p class="cb-h">Le planning de la semaine en dix minutes, repos compris</p><p><b>Planning</b> Brigade propose un planning qui respecte les 11&nbsp;heures de repos entre deux services.</p><p><b>Équipe</b> Les échanges de service se font entre collègues&#8239;; vous validez d’un geste.</p><p><b>Paie</b> Le 1er du mois, les heures partent à votre cabinet comptable.</p></div>`,
             css: `.cb { padding: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.5; color: #3a4150; }
 .cb-h { font-size: 20px; font-weight: 800; line-height: 1.2; color: #1d2230; margin-bottom: 4px; }
 .cb b { display: block; color: #1d2230; }`,
@@ -211,11 +211,13 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
     {
       id: 'lire-rapport',
       title: 'Lire un rapport sans se tromper de combat',
-      body: `- **Commence par les erreurs.** Un script cassé peut masquer la moitié de la page : corrige-le avant de juger quoi que ce soit d’autre.
-- **Un avertissement se corrige en réécrivant l’élément**, pas en l’adoucissant. Une pastille rendue plus pâle reste une pastille, et devient en plus illisible.
+      body: `- **Juge d’abord sans le rapport.** Examine le rendu (spécificité, hiérarchie) avant de lire les résultats : même déterministe, un rapport oriente le regard.
+- **Dans le rapport, commence par les erreurs.** Un script cassé peut laisser l’essentiel de la page invisible : corrige-le avant de juger quoi que ce soit d’autre.
+- **Vérifie chaque résultat en contexte.** Le détecteur repère des formes, pas des intentions : le quadrillage d’un éditeur de plans est un faux positif, à consigner avec sa raison.
+- **Un avertissement se corrige pour de bon.** Un cliché se réécrit : une pastille rendue plus pâle reste une pastille, et devient en plus illisible. Un défaut de qualité se corrige en réglant la valeur en cause (contraste, interlignage, largeur de ligne) ; une dérive du système se corrige, ou s’ajoute à DESIGN.md si elle est voulue.
 - **Un conseil est une invitation à vérifier**, pas une preuve. L’ombre dure décalée est légitime dans un univers néobrutaliste ; un mot seul en fin de paragraphe peut être voulu. Même parmi les avertissements, le titre italique à empattements peut convenir au registre d’un magazine : la règle demande de juger selon le contexte.
-- **Le brief gagne.** Un choix imposé par le brief ou confirmé par l’utilisateur se consigne comme une exception, avec sa raison. On n’ignore jamais une règle pour éviter une vraie correction.
-- **Un rapport vide est une preuve, pas une garantie.** Il ne remplace ni l’examen du rendu aux tailles utiles, ni la question de fond : ce design pourrait-il appartenir à n’importe quel autre produit ?`,
+- **Le brief gagne, sauf contre un interdit.** Un choix imposé par le brief ou confirmé par l’utilisateur se consigne comme une exception, avec sa raison ; un sur-titre au-dessus d’un titre ne se justifie jamais, même si le brief le demande. On n’ignore jamais une règle pour éviter une vraie correction.
+- **Un rapport vide est un indice, pas une preuve.** Il ne remplace ni l’examen du rendu aux tailles utiles, ni la question de fond : ce design pourrait-il appartenir à n’importe quel autre produit ?`,
     },
   ],
   rules: [
@@ -232,7 +234,7 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
     { id: 'sizes', front: 'Quelles tailles minimales pour le texte ?', back: 'Texte courant : jamais sous 12 px (14 px au moins, 16 px idéalement). Texte fonctionnel : 11 px ; 10 px pour les seules mentions légales non interactives.' },
     { id: 'caps', front: 'Quand les capitales posent-elles problème ?', back: 'Sur un passage qui se lit comme une phrase : 80 caractères ou plus. Boutons, navigation et courts libellés restent permis.' },
     { id: 'padding', front: 'Quelle marge intérieure pour un conteneur bordé ou coloré ?', back: '8 px au moins, idéalement 12 à 16 px.' },
-    { id: 'clean', front: 'Un rapport vide signifie-t-il un design réussi ?', back: 'Non : c’est une preuve, pas une garantie. Il faut encore regarder le rendu aux tailles utiles.' },
+    { id: 'clean', front: 'Un rapport vide signifie-t-il un design réussi ?', back: 'Non : c’est un indice, pas une preuve. Il faut encore regarder le rendu aux tailles utiles.' },
   ],
   exercises: [
     {
@@ -249,8 +251,8 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
   <div class="ss-hero">
     <span class="ss-chip" data-hotspot="chip"><i data-icon="sparkles" style="--ico:13px"></i>Nouveau · IA générative</span>
     <p class="ss-h" data-hotspot="gradient">La facturation, réinventée par l’IA</p>
-    <p class="ss-p" data-hotspot="sub">Importe tes relevés bancaires : Facturo les rapproche de tes factures et relance les impayés à J+7.</p>
-    <div class="ss-acts"><span class="ss-btn" data-hotspot="glow">Essayer gratuitement</span><span class="ss-link" data-hotspot="demo">Voir la démo (2 min)</span></div>
+    <p class="ss-p" data-hotspot="sub">Importe tes relevés bancaires&nbsp;: Facturo les rapproche de tes factures et relance les impayés à J+7.</p>
+    <div class="ss-acts"><span class="ss-btn" data-hotspot="glow">Essayer gratuitement</span><span class="ss-link" data-hotspot="demo">Voir la démo (2&nbsp;min)</span></div>
   </div>
 </div>`,
         css: `.ss-nav { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 10px 16px; font-size: 13px; }
@@ -293,7 +295,7 @@ Le correctif n’est pas de les atténuer, mais de réécrire : un titre uni qui
   <p class="ft-row"><span class="ft-num" data-hotspot="num">02</span><span class="ft-h" data-hotspot="heading">Ce que Facturo fait pour toi</span></p>
   <p class="ft-intro" data-hotspot="intro">Trois tâches que tu n’auras plus à faire le dimanche soir.</p>
   <div class="ft-grid" data-hotspot="tiles"><div class="ft-card"><span class="ft-tile"><i data-icon="refresh-cw" style="--ico:18px"></i></span><b>Rapprochement</b><span>Relevés et factures associés chaque nuit.</span></div><div class="ft-card"><span class="ft-tile"><i data-icon="send" style="--ico:18px"></i></span><b>Relances</b><span>Un rappel part seul à J+7.</span></div></div>
-  <div class="ft-new" data-hotspot="side"><b>Nouveau : export Factur-X</b><span>Un PDF lisible qui contient aussi les données de la facture.</span></div>
+  <div class="ft-new" data-hotspot="side"><b>Nouveau&nbsp;: export Factur-X</b><span>Un PDF lisible qui contient aussi les données de la facture.</span></div>
   <span class="ft-link" data-hotspot="link">Voir le guide d’import</span>
 </div>`,
         css: `.ft { padding: 18px; display: flex; flex-direction: column; gap: 10px; background: #f8f9fb; }
@@ -310,7 +312,7 @@ Le correctif n’est pas de les atténuer, mais de réécrire : un titre uni qui
 .ft-link { align-self: flex-start; font-size: 14px; color: #1f4fd8; text-decoration: underline; text-underline-offset: 3px; }`,
       },
       hotspots: [
-        { id: 'num', label: 'Petit numéro « 02 »', correct: true, why: 'Un numéro de section qui ne porte aucune information : la page numérote ses chapitres au lieu de mériter sa structure.' },
+        { id: 'num', label: 'Petit numéro « 02 »', correct: true, why: 'Un numéro de section qui ne porte aucune information : la page numérote ses chapitres au lieu de laisser la hiérarchie porter sa structure.' },
         { id: 'tiles', label: 'Tuiles d’icônes au-dessus des titres', correct: true, why: 'Le carré arrondi à icône empilé sur chaque titre : le gabarit universel de la carte de fonctionnalité générée.' },
         { id: 'side', label: 'Carte à bordure violette à gauche', correct: true, why: 'Le trait latéral épais sur une carte arrondie, signe le plus reconnaissable des interfaces générées.' },
         { id: 'heading', label: 'Titre de section', correct: false, why: 'Un titre direct, qui parle au lecteur.' },
@@ -339,10 +341,10 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
   <nav class="db-nav" data-hotspot="nav"><b>Envoi</b><span class="on">Statistiques</span><span>Campagnes</span><span>Contacts</span></nav>
   <div class="db-main">
     <div class="db-head"><p class="db-h">Statistiques</p><span class="db-live" data-hotspot="pulse"><span class="db-dot"></span>En direct</span></div>
-    <p class="db-sub">Chiffres recalculés chaque nuit · dernière mise à jour : 02:00</p>
-    <div class="db-card" data-hotspot="glow"><span>Taux d’ouverture</span><b>42 %</b></div>
-    <p class="db-fail" data-hotspot="fail"><i data-icon="circle-alert" style="--ico:15px"></i>1 envoi en échec : adresse invalide</p>
-    <table class="db-t"><thead><tr><th data-hotspot="sort">Campagne <i data-icon="chevron-down" style="--ico:12px"></i></th><th class="n">Ouvertures</th></tr></thead><tbody data-hotspot="tiny"><tr><td>Lettre de mars</td><td class="n">1 204</td></tr><tr><td>Soldes d’hiver</td><td class="n">986</td></tr></tbody></table>
+    <p class="db-sub">Chiffres recalculés chaque nuit · dernière mise à jour&nbsp;: 02:00</p>
+    <div class="db-card" data-hotspot="glow"><span>Taux d’ouverture</span><b>42&nbsp;%</b></div>
+    <p class="db-fail" data-hotspot="fail"><i data-icon="circle-alert" style="--ico:15px"></i>1 envoi en échec&nbsp;: adresse invalide</p>
+    <table class="db-t"><thead><tr><th data-hotspot="sort">Campagne <i data-icon="chevron-down" style="--ico:12px"></i></th><th class="n">Ouvertures</th></tr></thead><tbody data-hotspot="tiny"><tr><td>Lettre de mars</td><td class="n">1&#8239;204</td></tr><tr><td>Soldes d’hiver</td><td class="n">986</td></tr></tbody></table>
   </div>
 </div></div>`,
         css: `.db { display: grid; grid-template-columns: minmax(84px, 108px) minmax(0, 1fr); background: #0e0f1a; color: #e6e6ef; font-size: 13px; }
@@ -398,13 +400,13 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
       context: 'Le texte d’une page de présentation.',
       prompt: 'Trouve les trois tics de rédaction générée.',
       visual: {
-        alt: 'Page de présentation avec une accroche « Boostez votre productivité grâce à une plateforme de nouvelle génération », une phrase sur l’export des factures, trois arguments qui finissent par des formules courtes, une phrase « Fini le théâtre de la conformité. », un prix et un bouton.',
+        alt: 'Page de présentation avec une accroche « Booste ta productivité grâce à une plateforme de nouvelle génération », une phrase sur l’export des factures, trois arguments qui finissent par des formules courtes, une phrase « Fini le théâtre de la conformité. », un prix et un bouton.',
         html: `<div class="cpy">
-  <p class="cpy-h" data-hotspot="buzz">Boostez votre productivité grâce à une plateforme de nouvelle génération</p>
-  <p class="cpy-fact" data-hotspot="fact">Exporte tes factures en PDF ou au format Factur-X : ton comptable les reçoit le 5 de chaque mois.</p>
+  <p class="cpy-h" data-hotspot="buzz">Booste ta productivité grâce à une plateforme de nouvelle génération</p>
+  <p class="cpy-fact" data-hotspot="fact">Exporte tes factures en PDF ou au format Factur-X&nbsp;: ton comptable les reçoit le 5 de chaque mois.</p>
   <div class="cpy-args" data-hotspot="cadence"><p><b>Saisie</b> Tes dépenses arrivent seules. Pas de friction. Juste des résultats.</p><p><b>Relances</b> Les impayés sont suivis. Pas de stress. Juste de la sérénité.</p><p><b>Export</b> Ton comptable reçoit tout. Pas un outil. Un partenaire.</p></div>
   <p class="cpy-tag" data-hotspot="theater">Fini le théâtre de la conformité.</p>
-  <div class="cpy-buy"><span class="cpy-price" data-hotspot="price">9 € par mois, sans engagement</span><span class="mk-btn" data-hotspot="cta">Créer ma première facture</span></div>
+  <div class="cpy-buy"><span class="cpy-price" data-hotspot="price">9&nbsp;€ par mois, sans engagement</span><span class="mk-btn" data-hotspot="cta">Créer ma première facture</span></div>
 </div>`,
         css: `.cpy { padding: 18px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 1.5; color: #3a4150; }
 .cpy-h { font-size: 21px; line-height: 1.2; font-weight: 800; color: #1d2230; }
@@ -415,7 +417,7 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
 .cpy-price { font-weight: 650; color: #1d2230; }`,
       },
       hotspots: [
-        { id: 'buzz', label: 'Accroche « Boostez… nouvelle génération »', correct: true, why: 'Du jargon marketing : un verbe et un adjectif qui pourraient vendre n’importe quoi.' },
+        { id: 'buzz', label: 'Accroche « Booste… nouvelle génération »', correct: true, why: 'Du jargon marketing : un verbe et un adjectif qui pourraient vendre n’importe quoi.' },
         { id: 'cadence', label: 'Trois arguments à chute en formule', correct: true, why: 'Trois sections qui finissent par « Pas de Y. Juste Z. » : c’est la répétition de la cadence qui trahit le texte généré.' },
         { id: 'theater', label: '« Fini le théâtre de la conformité. »', correct: true, why: 'Disqualifier quelque chose en le traitant de « théâtre » : un tic récurrent, qui ne dit pas ce que fait le produit.' },
         { id: 'fact', label: 'Phrase sur l’export des factures', correct: false, why: 'Précise et vérifiable : un format, un destinataire, une date.' },
@@ -424,7 +426,7 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
       ],
       explanation: `Trois règles de rédaction du détecteur :
 
-- **Marketing buzzword** : le détecteur cherche les tournures anglaises (*supercharge your*, *next-generation*, *cutting-edge*…) ; « boostez » et « de nouvelle génération » trahissent le même réflexe en français ;
+- **Marketing buzzword** : le détecteur cherche les tournures anglaises (*supercharge your*, *next-generation*, *cutting-edge*…) ; « booste » et « de nouvelle génération » trahissent le même réflexe en français ;
 - **Aphoristic-cadence copy** : une fois, ça passe ; **trois sections ou plus** qui retombent sur « X. Pas de Y. » ou « Pas un outil. Un partenaire. », c’est une cadence, pas une voix ;
 - **Theater framing copy** : dire simplement ce que la chose fait ou ne fait pas.
 
@@ -457,17 +459,17 @@ Ces trois règles cherchent des formules anglaises : sur un texte français, le 
           id: 'specific',
           visual: {
             alt: 'Héros clair avec le titre « Le carnet de chantier qui tient dans la poche du chef d’équipe », un bouton ocre « Essayer 14 jours » et un aperçu d’une réserve photographiée sur le chantier Maison Ferrand.',
-            html: `<div class="hs"><p class="hs-h">Le carnet de chantier qui tient dans la poche du chef d’équipe</p><p class="hs-p">Photos, réserves et comptes rendus partagés avec le client le soir même.</p><span class="hs-btn">Essayer 14 jours</span><div class="hs-app"><span class="hs-ph"></span><div><b>Réserve n° 12 · Maison Ferrand</b><span>Joint de carrelage fissuré, salle de bain · photo de 16:40</span></div><em>À reprendre</em></div></div>`,
+            html: `<div class="hs"><p class="hs-h">Le carnet de chantier qui tient dans la poche du chef d’équipe</p><p class="hs-p">Photos, réserves et comptes rendus partagés avec le client le soir même.</p><span class="hs-btn">Essayer 14&nbsp;jours</span><div class="hs-app"><span class="hs-ph"></span><div><b>Réserve n°&nbsp;12 · Maison Ferrand</b><span>Joint de carrelage fissuré, salle de bain · photo de 16:40</span><em>À reprendre</em></div></div></div>`,
             css: `.hs { padding: 26px 18px; background: #f4f4f1; color: #22262b; }
 .hs-h { font-size: 23px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
 .hs-p { margin-top: 8px; font-size: 14px; line-height: 1.5; color: #4a4f57; }
-.hs-btn { display: inline-flex; margin-top: 14px; padding: 9px 16px; border-radius: 8px; background: #b9770e; color: #fff; font-weight: 700; font-size: 14px; }
-.hs-app { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 10px; border-radius: 10px; background: #fff; border: 1px solid #dcdcd5; font-size: 12px; }
+.hs-btn { display: inline-flex; margin-top: 14px; padding: 9px 16px; border-radius: 8px; background: #9a6208; color: #fff; font-weight: 700; font-size: 14px; }
+.hs-app { display: flex; align-items: flex-start; gap: 10px; margin-top: 18px; padding: 10px; border-radius: 10px; background: #fff; border: 1px solid #dcdcd5; font-size: 12px; }
 .hs-app div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .hs-app b { font-size: 13px; }
 .hs-app span { color: #5a5f66; }
 .hs-ph { flex: none; width: 42px; height: 42px; border-radius: 8px; background: linear-gradient(150deg, #cfd4d8, #eef0f1 50%, #a9b0b6); }
-.hs-app em { font-style: normal; font-weight: 650; padding: 2px 8px; border-radius: 999px; background: #fdf0d5; color: #7a4b00; }`,
+.hs-app em { align-self: flex-start; margin-top: 4px; font-style: normal; font-weight: 650; padding: 2px 8px; border-radius: 999px; background: #fdf0d5; color: #7a4b00; }`,
           },
           why: 'Le chef d’équipe, la réserve photographiée, le client prévenu le soir : chaque élément vient de ce métier.',
         },
@@ -475,7 +477,7 @@ Ces trois règles cherchent des formules anglaises : sur un texte français, le 
       answer: 'specific',
       explanation: `La critique d’impeccable commence par une question : **ce design est-il ancré dans ce produit, ou un produit sans rapport pourrait-il le reprendre tel quel ?** Remplace « chantier » par « recrutement » dans la version sombre : rien d’autre ne bouge. C’est la signature du réflexe.
 
-Elle cumule d’ailleurs quatre règles du détecteur (halo radial, pastille eyebrow, texte en dégradé dans la palette « IA », halo lumineux autour du bouton), plus un « révolutionne » qui relève du jargon marketing. La version claire, elle, montre la scène réelle du produit et l’action qu’on vient y faire.`,
+Elle cumule d’ailleurs cinq règles du détecteur (halo radial, pastille eyebrow, texte en dégradé, palette « IA », halo lumineux autour du bouton), plus un « révolutionne » qui relève du jargon marketing. La version claire, elle, montre la scène réelle du produit et l’action qu’on vient y faire.`,
       takeaway: 'Masque le nom du produit : si un produit voisin pouvait reprendre la page telle quelle, elle reste générique.',
       sources: ['imp:critique', 'imp:detector'],
     },
@@ -502,7 +504,7 @@ Elle cumule d’ailleurs quatre règles du détecteur (halo radial, pastille eye
           id: 'inline',
           visual: {
             alt: 'Liste de trois avantages, chacun avec une icône posée à côté du titre et une phrase précise.',
-            html: `<ul class="ai"><li><i data-icon="settings" style="--ico:18px"></i><div><b>Une révision complète offerte chaque année</b><span>Freins, transmission et roulements, réglés par un mécanicien.</span></div></li><li><i data-icon="bike" style="--ico:18px"></i><div><b>Tout l’outillage en accès libre</b><span>Pieds d’atelier, dérive-chaîne, clés dynamométriques.</span></div></li><li><i data-icon="users" style="--ico:18px"></i><div><b>Un atelier mécanique le samedi matin</b><span>Apprends à changer une chambre à air en 20 minutes.</span></div></li></ul>`,
+            html: `<ul class="ai"><li><i data-icon="settings" style="--ico:18px"></i><div><b>Une révision complète offerte chaque année</b><span>Freins, transmission et roulements, réglés par un mécanicien.</span></div></li><li><i data-icon="bike" style="--ico:18px"></i><div><b>Tout l’outillage en accès libre</b><span>Pieds d’atelier, dérive-chaîne, clés dynamométriques.</span></div></li><li><i data-icon="users" style="--ico:18px"></i><div><b>Un atelier mécanique le samedi matin</b><span>Apprends à changer une chambre à air en 20&nbsp;minutes.</span></div></li></ul>`,
             css: `.ai { list-style: none; margin: 0; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .ai li { display: flex; gap: 10px; align-items: flex-start; }
 .ai .mk-ico { margin-top: 2px; color: #b45309; }
@@ -530,7 +532,7 @@ La liste permet aussi des titres plus longs et précis, là où trois cartes ég
           id: 'glow',
           visual: {
             alt: 'Carte de concert sombre entourée d’un halo rose lumineux, avec un bouton rose qui brille.',
-            html: `<div class="gl"><div class="gl-c gl-c--glow"><span class="gl-d">Ce soir · 20:30</span><b>Les Ondes Basses</b><span>Le Ferrailleur, Nantes · 18 €</span><span class="gl-b gl-b--glow">Réserver</span></div></div>`,
+            html: `<div class="gl"><div class="gl-c gl-c--glow"><span class="gl-d">Ce soir · 20:30</span><b>Les Ondes Basses</b><span>Le Ferrailleur, Nantes · 18&nbsp;€</span><span class="gl-b gl-b--glow">Réserver</span></div></div>`,
             css: `.gl { padding: 26px 22px; background: #0d0b14; }
 .gl-c { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px; border-radius: 14px; background: #17141f; color: #eeeaf5; font-size: 13px; }
 .gl-c--glow { border: 1px solid rgb(244 114 182 / 0.5); box-shadow: 0 0 34px rgb(236 72 153 / 0.55); }
@@ -545,7 +547,7 @@ La liste permet aussi des titres plus longs et précis, là où trois cartes ég
           id: 'neutral',
           visual: {
             alt: 'Carte de concert sur fond sombre, détachée par une surface un peu plus claire, une fine bordure et une ombre neutre, avec un bouton jaune mat.',
-            html: `<div class="gl"><div class="gl-c"><span class="gl-d">Ce soir · 20:30</span><b>Les Ondes Basses</b><span>Le Ferrailleur, Nantes · 18 €</span><span class="gl-b">Réserver</span></div></div>`,
+            html: `<div class="gl"><div class="gl-c"><span class="gl-d">Ce soir · 20:30</span><b>Les Ondes Basses</b><span>Le Ferrailleur, Nantes · 18&nbsp;€</span><span class="gl-b">Réserver</span></div></div>`,
             css: `.gl { padding: 26px 22px; background: #121116; }
 .gl-c { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px; border-radius: 14px; background: #1f1d26; border: 1px solid #2f2c38; box-shadow: 0 10px 24px rgb(0 0 0 / 0.4); color: #eeeaf5; font-size: 13px; }
 .gl-c b { font-size: 19px; }
@@ -572,7 +574,7 @@ Sur fond sombre, la profondeur vient d’abord de la **surface** (un ton un peu 
           id: 'nested',
           visual: {
             alt: 'Panneau « Abonnement » contenant deux cartes bordées et ombrées, elles-mêmes contenant d’autres cadres.',
-            html: `<div class="ab"><div class="ab-c"><b class="ab-t">Abonnement</b><div class="ab-c ab-in"><span>Formule</span><div class="ab-c ab-in2"><b>Équipe</b><span>29 € / mois</span></div></div><div class="ab-c ab-in"><span>Paiement</span><div class="ab-c ab-in2"><b>Visa •••• 4821</b><span>Expire 08/27</span></div></div></div></div>`,
+            html: `<div class="ab"><div class="ab-c"><b class="ab-t">Abonnement</b><div class="ab-c ab-in"><span>Formule</span><div class="ab-c ab-in2"><b>Équipe</b><span>29&nbsp;€&nbsp;/&nbsp;mois</span></div></div><div class="ab-c ab-in"><span>Paiement</span><div class="ab-c ab-in2"><b>Visa&nbsp;••••&nbsp;4821</b><span>Expire 08/27</span></div></div></div></div>`,
             css: `.ab { padding: 14px; background: #f6f7f9; }
 .ab-c { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid #dfe3ea; border-radius: 12px; background: #fff; font-size: 13px; box-shadow: 0 4px 12px rgb(15 23 42 / 0.06); }
 .ab-t { font-size: 15px; }
@@ -587,15 +589,19 @@ Sur fond sombre, la profondeur vient d’abord de la **surface** (un ton un peu 
           id: 'flat',
           visual: {
             alt: 'Panneau « Abonnement » à plat : deux lignes séparées par un filet, chacune avec un libellé, une valeur et un lien « Modifier ».',
-            html: `<div class="ab"><div class="ab-c"><b class="ab-t">Abonnement</b><dl class="ab-dl"><div><dt>Formule</dt><dd><b>Équipe</b> · 29 € / mois</dd><span>Modifier</span></div><div><dt>Paiement</dt><dd><b>Visa •••• 4821</b> · expire 08/27</dd><span>Modifier</span></div></dl></div></div>`,
-            css: `.ab { padding: 14px; background: #f6f7f9; }
+            html: `<div class="ab"><div class="ab-c"><b class="ab-t">Abonnement</b><dl class="ab-dl"><div><dt>Formule</dt><dd><b>Équipe</b> · 29&nbsp;€&nbsp;/&nbsp;mois</dd><span>Modifier</span></div><div><dt>Paiement</dt><dd><b>Visa&nbsp;••••&nbsp;4821</b> · expire 08/27</dd><span>Modifier</span></div></dl></div></div>`,
+            css: `.ab { padding: 14px; background: #f6f7f9; container-type: inline-size; }
 .ab-c { display: flex; flex-direction: column; gap: 6px; padding: 14px; border: 1px solid #dfe3ea; border-radius: 12px; background: #fff; font-size: 13px; }
 .ab-t { font-size: 15px; }
 .ab-dl { margin: 0; }
 .ab-dl div { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; padding: 10px 0; border-top: 1px solid #edf0f3; }
 .ab-dl dt { color: #5a6172; }
 .ab-dl dd { margin: 0; }
-.ab-dl span { color: #1f4fd8; font-weight: 600; }`,
+.ab-dl span { color: #1f4fd8; font-weight: 600; }
+@container (max-width: 380px) {
+  .ab-dl div { grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
+  .ab-dl dd { grid-column: 1 / -1; grid-row: 2; }
+}`,
           },
           why: 'Une seule carte ; les filets, l’alignement et la graisse font la hiérarchie.',
         },
@@ -628,18 +634,18 @@ Pour regrouper des informations à l’intérieur d’une carte, impeccable reco
           id: 'plan',
           visual: {
             alt: 'Éditeur de plan d’appartement : barre d’outils Mur, Porte, Fenêtre, puis une toile quadrillée où sont tracées des pièces cotées, avec l’échelle « 1 carreau = 50 cm ».',
-            html: `<div class="pl"><div class="pl-tools"><span class="on">Mur</span><span>Porte</span><span>Fenêtre</span><span class="pl-scale">1 carreau = 50 cm</span></div><div class="pl-canvas"><div class="pl-room pl-r1"><span>Séjour · 12 m²</span></div><div class="pl-room pl-r2"><span>Chambre · 7,5 m²</span></div><span class="pl-dim">4,00 m</span></div></div>`,
+            html: `<div class="pl"><div class="pl-tools"><span class="on">Mur</span><span>Porte</span><span>Fenêtre</span><span class="pl-scale">1 carreau = 50&nbsp;cm</span></div><div class="pl-canvas"><div class="pl-room pl-r1"><span>Séjour<br>12&nbsp;m²</span></div><div class="pl-room pl-r2"><span>Chambre<br>7,5&nbsp;m²</span></div><span class="pl-dim">4,00&nbsp;m</span></div></div>`,
             css: `.pl { background: #fff; }
 .pl-tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #dfe3ea; font-size: 12px; }
 .pl-tools span { padding: 4px 10px; border-radius: 6px; border: 1px solid #cfd5df; }
 .pl-tools .on { background: #1f4fd8; border-color: #1f4fd8; color: #fff; }
 .pl-tools .pl-scale { margin-inline-start: auto; border: 0; color: #5a6172; }
-.pl-canvas { position: relative; height: 190px; background-color: #f8fafc; background-image: linear-gradient(#dbe3ee 1px, transparent 1px), linear-gradient(90deg, #dbe3ee 1px, transparent 1px); background-size: 20px 20px; }
+.pl-canvas { position: relative; height: 160px; background-color: #f8fafc; background-image: linear-gradient(#dbe3ee 1px, transparent 1px), linear-gradient(90deg, #dbe3ee 1px, transparent 1px); background-size: 16px 16px; }
 .pl-room { position: absolute; border: 3px solid #1d2230; background: rgb(255 255 255 / 0.6); }
-.pl-room span { position: absolute; left: 8px; top: 6px; font-size: 11px; font-weight: 600; }
-.pl-r1 { left: 20px; top: 20px; width: 160px; height: 120px; }
-.pl-r2 { left: 177px; top: 20px; width: 103px; height: 120px; }
-.pl-dim { position: absolute; left: 20px; top: 150px; width: 160px; text-align: center; font-size: 11px; color: #1f4fd8; border-top: 1px solid #1f4fd8; }`,
+.pl-room span { position: absolute; left: 7px; top: 5px; font-size: 11px; line-height: 1.3; font-weight: 600; white-space: nowrap; }
+.pl-r1 { left: 16px; top: 16px; width: 128px; height: 96px; }
+.pl-r2 { left: 141px; top: 16px; width: 83px; height: 96px; }
+.pl-dim { position: absolute; left: 16px; top: 120px; width: 128px; text-align: center; font-size: 11px; color: #1f4fd8; border-top: 1px solid #1f4fd8; }`,
           },
           why: 'Ici la grille est l’outil : elle donne l’échelle et sert à tracer les murs.',
         },
@@ -659,12 +665,12 @@ Le même motif est donc un tic sous un message marketing, et une fonction dans u
       leftTitle: 'Règle',
       rightTitle: 'Ce qu’elle repère',
       pairs: [
-        { id: 'eyebrow', left: 'Pastille eyebrow du héros', right: 'Un petit libellé en capitales espacées, ou une pastille, juste au-dessus d’un très grand titre' },
-        { id: 'ghost', left: 'Carte fantôme', right: 'Une bordure d’un pixel et une large ombre diffuse sur chaque carte d’une rangée' },
-        { id: 'halo', left: 'Halo radial', right: 'Un dégradé radial saturé au centre qui s’estompe vers le transparent, sur une page sombre' },
+        { id: 'eyebrow', left: 'Pastille eyebrow du héros', right: 'Un minuscule libellé en capitales espacées, nu ou en gélule, posé juste au-dessus d’un titre géant' },
+        { id: 'ghost', left: 'Carte fantôme', right: 'Un filet d’un pixel et une large ombre floue, répétés sur tous les blocs d’une rangée' },
+        { id: 'halo', left: 'Halo radial', right: 'Une lueur colorée, saturée au centre, qui s’efface vers le transparent sur le fond d’une page sombre' },
         { id: 'cadence', left: 'Cadence aphoristique', right: 'Trois sections ou plus qui retombent sur « X. Pas de Y. »' },
-        { id: 'tile', left: 'Tuile d’icône', right: 'Un carré arrondi contenant une icône, empilé au-dessus du titre' },
-        { id: 'edge', left: 'Cartes collées au bord', right: 'Des cartes coupées contre un bord d’un défilement horizontal, avec une gouttière de l’autre côté' },
+        { id: 'tile', left: 'Tuile d’icône', right: 'Un petit carré arrondi qui encadre un pictogramme, posé au-dessus de chaque titre' },
+        { id: 'edge', left: 'Cartes collées au bord', right: 'Dans un défilement horizontal, des blocs rognés d’un côté alors qu’une marge subsiste de l’autre' },
       ],
       explanation: `Chaque règle décrit une forme précise, pas un goût :
 
@@ -693,10 +699,10 @@ Le plancher de qualité la refuse **hors d’un univers réellement néobrutalis
       difficulty: 1,
       prompt: 'Si le détecteur ne signale plus rien, le design est réussi.',
       answer: false,
-      explanation: `impeccable le précise dans sa documentation : un passage du détecteur sans résultat est **une preuve, pas une garantie** de qualité visuelle ou d’accessibilité. Il ne remplace pas l’examen du rendu à toutes les tailles utiles.
+      explanation: `impeccable le précise dans sa documentation : un passage du détecteur sans résultat est **un indice, pas une preuve** de qualité visuelle ou d’accessibilité. Il ne remplace pas l’examen du rendu à toutes les tailles utiles.
 
 Le détecteur repère des formes précises. Il ne dit pas si la page sert son visiteur, si la hiérarchie suit la tâche, ni si le design pourrait appartenir à n’importe quel autre produit. Et le plancher de qualité rappelle que, même tout au vert, il reste à engager la page dans son monde.`,
-      takeaway: 'Un rapport vide est une preuve, pas une garantie : regarde toujours le rendu aux tailles réelles.',
+      takeaway: 'Un rapport vide est un indice, pas une preuve : regarde toujours le rendu aux tailles réelles.',
       sources: [{ label: 'impeccable — README (détecteur)', url: 'https://github.com/pbakaus/impeccable#readme' }, 'imp:craft-floor'],
     },
     {
@@ -714,22 +720,26 @@ C’est la saturation qui trahit une cadence générée, pas le signe lui-même.
     {
       id: 'antipatterns-slop-multi',
       type: 'multi',
-      difficulty: 1,
+      difficulty: 2,
       prompt: 'Lesquels de ces choix sont des tics typiques des interfaces générées ?',
       options: [
         { id: 'purple', label: 'Un dégradé bleu-violet en fond de la page d’accueil', why: 'La palette « IA » : un dégradé violet suffit à trahir le réflexe.' },
         { id: 'gradient-text', label: 'Un titre principal en texte dégradé', why: 'Décoratif plutôt que porteur de sens, surtout sur les titres et les chiffres clés.' },
         { id: 'tile', label: 'Une tuile d’icône arrondie au-dessus de chaque titre de carte', why: 'Le gabarit universel de la carte de fonctionnalité générée.' },
-        { id: 'tabular', label: 'Des chiffres tabulaires dans une colonne de montants', why: 'Une bonne pratique : les montants s’alignent.' },
-        { id: 'focus', label: 'Un anneau de focus visible, aux couleurs de la marque', why: 'Une bonne pratique d’accessibilité et de finition.' },
-        { id: 'label', label: 'Des libellés au-dessus des champs de formulaire', why: 'Une convention claire, que le détecteur ne vise pas.' },
+        { id: 'leading', label: 'Un interlignage de 1,2 sur le texte courant', why: 'Un défaut de qualité (sous 1,3) qui gêne la lecture, que la page soit générée ou non : il ne signale pas un générateur.' },
+        { id: 'plan-grid', label: 'Un fond quadrillé sous la toile d’un éditeur de plans', why: 'La grille y sert à mesurer et à tracer : c’est l’exception que prévoit la règle du quadrillage.' },
+        { id: 'shadow', label: 'Une ombre neutre, décalée et floue, sous un panneau flottant', why: 'C’est la profondeur que recommande impeccable à la place des halos colorés.' },
       ],
       answers: ['purple', 'gradient-text', 'tile'],
       explanation: `Le dégradé violet, le texte en dégradé et la tuile d’icône au-dessus du titre figurent tous trois parmi les règles de la famille *cliché* du détecteur : des choix devenus si fréquents dans les interfaces générées qu’ils signalent l’absence de décision.
 
-Les trois autres sont des finitions recommandées : chiffres tabulaires, focus visible thématisé, libellés au-dessus des champs. Une interface soignée n’est pas une interface sans conventions ; c’est une interface dont chaque choix a une raison.`,
-      takeaway: 'Dégradé violet, texte en dégradé et tuile d’icône sont des tics ; chiffres tabulaires et focus visible sont du métier.',
-      sources: ['imp:detector'],
+Les trois autres n’en sont pas :
+
+- l’interlignage de 1,2 est un défaut de la famille *qualité* : il gêne la lecture, mais ne trahit aucun générateur ;
+- le quadrillage d’un éditeur de plans est l’exception que prévoit la règle, car la grille y mesure quelque chose ;
+- l’ombre neutre décalée est justement la profondeur recommandée à la place des halos colorés.`,
+      takeaway: 'Dégradé violet, texte en dégradé et tuile d’icône sont des tics générés ; un défaut de lecture ou une grille qui sert à mesurer n’en sont pas.',
+      sources: ['imp:detector', 'imp:craft-floor'],
     },
     {
       id: 'antipatterns-severity-choice',
@@ -747,7 +757,7 @@ Les trois autres sont des finitions recommandées : chiffres tabulaires, focus v
       answer: 'script',
       explanation: `La description de la règle *Uncaught script error on load* est sans ambiguïté : un JavaScript cassé tue en silence les révélations, les interactions et le contenu dynamique, et peut laisser l’essentiel de la page invisible. **Corrige l’erreur avant de juger quoi que ce soit d’autre.**
 
-Les deux seules règles de sévérité *erreur* (script cassé, contenu invisible au repos) passent en premier. Viennent ensuite les avertissements, qu’on corrige en réécrivant l’élément, puis les conseils, qu’on examine au regard de la direction choisie.`,
+Les deux seules règles de sévérité *erreur* (script cassé, contenu invisible au repos) passent en premier. Viennent ensuite les avertissements (ici la bordure latérale, un cliché à réécrire), puis les conseils, qu’on examine au regard de la direction choisie.`,
       takeaway: 'Traite d’abord les erreurs (script cassé, contenu invisible), puis les avertissements, puis les conseils.',
       sources: ['imp:detector'],
     },
@@ -760,7 +770,7 @@ Les deux seules règles de sévérité *erreur* (script cassé, contenu invisibl
       options: [
         { id: 'integrate', label: 'Supprimer la pastille et faire entrer l’information dans le titre : « Tes relances d’impayés partent seules, à J+7 ».', why: 'C’est la correction proposée par la règle : l’information survit, la forme générée disparaît.' },
         { id: 'soften', label: 'Garder la pastille, mais en gris clair pour qu’elle se fasse discrète.', why: 'Adoucir n’est pas corriger : le gabarit reste, et le texte devient en plus difficile à lire.' },
-        { id: 'unpill', label: 'Retirer la forme de pastille, en gardant le libellé en capitales espacées au-dessus du titre.', why: 'On passe d’un tic à un autre : le sur-titre au-dessus d’un titre est interdit sans exception.' },
+        { id: 'unpill', label: 'Retirer la forme de pastille, en gardant le libellé en capitales espacées au-dessus du titre.', why: 'Le tic reste : sans sa pastille, c’est la forme de base de la même règle, et un sur-titre au-dessus d’un titre est interdit sans exception.' },
         { id: 'animate', label: 'L’animer légèrement pour qu’elle attire l’œil sans prendre de place.', why: 'Une animation décorative ajoute un tic au tic.' },
       ],
       answer: 'integrate',
