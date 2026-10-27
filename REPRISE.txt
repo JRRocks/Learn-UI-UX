@@ -72,10 +72,10 @@ a) Correcteurs de contenu encore actifs : modes (src/content/modules/modes.ts) e
    catalogue (src/content/antipatterns.ts). Si `git status` montre ces fichiers
    modifiés et cohérents, commiter. Sinon, relancer la relecture pour ces deux cibles
    (voir 5.A).
-b) Corrections de l’app, vague 1, dans trois worktrees git du scratchpad
-   (branches locales fix/exercise, fix/pages, fix/styles, base 1665f30) : AUCUN commit
-   n’avait encore été fait. Ces worktrees disparaissent avec le conteneur : refaire la
-   vague 1 (voir 5.B).
+b) Corrections de l’app, vague 1 : lancées dans trois worktrees git du scratchpad
+   (branches locales fix/exercise, fix/pages, fix/styles, base 1665f30), puis ARRÊTÉES
+   volontairement pour économiser le quota, avant tout commit. Rien n’est perdu : refaire
+   la vague 1 depuis le début (voir 5.B).
 c) Vérification des 7 constats de performance (voir 5.C).
 
 ======================================================================
