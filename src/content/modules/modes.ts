@@ -496,7 +496,7 @@ base-clients   OK       38 ms</pre>
 .ond-table th { text-align: start; padding: 7px 6px; font-size: 12px; font-weight: 600; color: #4c555b; border-bottom: 1px solid #dde2df; }
 .ond-table td { padding: 7px 6px; border-bottom: 1px solid #edf0ee; }
 .ond-table .num { text-align: end; white-space: nowrap; }
-.mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+.mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
 .ond-st { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e3f4e8; color: #1d6b3c; }
 .ond-st--warn { background: #fdf0d5; color: #7a4b00; }`,
           },

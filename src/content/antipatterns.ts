@@ -1059,9 +1059,9 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       bad: v(
         'Titre sur deux lignes dont la seconde ne contient que le mot « ligne ».',
         `<div class="ub"><p>Résilier ton contrat en<br>ligne</p></div>`,
-        `.ub { padding: 22px 18px; } .ub p { font-size: 24px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`,
+        `.ub { padding: 22px 18px; } .ub p { font-size: 21px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`,
       ),
-      good: v('Même titre réparti sur deux lignes de longueur proche.', `<div class="ub"><p>Résilier ton contrat<br>en ligne</p></div>`, `.ub { padding: 22px 18px; } .ub p { font-size: 24px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`),
+      good: v('Même titre réparti sur deux lignes de longueur proche.', `<div class="ub"><p>Résilier ton contrat<br>en ligne</p></div>`, `.ub { padding: 22px 18px; } .ub p { font-size: 21px; line-height: 1.15; font-weight: 800; white-space: nowrap; }`),
     },
   },
   {

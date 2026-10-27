@@ -301,7 +301,7 @@ Impeccable va dans le même sens : ne jamais simuler un travail ni retarder un r
         },
       ],
       answer: 'equal',
-      explanation: `La règle française : « L’utilisateur doit pouvoir accepter ou refuser les cookies avec le même degré de simplicité. » La CNIL précise qu’un bouton « Tout refuser » **au même niveau et au même format** que « Tout accepter » y répond, et qu’un simple « Paramétrer » à côté de « Tout accepter » ne suffit pas.
+      explanation: `La CNIL le résume ainsi : « L’utilisateur doit pouvoir accepter ou refuser les cookies avec le même degré de simplicité. » Elle précise qu’un bouton « Tout refuser » **au même niveau et au même format** que « Tout accepter » y répond, et qu’un simple « Paramétrer » à côté de « Tout accepter » ne suffit pas.
 
 Fin 2021, elle a sanctionné Google (150 M€) et Facebook (60 M€) parce que refuser demandait plusieurs clics quand accepter n’en demandait qu’un. Réduire le refus à un petit lien pâle contourne la règle par l’**interférence visuelle** : le choix existe, mais il est rendu difficile à voir.`,
       takeaway: 'Refuser les cookies doit être aussi simple qu’accepter : « Tout refuser » au même niveau et au même format que « Tout accepter ».',
@@ -561,7 +561,7 @@ Les cookies strictement nécessaires, eux, peuvent rester actifs sans consenteme
         { id: 'date', label: 'Date de fin d’accès', correct: false, why: 'Indiquer jusqu’à quand l’accès reste actif est une information honnête et utile.' },
         { id: 'downloads', label: 'Téléchargements retirés', correct: false, why: 'Prévenir des effets réels de la résiliation, sans dramatiser, aide à décider.' },
       ],
-      explanation: `Le DSA cite, parmi les pratiques à encadrer, le fait de « rendre la procédure de désinscription d’un service plus compliquée que l’inscription à celui-ci ». Ici, trois freins :
+      explanation: `Pour les plateformes en ligne, le DSA cite parmi les pratiques à encadrer le fait de « rendre la procédure de désinscription d’un service plus compliquée que l’inscription à celui-ci ». Ici, trois freins :
 
 - **Obstruction** : un questionnaire obligatoire, avec un minimum de caractères, pour lasser.
 - **Confirmshaming et interférence visuelle** : la résiliation n’est qu’un petit lien pâle, formulé pour culpabiliser, face à un gros bouton « Garder Premium ».
@@ -599,7 +599,7 @@ L’article 7 ajoute : retirer son consentement doit être aussi simple que le d
       prompt: 'Que prévoit l’article 25 du règlement européen sur les services numériques (DSA) ?',
       options: [
         { id: 'ban', label: 'Les plateformes en ligne ne doivent pas concevoir ou exploiter leurs interfaces de façon à tromper ou manipuler leurs utilisateurs, ou à altérer substantiellement leur capacité à décider librement et en connaissance de cause.', why: 'C’est le principe de l’article 25, applicable à toutes les plateformes en ligne depuis le 17 février 2024.' },
-        { id: 'three-clicks', label: 'Tout site marchand doit proposer une résiliation en trois clics.', why: 'C’est une règle française (Code de la consommation, en vigueur depuis juin 2023), pas l’article 25 du DSA.' },
+        { id: 'three-clicks', label: 'Tout site marchand doit proposer une résiliation en trois clics.', why: 'Ce n’est pas l’article 25 du DSA : c’est une règle française (Code de la consommation, depuis juin 2023), qui vise les contrats souscrits en ligne.' },
         { id: 'timers', label: 'Les comptes à rebours sont interdits sur tous les sites européens.', why: 'Le DSA vise la tromperie, pas un composant : un compte à rebours adossé à une vraie date reste possible.' },
         { id: 'cookies', label: 'Il remplace le RGPD pour les bandeaux de cookies.', why: 'Au contraire : l’article 25 ne s’applique pas aux pratiques déjà couvertes par le RGPD ou par la directive sur les pratiques commerciales déloyales.' },
       ],

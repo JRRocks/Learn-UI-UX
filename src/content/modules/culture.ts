@@ -128,6 +128,10 @@ const S = {
     url: 'https://cris.huji.ac.il/en/publications/whence-differences-in-value-priorities-individual-cultural-or-art/',
   },
   upi: { label: 'Wikipédia — Unified Payments Interface', url: 'https://en.wikipedia.org/wiki/Unified_Payments_Interface' },
+  koreaPass: {
+    label: 'Korea JoongAng Daily — Mobile carriers make app registration easier with Pass',
+    url: 'https://www.koreajoongangdaily.com/business/mobile-carriers-make-app-registration-easier-with-pass/11199798',
+  },
   swish: { label: 'Wikipédia — Swish', url: 'https://en.wikipedia.org/wiki/Swish_(payment)' },
 } satisfies Record<string, SourceRef>;
 
@@ -1160,7 +1164,7 @@ Par défaut, les navigateurs traitent pourtant les syllabes hangeul comme des id
 
 Trois marchés, trois conventions : vert et rouge en Occident, rouge et vert en Chine, rouge et bleu en Corée. Une palette « Asie » unique serait fausse quelque part : règle les couleurs **par locale**, et double-les toujours d’un signe ou d’une flèche (▲▼).`,
       takeaway: 'En Corée du Sud, la hausse est rouge et la baisse bleue : les conventions de couleur se règlent par marché, pas par continent.',
-      sources: [S.koreaStock, S.colours],
+      sources: [S.koreaStock],
     },
     {
       id: 'culture-kr-spaces-tf',
@@ -2306,6 +2310,34 @@ Ce sont des **hypothèses**, pas des règles, et le terrain les contredit parfoi
 Sans le moyen réflexe, la vente se perd au dernier écran, là où l’intention d’achat est la plus forte.`,
       takeaway: 'Chaque marché a son moyen de paiement réflexe : sans lui, le panier s’arrête au dernier écran.',
       sources: [S.upi, S.pix, S.mpesa, S.swish],
+    },
+    {
+      id: 'culture-identity-match',
+      type: 'match',
+      difficulty: 2,
+      prompt: 'Associe chaque marché à la façon dont on y identifie habituellement l’utilisateur.',
+      leftTitle: 'Marché',
+      rightTitle: 'Identification attendue',
+      pairs: [
+        { id: 'cn', left: 'Chine continentale', right: 'Numéro de mobile et code reçu par SMS, ou connexion avec WeChat' },
+        { id: 'in', left: 'Inde', right: 'Code à usage unique (OTP) envoyé sur le numéro de mobile' },
+        { id: 'kr', left: 'Corée du Sud', right: 'Vérification d’identité par les opérateurs mobiles (appli PASS)' },
+        { id: 'se', left: 'Suède', right: 'Connexion et signature avec BankID' },
+        { id: 'jp', left: 'Japon', right: 'Nom en kanji accompagné de sa lecture en katakana' },
+        { id: 'br', left: 'Brésil', right: 'Numéro CPF demandé à l’achat' },
+      ],
+      explanation: `L’e-mail et le mot de passe, réflexe occidental, ne sont qu’une façon parmi d’autres d’identifier quelqu’un :
+
+- **Chine** : le numéro de mobile, vérifié par un code SMS, sert d’identifiant ; sur ordinateur, on se connecte souvent en scannant un QR code avec l’appli.
+- **Inde** : un code à usage unique (OTP) envoyé sur le mobile remplace souvent le mot de passe.
+- **Corée du Sud** : PASS, l’appli commune aux trois opérateurs (SK Telecom, KT, LG U+), vérifie l’identité sur plus de 20 000 sites (2021).
+- **Suède** : BankID, que possèdent presque tous les adultes, sert à se connecter et à signer.
+- **Japon** : le nom s’accompagne de sa lecture en katakana.
+- **Brésil** : le CPF, identifiant fiscal, est demandé au paiement.
+
+Plaquer le parcours d’inscription de son marché d’origine, c’est imposer une étape que l’utilisateur n’attend pas.`,
+      takeaway: 'Chaque marché a sa façon d’identifier : mobile et SMS en Chine, OTP en Inde, PASS en Corée, BankID en Suède. Ne plaque pas l’e-mail et le mot de passe partout.',
+      sources: ['palo-it:china', S.koreaPass, S.bankid, S.furigana],
     },
     {
       id: 'culture-formats-match',

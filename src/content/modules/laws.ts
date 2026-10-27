@@ -164,7 +164,7 @@ const laws: ModuleContent = {
     {
       id: 'calibre',
       title: 'Des lois, pas toutes du même calibre',
-      body: `Les « lois de l’UX » rassemblées par Jon Yablonski (Laws of UX) sont des régularités observées en psychologie, en sciences cognitives ou en ingénierie — pas des lois physiques. Elles n’ont pas toutes la même solidité :
+      body: `Les « lois de l’UX » rassemblées par Jon Yablonski (Laws of UX) sont des régularités observées en psychologie, en sciences cognitives, en économie ou en ingénierie — pas des lois physiques. Elles n’ont pas toutes la même solidité :
 
 - **Mesurées** : Fitts (viser une cible) et Hick (choisir parmi plusieurs options) prédisent des durées et se vérifient en test ; le seuil de Doherty (temps de réponse) vient de mesures de productivité menées chez IBM.
 - **Limites de la perception et de la mémoire** : Miller et sa révision par Cowan, la position sérielle, l’effet Von Restorff, la règle pic-fin, les lois de la Gestalt.
