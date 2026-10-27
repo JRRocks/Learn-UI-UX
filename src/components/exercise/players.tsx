@@ -163,7 +163,7 @@ export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy 
                 </span>
               </>
             )}
-            {revealed && o.why && <span className="option-why">{o.why}</span>}
+            {revealed && o.why && <span className="option-why"><MdInline text={o.why} /></span>}
           </label>
         );
       })}
@@ -221,7 +221,7 @@ export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy }
                 </span>
               </>
             )}
-            {revealed && o.why && <span className="option-why">{o.why}</span>}
+            {revealed && o.why && <span className="option-why"><MdInline text={o.why} /></span>}
           </label>
         );
       })}
@@ -328,7 +328,7 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
                     {i + 1}
                   </span>
                   <span>
-                    <strong>{h.label}</strong> — {found ? 'trouvé' : 'manqué'}. {h.why}
+                    <strong>{h.label}</strong> — {found ? 'trouvé' : 'manqué'}. <MdInline text={h.why} />
                   </span>
                 </li>
               );
@@ -341,7 +341,7 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
                   ·
                 </span>
                 <span>
-                  <strong>Ta sélection : {h.label}</strong> — {h.why}
+                  <strong>Ta sélection : {h.label}</strong> — <MdInline text={h.why} />
                 </span>
               </li>
             ))}
@@ -558,7 +558,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
                   <strong>
                     Toi : {mine} · expert : {c.expert}.
                   </strong>{' '}
-                  {c.why}
+                  <MdInline text={c.why} />
                 </p>
               )}
             </div>

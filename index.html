@@ -9,6 +9,12 @@
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <title>Épreuves — atelier UI/UX</title>
+    <style>
+      .boot { min-height: 100dvh; display: grid; place-content: center; justify-items: center; gap: 12px; font: 700 18px/1.2 system-ui, sans-serif; color: #1d2433; background: #f7f8fb; }
+      @media (prefers-color-scheme: dark) { .boot { color: #eceef3; background: #161a24; } }
+      :root[data-theme='dark'] .boot { color: #eceef3; background: #161a24; }
+      :root[data-theme='light'] .boot { color: #1d2433; background: #f7f8fb; }
+    </style>
     <script>
       // Apply the saved theme before first paint to avoid a flash.
       try {
@@ -19,7 +25,13 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Painted before the app's JavaScript arrives; React replaces it on first render. -->
+      <div class="boot" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="40" height="40"><rect x="8" y="4.5" width="17" height="23" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11h9M12 15.5h9M12 20h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.5 17.2c-4.7-.6-6.9 2.2-4.4 4.1 3 2.3 11.9 2.3 16.3-.1 3.8-2.1 1.4-5.2-4.6-5.4" fill="none" stroke="#d2401f" stroke-width="2" stroke-linecap="round"/></svg>
+        <p>Épreuves</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

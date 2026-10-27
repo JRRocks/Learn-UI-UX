@@ -34,7 +34,11 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
               <strong>La version marquée « Recommandé ».</strong>
             </p>
           )}
-          {o.why && <p className="muted">{o.why}</p>}
+          {o.why && (
+            <p className="muted">
+              <MdInline text={o.why} />
+            </p>
+          )}
         </div>
       );
     }

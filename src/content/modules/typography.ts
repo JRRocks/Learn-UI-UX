@@ -354,6 +354,97 @@ Un thème sombre se **compose** : on ne retourne pas mécaniquement le thème cl
       takeaway: 'En thème sombre, compense : interlignage, approche et graisse légèrement augmentés.',
       sources: ['imp:typeset', 'imp:colorize'],
     },
+    {
+      id: 'typography-mobile-size-slider',
+      type: 'slider',
+      difficulty: 1,
+      prompt: 'Règle la taille du texte de cet article sur téléphone.',
+      context: 'Lecture d’un article de blog dans le navigateur d’un téléphone, tenu à bout de bras.',
+      visual: {
+        alt: 'Écran de téléphone affichant un titre et deux paragraphes dont la taille varie avec le curseur.',
+        frame: 'phone',
+        html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Le vélo-cargo, un an après</p><p class="art">Douze mois, trois mille kilomètres et deux crevaisons : voici ce que le vélo-cargo a changé dans nos trajets quotidiens, de l’école au marché.</p><p class="art">Le plus surprenant n’est pas la vitesse, mais la régularité : on arrive à l’heure, quel que soit le trafic.</p></div>`,
+        css: `.art { font-size: var(--v, 12px); line-height: 1.55; }`,
+      },
+      control: 'Taille du corps',
+      min: 10,
+      max: 24,
+      step: 1,
+      initial: 12,
+      unit: 'px',
+      target: [16, 19],
+      ideal: 17,
+      explanation: `Sur le web, le corps de texte ne descend pas sous **16 px** (1rem) sans raison : en dessous, la lecture fatigue vite sur un petit écran, et **iOS Safari zoome de force** dès qu’on touche un champ de saisie plus petit, ce qui casse la mise en page.
+
+Au-delà de 19–20 px sur téléphone, chaque ligne ne porte plus que quelques mots : la mesure devient trop courte et le texte se hache. 16 à 18 px, avec un interlignage autour de 1,5, est le bon compromis — et l’utilisateur doit toujours pouvoir agrandir (zoom, réglages de taille du système).`,
+      takeaway: 'Corps de texte sur mobile : 16 px minimum, autour de 16–18 px, et jamais de blocage du zoom.',
+      sources: ['imp:typeset', 'imp:harden'],
+    },
+    {
+      id: 'typography-justify-duel',
+      type: 'choice',
+      difficulty: 2,
+      prompt: 'Dans cette colonne étroite, quel paragraphe se lit le mieux ?',
+      context: 'Encadré latéral d’environ 30 caractères de large dans une application de documentation.',
+      options: [
+        {
+          id: 'justified',
+          visual: {
+            alt: 'Paragraphe justifié dans une colonne étroite, avec de grands blancs irréguliers entre les mots.',
+            html: `<div class="mk-pad"><p class="col">Les sauvegardes automatiques interviennent toutes les quinze minutes, conformément à la configuration administrateur sélectionnée.</p></div>`,
+            css: `.col { width: 30ch; text-align: justify; hyphens: manual; line-height: 1.5; }`,
+          },
+          why: 'Sans césure, la justification étire les espaces jusqu’à créer des « rivières » blanches qui coupent la lecture.',
+        },
+        {
+          id: 'ragged',
+          visual: {
+            alt: 'Même paragraphe aligné à gauche, espaces réguliers et fin de ligne irrégulière.',
+            html: `<div class="mk-pad"><p class="col" lang="fr">Les sauvegardes automatiques interviennent toutes les quinze minutes, conformément à la configuration administrateur sélectionnée.</p></div>`,
+            css: `.col { width: 30ch; text-align: start; line-height: 1.5; }`,
+          },
+          why: 'Aligné à gauche, chaque espace garde sa largeur : l’œil enchaîne les mots sans trous.',
+        },
+      ],
+      answer: 'ragged',
+      explanation: `La justification répartit l’espace restant de chaque ligne **entre les mots**. Dans une colonne étroite, il y a peu de mots par ligne : les espaces gonflent de façon irrégulière et forment des **rivières** blanches verticales. Le détecteur d’impeccable le signale (*justified text*).
+
+Aligne à gauche (\`text-align: start\`, qui suit aussi le sens d’écriture), élargis la mesure, ou, si la justification est indispensable, active la césure avec \`hyphens: auto\` et un attribut \`lang\` correct. Les écritures qui justifient autrement (chinois, japonais, thaï, arabe) ne sont pas concernées.`,
+      takeaway: 'Colonne étroite : aligne à gauche, ou justifie seulement avec `hyphens: auto` et la bonne langue.',
+      sources: ['imp:detector', 'butterick'],
+    },
+    {
+      id: 'typography-italic-serif-tf',
+      type: 'truefalse',
+      difficulty: 2,
+      prompt: 'Un grand titre en italique à empattements est toujours un cliché à éviter.',
+      answer: false,
+      explanation: `Pas toujours. Le détecteur d’impeccable signale le titre d’accueil en italique à empattements (type Fraunces, Playfair, Recoleta) parce qu’il est devenu **l’uniforme des pages d’accueil de startups générées par IA** : choisi par réflexe, il ne dit plus rien du produit.
+
+Mais impeccable précise aussi : **« jugez selon le contexte »**. Un magazine, une maison d’édition ou une marque au registre éditorial peuvent légitimement le vouloir — à condition que ce soit une décision qui découle du monde visuel choisi, pas un réflexe. Et une règle d’impeccable passe avant tout : **le brief gagne**.`,
+      takeaway: 'Ce qui est à refuser, c’est le réflexe : un titre italique à empattements doit découler d’un choix éditorial assumé.',
+      sources: ['imp:detector', 'imp:skill'],
+    },
+    {
+      id: 'typography-real-content-multi',
+      type: 'multi',
+      difficulty: 2,
+      prompt: 'Avant de valider la typographie d’un écran, quels tests font partie de la vérification recommandée ?',
+      options: [
+        { id: 'long', label: 'Un titre très long et un nom de 60 caractères', why: 'Les textes extrêmes révèlent débordements et coupures.' },
+        { id: 'translation', label: 'La version allemande (environ 30 % plus longue)', why: 'L’expansion des traductions casse les largeurs fixes.' },
+        { id: 'zoom', label: 'Le zoom du navigateur à 200 %', why: 'Le texte doit rester lisible et la mise en page tenir.' },
+        { id: 'fallback', label: 'La police de secours, si la police web ne charge pas', why: 'Un repli aux métriques proches évite les sauts de mise en page.' },
+        { id: 'lorem', label: 'Un lorem ipsum de longueur moyenne, pour juger l’équilibre', why: 'Le faux texte cache justement les cas qui posent problème : on teste avec le vrai contenu.' },
+        { id: 'one-size', label: 'Une seule largeur d’écran, celle de la maquette', why: 'Les retours à la ligne changent à chaque largeur : on vérifie à chaque point de rupture.' },
+      ],
+      answers: ['long', 'translation', 'zoom', 'fallback'],
+      explanation: `Impeccable demande de **vérifier la typographie avec le vrai texte, à chaque point de rupture** : titres longs, traductions plus longues, zoom, réglages de taille du système, absence d’une graisse, police de repli.
+
+Le faux texte et une seule largeur d’écran sont précisément ce qui fait passer les défauts inaperçus jusqu’à la mise en ligne.`,
+      takeaway: 'Teste la typo avec le vrai contenu, ses extrêmes, ses traductions, le zoom et la police de repli, à chaque largeur.',
+      sources: ['imp:typeset', 'imp:harden'],
+    },
   ],
 };
 
