@@ -43,6 +43,16 @@ const S = {
   },
   textEmphasis: { label: 'MDN — text-emphasis', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/text-emphasis' },
   wordBreak: { label: 'MDN — word-break', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/word-break' },
+  overflowWrap: { label: 'MDN — overflow-wrap', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/overflow-wrap' },
+  budoux: {
+    label: 'Google — BudouX, points de coupure entre groupes de mots (japonais, chinois)',
+    url: 'https://github.com/google/budoux',
+  },
+  nfUnit: {
+    label: 'MDN — Constructeur Intl.NumberFormat() (style unit)',
+    url: 'https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat',
+  },
+  usUnits: { label: 'Wikipédia — United States customary units', url: 'https://en.wikipedia.org/wiki/United_States_customary_units' },
   hyphens: { label: 'MDN — hyphens', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/hyphens' },
   bdi: { label: 'MDN — l’élément bdi', url: 'https://developer.mozilla.org/fr/docs/Web/HTML/Element/bdi' },
   normalize: {
@@ -108,7 +118,7 @@ const S = {
   },
   daraja: { label: 'Safaricom Daraja — API M-Pesa Express (STK push)', url: 'https://developer.safaricom.co.ke/' },
   idWallets: {
-    label: 'Fintech News Singapore — Worldpay Global Payments Report 2024 (portefeuilles en Asie)',
+    label: 'Fintech News Singapore — PPRO, 2021 Payment Almanac (janvier 2022)',
     url: 'https://fintechnews.sg/58718/e-commerce/china-india-and-indonesia-record-highest-digital-wallet-adoption-rates-across-apac/',
   },
   qris: {
@@ -127,6 +137,14 @@ const S = {
   koreaPass: {
     label: 'Korea JoongAng Daily — Mobile carriers make app registration easier with Pass',
     url: 'https://www.koreajoongangdaily.com/business/mobile-carriers-make-app-registration-easier-with-pass/11199798',
+  },
+  koreaPassSites: {
+    label: 'NewDaily — les trois opérateurs lancent un « portefeuille d’authentification » (2021, en coréen)',
+    url: 'https://biz.newdaily.co.kr/site/data/html/2021/09/15/2021091500017.amp.html',
+  },
+  wurtz: {
+    label: 'Würtz (2005) — Intercultural Communication on Web sites (contexte fort et contexte faible)',
+    url: 'https://doi.org/10.1111/j.1083-6101.2006.tb00313.x',
   },
   swish: { label: 'Wikipédia — Swish', url: 'https://en.wikipedia.org/wiki/Swish_(payment)' },
 } satisfies Record<string, SourceRef>;
@@ -157,6 +175,7 @@ const culture: ModuleContent = {
     S.marcusCourse,
     'hofstede',
     'hall',
+    S.wurtz,
     S.fischer,
     'palo-it:china',
     S.cnnic,
@@ -248,7 +267,7 @@ Marcus et Gould (2000) en ont tiré des hypothèses d’interface pour les cinq 
 
 - **Forte distance hiérarchique** : mettre en avant expertise, certifications et dirigeants ; accès guidé à l’information.
 - **Individualisme** : réussite personnelle, arguments tranchés. **Collectivisme** : le groupe, la tradition, des affirmations consensuelles.
-- **Orientation réussite** : maîtrise, exploration, compétition. À l’opposé : coopération, tâches rapides, esthétique.
+- **Orientation réussite** : maîtrise, exploration, compétition. À l’opposé : coopération et entraide, esthétique et valeurs fédératrices.
 - **Fort contrôle de l’incertitude** : rester simple, annoncer les conséquences d’une action, empêcher l’utilisateur de se perdre, doubler les repères (couleur, forme, texte).
 - **Orientation long terme** : valeur pratique, réseau de relations, patience.
 
@@ -256,7 +275,7 @@ Marcus et Gould (2000) en ont tiré des hypothèses d’interface pour les cinq 
 L’anthropologue Edward T. Hall oppose les cultures à **contexte fort**, où une grande part du sens passe par l’implicite, la relation et la situation (Japon, Chine, Corée, monde arabe), aux cultures à **contexte faible**, où le message doit tout dire explicitement (États-Unis, Allemagne, pays nordiques). La France se situe souvent entre les deux.
 
 ### Les limites
-- Ce sont des **moyennes nationales** : elles ne décrivent aucun individu. Une étude portant sur plus de 190 000 personnes (Fischer et Schwartz, 2011) trouve même plus de consensus que de désaccord entre pays sur les priorités de valeurs.
+- Ce sont des **moyennes nationales** : elles ne décrivent aucun individu. Une étude portant sur près de 170 000 personnes, issues de trois enquêtes internationales (Fischer et Schwartz, 2011), trouve même plus de consensus que de désaccord entre pays sur les priorités de valeurs.
 - Les données sont **anciennes** et régulièrement révisées (The Culture Factor publie des valeurs mises à jour).
 - Les prédictions **se contredisent** parfois : selon Marcus, un fort contrôle de l’incertitude appelle des écrans simples ; or le Japon (92) a certains des sites les plus denses au monde, précisément pour rassurer.
 - Le risque est de **plaquer un stéréotype**. Une grille sert à poser des questions ; seules la recherche et les tests avec des utilisateurs locaux y répondent.`,
@@ -397,7 +416,7 @@ La leçon n’est donc pas « chargé en Asie, épuré en Occident », mais : **
 - **Coupures** : pas d’espace entre les mots, on peut couper entre presque tous les caractères, mais jamais avant une ponctuation fermante (。、）」) — ce sont les règles de *kinsoku*, gérées par la propriété \`line-break\`.
 
 ### Coréen
-Le coréen **espace ses mots**. Par défaut, le navigateur le coupe pourtant entre deux syllabes, comme du chinois : ajoute \`word-break: keep-all\` pour ne couper qu’aux espaces — jamais sur du chinois ou du japonais, qui n’auraient presque plus de points de coupure.
+Le coréen **espace ses mots**. Par défaut, le navigateur le coupe pourtant entre deux syllabes, comme du chinois : ajoute \`word-break: keep-all\` pour ne couper qu’aux espaces, et \`overflow-wrap: anywhere\` pour qu’un mot plus large que sa colonne puisse quand même se couper. Jamais \`keep-all\` seul sur du chinois ou du japonais, qui n’auraient presque plus de points de coupure : il n’y sert qu’avec des points de coupure ajoutés entre les groupes de mots, comme le fait l’outil BudouX de Google.
 
 ### Arabe
 - Écriture **cursive** : les lettres se lient. Pas d’espacement des lettres (\`letter-spacing\`) — selon le navigateur et la police, il est ignoré ou il sépare des lettres qui doivent se lier —, ni capitales, ni italique au sens latin.
@@ -443,14 +462,14 @@ L’allemand est souvent **30 % plus long** que l’anglais, et ses mots compos�
     {
       id: 'rtl',
       title: 'Écrire de droite à gauche',
-      body: `L’arabe, l’hébreu, le persan ou l’ourdou s’écrivent de droite à gauche (*RTL*). Le texte n’est pas le seul à changer de sens : toute la mise en page se **miroite**, car l’œil part de la droite.
+      body: `L’arabe, l’hébreu, le persan ou l’ourdou s’écrivent de droite à gauche (*RTL*). Le texte n’est pas le seul à changer de sens : toute la mise en page se **met en miroir**, car l’œil part de la droite.
 
-### Ce qu’on miroite
+### Ce qu’on met en miroir
 - La mise en page : colonne principale, barre latérale, alignement du texte, ordre des onglets et des boutons.
 - Ce qui indique un sens de navigation : flèches retour et suivant, chevrons, carrousels, barres de progression des étapes, curseurs.
 - Les icônes qui montrent un mouvement ou une ligne de texte (envoyer, liste, retrait).
 
-### Ce qu’on ne miroite pas
+### Ce qu’on ne met pas en miroir
 - Les **commandes de lecture** (lecture, avance rapide) et la barre de progression d’une vidéo : elles suivent le sens de la bande, pas celui de l’écriture (Material Design).
 - Les **horloges** et les flèches circulaires qui tournent dans le sens des aiguilles d’une montre.
 - Les **coches**, les **logos**, les icônes symétriques, les **photos**.
@@ -461,7 +480,9 @@ L’allemand est souvent **30 % plus long** que l’anglais, et ses mots compos�
 - Écris l’espacement avec les **propriétés logiques** : \`margin-inline-start\`, \`padding-inline\`, \`inset-inline-end\`, \`border-inline-start\` plutôt que *left* et *right*.
 - Retourne les seules icônes directionnelles, par exemple avec \`[dir="rtl"] .icone-sens { transform: scaleX(-1); }\` — jamais la page entière.
 - **Isole les contenus de gauche à droite** insérés dans un texte arabe — numéros, e-mails, références, URL — avec \`<bdi>\`, \`dir="ltr"\`, ou \`dir="auto"\` sur les champs libres. Sinon, l’algorithme bidirectionnel d’Unicode réordonne leurs morceaux : c’est l’un des bugs RTL les plus fréquents.
-- Chiffres : \`Intl.NumberFormat('ar-SA')\` produit des chiffres arabes orientaux (١٢٣), \`ar-AE\` des chiffres occidentaux ; laisse la locale décider ou impose le système avec l’extension \`-u-nu-latn\`.`,
+- Chiffres : \`Intl.NumberFormat('ar-SA')\` produit des chiffres arabes orientaux (١٢٣), \`ar-AE\` des chiffres occidentaux ; laisse la locale décider ou impose le système avec l’extension \`-u-nu-latn\`.
+- Calendriers : choisis-le avec l’extension \`-u-ca-\` — \`ar-SA-u-ca-islamic-umalqura\` pour le calendrier hégirien officiel saoudien, \`ar-SA-u-ca-gregory\` pour le grégorien. \`fa-IR\` affiche d’office le calendrier solaire hégirien de l’Iran.
+- Persan et kurde : ne supprime jamais l’**antiliant sans chasse** (ZWNJ, U+200C), qui sépare les parties d’un mot composé sans couper le mot. Le persan écrit ی et ک là où l’arabe écrit ي et ك : garde la forme saisie, mais rends-les équivalentes dans la recherche.`,
       examples: [
         {
           title: 'Une liste de réglages en arabe',
@@ -485,7 +506,7 @@ L’allemand est souvent **30 % plus long** que l’anglais, et ses mots compos�
           },
           badNote: 'Texte arabe, mise en page restée de gauche à droite : l’œil part de la droite et ne trouve que des chevrons.',
           good: {
-            alt: 'Le même écran miroité : flèche retour pointant vers la droite en tête, icônes et textes à droite, chevrons pointant vers la gauche.',
+            alt: 'Le même écran mis en miroir : flèche retour pointant vers la droite en tête, icônes et textes à droite, chevrons pointant vers la gauche.',
             lang: 'ar',
             dir: 'rtl',
             css: `.set-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #e3e6ec;font-weight:700}
@@ -541,7 +562,7 @@ Ne formate jamais à la main : \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` (a
   <span class="mk-btn mk-btn--block">Continuer</span>
 </div>`,
           },
-          badNote: 'Deux champs imposés et une validation limitée à l’alphabet latin : le client chinois est refusé chez lui.',
+          badNote: 'Deux champs imposés et une validation limitée à l’alphabet latin : un client chinois ne peut même pas écrire son propre nom.',
           good: {
             lang: 'fr',
             alt: 'Formulaire avec un champ « Nom complet » rempli 王小明 et un champ « Comment devons-nous vous appeler ? » rempli 小明.',
@@ -621,9 +642,9 @@ Ces règles évoluent : vérifie-les avec un juriste local avant chaque lancemen
     { id: 'density', front: 'Pourquoi tant d’interfaces chinoises ou japonaises sont-elles denses ?', back: 'Écriture compacte, mobile d’abord et super-apps, besoin de contexte (*anshin* au Japon) — et modèle économique des portails. Dense ne veut pas dire désordonné.' },
     { id: 'stock', front: 'Quelle couleur pour une hausse en Bourse en Chine ? Et en Corée du Sud ?', back: 'Rouge en Chine (baisse en vert). En Corée du Sud, hausse rouge et baisse bleue. Double toujours la couleur d’un signe ou d’une flèche.' },
     { id: 'cjk-emphasis', front: 'Comment mettre en valeur un mot en chinois ou en japonais ?', back: 'Par la graisse, la couleur ou les points d’emphase (`text-emphasis`) ; jamais par l’italique, absent des polices CJK.' },
-    { id: 'keep-all', front: 'Comment éviter les mots coupés en coréen ?', back: '`word-break: keep-all` : les lignes ne se coupent qu’aux espaces. Jamais sur du chinois ou du japonais.' },
+    { id: 'keep-all', front: 'Comment éviter les mots coupés en coréen ?', back: '`word-break: keep-all` : les lignes ne se coupent qu’aux espaces (avec `overflow-wrap: anywhere` pour les mots trop larges). Jamais `keep-all` seul sur du chinois ou du japonais, qui n’ont pas d’espaces.' },
     { id: 'arabic', front: 'Peut-on espacer les lettres d’un texte arabe ?', back: 'Non : l’écriture est cursive, les lettres se lient. Donne plutôt un corps et un interlignage plus généreux.' },
-    { id: 'mirror', front: 'En RTL, que ne faut-il pas miroiter ?', back: 'Les commandes de lecture média, les horloges, les coches, les logos, les photos, les nombres et les numéros de téléphone.' },
+    { id: 'mirror', front: 'En RTL, que ne faut-il pas mettre en miroir ?', back: 'Les commandes de lecture média, les horloges, les coches, les logos, les photos, les nombres et les numéros de téléphone.' },
     { id: 'logical', front: 'Comment écrire un espacement qui marche en LTR comme en RTL ?', back: 'Avec les propriétés logiques (`margin-inline-start`, `padding-inline`, `inset-inline-end`) et `dir="rtl"` sur la racine.' },
     { id: 'bidi', front: 'Pourquoi un numéro de téléphone se mélange-t-il dans un texte arabe ?', back: 'L’algorithme bidirectionnel réordonne ses groupes de chiffres. Isole-le avec `<bdi>` ou `dir="ltr"`.' },
     { id: 'intl', front: 'Comment afficher dates, nombres et prix selon le marché ?', back: 'Avec `Intl` et la bonne locale : `en-IN` donne 1,00,000, `de-DE` 1.234,56 €, `zh-CN` en notation compacte 1.2万.' },
@@ -994,13 +1015,13 @@ On ne localise donc pas « en chinois », mais pour une **locale** : \`zh-CN\`, 
         {
           id: 'local',
           visual: {
-            alt: 'Formulaire d’inscription en japonais : nom de famille puis prénom, leur lecture en katakana, code postal avec un bouton « Rechercher l’adresse », puis préfecture et ville ; les champs obligatoires portent une étiquette rouge.',
+            alt: 'Formulaire d’inscription en japonais : nom de famille puis prénom, leur lecture en katakana, code postal avec un bouton « Rechercher l’adresse », puis préfecture et ville, numéro et immeuble ; les champs obligatoires portent une étiquette rouge.',
             frame: 'phone',
             lang: 'ja',
             css: `.jf{display:flex;flex-direction:column;gap:12px}
 .jf .mk-input{min-height:36px;padding:7px 10px}
 .jf-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.req{display:inline-block;margin-inline-start:6px;padding:1px 6px;border-radius:4px;background:#c92a2a;color:#fff;font-size:10px;font-weight:700;vertical-align:1px}
+.req{display:inline-block;margin-inline-start:6px;padding:1px 6px;border-radius:4px;background:#c92a2a;color:#fff;font-size:11px;font-weight:700;vertical-align:1px}
 .jf-zip{display:flex;gap:8px;align-items:center}
 .jf-zip .mk-input{flex:1}`,
             html: `<div class="jf mk-pad">
@@ -1008,7 +1029,8 @@ On ne localise donc pas « en chinois », mais pour une **locale** : \`zh-CN\`, 
   <div class="mk-field"><span class="mk-label">お名前<span class="req">必須</span></span><div class="jf-two"><span class="mk-input">山田</span><span class="mk-input">太郎</span></div></div>
   <div class="mk-field"><span class="mk-label">フリガナ<span class="req">必須</span></span><div class="jf-two"><span class="mk-input">ヤマダ</span><span class="mk-input">タロウ</span></div></div>
   <div class="mk-field"><span class="mk-label">郵便番号<span class="req">必須</span></span><div class="jf-zip"><span class="mk-input">530-0001</span><span class="mk-btn mk-btn--ghost mk-btn--s">住所を検索</span></div></div>
-  <div class="mk-field"><span class="mk-label">都道府県・市区町村</span><span class="mk-input">大阪府 大阪市北区梅田</span></div>
+  <div class="mk-field"><span class="mk-label">都道府県・市区町村<span class="req">必須</span></span><span class="mk-input">大阪府 大阪市北区梅田</span></div>
+  <div class="mk-field"><span class="mk-label">番地・建物名<span class="req">必須</span></span><span class="mk-input">1-2-3 梅田ビル 5階</span></div>
   <span class="mk-btn mk-btn--block">登録する</span>
 </div>`,
           },
@@ -1078,7 +1100,7 @@ Copier l’ordre occidental (rue d’abord, code postal à la fin) oblige l’ut
         { id: 'leading', label: 'Donner un interlignage généreux, autour de 1,7', why: 'Des caractères pleins et carrés demandent de l’air entre les lignes.' },
         { id: 'system', label: 'S’appuyer sur les polices système (Hiragino Sans, Yu Gothic, Noto Sans JP) ou des sous-ensembles', why: 'Une police japonaise complète couvre des milliers de caractères et pèse plusieurs mégaoctets.' },
         { id: 'italic', label: 'Mettre les termes importants en italique', why: 'Les polices japonaises n’ont pas d’italique : le navigateur fabrique un faux oblique peu lisible.' },
-        { id: 'keepall', label: 'Appliquer `word-break: keep-all` pour éviter de couper les mots', why: 'Sans espace entre les mots, keep-all ne laisserait couper qu’aux espaces et à la ponctuation : les lignes déborderaient. C’est un réglage pour le coréen.' },
+        { id: 'keepall', label: 'Appliquer `word-break: keep-all` pour éviter de couper les mots', why: 'Sans espace entre les mots, keep-all ne laisserait couper qu’aux espaces et à la ponctuation : les lignes déborderaient. Seul, c’est un réglage pour le coréen.' },
         { id: 'kinsoku', label: 'Laisser un « 。 » ou un « 、 » commencer une ligne quand la place manque', why: 'Les règles de kinsoku interdisent la ponctuation fermante en début de ligne.' },
       ],
       answers: ['weight', 'leading', 'system'],
@@ -1087,9 +1109,9 @@ Copier l’ordre occidental (rue d’abord, code postal à la fin) oblige l’ut
 - **Pas d’italique** : on souligne par la graisse, la couleur ou les points d’emphase (\`text-emphasis\`).
 - **Interlignage généreux**, autour de 1,7.
 - **Polices système** ou sous-ensembles : des milliers de caractères pèsent lourd.
-- **Coupures** : on peut couper entre presque tous les caractères, mais jamais avant une ponctuation fermante (。、）」) — ce sont les règles de *kinsoku*. \`word-break: keep-all\`, utile en coréen, supprimerait presque tous les points de coupure : les lignes déborderaient.`,
-      takeaway: 'Texte japonais : pas d’italique, interlignage généreux, polices système, règles de kinsoku — et jamais `keep-all`, réservé au coréen.',
-      sources: ['w3c:jlreq', S.textEmphasis, S.wordBreak, S.readium],
+- **Coupures** : on peut couper entre presque tous les caractères, mais jamais avant une ponctuation fermante (。、）」) — ce sont les règles de *kinsoku*. \`word-break: keep-all\` seul, utile en coréen, supprimerait presque tous les points de coupure : les lignes déborderaient. En japonais, il ne sert qu’avec des points de coupure ajoutés entre les groupes de mots, comme le fait l’outil BudouX de Google.`,
+      takeaway: 'Texte japonais : pas d’italique, interlignage généreux, polices système, règles de kinsoku — et jamais `keep-all` seul, qui supprimerait presque toutes les coupures.',
+      sources: ['w3c:jlreq', S.textEmphasis, S.wordBreak, S.readium, S.budoux],
     },
     /* ---------- Corée du Sud ---------- */
     {
