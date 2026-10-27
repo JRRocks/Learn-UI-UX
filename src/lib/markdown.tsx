@@ -14,7 +14,12 @@ export function frenchSpacing(text: string): string {
     .replace(/«[ \u00A0\u202F]?/g, '«\u202F')
     .replace(/[ \u00A0\u202F]?»/g, '\u202F»')
     // A numeric range (« 36–40 ») must not break after its dash.
-    .replace(/(\d)\u2013(?=\d)/g, '$1\u2013\u2060');
+    .replace(/(\d)\u2013(?=\d)/g, '$1\u2013\u2060')
+    // Keep numbers whole and attached to their unit: « 1 280 px », « 44 × 44 pt », « 18 h 30 ».
+    .replace(/(\d) (?=\d{3}(?!\d))/g, '$1\u00A0')
+    .replace(/(\d) × (?=\d)/g, '$1\u00A0×\u00A0')
+    .replace(/(\d) h (?=\d)/g, '$1\u00A0h\u00A0')
+    .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\p{L}\d]))/gu, '$1\u00A0');
 }
 
 const INLINE = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
