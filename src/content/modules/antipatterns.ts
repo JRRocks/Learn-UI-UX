@@ -784,30 +784,32 @@ Retirer seulement la forme de pastille ne suffit pas : il reste un sur-titre en 
       id: 'antipatterns-triage-order',
       type: 'order',
       difficulty: 2,
-      prompt: 'Range ces étapes du traitement d’un rapport du détecteur dans l’ordre.',
+      prompt: 'Range dans l’ordre les étapes de la revue d’une page avec le détecteur.',
       items: [
-        { id: 'errors', label: 'Corriger les erreurs : script cassé, contenu invisible au repos' },
-        { id: 'warnings', label: 'Réécrire les éléments signalés en avertissement' },
-        { id: 'advisories', label: 'Trancher les conseils selon la direction : corriger, ou consigner l’exception avec sa raison' },
-        { id: 'look', label: 'Examiner le rendu aux tailles utiles, puis relancer le détecteur' },
+        { id: 'blind', label: 'Juger soi-même le rendu : spécificité, hiérarchie, lisibilité' },
+        { id: 'errors', label: 'Lancer le détecteur et corriger en priorité les erreurs : script cassé, contenu invisible' },
+        { id: 'verify', label: 'Vérifier chaque autre résultat en contexte, et consigner les faux positifs' },
+        { id: 'fix', label: 'Corriger les vrais défauts, et trancher les conseils selon la direction' },
+        { id: 'look', label: 'Revoir le rendu corrigé aux tailles utiles, puis relancer le détecteur' },
       ],
-      explanation: `L’ordre suit la gravité :
+      explanation: `La démarche d’impeccable protège ton jugement du rapport :
 
-1. **Les erreurs** d’abord : une page cassée ou invisible fausse tout le reste du jugement.
-2. **Les avertissements** : on réécrit l’élément au lieu de l’adoucir.
-3. **Les conseils** : on vérifie s’ils contredisent la direction choisie. Un choix voulu (une ombre dure dans un univers néobrutaliste, une coupure de ligne délibérée) se consigne comme exception, avec la raison.
-4. **Le rendu** enfin, aux tailles réelles, puis un nouveau passage du détecteur : un rapport vide ne remplace jamais le regard.`,
-      takeaway: 'Erreurs, puis avertissements, puis conseils tranchés selon la direction, et toujours un dernier regard sur le rendu.',
-      sources: ['imp:detector', 'imp:layout'],
+1. **Ton propre examen d’abord** : le design est-il ancré dans ce produit, la hiérarchie suit-elle la tâche ? La critique d’impeccable l’exige avant tout résultat du détecteur, car même un rapport déterministe oriente le regard.
+2. **Les erreurs** : un script cassé ou un contenu invisible fausse tout le reste ; on les corrige avant de juger quoi que ce soit d’autre.
+3. **Chaque résultat, vérifié en contexte** : le quadrillage d’un éditeur de plans est un faux positif, qu’on consigne avec sa raison au lieu de le « corriger ».
+4. **Les corrections** : un cliché se réécrit, un défaut de qualité se règle, un conseil se tranche selon la direction choisie.
+5. **Le rendu corrigé**, aux tailles réelles, puis un nouveau passage : un rapport vide est un indice, pas une preuve.`,
+      takeaway: 'Juge le rendu avant d’ouvrir le rapport, vérifie chaque résultat en contexte avant de corriger, et finis par un nouveau regard sur le rendu.',
+      sources: ['imp:critique', 'imp:audit', 'imp:detector'],
     },
     {
       id: 'antipatterns-padding-slider',
       type: 'slider',
       difficulty: 1,
-      prompt: 'Règle la marge intérieure de cet encadré pour que le texte ne frotte plus la bordure.',
+      prompt: 'Règle la marge intérieure idéale de cet encadré : le texte ne doit ni frotter la bordure, ni flotter dans le cadre.',
       visual: {
         alt: 'Encadré bleu pâle bordé contenant une information sur le paiement en trois fois ; sa marge intérieure varie avec le curseur.',
-        html: `<div class="mk-pad"><div class="pad-box"><b>Paiement en trois fois</b> sans frais dès 150 € d’achat, avec ta carte bancaire. Les échéances sont prélevées à 30 et 60 jours.</div></div>`,
+        html: `<div class="mk-pad"><div class="pad-box"><b>Paiement en trois fois</b> sans frais dès 150&nbsp;€ d’achat, avec ta carte bancaire. Les échéances sont prélevées à 30 et 60&nbsp;jours.</div></div>`,
         css: `.pad-box { padding: var(--v, 2px); border: 1px solid #93c5fd; border-radius: 8px; background: #eff6ff; color: #1e3a8a; font-size: 14px; line-height: 1.5; }`,
       },
       control: 'Marge intérieure',
