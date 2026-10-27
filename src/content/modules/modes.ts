@@ -12,7 +12,7 @@ const LEDGER_COSTUME: Visual = {
     <p class="led-row"><span class="led-d">14 mars</span><span class="led-l">Location de la salle</span><span class="led-m">180,00</span></p>
     <p class="led-row"><span class="led-d">18 mars</span><span class="led-l">Subvention municipale</span><span class="led-m">1 200,00</span></p>
     <p class="led-row"><span class="led-d">21 mars</span><span class="led-l">Ballons de match (x12)</span><span class="led-m">96,50</span></p>
-    <p class="led-row led-row--total"><span class="led-d"></span><span class="led-l">Report à nouveau</span><span class="led-m">1 284,50</span></p>
+    <p class="led-row led-row--total"><span class="led-d"></span><span class="led-l">À reporter</span><span class="led-m">1 284,50</span></p>
   </div>
   <p class="led-turn">Page 3 sur 12 · tourner la page</p>
 </div>`,
@@ -37,7 +37,7 @@ const LEDGER_PRODUCT: Visual = {
   <div class="tre-bar"><strong>Trésorerie</strong><span>Basket Club de Vertou</span></div>
   <div class="tre-body">
     <div class="tre-head"><p class="tre-h">Mouvements de mars</p><span class="mk-btn mk-btn--s tre-add"><i data-icon="plus" style="--ico:14px"></i>Ajouter</span></div>
-    <div class="tre-filters"><span class="tre-select">Catégorie : toutes <i data-icon="chevron-down" style="--ico:14px"></i></span><span class="tre-chip tre-chip--on">Tout</span><span class="tre-chip">Recettes</span><span class="tre-chip">Dépenses</span></div>
+    <div class="tre-filters"><span class="tre-select">Catégorie&nbsp;: toutes <i data-icon="chevron-down" style="--ico:14px"></i></span><span class="tre-chip tre-chip--on">Tout</span><span class="tre-chip">Recettes</span><span class="tre-chip">Dépenses</span></div>
     <table class="tre-table">
       <thead><tr><th>Date</th><th>Libellé</th><th class="num">Montant <i data-icon="chevron-down" style="--ico:12px"></i></th></tr></thead>
       <tbody>
@@ -46,7 +46,7 @@ const LEDGER_PRODUCT: Visual = {
         <tr><td>18/03</td><td>Subvention municipale</td><td class="num pos">+1&#8239;200,00&nbsp;€</td></tr>
         <tr><td>21/03</td><td>Ballons de match</td><td class="num neg">−96,50&nbsp;€</td></tr>
       </tbody>
-      <tfoot><tr><td colspan="2">Solde au 31 mars</td><td class="num"><span class="tre-total">1&#8239;284,50&nbsp;€</span></td></tr></tfoot>
+      <tfoot><tr><td colspan="2">Solde au 31&nbsp;mars</td><td class="num"><span class="tre-total">1&#8239;284,50&nbsp;€</span></td></tr></tfoot>
     </table>
   </div>
 </div>`,
@@ -97,8 +97,8 @@ const CARE_FRAMED: Visual = {
   <div class="ard-page">
     <p class="ard-crumb">Entretien › Laine et cachemire</p>
     <p class="ard-h">Laver un pull en cachemire</p>
-    <p class="ard-body">Lavez-le à la main, dans une eau à 30 °C au plus, avec une lessive pour laine. Ne frottez pas : pressez l’eau à travers les fibres, puis rincez à la même température.</p>
-    <p class="ard-note"><strong>Séchage.</strong> À plat sur une serviette, loin d’une source de chaleur. Comptez 24 heures.</p>
+    <p class="ard-body">Lavez-le à la main, dans une eau à 30&nbsp;°C au plus, avec une lessive pour laine. Ne frottez pas&nbsp;: pressez l’eau à travers les fibres, puis rincez à la même température.</p>
+    <p class="ard-note"><strong>Séchage.</strong> À plat sur une serviette, loin d’une source de chaleur. Comptez 24&nbsp;heures.</p>
   </div>
 </div>`,
   css: `.ard { background: #f4efe7; color: #231f1c; }
@@ -132,36 +132,45 @@ const FERRY_POSTER: Visual = {
 .kfb-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 22px; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }`,
 };
 
-/** Même compagnie : la recherche de traversée dans le premier écran. */
+/** Même compagnie : le monde du billet de passage porte la recherche de traversée, dès le premier écran. */
 const FERRY_SEARCH: Visual = {
-  alt: 'Page d’accueil d’une compagnie de navettes maritimes avec, dans le premier écran, un formulaire Départ, Arrivée, Date, Passagers, un bouton « Voir les horaires » et le prochain départ.',
+  alt: 'Page d’accueil d’une compagnie de navettes maritimes : sur un fond bleu marine, le titre des lignes, puis un formulaire composé comme un billet de passage (Départ, Arrivée, Date, Passagers) dont le talon détachable porte le bouton « Voir les horaires », et le prochain départ.',
   frame: 'browser',
   html: `<div class="kfg">
   <div class="kfg-nav"><strong>Navettes Kerlan</strong><span>Horaires</span><span>Tarifs</span><span>Mon billet</span></div>
   <div class="kfg-hero">
     <p class="kfg-h">Quiberon – Belle-Île, Houat et Hoëdic</p>
-    <p class="kfg-p">Toute l’année, jusqu’à 10 départs par jour depuis Quiberon.</p>
-    <div class="kfg-form">
-      <span class="kfg-f"><small>Départ</small>Quiberon</span>
-      <span class="kfg-f"><small>Arrivée</small>Le Palais</span>
-      <span class="kfg-f"><small>Date</small>13 juin</span>
-      <span class="kfg-f"><small>Passagers</small>2 adultes</span>
-      <span class="mk-btn kfg-btn">Voir les horaires</span>
+    <p class="kfg-p">Toute l’année, jusqu’à 10&nbsp;départs par jour depuis Quiberon.</p>
+    <div class="kfg-ticket">
+      <p class="kfg-tt">Billet de passage</p>
+      <div class="kfg-form">
+        <span class="kfg-f"><small>Départ</small>Quiberon</span>
+        <span class="kfg-f"><small>Arrivée</small>Le Palais</span>
+        <span class="kfg-f"><small>Date</small>13&nbsp;juin</span>
+        <span class="kfg-f"><small>Passagers</small>2&nbsp;adultes</span>
+      </div>
+      <div class="kfg-stub"><span class="mk-btn kfg-btn">Voir les horaires</span></div>
     </div>
-    <p class="kfg-next"><i data-icon="clock" style="--ico:14px"></i> Prochain départ 14:15 · 23 places restantes</p>
+    <p class="kfg-next"><i data-icon="clock" style="--ico:14px"></i> Prochain départ 14:15 · 23&nbsp;places restantes</p>
   </div>
 </div>`,
-  css: `.kfg { color: #0d2f40; }
-.kfg-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 10px 16px; font-size: 13px; }
-.kfg-nav strong { margin-inline-end: auto; font-size: 14px; }
-.kfg-hero { padding: 18px 16px 18px; background: #e3f0f4; }
+  css: `.kfg { background: #0b3a55; color: #fff; }
+.kfg-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 10px 16px; font-size: 13px; color: #d3e5ee; border-bottom: 1px solid #2b5d78; }
+.kfg-nav strong { margin-inline-end: auto; font-size: 14px; color: #fff; }
+.kfg-hero { padding: 16px 16px 18px; }
 .kfg-h { font-size: 22px; line-height: 1.15; font-weight: 800; letter-spacing: -0.01em; }
-.kfg-p { margin-top: 4px; font-size: 13px; color: #31525f; }
-.kfg-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 6px; margin-top: 12px; padding: 8px; background: #fff; border-radius: 10px; box-shadow: 0 6px 16px rgb(13 47 64 / 0.14); }
-.kfg-f { display: flex; flex-direction: column; padding: 4px 8px; font-size: 13px; font-weight: 600; border-radius: 6px; background: #f3f7f9; }
+.kfg-p { margin-top: 4px; font-size: 13px; color: #c9dde7; }
+.kfg-ticket { position: relative; margin-top: 14px; border-radius: 10px; background: #fff; color: #0d2f40; }
+.kfg-tt { padding: 7px 12px; border-radius: 10px 10px 0 0; background: #f4c542; color: #3b2c00; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.kfg-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 6px; padding: 10px 12px 12px; }
+.kfg-f { display: flex; flex-direction: column; padding: 4px 8px; font-size: 13px; font-weight: 600; border: 1px solid #7c919c; border-radius: 6px; }
 .kfg-f small { font-size: 11px; font-weight: 500; color: #4b6470; }
-.kfg-btn { grid-column: 1 / -1; background: #0f4c6b; }
-.kfg-next { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; color: #31525f; }`,
+.kfg-stub { position: relative; padding: 12px; border-top: 2px dashed #9db3bf; }
+.kfg-stub::before, .kfg-stub::after { content: ""; position: absolute; top: -9px; width: 16px; height: 16px; border-radius: 50%; background: #0b3a55; }
+.kfg-stub::before { left: -8px; }
+.kfg-stub::after { right: -8px; }
+.kfg-btn { display: flex; width: 100%; background: #0b3a55; }
+.kfg-next { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; color: #c9dde7; }`,
 };
 
 /* ---------- Module ---------- */
@@ -172,7 +181,7 @@ const modes: ModuleContent = {
   category: 'fondations',
   summary:
     'Reconnaître le mode d’une surface (Persuader, Opérer, Lire, Expérience) d’après la réussite de son visiteur, et en déduire la dose d’ambition, ce que le monde visuel a le droit de toucher, et ce qu’un affinage doit préserver.',
-  minutes: 11,
+  minutes: 13,
   commands: ['shape'],
   sources: ['imp:skill', 'imp:mode-operate', 'imp:mode-persuade', 'imp:mode-read', 'imp:operate', 'imp:new-work', 'lawsofux'],
   sections: [
@@ -186,7 +195,7 @@ const modes: ModuleContent = {
 - **Lire** : le visiteur comprend quelque chose. Documentation, articles, guides, aide, journaux des modifications. On structure pour la compréhension, puis on rend la lecture assez agréable pour qu’on ait envie d’y rester.
 - **Expérience** : le visiteur est dans l’œuvre elle-même. Portfolios, galeries, vitrines. L’œuvre mène dès le premier écran ; l’interface s’efface.
 
-**L’ambition se dose selon le mode.** En Persuader et en Expérience, engagement total : un travail affirmé, distinct, qui a un point de vue. En Opérer et en Lire, l’ambition se voit dans la **précision et la retenue**, et les motifs que le visiteur connaît déjà méritent leur place. C’est la [loi de Jakob](https://lawsofux.com/jakobs-law/) : les gens passent l’essentiel de leur temps sur d’autres produits et s’attendent à ce que le tien fonctionne de la même façon.`,
+**L’ambition se dose selon le mode.** En Persuader et en Expérience, engagement total : un travail affirmé, distinct, qui a un point de vue. En Opérer et en Lire, l’ambition se voit dans la **précision et la retenue**, et les modèles d’interface que le visiteur connaît déjà méritent leur place. C’est la [loi de Jakob](https://lawsofux.com/jakobs-law/) : les gens passent l’essentiel de leur temps sur d’autres produits et s’attendent à ce que le tien fonctionne de la même façon.`,
     },
     {
       id: 'surface',
@@ -198,7 +207,7 @@ const modes: ModuleContent = {
 - sa documentation, son centre d’aide, son journal des modifications : **Lire**. L’index de la documentation relève lui aussi du mode Lire, pas du mode Persuader ;
 - la galerie des réalisations de ses clients : souvent **Expérience**.
 
-À l’inverse, une maison de couture très expressive publie aussi de la documentation : elle relève du mode **Lire**, et doit se lire comme une documentation.
+À l’inverse, la documentation d’une maison de couture très expressive relève du mode **Lire**, et doit se lire comme une documentation.
 
 ### Les questions qui changent le travail
 
@@ -216,15 +225,24 @@ Dans tous les cas : à quoi ressemble la réussite, ce qui doit rester intact, e
       title: 'Opérer : d’abord un vrai produit de sa catégorie',
       body: `Sur une surface Opérer, le visiteur vient faire un travail. Quelqu’un qui utilise ce genre d’outil doit **savoir où tout se trouve avant de remarquer l’univers visuel**.
 
-Le *monde* (l’univers visuel retenu pour le produit) ne prête que **quatre choses** : la typographie, la palette, la densité et **un geste signature**. Il ne fournit jamais la mise en page, le modèle de navigation ni les contrôles, qui restent ceux que le visiteur sait déjà utiliser : boutons, onglets, champs, listes, filtres, tableaux aux en-têtes triables. Des composants web standard sur le web, les contrôles natifs dans une app.
+Le *monde* (l’univers visuel retenu pour le produit) ne prête que **quatre choses** : la typographie, la palette, la densité et **un geste signature**. Il ne fournit jamais la mise en page, le modèle de navigation ni les contrôles, qui restent ceux que le visiteur sait déjà utiliser : boutons, onglets, champs, listes déroulantes, filtres, tableaux aux en-têtes triables. Des composants web standard sur le web, les contrôles natifs dans une app.
 
 - **Le costume.** Un monde tiré d’un outil ou d’un instrument (terminal, oscilloscope, tableau de commande, cockpit) revient comme un déguisement de cet outil : barre de touches de fonction, invite de commande, cadran d’instrument, papier réglé de registre à la place d’un tableau. Un écran qu’un ingénieur ne pourrait pas construire avec les composants standard est une image de l’outil, pas l’outil.
 - **Le geste signature se nomme concrètement** : l’état des services dessiné comme un plan de métro, un planning composé au rythme des colonnes d’un indicateur horaire. Un monde qui n’apparaît que comme un jeu de couleurs n’a pas encore trouvé son geste.
-- **La couleur travaille** : une coque assumée (rail ou en-tête coloré, fond teinté), les états, les séries de données, la sélection. Un écran gris avec une seule couleur d’accent, c’est le réglage par défaut de la catégorie sans sa finition, pas de la retenue.
+- **La couleur travaille** : une coque assumée (rail ou en-tête coloré, fond teinté), les états, les séries de données, la sélection. La stratégie par défaut d’un produit reste la *Retenue* (des neutres teintés par le monde et un seul accent), à condition que la couleur y garde ces travaux. Un écran gris neutre avec une seule couleur d’accent, c’est le réglage par défaut de la catégorie sans sa finition, pas de la retenue.
 
 ### Ce que la surface produit s’autorise
 
 Souvent une seule famille de caractères, une échelle fixe en rem au rapport serré (1,125 à 1,2), des transitions de 150 à 250 ms, tous les états des composants, des squelettes de chargement plutôt qu’un indicateur au milieu du contenu, des états vides qui enseignent l’interface. Et ce que les pages de marque ne peuvent pas se permettre : les polices système, les navigations standard (barre et menu latéral, fil d’Ariane, onglets, palette de commandes), la densité, la cohérence plutôt que la surprise.
+
+### … et ce qu’elle s’interdit
+
+- les polices d’affichage dans les libellés, les boutons et les données ;
+- les affordances standard réinventées pour le style : barres de défilement maison, contrôles de formulaire étranges, modales non standard ;
+- le mouvement décoratif, qui ne traduit aucun état ;
+- les couleurs lourdes ou les accents saturés sur des états inactifs ;
+- un vocabulaire de composants qui change d’un écran à l’autre ;
+- la modale comme premier réflexe, avant les solutions en ligne ou progressives.
 
 Le test : nom du produit masqué, l’écran se lit-il comme un produit de sa catégorie ? Le visiteur pourrait-il y faire sa tâche ? Est-il au moins aussi propre que le standard de la catégorie, et plus distinctif ?`,
       examples: [
@@ -249,7 +267,7 @@ Le test : nom du produit masqué, l’écran se lit-il comme un produit de sa ca
 
 Les mondes qui se transfèrent le mieux viennent des traditions éditoriales du public : ouvrages de référence, spécimens typographiques, indicateurs horaires, guides de terrain, manuels techniques, appareil critique des ouvrages savants, repères de navigation d’un journal.
 
-Double test. Le lecteur sait-il où il se trouve et où aller ensuite, et lit-il le corps sans effort ? Puis, nom masqué : cette documentation pourrait-elle être celle de n’importe quel produit ? Si oui, pousse le cadre plus loin dans le monde. Si la page se lit comme un objet du monde avant de se lire comme un document, le monde a atteint la colonne : ramène-le au cadre.`,
+Double test. Le lecteur sait-il où il se trouve et où aller ensuite, et lit-il le texte courant sans effort ? Puis, nom masqué : cette documentation pourrait-elle être celle de n’importe quel produit ? Si oui, pousse le cadre plus loin dans le monde. Si la page se lit comme un objet du monde avant de se lire comme un document, le monde a atteint la colonne : ramène-le au cadre.`,
       examples: [
         {
           title: 'Le guide d’entretien d’une maison de couture',
@@ -268,17 +286,27 @@ Double test. Le lecteur sait-il où il se trouve et où aller ensuite, et lit-il
 - **Le premier écran d’une page Persuader** rend l’offre compréhensible et désirable, expose **une action claire** et démontre quelque chose que **seul ce produit** peut prouver.
 - **L’action est celle de la catégorie, sous sa forme opérante** : la recherche trajet et dates d’une compagnie aérienne, les créneaux libres d’un cabinet médical, l’ajout au panier d’une boutique. Un lien décoratif qui pointe vers elle ailleurs ne compte pas.
 - **Le monde porte la page, il n’en fait pas un tableau.** Une façade, un rideau de fer ou un livre peuvent être ce sur quoi la page est construite ; un écran peint en entier comme une affiche, sans partie qui fonctionne, est une image du monde, pas son site. Les liens se lisent comme des liens, le texte comme du texte, l’action reste évidemment cliquable.
+- **La matière du monde couvre la page** : elle forme le fond et les grandes surfaces, et sa typographie compose les titres. Un monde réduit à un accent sur un gabarit neutre, c’est le défaut de la catégorie avec un autocollant.
 - **Deux pièges effacent la direction** : l’affiche peinte, et la page produit générique (un titre sur un sous-titre et un bouton, une rangée de cartes égales). Un héros scindé, texte d’un côté et produit de l’autre avec une rangée de badges dessous, reste le gabarit, quel que soit le monde qui le peint.
+- **On répare une affiche en faisant fonctionner ses parties là où le monde les a mises**, jamais en les rangeant dans une mise en page standard aux couleurs du monde.
 - **L’engagement est une profondeur, pas une dispersion** : un geste dominant, soutenu par la matière, la typographie et l’espacement ; le reste se tient tranquille. Plus chargé n’est pas plus audacieux.
 
-En **Expérience**, l’œuvre elle-même mène dès le premier écran et l’interface recule.`,
+En **Expérience**, l’œuvre elle-même mène dès le premier écran et l’interface recule.
+
+### Ce que le monde peut toucher, mode par mode
+
+- **Opérer** : la typographie, la palette, la densité et un geste signature. Sur un écran de travail, plus de monde, c’est un costume.
+- **Lire** : tout le cadre, jamais la colonne ni l’ordre de lecture. Un outil, un instrument ou une interface tirés du monde du public y reviennent aussi en costume : on n’en garde que typo, palette, densité et un geste.
+- **Persuader et Expérience** : la page entière. Un monde tiré d’un langage d’interface peut même y porter sa grammaire jusqu’à la navigation, aux contrôles et aux états, dans les conventions de la plateforme.
+
+Même logique pour choisir un monde. En Opérer et en Lire, on ne le tire jamais des outils et instruments que le public manipule ; en Persuader et en Expérience, ces outils font partie des pistes trop attendues, et on leur consacre une piste au plus.`,
       examples: [
         {
           title: 'L’action réelle dans le premier écran',
           bad: FERRY_POSTER,
           badNote: 'Une affiche et un lien décoratif : l’action (trouver une traversée) est ailleurs.',
           good: FERRY_SEARCH,
-          goodNote: 'La recherche de traversée fonctionne dès le premier écran, avec une preuve : le prochain départ.',
+          goodNote: 'Le monde du billet de passage porte la recherche de traversée, qui fonctionne dès le premier écran, avec une preuve : le prochain départ.',
         },
       ],
     },
@@ -287,14 +315,14 @@ En **Expérience**, l’œuvre elle-même mène dès le premier écran et l’in
       title: 'Le brief gagne ; affiner n’est pas refaire',
       body: `Quatre principes encadrent tout travail de conception chez impeccable.
 
-- **Le brief gagne.** Honore l’esthétique, l’époque, les matériaux, les polices et les palettes imposés par le brief, même quand ils déclenchent un avertissement de motif saturé du détecteur. Réorienter un brief clair vers ton propre goût est un échec.
+- **Le brief gagne.** Honore l’esthétique, l’époque, les matériaux, les polices et les palettes imposés par le brief, même quand le *détecteur* d’impeccable (l’outil qui analyse le code d’une interface pour y repérer défauts et clichés) les classe parmi les *motifs saturés* : des choix devenus clichés à force d’être produits par réflexe, comme un fond crème ou un titre en italique à empattements. Réorienter un brief clair vers ton propre goût est un échec.
 - **Affiner préserve ; refaire remplace.** Affiner garde l’identité en place, le comportement, les textes et tout ce qui sort du périmètre ; demande avant de remplacer un texte factuel ou d’ajouter une affirmation. Refaire garde la vérité du produit, le contenu, les fonctions, les affordances natives et les contraintes, mais traite l’ancien look comme une preuve et un anti-modèle : on choisit un monde de remplacement. Ne coupe jamais la poire en deux en polissant l’apparence qu’on abandonne.
 - **L’autorité visuelle est une preuve, pas un nom de fichier.** L’absence de DESIGN.md ne fait pas d’un projet une page blanche : une identité cohérente déjà présente dans le code (tokens, composants, visuels) s’hérite et se documente.
 - **Les symboles chargés restent hors du décor.** Le monde d’un sujet n’autorise pas les emblèmes liés au militarisme, au suprémacisme ou aux mouvements de haine comme motifs, badges ou ornements : les rayons du drapeau du Soleil levant, le drapeau de bataille confédéré, les insignes de l’ère nazie et leurs variantes stylisées. Prends les formes neutres de ce monde. Un contenu qui documente un tel symbole comme un fait le montre tel qu’il est.
 
 ### La bonne dose d’invention
 
-D’abord, décide de ce qui est déjà vrai : refonte (on remplace le monde), monde établi (on en hérite), marque incomplète (on préserve l’acquis et on l’étend avec l’utilisateur), aucune autorité visuelle (on crée un monde avec l’utilisateur). Puis :
+D’abord, décide de ce qui est déjà vrai : refonte (on remplace le monde), monde établi (on en hérite), marque incomplète (on préserve l’acquis et on l’étend avec le client), aucune autorité visuelle (on crée un monde avec le client). Puis :
 
 - **Étendre une surface existante** : on hérite de son monde et de sa composition, et on ne résout que le nouveau besoin, le contenu, la hiérarchie, les états, l’interaction et la jonction avec l’existant.
 - **Créer une surface entière dans un monde établi** : le système visuel reste fixe ; on explore cinq à sept structures nettement différentes, tirées du contenu, de la tâche et des comportements.
@@ -306,10 +334,10 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
   rules: [
     { id: 'success', front: 'Que nomme le mode d’une surface ?', back: 'La réussite du visiteur : décider et agir (Persuader), accomplir une tâche (Opérer), comprendre (Lire), être dans l’œuvre (Expérience).' },
     { id: 'surface', front: 'Sur quoi se choisit le mode ?', back: 'Sur la surface, pas sur le produit : la page d’accueil d’un outil relève du mode Persuader, la documentation d’une maison de mode du mode Lire.' },
-    { id: 'ambition', front: 'Comment l’ambition varie-t-elle selon le mode ?', back: 'Engagement total en Persuader et Expérience ; précision et retenue en Opérer et Lire, où les motifs connus méritent leur place.' },
+    { id: 'ambition', front: 'Comment l’ambition varie-t-elle selon le mode ?', back: 'Engagement total en Persuader et Expérience ; précision et retenue en Opérer et Lire, où les modèles d’interface connus méritent leur place.' },
     { id: 'four', front: 'En mode Opérer, que peut prêter l’univers visuel ?', back: 'Quatre choses : typographie, palette, densité, un geste signature. Jamais la mise en page, la navigation ni les contrôles.' },
     { id: 'costume', front: 'Qu’est-ce qu’un « costume » sur un écran de travail ?', back: 'L’interface d’un outil du monde rejouée à l’écran : touches de fonction, invite de commande, cadran, papier de registre. On n’en garde que typo, palette, densité et un geste.' },
-    { id: 'grey', front: 'Un écran gris avec une seule couleur d’accent, est-ce de la retenue ?', back: 'Non : c’est le défaut de la catégorie sans sa finition. La couleur travaille : coque, états, séries de données, sélection.' },
+    { id: 'grey', front: 'Un écran gris avec une seule couleur d’accent, est-ce de la retenue ?', back: 'Non : c’est le défaut de la catégorie sans sa finition. La Retenue, ce sont des neutres teintés par le monde et un accent, et la couleur y travaille : coque, états, séries de données, sélection.' },
     { id: 'frame', front: 'En mode Lire, où le monde s’exprime-t-il ?', back: 'Dans le cadre : en-tête, rail, fond, ouvertures, code, tableaux, encadrés. La colonne reste calme : police de lecture, vrai contraste, 60 à 75 caractères.' },
     { id: 'action', front: 'Quelle action le premier écran d’une page Persuader doit-il montrer ?', back: 'Celle de la catégorie, sous sa forme opérante : recherche trajet et dates, créneaux libres, ajout au panier. Un lien décoratif ne compte pas.' },
     { id: 'traps', front: 'Quels sont les deux pièges d’une page Persuader ?', back: 'L’affiche peinte sans partie qui fonctionne, et la page générique : titre, sous-titre, bouton, rangée de cartes égales.' },
@@ -330,14 +358,14 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
       pairs: [
         { id: 'landing', left: 'La page d’accueil de Facturo, un logiciel de facturation', right: 'Persuader' },
         { id: 'settings', left: 'L’écran « Moyens de paiement » dans l’application Facturo', right: 'Opérer' },
-        { id: 'care', left: 'Le guide d’entretien des vêtements de la maison de couture Ardent', right: 'Lire' },
+        { id: 'docs', left: 'L’index de la documentation de Facturo', right: 'Lire' },
         { id: 'portfolio', left: 'Le portfolio en ligne d’une photographe de paysage', right: 'Expérience' },
       ],
       explanation: `Le mode se choisit **d’après la surface**, pas d’après le produit ni la marque :
 
 - La page d’accueil d’un outil relève du mode **Persuader** : le visiteur doit décider d’essayer ou d’acheter.
 - L’écran de réglage relève du mode **Opérer** : on y accomplit une tâche.
-- Le guide d’une maison de couture, aussi expressive soit-elle, relève du mode **Lire** : le visiteur veut savoir comment laver un pull en cachemire.
+- L’index de la documentation relève du mode **Lire**, pas du mode Persuader : le visiteur y cherche par où commencer et où trouver sa réponse.
 - Le portfolio relève du mode **Expérience** : les photographies mènent, l’interface s’efface.`,
       takeaway: 'Choisis le mode d’après la surface et la réussite de son visiteur, pas d’après le produit ou la marque.',
       sources: ['imp:skill'],
@@ -351,9 +379,9 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
       prompt: 'Quel mode s’applique à cette page ?',
       options: [
         { id: 'persuade', label: 'Persuader : le visiteur doit décider d’essayer ou d’acheter.', why: 'La page d’accueil d’un outil est une surface de décision : le design y est le produit.' },
-        { id: 'operate', label: 'Opérer : le produit est un outil de travail.', why: 'Le mode ne s’hérite pas du produit. L’application relève du mode Opérer, pas sa page d’accueil.' },
-        { id: 'read', label: 'Lire : la page doit surtout expliquer le fonctionnement.', why: 'Expliquer sert ici la décision ; c’est la documentation de Relevé qui relèverait du mode Lire.' },
-        { id: 'experience', label: 'Expérience : il faut faire vivre l’univers du chantier.', why: 'L’Expérience concerne les surfaces où l’œuvre mène (portfolio, galerie), pas une page qui doit convaincre.' },
+        { id: 'operate', label: 'Opérer : le visiteur vient gérer ses chantiers.', why: 'Le mode ne s’hérite pas du produit : on gère ses chantiers dans l’application, qui relève du mode Opérer. Sa page d’accueil s’adresse à qui doit encore décider.' },
+        { id: 'read', label: 'Lire : le visiteur vient comprendre le fonctionnement.', why: 'Comprendre sert ici la décision ; c’est la documentation de Relevé qui relèverait du mode Lire.' },
+        { id: 'experience', label: 'Expérience : le visiteur vient découvrir l’univers du chantier.', why: 'L’Expérience concerne les surfaces où l’œuvre mène (portfolio, galerie), pas une page qui doit convaincre.' },
       ],
       answer: 'persuade',
       explanation: `impeccable est explicite : on choisit le mode **d’après la surface demandée, pas d’après le produit**. La page d’accueil d’un outil relève du mode Persuader ; l’index de sa documentation, du mode Lire ; l’application elle-même, du mode Opérer.
@@ -399,12 +427,12 @@ Concrètement, cette page doit rendre l’offre compréhensible et désirable, e
         {
           id: 'slots',
           visual: {
-            alt: 'Premier écran avec le titre « Kinésithérapie à Lyon 6e », les conditions (conventionné, carte Vitale) et quatre boutons de créneaux libres, de « Aujourd’hui 18:15 » à « Jeudi 17:00 ».',
+            alt: 'Premier écran avec le titre « Kinésithérapie à Lyon 6e », les conditions (conventionné, carte Vitale) et quatre boutons de créneaux libres, d’« Aujourd’hui 18:15 » à « Jeudi 17:00 ».',
             frame: 'browser',
             html: `<div class="kin">
   <div class="kin-nav"><strong>Kiné du Parc</strong><span>12 rue Duquesne, Lyon 6e</span></div>
   <div class="kin-main">
-    <p class="kin-h">Kinésithérapie à Lyon 6e : rééducation, sport, dos</p>
+    <p class="kin-h">Kinésithérapie à Lyon 6e&nbsp;: rééducation, sport, dos</p>
     <p class="kin-p">Conventionné · carte Vitale acceptée · accès de plain-pied</p>
     <p class="kin-lbl">Prochains créneaux disponibles</p>
     <div class="kin-slots"><span class="kin-slot">Aujourd’hui<b>18:15</b></span><span class="kin-slot">Demain<b>08:30</b></span><span class="kin-slot">Demain<b>12:45</b></span><span class="kin-slot">Jeudi<b>17:00</b></span></div>
@@ -466,18 +494,18 @@ base-clients   OK       38 ms</pre>
         {
           id: 'product',
           visual: {
-            alt: 'Écran de supervision avec un en-tête graphite à onglets, un filtre de région, un champ de recherche et un tableau trié par latence avec des pastilles d’état « Dégradé » et « Normal ».',
+            alt: 'Écran de supervision avec un en-tête graphite à onglets, un filtre de région, un champ de recherche et un tableau trié par latence : pastilles d’état « Dégradé » et « Normal », et pour chaque service un petit histogramme de la latence récente.',
             html: `<div class="ond">
   <div class="ond-top"><strong class="ond-brand">Ondine</strong><div class="ond-tabs"><span class="on">Services</span><span>Incidents</span><span>Déploiements</span></div></div>
   <div class="ond-body">
-    <div class="ond-tools"><span class="ond-select">Région : Paris-1 <i data-icon="chevron-down" style="--ico:14px"></i></span><span class="ond-search"><i data-icon="search" style="--ico:14px"></i>Filtrer les services</span></div>
+    <div class="ond-tools"><span class="ond-select">Région&nbsp;: Paris-1 <i data-icon="chevron-down" style="--ico:14px"></i></span><span class="ond-search"><i data-icon="search" style="--ico:14px"></i>Filtrer les services</span></div>
     <table class="ond-table">
       <thead><tr><th>Service</th><th>État</th><th class="num">Latence p95 (ms) <i data-icon="chevron-down" style="--ico:12px"></i></th></tr></thead>
       <tbody>
-        <tr><td class="mono">auth</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num mono">1&#8239;840</td></tr>
-        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Normal</span></td><td class="num mono">212</td></tr>
-        <tr><td class="mono">file-emails</td><td><span class="ond-st">Normal</span></td><td class="num mono">95</td></tr>
-        <tr><td class="mono">base-clients</td><td><span class="ond-st">Normal</span></td><td class="num mono">38</td></tr>
+        <tr><td class="mono">auth</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num"><span class="ond-lat"><span class="ond-spark ond-spark--warn"><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:9px"></span><span style="height:12px"></span><span style="height:12px"></span></span><span class="mono">1&#8239;840</span></span></td></tr>
+        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Normal</span></td><td class="num"><span class="ond-lat"><span class="ond-spark"><span style="height:5px"></span><span style="height:6px"></span><span style="height:5px"></span><span style="height:7px"></span><span style="height:6px"></span><span style="height:5px"></span><span style="height:6px"></span><span style="height:5px"></span></span><span class="mono">212</span></span></td></tr>
+        <tr><td class="mono">file-emails</td><td><span class="ond-st">Normal</span></td><td class="num"><span class="ond-lat"><span class="ond-spark"><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span></span><span class="mono">95</span></span></td></tr>
+        <tr><td class="mono">base-clients</td><td><span class="ond-st">Normal</span></td><td class="num"><span class="ond-lat"><span class="ond-spark"><span style="height:2px"></span><span style="height:2px"></span><span style="height:3px"></span><span style="height:2px"></span><span style="height:2px"></span><span style="height:3px"></span><span style="height:2px"></span><span style="height:2px"></span></span><span class="mono">38</span></span></td></tr>
       </tbody>
     </table>
   </div>
@@ -498,9 +526,13 @@ base-clients   OK       38 ms</pre>
 .ond-table .num { text-align: end; }
 .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
 .ond-st { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e3f4e8; color: #1d6b3c; }
-.ond-st--warn { background: #fdf0d5; color: #7a4b00; }`,
+.ond-st--warn { background: #fdf0d5; color: #7a4b00; }
+.ond-lat { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 3px 8px; }
+.ond-spark { display: inline-flex; align-items: flex-end; gap: 1px; height: 12px; }
+.ond-spark > span { width: 3px; background: #2a8a4f; }
+.ond-spark--warn > span:nth-last-child(-n+3) { background: #b7791f; }`,
           },
-          why: 'Onglets, filtres et tableau triable sont des contrôles standard ; le monde n’apporte que la palette graphite et verte, la densité et le monospace des valeurs.',
+          why: 'Onglets, filtres et tableau triable sont des contrôles standard ; le monde prête la palette graphite et verte, la densité, le monospace des valeurs et un geste : la latence récente en barres serrées, comme un graphique en caractères de terminal.',
         },
       ],
       answer: 'product',
@@ -520,11 +552,11 @@ Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockp
         {
           id: 'invaded',
           visual: {
-            alt: 'Page bleu nuit quadrillée comme une carte, tout en monospace, titre en capitales espacées, une rose des vents à la place de la navigation et la requête mêlée au texte.',
+            alt: 'Page bleu nuit quadrillée comme une carte, tout en monospace, titre en capitales espacées, une rose des vents avec quatre caps libellés et la requête écrite dans le paragraphe.',
             html: `<div class="alb">
-  <div class="alb-rose"><svg viewBox="0 0 40 40" width="38" height="38" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="#8fb8d8" stroke-width="1"/><path d="M20 3 L23 20 L20 37 L17 20 Z" fill="#8fb8d8"/><path d="M3 20 L20 17 L37 20 L20 23 Z" fill="none" stroke="#8fb8d8"/></svg><span>Choisissez un cap :<br>N Démarrer · E Houle · S Vent · O Marées</span></div>
+  <div class="alb-rose"><svg viewBox="0 0 40 40" width="38" height="38" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="#8fb8d8" stroke-width="1"/><path d="M20 3 L23 20 L20 37 L17 20 Z" fill="#8fb8d8"/><path d="M3 20 L20 17 L37 20 L20 23 Z" fill="none" stroke="#8fb8d8"/></svg><span>Choisissez un cap&nbsp;:<br>N Démarrer · E Houle · S Vent · O Marées</span></div>
   <p class="alb-h">PRÉVISIONS DE HOULE</p>
-  <p class="alb-p">Le point d’accès renvoie la hauteur significative, la période et la direction de la houle pour une position donnée, par pas de trois heures, sur sept jours. Requête : GET /v1/houle?lat=47.29&amp;lon=-2.51</p>
+  <p class="alb-p">Le point d’accès renvoie la hauteur significative, la période et la direction de la houle pour une position donnée, par pas de trois heures, sur sept jours. Requête&nbsp;: GET /v1/houle?lat=47.29&amp;lon=-2.51</p>
 </div>`,
             css: `.alb { padding: 16px; color: #8fb8d8; background-color: #0b2236; background-image: linear-gradient(rgb(143 184 216 / 0.16) 1px, transparent 1px), linear-gradient(90deg, rgb(143 184 216 / 0.16) 1px, transparent 1px); background-size: 22px 22px; font: 13px/1.55 "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; }
 .alb-rose { display: flex; align-items: center; gap: 10px; font-size: 11px; }
@@ -537,9 +569,9 @@ Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockp
         {
           id: 'framed',
           visual: {
-            alt: 'Page avec un en-tête bleu nuit quadrillé finement, un rail de navigation où « Houle » est sélectionné, un fil d’Ariane, un titre, un paragraphe en police de lecture et un bloc de code bleu nuit.',
+            alt: 'Page avec un en-tête bleu nuit traversé de courbes de profondeur et bordé d’une graduation claire et sombre, un rail de navigation où « Houle » est sélectionné, un fil d’Ariane, un titre, un paragraphe en linéale et un bloc de code bleu nuit.',
             html: `<div class="alz">
-  <div class="alz-mast"><strong>Alizé</strong><span>API · v1</span></div>
+  <div class="alz-mast"><svg class="alz-iso" viewBox="0 0 320 48" preserveAspectRatio="none" aria-hidden="true"><path d="M0 42 C60 42 100 32 160 28 S250 38 280 42 S312 43 320 43"/><path d="M0 47 C60 47 100 38 160 35 S250 42 280 46 S312 47 320 47"/></svg><strong>Alizé</strong><span>API · v1</span></div>
   <div class="alz-grid">
     <nav class="alz-rail"><span>Démarrer</span><span>Authentification</span><span class="on">Houle</span><span>Vent</span><span>Marées</span></nav>
     <div class="alz-col">
@@ -551,7 +583,11 @@ Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockp
   </div>
 </div>`,
             css: `.alz { background: #fff; color: #1c2733; container-type: inline-size; }
-.alz-mast { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 16px; color: #e8f0f6; background-color: #0b2236; background-image: linear-gradient(rgb(143 184 216 / 0.3) 1px, transparent 1px), linear-gradient(90deg, rgb(143 184 216 / 0.3) 1px, transparent 1px); background-size: 18px 18px; }
+.alz-mast { position: relative; display: flex; justify-content: space-between; align-items: baseline; padding: 12px 16px 18px; color: #e8f0f6; background: #0b2236; }
+.alz-mast::after { content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 6px; border-block: 1px solid #c9dbe8; background: repeating-linear-gradient(90deg, #c9dbe8 0 12px, #0b2236 12px 24px); }
+.alz-iso { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 6px); fill: none; stroke: #8fb8d8; stroke-width: 1; opacity: .5; }
+.alz-iso path { vector-effect: non-scaling-stroke; }
+.alz-mast strong, .alz-mast span { position: relative; }
 .alz-mast strong { font-size: 16px; letter-spacing: .04em; }
 .alz-mast span { font-size: 12px; }
 .alz-grid { display: grid; grid-template-columns: minmax(96px, 120px) minmax(0, 1fr); }
@@ -569,11 +605,11 @@ Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockp
   .alz-rail { flex-direction: row; flex-wrap: wrap; }
 }`,
           },
-          why: 'La carte marine reste dans l’en-tête et le bloc de code ; la colonne garde une police de lecture, un vrai contraste et une navigation standard.',
+          why: 'La carte marine tient l’en-tête (courbes de profondeur, graduation de bordure) et le bloc de code ; la colonne garde une police de lecture, un vrai contraste et une navigation standard.',
         },
       ],
       answer: 'framed',
-      explanation: `En mode Lire, **le monde possède le cadre et sert la colonne**. L’en-tête, le rail, le fond, les ouvertures de section et la façon de composer le code portent la palette et le geste signature. La colonne de lecture, elle, reste calme : police de lecture, vrai contraste, vraie mesure (environ 60 à 75 caractères, corps proche de 16 px), rien qui s’agite derrière le texte.
+      explanation: `En mode Lire, **le monde possède le cadre et sert la colonne**. L’en-tête, le rail, le fond, les ouvertures de section et la façon de composer le code portent la palette et le geste signature. La colonne de lecture, elle, reste calme : police de lecture, vrai contraste, rien qui s’agite derrière le texte. À taille réelle, elle tient aussi une vraie mesure (environ 60 à 75 caractères, corps proche de 16 px).
 
 Le monospace est réservé au code, aux paramètres et aux petits libellés. Quand le quadrillage, le monospace et une navigation « boussole » envahissent la colonne, la page se lit comme un objet du monde avant de se lire comme une documentation : il faut ramener le monde au cadre.`,
       takeaway: 'En Lire, engage le monde dans le cadre (en-tête, rail, code) et garde la colonne de lecture calme.',
@@ -585,7 +621,7 @@ Le monospace est réservé au code, aux paramètres et aux petits libellés. Qua
       difficulty: 3,
       context:
         'Page d’accueil du Fournil Lebrun, une boulangerie qui prend désormais les commandes en ligne pour le week-end. Le monde retenu : la devanture de la boutique.',
-      prompt: 'Quelle page évite à la fois l’affiche peinte et le gabarit générique ?',
+      prompt: 'Quelle page d’accueil sert le mieux le Fournil, dans le monde retenu ?',
       options: [
         {
           id: 'poster',
@@ -616,39 +652,44 @@ Le monospace est réservé au code, aux paramètres et aux petits libellés. Qua
         {
           id: 'template',
           visual: {
-            alt: 'Page blanche avec un titre centré « Le goût de l’authentique », un sous-titre, un bouton « Découvrir » et trois cartes identiques à icône : Pains, Viennoiseries, Pâtisseries.',
+            alt: 'Page brun bois sous un store rayé : titre doré centré « Le goût de l’authentique », un sous-titre, un bouton rouge « Découvrir » et trois cartes identiques à icône, encadrées de bois : Pains, Brioches, Gâteaux.',
             html: `<div class="tpl">
-  <p class="tpl-h">Le goût de l’authentique</p>
-  <p class="tpl-p">Des produits frais, faits maison, chaque jour.</p>
-  <span class="mk-btn tpl-btn">Découvrir</span>
-  <div class="tpl-cards">
-    <div class="tpl-card"><span class="tpl-ico"><i data-icon="sprout" style="--ico:16px"></i></span><b>Pains</b><span>Cuits chaque matin.</span></div>
-    <div class="tpl-card"><span class="tpl-ico"><i data-icon="coffee" style="--ico:16px"></i></span><b>Viennoiseries</b><span>Pur beurre.</span></div>
-    <div class="tpl-card"><span class="tpl-ico"><i data-icon="gift" style="--ico:16px"></i></span><b>Pâtisseries</b><span>Faites maison.</span></div>
+  <div class="tpl-awning"></div>
+  <div class="tpl-body">
+    <p class="tpl-h">Le goût de l’authentique</p>
+    <p class="tpl-p">Des produits frais, faits maison, chaque jour.</p>
+    <span class="mk-btn tpl-btn">Découvrir</span>
+    <div class="tpl-cards">
+      <div class="tpl-card"><span class="tpl-ico"><i data-icon="sprout" style="--ico:16px"></i></span><b>Pains</b><span>Cuits chaque matin.</span></div>
+      <div class="tpl-card"><span class="tpl-ico"><i data-icon="coffee" style="--ico:16px"></i></span><b>Brioches</b><span>Pur beurre.</span></div>
+      <div class="tpl-card"><span class="tpl-ico"><i data-icon="gift" style="--ico:16px"></i></span><b>Gâteaux</b><span>Faits maison.</span></div>
+    </div>
   </div>
 </div>`,
-            css: `.tpl { padding: 22px 16px; text-align: center; background: #fff; }
-.tpl-h { font-size: 23px; font-weight: 800; letter-spacing: -0.01em; }
-.tpl-p { margin-top: 4px; font-size: 13px; color: #5a6172; }
-.tpl-btn { margin-top: 12px; }
-.tpl-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
-.tpl-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 12px; color: #5a6172; }
-.tpl-card b { color: #1d2230; font-size: 13px; }
-.tpl-ico { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: #eef2ff; color: #4f46e5; }`,
+            css: `.tpl { text-align: center; background: #6b3f2a; }
+.tpl-awning { height: 12px; background: repeating-linear-gradient(90deg, #f3e7d3 0 18px, #9e2b25 18px 36px); }
+.tpl-body { padding: 20px 14px 18px; }
+.tpl-h { font: 700 23px/1.2 Georgia, "Liberation Serif", serif; color: #f0c86a; }
+.tpl-p { margin-top: 6px; font-size: 13px; color: #f3e7d3; }
+.tpl-btn { margin-top: 12px; background: #9e2b25; }
+.tpl-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 18px; }
+.tpl-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; background: #fbf6ec; border: 3px solid #3d2418; font-size: 12px; color: #6b5a48; }
+.tpl-card b { color: #2d1b12; font-size: 13px; }
+.tpl-ico { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #2d1b12; color: #f0c86a; }`,
           },
-          why: 'Titre centré, sous-titre, bouton et rangée de cartes égales : c’est le gabarit de la catégorie, quel que soit le décor qu’on y pose.',
+          why: 'Titre centré, sous-titre, bouton et rangée de cartes égales : même peint aux couleurs de la devanture, c’est le gabarit de la catégorie.',
         },
         {
           id: 'carried',
           visual: {
-            alt: 'Page construite sur la devanture : un store rayé fin, l’enseigne qui porte le nom et trois liens soulignés, puis une vitrine encadrée de bois avec un formulaire de réservation de pain et un bouton « Réserver pour samedi ».',
+            alt: 'Page avec un store rayé fin, une enseigne portant le nom et trois liens soulignés, puis une vitrine encadrée de bois avec un formulaire de réservation de pain et un bouton « Réserver pour samedi ».',
             html: `<div class="flc">
   <div class="flc-awning"></div>
   <div class="flc-sign"><strong>Fournil Lebrun</strong><nav><span>Nos pains</span><span>Commander</span><span>Horaires</span></nav></div>
   <div class="flc-window">
     <p class="flc-h">Réservez votre pain pour samedi</p>
-    <div class="flc-item"><span>Miche au levain, 1 kg</span><b>6,40&nbsp;€</b></div>
-    <div class="flc-row"><span class="flc-qty"><i data-icon="minus" style="--ico:14px"></i><b>1</b><i data-icon="plus" style="--ico:14px"></i></span><span class="flc-sel">Retrait samedi, 8 h – 13 h <i data-icon="chevron-down" style="--ico:14px"></i></span></div>
+    <div class="flc-item"><span>Miche au levain, 1&nbsp;kg</span><b>6,40&nbsp;€</b></div>
+    <div class="flc-row"><span class="flc-qty"><i data-icon="minus" style="--ico:14px"></i><b>1</b><i data-icon="plus" style="--ico:14px"></i></span><span class="flc-sel">Retrait samedi, 8&nbsp;h – 13&nbsp;h <i data-icon="chevron-down" style="--ico:14px"></i></span></div>
     <span class="mk-btn mk-btn--block flc-btn">Réserver pour samedi</span>
     <p class="flc-meta">12 rue des Halles, Nantes · paiement au retrait</p>
   </div>
@@ -673,7 +714,7 @@ Le monospace est réservé au code, aux paramètres et aux petits libellés. Qua
         },
       ],
       answer: 'carried',
-      explanation: `impeccable décrit deux extrêmes qui effacent une direction : **l’affiche peinte** (un écran dessiné comme une façade, sans partie qui fonctionne) et **la page produit générique** (un titre au-dessus d’un sous-titre et d’un bouton, une rangée de cartes égales).
+      explanation: `impeccable décrit deux extrêmes qui effacent une direction : **l’affiche peinte** (un écran dessiné comme une façade, sans partie qui fonctionne) et **la page produit générique** (un titre au-dessus d’un sous-titre et d’un bouton, une rangée de cartes égales), qui reste un gabarit quel que soit le monde qui la peint.
 
 Entre les deux, **le monde porte la page sans l’absorber** : la navigation posée dans l’enseigne se lit comme des liens, le texte de la vitrine se lit comme du texte, l’action est évidemment cliquable. Et cette action est celle de la catégorie, sous sa forme opérante : réserver son pain pour samedi.`,
       takeaway: 'En Persuader, le monde porte les parties de la page sans les absorber : liens lisibles, texte lisible, action évidente.',
@@ -690,9 +731,9 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
         html: `<div class="vel-wrap"><div class="vel">
   <nav class="vel-rail" data-hotspot="rail"><strong>Vélo Rade</strong><span class="on"><i data-icon="map-pin" style="--ico:15px"></i>Stations</span><span><i data-icon="bike" style="--ico:15px"></i>Vélos</span><span><i data-icon="settings" style="--ico:15px"></i>Interventions</span></nav>
   <div class="vel-main">
-    <div class="vel-head"><p class="vel-h">Stations</p><div class="vel-knob" data-hotspot="knob"><span class="vel-dial"></span><span class="vel-t vel-t1">J</span><span class="vel-t vel-t2">S</span><span class="vel-t vel-t3">M</span></div></div>
-    <div class="vel-line" data-hotspot="line"><span class="vel-st vel-st--empty"></span><span class="vel-st"></span><span class="vel-st"></span><span class="vel-st vel-st--full"></span><small>Ligne du port : 4 stations</small></div>
-    <div class="vel-alert" data-hotspot="alert"><i data-icon="triangle-alert" style="--ico:16px"></i><span>Port de commerce vide depuis 40 min</span><b>Planifier un réassort</b></div>
+    <div class="vel-head"><p class="vel-h">Stations</p><div class="vel-period" data-hotspot="knob"><span class="vel-plbl">Période</span><div class="vel-knob"><span class="vel-dial"></span><span class="vel-t vel-t1">J</span><span class="vel-t vel-t2">S</span><span class="vel-t vel-t3">M</span></div></div></div>
+    <div class="vel-line" data-hotspot="line"><span class="vel-st vel-st--empty"></span><span class="vel-st"></span><span class="vel-st"></span><span class="vel-st vel-st--full"></span><small>Ligne du port&nbsp;: 4&nbsp;stations</small></div>
+    <div class="vel-alert" data-hotspot="alert"><i data-icon="triangle-alert" style="--ico:16px"></i><span>Port de commerce vide depuis 40&nbsp;min</span><b>Planifier un réassort</b></div>
     <ul class="vel-list" data-hotspot="font"><li><span>Port de commerce</span><b>0 / 20</b></li><li><span>Saint-Martin</span><b>7 / 16</b></li><li><span>Capucins</span><b>12 / 24</b></li></ul>
   </div>
 </div></div>`,
@@ -704,11 +745,13 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
 .vel-main { padding: 12px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 .vel-head { display: flex; justify-content: space-between; align-items: center; }
 .vel-h { font-size: 17px; font-weight: 700; }
-.vel-knob { position: relative; width: 62px; height: 52px; }
-.vel-dial { position: absolute; left: 13px; top: 10px; width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #c5ced9); border: 1px solid #8794a6; }
+.vel-period { display: flex; align-items: center; gap: 4px; }
+.vel-plbl { font-size: 12px; font-weight: 600; color: #4b5a6e; }
+.vel-knob { position: relative; width: 70px; height: 58px; }
+.vel-dial { position: absolute; left: 17px; top: 18px; width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #c5ced9); border: 1px solid #8794a6; }
 .vel-dial::after { content: ""; position: absolute; left: 16px; top: 3px; width: 3px; height: 13px; border-radius: 2px; background: #12355b; transform-origin: 1.5px 15px; transform: rotate(-40deg); }
-.vel-t { position: absolute; font-size: 9px; font-weight: 700; color: #4b5a6e; }
-.vel-t1 { left: 4px; top: 2px; } .vel-t2 { left: 28px; top: -3px; } .vel-t3 { right: 4px; top: 2px; }
+.vel-t { position: absolute; font-size: 11px; line-height: 1; font-weight: 700; color: #4b5a6e; }
+.vel-t1 { left: 9px; top: 9px; } .vel-t2 { left: 31px; top: 2px; } .vel-t3 { left: 52px; top: 9px; }
 .vel-line { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 10px 22px; background: #fff; border: 1px solid #dfe5ee; border-radius: 8px; }
 .vel-line::before { content: ""; position: absolute; left: 16px; right: 16px; top: 15px; height: 4px; border-radius: 2px; background: #12355b; }
 .vel-st { position: relative; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid #12355b; }
@@ -728,7 +771,7 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
       },
       hotspots: [
         { id: 'knob', label: 'Bouton rotatif de période', correct: true, why: 'Un contrôle réinventé pour le style : un bouton à tourner remplace des onglets ou un sélecteur que tout le monde sait utiliser.' },
-        { id: 'font', label: 'Liste des stations en italique à empattements', correct: true, why: 'Une police d’affichage dans les données d’un tableau de bord : impeccable l’exclut des libellés, boutons et données.' },
+        { id: 'font', label: 'Liste des stations en italique à empattements', correct: true, why: 'Une police choisie pour l’effet (italique à empattements, approche élargie) dans les données d’un tableau de bord : impeccable exclut les polices d’affichage des libellés, boutons et données.' },
         { id: 'rail', label: 'Rail de navigation coloré', correct: false, why: 'Une navigation standard dans une coque colorée : la couleur fait ici un vrai travail.' },
         { id: 'line', label: 'Ligne schématique des stations', correct: false, why: 'C’est le geste signature, tiré de la signalétique : il ajoute une lecture sans remplacer un contrôle.' },
         { id: 'alert', label: 'Alerte rouge « station vide »', correct: false, why: 'Une couleur d’état posée là où elle porte un sens, avec l’action utile à côté.' },
@@ -736,10 +779,10 @@ Entre les deux, **le monde porte la page sans l’absorber** : la navigation pos
       explanation: `La surface produit a ses interdits explicites chez impeccable :
 
 - **pas d’affordance standard réinventée pour le style** (barres de défilement maison, contrôles de formulaire étranges, modales non standard). Choisir une période se fait avec des onglets ou un sélecteur, pas avec un cadran ;
-- **pas de police d’affichage dans les libellés, boutons et données.** Une liste de stations se lit d’un coup d’œil en linéale régulière, avec des chiffres tabulaires.
+- **pas de police d’affichage dans les libellés, boutons et données**, ni de police choisie pour l’effet comme cette italique à empattements à l’approche élargie. Une liste de stations se lit d’un coup d’œil en linéale régulière, avec des chiffres tabulaires.
 
 Le reste est à sa place : coque colorée, couleur d’état porteuse de sens, et un geste signature qui ajoute une lecture de la ligne sans remplacer aucun contrôle.`,
-      takeaway: 'En Opérer, contrôles standard et police de lecture pour les données ; le monde s’exprime par la couleur et un geste signature.',
+      takeaway: 'En Opérer, contrôles standard et police de lecture pour les données ; le monde prête typo, palette, densité et un geste signature, jamais une police d’affichage ni un contrôle réinventé.',
       sources: ['imp:operate', 'imp:mode-operate'],
     },
     {
@@ -747,9 +790,9 @@ Le reste est à sa place : coque colorée, couleur d’état porteuse de sens, e
       type: 'hotspot',
       difficulty: 2,
       context: 'Documentation de l’API d’un réseau régional de trains. Le monde retenu : l’indicateur horaire imprimé.',
-      prompt: 'Trouve les deux éléments où le monde a franchi la limite du mode Lire.',
+      prompt: 'Trouve les deux éléments qui sortent du mode Lire.',
       visual: {
-        alt: 'Page de documentation avec un en-tête vert, un sélecteur de « quais » à la place du menu, un paragraphe en monospace, un exemple de requête et un tableau de paramètres.',
+        alt: 'Page de documentation avec un en-tête vert portant trois horaires, puis une rangée de boutons Quai A à Quai D avec la consigne « Montez sur un quai pour changer de chapitre », un paragraphe en monospace, un exemple de requête et un tableau de paramètres.',
         html: `<div class="rlo">
   <div class="rlo-mast" data-hotspot="mast"><strong>Rail Ouest</strong><span>API des horaires</span><span class="rlo-times">06:12 · 06:42 · 07:12</span></div>
   <div class="rlo-body">
@@ -779,7 +822,7 @@ Le reste est à sa place : coque colorée, couleur d’état porteuse de sens, e
       },
       hotspots: [
         { id: 'quai', label: 'Sélecteur de « quais »', correct: true, why: 'La navigation est remplacée par un dispositif qu’il faut apprendre : quel chapitre se cache derrière le quai C ?' },
-        { id: 'mono', label: 'Paragraphe en monospace', correct: true, why: 'Le texte courant passe en monospace : le monde a atteint la colonne de lecture.' },
+        { id: 'mono', label: 'Paragraphe en monospace', correct: true, why: 'Le texte courant passe en monospace, un costume « technique » : la colonne de lecture perd sa police de lecture.' },
         { id: 'mast', label: 'En-tête aux couleurs du réseau', correct: false, why: 'Le cadre appartient au monde : couleur, horaires en chiffres tabulaires, c’est là qu’il doit s’engager.' },
         { id: 'code', label: 'Exemple de requête en monospace', correct: false, why: 'Le monospace est à sa place dans un bloc de code, composé ici dans la palette du monde.' },
         { id: 'table', label: 'Tableau des paramètres', correct: false, why: 'Une forme standard que tout lecteur de documentation reconnaît.' },
@@ -788,7 +831,7 @@ Le reste est à sa place : coque colorée, couleur d’état porteuse de sens, e
 
 Tout le reste peut, et doit, porter le monde : l’en-tête, la composition du code, les tableaux. Une documentation qui ne s’engage nulle part pourrait appartenir à n’importe quel produit.`,
       takeaway: 'En Lire, le monde habille le cadre et le code ; il ne remplace ni la navigation ni la police de lecture du texte courant.',
-      sources: ['imp:mode-read'],
+      sources: ['imp:mode-read', 'imp:craft-floor'],
     },
     {
       id: 'modes-fashion-docs-tf',
@@ -796,7 +839,7 @@ Tout le reste peut, et doit, porter le monde : l’en-tête, la composition du c
       difficulty: 1,
       prompt: 'La documentation d’une maison de couture peut adopter le mode Persuader, puisque la marque vit de son image.',
       answer: false,
-      explanation: `Le mode se choisit d’après **la surface**, pas d’après la marque. impeccable cite justement la documentation d’une maison de mode comme exemple de surface **Lire** : le visiteur y vient pour comprendre (entretenir un tissu, suivre une commande), pas pour être convaincu.
+      explanation: `Le mode se choisit d’après **la surface**, pas d’après la marque. impeccable cite justement la documentation d’une maison de mode comme exemple de surface **Lire** : le visiteur y vient pour comprendre (entretenir un tissu, connaître les conditions de retour), pas pour être convaincu.
 
 La marque n’en disparaît pas : en mode Lire, son monde possède le cadre (en-tête, rail, fond, ouvertures de section). Seule la colonne de lecture reste calme.`,
       takeaway: 'Une documentation relève du mode Lire, même pour une marque très expressive : son monde s’exprime dans le cadre.',
@@ -806,12 +849,14 @@ La marque n’en disparaît pas : en mode Lire, son monde possède le cadre (en-
       id: 'modes-grey-tf',
       type: 'truefalse',
       difficulty: 3,
-      prompt: 'Sur un écran de travail (mode Opérer), un fond gris et une seule couleur d’accent sont la meilleure façon de faire preuve de retenue.',
+      prompt: 'Sur un écran de travail (mode Opérer), un fond gris neutre et une seule couleur d’accent, sans autre couleur, sont la meilleure façon de faire preuve de retenue.',
       answer: false,
       explanation: `La retenue d’Opérer porte sur l’expression (pas de police d’affichage dans les libellés, pas d’animation décorative, pas de contrôles réinventés), pas sur l’absence de couleur. impeccable est net : **un écran gris avec une seule couleur d’accent, c’est le réglage par défaut de la catégorie sans sa finition, pas de la retenue.**
 
+Attention au mot : la stratégie de couleur par défaut d’un produit s’appelle bien *Retenue*, mais ce sont des neutres **teintés par le monde** et un seul accent, et la couleur y garde ses travaux. Ce qui échoue, c’est le gris neutre, non teinté, avec l’accent pour seule couleur.
+
 Dans un produit, la couleur fait de vrais travaux : une coque assumée (rail ou en-tête coloré, fond teinté), les couleurs d’état, les séries de données, la sélection. L’accent, lui, reste réservé aux actions principales, à la sélection et aux indicateurs d’état.`,
-      takeaway: 'En Opérer, la couleur travaille (coque, états, données, sélection) : gris plus un accent n’est pas de la retenue.',
+      takeaway: 'En Opérer, la Retenue, ce sont des neutres teintés par le monde et un accent, et la couleur y travaille (coque, états, données, sélection) : gris neutre plus un accent n’en est pas.',
       sources: ['imp:mode-operate', 'imp:operate'],
     },
     {
@@ -823,7 +868,7 @@ Dans un produit, la couleur fait de vrais travaux : une coque assumée (rail ou 
       prompt: 'Que fais-tu des textes ?',
       options: [
         { id: 'keep-ask', label: 'Tu gardes les textes et tu demandes à l’équipe avant de remplacer l’accroche ou de toucher au chiffre.', why: 'Affiner préserve les textes ; un texte factuel ne se remplace qu’avec l’accord de l’équipe.' },
-        { id: 'rewrite', label: 'Tu réécris l’accroche pour la rendre percutante et tu passes le chiffre à 5 000 pour suivre la croissance.', why: 'Une affirmation commerciale ne s’invente jamais, et réécrire sort du périmètre d’un affinage.' },
+        { id: 'rewrite', label: 'Tu réécris l’accroche pour la rendre plus percutante, sans toucher au chiffre.', why: 'Réécrire un texte sort du périmètre d’un affinage : propose ta version, puis demande avant de remplacer.' },
         { id: 'delete', label: 'Tu supprimes l’affirmation non sourcée sans prévenir personne.', why: 'Retirer en silence un contenu factuel modifie aussi la vérité du produit sans accord.' },
         { id: 'redesign', label: 'Tu profites de l’occasion pour proposer une nouvelle identité visuelle.', why: 'Un affinage garde l’identité en place ; changer de monde relève d’une refonte décidée explicitement.' },
       ],
@@ -841,15 +886,15 @@ Les affirmations commerciales (prix, clients, chiffres, capacités) ne s’inven
       context: 'Le client rejette l’apparence actuelle de son site de location de vélos et demande une refonte.',
       prompt: 'Quelle approche correspond à une vraie refonte ?',
       options: [
-        { id: 'replace', label: 'Garder la vérité du produit, le contenu, les fonctions et les contraintes, et choisir un nouveau monde visuel en traitant l’ancien look comme un anti-modèle.', why: 'C’est la définition d’impeccable : refaire remplace l’apparence, pas la vérité du produit.' },
+        { id: 'replace', label: 'Garder contenu, fonctions et contraintes, et choisir un nouveau monde visuel, l’ancien look servant d’anti-modèle.', why: 'C’est la définition d’impeccable : refaire remplace l’apparence, pas la vérité du produit.' },
         { id: 'polish', label: 'Garder la palette et les composants actuels, mais les polir : ombres plus douces, coins plus arrondis, espacements revus.', why: 'C’est couper la poire en deux : polir l’apparence que le client vient de rejeter.' },
-        { id: 'everything', label: 'Tout repartir de zéro, y compris l’offre, les tarifs et le parcours de réservation.', why: 'Une refonte remplace le monde visuel ; le contenu, les fonctions et les contraintes restent.' },
-        { id: 'mix', label: 'Mélanger ancien et nouveau style, section par section, pour ménager les habitués.', why: 'Deux mondes sur une page ne font aucune direction : un seul monde possède la page.' },
+        { id: 'everything', label: 'Tout repartir de zéro, y compris l’offre, les tarifs et le parcours de réservation, pour marquer la rupture.', why: 'Une refonte remplace le monde visuel ; le contenu, les fonctions et les contraintes restent.' },
+        { id: 'mix', label: 'Mélanger ancien et nouveau style, section par section, pour ménager les habitués pendant la transition.', why: 'Deux mondes sur une page ne font aucune direction : un seul monde possède la page.' },
       ],
       answer: 'replace',
       explanation: `**Refaire remplace.** Une refonte conserve la vérité du produit, le contenu, les fonctions, les affordances natives et les contraintes, mais **traite l’ancien look comme une preuve et un anti-modèle** : il dit ce qu’est le sujet, pas ce qu’il doit devenir. On choisit un monde de remplacement, et DESIGN.md est réécrit en conséquence.
 
-L’erreur la plus fréquente consiste à couper la poire en deux : appliquer du polissage sur l’apparence qu’on est censé abandonner.`,
+Le piège à éviter : couper la poire en deux, c’est-à-dire polir l’apparence qu’on est censé abandonner.`,
       takeaway: 'Une refonte garde la vérité du produit et remplace le monde visuel ; ne polis jamais l’apparence qu’on abandonne.',
       sources: ['imp:skill', 'imp:new-work'],
     },
@@ -880,17 +925,17 @@ Les clichés du détecteur décrivent ce qu’on choisit *par réflexe* quand l�
       prompt: 'Range ces demandes de la moins inventive à la plus inventive, selon la part de design à réinventer.',
       items: [
         { id: 'refine', label: 'Resserrer les espacements du formulaire de contact existant' },
-        { id: 'extend', label: 'Ajouter un écran « Notifications » aux réglages de l’application' },
+        { id: 'extend', label: 'Ajouter une rubrique « Notifications » à l’écran Réglages existant' },
         { id: 'surface', label: 'Créer la page Tarifs d’un site dont l’identité est déjà établie' },
         { id: 'world', label: 'Remplacer l’identité visuelle d’un site dont le client rejette le look' },
       ],
-      explanation: `impeccable dose l’invention selon ce qui est déjà vrai :
+      explanation: `impeccable dose l’invention selon la portée de la demande :
 
-1. **Affiner** un écran existant préserve tout : identité, comportement, textes.
+1. **Affiner** un écran existant préserve l’identité, le comportement, les textes et tout ce qui sort du périmètre : seul le point demandé change.
 2. **Étendre une surface** hérite de son monde et de sa composition ; on ne résout que le nouveau besoin, ses états et sa jonction avec l’existant.
 3. **Créer une surface entière dans un monde établi** garde le système visuel fixe, mais explore plusieurs structures (cinq à sept) tirées du contenu et de la tâche.
 4. **Remplacer le monde** repart du mécanisme du produit, de la scène réelle de son public et de son univers culturel.`,
-      takeaway: 'Plus ce qui existe est établi, moins on invente : affiner, étendre, nouvelle surface, puis seulement nouveau monde.',
+      takeaway: 'L’invention suit la portée de la demande : affiner, étendre une surface, créer une surface dans un monde établi, puis seulement créer ou remplacer le monde.',
       sources: ['imp:new-work', 'imp:skill'],
     },
     {
@@ -903,9 +948,9 @@ Les clichés du détecteur décrivent ce qu’on choisit *par réflexe* quand l�
         { id: 'task', label: 'Quelle tâche le répartiteur accomplit-il, et à quelle fréquence ?', why: 'La tâche et la fréquence d’usage sont au cœur d’une surface Opérer.' },
         { id: 'states', label: 'Quels états comptent : tournée en retard, chauffeur absent, aucun colis à répartir ?', why: 'Les états importants changent la conception de l’écran.' },
         { id: 'constraints', label: 'Quelles contraintes s’imposent : écran partagé au dépôt, volume de colis, appareils utilisés ?', why: 'Les contraintes réelles de la scène d’usage orientent densité et lisibilité.' },
-        { id: 'hex', label: 'Quelle valeur hexadécimale veux-tu pour le bleu principal ?', why: 'Jamais de question sur des valeurs CSS : c’est au designer d’en décider.' },
-        { id: 'lanes', label: 'Tu préfères un style minimaliste, brutaliste ou en verre dépoli ?', why: 'Un « style » prêt à l’emploi ne dit rien de la tâche ; impeccable exclut ces questions.' },
-        { id: 'proof', label: 'Quelle preuve fera croire à l’offre ?', why: 'C’est une question de Persuader : sur un écran de travail, on aide à faire, on ne convainc pas.' },
+        { id: 'hex', label: 'Quelle valeur hexadécimale veux-tu pour le bleu principal, et quel arrondi pour les boutons ?', why: 'Jamais de question sur des valeurs CSS : c’est au designer d’en décider.' },
+        { id: 'lanes', label: 'Pour cet écran, tu préfères un style minimaliste, brutaliste ou en verre dépoli ?', why: 'Un « style » prêt à l’emploi ne dit rien de la tâche ; impeccable exclut ces questions.' },
+        { id: 'proof', label: 'Quelles preuves (avis clients, chiffres clés, logos) feront croire à l’offre ?', why: 'C’est une question de Persuader : sur un écran de travail, on aide à faire, on ne convainc pas.' },
       ],
       answers: ['task', 'states', 'constraints'],
       explanation: `Pour une surface Opérer, impeccable fait porter les questions sur **la tâche, les informations, les états importants, la fréquence et les contraintes**. Dans tous les modes, on demande aussi à quoi ressemble la réussite, ce qui doit rester intact, et ce qui ferait paraître faux un résultat pourtant soigné.
@@ -922,7 +967,7 @@ Deux types de questions sont exclus : les **valeurs CSS** et les **« styles » 
         'Tu conçois le site d’un festival de cinéma japonais à Paris. Une maquette reçue utilise en fond les rayons du drapeau du Soleil levant, « pour l’ambiance ».',
       prompt: 'Que fais-tu ?',
       options: [
-        { id: 'neutral', label: 'Tu retires les rayons et tu puises dans les formes neutres de ce monde : affiches de cinéma, typographie des génériques, motifs textiles traditionnels.', why: 'C’est la règle : on garde le monde du sujet, sans ses emblèmes chargés.' },
+        { id: 'neutral', label: 'Tu retires les rayons et tu puises dans les formes neutres de ce monde.', why: 'C’est la règle : on garde le monde du sujet (affiches de cinéma, typographie des génériques, motifs textiles traditionnels), sans ses emblèmes chargés.' },
         { id: 'keep', label: 'Tu les gardes : le sujet est japonais, le motif est donc légitime.', why: 'Le sujet ne donne pas licence aux emblèmes militaristes ; ce drapeau en est un pour une partie du public.' },
         { id: 'faded', label: 'Tu les gardes, mais en version très pâle, presque invisible.', why: 'Atténuer un symbole chargé ne le neutralise pas : il reste un ornement.' },
         { id: 'footnote', label: 'Tu les gardes en fond, avec une note sur leur histoire en pied de page.', why: 'Documenter un symbole a sa place dans un contenu qui en parle ; en faire le décor d’un festival, non.' },

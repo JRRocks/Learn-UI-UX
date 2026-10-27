@@ -41,7 +41,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     severity: 'avertissement',
     description:
       'Une bordure épaisse et colorée sur un seul côté d’une carte : le signe le plus reconnaissable des interfaces générées par IA. Le détecteur la relève sur les cartes aux coins arrondis.',
-    fix: 'Utilise un accent plus discret (point, icône, teinte de fond, bordure fine sur tout le pourtour) ou supprime-le. Le plancher de qualité refuse tout trait latéral coloré de plus de 1 px sur les cartes, listes, encadrés et alertes.',
+    fix: 'Utilise un accent plus discret (point, icône, teinte de fond, bordure fine sur tout le pourtour) ou supprime-le. Par défaut, le plancher de qualité écarte tout trait latéral coloré de plus de 1 px sur les cartes, les éléments de liste, les encadrés et les alertes ; seul un brief qui le demande explicitement peut le justifier.',
     demo: {
       bad: v(
         'Carte arrondie « Conseil du jour » avec une épaisse bordure violette sur le côté gauche.',
@@ -137,8 +137,10 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       ),
       good: v(
         'Même titre en couleur unie foncée, les mots importants portés par la graisse.',
-        `<div class="ch"><p class="ch-h">Ta facture part le jour du chantier, pas le dimanche soir</p><p class="ch-p">Devis, factures et relances au même endroit.</p></div>`,
-        CLEAN_HERO,
+        `<div class="sh"><p class="sh-h gt-h">Facturez <strong>deux fois plus vite</strong></p><p class="sh-p">Devis, factures et relances au même endroit.</p></div>`,
+        `${SLOP_HERO}
+.gt-h { font-weight: 600; }
+.gt-h strong { font-weight: 800; }`,
       ),
     },
   },
@@ -179,6 +181,24 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     description:
       'Un fond de page crème ou beige chaud est devenu la surface « de bon goût » par défaut des interfaces générées, choisie par réflexe.',
     fix: 'Choisis un fond issu d’une palette délibérée, pas le blanc cassé chaud par sécurité. Si le monde du produit appelle vraiment le papier ou le lin, assume-le pleinement.',
+    demo: {
+      bad: v(
+        'Page d’accueil d’une application de recharge pour voitures électriques, sur un fond crème chaud, avec un titre brun foncé et un bouton brun.',
+        `<div class="cr"><p class="cr-h">Trouve une borne libre en moins d’une minute</p><p class="cr-p">Disponibilité en direct, puissance et prix au kWh des bornes autour de toi.</p><span class="cr-btn">Voir la carte</span></div>`,
+        `.cr { padding: 28px 20px; background: #f6efe2; }
+.cr-h { font-size: 24px; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; color: #2e2924; }
+.cr-p { margin-top: 8px; max-width: 40ch; font-size: 14px; line-height: 1.5; color: #5b5247; }
+.cr-btn { display: inline-flex; margin-top: 16px; padding: 9px 16px; border-radius: 8px; background: #3b3026; color: #fff; font-weight: 650; font-size: 14px; }`,
+      ),
+      good: v(
+        'Même page sur un bleu-vert très clair tiré de la couleur de la marque, avec un titre pétrole foncé et un bouton bleu pétrole.',
+        `<div class="cr"><p class="cr-h">Trouve une borne libre en moins d’une minute</p><p class="cr-p">Disponibilité en direct, puissance et prix au kWh des bornes autour de toi.</p><span class="cr-btn">Voir la carte</span></div>`,
+        `.cr { padding: 28px 20px; background: #e7f3f5; }
+.cr-h { font-size: 24px; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; color: #0d3640; }
+.cr-p { margin-top: 8px; max-width: 40ch; font-size: 14px; line-height: 1.5; color: #33555e; }
+.cr-btn { display: inline-flex; margin-top: 16px; padding: 9px 16px; border-radius: 8px; background: #0e6f8a; color: #fff; font-weight: 650; font-size: 14px; }`,
+      ),
+    },
   },
   {
     id: 'nested-cards',
@@ -304,9 +324,10 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     demo: {
       bad: v(
         'Héros avec le titre « Décrivez votre site » suivi d’un curseur rectangulaire clignotant, sans champ de saisie.',
-        `<div class="bc"><p class="bc-h">Décrivez votre site<span class="bc-cur"></span></p><p class="bc-p">Notre IA s’occupe du reste.</p></div>`,
+        `<div class="bc"><p class="bc-h">Décrivez votre <span class="bc-end">site<span class="bc-cur"></span></span></p><p class="bc-p">Notre IA s’occupe du reste.</p></div>`,
         `.bc { padding: 30px 18px; background: #0f1115; color: #f1f2f4; }
 .bc-h { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.bc-end { white-space: nowrap; }
 .bc-cur { display: inline-block; width: 12px; height: 26px; margin-inline-start: 4px; vertical-align: -4px; background: #f1f2f4; }
 @media (prefers-reduced-motion: no-preference) { .bc-cur { animation: bc-blink 1s steps(1) infinite; } }
 @keyframes bc-blink { 50% { opacity: 0; } }
@@ -365,6 +386,26 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     description:
       'Un polygone `clip-path` aux nombreux sommets arbitraires, ou un chemin `path()` courbe, c’est du CSS qui imite un bord déchiré, une tache ou une silhouette. Il se lit comme la version au rabais de l’effet, et remplace souvent une matière produite ou photographique par du code.',
     fix: 'Tire un masque alpha de l’image réelle, ou livre la forme en image détourée. Garde `clip-path` pour la géométrie : coins coupés, diagonales, hexagones.',
+    demo: {
+      bad: v(
+        'Carte d’un atelier de céramique dont la photo d’un bol est découpée en forme de tache aux contours anguleux et facettés.',
+        `<div class="oc"><div class="oc-img oc-img--blob" role="img" aria-label="Photographie d’un bol en grès"></div><p class="oc-h">Atelier tournage du samedi</p><p class="oc-p">Trois heures au tour avec Inès, terre et cuisson comprises · 65&nbsp;€</p></div>`,
+        `.oc { padding: 18px; display: flex; flex-direction: column; gap: 4px; }
+.oc-img { margin-bottom: 8px; aspect-ratio: 16 / 9; background: radial-gradient(ellipse 30% 11% at 50% 47%, #ece1d0 0 70%, transparent 72%), radial-gradient(ellipse 33% 27% at 50% 58%, #7b5136 0 64%, transparent 66%), linear-gradient(180deg, #ddd2c3 0 56%, #b48c66 56% 100%); }
+.oc-img--blob { clip-path: polygon(12% 18%, 31% 4%, 52% 9%, 71% 2%, 89% 14%, 97% 37%, 91% 61%, 96% 83%, 77% 97%, 54% 91%, 33% 98%, 13% 88%, 3% 64%, 8% 41%); }
+.oc-h { font-size: 16px; font-weight: 750; color: #1d2230; }
+.oc-p { font-size: 13px; line-height: 1.5; color: #4b5262; }`,
+      ),
+      good: v(
+        'Même carte avec la photo du bol en rectangle net, simplement coupé en bas par une diagonale franche.',
+        `<div class="oc"><div class="oc-img oc-img--cut" role="img" aria-label="Photographie d’un bol en grès"></div><p class="oc-h">Atelier tournage du samedi</p><p class="oc-p">Trois heures au tour avec Inès, terre et cuisson comprises · 65&nbsp;€</p></div>`,
+        `.oc { padding: 18px; display: flex; flex-direction: column; gap: 4px; }
+.oc-img { margin-bottom: 8px; aspect-ratio: 16 / 9; background: radial-gradient(ellipse 30% 11% at 50% 47%, #ece1d0 0 70%, transparent 72%), radial-gradient(ellipse 33% 27% at 50% 58%, #7b5136 0 64%, transparent 66%), linear-gradient(180deg, #ddd2c3 0 56%, #b48c66 56% 100%); }
+.oc-img--cut { clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%); }
+.oc-h { font-size: 16px; font-weight: 750; color: #1d2230; }
+.oc-p { font-size: 13px; line-height: 1.5; color: #4b5262; }`,
+      ),
+    },
   },
   {
     id: 'buried-raster',
@@ -385,7 +426,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     fix: 'Hors d’un univers réellement néobrutaliste, passe à une ombre douce, avec décalage et flou. Dans un tel univers, garde-la et marque l’usage voulu avec `data-impeccable-ignore="hard-offset-shadow"`.',
     demo: {
       bad: v(
-        'Carte bancaire aux couleurs douces et aux coins très arrondis, portant une ombre noire dure décalée vers le bas et la droite.',
+        'Carte de solde « Compte courant » aux coins très arrondis, cernée d’un trait noir épais et portant une ombre noire dure décalée vers le bas et la droite.',
         `<div class="ho"><div class="ho-c ho-c--hard"><span class="ho-l">Compte courant</span><span class="ho-a">2 418,60 €</span><span class="ho-s">Mis à jour il y a 5 min</span></div></div>`,
         `.ho { padding: 22px 20px 26px; background: #f3f6fb; }
 .ho-c { display: flex; flex-direction: column; gap: 2px; padding: 16px; border-radius: 16px; background: #fff; }
@@ -395,7 +436,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
 .ho-s { font-size: 12px; color: #5a6172; }`,
       ),
       good: v(
-        'Même carte bancaire avec une ombre douce et diffuse, cohérente avec l’univers arrondi.',
+        'Même carte de solde, sans trait noir, avec une ombre douce et diffuse cohérente avec l’univers arrondi.',
         `<div class="ho"><div class="ho-c"><span class="ho-l">Compte courant</span><span class="ho-a">2 418,60 €</span><span class="ho-s">Mis à jour il y a 5 min</span></div></div>`,
         `.ho { padding: 22px 20px 26px; background: #f3f6fb; }
 .ho-c { display: flex; flex-direction: column; gap: 2px; padding: 16px; border-radius: 16px; background: #fff; box-shadow: 0 6px 18px rgb(15 23 42 / 0.10); }
@@ -470,6 +511,25 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     description:
       'Un dégradé radial de la couleur d’accent qui s’estompe vers le transparent, posé derrière un héros ou une section comme un « projecteur », assez lumineux par rapport à la surface pour flotter comme un nuage au-dessus du texte. Un réflexe décoratif, cousin translucide du halo radial saturé.',
     fix: 'Laisse la surface tenir seule, ou éclaire la composition par un accent de matière délibéré plutôt que par une brume colorée.',
+    demo: {
+      bad: v(
+        'Héros clair d’un outil de planning pour équipes soignantes : un nuage bleu translucide en dégradé radial flotte derrière le titre et le texte.',
+        `<div class="sl sl--glow"><p class="sl-h">Les gardes de ton service, planifiées en dix minutes</p><p class="sl-p">Repos, compétences et souhaits de chacun sont respectés automatiquement.</p><span class="sl-btn">Essayer avec mon équipe</span></div>`,
+        `.sl { padding: 36px 20px; text-align: center; background: #fff; }
+.sl--glow { background: radial-gradient(ellipse 65% 60% at 50% 45%, rgb(37 99 235 / 0.3), transparent 70%), #fff; }
+.sl-h { max-width: 22ch; margin-inline: auto; font-size: 24px; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; color: #111827; }
+.sl-p { max-width: 36ch; margin: 10px auto 0; font-size: 14px; line-height: 1.5; color: #4b5262; }
+.sl-btn { display: inline-flex; margin-top: 16px; padding: 9px 16px; border-radius: 8px; background: #1d4ed8; color: #fff; font-weight: 650; font-size: 14px; }`,
+      ),
+      good: v(
+        'Même héros sur une surface blanche unie ; le bleu de la marque ne reste que sur le bouton.',
+        `<div class="sl"><p class="sl-h">Les gardes de ton service, planifiées en dix minutes</p><p class="sl-p">Repos, compétences et souhaits de chacun sont respectés automatiquement.</p><span class="sl-btn">Essayer avec mon équipe</span></div>`,
+        `.sl { padding: 36px 20px; text-align: center; background: #fff; }
+.sl-h { max-width: 22ch; margin-inline: auto; font-size: 24px; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; color: #111827; }
+.sl-p { max-width: 36ch; margin: 10px auto 0; font-size: 14px; line-height: 1.5; color: #4b5262; }
+.sl-btn { display: inline-flex; margin-top: 16px; padding: 9px 16px; border-radius: 8px; background: #1d4ed8; color: #fff; font-weight: 650; font-size: 14px; }`,
+      ),
+    },
   },
   {
     id: 'marquee',
@@ -537,7 +597,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     demo: {
       bad: v(
         'Héros d’une application de prise de notes avec un très grand titre en italique à empattements.',
-        `<div class="is"><p class="is-h is-h--it">L’assistant qui écrit vos comptes rendus</p><p class="is-p">Enregistre la réunion, reçois le compte rendu en 2 minutes.</p></div>`,
+        `<div class="is"><p class="is-h is-h--it">L’assistant qui écrit tes comptes rendus</p><p class="is-p">Enregistre la réunion, reçois le compte rendu en 2 minutes.</p></div>`,
         `.is { padding: 26px 18px; }
 .is-h { font-size: 32px; line-height: 1.08; color: #1d2230; }
 .is-h--it { font-family: "Fraunces", "Playfair Display", Georgia, "Liberation Serif", serif; font-style: italic; font-weight: 500; }
@@ -545,7 +605,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       ),
       good: v(
         'Même héros avec un titre romain sans empattements, plus compact et gras.',
-        `<div class="is"><p class="is-h">L’assistant qui écrit vos comptes rendus</p><p class="is-p">Enregistre la réunion, reçois le compte rendu en 2 minutes.</p></div>`,
+        `<div class="is"><p class="is-h">L’assistant qui écrit tes comptes rendus</p><p class="is-p">Enregistre la réunion, reçois le compte rendu en 2 minutes.</p></div>`,
         `.is { padding: 26px 18px; }
 .is-h { font-size: 28px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: #1d2230; }
 .is-p { margin-top: 10px; font-size: 14px; color: #4b5262; }`,
@@ -554,7 +614,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
   },
   {
     id: 'hero-eyebrow-chip',
-    name: 'Pastille « eyebrow » du héros',
+    name: 'Sur-titre ou pastille au-dessus du titre de héros',
     family: 'cliche',
     severity: 'avertissement',
     description:
@@ -583,7 +643,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     fix: 'Supprime le libellé et laisse parler le titre. Si ses mots comptent, intègre-les au titre ou au texte.',
     demo: {
       bad: v(
-        'Section avec le libellé « NOTRE MÉTHODE » en petites capitales espacées au-dessus du titre « Comment ça marche ».',
+        'Section avec le libellé « NOTRE MÉTHODE » en capitales espacées de 11 px au-dessus du titre « Comment ça marche ».',
         `<div class="kh"><p class="kh-k">NOTRE MÉTHODE</p><p class="kh-h">Comment ça marche</p><p class="kh-p">Tu photographies ton ticket, nous saisissons la dépense.</p></div>`,
         `.kh { padding: 22px 18px; }
 .kh-k { font-size: 11px; font-weight: 700; letter-spacing: .18em; color: #0e7490; }
@@ -698,11 +758,11 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'cliche',
     severity: 'avertissement',
     description:
-      'Un titre en phrase complète composé en taille d’affichage finit par dominer la fenêtre et ne laisse place à rien d’autre au-dessus de la ligne de flottaison. Un titre percutant d’un ou deux mots à cette taille va bien ; le problème, c’est une phrase longue gonflée à l’extrême. Le détecteur vise un h1 d’au moins 72 px et 40 caractères qui occupe une grande part de l’écran.',
+      'Un titre en phrase complète composé en taille d’affichage finit par dominer la fenêtre et ne laisse place à rien d’autre au-dessus de la ligne de flottaison. Un titre percutant d’un ou deux mots à cette taille va bien ; le problème, c’est une phrase longue gonflée à l’extrême. Le détecteur vise un h1 d’au moins 72 px et 40 caractères qui occupe une grande part de l’écran. Sur un téléphone, l’effet apparaît bien avant ce seuil (ici 44 px pour 68 caractères) : le détecteur ne le relèvera pas, vérifie à l’œil.',
     fix: 'Compose les titres longs plus petits, ou resserre le texte.',
     demo: {
       bad: v(
-        'Écran de téléphone entièrement occupé par un titre de onze mots en très grand corps ; ni texte ni bouton visibles.',
+        'Écran de téléphone entièrement occupé par un titre de douze mots en très grand corps ; ni texte ni bouton visibles.',
         `<div class="oh"><p class="oh-h oh-h--big">Gérez toutes vos factures, vos devis et vos relances au même endroit</p></div>`,
         `.oh { padding: 18px 16px 22px; min-height: 300px; }
 .oh-h { font-weight: 800; letter-spacing: -0.02em; color: #1d2230; }
@@ -788,7 +848,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `<div class="hr"><div class="hr-nav"><b>Gîte des Sapins</b><span>Chambres</span><span>Accès</span><span>Réserver</span></div><div class="hr-body"><p class="hr-h">Un gîte de 6 places au-dessus de Lamastre</p><p class="hr-p">Libre du 12 au 19 juillet · 640 € la semaine, ménage compris.</p><span class="mk-btn">Voir les disponibilités</span></div></div>`,
         `.hr-nav { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 10px 16px; font-size: 13px; border-bottom: 1px solid #e3e6ec; }
 .hr-nav b { margin-inline-end: auto; }
-.hr-body { height: 190px; padding: 22px 16px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.hr-body { min-height: 190px; padding: 22px 16px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .hr-h { font-size: 21px; font-weight: 800; line-height: 1.2; }
 .hr-p { font-size: 14px; color: #4b5262; }`,
         { frame: 'browser' },
@@ -809,20 +869,19 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `<div class="ef"><p class="ef-t">Recettes de saison</p><div class="ef-clip"><div class="ef-row ef-row--flush"><span class="ef-c"><b>Velouté de potimarron</b>25 min</span><span class="ef-c"><b>Tarte fine aux poireaux</b>40 min</span><span class="ef-c"><b>Crumble pommes-coings</b>50 min</span></div></div></div>`,
         `.ef { padding: 16px 0; }
 .ef-t { padding: 0 16px 8px; font-size: 14px; font-weight: 700; }
-.ef-clip { overflow: hidden; }
+.ef-clip { overflow-x: auto; }
 .ef-row { display: flex; gap: 10px; padding: 0 16px; }
 .ef-row--flush { margin-inline-start: -30px; }
-.ef-c { flex: none; width: 150px; display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 12px; background: #fff7ed; border: 1px solid #fed7aa; font-size: 12px; color: #7c2d12; }
+.ef-c { flex: none; width: calc((100% - 10px) / 1.6); display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 12px; background: #fff7ed; border: 1px solid #fed7aa; font-size: 12px; color: #7c2d12; }
 .ef-c b { font-size: 13px; color: #431407; }`,
       ),
       good: v(
-        'Même rangée défilante avec la même marge de 16 px à gauche et à droite ; la première carte est entière.',
-        `<div class="ef"><p class="ef-t">Recettes de saison</p><div class="ef-clip"><div class="ef-row"><span class="ef-c"><b>Velouté de potimarron</b>25 min</span><span class="ef-c"><b>Tarte fine aux poireaux</b>40 min</span><span class="ef-c"><b>Crumble pommes-coings</b>50 min</span></div></div></div>`,
+        'Même rangée défilante : la première carte est entière, à 16 px du bord ; la suivante dépasse nettement pour signaler le défilement, et la rangée se termine sur la même marge de 16 px.',
+        `<div class="ef"><p class="ef-t">Recettes de saison</p><div class="ef-row"><span class="ef-c"><b>Velouté de potimarron</b>25 min</span><span class="ef-c"><b>Tarte fine aux poireaux</b>40 min</span><span class="ef-c"><b>Crumble pommes-coings</b>50 min</span></div></div>`,
         `.ef { padding: 16px 0; }
 .ef-t { padding: 0 16px 8px; font-size: 14px; font-weight: 700; }
-.ef-clip { overflow: hidden; }
-.ef-row { display: flex; gap: 10px; padding: 0 16px; }
-.ef-c { flex: none; width: 150px; display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 12px; background: #fff7ed; border: 1px solid #fed7aa; font-size: 12px; color: #7c2d12; }
+.ef-row { display: flex; gap: 10px; padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; }
+.ef-c { flex: none; width: calc((100% - 10px) / 1.6); scroll-snap-align: start; display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 12px; background: #fff7ed; border: 1px solid #fed7aa; font-size: 12px; color: #7c2d12; }
 .ef-c b { font-size: 13px; color: #431407; }`,
       ),
     },
@@ -871,22 +930,22 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     name: 'Texte gris sur fond coloré',
     family: 'qualite',
     severity: 'avertissement',
-    description: 'Un texte gris paraît délavé sur un fond coloré.',
+    description: 'Un texte gris paraît délavé sur un fond coloré, même quand son contraste suffit.',
     fix: 'Prends une nuance plus foncée de la couleur du fond, ou un blanc ou quasi-blanc sur un fond foncé.',
     demo: {
       bad: v(
-        'Encadré jaune pâle avec un texte gris moyen à peine lisible.',
+        'Encadré jaune soutenu dont le paragraphe est en gris terne, pourtant lisible.',
         `<div class="gy"><div class="gy-b"><b>Livraison en point relais</b><p class="gy-gray">Ton colis t’attend 10 jours ouvrés au point relais choisi. Pense à te munir d’une pièce d’identité.</p></div></div>`,
         `.gy { padding: 16px; }
-.gy-b { padding: 14px; border-radius: 10px; background: #fef3c7; font-size: 14px; line-height: 1.5; }
+.gy-b { padding: 14px; border-radius: 10px; background: #fcd34d; font-size: 14px; line-height: 1.5; }
 .gy-b b { color: #78350f; }
-.gy-gray { margin-top: 4px; color: #9ca3af; }`,
+.gy-gray { margin-top: 4px; color: #4b5563; }`,
       ),
       good: v(
         'Même encadré avec le texte en brun ambré foncé, tiré de la couleur du fond.',
         `<div class="gy"><div class="gy-b"><b>Livraison en point relais</b><p>Ton colis t’attend 10 jours ouvrés au point relais choisi. Pense à te munir d’une pièce d’identité.</p></div></div>`,
         `.gy { padding: 16px; }
-.gy-b { padding: 14px; border-radius: 10px; background: #fef3c7; font-size: 14px; line-height: 1.5; color: #78350f; }
+.gy-b { padding: 14px; border-radius: 10px; background: #fcd34d; font-size: 14px; line-height: 1.5; color: #78350f; }
 .gy-b p { margin-top: 4px; }`,
       ),
     },
@@ -1013,7 +1072,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'qualite',
     severity: 'avertissement',
     description:
-      'Dans une colonne aussi étroite, justifier sans césure étire les espaces entre les mots jusqu’à faire couler des rivières blanches verticales dans le bloc. Les écritures qui justifient sur une grille de caractères ou en allongeant les glyphes (CJK, thaï, arabe) ne sont pas concernées.',
+      'Dans une colonne étroite (environ 45 caractères par ligne ou moins), justifier sans césure étire les espaces entre les mots jusqu’à faire couler des rivières blanches verticales dans le bloc. Les écritures qui justifient sur une grille de caractères ou en allongeant les glyphes (CJK, thaï, arabe) ne sont pas concernées.',
     fix: 'Aligne à gauche, élargis la mesure, ou active `hyphens: auto` si tu dois justifier.',
     demo: {
       bad: v(
@@ -1033,7 +1092,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     name: 'Mot seul en fin de paragraphe',
     family: 'qualite',
     severity: 'conseil',
-    description: 'La dernière ligne du paragraphe ne contient qu’un mot, ce qui laisse un trou sous le bloc.',
+    description: 'La dernière ligne d’un paragraphe ne contient qu’un mot, ce qui laisse un trou sous le bloc.',
     fix: 'Applique `text-wrap: pretty` au texte courant (Chrome, Safari) pour ramener un mot à côté. Sinon, retouche la dernière phrase ou lie les deux derniers mots par une espace insécable. Garde-le si la coupure est voulue.',
     demo: {
       bad: v(
@@ -1053,7 +1112,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     name: 'Titre déséquilibré',
     family: 'qualite',
     severity: 'conseil',
-    description: 'Ce titre passe à la ligne avec une dernière ligne bien plus courte que la précédente, souvent un mot seul.',
+    description: 'Un titre passe à la ligne avec une dernière ligne bien plus courte que la précédente, souvent un mot seul.',
     fix: 'Applique `text-wrap: balance` aux titres pour obtenir des lignes presque égales, ou réécris-le pour qu’il tienne. Garde la coupure si elle porte volontairement un sens.',
     demo: {
       bad: v(
@@ -1170,8 +1229,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     fix: 'Dis-le une fois, là où il compte le plus.',
     demo: {
       bad: v(
-        'Carte de devis où le mot « En attente » apparaît trois fois : en pastille, dans le texte et sur le bouton.',
-        `<div class="rc"><div class="rc-c"><div class="rc-top"><b>Devis D-2026-014</b><em>En attente</em></div><p>Statut : En attente</p><span class="mk-btn mk-btn--ghost mk-btn--s">En attente</span></div></div>`,
+        'Carte de devis où le libellé « En attente » apparaît trois fois : en pastille, dans le texte et sur le bouton.',
+        `<div class="rc"><div class="rc-c"><div class="rc-top"><b>Devis D-2026-014</b><em>En attente</em></div><p>Statut : <span>En attente</span></p><span class="mk-btn mk-btn--ghost mk-btn--s">En attente</span></div></div>`,
         `.rc { padding: 16px; }
 .rc-c { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding: 14px; border: 1px solid #dfe3ea; border-radius: 12px; font-size: 13px; color: #4b5262; }
 .rc-top { display: flex; justify-content: space-between; gap: 8px; align-self: stretch; }
