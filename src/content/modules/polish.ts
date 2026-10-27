@@ -108,7 +108,7 @@ const polish: ModuleContent = {
   category: 'affiner',
   summary:
     'Mener la dernière passe avant la mise en ligne : classer la dérive, trier les défauts du fonctionnel au cosmétique, donner à chaque contrôle tous ses états et finir les surfaces qu’on oublie — sans refondre en douce.',
-  minutes: 11,
+  minutes: 13,
   commands: ['polish'],
   sources: [
     'imp:polish',
@@ -646,7 +646,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
           id: 'save',
           label: 'Bouton Enregistrer',
           correct: false,
-          why: 'Le laisser cliquable malgré l’erreur n’est pas un défaut : grisé, il n’expliquerait pas ce qui manque. Au clic, le formulaire doit signaler l’erreur près du champ — c’est ce message qui manque.',
+          why: 'Le laisser cliquable malgré l’erreur n’est pas un défaut : grisé, il ne dirait pas ce qui bloque. Au clic, le formulaire doit signaler l’erreur près du champ — c’est ce message qui manque.',
         },
       ],
       explanation: `Deux états mal finis, deux façons de tromper :
@@ -836,7 +836,7 @@ Se taire n’est pas mieux : le défaut le plus important resterait caché derri
 
 - sous 1 seconde, rien ; pour une zone de contenu, un squelette ; pour un petit module, un indicateur local ; au-delà de 10 secondes, une progression réelle avec une estimation ;
 - le texte nomme l’opération réelle ;
-- on ne fabrique jamais de progression, et on n’affiche pas un faux vide pendant le chargement. Nielsen Norman Group relève que ce « Aucun enregistrement » provisoire fait abandonner la plupart des gens, pressés, avant l’arrivée des données, et que ceux qui attendent perdent confiance dans l’outil.`,
+- on ne fabrique jamais de progression, et on n’affiche pas un faux vide pendant le chargement. Nielsen Norman Group relève qu’avec ce « Aucun enregistrement » provisoire, la plupart des gens, pressés, ne voient jamais les données, et que ceux qui attendent perdent confiance dans l’outil.`,
       takeaway: 'Un chargement dit la vérité : rien sous 1 s, squelette pour le contenu, opération nommée, ni fausse progression ni faux vide.',
       sources: ['imp:operate', 'imp:clarify', NNG_SKELETON, NNG_PROGRESS, NNG_EMPTY],
     },
