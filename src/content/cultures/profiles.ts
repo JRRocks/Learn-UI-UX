@@ -14,7 +14,17 @@ const nb = (s: string) =>
     .replace(/« /g, '«\u202f')
     .replace(/ %/g, '\u00a0%');
 
-const ZH = `"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif`;
+/**
+ * Formats table cells are plain text too: each example stays whole on a narrow screen
+ * (no-break spaces, word joiner after a hyphen); only \u00ab \u00b7 \u00bb separates two examples.
+ */
+const keep = (s: string) =>
+  s
+    .split(' \u00b7 ')
+    .map((x) => x.replace(/ /g, '\u00a0').replace(/-(?=\S)/g, '-\u2060'))
+    .join('\u00a0\u00b7 ');
+
+const ZH =`"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif`;
 const JA = `"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif`;
 const KO = `"Apple SD Gothic Neo", Pretendard, "Malgun Gothic", "Noto Sans KR", "Noto Sans CJK KR", sans-serif`;
 const AR = `"Noto Sans Arabic", "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif`;
@@ -130,7 +140,7 @@ Prévois l’authentification forte (DSP2) : la validation se fait souvent dans 
       { label: 'Pourcentage', value: '12,5\u00a0%' },
       { label: 'Ordre du nom', value: 'Prénom Nom (Marie Dupont)' },
       { label: 'Adresse', value: '12 rue des Lilas, 75011 Paris' },
-      { label: 'Téléphone', value: '06 12 34 56 78 · +33 6 12 34 56 78' },
+      { label: 'Téléphone', value: keep('06 12 34 56 78 · +33 6 12 34 56 78') },
       { label: 'Début de semaine', value: 'lundi' },
     ],
     visual: {
@@ -263,7 +273,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
       {
         topic: 'legal',
         title: 'Accessibilité et procès ADA',
-        body: `De nombreux tribunaux appliquent l’Americans with Disabilities Act aux sites et applis de commerce : plusieurs milliers de plaintes sont déposées chaque année. Vise les WCAG 2.1 ou 2.2 niveau AA, la référence des accords conclus après procès et de la règle fédérale de 2024 qui s’impose aux États et aux collectivités locales.`,
+        body: `De nombreux tribunaux appliquent l’Americans with Disabilities Act aux sites et applis de commerce : plusieurs milliers de plaintes sont déposées chaque année. Vise au minimum les WCAG 2.1 niveau AA, la norme retenue par la règle fédérale de 2024 (titre II de l’ADA, qui s’impose aux États et aux collectivités locales) et par la plupart des accords conclus après procès, et de préférence les WCAG 2.2 AA.`,
       },
     ],
     adapt: {
@@ -286,14 +296,14 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
     formats: [
       { label: 'Date', value: '10/27/2026' },
       { label: 'Date longue', value: 'Tuesday, October 27, 2026' },
-      { label: 'Heure', value: '1:30 PM' },
+      { label: 'Heure', value: '1:30 PM' },
       { label: 'Nombre', value: '1,234,567.89' },
       { label: 'Monnaie (hors taxes)', value: '$1,234.56' },
       { label: 'Ordre du nom', value: 'Jane Smith' },
-      { label: 'Adresse', value: '1600 Main St Apt 4B, Springfield, IL 62701' },
-      { label: 'Téléphone', value: '(555) 123-4567 · +1 555 123 4567' },
-      { label: 'Unités', value: '°F · miles · lb, oz · in' },
-      { label: 'Début de semaine', value: 'dimanche' },
+      { label: 'Adresse', value: '1600 Main St Apt 4B, Springfield, IL 62701' },
+      { label: 'Téléphone', value: keep('(555) 123-4567 · +1 555 123 4567') },
+      { label: 'Unités', value: keep('°F · miles · lb, oz · in') },
+      { label: 'Début de semaine (dimanche)', value: 'Sunday' },
     ],
     visual: {
       frame: 'phone',
@@ -363,7 +373,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
     context: 'faible',
     hofstede: { pdi: 35, idv: 67, mas: 66, uai: 65, lto: 83, ivr: 40 },
     summary: nb(
-      'Un marché qui attend des faits vérifiables, une structure claire et une conformité juridique sans faille : Impressum, déclaration de confidentialité, consentement aux traceurs, bouton de commande au libellé imposé par la loi. Le contexte est faible et le contrôle de l’incertitude assez élevé (65) : on lit les conditions, on compare, on veut connaître délais, frais et droit de rétractation avant d’acheter. Le paiement est une affaire de confiance — achat sur facture, PayPal, prélèvement SEPA — plus que de carte. La langue allonge les textes d’environ 30 % et forme de longs mots composés : les composants doivent l’encaisser.',
+      'Un marché qui attend des faits vérifiables, une structure claire et une conformité juridique sans faille : Impressum, déclaration de confidentialité, consentement aux traceurs, bouton de commande au libellé encadré par la loi. Le contexte est faible et le contrôle de l’incertitude assez élevé (65) : on lit les conditions, on compare, on veut connaître délais, frais et droit de rétractation avant d’acheter. Le paiement est une affaire de confiance — achat sur facture, PayPal, prélèvement SEPA — plus que de carte. La langue allonge les textes d’environ 30 % et forme de longs mots composés : les composants doivent l’encaisser.',
     ),
     ecosystem: ['PayPal', 'Klarna', 'Amazon.de', 'Otto', 'Zalando', 'Check24', 'DB Navigator', 'Kleinanzeigen', 'Trusted Shops'],
     conventions: [
@@ -438,14 +448,14 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
     formats: [
       { label: 'Date', value: '27.10.2026' },
       { label: 'Date longue', value: 'Dienstag, 27. Oktober 2026' },
-      { label: 'Heure', value: '13:30 Uhr' },
+      { label: 'Heure', value: keep('13:30 Uhr') },
       { label: 'Nombre', value: '1.234.567,89' },
       { label: 'Monnaie', value: '1.234,56\u00a0€' },
-      { label: 'Prix unitaire (Grundpreis)', value: '500 g · 12,90\u00a0€ (25,80\u00a0€/kg)' },
+      { label: 'Prix unitaire (Grundpreis)', value: '500 g · 12,90\u00a0€ (25,80\u00a0€/kg)' },
       { label: 'Ordre du nom (avec titre)', value: 'Dr. Anna Schmidt' },
-      { label: 'Adresse', value: 'Hauptstraße 12, 10115 Berlin' },
-      { label: 'Téléphone', value: '030 12345678 · +49 30 12345678' },
-      { label: 'Semaine', value: 'lundi · KW 44' },
+      { label: 'Adresse', value: 'Hauptstraße 12, 10115 Berlin' },
+      { label: 'Téléphone', value: keep('030 12345678 · +49 30 12345678') },
+      { label: 'Semaine (début le lundi, numéro ISO)', value: keep('Montag · KW 44') },
     ],
     visual: {
       frame: 'browser',
@@ -471,8 +481,13 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
   <p class="de-foot"><span>Impressum</span> · <span>Datenschutz</span> · <span>AGB</span> · <span>Widerrufsbelehrung</span> · <span>Versand &amp; Zahlung</span> · <span>Cookie-Einstellungen</span></p>
 </div>`,
       css: `.mk-browser { max-width: 520px; margin-inline: auto; }
-.de { font-size: 13px; }
+.de { font-size: 13px; container-type: inline-size; }
 .de-head { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
+@container (max-width: 420px) {
+  .de-head { flex-wrap: wrap; row-gap: 8px; }
+  .de-logo { margin-inline-end: auto; }
+  .de-search { order: 3; flex-basis: 100%; }
+}
 .de-logo { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; color: #5b3a1e; }
 .de-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #c3c8d3; border-radius: 6px; color: #5a6172; white-space: nowrap; overflow: hidden; --ico: 14px; }
 .de-crumbs { padding: 8px 16px 0; font-size: 12px; color: #5a6172; }
@@ -521,14 +536,14 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
       {
         topic: 'formulaires',
         title: 'Se connecter avec BankID',
-        body: `BankID sert à se connecter et à signer dans les banques, les administrations et de nombreux services privés (Suède, Norvège ; MitID au Danemark). Sur ordinateur, on scanne un QR code avec l’appli, ce qui prouve que les deux appareils sont au même endroit ; sur mobile, l’appli s’ouvre directement.
+        body: `BankID sert à se connecter et à signer dans les banques, les administrations et de nombreux services privés (Suède, Norvège ; MitID au Danemark). Sur ordinateur, on scanne avec l’appli un QR code animé, qui change chaque seconde : il faut être devant l’écran, ce qui complique les fraudes lancées à distance ; sur mobile, l’appli s’ouvre directement.
 
 Pour un service sensible, un simple couple e-mail et mot de passe paraît daté.`,
       },
       {
         topic: 'formulaires',
         title: 'Le personnummer préremplit l’adresse',
-        body: `Au paiement, saisir son personnummer (ÅÅMMDD-NNNN ou ÅÅÅÅMMDD-NNNN) suffit pour récupérer l’adresse officielle : c’est rapide et attendu. Dis pourquoi tu le demandes et ne le réaffiche jamais en entier : c’est une donnée personnelle sensible.`,
+        body: `Au paiement, saisir son personnummer (ÅÅMMDD-NNNN ou ÅÅÅÅMMDD-NNNN) suffit pour récupérer l’adresse officielle : c’est rapide et attendu. Dis pourquoi tu le demandes et ne le réaffiche jamais en entier : la loi suédoise protège particulièrement cet identifiant (dataskyddslagen, 3 kap. 10 §).`,
       },
       {
         topic: 'paiement',
