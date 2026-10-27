@@ -74,7 +74,7 @@ const CK_TEXT = `<p class="mk-h3">Vos choix sur les cookies</p><p class="mk-smal
 const NEWS_PAGE = `<div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h2">Maison Lin</p><p class="mk-small mk-muted">Linge de maison en lin lavé</p><div class="mk-img" style="--ratio:16/7"></div></div>`;
 
 const newsDialog = (refuse: string, extra = '') =>
-  fr(`${NEWS_PAGE}<div class="mk-overlay"><div class="mk-dialog mk-stack mk-center" style="--gap:10px"><p class="mk-h2">-10 % sur votre première commande</p><p class="mk-small mk-muted">Inscrivez-vous à notre lettre d’information.</p><span class="mk-input" style="text-align:start;color:#6b7280">Votre adresse e-mail</span><span class="mk-btn mk-btn--block">J’en profite</span><span class="cs-no">${refuse}</span>${extra}</div></div>`);
+  fr(`${NEWS_PAGE}<div class="mk-overlay" style="place-items:end center"><div class="mk-dialog mk-stack mk-center" style="--gap:10px"><p class="mk-h2">-10 % sur votre première commande</p><p class="mk-small mk-muted">Inscrivez-vous à notre lettre d’information.</p><span class="mk-input" style="text-align:start;color:#6b7280">Votre adresse e-mail</span><span class="mk-btn mk-btn--block">J’en profite</span><span class="cs-no">${refuse}</span>${extra}</div></div>`);
 
 const MATTRESS_HEAD = `<div class="mk-img" style="--ratio:16/6"></div><p class="mk-h3">Matelas Aube 140 × 190</p><p><span class="mk-price" style="font-size:20px">389 €</span> <s class="mk-muted">459 €</s></p>`;
 
@@ -213,7 +213,7 @@ La Commission nationale de l’informatique et des libertés (CNIL) le résume a
 Fin 2021, la CNIL a sanctionné **Google (150 M€)** et **Facebook (60 M€)** : refuser les cookies demandait plusieurs clics, les accepter un seul. **TikTok** a écopé de **5 M€** pour le même motif, entre autres (décision rendue publique en janvier 2023).
 
 ### Le DSA
-Le règlement sur les services numériques (2022), applicable depuis le 17 février 2024 aux plateformes en ligne autres que les micro et petites entreprises, interdit à son **article 25** de concevoir, d’organiser ou d’exploiter des interfaces « de façon à tromper ou à manipuler » leurs utilisateurs, ou d’altérer substantiellement leur capacité à prendre des décisions libres et éclairées. Cette interdiction ne s’applique pas aux pratiques déjà couvertes par la directive sur les pratiques commerciales déloyales ou par le RGPD (article 25, paragraphe 2) : le DSA comble les vides de ces textes.`,
+Le règlement sur les services numériques (2022) interdit aux plateformes en ligne, à son **article 25**, de concevoir, d’organiser ou d’exploiter leurs interfaces « de façon à tromper ou à manipuler » leurs utilisateurs, ou d’altérer substantiellement leur capacité à prendre des décisions libres et éclairées. Cette interdiction s’applique depuis le 17 février 2024, sauf aux micro et petites entreprises, et pas aux pratiques déjà couvertes par la directive sur les pratiques commerciales déloyales ou par le RGPD (article 25, paragraphe 2) : le DSA comble les vides de ces textes.`,
       examples: [
         {
           title: 'Refuser aussi simplement qu’accepter',
@@ -477,7 +477,7 @@ Ici, les deux pages décrivent les mêmes offres : 5,99 € par mois s’affiche
         css: `.co-trip { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #f4f6f9; }
 .co-lines { display: flex; flex-direction: column; gap: 8px; }
 .co-total { border-top: 1px solid #e3e6ec; padding-top: 10px; }
-.co-fee { width: fit-content; margin: 0 0 0 auto; padding: 5px 0 5px 8px; font-size: 10px; color: #a3a9b5; }`,
+.co-fee { width: fit-content; margin: 4px 0 0 auto; padding: 2px 0 8px 8px; font-size: 10px; color: #a3a9b5; }`,
       },
       hotspots: [
         { id: 'insurance', label: 'Assurance cochée d’avance', correct: true, why: 'Panier piégé par présélection : une option payante ajoutée sans demande. Tout paiement supplémentaire exige un consentement exprès ; à défaut, le client a droit au remboursement.' },

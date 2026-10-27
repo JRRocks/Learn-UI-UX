@@ -377,7 +377,7 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
 - **L’élévation tonale** : une surface plus élevée se distingue par sa teinte (et une ombre là où elle aide), pas par des ombres arbitraires.
 - **Les composants Material** : boutons (plein, tonal, contour, texte), FAB, interrupteurs, chips, snackbars, feuilles inférieures (*bottom sheets*), dialogues, barre, rail et tiroir de navigation (Material 3 Expressive remplace le tiroir par le rail étendu, et les boutons segmentés par le groupe de boutons connectés). On ne porte pas les contrôles iOS et on n’invente pas d’équivalents.
 - **Un seul FAB**, pour l’action principale ; jamais de FAB empilés, ni de FAB pour une tâche secondaire.
-- **Les snackbars** pour un retour passager, avec une action comme « Annuler » si elle est utile, jamais un toast pour ça ; un **dialogue** seulement pour une décision qui doit interrompre. Sans action, la snackbar s’efface d’elle-même ; avec une action, elle reste jusqu’à ce que la personne agisse ou passe à autre chose.
+- **Les snackbars** pour un retour passager, jamais un toast, avec une action comme « Annuler » si elle est utile ; un **dialogue** seulement pour une décision qui doit interrompre. Sans action, la snackbar s’efface d’elle-même ; avec une action, elle reste jusqu’à ce que la personne agisse ou passe à autre chose.
 - **Les motifs de mouvement Material** : transformation de conteneur, axe partagé, fondu traversant, avec les courbes et durées standard. Le réglage **Supprimer les animations** est respecté : fondu enchaîné ou coupe franche.`,
     },
     {
@@ -433,7 +433,7 @@ La couche expressive de la marque (intention de la palette, accent typographique
     {
       id: 'audit-natif',
       title: 'Auditer une appli native',
-      body: `La commande \`audit\` d’impeccable a une variante native : un **contrôle technique** mené dans le code source (SwiftUI, UIKit, Compose, React Native, Flutter), sans navigateur ni détecteur. Il documente chaque problème sans le corriger, d’après les références iOS et Android, et note **cinq dimensions de 0 à 4** :
+      body: `La commande \`audit\` d’impeccable a une variante native : un **contrôle technique** mené dans le code source (SwiftUI, UIKit, Compose, React Native, Flutter), sans navigateur ni détecteur. Il documente chaque problème sans le corriger et note, d’après les références iOS et Android, **cinq dimensions de 0 à 4** :
 
 1. **Accessibilité (VoiceOver, TalkBack)** : chaque contrôle a un libellé (\`accessibilityLabel\` sur iOS, \`contentDescription\` sur Android) et annonce son rôle (bouton, interrupteur) et son état ; l’ordre de lecture et de focus suit la logique de l’écran, sans contrôle inatteignable ni focus perdu en changeant d’écran. S’y ajoutent le texte qui suit Dynamic Type ou les sp sans se couper, les cibles de 44 pt ou 48 dp, Réduire les animations et le contraste dans les deux apparences.
 2. **Performance** : démarrage lent, longues listes non virtualisées (sans \`List\`, \`LazyColumn\` ou \`FlatList\`), travail synchrone pendant un défilement ou un geste, qui fait sauter des images à 60 ou 120 Hz, rendus inutiles, images pleine taille pour des vignettes, appli trop lourde.
@@ -441,7 +441,7 @@ La couche expressive de la marque (intention de la palette, accent typographique
 4. **Conformité à la plateforme**, la dimension critique : gestes système cassés, contenu sous l’encoche, la barre d’état ou le clavier, navigation étrangère à la plateforme, contrôles réinventés ou en forme de page web, jeux d’icônes mélangés.
 5. **Adaptativité** : mise en page de téléphone étirée sur tablette, paysage coupé ou verrouillé sans raison, champs masqués par le clavier, multifenêtre et pliables mal gérés.
 
-Le rapport **commence par le verdict de conformité**, réussi ou échoué : l’appli se lit-elle comme une appli native, ou comme un site porté ? Le total sur 20 se lit avec les mêmes bandes que l’audit web (de 18–20, excellent, à 0–5, critique), et chaque problème reçoit une gravité :
+Le rapport **commence par le verdict de conformité**, réussi ou échoué : l’appli se lit-elle comme une appli native, ou comme un site porté ? Le total sur 20 se lit avec les mêmes bandes que l’audit web (18 à 20 : excellent ; 0 à 5 : critique), et chaque problème reçoit une gravité :
 
 - **P0**, bloquant : la tâche ne peut pas aboutir ; à corriger tout de suite.
 - **P1**, majeur : une vraie difficulté ou une entorse aux guides de la plateforme ; à corriger avant la sortie.

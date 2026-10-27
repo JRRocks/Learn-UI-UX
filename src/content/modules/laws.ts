@@ -37,6 +37,10 @@ const KUROSU: SourceRef = {
   label: 'Kurosu & Kashimura (1995) — Apparent usability vs. inherent usability',
   url: 'https://doi.org/10.1145/223355.223680',
 };
+const SONDEREGGER: SourceRef = {
+  label: 'Sonderegger & Sauer (2010) — The influence of design aesthetics in usability testing',
+  url: 'https://doi.org/10.1016/j.apergo.2009.09.002',
+};
 const SCHEIBEHENNE: SourceRef = {
   label: 'Scheibehenne, Greifeneder & Todd (2010) — méta-analyse de la surcharge de choix',
   url: 'https://doi.org/10.1086/651235',
@@ -88,7 +92,7 @@ const GRID_ITEMS = [
 ];
 const gridMock = (cls: string) =>
   fr(`<div class="mk-pad"><div class="${cls}">${GRID_ITEMS.map(
-    ([name, price]) => `<div class="gi"><div class="mk-img" style="--ratio:4/3"></div><p class="gi-cap"><b>${name}</b> · ${price}</p></div>`,
+    ([name, price]) => `<div class="gi"><div class="mk-img" style="--ratio:4/3"></div><p class="gi-cap"><b>${name}</b><br>${price}</p></div>`,
   ).join('')}</div></div>`);
 
 const HELP_TITLE = '<p class="mk-h2">Comment pouvons-nous vous aider ?</p>';
@@ -105,7 +109,7 @@ const PLAN_CSS = `.plan { min-width: 0; display: flex; flex-direction: column; a
   .plan--pick { padding: 9px 3px; }
   .plan-name { font-size: 12px; }
   .plan-price { font-size: 17px; }
-  .plan-badge { font-size: 10px; padding: 2px 6px; }
+  .plan-badge { font-size: 11px; padding: 2px 5px; }
 }`;
 
 const plan = (name: string, price: string, desc: string, pick = false) =>
@@ -132,7 +136,12 @@ const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding
 .jk-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #c3c8d3; border-radius: 999px; color: #5a6172; font-size: 13px; overflow: hidden; white-space: nowrap; }
 .jk-icons { display: flex; align-items: center; gap: 12px; }
 .jk-bag { position: relative; display: inline-flex; }
-.jk-bag b { position: absolute; top: -6px; inset-inline-end: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: #1f4fd8; color: #fff; font-size: 10px; display: grid; place-items: center; }`;
+.jk-bag b { position: absolute; top: -6px; inset-inline-end: -8px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #1f4fd8; color: #fff; font-size: 11px; display: grid; place-items: center; }
+@media (max-width: 440px) {
+  .jk-bar { gap: 6px; padding: 10px; }
+  .jk-icons { gap: 8px; }
+  .jk-search { padding: 0 8px; }
+}`;
 
 const laws: ModuleContent = {
   id: 'laws',
@@ -179,7 +188,7 @@ Pour chaque loi, retiens trois choses : **ce qu’elle prédit**, **son applicat
       body: `### Loi de Fitts (1954)
 Le temps pour atteindre une cible croît avec sa **distance** et diminue avec sa **taille** — plus exactement, avec le logarithme du rapport entre les deux. Aller vite vers une petite cible produit des erreurs.
 
-- **Application** : l’action principale est large et proche de la main (le pouce sur mobile). Cibles tactiles d’au moins **44 × 44 pt** (Apple) ou **48 × 48 dp** (Material Design) ; le WCAG 2.2 fixe un minimum de 24 × 24 px (niveau AA), sauf pour une cible assez isolée de ses voisines.
+- **Application** : l’action principale est large et proche de la main (le pouce sur mobile). Cibles tactiles d’au moins **44 × 44 pt** (Apple) ou **48 × 48 dp** (Material Design) ; le WCAG 2.2 fixe un minimum de 24 × 24 px (niveau AA), sauf exceptions (cible assez espacée de ses voisines, lien dans une phrase, contrôle équivalent ailleurs sur la page…).
 - **L’espacement compte** : des cibles serrées attirent les erreurs. Éloigne « Supprimer » des actions fréquentes : la distance protège aussi.
 - **Mauvais usage** : tout agrandir. Si chaque bouton est énorme, aucun n’est plus facile qu’un autre et l’écran perd sa hiérarchie.
 
@@ -219,7 +228,7 @@ Le temps de décision croît avec le **nombre** et la **complexité** des choix 
 
 - **Segmentation** (*chunking*) : regrouper des éléments en unités de sens augmente ce qu’on retient et ce qu’on vérifie. « 06 12 34 56 78 » se lit en 5 blocs, pas en 10 chiffres ; un IBAN s’affiche par groupes de 4.
 - **Reconnaissance plutôt que rappel** : la mémoire de travail est fragile et s’efface en quelques dizaines de secondes. Montre l’information au lieu de demander de la retenir.
-- **Position sérielle** : on retient mieux les premiers éléments d’une liste (primauté) et les derniers (récence). Place l’essentiel aux extrémités d’une navigation, le moins important au milieu.
+- **Position sérielle** : on retient mieux les premiers éléments d’une liste (primauté) et les derniers (récence). L’effet compte surtout pour ce qu’on doit retenir sans le revoir : consignes, étapes, menu vocal. Une navigation, elle, reste sous les yeux : l’effet joue sur ce qu’on en garde d’une visite à l’autre. Place l’essentiel aux extrémités, le moins important au milieu.
 
 **Le mauvais usage classique** : limiter un menu à 7 entrées « à cause de Miller ». Un menu reste sous les yeux : c’est de la reconnaissance, pas de la mémorisation, et le Nielsen Norman Group qualifie cette limite d’idée reçue. Ce qui compte, c’est le nombre d’options à **peser ensemble** et la clarté des regroupements — d’où les repères d’impeccable : ≤ 4 options visibles à un point de décision, ≤ 5 entrées de navigation de premier niveau, le reste rangé sous des catégories claires.`,
       examples: [
@@ -251,7 +260,7 @@ Le temps de décision croît avec le **nombre** et la **complexité** des choix 
 - **Connexité uniforme** : des éléments reliés visuellement (trait, flèche) paraissent plus liés que des éléments seulement proches. Les étapes d’un indicateur de progression sont reliées par un trait.
 - **Prägnanz** (« bonne forme ») : on interprète une figure ambiguë ou complexe sous sa forme la plus simple. Des formes et des icônes simples se comprennent plus vite.
 
-La région commune et la connexité uniforme sont des ajouts plus récents de Stephen Palmer (1992 et 1994). Impeccable en tire une règle pratique : **grouper par le sens, et utiliser la proximité avant d’ajouter des conteneurs ou de la décoration**.`,
+La région commune (Stephen Palmer, 1992) et la connexité uniforme (Palmer et Irvin Rock, 1994) sont des ajouts plus récents. Impeccable en tire une règle pratique : **grouper par le sens, et utiliser la proximité avant d’ajouter des conteneurs ou de la décoration**.`,
       examples: [
         {
           title: 'Une légende appartient à l’image la plus proche',
@@ -300,7 +309,7 @@ Parmi des éléments semblables, celui qui **diffère** est le mieux remarqué e
 ### Seuil de Doherty (1982)
 La productivité s’envole quand le système répond en **moins de 400 ms**, contre 2 secondes admises jusque-là (Doherty et Thadani, IBM).
 
-- **Application** : un retour visuel immédiat (100 à 150 ms selon impeccable), puis le résultat. Au-delà d’une seconde, montre que le travail avance ; au-delà de 10 s, affiche une progression chiffrée (repères du Nielsen Norman Group : 0,1 s, 1 s, 10 s).
+- **Application** : un retour visuel en moins de 0,1 s, qui paraît instantané (impeccable donne 100 à 150 ms à une animation de retour), puis le résultat. Au-delà d’une seconde, montre que le travail avance ; au-delà de 10 s, affiche une progression chiffrée (repères du Nielsen Norman Group : 0,1 s, 1 s, 10 s).
 - **Performance perçue** : un squelette de page, un état « en cours » ou un résultat partiel rendent l’attente supportable.
 - **Mauvais usage** : Laws of UX note qu’un délai ajouté peut augmenter la valeur perçue. Impeccable l’interdit : ne jamais simuler un travail ni retarder un résultat pour la mise en scène.`,
     },
@@ -321,17 +330,17 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
 - **Rasoir d’Occam** : à efficacité égale, choisis la solution qui suppose le moins. Retire un élément tant que la fonction n’en souffre pas. Mauvais usage : retirer les libellés des icônes — le mystère n’est pas du minimalisme, rappelle impeccable.
 - **Principe de Pareto** : environ 80 % des effets viennent de 20 % des causes. Concentre l’effort sur les parcours les plus fréquents. Mauvais usage : sacrifier le reste quand il est vital pour certains (accessibilité, cas d’erreur).
 - **Loi de Parkinson** (1955) : une tâche s’étire jusqu’à occuper le temps disponible. Raccourcis la tâche — remplissage automatique, paiement express — plutôt que de presser la personne. Mauvais usage : un faux compte à rebours, qui est un motif trompeur.
-- **Surcharge de choix** (Toffler, 1970) : trop d’options peut gêner la décision. Mais l’effet est conditionnel : une méta-analyse de 50 expériences (Scheibehenne et coll., 2010) trouve un effet moyen quasi nul ; une autre (Chernev et coll., 2015) le retrouve quand la tâche est difficile, les options complexes à comparer, les préférences floues ou l’envie de décider vite forte. Le remède est souvent d’aider à comparer — vue côte à côte, filtres, option conseillée — plutôt que de couper.`,
+- **Surcharge de choix** (Toffler, 1970) : trop d’options peuvent gêner la décision. Mais l’effet est conditionnel : une méta-analyse de 50 expériences (Scheibehenne et coll., 2010) trouve un effet moyen quasi nul ; une autre (Chernev et coll., 2015) le retrouve quand la tâche est difficile, les options complexes à comparer, les préférences floues ou l’envie de décider vite forte. Impeccable (distill) tient ce « paradoxe du choix » pour réel et demande moins d’options : c’est juste à un point de décision chargé, pas comme loi universelle. Réduis ce qui est affiché et aide à comparer le reste — vue côte à côte, filtres, option conseillée — plutôt que de couper à l’aveugle.`,
     },
   ],
   rules: [
     { id: 'fitts', front: 'Que prédit la loi de Fitts ?', back: 'Le temps pour atteindre une cible croît avec la distance et diminue avec la taille. Actions fréquentes : grandes et proches ; actions destructives : à l’écart.' },
-    { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 pt chez Apple, 48 × 48 dp chez Material Design. Le WCAG 2.2 exige au moins 24 × 24 px (niveau AA), sauf cible bien isolée.' },
+    { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 pt chez Apple, 48 × 48 dp chez Material Design. Le WCAG 2.2 exige au moins 24 × 24 px (niveau AA), sauf exceptions (cible assez espacée, lien dans le texte…).' },
     { id: 'hick', front: 'Que prédit la loi de Hick ?', back: 'Le temps de décision croît (de façon logarithmique) avec le nombre et la complexité des choix. Mets en avant l’option recommandée, sans tout enfouir dans des sous-menus.' },
     { id: 'cowan', front: 'Combien d’éléments tient la mémoire de travail ?', back: 'Environ 4 (Cowan, 2001), pas 7 ± 2. Impeccable : ≤ 4 éléments à considérer ensemble à un point de décision.' },
     { id: 'miller-menu', front: 'La loi de Miller limite-t-elle un menu à 7 entrées ?', back: 'Non : un menu se lit, il ne se mémorise pas (reconnaissance). Ce qui compte, c’est de regrouper et de hiérarchiser.' },
     { id: 'jakob', front: 'Que dit la loi de Jakob ?', back: 'Les gens passent l’essentiel de leur temps sur d’autres sites : ils attendent que le tien fonctionne pareil. Suis les conventions.' },
-    { id: 'doherty', front: 'Quel temps de réponse vise le seuil de Doherty ?', back: 'Moins de 400 ms. Retour visuel en 100–150 ms ; au-delà d’une seconde, montre que le travail avance.' },
+    { id: 'doherty', front: 'Quel temps de réponse vise le seuil de Doherty ?', back: 'Moins de 400 ms. Retour visuel sous 0,1 s ; au-delà d’une seconde, montre que le travail avance.' },
     { id: 'peak-end', front: 'Sur quoi juge-t-on une expérience, selon la règle pic-fin ?', back: 'Sur son moment le plus intense et sur sa fin. Soigne les erreurs, les attentes et l’écran final.' },
     { id: 'restorff', front: 'Comment utiliser l’effet Von Restorff ?', back: 'Un seul élément distinct par écran, pour l’action clé — distinct par la forme ou le texte, pas seulement par la couleur.' },
     { id: 'aesthetic', front: 'Que masque l’effet esthétique-utilisabilité ?', back: 'Un beau design paraît plus utilisable et fait tolérer des défauts. En test, observe les actions, pas seulement les avis.' },
@@ -356,7 +365,7 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
             html: fr(`<div class="pay"><div class="mk-row mk-between pay-top"><span class="mk-row" style="--gap:2px"><i data-icon="chevron-left"></i><b>Panier</b></span><span class="pay-link">Payer</span></div>${PAY_LINES}</div>`),
             css: PAY_CSS,
           },
-          why: 'Une petite cible de texte, dans le coin le plus éloigné du pouce : il faut changer de prise ou viser au millimètre.',
+          why: 'Une petite cible de texte tout en haut de l’écran, hors de portée naturelle du pouce : il faut changer de prise ou viser au millimètre.',
         },
         {
           id: 'thumb',
@@ -370,7 +379,7 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
         },
       ],
       answer: 'thumb',
-      explanation: `La **loi de Fitts** prédit que le temps pour atteindre une cible croît avec sa distance et diminue avec sa taille. Sur un téléphone tenu d’une main, la distance se mesure depuis le pouce : le coin supérieur opposé est la zone la plus difficile à atteindre.
+      explanation: `La **loi de Fitts** prédit que le temps pour atteindre une cible croît avec sa distance et diminue avec sa taille. Sur un téléphone tenu d’une main, la distance se mesure depuis le pouce : le haut de l’écran, surtout le coin opposé à la main, est la zone la plus difficile à atteindre.
 
 L’écran recommandé joue sur les deux leviers : une cible pleine largeur de 48 px de haut, placée dans la moitié inférieure de l’écran. Le persona « Casey » d’impeccable (mobile, une main, souvent interrompu) signale justement les actions importantes placées hors de portée du pouce.`,
       takeaway: 'Sur mobile, l’action principale est grande (44–48 px de haut au moins) et dans la zone du pouce, pas une petite cible dans un coin éloigné.',
@@ -426,7 +435,7 @@ Pour l’action principale, touchée souvent et au pouce, vise environ 48 px. Au
           id: 'focused',
           visual: {
             alt: 'Page d’aide avec un champ de recherche, trois démarches fréquentes mises en avant et un lien vers toutes les rubriques.',
-            html: fr(`<div class="mk-pad mk-stack" style="--gap:10px">${HELP_TITLE}<div class="help-search"><i data-icon="search" style="--ico:16px"></i><span>Rechercher : facture, relevé, déménagement…</span></div><p class="mk-small mk-muted mk-strong">Les démarches les plus fréquentes</p><div class="mk-stack" style="--gap:8px"><span class="help-top"><i data-icon="receipt"></i>Comprendre ma facture<i data-icon="chevron-right" class="help-chev"></i></span><span class="help-top"><i data-icon="zap"></i>Transmettre mon relevé<i data-icon="chevron-right" class="help-chev"></i></span><span class="help-top"><i data-icon="truck"></i>Je déménage<i data-icon="chevron-right" class="help-chev"></i></span></div><span class="mk-btn mk-btn--text" style="align-self:flex-start;padding:0;min-height:30px">Voir toutes les rubriques (12)</span></div>`),
+            html: fr(`<div class="mk-pad mk-stack" style="--gap:10px">${HELP_TITLE}<div class="help-search"><i data-icon="search" style="--ico:16px"></i><span>Rechercher : facture, relevé, déménagement…</span></div><p class="mk-small mk-muted mk-strong">Les démarches les plus fréquentes</p><div class="mk-stack" style="--gap:8px"><span class="help-top"><i data-icon="file-text"></i>Comprendre ma facture<i data-icon="chevron-right" class="help-chev"></i></span><span class="help-top"><i data-icon="zap"></i>Transmettre mon relevé<i data-icon="chevron-right" class="help-chev"></i></span><span class="help-top"><i data-icon="truck"></i>Je déménage<i data-icon="chevron-right" class="help-chev"></i></span></div><span class="mk-btn mk-btn--text" style="align-self:flex-start;padding:0;min-height:30px">Voir toutes les rubriques (12)</span></div>`),
             css: `.help-search { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 12px; border: 1px solid #c3c8d3; border-radius: 8px; color: #5a6172; font-size: 13px; }
 .help-top { display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 12px; border: 1px solid #d5dae3; border-radius: 10px; font-weight: 600; }
 .help-chev { margin-inline-start: auto; color: #8b92a1; }`,
@@ -516,7 +525,7 @@ La règle d’impeccable : grouper par le sens et créer un rythme — serré da
           id: 'custom',
           visual: {
             frame: 'browser',
-            alt: 'En-tête de boutique original : le panier est une icône de colis légendée « Ma malle » placée en tête de barre, la recherche est un simple mot « Explorer », le logo est à l’autre extrémité.',
+            alt: 'En-tête de boutique : une icône de colis légendée « Ma malle » en tête de barre, le mot « Explorer », puis le logo à l’autre extrémité.',
             html: fr(`<div class="jk-bar jk-odd"><span class="jk-cart"><i data-icon="package"></i>Ma malle</span><span class="jk-explore">Explorer</span><span class="jk-logo">Maison Lin</span></div>${JK_CONTENT}`),
             css: JK_CSS,
           },
@@ -526,7 +535,7 @@ La règle d’impeccable : grouper par le sens et créer un rythme — serré da
           id: 'conventional',
           visual: {
             frame: 'browser',
-            alt: 'En-tête de boutique classique : logo en tête de barre, champ de recherche avec loupe au centre, icônes du compte et du panier avec un badge « 2 » à l’autre extrémité.',
+            alt: 'En-tête de boutique : logo en tête de barre, champ « Rechercher » avec loupe au centre, icônes du compte et du panier (pastille « 2 ») à l’autre extrémité.',
             html: fr(`<div class="jk-bar"><span class="jk-logo">Maison Lin</span><span class="jk-search"><i data-icon="search" style="--ico:15px"></i>Rechercher</span><span class="jk-icons"><i data-icon="user"></i><span class="jk-bag"><i data-icon="shopping-bag"></i><b>2</b></span></span></div>${JK_CONTENT}`),
             css: JK_CSS,
           },
@@ -547,28 +556,29 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
       prompt: 'Trouve les deux endroits où cet écran va à l’encontre de la loi de Fitts.',
       visual: {
         frame: 'phone',
-        alt: 'Écran « Modifier l’adresse » sur téléphone : une petite croix de fermeture, trois champs, puis un bouton « Enregistrer » collé à un bouton rouge « Supprimer ».',
+        alt: 'Écran « Modifier l’adresse » sur téléphone : titre et croix de fermeture en haut, champs Adresse, Code postal et Ville, puis les boutons « Enregistrer » et « Supprimer » (rouge) côte à côte en bas.',
         html: fr(`<div class="ad">
 <div class="mk-row mk-between ad-top"><p class="mk-h3" data-hotspot="title">Modifier l’adresse</p><span class="ad-x" data-hotspot="close"><i data-icon="x" style="--ico:14px"></i></span></div>
 <div class="mk-pad mk-stack" style="--gap:12px">
-<div class="mk-field"><span class="mk-label">Adresse</span><span class="mk-input">14 rue des Lilas</span></div>
+<div class="mk-field" data-hotspot="street"><span class="mk-label">Adresse</span><span class="mk-input">14 rue des Lilas</span></div>
 <div class="mk-field" data-hotspot="zip"><span class="mk-label">Code postal</span><span class="mk-input">69003</span></div>
 <div class="mk-field"><span class="mk-label">Ville</span><span class="mk-input">Lyon</span></div>
 </div>
-<div class="ad-actions"><span class="mk-btn ad-save" data-hotspot="save">Enregistrer</span><span class="mk-btn mk-btn--danger ad-del" data-hotspot="delete">Supprimer</span></div>
+<div class="ad-actions" data-hotspot="actions"><span class="mk-btn ad-save">Enregistrer</span><span class="mk-btn mk-btn--danger ad-del">Supprimer</span></div>
 </div>`),
         css: `.ad { min-height: 400px; display: flex; flex-direction: column; }
 .ad-top { padding: 10px 14px; border-bottom: 1px solid #eceef2; }
-.ad-x { display: inline-flex; color: #5a6172; }
+.ad-x { position: relative; display: inline-flex; color: #5a6172; }
+.ad-x::before { content: ""; position: absolute; inset: -10px; }
 .ad-actions { margin-top: auto; display: flex; gap: 4px; padding: 12px 14px 16px; }
 .ad-save { flex: 1; min-height: 46px; }
 .ad-del { min-height: 46px; padding: 0 12px; }`,
       },
       hotspots: [
         { id: 'close', label: 'Croix de fermeture de 14 px', correct: true, why: 'Une cible de 14 × 14 px sans zone de toucher élargie : très loin des 44 pt recommandés par Apple et des 48 dp de Material Design.' },
-        { id: 'delete', label: '« Supprimer » collé à « Enregistrer »', correct: true, why: 'Une action destructive à 4 px de l’action la plus fréquente : le moindre écart de pouce supprime l’adresse.' },
-        { id: 'save', label: 'Bouton « Enregistrer »', correct: false, why: 'Large et dans la zone du pouce : c’est la bonne cible. Le problème est sa voisine.' },
+        { id: 'actions', label: '« Supprimer » collé à « Enregistrer »', correct: true, why: 'Une action destructive à 4 px de l’action la plus fréquente : le moindre écart de pouce supprime l’adresse. « Enregistrer », large et dans la zone du pouce, est bien placé ; c’est « Supprimer » qu’il faut éloigner.' },
         { id: 'title', label: 'Titre de l’écran', correct: false, why: 'Le titre nomme clairement la tâche : rien à corriger.' },
+        { id: 'street', label: 'Champ « Adresse »', correct: false, why: 'Champ pleine largeur avec un libellé visible : une cible facile à atteindre.' },
         { id: 'zip', label: 'Champ « Code postal »', correct: false, why: 'Champ pleine largeur, de hauteur confortable, avec un libellé visible.' },
       ],
       explanation: `La loi de Fitts dit deux choses utiles ici :
@@ -585,9 +595,9 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
       prompt: 'Sur cette page d’inscription, trouve les deux éléments où une loi de l’UX est mal appliquée.',
       visual: {
         frame: 'browser',
-        alt: 'Étape 2 d’une inscription : une barre de progression, trois formules portant chacune un badge criard de couleur différente, un champ e-mail, un champ téléphone refusé pour cause d’espaces, et un bouton « Continuer ».',
+        alt: 'Étape 2 sur 3 d’une inscription : indicateur d’étapes, trois formules portant chacune un badge de couleur différente (« Populaire ! », « Top prix ! », « Conseillé ! »), champ e-mail, champ téléphone « 06 12 34 56 78 » marqué « Format invalide : 10 chiffres, sans espace ni point », et un bouton « Continuer ».',
         html: fr(`<div class="mk-pad mk-stack" style="--gap:14px">
-<div class="mk-stack" style="--gap:6px" data-hotspot="steps"><div class="mk-row mk-between mk-small"><b>Étape 2 sur 3 · Formule et coordonnées</b><span class="mk-muted">Plus qu’une étape</span></div><div class="su-bar"><span></span></div></div>
+<div class="mk-stack" style="--gap:6px" data-hotspot="steps"><div class="mk-row mk-between mk-small"><b>Étape 2 sur 3 · Formule et coordonnées</b><span class="mk-muted">Ensuite : paiement</span></div><div class="su-steps"><span class="su-done"></span><span class="su-cur"></span><span></span></div></div>
 <div class="su-grid" data-hotspot="badges">
 <div class="su-plan su-p1"><span class="su-b">Populaire !</span><b>Mensuel</b><span class="mk-small">7,99 €/mois</span></div>
 <div class="su-plan su-p2"><span class="su-b">Top prix !</span><b>Annuel</b><span class="mk-small">79 €/an</span></div>
@@ -597,26 +607,28 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
 <div class="mk-field" data-hotspot="phone"><span class="mk-label">Téléphone</span><span class="mk-input mk-input--error">06 12 34 56 78</span><span class="mk-error">Format invalide : 10 chiffres, sans espace ni point.</span></div>
 <span class="mk-btn mk-btn--block" data-hotspot="cta">Continuer</span>
 </div>`),
-        css: `.su-bar { height: 6px; border-radius: 3px; background: #e3e6ec; }
-.su-bar span { display: block; width: 66%; height: 100%; border-radius: 3px; background: #1f4fd8; }
+        css: `.su-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.su-steps span { height: 6px; border-radius: 3px; background: #e3e6ec; }
+.su-steps .su-done { background: #1f4fd8; }
+.su-steps .su-cur { background: linear-gradient(90deg, #1f4fd8 50%, #e3e6ec 50%); }
 .su-plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 10px; border: 2px solid; text-align: center; overflow-wrap: break-word; }
-.su-b { max-width: 100%; font-size: 10.5px; font-weight: 800; color: #fff; padding: 2px 6px; border-radius: 999px; }
+.su-b { max-width: 100%; font-size: 11px; font-weight: 800; color: #fff; padding: 2px 6px; border-radius: 999px; }
 .su-p1 { border-color: #d92d3a; background: #fff0f0; } .su-p1 .su-b { background: #d92d3a; }
-.su-p2 { border-color: #c25e00; background: #fff4e5; } .su-p2 .su-b { background: #c25e00; }
+.su-p2 { border-color: #b35600; background: #fff4e5; } .su-p2 .su-b { background: #b35600; }
 .su-p3 { border-color: #7b3fbf; background: #f6efff; } .su-p3 .su-b { background: #7b3fbf; }
 .su-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 8px; }`,
       },
       hotspots: [
         { id: 'phone', label: 'Numéro refusé à cause des espaces', correct: true, why: 'Loi de Postel ignorée : le système refuse une saisie parfaitement compréhensible au lieu de retirer les espaces lui-même.' },
         { id: 'badges', label: 'Un badge criard sur chaque formule', correct: true, why: 'Effet Von Restorff annulé : trois éléments mis en avant à égalité, donc aucun ne ressort.' },
-        { id: 'steps', label: 'Barre « Étape 2 sur 3 »', correct: false, why: 'Gradient d’objectif bien appliqué : la progression est visible et honnête.' },
+        { id: 'steps', label: 'Indicateur « Étape 2 sur 3 »', correct: false, why: 'Gradient d’objectif bien appliqué : une étape faite, la deuxième en cours, la suite annoncée. La progression est visible et honnête.' },
         { id: 'email', label: 'Champ e-mail', correct: false, why: 'Libellé visible, valeur lisible : rien à redire.' },
         { id: 'cta', label: 'Bouton « Continuer »', correct: false, why: 'Une seule action principale, large : conforme à Fitts.' },
       ],
       explanation: `- **Loi de Postel** : « sois tolérant dans ce que tu acceptes ». Refuser « 06 12 34 56 78 » pour des espaces fait porter à la personne un travail que le système fait en une ligne : retirer les espaces, puis valider.
 - **Effet Von Restorff** : un élément ressort parce qu’il est seul à différer. Trois badges criards sur trois cartes s’annulent ; mets en avant une seule formule, ou aucune.
 
-La barre de progression (gradient d’objectif), le champ e-mail et le bouton pleine largeur (Fitts) sont corrects.`,
+L’indicateur d’étapes (gradient d’objectif), le champ e-mail et le bouton pleine largeur (Fitts) sont corrects.`,
       takeaway: 'Normalise les saisies au lieu de les refuser (Postel), et n’isole qu’un élément à la fois (Von Restorff).',
       sources: [law('postels-law', 'Loi de Postel'), law('von-restorff-effect', 'Effet Von Restorff'), law('goal-gradient-effect', 'Effet de gradient d’objectif')],
     },
@@ -624,18 +636,18 @@ La barre de progression (gradient d’objectif), le champ e-mail et le bouton pl
       id: 'laws-miller-choice',
       type: 'choice',
       difficulty: 2,
-      context: 'En revue de design, un collègue propose : « La loi de Miller dit qu’on retient 7 ± 2 éléments. Coupons le menu de la boutique à 7 catégories. »',
+      context: 'En revue de design, un collègue propose : « Le menu de la boutique a 14 catégories. La loi de Miller dit qu’on retient 7 ± 2 éléments : coupons-le à 7. »',
       prompt: 'Que lui réponds-tu ?',
       options: [
-        { id: 'recognition', label: 'Un menu se lit, il ne se mémorise pas : Miller ne fixe pas sa taille. Regroupons plutôt les catégories sous quelques entrées claires.', why: 'Exact : un menu sollicite la reconnaissance, pas la mémoire. Le vrai levier est la clarté des regroupements.' },
-        { id: 'seven', label: 'D’accord : au-delà de 7, les gens oublient les premières entrées.', why: 'Les entrées restent affichées : personne n’a besoin de s’en souvenir.' },
-        { id: 'four', label: 'Allons plus loin : 4 entrées au total, puisque Cowan a révisé le chiffre à 4.', why: 'Cowan corrige bien Miller, mais la mémoire de travail ne limite pas un menu visible. Quatre entrées pour toute une boutique deviendraient abstraites.' },
-        { id: 'flat', label: 'Gardons les 14 catégories à plat : la longueur d’un menu n’a aucune importance.', why: 'Un menu long n’est pas interdit, mais 14 entrées sans regroupement compliquent le choix (Hick) et le balayage.' },
+        { id: 'recognition', label: 'Un menu se reconnaît, il ne se mémorise pas : regroupons plutôt les catégories sous quelques entrées claires.', why: 'Exact : un menu sollicite la reconnaissance, pas le rappel. Le vrai levier est la clarté des regroupements.' },
+        { id: 'seven', label: 'D’accord : au-delà de 7 entrées, les gens oublient les premières et se perdent dans le menu.', why: 'Les entrées restent affichées : personne n’a besoin de s’en souvenir.' },
+        { id: 'four', label: 'Allons plus loin : 4 catégories en tout, puisque Cowan a révisé le chiffre de Miller à 4.', why: 'Cowan limite ce qu’on compare en même temps, pas le nombre total de catégories : 4 entrées pour toute une boutique deviendraient abstraites. Impeccable vise ≤ 5 entrées de premier niveau, le reste regroupé dessous.' },
+        { id: 'flat', label: 'Gardons les 14 catégories à plat : un menu reste visible, sa longueur n’a donc aucune importance.', why: 'Un menu long n’est pas interdit, mais 14 entrées sans regroupement compliquent le choix (Hick) et le balayage.' },
       ],
       answer: 'recognition',
       explanation: `Miller (1956) parlait de l’empan de la **mémoire immédiate** — ce qu’on retient sans le voir. Un menu, lui, reste sous les yeux : c’est de la **reconnaissance**. Le Nielsen Norman Group range la limite de 7 entrées par menu parmi les idées reçues, et prévient qu’un menu trop court rend les choix abstraits.
 
-Le bon argument n’est pas mémoriel mais décisionnel : des entrées nombreuses et non regroupées ralentissent le choix. D’où le repère d’impeccable : ≤ 5 entrées de premier niveau, le reste rangé sous des catégories claires. Et quand on parle vraiment de mémoire, le chiffre actuel est **environ 4** (Cowan, 2001), pas 7.`,
+Le bon argument n’est pas le rappel mais la comparaison : les options qu’on pèse en même temps occupent la mémoire de travail, qui en tient **environ 4** (Cowan, 2001), pas 7. D’où le repère d’impeccable : ≤ 5 entrées de premier niveau, le reste rangé sous des catégories claires.`,
       takeaway: 'Miller ne fixe pas la taille d’un menu : un menu se reconnaît, il ne se mémorise pas. Regroupe et hiérarchise.',
       sources: [law('millers-law', 'Loi de Miller'), NNG_STM, COWAN, 'imp:critique'],
     },
@@ -646,9 +658,9 @@ Le bon argument n’est pas mémoriel mais décisionnel : des entrées nombreuse
       context: 'La recherche de trajets de ton application de covoiturage met 2 à 3 secondes à répondre.',
       prompt: 'Quelle réponse d’interface est la meilleure pendant cette attente ?',
       options: [
-        { id: 'feedback', label: 'Montrer tout de suite que la recherche est lancée (bouton enfoncé, squelette de la liste), puis afficher les trajets dès qu’ils arrivent.', why: 'Un retour en moins de 400 ms garde la personne dans le rythme, et le squelette annonce ce qui vient.' },
-        { id: 'nothing', label: 'Ne rien changer à l’écran jusqu’à l’arrivée des résultats.', why: 'Sans retour, au-delà d’une seconde, on se demande si l’appui a été pris en compte, et on tape à nouveau.' },
-        { id: 'percent', label: 'Afficher une barre de progression de 0 à 100 %.', why: 'Un pourcentage se justifie au-delà d’une dizaine de secondes ; pour 2 à 3 s, c’est excessif — et inventé si le système ne connaît pas son avancement.' },
+        { id: 'feedback', label: 'Accuser réception tout de suite (bouton enfoncé, squelette de la liste), puis afficher les trajets.', why: 'Un retour en moins de 400 ms garde la personne dans le rythme, et le squelette annonce ce qui vient.' },
+        { id: 'nothing', label: 'Ne rien changer à l’écran avant l’arrivée des trajets, pour éviter tout clignotement inutile.', why: 'Éviter un clignotement vaut pour une attente de moins d’une seconde. Au-delà, sans retour, on se demande si l’appui a été pris en compte, et on tape à nouveau.' },
+        { id: 'percent', label: 'Afficher une barre de progression de 0 à 100 % pour montrer précisément l’avancement.', why: 'Un pourcentage se justifie au-delà d’une dizaine de secondes ; pour 2 à 3 s, c’est excessif — et inventé si le système ne connaît pas son avancement.' },
         { id: 'delay', label: 'Ajouter une animation de 3 secondes pour que la recherche paraisse plus sérieuse.', why: 'Allonger l’attente pour la mise en scène, c’est simuler un travail : impeccable l’interdit.' },
       ],
       answer: 'feedback',
@@ -665,10 +677,10 @@ Avec 2 à 3 secondes de calcul, on ne peut pas livrer les trajets en 400 ms — 
       context: 'Les tests montrent que le formulaire d’adresse de livraison (six champs) est jugé pénible. Une idée circule : supprimer des champs.',
       prompt: 'Quelle simplification respecte la loi de Tesler ?',
       options: [
-        { id: 'autocomplete', label: 'Une recherche d’adresse avec autocomplétion qui remplit rue, code postal et ville, et un champ « Complément » facultatif.', why: 'Le système absorbe la complexité : quelques lettres tapées, et une adresse complète.' },
+        { id: 'autocomplete', label: 'Une recherche d’adresse avec autocomplétion qui remplit les champs, et « Complément » facultatif.', why: 'Le système absorbe la complexité : quelques lettres tapées, et une adresse complète.' },
         { id: 'remove', label: 'Supprimer le champ « Complément d’adresse » (bâtiment, étage, code d’accès).', why: 'La complexité ne disparaît pas : elle ressurgit chez le livreur et chez le client, sous forme de colis non livrés.' },
-        { id: 'single', label: 'Un seul grand champ libre « Votre adresse », sans aide.', why: 'Moins de champs, mais toute la structuration repose sur la personne — et sur un système qui devra deviner.' },
-        { id: 'steps', label: 'Répartir les six champs sur trois écrans successifs.', why: 'La même saisie, plus deux transitions : l’effort est déplacé, pas réduit.' },
+        { id: 'single', label: 'Remplacer les six champs par un seul champ de texte libre « Votre adresse », sans aide.', why: 'Moins de champs, mais toute la structuration repose sur la personne — et sur un système qui devra deviner.' },
+        { id: 'steps', label: 'Répartir les six champs sur trois écrans de deux champs, plus légers à remplir.', why: 'La même saisie, plus deux transitions : l’effort est déplacé, pas réduit.' },
       ],
       answer: 'autocomplete',
       explanation: `La **loi de Tesler**, ou loi de conservation de la complexité : toute tâche a une part de complexité irréductible. Elle ne disparaît pas quand on retire des champs ; elle change de camp. Une livraison a besoin d’une rue, d’un code postal, d’une ville et parfois d’un code d’accès.
@@ -685,32 +697,34 @@ La bonne simplification fait porter cette complexité au système : autocomplét
       options: [
         { id: 'miller7', label: 'Couper un menu à 7 entrées « à cause de la loi de Miller ».', why: 'Un menu visible ne se mémorise pas : Miller ne s’applique pas.' },
         { id: 'thumb', label: 'Placer le bouton « Payer » dans la zone du pouce (loi de Fitts).', why: 'Bonne application : une cible proche et large.' },
-        { id: 'everything', label: 'Mettre un badge coloré sur chaque offre pour qu’elles soient toutes remarquées (effet Von Restorff).', why: 'L’effet repose sur l’exception : si tout ressort, rien ne ressort.' },
+        { id: 'deep', label: 'Ranger les options dans trois niveaux de sous-menus pour réduire les choix (loi de Hick).', why: 'Chaque niveau ajoute un clic et une décision. Hick est logarithmique : une liste plus longue mais bien ordonnée coûte souvent moins cher.' },
         { id: 'countdown', label: 'Afficher un compte à rebours fictif pour accélérer la décision (loi de Parkinson).', why: 'C’est de la fausse urgence, un motif trompeur. Parkinson invite à raccourcir la tâche, pas à presser la personne.' },
-        { id: 'phone', label: 'Accepter un numéro saisi avec des espaces ou des tirets (loi de Postel).', why: 'Bonne application : tolérant en entrée, normalisé en sortie.' },
+        { id: 'pareto', label: 'Concentrer l’effort sur les quelques parcours qui font l’essentiel des visites (principe de Pareto).', why: 'Bonne application : l’effort va là où il sert le plus de monde, sans abandonner le reste.' },
       ],
-      answers: ['miller7', 'everything', 'countdown'],
+      answers: ['miller7', 'deep', 'countdown'],
       explanation: `Une loi de l’UX décrit un mécanisme ; elle ne justifie que les décisions qui agissent sur ce mécanisme.
 
 - **Miller** décrit ce qu’on retient sans le voir — or un menu reste visible.
-- **Von Restorff** repose sur l’exception — la multiplier la détruit.
+- **Hick** compte toutes les décisions : trois niveaux de sous-menus en ajoutent une à chaque clic, alors qu’une liste plus longue ne coûte qu’un peu plus (la croissance est logarithmique).
 - **Parkinson** dit qu’une tâche s’étire avec le temps disponible : on raccourcit la tâche (remplissage automatique, paiement express), on n’invente pas une échéance.
 
-Fitts et Postel sont, eux, appliqués à bon escient.`,
+Fitts et Pareto sont, eux, appliqués à bon escient.`,
       takeaway: 'Avant de citer une loi, vérifie qu’elle décrit bien le mécanisme en jeu ; sinon, c’est un argument d’autorité.',
-      sources: [law('millers-law', 'Loi de Miller'), law('von-restorff-effect', 'Effet Von Restorff'), law('parkinsons-law', 'Loi de Parkinson'), 'deceptive'],
+      sources: [law('millers-law', 'Loi de Miller'), law('hicks-law', 'Loi de Hick'), NNG_FLAT, law('parkinsons-law', 'Loi de Parkinson'), law('pareto-principle', 'Principe de Pareto'), 'deceptive'],
     },
     {
       id: 'laws-aesthetic-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un design plus esthétique rend une interface réellement plus facile à utiliser.',
+      prompt: 'En test, si un design plus esthétique est jugé plus facile à utiliser, c’est qu’il l’est réellement.',
       answer: false,
       explanation: `L’**effet esthétique-utilisabilité** porte sur la **perception**. Dans l’étude de Kurosu et Kashimura (Hitachi, 1995), menée sur 26 variantes d’écran de distributeur de billets, l’attrait esthétique était plus fortement lié à la facilité d’usage *perçue* qu’à la facilité réelle.
 
+Un beau design peut aussi aider pour de vrai : sur un téléphone simulé, la version attrayante a donné des tâches plus rapides (Sonderegger et Sauer, 2010). Mais ce gain se mesure ; il ne se déduit pas des avis.
+
 Conséquence pratique : un beau prototype rend les gens plus tolérants aux petits défauts — et peut masquer des problèmes en test. Mesure ce que les personnes réussissent à faire, pas seulement ce qu’elles déclarent.`,
       takeaway: 'Un beau design paraît plus utilisable sans forcément l’être : en test, observe les actions, pas seulement les avis.',
-      sources: [law('aesthetic-usability-effect', 'Effet esthétique-utilisabilité'), KUROSU],
+      sources: [law('aesthetic-usability-effect', 'Effet esthétique-utilisabilité'), KUROSU, SONDEREGGER],
     },
     {
       id: 'laws-choice-overload-tf',
