@@ -622,16 +622,16 @@ Les deux autres repères viennent de la psychologie de l’attente : sous **0,1 
       difficulty: 1,
       prompt: 'Range les étapes d’une démarche d’optimisation dans l’ordre.',
       items: [
-        { id: 'measure', label: 'Mesurer l’état actuel sur un appareil et un réseau réalistes' },
+        { id: 'measure', label: 'Mesurer l’état actuel : données de terrain, puis test sur un appareil et un réseau réalistes' },
         { id: 'find', label: 'Identifier le goulot d’étranglement le plus coûteux' },
         { id: 'fix', label: 'Corriger ce problème-là en priorité' },
         { id: 'compare', label: 'Mesurer à nouveau et comparer avant et après' },
-        { id: 'monitor', label: 'Suivre les données de terrain chez les vrais utilisateurs' },
+        { id: 'monitor', label: 'Après la mise en ligne, surveiller les données de terrain pour confirmer que le gain tient dans la durée' },
       ],
       explanation: `Impeccable résume la démarche : **mesurer, trouver la vraie cause, corriger, mesurer encore**. Optimiser sans mesure dépense de l’effort sur ce qui ne compte pas ; corriger les détails en ignorant le gros problème ne change rien pour les utilisateurs.
 
-La mesure finale se fait **chez les vrais utilisateurs** (données de terrain), car un test de labo, même sur un appareil modeste, ne couvre pas toute la variété des appareils et des réseaux.`,
-      takeaway: 'Mesure, trouve le plus gros goulot, corrige-le, mesure encore, puis suis les données de terrain.',
+Les **données de terrain** servent deux fois : pour repérer le problème, puis pour confirmer le gain **chez les vrais utilisateurs**, car un test de labo, même sur un appareil modeste, ne couvre pas toute la variété des appareils et des réseaux.`,
+      takeaway: 'Mesure (terrain et labo), trouve le plus gros goulot, corrige-le, mesure encore, puis confirme le gain dans les données de terrain.',
       sources: ['imp:optimize'],
     },
     {
