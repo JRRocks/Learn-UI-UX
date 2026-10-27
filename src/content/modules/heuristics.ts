@@ -12,7 +12,7 @@ const HEURISTICS = [
   'Reconnaissance plutôt que rappel',
   'Flexibilité et efficacité',
   'Esthétique et minimalisme',
-  'Reconnaître et corriger les erreurs',
+  'Aider à reconnaître et corriger les erreurs',
   'Aide et documentation',
 ];
 
@@ -26,7 +26,7 @@ const crit = (n: number, expert: number, why: string): GridCriterion => ({
 
 const BOOKING: Visual = {
   frame: 'browser',
-  alt: 'Réservation de train, étape Passagers : indicateur d’étape et barre de progression, récapitulatif du trajet, bandeau d’erreur en haut du formulaire, champs du passager dont une date de naissance vide et une carte de réduction en code, promotion de location de voiture, bouton vert Ajouter un passager, boutons Réinitialiser et Continuer côte à côte, lien d’aide.',
+  alt: 'Réservation de train sur le site Ligne Bleue, étape « 2 sur 4 · Passagers » : lien « Modifier le trajet », barre de progression à moitié remplie, récapitulatif du trajet Lyon Part-Dieu → Marseille Saint-Charles à 38 €, bandeau rouge « Erreur V-102 : champ invalide. » en haut du formulaire, pastille « Remplir avec : Jules D. », champs Prénom (Camille) et Nom (Durand), champ Date de naissance vide avec le modèle JJ/MM/AAAA, sans icône de calendrier, sans contour ni message d’erreur, liste déroulante Carte de réduction qui affiche « CR-AV » avec le lien « Quelle carte choisir ? », encart jaune « Location de voiture : −20 % à l’arrivée ! », pastille verte arrondie « + Ajouter un passager », boutons « Réinitialiser » et « Continuer » côte à côte dans le même style bleu, lien « Aide et FAQ ».',
   css: `.bk { max-width: 560px; margin: 0 auto; }
 .bk-top { padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .bk-logo { font-weight: 800; color: #1f4fd8; letter-spacing: -0.01em; }
@@ -67,7 +67,7 @@ const BOOKING: Visual = {
 
 const DASHBOARD: Visual = {
   frame: 'browser',
-  alt: 'Tableau de bord d’un logiciel de facturation : recherche avec raccourci clavier, lien Aide, onglets, heure de synchronisation, bandeau « Échec de la synchro (BNK_401) », promotion pour l’offre Pro, quatre tuiles chiffrées avec mini-courbes, vues enregistrées, barre d’actions groupées Relancer, Exporter et Supprimer, tableau de trois factures et notification « Relance envoyée à 2 clients » avec Annuler.',
+  alt: 'Tableau de bord du logiciel de facturation Facturo : recherche « Rechercher une facture, un client… » avec la touche « / », lien Aide, onglets Tableau de bord (actif), Factures, Clients et Dépenses, mention « Dernière synchronisation bancaire réussie : hier à 18:02 », bouton « Nouvelle facture » avec la touche « N », bandeau rouge « Échec de la synchro (BNK_401). », promotion « Passez à Facturo Pro : −30 % ce mois-ci », quatre tuiles chiffrées avec mini-courbes, dont « CA de novembre » suivi d’une icône d’information, vues enregistrées Toutes, En retard, À relancer et « + Nouvelle vue », barre « 2 sélectionnées » avec Relancer, Exporter et Supprimer dans le même style, tableau de trois factures dont les échéances s’affichent 12/11/2026, 2026-11-15 et 02/11/2026, notification « Relance envoyée à 2 clients » avec Annuler.',
   css: `.fa { container: fa / inline-size; }
 .fa-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .fa-logo { font-weight: 800; letter-spacing: -0.01em; }
@@ -116,7 +116,7 @@ kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border:
   <div class="mk-tabs fa-nav"><span class="mk-tab mk-tab--on">Tableau de bord</span><span class="mk-tab">Factures</span><span class="mk-tab">Clients</span><span class="mk-tab">Dépenses</span></div>
   <div class="mk-pad mk-stack" style="--gap:12px">
     <div class="mk-row mk-between mk-wrap" style="--gap:8px">
-      <div><p class="mk-h2">Tableau de bord</p><p class="mk-small mk-muted">Synchronisé avec la banque il y a 3 min</p></div>
+      <div><p class="mk-h2">Tableau de bord</p><p class="mk-small mk-muted">Dernière synchronisation bancaire réussie : hier à 18:02</p></div>
       <span class="mk-btn mk-btn--s">Nouvelle facture <kbd class="fa-kbd">N</kbd></span>
     </div>
     <p class="fa-alert"><i data-icon="circle-alert" style="--ico:15px"></i> Échec de la synchro (BNK_401).</p>
@@ -217,7 +217,7 @@ Une **évaluation heuristique** est une inspection par des experts, pas un test 
     {
       id: 'noter',
       title: 'Noter de 0 à 4, honnêtement',
-      body: `Chaque heuristique reçoit une note de **0 à 4**, sur le même barème :
+      body: `Chaque heuristique reçoit une note de **0 à 4**. Les cinq niveaux, en résumé :
 
 - **0 — absent** : l’utilisateur devine, se perd ou reste coincé.
 - **1 — rare** : quelques cas couverts, la plupart non.
@@ -225,11 +225,13 @@ Une **évaluation heuristique** est une inspection par des experts, pas un test 
 - **3 — bon** : presque tout est couvert, manques mineurs.
 - **4 — excellent** : vraiment excellent, pas seulement « assez bien ».
 
+Le guide d’impeccable précise ces niveaux pour chaque heuristique. Pour la 9 (erreurs), par exemple : **0** un code, du jargon ou aucun message ; **1** un message vague, sans piste ; **2** le problème nommé, mais pas la correction ; **3** le problème et une marche à suivre ; **4** le problème localisé, la correction proposée et la saisie préservée.
+
 Le total sur **40** se lit en bandes : **36–40** excellent (finitions seulement), **28–35** bon (des points faibles à reprendre), **20–27** acceptable (des améliorations importantes avant que les gens soient satisfaits), **12–19** faible (refonte majeure de l’expérience), **0–11** critique (inutilisable en l’état). Sois honnête : la plupart des interfaces réelles obtiennent **entre 20 et 32**.
 
 ### Quand une heuristique ne s’applique pas
 
-Sur une surface **Persuader** ou **Expérience** (page d’accueil, campagne, portfolio), les heuristiques 7 (flexibilité) et 10 (aide) peuvent être notées **n/a**, avec une ligne de justification ; de même pour toute heuristique qui ne peut réellement pas s’appliquer. Le maximum devient 4 × le nombre d’heuristiques notées — **32** pour deux n/a — et la bande se lit en pourcentage : 90 % et plus excellent, 70 % bon, 50 % acceptable, 30 % faible, en dessous critique. Ainsi 24/32 = 75 % : bon. N’affiche jamais « /40 » sur un ensemble partiel.`,
+Sur une surface **Persuader** ou **Expérience** (page d’atterrissage ou *landing page*, campagne, portfolio), les heuristiques 7 (flexibilité) et 10 (aide) peuvent être notées **n/a**, avec une ligne de justification ; de même pour toute heuristique qui ne peut réellement pas s’appliquer. Le maximum devient 4 × le nombre d’heuristiques notées — **32** pour deux n/a — et la bande se lit en pourcentage : 90 % et plus excellent, 70 % bon, 50 % acceptable, 30 % faible, en dessous critique. Ainsi 24/32 = 75 % : bon. N’affiche jamais « /40 » sur un ensemble partiel.`,
     },
     {
       id: 'severite',
@@ -245,7 +247,7 @@ Tu hésites entre deux niveaux ? Demande-toi : **un utilisateur contacterait-il 
 
 Le Nielsen Norman Group fonde la sévérité sur trois facteurs : la **fréquence** (combien de gens le rencontrent), l’**impact** (est-ce difficile à surmonter ?) et la **persistance** (une fois, ou à chaque passage ?), plus l’effet sur l’adoption du produit. Il recommande de faire noter la sévérité par plusieurs évaluateurs, chacun de son côté : la note d’un seul n’est pas fiable.
 
-> Ne confonds pas les deux échelles : une heuristique notée 4 est excellente, un problème P0 est le pire de tous.`,
+> Ne confonds pas les échelles : une heuristique notée 4 est excellente, un problème P0 est le pire de tous. Et chez NN/g, la sévérité se note de 0 (pas un problème) à 4 (catastrophe) : vérifie toujours dans quel sens se lit une échelle.`,
     },
     {
       id: 'mener',
@@ -253,6 +255,7 @@ Le Nielsen Norman Group fonde la sévérité sur trois facteurs : la **fréquenc
       body: `- **Plusieurs regards indépendants** : chaque évaluateur inspecte seul, sans voir les notes des autres, puis on consolide. NN/g recommande trois à cinq personnes, environ une à deux heures chacune.
 - **Deux passages** : un premier pour comprendre le parcours, un second pour l’inspecter élément par élément.
 - **Être précis** : « le bouton Payer », pas « certains éléments ». Dis ce qui ne va pas *et* pourquoi ça gêne, puis propose un correctif concret.
+- **Dire aussi ce qui marche** : deux ou trois points forts précis, et pourquoi ils fonctionnent, pour qu’on ne les casse pas en corrigeant le reste.
 - **Prioriser sans pitié** : trois à cinq problèmes majeurs, classés. Si tout est important, rien ne l’est.
 - **Ne pas se laisser ancrer** : impeccable mène la revue de design *avant* de lire les résultats de son détecteur automatique, pour que ceux-ci n’orientent pas le jugement.
 
@@ -267,9 +270,9 @@ Chaque problème retenu suit le même gabarit : **[P?] quoi**, **pourquoi ça co
           },
           badNote: 'Vague, sans priorité ni piste : personne ne sait quoi faire lundi matin.',
           good: {
-            alt: 'Note de revue avec une étiquette P1, le problème précis du bouton Payer hors écran sur mobile, la raison, le correctif et la commande adapt.',
+            alt: 'Note de revue avec une étiquette P2, le problème précis du bouton Payer hors écran sur mobile, la raison, le correctif et la commande adapt.',
             css: `.nt { padding: 14px; border: 1px solid #e1e4ea; border-radius: 10px; } .nt-p { display: inline-block; padding: 1px 7px; border-radius: 6px; background: #8c1d18; color: #fff; font-size: 12px; font-weight: 700; margin-inline-end: 6px; } code { font: 600 12px ui-monospace, Menlo, monospace; background: #eef1f7; padding: 1px 5px; border-radius: 4px; }`,
-            html: `<div class="mk-pad"><div class="nt mk-stack" style="--gap:6px"><p class="mk-strong"><span class="nt-p">P1</span>Le bouton « Payer » sort de l’écran sur mobile</p><p class="mk-small"><b>Pourquoi :</b> sur un écran de 375 px, il faut défiler sous le récapitulatif pour trouver l’action principale.</p><p class="mk-small"><b>Correctif :</b> une barre fixe dans le bas de l’écran avec le total et « Payer ».</p><p class="mk-small"><b>Commande :</b> <code>adapt</code></p></div></div>`,
+            html: `<div class="mk-pad"><div class="nt mk-stack" style="--gap:6px"><p class="mk-strong"><span class="nt-p">P2</span>Le bouton « Payer » sort de l’écran sur mobile</p><p class="mk-small"><b>Pourquoi :</b> sur un écran de 375 px, il faut défiler sous le récapitulatif pour trouver l’action principale.</p><p class="mk-small"><b>Correctif :</b> une barre fixe dans le bas de l’écran avec le total et « Payer ».</p><p class="mk-small"><b>Commande :</b> <code>adapt</code></p></div></div>`,
           },
           goodNote: 'Sévérité, élément nommé, impact, correctif, commande : actionnable tout de suite.',
         },
@@ -284,7 +287,7 @@ Chaque problème retenu suit le même gabarit : **[P?] quoi**, **pourquoi ça co
     { id: 'scale', front: 'Que vaut un 4 sur le barème 0–4 ?', back: 'Vraiment excellent, pas « assez bien ». Un écran correct mais imparfait vit entre 2 et 3.' },
     { id: 'bands', front: 'Comment lire un total sur 40 ?', back: '36–40 excellent, 28–35 bon, 20–27 acceptable, 12–19 faible, 0–11 critique.' },
     { id: 'typical', front: 'Quel score obtiennent la plupart des interfaces réelles ?', back: 'Entre 20 et 32 sur 40.' },
-    { id: 'na', front: 'Quand noter une heuristique « n/a », et comment calculer ?', back: 'Les heuristiques 7 et 10 sur une surface Persuader ou Expérience. Le maximum devient 4 × le nombre d’heuristiques notées et la bande se lit en pourcentage (90/70/50/30).' },
+    { id: 'na', front: 'Quand noter une heuristique « n/a », et comment calculer ?', back: 'Surtout les heuristiques 7 et 10 sur une surface Persuader ou Expérience, et toute heuristique qui ne peut réellement pas s’appliquer, avec une ligne de justification. Le maximum devient 4 × le nombre d’heuristiques notées ; la bande se lit en pourcentage (90/70/50/30).' },
     { id: 'priorities', front: 'Que signifient P0, P1, P2, P3 ?', back: 'P0 bloque la tâche, P1 gêne fortement (à corriger avant la sortie), P2 agace mais se contourne, P3 relève de la finition.' },
     { id: 'support', front: 'Tu hésites entre deux sévérités : quelle question te poser ?', back: '« Un utilisateur contacterait-il le support pour ça ? » Si oui, c’est au moins P1.' },
     { id: 'severity-factors', front: 'Sur quels facteurs NN/g fonde-t-il la sévérité d’un problème ?', back: 'Sa fréquence, son impact et sa persistance, plus son effet sur l’adoption du produit.' },
@@ -300,26 +303,26 @@ Chaque problème retenu suit le même gabarit : **[P?] quoi**, **pourquoi ça co
       visual: BOOKING,
       scale: SCALE,
       criteria: [
-        crit(1, 3, 'L’étape « 2 sur 4 », la barre de progression et le récapitulatif du trajet disent où l’on en est. Manque : l’erreur n’apparaît qu’après l’envoi, sans désigner le champ.'),
+        crit(1, 3, 'L’étape « 2 sur 4 », la barre de progression et le récapitulatif du trajet disent où l’on en est. Manque : le champ fautif n’est pas signalé (ni contour ni message sous « Date de naissance »).'),
         crit(2, 2, 'Les libellés sont clairs (Prénom, Date de naissance), mais la carte de réduction s’affiche en code interne : « CR-AV ».'),
-        crit(3, 2, 'Le lien « Modifier le trajet » permet de revenir en arrière, mais « Réinitialiser » efface tout sans annulation possible.'),
+        crit(3, 2, 'Le lien « Modifier le trajet » permet de revenir en arrière, mais « Réinitialiser » vide le formulaire d’un clic, et rien n’annonce qu’on pourra l’annuler.'),
         crit(4, 2, '« Ajouter un passager » est une pastille verte qui ne ressemble à aucun autre bouton, et « Réinitialiser » emprunte l’apparence de l’action principale.'),
-        crit(5, 1, '« Réinitialiser » est collé à « Continuer », avec le même poids : le clic de travers est garanti. La date se tape librement, sans sélecteur ni contrôle en ligne.'),
+        crit(5, 1, '« Réinitialiser » est collé à « Continuer », avec le même poids : un clic de travers est vite arrivé. La date se tape librement, sans sélecteur ni contrôle en ligne.'),
         crit(6, 3, 'Le trajet reste visible pendant la saisie et un passager enregistré se choisit d’un clic : presque rien à retenir.'),
-        crit(7, 2, 'Un seul accélérateur visible : le remplissage avec un passager enregistré.'),
+        crit(7, 2, 'Le remplissage avec un passager enregistré est l’accélérateur qui compte pour un achat occasionnel ; aucun autre raccourci n’est visible.'),
         crit(8, 2, 'Le formulaire est lisible, mais la promotion de location de voiture s’insère au milieu de la saisie.'),
         crit(9, 1, '« Erreur V-102 : champ invalide » : un code, aucun champ désigné, aucune piste de correction.'),
         crit(10, 3, 'Une aide contextuelle « Quelle carte choisir ? » à côté du champ, plus un lien vers l’aide et la FAQ.'),
       ],
       explanation: `Total de l’expert : **21/40**, dans la bande **acceptable** (20–27). Le parcours fonctionne, mais il faut des améliorations importantes avant que les voyageurs soient satisfaits.
 
-Les deux notes à 1 désignent les priorités :
+Les deux notes à 1 montrent où creuser ; chaque problème trouvé reçoit ensuite sa sévérité :
 
-- **Heuristique 9** : le message doit nommer le champ et la correction, à côté du champ — « Indiquez votre date de naissance, par exemple 14/03/1990 ».
-- **Heuristique 5** : « Réinitialiser » n’a rien à faire à côté de « Continuer » ; au mieux un lien discret, éloigné de l’action principale.
+- **Heuristique 9, P1** : « champ invalide », sans nom de champ, laisse deviner ce qui bloque la suite ; des gens écriront au support. Le message doit nommer le champ et la correction, à côté du champ — « Indiquez votre date de naissance, par exemple 14/03/1990 ».
+- **Heuristique 5, P2** : un clic de travers sur « Réinitialiser » oblige à tout ressaisir, mais la réservation reste possible. Ce bouton n’a rien à faire à côté de « Continuer » ; au mieux un lien discret, éloigné de l’action principale.
 
 Chaque note s’appuie sur un élément visible. Un 4 se mérite : rien ici n’est irréprochable, et la plupart des écrans réels vivent entre 2 et 3.`,
-      takeaway: 'Note chaque heuristique sur des éléments visibles : les notes de 0 ou 1 désignent les priorités, et le total se lit en bandes (20–27 : acceptable).',
+      takeaway: 'Note chaque heuristique sur des éléments visibles : les notes basses montrent où creuser, la sévérité de chaque problème (P0 à P3) dit quoi corriger d’abord, et le total se lit en bandes (de 20 à 27 : acceptable).',
       sources: ['imp:critique', 'nng:heuristics'],
     },
     {
@@ -331,13 +334,13 @@ Chaque note s’appuie sur un élément visible. Un 4 se mérite : rien ici n’
       visual: DASHBOARD,
       scale: SCALE,
       criteria: [
-        crit(1, 4, 'Onglet actif, heure de la dernière synchronisation, compteur « 2 sélectionnées » et confirmation « Relance envoyée à 2 clients » : chaque état et chaque action se voient.'),
+        crit(1, 4, 'Onglet actif, heure de la dernière synchronisation réussie et échec signalé, compteur « 2 sélectionnées », confirmation « Relance envoyée à 2 clients » : chaque état et chaque action se voient.'),
         crit(2, 3, 'Le vocabulaire est celui d’une indépendante (Relancer, En retard, CA) ; seul le code « BNK_401 » sort de son langage.'),
         crit(3, 3, 'La relance s’annule depuis la notification et les vues changent d’un clic ; rien n’indique en revanche comment sortir de l’échec de synchronisation.'),
         crit(4, 3, 'Composants homogènes, mais les échéances mélangent deux formats de date (12/11/2026 et 2026-11-15) : une déviation ponctuelle.'),
         crit(5, 2, '« Supprimer » est collé à « Relancer » et « Exporter », dans le même style, sur une sélection multiple : une erreur coûteuse reste facile à commettre.'),
         crit(6, 4, 'Navigation libellée, recherche qui annonce ce qu’elle trouve, raccourcis affichés à côté des actions : rien à mémoriser.'),
-        crit(7, 4, 'Raccourcis « / » et « N », actions groupées, vues enregistrées et « + Nouvelle vue » : les habituées vont vite sans gêner les novices.'),
+        crit(7, 4, 'Raccourcis « / » et « N », actions groupées, vues enregistrées et « + Nouvelle vue » : les personnes habituées vont vite sans gêner les novices.'),
         crit(8, 2, 'La liste des factures est claire, mais la promotion Pro et quatre tuiles à mini-courbes décoratives se disputent l’attention.'),
         crit(9, 1, '« Échec de la synchro (BNK_401) » : ni cause compréhensible, ni marche à suivre pour reconnecter la banque.'),
         crit(10, 3, 'L’aide reste accessible en permanence et une infobulle explique le CA ; rien ne montre si l’aide est organisée par tâche.'),
@@ -346,7 +349,7 @@ Chaque note s’appuie sur un élément visible. Un 4 se mérite : rien ici n’
 
 Les trois 4 sont mérités parce qu’on les **voit** : l’état est toujours affiché, les raccourcis sont écrits à côté des actions, les vues se personnalisent. Une seule déviation (le format de date) suffit en revanche à refuser le 4 en cohérence.
 
-Mais un bon total peut cacher un 1. L’échec de synchronisation bancaire, annoncé par un code sans cause ni solution, est le premier chantier : les utilisatrices écriront au support, c’est donc au moins un **P1**. Un message utile dirait : « Ta banque demande une nouvelle autorisation. Reconnecter le compte ».`,
+Mais un bon total peut cacher un 1. L’échec de synchronisation bancaire, annoncé par un code sans cause ni solution, est le premier chantier : des gens écriront au support, c’est donc au moins un **P1**. Un message utile dirait « Votre banque demande une nouvelle autorisation », avec un bouton « Reconnecter le compte ».`,
       takeaway: 'Un 4 se prouve par des éléments visibles ; un bon total n’excuse pas une note de 1 sur une erreur qui enverra les gens au support.',
       sources: ['imp:critique', 'nng:heuristics', 'nng:severity'],
     },
@@ -364,7 +367,8 @@ Mais un bon total peut cacher un 1. L’échec de synchronisation bancaire, anno
 .ck-opt::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #8b92a1; flex: none; }
 .ck-opt--on { border-color: #1f4fd8; box-shadow: inset 0 0 0 1px #1f4fd8; }
 .ck-opt--on::before { border: 5px solid #1f4fd8; }
-.ck-back { display: inline-flex; align-items: center; gap: 4px; color: #1f4fd8; font-weight: 600; font-size: 13px; align-self: flex-start; }`,
+.ck-back { display: inline-flex; align-items: center; gap: 4px; color: #1f4fd8; font-weight: 600; font-size: 13px; align-self: flex-start; }
+.ck-actions .mk-btn { flex: 1 1 0; min-width: 0; padding: 4px 10px; white-space: normal; text-align: center; }`,
         html: `<div class="ck mk-pad mk-stack" style="--gap:12px">
   <span class="ck-back" data-hotspot="back"><i data-icon="arrow-left" style="--ico:14px"></i> Retour au panier</span>
   <p class="mk-h2">Paiement</p>
@@ -372,7 +376,7 @@ Mais un bon total peut cacher un 1. L’échec de synchronisation bancaire, anno
   <div class="mk-stack" style="--gap:6px" data-hotspot="ship"><p class="mk-label">Livraison</p><div class="ck-opt ck-opt--on"><span class="mk-grow">STD-48</span><span class="mk-price">4,90 €</span></div><div class="ck-opt"><span class="mk-grow">EXP-24</span><span class="mk-price">9,90 €</span></div><div class="ck-opt"><span class="mk-grow">PR-REL</span><span class="mk-price">3,50 €</span></div></div>
   <div class="mk-field" data-hotspot="card"><span class="mk-label">Numéro de carte</span><div class="mk-input mk-input--error">4970 1012 3456</div><p class="mk-error">Erreur 0x80041002</p></div>
   <div class="mk-row mk-between" data-hotspot="total"><span class="mk-strong">Total</span><span class="mk-price" style="font-size:18px">93,90 €</span></div>
-  <div class="mk-row" style="--gap:8px"><span class="mk-btn" data-hotspot="empty">Vider le panier</span><span class="mk-btn" data-hotspot="pay">Payer 93,90 €</span></div>
+  <div class="mk-row ck-actions" style="--gap:8px"><span class="mk-btn" data-hotspot="empty">Vider le panier</span><span class="mk-btn" data-hotspot="pay">Payer 93,90 €</span></div>
 </div>`,
       },
       hotspots: [
@@ -401,9 +405,10 @@ Sur une page de paiement, chacune coûte des ventes. L’erreur de carte, qui em
       prompt: 'Trouve les deux violations de l’heuristique 4, cohérence et standards.',
       visual: {
         frame: 'browser',
-        alt: 'Page de paramètres du compte : un bandeau « Erreur 0x2F », une section Profil avec un bouton bleu Enregistrer, une section Centres d’intérêt « plusieurs choix possibles » dont deux options rondes sont cochées, une section Notifications avec deux interrupteurs et un bouton vert arrondi « Sauvegarder les préférences », et un lien rouge Supprimer mon compte.',
+        alt: 'Page de paramètres du compte : un bandeau « Erreur 0x2F », une section Profil avec un bouton bleu Enregistrer, une section Centres d’intérêt « plusieurs choix possibles » dont deux options rondes sont cochées, une section Notifications avec deux cases à cocher carrées et un bouton vert arrondi « Sauvegarder les préférences », et un lien rouge Supprimer mon compte.',
         css: `.st { max-width: 540px; margin: 0 auto; }
 .st-alert { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; background: #fdecea; color: #8c1d18; font-size: 13px; font-weight: 600; }
+.st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
 .st-opts { display: flex; flex-wrap: wrap; gap: 8px 16px; }
 .st-radio { display: inline-flex; align-items: center; gap: 8px; }
 .st-radio::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #8b92a1; flex: none; }
@@ -413,20 +418,19 @@ Sur une page de paiement, chacune coûte des ventes. L’erreur de carte, qui em
         html: `<div class="st mk-pad mk-stack" style="--gap:14px">
   <p class="mk-h2">Paramètres du compte</p>
   <p class="st-alert" data-hotspot="error"><i data-icon="circle-alert" style="--ico:15px"></i> Erreur 0x2F</p>
-  <div class="mk-stack" style="--gap:10px"><p class="mk-h3">Profil</p><div class="mk-grid" style="--cols:2;--gap:10px"><div class="mk-field"><span class="mk-label">Nom</span><div class="mk-input">Inès Barbier</div></div><div class="mk-field"><span class="mk-label">Courriel</span><div class="mk-input">ines.b@exemple.fr</div></div></div><span class="mk-btn" style="align-self:flex-start" data-hotspot="save1">Enregistrer</span></div>
+  <div class="mk-stack" style="--gap:10px"><p class="mk-h3">Profil</p><div class="st-grid"><div class="mk-field"><span class="mk-label">Nom</span><div class="mk-input">Inès Barbier</div></div><div class="mk-field"><span class="mk-label">Courriel</span><div class="mk-input">ines.b@exemple.fr</div></div></div><span class="mk-btn" style="align-self:flex-start">Enregistrer</span></div>
   <div class="mk-divider"></div>
   <div class="mk-stack" style="--gap:8px" data-hotspot="interests"><p class="mk-h3">Centres d’intérêt</p><p class="mk-help">Plusieurs choix possibles</p><div class="st-opts"><span class="st-radio st-radio--on">Randonnée</span><span class="st-radio">Escalade</span><span class="st-radio st-radio--on">Trail</span><span class="st-radio">Vélo</span></div></div>
   <div class="mk-divider"></div>
-  <div class="mk-stack" style="--gap:10px"><p class="mk-h3">Notifications</p><div class="mk-row mk-between"><span>Lettre hebdomadaire</span><span class="mk-toggle mk-toggle--on"></span></div><div class="mk-row mk-between"><span>Alertes de prix</span><span class="mk-toggle"></span></div><span class="st-save2" data-hotspot="save2">Sauvegarder les préférences</span></div>
+  <div class="mk-stack" style="--gap:10px"><p class="mk-h3">Notifications</p><span class="mk-check mk-check--on">Lettre hebdomadaire</span><span class="mk-check">Alertes de prix</span><span class="st-save2" data-hotspot="save2">Sauvegarder les préférences</span></div>
   <div class="mk-divider"></div>
   <span class="st-delete" data-hotspot="delete">Supprimer mon compte</span>
 </div>`,
       },
       hotspots: [
         { id: 'interests', label: 'Choix multiples en boutons radio', correct: true, why: 'Standard de plateforme trahi : un rond signifie « un seul choix ». Deux ronds cochés dans un même groupe contredisent la convention ; pour plusieurs choix, des cases carrées.' },
-        { id: 'save2', label: '« Sauvegarder les préférences » en pastille verte', correct: true, why: 'La même action change de mot (« Enregistrer » / « Sauvegarder ») et d’apparence (bleu rectangulaire / vert arrondi) d’une section à l’autre : l’utilisateur se demande si elles font la même chose.' },
+        { id: 'save2', label: '« Sauvegarder les préférences » en pastille verte', correct: true, why: 'La même action change de mot (« Enregistrer » / « Sauvegarder ») et d’apparence (bleu rectangulaire / vert arrondi) d’une section à l’autre : on se demande si les deux boutons font la même chose.' },
         { id: 'error', label: 'Bandeau « Erreur 0x2F »', correct: false, why: 'Vrai problème, mais il relève de l’heuristique 9 (message cryptique), pas de la cohérence.' },
-        { id: 'save1', label: 'Bouton « Enregistrer » du profil', correct: false, why: 'C’est la référence du système : bouton principal standard, verbe clair.' },
         { id: 'delete', label: 'Lien « Supprimer mon compte »', correct: false, why: 'Action destructrice en rouge, isolée sous un séparateur : conforme aux conventions.' },
       ],
       explanation: `L’heuristique 4 couvre deux choses : la **cohérence interne** (mêmes mots, même apparence, même comportement pour la même action) et les **standards externes** (conventions de la plateforme).
@@ -451,7 +455,7 @@ Le bandeau d’erreur est un vrai défaut, mais d’une autre heuristique. Savoi
         { id: 'h5', left: '5 · Prévention des erreurs', right: 'Le calendrier grise les dates déjà passées' },
         { id: 'h6', left: '6 · Reconnaissance plutôt que rappel', right: 'Un libellé sous chaque icône de la barre d’onglets' },
         { id: 'h7', left: '7 · Flexibilité et efficacité', right: '`Ctrl+K` ouvre une palette de commandes' },
-        { id: 'h9', left: '9 · Reconnaître et corriger les erreurs', right: '« Ce fichier fait 12 Mo ; la limite est de 10 Mo. »' },
+        { id: 'h9', left: '9 · Aider à reconnaître et corriger les erreurs', right: '« Ce fichier fait 12 Mo ; la limite est de 10 Mo. Compressez-le ou choisissez-en un autre. »' },
         { id: 'h10', left: '10 · Aide et documentation', right: 'Un centre d’aide cherchable, organisé par tâche' },
       ],
       explanation: `Chaque pratique répond à une question différente :
@@ -461,7 +465,7 @@ Le bandeau d’erreur est un vrai défaut, mais d’une autre heuristique. Savoi
 - **5** : comment éviter l’erreur ? → une contrainte qui la rend impossible.
 - **6** : que dois-je retenir ? → rien, tout est sous les yeux.
 - **7** : comment aller plus vite ? → un accélérateur pour les habitués.
-- **9** : que faire après l’erreur ? → un diagnostic précis.
+- **9** : que faire après l’erreur ? → un diagnostic précis et une solution.
 - **10** : où trouver de l’aide ? → une aide cherchable, pensée par tâche.
 
 Distinguer la 3 de la 5 est classique : la 5 agit **avant** l’erreur, la 3 **après**.`,
@@ -485,7 +489,7 @@ Distinguer la 3 de la 5 est classique : la 5 agit **avant** l’erreur, la 3 **a
 - **P3 — finition** : aucun impact sur la réservation.
 
 Cet ordre est celui des corrections : on ne peaufine pas des icônes tant qu’une partie des clients ne peut pas réserver.`,
-      takeaway: 'P0 bloque la tâche, P1 la rend pénible au point d’appeler le support, P2 agace mais se contourne, P3 est de la finition.',
+      takeaway: 'P0 bloque la tâche, P1 cause une difficulté ou une confusion importante (un appel au support en est un signe), P2 agace mais se contourne, P3 est de la finition.',
       sources: ['imp:critique', 'nng:severity'],
     },
     {
@@ -576,9 +580,9 @@ La version recommandée combine trois signaux : un indicateur d’étapes, un ti
         {
           id: 'undo',
           visual: {
-            alt: 'Même boîte de réception avec une notification « Conversation « Devis cuisine » supprimée » et un bouton Annuler.',
+            alt: 'Même boîte de réception avec une notification qui confirme la suppression de la conversation « Devis cuisine », et un bouton Annuler.',
             css: `.ml-row { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eceef2; } .ml-undo { font-weight: 700; color: #9db4ff; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:6px"><div class="mk-row mk-between"><p class="mk-h3">Boîte de réception</p><span class="mk-small mk-muted">3 conversations</span></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Banque Arpège</p><p class="mk-small mk-muted">Votre relevé d’octobre est disponible</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Léa Martin</p><p class="mk-small mk-muted">Les photos du week-end</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Mairie de Lyon</p><p class="mk-small mk-muted">Rendez-vous confirmé le 3 décembre</p></div></div><div class="mk-toast" style="margin-top:8px"><span class="mk-grow">« Devis cuisine » supprimée</span><span class="ml-undo">Annuler</span></div></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:6px"><div class="mk-row mk-between"><p class="mk-h3">Boîte de réception</p><span class="mk-small mk-muted">3 conversations</span></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Banque Arpège</p><p class="mk-small mk-muted">Votre relevé d’octobre est disponible</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Léa Martin</p><p class="mk-small mk-muted">Les photos du week-end</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Mairie de Lyon</p><p class="mk-small mk-muted">Rendez-vous confirmé le 3 décembre</p></div></div><div class="mk-toast" style="margin-top:8px"><span class="mk-grow">Conversation « Devis cuisine » supprimée</span><span class="ml-undo">Annuler</span></div></div>`,
           },
           why: 'L’action est confirmée (heuristique 1) et réversible d’un geste (heuristique 3).',
         },
@@ -650,7 +654,7 @@ Le système connaît déjà la commande et l’article : les redemander, c’est
       options: [
         { id: 'pct', label: '22/32, soit 69 % : acceptable', why: 'Maximum renormalisé (4 × 8 = 32) et bande lue en pourcentage : 69 % est sous le seuil de 70 %.' },
         { id: 'forty', label: '22/40, soit 55 % : acceptable', why: 'Le maximum doit refléter ce qui a été noté. Afficher /40 sur huit heuristiques fausse la lecture.' },
-        { id: 'raw', label: '22/32 : bon, puisque 22 dépasse le seuil de 20', why: 'Les seuils bruts (20, 28…) valent pour un total sur 40. Sur 32, on lit le pourcentage.' },
+        { id: 'round', label: '22/32 ≈ 70 % : bon', why: '22/32 = 68,75 % : la barre des 70 % n’est pas atteinte. On n’arrondit pas pour franchir un seuil : c’est « acceptable ».' },
         { id: 'fill', label: 'Mettre 2/4 aux heuristiques 7 et 10 pour garder un total sur 40', why: 'Inventer des notes pour remplir la grille fausse l’évaluation : n/a se justifie et se renormalise.' },
       ],
       answer: 'pct',
