@@ -60,7 +60,7 @@ const accessibility: ModuleContent = {
   category: 'evaluer',
   summary:
     'Appliquer les critères clés des WCAG 2.2 (contraste, clavier, focus, cibles, sémantique, formulaires, annonces) et mener l’audit technique d’impeccable : cinq dimensions notées de 0 à 4, soit un total sur 20.',
-  minutes: 12,
+  minutes: 14,
   commands: ['audit'],
   sources: ['wcag22', 'wcag:contrast', 'wcag:target', 'imp:audit', IMP_AUDIT_NATIVE, 'imp:critique', WEBAIM, USING_ARIA, EAA],
   sections: [
@@ -228,7 +228,7 @@ Ces cinq dimensions valent pour le **web**. Pour une appli native (iOS, Android 
       answer: 'strong',
       explanation: `Le critère **1.4.11 (contraste non textuel, AA)** exige **3:1** pour ce qui permet de repérer un composant : bordures de champ, indicateur de focus, et icônes qui portent seules une fonction, comme ici.
 
-Le gris très pâle passe pour « élégant » sur un bon écran, au calme. En plein soleil, avec une basse vision ou un écran bas de gamme, les commandes disparaissent. Seuls échappent à cette règle les composants désactivés et les contrôles natifs que l’auteur n’a pas restylés.`,
+Le gris très pâle passe pour « élégant » sur un bon écran, au calme. En plein soleil, avec une basse vision ou un écran bas de gamme, les commandes disparaissent. Seuls échappent à cette règle les composants désactivés et les contrôles natifs dont l’auteur n’a pas modifié l’apparence.`,
       takeaway: 'Une icône qui porte seule une fonction doit contraster à 3:1 au moins avec son fond, comme une bordure de champ ou un focus.',
       sources: [U('non-text-contrast', '1.4.11 (contraste non textuel)'), 'imp:audit'],
     },
@@ -307,7 +307,7 @@ La bonne pratique : un anneau d’au moins 2 px, contrasté à 3:1 avec ce qui l
 - **44 × 44** : le seuil sous lequel l’audit d’impeccable signale une cible tactile, celui du niveau AAA (2.5.5) et des recommandations d’Apple (44 × 44 pt).
 - **48 × 48 dp** : la recommandation de Material Design.
 
-Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zone : 44 à 48 px suffisent, au-delà chaque ligne s’épaissit et l’écran affiche moins d’éléments. L’icône dessinée peut rester à 16 px : c’est la zone sensible qui doit grandir, pas forcément le dessin.`,
+Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zone : 44 à 48 px suffisent ; au-delà, chaque ligne s’épaissit et l’écran affiche moins d’éléments. L’icône dessinée peut rester à 16 px : c’est la zone sensible qui doit grandir, pas forcément le dessin.`,
       takeaway: 'Zone tactile : 24 × 24 px au minimum WCAG 2.2 (AA), 44 à 48 px pour un usage confortable au doigt.',
       sources: ['wcag:target', 'imp:audit', 'hig', 'material3'],
     },
@@ -321,7 +321,7 @@ Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zon
         alt: 'Formulaire « Espace client » : un champ affichant en gris le texte « Identifiant client », un champ « Mot de passe » avec la mention « Le copier-coller est désactivé pour votre sécurité », une case cochée « Rester connecté sur cet appareil », un bouton Se connecter et un lien souligné « Mot de passe oublié ? ».',
         css: `.lg { max-width: 420px; margin: 0 auto; }
 .lg-ph { color: #6b7280; }
-.lg-link { align-self: center; color: #1f4fd8; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }`,
+.lg-link { align-self: center; padding-block: 3px; color: #1f4fd8; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }`,
         html: `<div class="lg mk-pad mk-stack" style="--gap:12px">
   <p class="mk-h2" data-hotspot="title">Espace client</p>
   <div class="mk-input lg-ph" data-hotspot="id">Identifiant client</div>
@@ -340,7 +340,7 @@ Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zon
       ],
       explanation: `Deux défauts distincts sont en jeu :
 
-- **L’étiquette** : le critère **3.3.2 (A)** demande une étiquette ou une instruction pour toute saisie, et **1.3.1** et **4.1.2** veulent que le nom du champ lui soit lié dans le code. Le texte indicatif disparaît à la première frappe : le RGAA (critère 11.1) ne le compte pas parmi les étiquettes acceptées, et impeccable le réserve aux exemples.
+- **L’étiquette** : le critère **3.3.2 (A)** demande une étiquette ou une instruction pour toute saisie, et **1.3.1** et **4.1.2** exigent que le nom du champ lui soit lié dans le code. Le texte indicatif disparaît à la première frappe : le RGAA (critère 11.1) ne le compte pas parmi les étiquettes acceptées, et impeccable le réserve aux exemples.
 - **3.3.8 (AA, nouveau en WCAG 2.2)** : se connecter ne doit pas exiger un **test cognitif** — retenir ou recopier un mot de passe — sans alternative. Interdire le collage bloque les personnes qui copient leur mot de passe depuis un gestionnaire externe et les force à le recopier : c’est précisément ce que le critère proscrit, faute d’autre méthode (lien de connexion par e-mail, clé d’accès…).`,
       takeaway: 'Collage interdit au mot de passe : échec de 3.3.8. Texte indicatif seul : refusé comme étiquette (RGAA 11.1). Il faut une étiquette visible et liée, et le collage autorisé.',
       sources: [U('accessible-authentication-minimum', '3.3.8 (authentification accessible)'), U('labels-or-instructions', '3.3.2 (étiquettes ou instructions)'), RGAA_LABELS, 'imp:clarify'],
@@ -511,7 +511,7 @@ Bandes : 18–20 excellent, 14–17 bon, 10–13 acceptable, 6–9 faible, 0–5
       id: 'accessibility-keyboard-order',
       type: 'order',
       difficulty: 2,
-      prompt: 'Remets dans l’ordre ce test d’un formulaire de paiement, au clavier et lecteur d’écran allumé.',
+      prompt: 'Remets dans l’ordre ce test d’un formulaire de paiement, mené au clavier, lecteur d’écran allumé.',
       items: [
         { id: 'skip', label: 'Charger la page et appuyer sur Tab : le lien « Aller au contenu » apparaît' },
         { id: 'fields', label: 'Parcourir les champs : chaque focus est visible et suit l’ordre de lecture' },
