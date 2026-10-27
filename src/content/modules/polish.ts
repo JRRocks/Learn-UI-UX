@@ -2,7 +2,7 @@ import type { ModuleContent, SourceRef } from '../../engine/types';
 
 /*
  * Contrast ratios quoted below were computed with the WCAG formula of src/engine/grade.ts.
- * Loading thresholds (1 s / 2–10 s / 10 s) come from the two NN/g articles referenced.
+ * Loading thresholds (1 s / 2–10 s / 10 s) come from the two NN/g articles referenced.
  */
 
 const NNG_SKELETON: SourceRef = { label: 'Nielsen Norman Group — Skeleton Screens 101', url: 'https://www.nngroup.com/articles/skeleton-screens/' };
@@ -182,7 +182,7 @@ Ne perfectionne pas un coin en laissant le reste sous le même niveau d’exigen
 
 - **Survol** : signale que l’élément réagit au pointeur. Il n’existe ni au doigt ni au clavier : l’**affordance** (le signe qu’on peut agir) doit déjà se voir au repos.
 - **Focus** : montre où se trouve le clavier. Un contour plutôt qu’un simple changement de couleur, contrasté d’au moins **3:1** avec ce qui l’entoure. Ne le supprime jamais sans le remplacer.
-- **Actif** : accuse réception du clic sans délai perceptible (Nielsen Norman Group recommande 100 à 150 ms), sinon on clique deux fois.
+- **Actif** : accuse réception du clic sans délai perceptible (Nielsen Norman Group recommande 100 à 150 ms), sinon on clique deux fois.
 - **Désactivé** : indique que l’action n’est pas disponible maintenant — et, si ce n’est pas évident, pourquoi.
 - **Chargement** : garde la largeur du bouton, nomme l’opération (« Envoi… ») et bloque la double soumission.
 - **Erreur** et **succès** : disent ce qui s’est passé, près de l’élément concerné.
@@ -355,7 +355,7 @@ Termine en relisant le **diff** (la différence entre le code avant et après ta
     {
       id: 'focus',
       front: 'À quoi doit ressembler un focus clavier ?',
-      back: 'Un contour visible d’au moins 2 px, contrasté à 3:1 entre l’état focalisé et l’état normal. Jamais supprimé sans remplacement.',
+      back: 'Un contour visible d’au moins 2 px, contrasté à 3:1 entre l’état focalisé et l’état normal. Jamais supprimé sans remplacement.',
     },
     {
       id: 'hover',
@@ -370,7 +370,7 @@ Termine en relisant le **diff** (la différence entre le code avant et après ta
     {
       id: 'skeleton',
       front: 'Rien, squelette, spinner ou barre de progression : comment choisir ?',
-      back: 'Rien sous 1 s ; un squelette pour une zone de contenu ; un spinner pour un petit module (2 à 10 s) ; une progression réelle avec estimation au-delà de 10 s.',
+      back: 'Rien sous 1 s ; un squelette pour une zone de contenu ; un spinner pour un petit module (2 à 10 s) ; une progression réelle avec estimation au-delà de 10 s.',
     },
     {
       id: 'false-empty',
@@ -774,7 +774,7 @@ Se taire n’est pas mieux : le défaut le plus important resterait caché derri
         {
           id: 'fake',
           label: 'Une barre de progression qui avance à rythme fixe, sans lien avec l’avancement réel',
-          why: 'Une progression inventée trompe ; quand elle se fige à 99 %, la confiance s’effondre.',
+          why: 'Une progression inventée trompe ; quand elle se fige à 99 %, la confiance s’effondre.',
         },
         {
           id: 'blocking',
@@ -793,7 +793,7 @@ Se taire n’est pas mieux : le défaut le plus important resterait caché derri
 - sous 1 seconde, rien ; pour une zone de contenu, un squelette ; pour un petit module, un indicateur local ; au-delà de 10 secondes, une progression réelle avec une estimation ;
 - le texte nomme l’opération réelle ;
 - on ne fabrique jamais de progression, et on n’affiche pas un faux vide pendant le chargement. Nielsen Norman Group relève que ce « Aucun enregistrement » provisoire fait partir les utilisateurs pressés avant l’arrivée des données.`,
-      takeaway: 'Un chargement dit la vérité : rien sous 1 s, squelette pour le contenu, opération nommée, ni fausse progression ni faux vide.',
+      takeaway: 'Un chargement dit la vérité : rien sous 1 s, squelette pour le contenu, opération nommée, ni fausse progression ni faux vide.',
       sources: ['imp:operate', 'imp:clarify', NNG_SKELETON, NNG_EMPTY],
     },
     {
@@ -879,10 +879,10 @@ L’affordance doit se voir **au repos** (forme de bouton, lien souligné, libel
       unit: 'px',
       target: [2, 4],
       ideal: 3,
-      explanation: `Le **focus** montre où se trouve le clavier. Un contour de 1 px se confond avec la bordure du champ. WCAG 2.2 (critère 2.4.13, niveau AAA) demande un indicateur au moins aussi grand qu’un contour de **2 px** autour du composant, avec un contraste d’au moins **3:1** entre l’état focalisé et l’état normal.
+      explanation: `Le **focus** montre où se trouve le clavier. Un contour de 1 px se confond avec la bordure du champ. WCAG 2.2 (critère 2.4.13, niveau AAA) demande un indicateur au moins aussi grand qu’un contour de **2 px** autour du composant, avec un contraste d’au moins **3:1** entre l’état focalisé et l’état normal.
 
-En pratique, 2 à 3 px légèrement décalés du composant (\`outline-offset\`) restent nets sans l’écraser ; au-delà, l’anneau commence à dominer le formulaire. Et on ne supprime jamais le focus (\`outline: none\`) sans le remplacer.`,
-      takeaway: 'Un focus visible : un contour d’au moins 2 px, contrasté à 3:1, décalé du composant — jamais supprimé sans remplacement.',
+En pratique, 2 à 3 px légèrement décalés du composant (\`outline-offset\`) restent nets sans l’écraser ; au-delà, l’anneau commence à dominer le formulaire. Et on ne supprime jamais le focus (\`outline: none\`) sans le remplacer.`,
+      takeaway: 'Un focus visible : un contour d’au moins 2 px, contrasté à 3:1, décalé du composant — jamais supprimé sans remplacement.',
       sources: [WCAG_FOCUS, WCAG_NON_TEXT, 'imp:polish'],
     },
   ],

@@ -1,8 +1,8 @@
 import type { ModuleContent, SourceRef } from '../../engine/types';
 
 /*
- * Intl outputs quoted below were checked with Node 22 (ICU): fr-FR compact currency of 987 654 321
- * gives "988 M €" (or "987,7 M €" with maximumFractionDigits: 1); PluralRules('fr').select(0) is "one";
+ * Intl outputs quoted below were checked with Node 22 (ICU): fr-FR compact currency of 987 654 321
+ * gives "988 M €" (or "987,7 M €" with maximumFractionDigits: 1); PluralRules('fr').select(0) is "one";
  * PluralRules('ar') has six categories; '😀'.length is 2 and the family emoji is 8 UTF-16 code units.
  */
 
@@ -74,8 +74,8 @@ const AR_CHATS = (back: string) => `<div class="mk-pad mk-stack" style="--gap:10
 </div>`;
 
 const NOTE_BODY = `<p class="mk-h2">Notes de réunion — lancement</p>
-    <p class="mk-muted">Décisions : ouverture des précommandes le 4 novembre, envoi de la lettre d’information la veille, point d’étape le 12.</p>
-    <p class="mk-muted">À faire : valider les visuels avec Inès, relire les conditions de vente.</p>`;
+    <p class="mk-muted">Décisions&nbsp;: ouverture des précommandes le 4 novembre, envoi de la lettre d’information la veille, point d’étape le 12.</p>
+    <p class="mk-muted">À faire&nbsp;: valider les visuels avec Inès, relire les conditions de vente.</p>`;
 
 const harden: ModuleContent = {
   id: 'harden',
@@ -95,7 +95,7 @@ const harden: ModuleContent = {
 - **Textes extrêmes** : noms de 60 ou 100 caractères, titres sans espace, champ vide ou d’un seul caractère.
 - **Caractères spéciaux** : accents, emoji, arabe ou hébreu, chinois, japonais, coréen.
 - **Grands nombres** : millions, milliards, montants à 9 chiffres.
-- **Beaucoup d’éléments** : 1 000 lignes, 50 options dans une liste — pagination ou défilement virtuel, recherche et filtres ; on ne charge pas 10 000 éléments d’un coup.
+- **Beaucoup d’éléments** : 1 000 lignes, 50 options dans une liste — pagination ou défilement virtuel, recherche et filtres ; on ne charge pas 10 000 éléments d’un coup.
 - **Aucune donnée** : liste vide, recherche sans résultat, aucune notification — toujours avec une action claire pour avancer.
 - **Mauvaises conditions** : hors ligne, connexion lente, délai dépassé, erreurs serveur, actions simultanées.
 
@@ -142,9 +142,9 @@ Les maquettes « parfaites » cachent ces cas ; la vérification consiste à les
 Le piège classique des mises en page flexibles : par défaut, un enfant flex ou grid ne rétrécit pas sous la largeur de son contenu (\`min-width: auto\`). Un nom de fichier sans espace pousse alors les boutons hors du cadre. La correction : \`min-width: 0\` sur l’enfant qui doit rétrécir (et \`min-height: 0\` dans une grille).
 
 - Pas de **largeur fixe** sur un conteneur de texte : les conteneurs grandissent avec leur contenu.
-- Ne tronque jamais un **nombre** : « 12 480 3… » devient faux. Préfère une notation compacte — \`Intl.NumberFormat\` avec \`notation: 'compact'\` donne « 988 M € » en français — et garde la valeur exacte accessible.
-- Teste le **zoom à 200 %**.
-- Sur mobile, les champs de formulaire font au moins **16 px** : en dessous, Safari sur iOS zoome de force sur le champ au focus et casse la mise en page. Le corps de texte suit le même plancher ; 14 px seulement pour du texte vraiment secondaire.`,
+- Ne tronque jamais un **nombre** : « 12 480 3… » devient faux. Préfère une notation compacte — \`Intl.NumberFormat\` avec \`notation: 'compact'\` donne « 988 M € » en français — et garde la valeur exacte accessible.
+- Teste le **zoom à 200 %**.
+- Sur mobile, les champs de formulaire font au moins **16 px** : en dessous, Safari sur iOS zoome de force sur le champ au focus et casse la mise en page. Le corps de texte suit le même plancher ; 14 px seulement pour du texte vraiment secondaire.`,
       examples: [
         {
           title: 'Un nom de fichier sans fin',
@@ -167,7 +167,7 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
     {
       id: 'i18n',
       title: 'Traduire, inverser, écrire autrement',
-      body: `**Expansion du texte.** Prévois **30 à 40 %** d’espace en plus pour les traductions ; l’allemand est souvent ~30 % plus long que l’anglais. Les chaînes courtes gonflent le plus : selon les moyennes d’IBM reprises par le W3C, un texte anglais de 10 caractères ou moins peut atteindre deux à trois fois sa longueur une fois traduit. Teste avec la langue la plus longue, évite les largeurs fixes, et écris des messages complets plutôt que des fragments concaténés, pour que les traducteurs puissent réordonner les variables.
+      body: `**Expansion du texte.** Prévois **30 à 40 %** d’espace en plus pour les traductions ; l’allemand est souvent ~30 % plus long que l’anglais. Les chaînes courtes gonflent le plus : selon les moyennes d’IBM reprises par le W3C, un texte anglais de 10 caractères ou moins peut atteindre deux à trois fois sa longueur une fois traduit. Teste avec la langue la plus longue, évite les largeurs fixes, et écris des messages complets plutôt que des fragments concaténés, pour que les traducteurs puissent réordonner les variables.
 
 **Droite à gauche (RTL).** En arabe et en hébreu, toute la mise en page se met en miroir. Utilise les **propriétés logiques** — \`margin-inline-start\` plutôt que \`margin-left\`, \`padding-inline\`, \`border-inline-end\` — et l’attribut \`dir="rtl"\`. Les icônes directionnelles (flèche retour, chevron « suivant ») se retournent ; une icône sans direction (une cloche, un cadenas) reste telle quelle.
 
@@ -207,7 +207,7 @@ Le piège classique des mises en page flexibles : par défaut, un enfant flex ou
 
 - **Dates** : le 27 octobre 2026 s’écrit \`10/27/2026\` en \`en-US\`, \`27.10.2026\` en \`de-DE\` et \`27/10/2026\` en \`fr-FR\`. Une date comme 03/04 désigne le 3 avril ou le 4 mars selon le pays.
 - **Nombres** : « 1,000 » (anglais) et « 1.000 » (allemand) valent tous deux mille, mais « 1,5 » et « 1.5 » s’inversent. En français, le séparateur des milliers est une espace fine insécable et la décimale une virgule.
-- **Devises** : le symbole change de place et d’espacement — « €1,234.56 » en \`en-US\`, « 1.234,56 € » en \`de-DE\`, « 1 234,56 € » en \`fr-FR\`.
+- **Devises** : le symbole change de place et d’espacement — « €1,234.56 » en \`en-US\`, « 1.234,56 € » en \`de-DE\`, « 1 234,56 € » en \`fr-FR\`.
 - **Pluriels** : \`count !== 1 ? 's' : ''\` ne marche qu’en anglais. L’arabe a **six** catégories de pluriel (zéro, un, deux, quelques, beaucoup, autre) ; le polonais et le russe distinguent « quelques » et « beaucoup » ; en français, les règles CLDR mettent 0 au singulier (« 0 fichier »). Utilise une bibliothèque i18n ou \`Intl.PluralRules\`.
 
 \`Intl.DateTimeFormat\`, \`Intl.NumberFormat\` et \`Intl.PluralRules\` font ce travail à partir de la **locale** — la langue et la région de la personne.`,
@@ -241,7 +241,7 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
           good: {
             alt: 'Même éditeur avec un bandeau en tête : « Note non enregistrée. La connexion a été perdue ; votre texte est conservé sur cet appareil » et un bouton Réessayer.',
             html: `<div class="mk-pad mk-stack" style="--gap:10px">
-  <div class="har-banner"><i data-icon="wifi" style="--ico:18px"></i><div class="mk-grow"><p class="mk-strong">Note non enregistrée</p><p class="mk-small">La connexion a été perdue ; votre texte est conservé sur cet appareil.</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Réessayer</span></div>
+  <div class="har-banner"><i data-icon="wifi" style="--ico:18px"></i><div class="mk-grow"><p class="mk-strong">Note non enregistrée</p><p class="mk-small">La connexion a été perdue&#8239;; votre texte est conservé sur cet appareil.</p></div><span class="mk-btn mk-btn--ghost mk-btn--s">Réessayer</span></div>
   ${NOTE_BODY}
 </div>`,
             css: `.har-banner { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #fdf3e3; color: #6b3a00; border: 1px solid #f1d6a8; }`,
@@ -272,7 +272,7 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
     },
   ],
   rules: [
-    { id: 'expansion', front: 'Quelle marge prévoir pour les traductions ?', back: '30 à 40 % d’espace en plus, avec des conteneurs qui s’adaptent ; l’allemand est souvent ~30 % plus long que l’anglais, et les chaînes courtes gonflent le plus.' },
+    { id: 'expansion', front: 'Quelle marge prévoir pour les traductions ?', back: '30 à 40 % d’espace en plus, avec des conteneurs qui s’adaptent ; l’allemand est souvent ~30 % plus long que l’anglais, et les chaînes courtes gonflent le plus.' },
     { id: 'min-width', front: 'Un texte long pousse les boutons hors d’une rangée flex : que faire ?', back: '`min-width: 0` sur l’enfant flex (et `min-height: 0` en grille) : par défaut, il ne rétrécit pas sous la largeur de son contenu.' },
     { id: 'numbers', front: 'Peut-on tronquer un montant trop long ?', back: "Non : un nombre tronqué devient faux. Notation compacte (`Intl.NumberFormat`, `notation: 'compact'`) et valeur exacte accessible." },
     { id: 'rtl', front: 'Comment préparer une mise en page pour l’arabe ou l’hébreu ?', back: '`dir="rtl"` et propriétés logiques (`margin-inline-start`, `padding-inline`…) ; on retourne les icônes directionnelles.' },
@@ -284,7 +284,7 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
     { id: 'error-msg', front: 'Que doit dire un message d’erreur ?', back: 'Ce qui a échoué, pourquoi (si c’est connu et utile) et comment s’en sortir — en conservant la saisie.' },
     { id: 'double', front: 'Comment empêcher une double commande ?', back: 'Bouton désactivé avec un état explicite pendant l’envoi, et opération idempotente côté serveur.' },
     { id: 'validation', front: 'La validation côté client suffit-elle ?', back: 'Non : elle sert le confort. La validation et l’assainissement côté serveur sont toujours obligatoires.' },
-    { id: 'ios16', front: 'Pourquoi 16 px minimum dans les champs sur mobile ?', back: 'Safari sur iOS zoome de force sur un champ focalisé dont le texte fait moins de 16 px. Et on ne bloque jamais le zoom pour l’éviter.' },
+    { id: 'ios16', front: 'Pourquoi 16 px minimum dans les champs sur mobile ?', back: 'Safari sur iOS zoome de force sur un champ focalisé dont le texte fait moins de 16 px. Et on ne bloque jamais le zoom pour l’éviter.' },
     { id: 'gestures', front: 'Que faire quand un glissement est interrompu ?', back: 'Sur `pointercancel`, `lostpointercapture` ou `blur` : effacer l’état de glissement et libérer la capture, pour que le geste suivant marche sans recharger.' },
   ],
   exercises: [
@@ -356,17 +356,17 @@ La version robuste donne \`flex: 1\` et \`min-width: 0\` au bloc de texte et lai
         },
       ],
       answer: 'fluid',
-      explanation: `« Save » devient « Speichern », « Save changes » devient « Änderungen speichern » : l’allemand est souvent **~30 % plus long** que l’anglais, et les chaînes courtes gonflent proportionnellement le plus. Une largeur fixe calibrée sur la langue source finit toujours par couper un libellé.
+      explanation: `« Save » devient « Speichern », « Save changes » devient « Änderungen speichern » : l’allemand est souvent **~30 % plus long** que l’anglais, et les chaînes courtes gonflent proportionnellement le plus. Une largeur fixe calibrée sur la langue source finit toujours par couper un libellé.
 
-Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter les largeurs fixes sur les conteneurs de texte et de laisser flexbox ou grid s’adapter au contenu : sur un bouton, un \`padding\` plutôt qu’une \`width\`.`,
-      takeaway: 'Pas de largeur fixe sur un libellé : prévois 30 à 40 % d’espace pour les traductions et laisse les boutons s’adapter.',
+Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter les largeurs fixes sur les conteneurs de texte et de laisser flexbox ou grid s’adapter au contenu : sur un bouton, un \`padding\` plutôt qu’une \`width\`.`,
+      takeaway: 'Pas de largeur fixe sur un libellé : prévois 30 à 40 % d’espace pour les traductions et laisse les boutons s’adapter.',
       sources: ['imp:harden', W3C_TEXT_SIZE],
     },
     {
       id: 'harden-amount-duel',
       type: 'choice',
       difficulty: 2,
-      prompt: 'Le chiffre d’affaires annuel d’un client atteint 987 654 321,00 €. Quelle tuile l’affiche correctement ?',
+      prompt: 'Le chiffre d’affaires annuel d’un client atteint 987 654 321,00 €. Quelle tuile l’affiche correctement ?',
       options: [
         {
           id: 'cut',
@@ -384,7 +384,7 @@ Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter le
         {
           id: 'compact',
           visual: {
-            alt: 'Trois tuiles d’indicateurs ; le chiffre d’affaires annuel s’affiche « 987,7 M € », avec la valeur exacte en petit en dessous.',
+            alt: 'Trois tuiles d’indicateurs ; le chiffre d’affaires annuel s’affiche « 987,7 M € », avec la valeur exacte en petit en dessous.',
             html: `<div class="mk-pad"><div class="har-kpis">
   <div class="har-kpi"><span class="mk-small mk-muted">Chiffre d’affaires annuel</span><b>987,7&nbsp;M&nbsp;€</b><span class="mk-small mk-muted">987&#8239;654&#8239;321,00&nbsp;€</span></div>
   <div class="har-kpi"><span class="mk-small mk-muted">Clients actifs</span><b>1&#8239;284</b></div>
@@ -396,9 +396,9 @@ Impeccable demande de prévoir **30 à 40 %** d’espace en plus, d’éviter le
         },
       ],
       answer: 'compact',
-      explanation: `Un nombre ne se tronque pas comme un texte : couper « 987 654 321 » en « 987 654 3… » change sa valeur, et rien n’indique plus l’ordre de grandeur.
+      explanation: `Un nombre ne se tronque pas comme un texte : couper « 987 654 321 » en « 987 654 3… » change sa valeur, et rien n’indique plus l’ordre de grandeur.
 
-Pour un indicateur, la **notation compacte** de \`Intl.NumberFormat\` (\`notation: 'compact'\`) donne « 988 M € » en français — ou « 987,7 M € » avec une décimale — en respectant la langue de chacun. La valeur exacte reste disponible juste à côté, dans une infobulle ou dans le détail. Dans un tableau, on garde la valeur complète en chiffres tabulaires et on laisse la colonne s’élargir.`,
+Pour un indicateur, la **notation compacte** de \`Intl.NumberFormat\` (\`notation: 'compact'\`) donne « 988 M € » en français — ou « 987,7 M € » avec une décimale — en respectant la langue de chacun. La valeur exacte reste disponible juste à côté, dans une infobulle ou dans le détail. Dans un tableau, on garde la valeur complète en chiffres tabulaires et on laisse la colonne s’élargir.`,
       takeaway: 'Ne tronque jamais un nombre : notation compacte localisée (`Intl.NumberFormat`) et valeur exacte accessible.',
       sources: ['imp:harden', 'mdn:intl'],
     },
@@ -413,7 +413,7 @@ Pour un indicateur, la **notation compacte** de \`Intl.NumberFormat\` (\`notatio
           visual: {
             alt: 'Page entièrement remplacée par un message centré « Une erreur est survenue », un code ERR_DASH_500 et un bouton OK.',
             frame: 'browser',
-            html: `<div class="har-fatal"><i data-icon="triangle-alert" style="--ico:28px"></i><p class="mk-h3">Une erreur est survenue.</p><p class="mk-small mk-muted">Code : ERR_DASH_500</p><span class="mk-btn mk-btn--ghost mk-btn--s">OK</span></div>`,
+            html: `<div class="har-fatal"><i data-icon="triangle-alert" style="--ico:28px"></i><p class="mk-h3">Une erreur est survenue.</p><p class="mk-small mk-muted">Code&nbsp;: ERR_DASH_500</p><span class="mk-btn mk-btn--ghost mk-btn--s">OK</span></div>`,
             css: `.har-fatal { min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; text-align: center; color: #1d2230; }`,
           },
           why: 'Toute la page disparaît pour une seule panne, avec un code interne en guise d’explication et aucun moyen de réessayer.',
@@ -484,7 +484,7 @@ Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inli
       difficulty: 2,
       prompt: 'Ce tableau de commandes a été rempli avec de vraies données. Trouve les deux endroits qui cassent.',
       visual: {
-        alt: 'Tableau de quatre commandes avec les colonnes Client, Statut et Montant ; un nom de société très long passe sous l’étiquette de statut et un montant est coupé ; une pagination indique 1 à 4 sur 1 284.',
+        alt: 'Tableau de quatre commandes avec les colonnes Client, Statut et Montant ; un nom de société très long passe sous l’étiquette de statut et un montant est coupé ; une pagination indique 1 à 4 sur 1 284.',
         frame: 'browser',
         html: `<div class="mk-pad"><div class="mk-stack har-orders" style="--gap:0">
   <div class="har-tr har-th" data-hotspot="header"><span>Client</span><span>Statut</span><span class="har-num">Montant</span></div>
@@ -515,9 +515,9 @@ Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inli
         { id: 'status', label: 'Étiquette « En attente »', correct: false, why: 'L’étiquette tient dans sa colonne.' },
         {
           id: 'pager',
-          label: 'Pagination « 1–4 sur 1 284 »',
+          label: 'Pagination « 1–4 sur 1 284 »',
           correct: false,
-          why: 'C’est la bonne réponse à une longue liste : on ne charge pas 1 284 commandes d’un coup.',
+          why: 'C’est la bonne réponse à une longue liste : on ne charge pas 1 284 commandes d’un coup.',
         },
       ],
       explanation: `Deux défauts classiques du vrai contenu :
@@ -525,7 +525,7 @@ Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inli
 - **Débordement de texte** : un nom long, sans retour à la ligne possible, envahit la colonne voisine. Le texte doit pouvoir revenir à la ligne (\`overflow-wrap\`), ou être tronqué proprement avec le nom complet accessible.
 - **Nombre tronqué** : un montant coupé au milieu de ses chiffres ne signifie plus rien. Les montants ne se tronquent pas ; la colonne s’élargit ou passe en notation compacte.
 
-La pagination, elle, est la réponse attendue à 1 284 commandes.`,
+La pagination, elle, est la réponse attendue à 1 284 commandes.`,
       takeaway: 'Avec du vrai contenu, aucun texte ne déborde sur ses voisins et aucun nombre n’est tronqué.',
       sources: ['imp:harden', 'imp:detector', MDN_TEXT_OVERFLOW],
     },
@@ -536,10 +536,10 @@ La pagination, elle, est la réponse attendue à 1 284 commandes.`,
       context: 'Ce tableau de bord est affiché en français de France (`fr-FR`).',
       prompt: 'Trouve les trois défauts de localisation.',
       visual: {
-        alt: 'Tableau de bord bancaire en français : message de bienvenue, heure de dernière connexion, solde de 12,480.50 €, échéance au 10/30/2026, message « Vous avez 1 messages non lus » et bouton Voir les factures.',
+        alt: 'Tableau de bord bancaire en français : message de bienvenue, heure de dernière connexion, solde de 12,480.50 €, échéance au 10/30/2026, message « Vous avez 1 messages non lus » et bouton Voir les factures.',
         frame: 'browser',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
-  <div class="mk-row mk-between mk-wrap" style="--gap:6px 12px"><p class="mk-h2">Bonjour Camille</p><span class="mk-small mk-muted" data-hotspot="login">Dernière connexion : aujourd’hui à 9&nbsp;h&nbsp;41</span></div>
+  <div class="mk-row mk-between mk-wrap" style="--gap:6px 12px"><p class="mk-h2">Bonjour Camille</p><span class="mk-small mk-muted" data-hotspot="login">Dernière connexion&nbsp;: aujourd’hui à 9&nbsp;h&nbsp;41</span></div>
   <div class="mk-grid" style="--gap:10px">
     <div class="har-kpi"><span class="mk-small mk-muted">Solde disponible</span><b data-hotspot="number" style="align-self:flex-start">12,480.50&nbsp;€</b></div>
     <div class="har-kpi"><span class="mk-small mk-muted">Prochaine échéance</span><b data-hotspot="date" style="align-self:flex-start">10/30/2026</b></div>
@@ -560,7 +560,7 @@ La pagination, elle, est la réponse attendue à 1 284 commandes.`,
           id: 'number',
           label: 'Séparateurs anglais dans un montant',
           correct: true,
-          why: 'En français : « 12 480,50 € », espace fine pour les milliers et virgule pour les décimales. Intl.NumberFormat le fait pour toi.',
+          why: 'En français : « 12 480,50 € », espace fine pour les milliers et virgule pour les décimales. Intl.NumberFormat le fait pour toi.',
         },
         {
           id: 'plural',
@@ -568,13 +568,13 @@ La pagination, elle, est la réponse attendue à 1 284 commandes.`,
           correct: true,
           why: '« 1 messages » : le « s » a été collé sans règle. Intl.PluralRules ou une bibliothèque i18n choisit la bonne forme.',
         },
-        { id: 'login', label: 'Heure de dernière connexion', correct: false, why: '« 9 h 41 » est une écriture française correcte de l’heure.' },
+        { id: 'login', label: 'Heure de dernière connexion', correct: false, why: '« 9 h 41 » est une écriture française correcte de l’heure.' },
         { id: 'cta', label: 'Bouton « Voir les factures »', correct: false, why: 'Libellé traduit, clair, qui tient dans son bouton.' },
       ],
       explanation: `Ces trois défauts ont la même cause : des formats **codés à la main** pour une seule langue.
 
 - \`Intl.DateTimeFormat('fr-FR')\` écrit la date dans l’ordre jour/mois/année ;
-- \`Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })\` donne « 12 480,50 € » ;
+- \`Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })\` donne « 12 480,50 € » ;
 - \`Intl.PluralRules\` (ou une bibliothèque i18n) choisit la forme du pluriel selon la langue — en français, 0 et 1 au singulier.
 
 Passer la locale de l’utilisateur à ces API règle d’un coup toutes les langues, y compris celles dont tu ne connais pas les règles.`,
@@ -693,10 +693,10 @@ La validation et l’assainissement côté **serveur** sont donc **toujours** ob
       unit: 'px',
       target: [16, 20],
       ideal: 16,
-      explanation: `Safari sur iOS **zoome automatiquement** sur un champ focalisé dont le texte fait 15 px ou moins. La page s’agrandit, la mise en page sort de l’écran, et il faut dézoomer à la main après chaque saisie.
+      explanation: `Safari sur iOS **zoome automatiquement** sur un champ focalisé dont le texte fait 15 px ou moins. La page s’agrandit, la mise en page sort de l’écran, et il faut dézoomer à la main après chaque saisie.
 
-La correction est simple : **16 px minimum** dans les champs sur mobile — le même plancher que le corps de texte. Ne contourne pas le problème en bloquant le zoom de la page (\`maximum-scale=1\`, \`user-scalable=no\`) : selon les navigateurs, tu empêcherais aussi les gens d’agrandir la page quand ils en ont besoin.`,
-      takeaway: 'Sur mobile, 16 px minimum dans les champs : en dessous, iOS zoome de force. Ne bloque jamais le zoom pour l’éviter.',
+La correction est simple : **16 px minimum** dans les champs sur mobile — le même plancher que le corps de texte. Ne contourne pas le problème en bloquant le zoom de la page (\`maximum-scale=1\`, \`user-scalable=no\`) : selon les navigateurs, tu empêcherais aussi les gens d’agrandir la page quand ils en ont besoin.`,
+      takeaway: 'Sur mobile, 16 px minimum dans les champs : en dessous, iOS zoome de force. Ne bloque jamais le zoom pour l’éviter.',
       sources: ['imp:harden', CSS_TRICKS_IOS],
     },
     {

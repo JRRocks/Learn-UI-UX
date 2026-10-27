@@ -26,7 +26,8 @@ const { port } = server.httpServer.address();
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage({
-    viewport: mobile ? { width: 390, height: 844 } : { width: 1180, height: 900 },
+    // Tall viewports so element captures are never cut at the fold.
+    viewport: mobile ? { width: 390, height: 2400 } : { width: 1180, height: 2200 },
     deviceScaleFactor: mobile ? 2 : 1,
     colorScheme: dark ? 'dark' : 'light',
   });

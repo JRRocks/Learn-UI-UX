@@ -15,15 +15,15 @@ const SAINT_EX: SourceRef = { label: 'Antoine de Saint-Exupéry — Terre des ho
 /* ---------- Shared mock pieces ---------- */
 
 const INVOICE_HEAD = `<div class="mk-row" style="--gap:8px"><p class="mk-h2">Facture F-2026-118</p><span class="mk-badge">Brouillon</span></div>
-  <p class="mk-small mk-muted">Studio Lumen · 2 400,00&nbsp;€ HT · échéance le 30 novembre</p>`;
+  <p class="mk-small mk-muted">Studio Lumen · 2 400,00&nbsp;€ HT · échéance le 30 novembre</p>`;
 
 const INVOICE_LINES = `<div class="mk-divider"></div>
-  <div class="mk-row mk-between"><span>Refonte du site vitrine</span><span class="mk-price">2 000,00&nbsp;€</span></div>
+  <div class="mk-row mk-between"><span>Refonte du site vitrine</span><span class="mk-price">2 000,00&nbsp;€</span></div>
   <div class="mk-row mk-between"><span>Hébergement annuel</span><span class="mk-price">400,00&nbsp;€</span></div>`;
 
 const EDITOR_BODY = `<div class="mk-pad mk-stack" style="--gap:8px">
     <p class="mk-h3">Lettre d’information — novembre</p>
-    <p class="mk-muted">Bonjour à toutes et à tous, voici les nouveautés de l’atelier : deux nouveaux cours du soir et une journée portes ouvertes le 22 novembre.</p>
+    <p class="mk-muted">Bonjour à toutes et à tous, voici les nouveautés de l’atelier&nbsp;: deux nouveaux cours du soir et une journée portes ouvertes le 22 novembre.</p>
   </div>`;
 
 const EDITOR_CSS = `
@@ -63,7 +63,7 @@ Dans les trois cas, l’identité en place est préservée, et une passe de fini
     {
       id: 'simplifier',
       title: 'Simplifier : un but, une action principale',
-      body: `Commence par l’**essentiel** : quel est l’objectif principal de l’utilisateur sur cet écran ? Il n’y en a qu’**un**. Qu’est-ce qui est nécessaire, qu’est-ce qui est seulement agréable ? Quels sont les 20 % qui apportent 80 % de la valeur ? Attends-toi à dire non à de bonnes idées pour faire de la place à une exécution excellente.
+      body: `Commence par l’**essentiel** : quel est l’objectif principal de l’utilisateur sur cet écran ? Il n’y en a qu’**un**. Qu’est-ce qui est nécessaire, qu’est-ce qui est seulement agréable ? Quels sont les 20 % qui apportent 80 % de la valeur ? Attends-toi à dire non à de bonnes idées pour faire de la place à une exécution excellente.
 
 - **Une action principale**, quelques actions secondaires, tout le reste en tertiaire ou masqué. La loi de Hick le rappelle : le temps de décision augmente avec le nombre et la complexité des choix.
 - **Divulgation progressive** : montre d’abord l’essentiel et range la complexité derrière des points d’entrée clairs (accordéon, « Options avancées », étape suivante).
@@ -91,7 +91,7 @@ Dans les trois cas, l’identité en place est préservée, et une passe de fini
             alt: 'Même carte d’atelier avec une seule police, un seul bleu pour les actions, des gris pour les informations secondaires et trois tailles de texte.',
             html: `<div class="mk-pad"><div class="mk-card mk-stack" style="--gap:8px">
   <p class="mk-h2">Atelier céramique</p>
-  <p class="mk-small mk-muted">Samedi 15 novembre · 14 h</p>
+  <p class="mk-small mk-muted">Samedi 15 novembre · 14 h</p>
   <p>Tournage, émaillage et cuisson : repartez avec deux bols faits main.</p>
   <div class="mk-row mk-between"><span class="mk-price" style="font-size:18px">65&nbsp;€</span><span class="mk-small mk-muted">Plus que 3 places</span></div>
   <div class="mk-row mk-between"><span class="mk-btn mk-btn--text">Offrir cet atelier</span><span class="mk-btn">Réserver</span></div>
@@ -193,10 +193,10 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
       title: 'Adoucir : baisser le volume avec précision',
       body: `Adoucir demande **plus** de précision qu’intensifier. Le sens dépend du mode : sur une page qui doit convaincre, une palette plus retenue, plus de blanc, plus d’air typographique — le drame baisse sans disparaître ; dans une application, moins de bruit — fonds d’accent, cartes plus plates, moins de couleur et de mouvement.
 
-- **Couleur** : désature (des teintes pleinement saturées vers 70–85 % de saturation), réduis le nombre de couleurs, laisse les **neutres dominer** et garde la couleur pour les accents (la règle des 10 %). Préfère des gris teintés, chauds ou froids, au gris pur. Garde le contraste fort là où il compte.
+- **Couleur** : désature (des teintes pleinement saturées vers 70–85 % de saturation), réduis le nombre de couleurs, laisse les **neutres dominer** et garde la couleur pour les accents (la règle des 10 %). Préfère des gris teintés, chauds ou froids, au gris pur. Garde le contraste fort là où il compte.
 - **Poids** : baisse les graisses (900 → 600, 700 → 500), allège ou supprime les bordures, augmente l’espace.
 - **Effets** : retire dégradés, ombres multiples, lueurs et motifs qui ne servent à rien.
-- **Mouvement** : distances plus courtes (10 à 20 px plutôt que 40), une décélération douce (*ease-out*), jamais de rebond ni d’élastique ; supprime les animations sans rôle.
+- **Mouvement** : distances plus courtes (10 à 20 px plutôt que 40), une décélération douce (*ease-out*), jamais de rebond ni d’élastique ; supprime les animations sans rôle.
 - **Composition** : écarts d’échelle plus faibles, alignement sur la grille, rythme d’espacement régulier.
 - **Jamais de gris sur une couleur** : sur un fond coloré, le texte secondaire prend une nuance de cette couleur (ou du blanc en transparence), pas un gris qui paraît sale.`,
       examples: [
@@ -206,7 +206,7 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
             alt: 'Alerte de paiement en retard sur fond rouge vif, texte blanc très gras en capitales avec points d’exclamation, épaisse bordure jaune et halo rouge.',
             html: `<div class="mk-pad"><div class="int-alarm">
   <p class="int-alarm-h">PAIEMENT EN RETARD&#8239;!!!</p>
-  <p>LA FACTURE F-2026-097 DE 1 240,00&nbsp;€ AURAIT DÛ ÊTRE RÉGLÉE LE 15 OCTOBRE.</p>
+  <p>LA FACTURE F-2026-097 DE 1 240,00&nbsp;€ AURAIT DÛ ÊTRE RÉGLÉE LE 15 OCTOBRE.</p>
   <span class="int-alarm-btn">RELANCER MAINTENANT</span>
 </div></div>`,
             css: `.int-alarm { display: flex; flex-direction: column; gap: 8px; padding: 16px; background: #ff0000; color: #fff; border: 4px solid #ffd400; border-radius: 12px; box-shadow: 0 0 24px 6px rgb(255 0 0 / 0.55); font-weight: 800; }
@@ -220,7 +220,7 @@ Le réflexe « plus d’effets » (ombres, dégradés, animations) est le contra
   <i data-icon="circle-alert" style="--ico:20px"></i>
   <div class="mk-stack" style="--gap:6px">
     <p class="int-calm-h">Paiement en retard</p>
-    <p>La facture F-2026-097 de 1 240,00&nbsp;€ aurait dû être réglée le 15 octobre.</p>
+    <p>La facture F-2026-097 de 1 240,00&nbsp;€ aurait dû être réglée le 15 octobre.</p>
     <span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start">Relancer le client</span>
   </div>
 </div></div>`,
@@ -254,11 +254,11 @@ Vérifie à la fin : est-ce toujours fonctionnel ? toujours reconnaissable ? plu
     { id: 'scope', front: 'On te demande une section « plus audacieuse » : que peux-tu modifier ?', back: 'Seulement la cible nommée, avec les moyens du système : ni les voisines, ni nouvelle couleur, police ou primitive sans le demander.' },
     { id: 'commit', front: 'Pourquoi « tout rendre plus fort » échoue-t-il ?', back: 'Si tout monte, rien ne ressort et la section devient plus plate. Un geste décisif, puis du calme autour.' },
     { id: 'skeleton', front: 'Qu’est-ce que le test du squelette ?', back: 'Retirer le texte et regarder la structure nue : si elle ne dit plus pourquoi la section compte, l’audace n’est que dans la taille du texte.' },
-    { id: 'desaturate', front: 'Comment adoucir une palette criarde ?', back: 'Désaturer vers 70–85 %, réduire le nombre de couleurs, laisser dominer des neutres teintés et garder la couleur pour les accents.' },
+    { id: 'desaturate', front: 'Comment adoucir une palette criarde ?', back: 'Désaturer vers 70–85 %, réduire le nombre de couleurs, laisser dominer des neutres teintés et garder la couleur pour les accents.' },
     { id: 'weights', front: 'Comment alléger les graisses sans perdre la hiérarchie ?', back: 'Descendre d’un ou deux crans (900 → 600, 700 → 500) en gardant quelques ancres fortes.' },
     { id: 'gray-on-color', front: 'Texte secondaire sur fond coloré : quelle couleur ?', back: 'Jamais du gris : une nuance de la couleur du fond (ou du blanc en transparence), avec au moins 4,5:1.' },
     { id: 'generic', front: 'À quoi ressemble un calme générique ?', back: 'Du gris sur blanc, une seule graisse partout, une grille de cartes identiques : de la retenue sans point de vue.' },
-    { id: 'quiet-motion', front: 'Comment adoucir une animation ?', back: 'Distances plus courtes (10 à 20 px), décélération douce, jamais de rebond ni d’élastique — ou pas d’animation si elle ne sert à rien.' },
+    { id: 'quiet-motion', front: 'Comment adoucir une animation ?', back: 'Distances plus courtes (10 à 20 px), décélération douce, jamais de rebond ni d’élastique — ou pas d’animation si elle ne sert à rien.' },
   ],
   exercises: [
     {
@@ -348,7 +348,7 @@ La vraie simplification réduit le **nombre** d’actions visibles et regroupe l
             html: `<div class="int-loud">
   <p class="int-loud-h">CHIFFRES CLÉS</p>
   <div class="mk-grid" style="--cols:3;--gap:10px">
-    <div class="int-loud-card"><b style="color:#ea580c">12 400</b><span>DOSSIERS EN 2025</span></div>
+    <div class="int-loud-card"><b style="color:#ea580c">12 400</b><span>DOSSIERS EN 2025</span></div>
     <div class="int-loud-card"><b style="color:#7c3aed">38</b><span>EXPERTS-COMPTABLES</span></div>
     <div class="int-loud-card"><b style="color:#16a34a">4</b><span>BUREAUX EN BRETAGNE</span></div>
   </div>
@@ -364,11 +364,11 @@ La vraie simplification réduit le **nombre** d’actions visibles et regroupe l
         {
           id: 'decisive',
           visual: {
-            alt: 'Section Chiffres clés sur fond blanc : un très grand chiffre 12 400 en vert sapin dans la police à empattements, une phrase courte, puis deux chiffres secondaires discrets.',
+            alt: 'Section Chiffres clés sur fond blanc : un très grand chiffre 12 400 en vert sapin dans la police à empattements, une phrase courte, puis deux chiffres secondaires discrets.',
             html: `<div class="mk-pad-l mk-stack" style="--gap:14px">
   <p class="int-serif-h">Chiffres clés</p>
   <div class="mk-row mk-wrap" style="--gap:6px 16px;align-items:flex-end">
-    <b class="int-big">12 400</b>
+    <b class="int-big">12 400</b>
     <span class="int-big-txt">dossiers traités en 2025, de l’auto-entreprise à la PME.</span>
   </div>
   <div class="mk-divider"></div>
@@ -442,10 +442,10 @@ Pour faire reculer un texte secondaire sur un fond coloré, choisis une **nuance
             html: `<div class="mk-pad mk-stack int-gen" style="--gap:12px">
   <p>Consommation d’énergie</p>
   <div class="mk-grid" style="--gap:10px">
-    <div class="int-gen-card"><span>Octobre</span><span>412 kWh</span></div>
-    <div class="int-gen-card"><span>Septembre</span><span>455 kWh</span></div>
+    <div class="int-gen-card"><span>Octobre</span><span>412 kWh</span></div>
+    <div class="int-gen-card"><span>Septembre</span><span>455 kWh</span></div>
     <div class="int-gen-card"><span>Coût estimé</span><span>98&nbsp;€</span></div>
-    <div class="int-gen-card"><span>Pic de puissance</span><span>6,2 kVA</span></div>
+    <div class="int-gen-card"><span>Pic de puissance</span><span>6,2 kVA</span></div>
   </div>
 </div>`,
             css: `.int-gen { color: #6b7280; font-weight: 400; }
@@ -456,19 +456,19 @@ Pour faire reculer un texte secondaire sur un fond coloré, choisis une **nuance
         {
           id: 'refined',
           visual: {
-            alt: 'Tableau de bord avec la consommation d’octobre en grand, une tendance de −9 % dans un vert-bleu sourd, puis une courte liste de trois données secondaires.',
+            alt: 'Tableau de bord avec la consommation d’octobre en grand, une tendance de −9 % dans un vert-bleu sourd, puis une courte liste de trois données secondaires.',
             frame: 'browser',
             html: `<div class="mk-pad mk-stack int-ref" style="--gap:12px">
   <p class="int-ref-h">Consommation d’énergie</p>
   <div class="mk-stack" style="--gap:2px">
     <span class="int-ref-meta">Octobre</span>
-    <b class="int-ref-big">412 kWh</b>
+    <b class="int-ref-big">412 kWh</b>
     <span class="int-ref-trend"><i data-icon="trending-down" style="--ico:14px"></i>−9&nbsp;% par rapport à septembre</span>
   </div>
   <ul class="mk-list">
     <li><span class="mk-grow int-ref-meta">Coût estimé</span><b>98&nbsp;€</b></li>
-    <li><span class="mk-grow int-ref-meta">Pic de puissance</span><b>6,2 kVA</b></li>
-    <li><span class="mk-grow int-ref-meta">Septembre</span><b>455 kWh</b></li>
+    <li><span class="mk-grow int-ref-meta">Pic de puissance</span><b>6,2 kVA</b></li>
+    <li><span class="mk-grow int-ref-meta">Septembre</span><b>455 kWh</b></li>
   </ul>
 </div>`,
             css: `.int-ref { color: #1e2a32; }
@@ -544,8 +544,8 @@ Le prix et l’action principale, eux, sont exactement ce qu’une simplificatio
         html: `<div class="mk-pad mk-stack" style="--gap:14px">
   <div class="mk-row mk-between"><p class="mk-h2" data-hotspot="title">Ventes de la semaine</p><span class="mk-btn mk-btn--ghost mk-btn--s" data-hotspot="range"><i data-icon="calendar" style="--ico:14px"></i>20–26 oct.</span></div>
   <div class="mk-grid" style="--gap:14px">
-    <div class="int-kpi int-glow" data-hotspot="glow"><span class="mk-small mk-muted">Chiffre d’affaires</span><b>48 210&nbsp;€</b></div>
-    <div class="int-kpi"><span class="mk-small mk-muted">Commandes</span><b>1 284</b></div>
+    <div class="int-kpi int-glow" data-hotspot="glow"><span class="mk-small mk-muted">Chiffre d’affaires</span><b>48 210&nbsp;€</b></div>
+    <div class="int-kpi"><span class="mk-small mk-muted">Commandes</span><b>1 284</b></div>
   </div>
   <div class="mk-row mk-wrap" style="--gap:6px;align-self:flex-start" data-hotspot="tags"><span class="int-tag-loud" style="background:#ff1f1f;color:#fff">EN RETARD (4)</span><span class="int-tag-loud" style="background:#ffe500;color:#000">URGENT (2)</span><span class="int-tag-loud" style="background:#00d26a;color:#000">À EXPÉDIER (9)</span></div>
   <ul class="mk-list" data-hotspot="table">
@@ -689,7 +689,7 @@ Couper avant d’avoir nommé le but, c’est risquer de retirer ce qui comptait
       visual: {
         alt: 'Bandeau promotionnel rouge et trois commandes avec des étiquettes de statut verte, bleue et orange, dont la saturation varie avec le curseur.',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
-  <div class="int-promo">Soldes d’automne : −20&nbsp;% sur l’atelier jusqu’à dimanche</div>
+  <div class="int-promo">Soldes d’automne&nbsp;: −20&nbsp;% sur l’atelier jusqu’à dimanche</div>
   <ul class="mk-list">
     <li><span class="mk-grow">Commande 4821 · Lyon</span><span class="int-tag" style="--h:145;--l:28%">Livrée</span></li>
     <li><span class="mk-grow">Commande 4822 · Nantes</span><span class="int-tag" style="--h:215;--l:44%">En transit</span></li>
@@ -707,10 +707,10 @@ Couper avant d’avoir nommé le but, c’est risquer de retirer ce qui comptait
       unit: '%',
       target: [70, 85],
       ideal: 78,
-      explanation: `Des couleurs pleinement saturées crient toutes en même temps. Impeccable conseille de les ramener vers **70 à 85 %** de saturation : les teintes restent reconnaissables — le vert, le bleu et l’orange gardent leur sens — mais cessent de vibrer.
+      explanation: `Des couleurs pleinement saturées crient toutes en même temps. Impeccable conseille de les ramener vers **70 à 85 %** de saturation : les teintes restent reconnaissables — le vert, le bleu et l’orange gardent leur sens — mais cessent de vibrer.
 
-Descendre beaucoup plus bas fait basculer dans l’autre piège : les statuts deviennent ternes et finissent par se confondre ; à 0 %, tout est gris et la couleur ne porte plus aucune information. Calme ≠ niveaux de gris.`,
-      takeaway: 'Pour adoucir une palette, désature vers 70–85 % : la couleur garde son sens sans crier. Pas jusqu’au gris.',
+Descendre beaucoup plus bas fait basculer dans l’autre piège : les statuts deviennent ternes et finissent par se confondre ; à 0 %, tout est gris et la couleur ne porte plus aucune information. Calme ≠ niveaux de gris.`,
+      takeaway: 'Pour adoucir une palette, désature vers 70–85 % : la couleur garde son sens sans crier. Pas jusqu’au gris.',
       sources: ['imp:quieter'],
     },
     {
@@ -721,7 +721,7 @@ Descendre beaucoup plus bas fait basculer dans l’autre piège : les statuts de
       answer: false,
       explanation: `Faux. Impeccable le dit explicitement : **calme ≠ niveaux de gris**. Retirer toute la couleur supprime aussi l’information qu’elle portait (statuts, sélection, actions) et produit le calme générique : du gris sur blanc, sans point de vue.
 
-On adoucit en **désaturant** (vers 70–85 %), en réduisant le nombre de couleurs et en laissant dominer les neutres, avec un accent réservé à ce qui compte.`,
+On adoucit en **désaturant** (vers 70–85 %), en réduisant le nombre de couleurs et en laissant dominer les neutres, avec un accent réservé à ce qui compte.`,
       takeaway: 'Adoucir, c’est retirer de la couleur, pas toute la couleur.',
       sources: ['imp:quieter'],
     },
@@ -742,7 +742,7 @@ Impeccable demande de **s’engager, puis clarifier** : un geste décisif fait c
       type: 'choice',
       difficulty: 3,
       context:
-        'Tu as rendu la section « Notre méthode » plus audacieuse en passant ses textes de 16 à 24 px. Tu appliques le test du squelette : sans le texte, ses blocs sont identiques à ceux des sections voisines.',
+        'Tu as rendu la section « Notre méthode » plus audacieuse en passant ses textes de 16 à 24 px. Tu appliques le test du squelette : sans le texte, ses blocs sont identiques à ceux des sections voisines.',
       prompt: 'Qu’en conclus-tu ?',
       options: [
         {

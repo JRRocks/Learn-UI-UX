@@ -35,7 +35,7 @@ const linksText = (underline: boolean): Visual => ({
     ? 'Paragraphe de confirmation de séjour avec deux liens bleus soulignés.'
     : 'Paragraphe de confirmation de séjour avec deux liens qui ne se distinguent du texte que par leur couleur bleue, sans soulignement.',
   css: `.ln { color: #1f4fd8; ${underline ? 'text-decoration: underline; text-underline-offset: 2px;' : 'text-decoration: none;'} }`,
-  html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h3">Votre séjour est confirmé</p><p style="line-height:1.6">Avant de partir, consultez nos <span class="ln">conditions d’annulation</span> : le remboursement est intégral jusqu’à 48 h avant l’arrivée. Pour venir sans voiture, voyez l’<span class="ln">accès en transports en commun</span> depuis la gare d’Annecy.</p></div>`,
+  html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h3">Votre séjour est confirmé</p><p style="line-height:1.6">Avant de partir, consultez nos <span class="ln">conditions d’annulation</span> : le remboursement est intégral jusqu’à 48 h avant l’arrivée. Pour venir sans voiture, voyez l’<span class="ln">accès en transports en commun</span> depuis la gare d’Annecy.</p></div>`,
 });
 
 /** Étape de commande dont le bouton « Continuer » a le focus clavier, visible ou non. */
@@ -318,7 +318,7 @@ Pour deux boutons voisins dans une liste tactile, vise **44 à 48 px** de zone. 
   <div class="mk-field" data-hotspot="paste"><span class="mk-label">Mot de passe</span><div class="mk-input">••••••••••</div><span class="mk-help">Le copier-coller est désactivé pour votre sécurité.</span></div>
   <span class="mk-check mk-check--on">Rester connecté sur cet appareil</span>
   <span class="mk-btn mk-btn--block" data-hotspot="submit">Se connecter</span>
-  <span class="lg-link" data-hotspot="forgot">Mot de passe oublié ?</span>
+  <span class="lg-link" data-hotspot="forgot">Mot de passe oublié ?</span>
 </div>`,
       },
       hotspots: [

@@ -52,7 +52,7 @@ ${inherit ? `.rs-body { background: #fff; }
 <div class="rs-body mk-pad mk-stack" style="--gap:12px"><p class="mk-h2">Statistiques · novembre</p><div class="rs-grid"><div class="rs-card"><p class="rs-lab">Taux d’occupation</p><p class="rs-num">72 %</p></div><div class="rs-card"><p class="rs-lab">Réservations</p><p class="rs-num">318</p></div><div class="rs-card"><p class="rs-lab">Salle la plus demandée</p><p class="rs-num" style="font-size:17px">Galilée</p></div></div><div class="rs-card"><p class="rs-lab" style="margin-bottom:8px">Occupation par jour</p><div class="rs-bars"><span style="height:55%"></span><span style="height:80%"></span><span style="height:92%"></span><span style="height:74%"></span><span style="height:40%"></span></div><div class="rs-days"><span>Lun.</span><span>Mar.</span><span>Mer.</span><span>Jeu.</span><span>Ven.</span></div></div></div>`,
 });
 
-const process: ModuleContent = {
+const processModule: ModuleContent = {
   id: 'process',
   title: 'Cadrer et systématiser',
   category: 'construire',
@@ -99,13 +99,13 @@ Le plus court qui suffise : public et situation, résultat attendu et preuves, d
           bad: {
             alt: 'Brief « Suivi de commande » qui ne contient que des adjectifs : moderne, épuré, premium, couleurs douces, animations fluides, effet waouh.',
             css: `.bf { padding: 14px; border: 1px solid #e1e4ea; border-radius: 10px; } .bf-file { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5a6172; }`,
-            html: `<div class="mk-pad"><div class="bf mk-stack" style="--gap:8px"><p class="bf-file"><i data-icon="file-text" style="--ico:14px"></i> Brief — Suivi de commande</p><p>Un écran moderne et épuré, avec une touche premium. Des couleurs douces, beaucoup d’espace et des animations fluides. Il faut que ça fasse « waouh ».</p></div></div>`,
+            html: `<div class="mk-pad"><div class="bf mk-stack" style="--gap:8px"><p class="bf-file"><i data-icon="file-text" style="--ico:14px"></i> Brief — Suivi de commande</p><p>Un écran moderne et épuré, avec une touche premium. Des couleurs douces, beaucoup d’espace et des animations fluides. Il faut que ça fasse « waouh ».</p></div></div>`,
           },
           badNote: 'Des adjectifs, aucune décision : qui, pour faire quoi, dans quels cas ? Tout reste à inventer.',
           good: {
             alt: 'Brief « Suivi de commande » en cinq lignes : qui, but, états, limites, hors champ.',
             css: `.bf { padding: 14px; border: 1px solid #e1e4ea; border-radius: 10px; } .bf-file { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5a6172; } .bf p { font-size: 13px; }`,
-            html: `<div class="mk-pad"><div class="bf mk-stack" style="--gap:6px"><p class="bf-file"><i data-icon="file-text" style="--ico:14px"></i> Brief — Suivi de commande</p><p><b>Qui :</b> un client qui vient de commander, souvent sur mobile, parfois inquiet d’un retard.</p><p><b>But :</b> savoir en 5 secondes où est le colis et quand il arrive.</p><p><b>États :</b> en préparation, expédié, en retard, livré, adresse introuvable.</p><p><b>Limites :</b> suivi du transporteur mis à jour toutes les heures ; pas de carte en temps réel.</p><p><b>Hors champ :</b> la page panier ne change pas.</p></div></div>`,
+            html: `<div class="mk-pad"><div class="bf mk-stack" style="--gap:6px"><p class="bf-file"><i data-icon="file-text" style="--ico:14px"></i> Brief — Suivi de commande</p><p><b>Qui :</b> un client qui vient de commander, souvent sur mobile, parfois inquiet d’un retard.</p><p><b>But :</b> savoir en 5 secondes où est le colis et quand il arrive.</p><p><b>États :</b> en préparation, expédié, en retard, livré, adresse introuvable.</p><p><b>Limites :</b> suivi du transporteur mis à jour toutes les heures ; pas de carte en temps réel.</p><p><b>Hors champ :</b> la page panier ne change pas.</p></div></div>`,
           },
           goodNote: 'Public, résultat, états, limites, périmètre : chaque ligne tranche une décision.',
         },
@@ -169,11 +169,11 @@ Un **jeton primitif** nomme une valeur (\`blue-600: #1f4fd8\`). Un **jeton séma
           good: {
             alt: 'Feuille de style en deux couches : des jetons primitifs qui nomment des valeurs, puis des jetons sémantiques qui nomment des rôles, utilisés par les composants.',
             css: CODE_CSS,
-            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd"><span class="c">/* Primitifs : des valeurs */</span>
+            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd"><span class="c">/* Primitifs : des valeurs */</span>
 --blue-600: #1f4fd8;
 --gray-600: #5a6172;
 --space-4: 16px;
-<span class="c">/* Sémantiques : des rôles */</span>
+<span class="c">/* Sémantiques : des rôles */</span>
 --color-action: var(--blue-600);
 --color-text-muted: var(--gray-600);
 --space-field-gap: var(--space-4);
@@ -259,7 +259,7 @@ La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond,
           visual: {
             alt: 'Extrait de DESIGN.md titré « Color Palette & Roles » : une liste de noms techniques (blue-800, gray-500, red-600) avec leurs valeurs, puis « rounded-lg, shadow-md ».',
             css: DOC_CSS,
-            html: `<div class="mk-pad"><div class="dm"><p class="dm-file"><i data-icon="file-text" style="--ico:14px"></i> DESIGN.md</p><h4>Color Palette &amp; Roles</h4><p><code>blue-800</code> : #1f4fd8</p><p><code>gray-500</code> : #5a6172</p><p><code>red-600</code> : #b3261e</p><p><code>rounded-lg</code>, <code>shadow-md</code></p></div></div>`,
+            html: `<div class="mk-pad"><div class="dm"><p class="dm-file"><i data-icon="file-text" style="--ico:14px"></i> DESIGN.md</p><h4>Color Palette &amp; Roles</h4><p><code>blue-800</code> : #1f4fd8</p><p><code>gray-500</code> : #5a6172</p><p><code>red-600</code> : #b3261e</p><p><code>rounded-lg</code>, <code>shadow-md</code></p></div></div>`,
           },
           why: 'Des valeurs sans rôle ni usage, des noms de classes bruts et un titre non canonique : rien ne dit quand utiliser quoi.',
         },
@@ -268,7 +268,7 @@ La version sombre et néon change tout ce qu’il ne fallait pas toucher : fond,
           visual: {
             alt: 'Extrait de DESIGN.md titré « Colors » : un bleu d’action et une ardoise, chacun avec son nom descriptif, sa valeur entre parenthèses et son usage, puis une règle nommée sur la rareté du bleu.',
             css: DOC_CSS,
-            html: `<div class="mk-pad"><div class="dm"><p class="dm-file"><i data-icon="file-text" style="--ico:14px"></i> DESIGN.md</p><h4>Colors</h4><h5>Primary</h5><p><b>Bleu d’action</b> (#1f4fd8) : boutons principaux, liens et focus. Jamais en décoration.</p><h5>Neutral</h5><p><b>Ardoise</b> (#5a6172) : texte secondaire et métadonnées.</p><p><b>La règle de la voix unique.</b> Le bleu d’action reste rare : c’est sa rareté qui le rend visible.</p></div></div>`,
+            html: `<div class="mk-pad"><div class="dm"><p class="dm-file"><i data-icon="file-text" style="--ico:14px"></i> DESIGN.md</p><h4>Colors</h4><h5>Primary</h5><p><b>Bleu d’action</b> (#1f4fd8) : boutons principaux, liens et focus. Jamais en décoration.</p><h5>Neutral</h5><p><b>Ardoise</b> (#5a6172) : texte secondaire et métadonnées.</p><p><b>La règle de la voix unique.</b> Le bleu d’action reste rare : c’est sa rareté qui le rend visible.</p></div></div>`,
           },
           why: 'Nom descriptif, valeur exacte entre parenthèses, usage, interdit et règle nommée : un nouvel écran sait quoi faire.',
         },
@@ -311,7 +311,8 @@ Les noms de classes bruts (\`rounded-lg\`, \`shadow-md\`) n’apprennent rien : 
           visual: {
             alt: 'Feuille de style où des jetons sémantiques (surface, texte, action) pointent vers des primitifs, et où le thème sombre se contente de les rebrancher en trois lignes.',
             css: CODE_CSS,
-            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd">:root {
+            html: `<div class="mk-pad mk-stack" style="--gap:8px"><p class="cd-file"><i data-icon="file-text" style="--ico:14px"></i> tokens.css</p><pre class="cd"><span class="c">/* Primitifs déclarés plus haut : --gray-*, --blue-* */</span>
+:root {
   --surface: var(--gray-50);
   --text: var(--gray-900);
   --action: var(--blue-600);
@@ -391,10 +392,10 @@ Classer la dérive dit où corriger : dans le système, dans le composant, ou su
   <div class="pm-sec" data-hotspot="users"><p class="pm-h">## Users</p><p>Infirmières et infirmiers libéraux qui notent leurs soins entre deux visites, sur téléphone, souvent garés devant chez le patient.</p></div>
   <div class="pm-sec" data-hotspot="purpose"><p class="pm-h">## Product Purpose</p><p>Saisir un soin en moins de 30 secondes et préparer la télétransmission du soir.</p></div>
   <div class="pm-sec" data-hotspot="visual"><p class="pm-h">## Visual Direction</p><p>Fond crème, accent vert sauge, titres en serif italique.</p></div>
-  <div class="pm-sec" data-hotspot="constraints"><p class="pm-h">## Capabilities and Constraints</p><p>Fonctionne hors connexion ; synchronisation au retour du réseau.</p></div>
-  <div class="pm-sec" data-hotspot="proof"><p class="pm-h">## Evidence on Hand</p><p>Témoignage à rédiger pour la démo : « Soignly m’a fait gagner une heure par jour. » — Claire, infirmière à Lyon</p></div>
+  <div class="pm-sec" data-hotspot="constraints"><p class="pm-h">## Capabilities and Constraints</p><p>Fonctionne hors connexion ; synchronisation au retour du réseau.</p></div>
+  <div class="pm-sec" data-hotspot="proof"><p class="pm-h">## Evidence on Hand</p><p>Témoignage à rédiger pour la démo : « Soignly m’a fait gagner une heure par jour. » — Claire, infirmière à Lyon</p></div>
   <div class="pm-sec" data-hotspot="home"><p class="pm-h">## Homepage</p><p>Héros plein écran, puis trois cartes de fonctionnalités, puis les tarifs.</p></div>
-  <div class="pm-sec" data-hotspot="a11y"><p class="pm-h">## Accessibility &amp; Inclusion</p><p>Une partie des soignants agrandit le texte du téléphone : l’interface doit tenir à 200 %.</p></div>
+  <div class="pm-sec" data-hotspot="a11y"><p class="pm-h">## Accessibility &amp; Inclusion</p><p>Une partie des soignants agrandit le texte du téléphone : l’interface doit tenir à 200 %.</p></div>
 </div></div>`,
       },
       hotspots: [
@@ -600,4 +601,4 @@ Séparer le cadrage de la construction protège la décision : on valide ce qu�
   ],
 };
 
-export default process;
+export default processModule;

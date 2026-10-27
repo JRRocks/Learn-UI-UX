@@ -89,10 +89,10 @@ const gridMock = (cls: string) =>
 
 const HELP_TITLE = '<p class="mk-h2">Comment pouvons-nous vous aider ?</p>';
 
-const PLAN_CSS = `.plan { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border: 1px solid #dfe3ea; border-radius: 10px; text-align: center; }
-.plan-name { font-weight: 700; }
+const PLAN_CSS = `.plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px; border: 1px solid #dfe3ea; border-radius: 10px; text-align: center; overflow-wrap: anywhere; }
+.plan-name { font-weight: 700; font-size: 13.5px; }
 .plan-price { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.plan-price small { font-size: 12px; font-weight: 500; color: #5a6172; }
+.plan-price small { display: block; font-size: 12px; font-weight: 500; color: #5a6172; }
 .plan-desc { font-size: 12px; color: #5a6172; min-height: 34px; }
 .plan--pick { border: 2px solid #1f4fd8; padding: 11px 5px; box-shadow: 0 6px 18px rgb(31 79 216 / 0.14); }
 .plan-badge { background: #1f4fd8; color: #fff; font-size: 11px; padding: 2px 7px; }`;
@@ -104,7 +104,7 @@ const FIELDS: [string, string][] = [
   ['Prénom', 'Camille'],
   ['Nom', 'Durand'],
   ['E-mail', 'camille.durand@mail.fr'],
-  ['Téléphone', '06 12 34 56 78'],
+  ['Téléphone', '06 12 34 56 78'],
 ];
 
 const JK_CONTENT = `<div class="mk-pad mk-stack" style="--gap:8px">
@@ -113,12 +113,12 @@ const JK_CONTENT = `<div class="mk-pad mk-stack" style="--gap:8px">
 <p class="mk-small mk-muted">Fabriqué au Portugal · 12 coloris</p>
 </div>`;
 
-const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 14px; padding: 10px 16px; border-bottom: 1px solid #e6e9ef; }
+const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e6e9ef; }
 .jk-logo { font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; }
 .jk-odd .jk-logo { margin-inline-start: auto; }
 .jk-cart { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #5a6172; }
 .jk-explore { font-size: 13px; font-weight: 600; color: #1f2a44; }
-.jk-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #c3c8d3; border-radius: 999px; color: #5a6172; font-size: 13px; }
+.jk-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #c3c8d3; border-radius: 999px; color: #5a6172; font-size: 13px; overflow: hidden; white-space: nowrap; }
 .jk-icons { display: flex; align-items: center; gap: 12px; }
 .jk-bag { position: relative; display: inline-flex; }
 .jk-bag b { position: absolute; top: -6px; inset-inline-end: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: #1f4fd8; color: #fff; font-size: 10px; display: grid; place-items: center; }`;
@@ -205,7 +205,7 @@ Le temps de décision croît avec le **nombre** et la **complexité** des choix 
       title: 'Mémoire : de Miller à Cowan',
       body: `George Miller (1956) estimait l’empan de la mémoire immédiate à **7 ± 2** éléments. Nelson Cowan (2001) a révisé ce chiffre : quand on empêche les participants de regrouper ou de répéter, la capacité tourne autour de **4 unités** (*chunks*). C’est la règle retenue par impeccable : **≤ 4 éléments** à considérer en même temps à un point de décision.
 
-- **Segmentation** (*chunking*) : regrouper des éléments en unités de sens augmente ce qu’on retient et ce qu’on vérifie. « 06 12 34 56 78 » se lit en 5 blocs, pas en 10 chiffres ; un IBAN s’affiche par groupes de 4.
+- **Segmentation** (*chunking*) : regrouper des éléments en unités de sens augmente ce qu’on retient et ce qu’on vérifie. « 06 12 34 56 78 » se lit en 5 blocs, pas en 10 chiffres ; un IBAN s’affiche par groupes de 4.
 - **Reconnaissance plutôt que rappel** : la mémoire de travail est fragile et s’efface en quelques dizaines de secondes. Montre l’information au lieu de demander de la retenir.
 - **Position sérielle** : on retient mieux les premiers éléments d’une liste (primauté) et les derniers (récence). Place l’essentiel aux extrémités d’une navigation, le moins important au milieu.
 
@@ -305,7 +305,7 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
       title: 'Maximes de conception',
       body: `- **Loi de Jakob** (Jakob Nielsen, 2000) : les gens passent l’essentiel de leur temps sur d’autres sites, et attendent que le tien fonctionne pareil. Suis les conventions : logo qui ramène à l’accueil, panier dans le coin supérieur droit, recherche signalée par une loupe. Pour une refonte, laisse un temps l’accès à l’ancienne version. Mauvais usage : copier aussi les défauts — ou les motifs trompeurs — d’un concurrent au nom de la convention.
 - **Loi de Tesler** (conservation de la complexité) : toute tâche a une part de complexité irréductible, portée soit par le système, soit par l’utilisateur. Fais-la porter par le système : autocomplétion d’adresse, détection du type de carte, valeurs par défaut. Mauvais usage : « simplifier » en supprimant un champ dont les gens ont besoin.
-- **Loi de Postel** (principe de robustesse, spécification de TCP, 1980) : tolérant dans ce que tu acceptes, rigoureux dans ce que tu renvoies. Accepte « 06 12 34 56 78 », « 06-12-34-56-78 » ou « +33 6 12 34 56 78 », normalise, et affiche un format clair. Mauvais usage : tout accepter en silence, sans limite ni retour.
+- **Loi de Postel** (principe de robustesse, spécification de TCP, 1980) : tolérant dans ce que tu acceptes, rigoureux dans ce que tu renvoies. Accepte « 06 12 34 56 78 », « 06-12-34-56-78 » ou « +33 6 12 34 56 78 », normalise, et affiche un format clair. Mauvais usage : tout accepter en silence, sans limite ni retour.
 - **Rasoir d’Occam** : à efficacité égale, choisis la solution qui suppose le moins. Retire un élément tant que la fonction n’en souffre pas. Mauvais usage : retirer les libellés des icônes — le mystère n’est pas du minimalisme, rappelle impeccable.
 - **Principe de Pareto** : environ 80 % des effets viennent de 20 % des causes. Concentre l’effort sur les parcours les plus fréquents. Mauvais usage : sacrifier le reste quand il est vital pour certains (accessibilité, cas d’erreur).
 - **Loi de Parkinson** (1955) : une tâche s’étire jusqu’à occuper le temps disponible. Raccourcis la tâche — remplissage automatique, paiement express — plutôt que de presser la personne. Mauvais usage : un faux compte à rebours, qui est un motif trompeur.
@@ -404,8 +404,9 @@ Pour l’action principale, touchée souvent et au pouce, vise environ 48 px. Au
           id: 'wall',
           visual: {
             alt: 'Page d’aide présentant douze tuiles de rubriques identiques en grille : facture, relevé de compteur, déménagement, contrat, paiement…',
-            html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">${HELP_TITLE}<div class="mk-grid help-grid" style="--cols:3;--gap:8px"><span>Facture</span><span>Relevé de compteur</span><span>Déménagement</span><span>Contrat</span><span>Paiement</span><span>Échéancier</span><span>Offres</span><span>Espace client</span><span>Mot de passe</span><span>Coupure</span><span>Réclamation</span><span>Autre demande</span></div></div>`),
-            css: `.help-grid span { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 52px; padding: 6px; border: 1px solid #d5dae3; border-radius: 8px; font-size: 13px; font-weight: 600; color: #1f2a44; }`,
+            html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">${HELP_TITLE}<div class="help-grid"><span>Facture</span><span>Relevé de compteur</span><span>Déménagement</span><span>Contrat</span><span>Paiement</span><span>Échéancier</span><span>Offres</span><span>Espace client</span><span>Mot de passe</span><span>Coupure</span><span>Réclamation</span><span>Autre demande</span></div></div>`),
+            css: `.help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.help-grid span { min-width: 0; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 52px; padding: 6px; border: 1px solid #d5dae3; border-radius: 8px; font-size: 13px; font-weight: 600; color: #1f2a44; overflow-wrap: anywhere; }`,
           },
           why: 'Douze tuiles de même poids : il faut toutes les lire et les comparer, même pour la démarche la plus courante.',
         },
@@ -577,17 +578,17 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
 <div class="mk-stack" style="--gap:6px" data-hotspot="steps"><div class="mk-row mk-between mk-small"><b>Étape 2 sur 3 · Formule et coordonnées</b><span class="mk-muted">Plus qu’une étape</span></div><div class="su-bar"><span></span></div></div>
 <div class="mk-grid" style="--cols:3;--gap:8px" data-hotspot="badges">
 <div class="su-plan su-p1"><span class="su-b">Populaire !</span><b>Mensuel</b><span class="mk-small">7,99 €/mois</span></div>
-<div class="su-plan su-p2"><span class="su-b">Meilleur prix !</span><b>Annuel</b><span class="mk-small">79 €/an</span></div>
-<div class="su-plan su-p3"><span class="su-b">Recommandé !</span><b>Famille</b><span class="mk-small">12,99 €/mois</span></div>
+<div class="su-plan su-p2"><span class="su-b">Top prix !</span><b>Annuel</b><span class="mk-small">79 €/an</span></div>
+<div class="su-plan su-p3"><span class="su-b">Conseillé !</span><b>Famille</b><span class="mk-small">12,99 €/mois</span></div>
 </div>
 <div class="mk-field" data-hotspot="email"><span class="mk-label">E-mail</span><span class="mk-input">nora.benali@mail.fr</span></div>
-<div class="mk-field" data-hotspot="phone"><span class="mk-label">Téléphone</span><span class="mk-input mk-input--error">06 12 34 56 78</span><span class="mk-error">Format invalide : 10 chiffres, sans espace ni point.</span></div>
+<div class="mk-field" data-hotspot="phone"><span class="mk-label">Téléphone</span><span class="mk-input mk-input--error">06 12 34 56 78</span><span class="mk-error">Format invalide : 10 chiffres, sans espace ni point.</span></div>
 <span class="mk-btn mk-btn--block" data-hotspot="cta">Continuer</span>
 </div>`),
         css: `.su-bar { height: 6px; border-radius: 3px; background: #e3e6ec; }
 .su-bar span { display: block; width: 66%; height: 100%; border-radius: 3px; background: #1f4fd8; }
-.su-plan { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 10px; border: 2px solid; text-align: center; }
-.su-b { font-size: 11px; font-weight: 800; color: #fff; padding: 2px 6px; border-radius: 999px; }
+.su-plan { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 10px; border: 2px solid; text-align: center; overflow-wrap: anywhere; }
+.su-b { max-width: 100%; font-size: 10.5px; font-weight: 800; color: #fff; padding: 2px 6px; border-radius: 999px; }
 .su-p1 { border-color: #d92d3a; background: #fff0f0; } .su-p1 .su-b { background: #d92d3a; }
 .su-p2 { border-color: #c25e00; background: #fff4e5; } .su-p2 .su-b { background: #c25e00; }
 .su-p3 { border-color: #7b3fbf; background: #f6efff; } .su-p3 .su-b { background: #7b3fbf; }`,
@@ -599,7 +600,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
         { id: 'email', label: 'Champ e-mail', correct: false, why: 'Libellé visible, valeur lisible : rien à redire.' },
         { id: 'cta', label: 'Bouton « Continuer »', correct: false, why: 'Une seule action principale, large : conforme à Fitts.' },
       ],
-      explanation: `- **Loi de Postel** : « sois tolérant dans ce que tu acceptes ». Refuser « 06 12 34 56 78 » pour des espaces fait porter à la personne un travail que le système fait en une ligne : retirer les espaces, puis valider.
+      explanation: `- **Loi de Postel** : « sois tolérant dans ce que tu acceptes ». Refuser « 06 12 34 56 78 » pour des espaces fait porter à la personne un travail que le système fait en une ligne : retirer les espaces, puis valider.
 - **Effet Von Restorff** : un élément ressort parce qu’il est seul à différer. Trois badges criards sur trois cartes s’annulent ; mets en avant une seule formule, ou aucune.
 
 La barre de progression (gradient d’objectif), le champ e-mail et le bouton pleine largeur (Fitts) sont corrects.`,
@@ -743,7 +744,7 @@ Les seuils de 0,1, 1 et 10 secondes sont ceux du Nielsen Norman Group.`,
         { id: 'fitts', left: 'Loi de Fitts', right: 'Bouton principal large, dans la zone du pouce' },
         { id: 'hick', left: 'Loi de Hick', right: 'Trois démarches fréquentes mises en avant, les autres à un clic' },
         { id: 'jakob', left: 'Loi de Jakob', right: 'Le logo ramène à l’accueil, comme partout ailleurs' },
-        { id: 'postel', left: 'Loi de Postel', right: 'Accepter « 06 12 34 56 78 » comme « 0612345678 »' },
+        { id: 'postel', left: 'Loi de Postel', right: 'Accepter « 06 12 34 56 78 » comme « 0612345678 »' },
         { id: 'peak', left: 'Règle pic-fin', right: 'Soigner l’écran de confirmation de commande' },
         { id: 'goal', left: 'Gradient d’objectif', right: 'Indicateur « Étape 2 sur 3 » dans un tunnel d’achat' },
       ],

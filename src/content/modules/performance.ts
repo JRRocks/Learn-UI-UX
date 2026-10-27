@@ -35,21 +35,21 @@ const DOHERTY: SourceRef = { label: 'Laws of UX — Doherty Threshold', url: 'ht
 /** Two moments of the same page load, side by side. */
 const FRAMES_CSS = `
 .fs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; background: #f4f6f9; }
+.fs > div { display: flex; flex-direction: column; }
 .fs-cap { font-size: 11px; font-weight: 600; color: #5a6172; margin-bottom: 4px; }
-.fs-fr { position: relative; overflow: hidden; padding: 8px; border: 1px solid #d5d9e2; border-radius: 8px; background: #fff; }
+.fs-fr { flex: 1; position: relative; overflow: hidden; padding: 8px 8px 12px; border: 1px solid #d5d9e2; border-radius: 8px; background: #fff; }
 .fs-t { font-size: 11px; line-height: 16px; height: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fs-l { height: 6px; margin-top: 5px; border-radius: 3px; background: #dfe3ea; }
 .fs-l.m { width: 70%; }
-.fs-img { margin-top: 6px; aspect-ratio: 16 / 9; border-radius: 4px; background: linear-gradient(160deg, #b8c7dc 0%, #dfe6f0 60%, #eef2f7 100%); }
-.fs-slot { margin-top: 6px; aspect-ratio: 16 / 9; border-radius: 4px; background: #eef1f5; }
+.fs-img { margin-top: 6px; aspect-ratio: 2 / 1; border-radius: 4px; background: linear-gradient(160deg, #b8c7dc 0%, #dfe6f0 60%, #eef2f7 100%); }
+.fs-slot { margin-top: 6px; aspect-ratio: 2 / 1; border-radius: 4px; background: #eef1f5; }
 .fs-btn { margin-top: 8px; height: 24px; border-radius: 5px; background: #1f4fd8; color: #fff; font-size: 10px; font-weight: 600; display: grid; place-items: center; }
 .fs-ban { height: 24px; margin-bottom: 6px; border-radius: 4px; background: #fff1c9; color: #5c4300; font-size: 10px; font-weight: 600; display: grid; place-items: center; }
 .fs-res { height: 24px; margin-bottom: 6px; border-radius: 4px; border: 1.5px dashed #c3c8d3; }
 .fs-finger { position: absolute; left: 50%; width: 30px; height: 30px; margin-left: -15px; border-radius: 50%; background: rgb(214 120 90 / 0.3); border: 1.5px dashed #b4553a; }
 `;
 
-const frame = (caption: string, inner: string, height: number) =>
-  `<div><p class="fs-cap">${caption}</p><div class="fs-fr" style="height:${height}px">${inner}</div></div>`;
+const frame = (caption: string, inner: string) => `<div><p class="fs-cap">${caption}</p><div class="fs-fr">${inner}</div></div>`;
 
 const LINES = `<div class="fs-l"></div><div class="fs-l"></div><div class="fs-l m"></div>`;
 
@@ -96,10 +96,10 @@ const chatHead = fr(`<div class="ct-head"><i data-icon="arrow-left"></i><span cl
 const chatHistory = fr(`<p class="ct-b">On dîne où samedi ?</p><p class="ct-b me">Le bistrot de la place, il reste de la place à 20 h.</p><p class="ct-b">Parfait, tu réserves ?</p>`);
 
 const ARTICLE_CSS = `
-.ar { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ar { position: relative; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
 .ar-top { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .ar-logo { width: 84px; height: 14px; border-radius: 3px; background: #1d2230; }
-.ar-cap { font-size: 11px; font-weight: 600; color: #5a6172; }
+.ar-cap { position: absolute; top: 22px; right: 24px; z-index: 1; padding: 2px 8px; border-radius: 999px; background: #1d2230; color: #fff; font-size: 11px; font-weight: 600; }
 .ar-img { aspect-ratio: 21 / 9; border-radius: 8px; background: linear-gradient(160deg, #c8d3e4 0%, #dfe6f0 55%, #eef2f7 100%); }
 .ar-t { font-size: 19px; line-height: 1.25; font-weight: 700; }
 .ar-p { font-size: 13px; line-height: 1.5; }
@@ -186,8 +186,8 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
           bad: {
             alt: 'Deux instants du chargement d’un article. À 0,5 s, le titre, le texte et le bouton s’affichent sans image ; à 1,4 s, l’image arrive et repousse le texte et le bouton vers le bas.',
             html: fr(`<div class="fs">
-  ${frame('À 0,5 s', `<p class="fs-t">Les halles rénovées</p>${LINES}<div class="fs-btn">Lire la suite</div>`, 170)}
-  ${frame('À 1,4 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`, 170)}
+  ${frame('À 0,5 s', `<p class="fs-t">Les halles rénovées</p>${LINES}<div class="fs-btn">Lire la suite</div>`)}
+  ${frame('À 1,4 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -195,8 +195,8 @@ N’échange jamais l’accessibilité ou une fonctionnalité contre quelques mi
           good: {
             alt: 'Les deux mêmes instants : à 0,5 s, un emplacement gris de la taille de l’image est déjà réservé ; à 1,4 s, l’image le remplit et rien ne bouge.',
             html: fr(`<div class="fs">
-  ${frame('À 0,5 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-slot"></div>${LINES}<div class="fs-btn">Lire la suite</div>`, 170)}
-  ${frame('À 1,4 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`, 170)}
+  ${frame('À 0,5 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-slot"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
+  ${frame('À 1,4 s', `<p class="fs-t">Les halles rénovées</p><div class="fs-img"></div>${LINES}<div class="fs-btn">Lire la suite</div>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -373,8 +373,8 @@ Le Nielsen Norman Group réserve le spinner aux attentes courtes **d’un seul m
           visual: {
             alt: 'Deux instants d’une page de recette : à 0,8 s, le doigt vise le bouton « Enregistrer » ; à 1,6 s, un bandeau promotionnel apparaît en tête, tout descend et le doigt se retrouve sur le texte.',
             html: fr(`<div class="fs">
-  ${frame('À 0,8 s', `<p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`, 140)}
-  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`, 140)}
+  ${frame('À 0,8 s', `<p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`)}
+  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:62px"></span>`)}
 </div>`),
             css: FRAMES_CSS,
           },
@@ -385,8 +385,8 @@ Le Nielsen Norman Group réserve le spinner aux attentes courtes **d’un seul m
           visual: {
             alt: 'Deux instants de la même page : à 0,8 s, un emplacement en pointillés est déjà réservé en tête ; à 1,6 s, le bandeau le remplit et le bouton reste sous le doigt.',
             html: fr(`<div class="fs">
-  ${frame('À 0,8 s', `<div class="fs-res"></div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`, 140)}
-  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`, 140)}
+  ${frame('À 0,8 s', `<div class="fs-res"></div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`)}
+  ${frame('À 1,6 s', `<div class="fs-ban">Livraison offerte</div><p class="fs-t">Tarte aux poireaux</p>${LINES}<div class="fs-btn">Enregistrer</div><span class="fs-finger" style="top:92px"></span>`)}
 </div>`),
             css: FRAMES_CSS,
           },

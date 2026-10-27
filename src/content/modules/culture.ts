@@ -1433,6 +1433,396 @@ Impeccable recommande ce réflexe dans toute interface destinée à plusieurs la
       takeaway: 'Écris tes espacements avec les propriétés logiques (`margin-inline-start`, `padding-inline`, `inset-inline-end`) : ils suivent le sens de l’écriture.',
       sources: ['mdn:logical', 'imp:harden'],
     },
+    /* ---------- Brésil ---------- */
+    {
+      id: 'culture-br-checkout-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'br',
+      prompt: 'Quel écran de paiement a le plus de chances de convertir au Brésil ?',
+      options: [
+        {
+          id: 'cards',
+          visual: {
+            alt: 'Écran de paiement en portugais : total de 1 299,90 réais, paiement par carte de crédit en une fois avec numéro de carte, date de validité et code de sécurité.',
+            frame: 'phone',
+            lang: 'pt-BR',
+            css: `.ck{display:flex;flex-direction:column;gap:10px}
+.ck-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
+.ck-total b{font-size:18px;font-variant-numeric:tabular-nums}
+.ck-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.ck-opt--on{border-color:#0b7a3b;box-shadow:0 0 0 1px #0b7a3b}
+.ck-opt .mk-ico{--ico:20px;color:#36405a;margin-top:1px}
+.ck-opt p{line-height:1.35}
+.ck .mk-input{min-height:34px;padding:6px 10px}
+.ck .mk-btn{background:#0b7a3b}`,
+            html: `<div class="ck mk-pad">
+  <p class="mk-h2">Pagamento</p>
+  <div class="ck-total"><span>Total</span><b>R$ 1.299,90</b></div>
+  <div class="ck-opt ck-opt--on"><i data-icon="credit-card"></i><div><p class="mk-strong">Cartão de crédito</p><p class="mk-small mk-muted">Pagamento à vista</p></div></div>
+  <div class="mk-field"><span class="mk-label">Número do cartão</span><span class="mk-input">0000 0000 0000 0000</span></div>
+  <div class="mk-grid" style="--cols:2;--gap:8px"><div class="mk-field"><span class="mk-label">Validade</span><span class="mk-input">MM/AA</span></div><div class="mk-field"><span class="mk-label">CVV</span><span class="mk-input">123</span></div></div>
+  <span class="mk-btn mk-btn--block">Pagar R$ 1.299,90</span>
+</div>`,
+          },
+          why: 'Carte seule, paiement en une fois : ni Pix, ni paiement en plusieurs fois, ni boleto. Une bonne partie des acheteurs s’arrête là.',
+        },
+        {
+          id: 'local',
+          visual: {
+            alt: 'Écran de paiement en portugais : total de 1 299,90 réais, choix entre Pix avec 5 % de remise, carte en 10 fois sans frais de 129,99 réais et boleto bancaire, champ CPF, bouton « Payer avec Pix ».',
+            frame: 'phone',
+            lang: 'pt-BR',
+            css: `.ck{display:flex;flex-direction:column;gap:10px}
+.ck-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
+.ck-total b{font-size:18px;font-variant-numeric:tabular-nums}
+.ck-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.ck-opt--on{border-color:#0b7a3b;box-shadow:0 0 0 1px #0b7a3b}
+.ck-opt .mk-ico{--ico:20px;color:#36405a;margin-top:1px}
+.ck-opt p{line-height:1.35}
+.ck-off{color:#0b7a3b;font-weight:700}
+.ck .mk-input{min-height:34px;padding:6px 10px}
+.ck .mk-btn{background:#0b7a3b}`,
+            html: `<div class="ck mk-pad">
+  <p class="mk-h2">Pagamento</p>
+  <div class="ck-total"><span>Total</span><b>R$ 1.299,90</b></div>
+  <div class="ck-opt ck-opt--on"><i data-icon="qr-code"></i><div><p class="mk-strong">Pix</p><p class="mk-small"><span class="ck-off">5% de desconto</span> · aprovação imediata</p></div></div>
+  <div class="ck-opt"><i data-icon="credit-card"></i><div><p class="mk-strong">Cartão de crédito</p><p class="mk-small mk-muted">em até 10x de R$ 129,99 sem juros</p></div></div>
+  <div class="ck-opt"><i data-icon="receipt"></i><div><p class="mk-strong">Boleto bancário</p><p class="mk-small mk-muted">Vence em 3 dias úteis</p></div></div>
+  <div class="mk-field"><span class="mk-label">CPF</span><span class="mk-input">123.456.789-09</span></div>
+  <span class="mk-btn mk-btn--block">Pagar com Pix</span>
+</div>`,
+          },
+          why: 'Pix avec remise, carte en 10 fois sans frais, boleto et CPF : les réflexes du paiement au Brésil.',
+        },
+      ],
+      answer: 'local',
+      explanation: `Au Brésil, le paiement a ses propres réflexes :
+
+- **Pix**, lancé fin 2020 par la Banque centrale : paiement instantané par QR code ou par code « copia e cola ». Il est devenu en deux ans le moyen de paiement le plus utilisé du pays, et les boutiques offrent souvent une remise pour l’encourager.
+- **Le paiement en plusieurs fois sans frais** (*parcelamento*) : « em até 10x sem juros » s’affiche dès la fiche produit, avec le montant de chaque mensualité.
+- **Le boleto bancário** : un bordereau payé en agence, au distributeur ou en ligne avant son échéance.
+- **Le CPF** (identifiant fiscal) est demandé au paiement, notamment pour la facture électronique et le boleto.`,
+      takeaway: 'Au Brésil, propose Pix, le paiement en plusieurs fois sans frais (« em até 10x sem juros ») et le boleto, et demande le CPF.',
+      sources: [S.pix, S.boleto],
+    },
+    {
+      id: 'culture-br-market-choice',
+      type: 'choice',
+      difficulty: 3,
+      culture: 'br',
+      prompt: 'Quel marché vise cette fiche produit ?',
+      visual: {
+        alt: 'Fiche produit en portugais d’une chaussure de course à 349,90 réais, payable en 10 fois sans frais, avec 5 % de remise par Pix, un calcul des frais de port par code postal 01310-100 et une aide sur WhatsApp.',
+        frame: 'browser',
+        lang: 'pt-BR',
+        css: `.bm{display:flex;flex-direction:column;gap:8px}
+.bm-price{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.bm-pix{display:inline-flex;align-items:center;gap:6px;color:#0b7a3b;font-weight:700;font-size:13px}
+.bm-pix .mk-ico{--ico:16px}
+.bm-cep{display:flex;gap:8px;align-items:center}
+.bm-cep .mk-input{width:120px;min-height:34px;padding:6px 10px}
+.bm-wa{display:flex;align-items:center;gap:6px;font-size:13px;color:#5a6172}
+.bm-wa .mk-ico{--ico:16px;color:#0b7a3b}
+.bm .mk-btn--block{background:#0b7a3b}`,
+        html: `<div class="bm mk-pad">
+  <p class="mk-small mk-muted">Esportes › Corrida</p>
+  <p class="mk-h2">Tênis de corrida Aero Leve</p>
+  <p class="bm-price">R$ 349,90</p>
+  <p class="mk-small">em até 10x de R$ 34,99 sem juros</p>
+  <p class="bm-pix"><i data-icon="qr-code"></i>5% de desconto no Pix</p>
+  <div class="mk-field"><span class="mk-label">Calcular frete</span><div class="bm-cep"><span class="mk-input">01310-100</span><span class="mk-btn mk-btn--ghost mk-btn--s">OK</span></div></div>
+  <p class="bm-wa"><i data-icon="message-circle"></i>Dúvidas? Fale com a gente no WhatsApp</p>
+  <span class="mk-btn mk-btn--block">Comprar</span>
+</div>`,
+      },
+      options: [
+        { id: 'br', label: 'Brésil', why: 'Réais (R$), « 10x sem juros », remise Pix, CEP à 8 chiffres et « tênis » avec un accent circonflexe.' },
+        { id: 'pt', label: 'Portugal', why: 'Le Portugal paie en euros (MB WAY, Multibanco), écrit « ténis » et utilise des codes postaux de la forme 1000-001.' },
+        { id: 'ao', label: 'Angola', why: 'L’Angola paie en kwanzas (Kz) : ni Pix ni CEP.' },
+      ],
+      answer: 'br',
+      explanation: `Même langue, deux locales : \`pt-BR\` et \`pt-PT\` diffèrent par la monnaie, les paiements, les codes postaux et le vocabulaire.
+
+Ici, tout désigne le Brésil : le prix en **réais** (R$ 349,90), le **parcelamento** (« em até 10x de R$ 34,99 sem juros »), la remise **Pix**, le calcul des frais de port par **CEP** (01310-100) et l’orthographe brésilienne « tênis » (le Portugal écrit « ténis » et dit souvent « sapatilhas »).
+
+Traduire une fois « en portugais » pour les deux pays produit une interface étrangère partout.`,
+      takeaway: 'Le portugais du Brésil et celui du Portugal sont deux locales : monnaie, codes postaux, paiements et vocabulaire changent.',
+      sources: ['w3c:i18n', S.pix],
+    },
+    {
+      id: 'culture-br-cep-choice',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'br',
+      prompt: 'Dans un formulaire de livraison brésilien, quel champ placer en premier pour accélérer la saisie ?',
+      options: [
+        { id: 'cep', label: 'Le CEP (code postal)', why: 'Huit chiffres qui suffisent à retrouver la rue, le quartier, la ville et l’État : le reste se remplit tout seul.' },
+        { id: 'state', label: 'L’État, dans une liste déroulante', why: 'L’État se déduit du CEP : le demander d’abord fait saisir une information que le formulaire pouvait trouver.' },
+        { id: 'street', label: 'La rue (logradouro)', why: 'Dans les villes, la rue se déduit du CEP : inutile de la taper.' },
+        { id: 'cpf', label: 'Le CPF', why: 'Il est demandé au paiement, mais il ne remplit pas l’adresse.' },
+      ],
+      answer: 'cep',
+      explanation: `Au Brésil, le **CEP** (Código de Endereçamento Postal, 00000-000) est assez précis pour désigner la rue dans les grandes villes. Les formulaires brésiliens le demandent donc **en premier** et remplissent automatiquement la rue (*logradouro*), le quartier (*bairro*), la ville et l’État ; l’utilisateur n’ajoute que le numéro et le complément (appartement, bloc).
+
+Placer le CEP à la fin, comme un code postal occidental, fait saisir à la main ce que la base postale connaît déjà.`,
+      takeaway: 'Au Brésil, demande le CEP d’abord : il remplit rue, quartier, ville et État ; il ne reste que le numéro et le complément.',
+      sources: [S.viacep],
+    },
+
+    /* ---------- France ---------- */
+    {
+      id: 'culture-fr-cookies-hotspot',
+      type: 'hotspot',
+      difficulty: 1,
+      culture: 'fr',
+      prompt: 'Ce bandeau de cookies s’adresse à des visiteurs en France. Trouve les deux défauts que la CNIL sanctionne.',
+      visual: {
+        alt: 'Site d’actualité avec un bandeau de cookies : un titre, une description des finalités, la phrase « En poursuivant votre navigation, vous acceptez leur utilisation », un lien discret « Personnaliser » à côté d’un bouton « Tout accepter », et un lien vers la politique de confidentialité.',
+        frame: 'browser',
+        lang: 'fr',
+        css: `.ck2{display:flex;flex-direction:column;gap:12px;padding:14px 14px 16px}
+.ck2-logo{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.ck2-head{font-size:19px;font-weight:700;line-height:1.3}
+.ck2-banner{border:1px solid #d5d9e2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgb(15 20 35 / .12)}
+.ck2-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.ck2-link{font-size:13px;color:#1f4fd8;text-decoration:underline;align-self:flex-start}`,
+        html: `<div class="ck2">
+  <p class="ck2-logo">L’Écho des Calanques</p>
+  <p class="ck2-head">Les marchés de producteurs reviennent tous les samedis matin</p>
+  <div class="ck2-banner">
+    <p class="mk-h3">Votre vie privée nous importe</p>
+    <p class="mk-small" data-hotspot="purposes">Avec nos 214 partenaires, nous utilisons des cookies pour mesurer l’audience et vous proposer des publicités personnalisées.</p>
+    <p class="mk-small" data-hotspot="continue">En poursuivant votre navigation, vous acceptez leur utilisation.</p>
+    <div class="ck2-row" data-hotspot="buttons"><span class="mk-btn mk-btn--text mk-btn--s">Personnaliser</span><span class="mk-btn">Tout accepter</span></div>
+    <span class="ck2-link" data-hotspot="policy">Politique de confidentialité</span>
+  </div>
+</div>`,
+      },
+      hotspots: [
+        { id: 'buttons', label: 'Boutons « Personnaliser » et « Tout accepter »', correct: true, why: 'Accepter se fait en un clic, refuser oblige à passer par « Personnaliser » : la CNIL exige un refus aussi simple, au même niveau.' },
+        { id: 'continue', label: '« En poursuivant votre navigation… »', correct: true, why: 'Poursuivre la navigation ne vaut pas consentement : il faut un acte positif clair.' },
+        { id: 'purposes', label: 'Description des finalités', correct: false, why: 'Informer sur les finalités (mesure d’audience, publicité) est requis : rien à corriger.' },
+        { id: 'policy', label: 'Lien vers la politique de confidentialité', correct: false, why: 'Le lien vers la politique complète est attendu : correct.' },
+      ],
+      explanation: `Pour la **CNIL**, refuser les cookies doit être **aussi simple** que les accepter : un bouton « Tout refuser » au même niveau et du même format que « Tout accepter », ou un lien « Continuer sans accepter ». Un « Personnaliser » qui cache le refus derrière plusieurs écrans ne suffit pas.
+
+Et depuis le RGPD, le consentement doit résulter d’un **acte positif clair** : « en poursuivant votre navigation, vous acceptez » n’est plus valable.
+
+Les sanctions sont lourdes : 150 M€ pour Google et 60 M€ pour Facebook (décembre 2021), 5 M€ pour TikTok, qui demandait plusieurs clics pour refuser contre un seul pour accepter (décembre 2022).`,
+      takeaway: 'En France, « Tout refuser » doit être aussi simple et visible que « Tout accepter », et poursuivre la navigation ne vaut pas consentement.',
+      sources: ['cnil:cookies', S.cnilBilan, S.tiktok],
+    },
+    {
+      id: 'culture-fr-toubon-tf',
+      type: 'truefalse',
+      difficulty: 2,
+      culture: 'fr',
+      prompt: 'Une boutique en ligne qui vend à des consommateurs en France peut présenter ses offres et ses conditions uniquement en anglais si sa marque est internationale.',
+      answer: false,
+      explanation: `**Faux.** La **loi Toubon** (loi n° 94-665 du 4 août 1994) impose l’usage du français dans la désignation, l’offre, la présentation, le mode d’emploi et les conditions de garantie des biens et des services, ainsi que dans les factures et la publicité destinées aux consommateurs en France.
+
+Une traduction peut accompagner le texte français, à condition que la version française soit **aussi lisible, audible ou intelligible**. Les noms de marque échappent en principe à la règle, pas les slogans ni les descriptions.
+
+Pour un produit numérique : parcours d’achat, fiches, conditions générales et e-mails de commande en français.`,
+      takeaway: 'En France, la loi Toubon impose le français dans les offres, descriptions et conditions destinées aux consommateurs : une traduction peut s’ajouter, pas remplacer.',
+      sources: [S.toubon],
+    },
+    {
+      id: 'culture-fr-format-duel',
+      type: 'choice',
+      difficulty: 1,
+      culture: 'fr',
+      prompt: 'Quelle fiche produit est correctement localisée pour la France ?',
+      options: [
+        {
+          id: 'us',
+          visual: {
+            alt: 'Fiche d’un ordinateur portable : prix €1,249.00, badge « Économisez 15%! », livraison estimée le 10/27/2026, citation entre guillemets anglais.',
+            lang: 'fr',
+            css: `.fp{display:flex;flex-direction:column;gap:8px}
+.fp-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.fp-price{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.fp-badge{background:#fff0f0;color:#b42318;font-weight:700;font-size:12px;padding:2px 8px;border-radius:999px}
+.fp-quote{font-size:13px;color:#36405a}`,
+            html: `<div class="fp mk-pad">
+  <div class="mk-img" style="--ratio:16/9"></div>
+  <p class="mk-h3">Ordinateur portable Lumen 14</p>
+  <div class="fp-row"><span class="fp-price">€1,249.00</span><span class="fp-badge">Économisez 15%!</span></div>
+  <p class="mk-small mk-muted">Livraison estimée le 10/27/2026</p>
+  <p class="fp-quote">“Le meilleur rapport qualité-prix de l’année” — Tech Hebdo</p>
+  <span class="mk-btn mk-btn--block">Ajouter au panier</span>
+</div>`,
+          },
+          why: 'Formats américains : symbole avant le montant, virgule des milliers, point décimal, date mois/jour, pas d’espace avant « % » et « ! », guillemets anglais.',
+        },
+        {
+          id: 'fr',
+          visual: {
+            alt: 'La même fiche : prix 1 249,00 €, badge « Économisez 15 % ! », livraison estimée le 27/10/2026, citation entre guillemets français.',
+            lang: 'fr',
+            css: `.fp{display:flex;flex-direction:column;gap:8px}
+.fp-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.fp-price{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.fp-badge{background:#fff0f0;color:#b42318;font-weight:700;font-size:12px;padding:2px 8px;border-radius:999px}
+.fp-quote{font-size:13px;color:#36405a}`,
+            html: `<div class="fp mk-pad">
+  <div class="mk-img" style="--ratio:16/9"></div>
+  <p class="mk-h3">Ordinateur portable Lumen 14</p>
+  <div class="fp-row"><span class="fp-price">1&#8239;249,00&nbsp;€</span><span class="fp-badge">Économisez 15&nbsp;%&#8239;!</span></div>
+  <p class="mk-small mk-muted">Livraison estimée le 27/10/2026</p>
+  <p class="fp-quote">«&#8239;Le meilleur rapport qualité-prix de l’année&#8239;» — Tech Hebdo</p>
+  <span class="mk-btn mk-btn--block">Ajouter au panier</span>
+</div>`,
+          },
+          why: 'Formats français : 1 249,00 €, date jour/mois, espace insécable avant « % » et « ! », guillemets « ».',
+        },
+      ],
+      answer: 'fr',
+      explanation: `La typographie et les formats français ont leurs règles :
+
+- **Montants** : espace fine insécable pour les milliers, virgule décimale, symbole après le montant — 1 249,00 €. C’est exactement ce que produit \`Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })\`.
+- **Dates** : jour/mois/année (27/10/2026) ; « 10/27/2026 » se lit comme une date impossible.
+- **Ponctuation** : espace insécable avant « : ; ! ? % », guillemets « » avec des espaces fines.
+
+Un format étranger ne bloque pas la lecture, mais il signale un produit traduit à la va-vite — et sème le doute sur le montant réellement débité.`,
+      takeaway: 'En France : 1 249,00 € (espace fine, virgule, symbole après), 27/10/2026, et une espace insécable avant « : ; ! ? % ».',
+      sources: ['mdn:intl', 'butterick'],
+    },
+
+    /* ---------- Allemagne ---------- */
+    {
+      id: 'culture-de-button-hotspot',
+      type: 'hotspot',
+      difficulty: 3,
+      culture: 'de',
+      prompt: 'Dernière étape d’une commande sur une boutique allemande. Trouve les deux problèmes.',
+      visual: {
+        alt: 'Récapitulatif de commande en allemand d’une machine à café : livraison du lundi 2 au mercredi 4 novembre, paiement sur facture, total TTC « €649.00 », mention des conditions générales, bouton « Bestellen » et liens Impressum, Datenschutz, AGB.',
+        frame: 'browser',
+        lang: 'de',
+        css: `.co{display:flex;flex-direction:column;gap:10px}
+.co-item{display:flex;gap:10px;align-items:center}
+.co-img{width:56px;height:56px;border-radius:8px;background:linear-gradient(160deg,#c8d3e4,#eef2f7);flex:none}
+.co-line{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:2px 0}
+.co-total{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:15px;padding-top:8px;border-top:1px solid #e3e6ec}
+.co-legal{font-size:12px;color:#5a6172}
+.co-foot{font-size:12px;color:#5a6172;text-align:center}`,
+        html: `<div class="co mk-pad">
+  <p class="mk-h2">Bestellübersicht</p>
+  <div class="co-item"><div class="co-img"></div><div class="mk-grow"><p class="mk-strong">Kaffeevollautomat Barista S</p><p class="mk-small mk-muted">Menge: 1 · Farbe: Edelstahl</p></div></div>
+  <div class="co-line" data-hotspot="delivery"><span>Lieferung</span><span>Mo, 02.11. – Mi, 04.11.</span></div>
+  <div class="co-line" data-hotspot="payment"><span>Zahlungsart</span><span>Kauf auf Rechnung</span></div>
+  <div class="co-total" data-hotspot="price"><span>Gesamtsumme inkl. MwSt.</span><span>€649.00</span></div>
+  <p class="co-legal">Es gelten unsere <a>AGB</a>. Hinweise zum <a>Widerrufsrecht</a>.</p>
+  <span class="mk-btn mk-btn--block" data-hotspot="button">Bestellen</span>
+  <p class="co-foot" data-hotspot="footer">Impressum · Datenschutz · AGB</p>
+</div>`,
+      },
+      hotspots: [
+        { id: 'button', label: 'Bouton « Bestellen »', correct: true, why: '« Bestellen » seul ne dit pas que la commande engage à payer : la loi exige « zahlungspflichtig bestellen » ou une formule aussi claire.' },
+        { id: 'price', label: 'Total « €649.00 »', correct: true, why: 'Format anglo-saxon : en Allemagne, le montant s’écrit 649,00 €.' },
+        { id: 'delivery', label: 'Délai de livraison', correct: false, why: 'Jours et dates au format allemand (Mo, 02.11.) : correct.' },
+        { id: 'payment', label: 'Achat sur facture', correct: false, why: 'Le paiement sur facture est l’un des moyens préférés en Allemagne : bon choix.' },
+        { id: 'footer', label: 'Liens Impressum et Datenschutz', correct: false, why: 'Mentions légales et politique de confidentialité accessibles : obligatoire, et c’est fait.' },
+      ],
+      explanation: `Depuis août 2012, la **« Button-Lösung »** (§ 312j BGB) impose que le bouton qui conclut une commande payante indique sans ambiguïté l’obligation de payer : « **zahlungspflichtig bestellen** », ou une formule aussi claire. « Bestellen » seul, « Weiter » ou « Anmelden » ne suffisent pas — et dans ce cas, **le contrat n’est pas conclu** : le client ne doit rien.
+
+Le total, lui, suit le format allemand : point pour les milliers, virgule décimale, symbole après — 649,00 €, ce que donne \`Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' })\`.`,
+      takeaway: 'En Allemagne, le bouton final dit « zahlungspflichtig bestellen » (ou aussi clair), sinon pas de contrat ; et les prix s’écrivent 649,00 €.',
+      sources: [S.bgb312j, S.itRecht, 'mdn:intl'],
+    },
+    {
+      id: 'culture-de-hyphens-duel',
+      type: 'choice',
+      difficulty: 2,
+      culture: 'de',
+      prompt: 'Quelle version de cet écran de réglages supporte la traduction allemande ?',
+      options: [
+        {
+          id: 'fixed',
+          visual: {
+            alt: 'Écran « Einstellungen » avec trois tuiles de largeur fixe dont les libellés allemands sont tronqués par des points de suspension, et un bouton tronqué lui aussi.',
+            lang: 'de',
+            css: `.ds{display:flex;flex-direction:column;gap:12px}
+.ds-grid{display:grid;grid-template-columns:repeat(3,96px);gap:10px}
+.ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
+.ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
+.ds-tile span{display:block;width:100%;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-btn{display:block;width:128px;line-height:38px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}`,
+            html: `<div class="ds mk-pad">
+  <p class="mk-h3">Einstellungen</p>
+  <div class="ds-grid">
+    <div class="ds-tile"><i data-icon="bell"></i><span>Benachrichtigungen</span></div>
+    <div class="ds-tile"><i data-icon="lock"></i><span>Datenschutzeinstellungen</span></div>
+    <div class="ds-tile"><i data-icon="credit-card"></i><span>Zahlungsmethoden</span></div>
+  </div>
+  <span class="mk-btn ds-btn">Änderungen speichern</span>
+</div>`,
+          },
+          why: 'Largeurs fixes pensées pour l’anglais : les mots composés allemands sont tronqués et deviennent illisibles.',
+        },
+        {
+          id: 'flexible',
+          visual: {
+            alt: 'Le même écran avec des tuiles souples : les libellés allemands se coupent avec un trait d’union sur deux lignes et le bouton s’élargit.',
+            lang: 'de',
+            css: `.ds{display:flex;flex-direction:column;gap:12px}
+.ds-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
+.ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
+.ds-tile span{font-size:13px;font-weight:600;line-height:1.3;hyphens:auto;overflow-wrap:break-word;max-width:100%}
+.ds .mk-btn{align-self:flex-start}`,
+            html: `<div class="ds mk-pad">
+  <p class="mk-h3">Einstellungen</p>
+  <div class="ds-grid">
+    <div class="ds-tile"><i data-icon="bell"></i><span>Benachrichtigungen</span></div>
+    <div class="ds-tile"><i data-icon="lock"></i><span>Datenschutzeinstellungen</span></div>
+    <div class="ds-tile"><i data-icon="credit-card"></i><span>Zahlungsmethoden</span></div>
+  </div>
+  <span class="mk-btn">Änderungen speichern</span>
+</div>`,
+          },
+          why: 'Largeurs souples, langue déclarée et `hyphens: auto` : les mots longs se coupent selon les règles allemandes, rien n’est tronqué.',
+        },
+      ],
+      answer: 'flexible',
+      explanation: `L’allemand est en moyenne **30 % plus long** que l’anglais, et bien plus sur les libellés courts : pour une chaîne de moins de 10 caractères, IBM prévoit une traduction 2 à 3 fois plus longue. « Privacy » devient « Datenschutzeinstellungen ».
+
+Trois réglages évitent la troncature :
+
+- pas de largeur fixe sur du texte : laisse les boîtes s’adapter au contenu ;
+- \`hyphens: auto\` pour couper les mots longs ;
+- l’attribut \`lang="de"\` sur le contenu : sans lui, le navigateur ne sait pas quel dictionnaire de césure utiliser et ne coupe rien.
+
+Impeccable recommande de prévoir 30 à 40 % de place en plus et de tester avec la langue la plus longue — souvent l’allemand.`,
+      takeaway: 'Prévois 30 à 40 % de place en plus pour les traductions et laisse le navigateur couper les mots avec `lang` et `hyphens: auto`.',
+      sources: ['imp:harden', S.w3cTextSize, S.hyphens],
+    },
+    {
+      id: 'culture-de-legal-multi',
+      type: 'multi',
+      difficulty: 3,
+      culture: 'de',
+      prompt: 'Lesquelles de ces exigences sont des obligations légales pour une boutique en ligne allemande qui vend des abonnements à des particuliers ?',
+      options: [
+        { id: 'impressum', label: 'Un Impressum (mentions légales) facilement accessible depuis chaque page', why: 'Obligation légale (§ 5 DDG) : identité, adresse, contact, registre, numéro de TVA.' },
+        { id: 'button', label: 'Un bouton final « zahlungspflichtig bestellen » ou une formule aussi claire', why: 'Obligation légale (§ 312j BGB) : sans elle, le contrat n’est pas conclu.' },
+        { id: 'cancel', label: 'Un bouton « Verträge hier kündigen » pour résilier en ligne', why: 'Obligation légale depuis juillet 2022 (§ 312k BGB) pour les contrats conclus en ligne qui se prolongent.' },
+        { id: 'invoice', label: 'Proposer le paiement sur facture (Kauf auf Rechnung)', why: 'Très attendu par les acheteurs allemands, mais pas imposé par la loi.' },
+        { id: 'seal', label: 'Afficher un label de confiance comme Trusted Shops', why: 'Rassurant et répandu, mais facultatif.' },
+        { id: 'sie', label: 'Vouvoyer le client (« Sie »)', why: 'Une tradition, pas une loi : beaucoup de marques grand public tutoient (« du »).' },
+      ],
+      answers: ['impressum', 'button', 'cancel'],
+      explanation: `Distingue ce que la loi impose de ce que le marché attend :
+
+- **Obligations** : l’**Impressum** (§ 5 DDG), facilement accessible depuis chaque page ; le bouton de commande « zahlungspflichtig bestellen » (§ 312j BGB) ; pour un contrat conclu en ligne qui se prolonge, un bouton de résiliation « Verträge hier kündigen » menant à une confirmation « jetzt kündigen » (§ 312k BGB, depuis juillet 2022).
+- **Attentes fortes, mais facultatives** : le paiement sur facture, les labels comme Trusted Shops, le vouvoiement.
+
+Ignorer une obligation expose à des mises en demeure (*Abmahnungen*) ; ignorer une attente coûte des ventes. Les deux comptent, pas de la même façon.`,
+      takeaway: 'Sépare ce que la loi impose (Impressum, bouton de commande, bouton de résiliation) de ce que le marché attend (facture, labels, ton).',
+      sources: [S.ddg5, S.bgb312j, S.bgb312k],
+    },
     // @@EXERCISES@@
   ],
 };

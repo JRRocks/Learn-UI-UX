@@ -48,15 +48,15 @@ const BOOKING: Visual = {
     <span class="bk-back"><i data-icon="arrow-left" style="--ico:14px"></i> Modifier le trajet</span>
     <div class="mk-stack" style="--gap:6px"><p class="mk-small mk-strong">Étape 2 sur 4 · Passagers</p><div class="bk-bar"><span></span></div></div>
     <div class="bk-trip mk-row"><i data-icon="train-front" style="--ico:20px"></i><div class="mk-grow"><p class="mk-strong">Lyon Part-Dieu → Marseille Saint-Charles</p><p class="mk-small mk-muted">Ven. 14 nov. · 08:04 → 09:46 · 1 adulte</p></div><span class="mk-price">38,00 €</span></div>
-    <p class="bk-alert">Erreur V-102 : champ invalide.</p>
-    <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h3">Passager 1</p><span class="bk-chip"><i data-icon="user" style="--ico:13px"></i> Remplir avec : Jules D.</span></div>
+    <p class="bk-alert">Erreur V-102 : champ invalide.</p>
+    <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h3">Passager 1</p><span class="bk-chip"><i data-icon="user" style="--ico:13px"></i> Remplir avec : Jules D.</span></div>
     <div class="bk-grid">
       <div class="mk-field"><span class="mk-label">Prénom</span><div class="mk-input">Camille</div></div>
       <div class="mk-field"><span class="mk-label">Nom</span><div class="mk-input">Durand</div></div>
       <div class="mk-field"><span class="mk-label">Date de naissance</span><div class="mk-input bk-ph">JJ/MM/AAAA</div></div>
-      <div class="mk-field"><span class="mk-label">Carte de réduction</span><div class="mk-input" style="display:flex;align-items:center;justify-content:space-between;gap:8px">CR-AV <i data-icon="chevron-down" style="--ico:14px"></i></div><span class="bk-help"><i data-icon="info" style="--ico:12px"></i> Quelle carte choisir ?</span></div>
+      <div class="mk-field"><span class="mk-label">Carte de réduction</span><div class="mk-input" style="display:flex;align-items:center;justify-content:space-between;gap:8px">CR-AV <i data-icon="chevron-down" style="--ico:14px"></i></div><span class="bk-help"><i data-icon="info" style="--ico:12px"></i> Quelle carte choisir ?</span></div>
     </div>
-    <div class="bk-promo mk-row"><i data-icon="car" style="--ico:18px"></i><span class="mk-grow">Location de voiture : −20 % à l’arrivée !</span><span class="mk-strong">Découvrir</span></div>
+    <div class="bk-promo mk-row"><i data-icon="car" style="--ico:18px"></i><span class="mk-grow">Location de voiture : −20 % à l’arrivée !</span><span class="mk-strong">Découvrir</span></div>
     <span class="bk-add">+ Ajouter un passager</span>
     <div class="mk-row" style="--gap:8px"><span class="mk-btn">Réinitialiser</span><span class="mk-btn">Continuer</span></div>
     <div class="mk-divider"></div>
@@ -119,7 +119,7 @@ kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border:
       <span class="mk-btn mk-btn--s">Nouvelle facture <kbd class="fa-kbd">N</kbd></span>
     </div>
     <p class="fa-alert"><i data-icon="circle-alert" style="--ico:15px"></i> Échec de la synchro (BNK_401).</p>
-    <div class="fa-promo"><i data-icon="sparkles" style="--ico:16px"></i><span class="mk-grow">Passez à Facturo Pro : −30 % ce mois-ci</span><span class="mk-strong">Découvrir</span></div>
+    <div class="fa-promo"><i data-icon="sparkles" style="--ico:16px"></i><span class="mk-grow">Passez à Facturo Pro : −30 % ce mois-ci</span><span class="mk-strong">Découvrir</span></div>
     <div class="fa-kpis">
       <div class="fa-kpi"><span class="mk-small mk-muted">CA de novembre <i data-icon="info" style="--ico:12px"></i></span><span class="fa-num">12 480 €</span><svg class="fa-spark" viewBox="0 0 60 16" preserveAspectRatio="none"><polyline points="0,13 10,10 20,11 30,6 40,8 50,4 60,5"/></svg></div>
       <div class="fa-kpi"><span class="mk-small mk-muted">En attente</span><span class="fa-num">3 920 €</span><svg class="fa-spark" viewBox="0 0 60 16" preserveAspectRatio="none"><polyline points="0,6 10,8 20,5 30,9 40,7 50,10 60,8"/></svg></div>
@@ -194,7 +194,7 @@ Une **évaluation heuristique** est une inspection par des experts, pas un test 
           good: {
             alt: 'Même fenêtre avec le nombre de contacts importés, une barre de progression à 62 %, le temps restant et un bouton Annuler.',
             css: `.ld-bar { height: 8px; border-radius: 4px; background: #e3e6ec; overflow: hidden; } .ld-bar span { display: block; width: 62%; height: 100%; background: #1f4fd8; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-h3">Importer des contacts</p><p>Import de <b>1 240 contacts</b> depuis « clients-2026.csv »</p><div class="ld-bar"><span></span></div><div class="mk-row mk-between"><span class="mk-small mk-muted">62 % · environ 20 s restantes</span><span class="mk-btn mk-btn--ghost mk-btn--s">Annuler</span></div></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-h3">Importer des contacts</p><p>Import de <b>1 240 contacts</b> depuis « clients-2026.csv »</p><div class="ld-bar"><span></span></div><div class="mk-row mk-between"><span class="mk-small mk-muted">62 % · environ 20 s restantes</span><span class="mk-btn mk-btn--ghost mk-btn--s">Annuler</span></div></div>`,
           },
           goodNote: 'Ce qui se passe, où on en est, combien de temps encore, et une sortie.',
         },
@@ -207,7 +207,7 @@ Une **évaluation heuristique** est une inspection par des experts, pas un test 
           badNote: 'Quel champ ? Quelle erreur ? Quelle correction ? Et le mot de passe a été effacé : tout est à refaire.',
           good: {
             alt: 'Même formulaire : le champ e-mail est encadré en rouge et un message dessous explique qu’il manque le @, avec un exemple.',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input mk-input--error">camille.durand.exemple.fr</div><p class="mk-error">Il manque le « @ ». Exemple : camille.durand@exemple.fr</p></div><div class="mk-field"><span class="mk-label">Mot de passe</span><div class="mk-input">••••••••••</div></div><span class="mk-btn" style="align-self:flex-start">Créer mon compte</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div class="mk-field"><span class="mk-label">Adresse e-mail</span><div class="mk-input mk-input--error">camille.durand.exemple.fr</div><p class="mk-error">Il manque le « @ ». Exemple : camille.durand@exemple.fr</p></div><div class="mk-field"><span class="mk-label">Mot de passe</span><div class="mk-input">••••••••••</div></div><span class="mk-btn" style="align-self:flex-start">Créer mon compte</span></div>`,
           },
           goodNote: 'Le problème précis, à côté du champ, avec la correction — et le mot de passe n’est pas effacé.',
         },
@@ -262,13 +262,13 @@ Chaque problème retenu suit le même gabarit : **[P?] quoi**, **pourquoi ça co
           bad: {
             alt: 'Note de revue : « L’interface pourrait être plus claire et plus moderne. Peut-être revoir les couleurs ? »',
             css: `.nt { padding: 14px; border: 1px solid #e1e4ea; border-radius: 10px; }`,
-            html: `<div class="mk-pad"><div class="nt mk-stack" style="--gap:6px"><p class="mk-small mk-muted">Remarque</p><p>L’interface pourrait être plus claire et plus moderne. Peut-être revoir les couleurs ?</p></div></div>`,
+            html: `<div class="mk-pad"><div class="nt mk-stack" style="--gap:6px"><p class="mk-small mk-muted">Remarque</p><p>L’interface pourrait être plus claire et plus moderne. Peut-être revoir les couleurs ?</p></div></div>`,
           },
           badNote: 'Vague, sans priorité ni piste : personne ne sait quoi faire lundi matin.',
           good: {
             alt: 'Note de revue avec une étiquette P1, le problème précis du bouton Payer hors écran sur mobile, la raison, le correctif et la commande adapt.',
             css: `.nt { padding: 14px; border: 1px solid #e1e4ea; border-radius: 10px; } .nt-p { display: inline-block; padding: 1px 7px; border-radius: 6px; background: #8c1d18; color: #fff; font-size: 12px; font-weight: 700; margin-inline-end: 6px; } code { font: 600 12px ui-monospace, Menlo, monospace; background: #eef1f7; padding: 1px 5px; border-radius: 4px; }`,
-            html: `<div class="mk-pad"><div class="nt mk-stack" style="--gap:6px"><p class="mk-strong"><span class="nt-p">P1</span>Le bouton « Payer » sort de l’écran sur mobile</p><p class="mk-small"><b>Pourquoi :</b> sur un écran de 375 px, il faut défiler sous le récapitulatif pour trouver l’action principale.</p><p class="mk-small"><b>Correctif :</b> une barre fixe dans le bas de l’écran avec le total et « Payer ».</p><p class="mk-small"><b>Commande :</b> <code>adapt</code></p></div></div>`,
+            html: `<div class="mk-pad"><div class="nt mk-stack" style="--gap:6px"><p class="mk-strong"><span class="nt-p">P1</span>Le bouton « Payer » sort de l’écran sur mobile</p><p class="mk-small"><b>Pourquoi :</b> sur un écran de 375 px, il faut défiler sous le récapitulatif pour trouver l’action principale.</p><p class="mk-small"><b>Correctif :</b> une barre fixe dans le bas de l’écran avec le total et « Payer ».</p><p class="mk-small"><b>Commande :</b> <code>adapt</code></p></div></div>`,
           },
           goodNote: 'Sévérité, élément nommé, impact, correctif, commande : actionnable tout de suite.',
         },
@@ -510,7 +510,7 @@ Cet ordre est celui des corrections : on ne peaufine pas des icônes tant qu’u
             css: `.up-file { padding: 10px 12px; border: 1px solid #e1e4ea; border-radius: 10px; }
 .up-msg { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: #fdecea; color: #8c1d18; font-size: 13px; font-weight: 600; }
 .up-msg .mk-ico { margin-top: 2px; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Joindre un justificatif</p><div class="up-file mk-row"><i data-icon="file-text" style="--ico:20px"></i><div class="mk-grow"><p class="mk-strong">devis-mars.pdf</p><p class="mk-small mk-muted">12 Mo</p></div></div><p class="up-msg"><i data-icon="circle-alert" style="--ico:14px"></i> Ce fichier fait 12 Mo : la limite est de 10 Mo. Compressez-le ou choisissez un autre fichier.</p><span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start">Choisir un autre fichier</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Joindre un justificatif</p><div class="up-file mk-row"><i data-icon="file-text" style="--ico:20px"></i><div class="mk-grow"><p class="mk-strong">devis-mars.pdf</p><p class="mk-small mk-muted">12 Mo</p></div></div><p class="up-msg"><i data-icon="circle-alert" style="--ico:14px"></i> Ce fichier fait 12 Mo : la limite est de 10 Mo. Compressez-le ou choisissez un autre fichier.</p><span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start">Choisir un autre fichier</span></div>`,
           },
           why: 'Le problème (12 Mo), la règle (10 Mo maximum) et deux solutions, avec l’action pour repartir.',
         },
@@ -577,7 +577,7 @@ La version recommandée combine trois signaux : un indicateur d’étapes, un ti
           visual: {
             alt: 'Même boîte de réception avec une notification « Conversation « Devis cuisine » supprimée » et un bouton Annuler.',
             css: `.ml-row { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eceef2; } .ml-undo { font-weight: 700; color: #9db4ff; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:6px"><div class="mk-row mk-between"><p class="mk-h3">Boîte de réception</p><span class="mk-small mk-muted">3 conversations</span></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Banque Arpège</p><p class="mk-small mk-muted">Votre relevé d’octobre est disponible</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Léa Martin</p><p class="mk-small mk-muted">Les photos du week-end</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Mairie de Lyon</p><p class="mk-small mk-muted">Rendez-vous confirmé le 3 décembre</p></div></div><div class="mk-toast" style="margin-top:8px"><span class="mk-grow">« Devis cuisine » supprimée</span><span class="ml-undo">Annuler</span></div></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:6px"><div class="mk-row mk-between"><p class="mk-h3">Boîte de réception</p><span class="mk-small mk-muted">3 conversations</span></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Banque Arpège</p><p class="mk-small mk-muted">Votre relevé d’octobre est disponible</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Léa Martin</p><p class="mk-small mk-muted">Les photos du week-end</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Mairie de Lyon</p><p class="mk-small mk-muted">Rendez-vous confirmé le 3 décembre</p></div></div><div class="mk-toast" style="margin-top:8px"><span class="mk-grow">« Devis cuisine » supprimée</span><span class="ml-undo">Annuler</span></div></div>`,
           },
           why: 'L’action est confirmée (heuristique 1) et réversible d’un geste (heuristique 3).',
         },
@@ -609,7 +609,7 @@ Pour une action réversible comme celle-ci, l’annulation après coup vaut mieu
           visual: {
             alt: 'Même étape avec un récapitulatif : photo et nom de l’article, numéro de commande, motif du retour et conditions de remboursement.',
             css: `.mr-sum { padding: 10px; border: 1px solid #e1e4ea; border-radius: 10px; background: #f6f7f9; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Retour d’un article · Étape 3 sur 3</p><p class="mk-h3">Confirmez votre demande</p><div class="mr-sum mk-row"><div class="mk-img" style="--ratio:1;width:44px"></div><div class="mk-grow"><p class="mk-strong">Sac à dos Alto 28 L</p><p class="mk-small mk-muted">Commande n° 48213 · Motif : ne convient pas</p></div></div><p class="mk-small">Remboursement de 89,00 € sur la carte utilisée, sous 5 jours après réception.</p><span class="mk-btn mk-btn--block">Envoyer la demande</span></div>`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Retour d’un article · Étape 3 sur 3</p><p class="mk-h3">Confirmez votre demande</p><div class="mr-sum mk-row"><div class="mk-img" style="--ratio:1;width:44px"></div><div class="mk-grow"><p class="mk-strong">Sac à dos Alto 28 L</p><p class="mk-small mk-muted">Commande n° 48213 · Motif : ne convient pas</p></div></div><p class="mk-small">Remboursement de 89,00 € sur la carte utilisée, sous 5 jours après réception.</p><span class="mk-btn mk-btn--block">Envoyer la demande</span></div>`,
           },
           why: 'Tout ce qui a été choisi est rappelé à l’écran : il suffit de reconnaître et de confirmer.',
         },

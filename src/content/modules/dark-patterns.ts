@@ -423,8 +423,9 @@ C’est aussi un problème juridique : le RGPD exige un consentement **éclairé
             alt: 'Trois cartes de formules aux prix exprimés dans trois unités différentes — 1,38 € par semaine, 13,49 € par mois, 239,88 € par an — et aux caractéristiques décrites différemment.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Choisissez votre formule</p><div class="mk-grid" style="--cols:3;--gap:8px"><div class="cp"><b>Essentiel</b><p class="cp-price">1,38 €<small>/semaine</small></p><p class="mk-small">Avec publicités · HD</p></div><div class="cp"><b>Standard</b><p class="cp-price">13,49 €<small>/mois</small></p><p class="mk-small">2 écrans en même temps</p></div><div class="cp"><b>Premium</b><p class="cp-price">239,88 €<small>/an</small></p><p class="mk-small">Qualité maximale · <u>voir conditions</u></p></div></div></div>`),
             css: `.cp { display: flex; flex-direction: column; gap: 4px; padding: 10px 8px; border: 1px solid #dfe3ea; border-radius: 10px; }
-.cp-price { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
-.cp-price small { font-size: 11px; font-weight: 500; color: #5a6172; }`,
+.cp { min-width: 0; overflow-wrap: anywhere; }
+.cp-price { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.cp-price small { display: block; font-size: 11px; font-weight: 500; color: #5a6172; }`,
           },
           why: 'Prix à la semaine, au mois et à l’an, caractéristiques décrites sans critères communs : il faut convertir et deviner pour comparer.',
         },
@@ -433,8 +434,9 @@ C’est aussi un problème juridique : le RGPD exige un consentement **éclairé
           visual: {
             alt: 'Tableau comparant les trois formules sur les mêmes lignes : prix par mois (5,99 €, 13,49 €, 19,99 €), publicités, qualité et nombre d’écrans simultanés.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Choisissez votre formule</p><table class="cp-t"><thead><tr><th></th><th>Essentiel</th><th>Standard</th><th>Premium</th></tr></thead><tbody><tr><th>Prix par mois</th><td>5,99 €</td><td>13,49 €</td><td>19,99 €</td></tr><tr><th>Publicités</th><td>Oui</td><td>Non</td><td>Non</td></tr><tr><th>Qualité</th><td>HD</td><td>Full HD</td><td>4K</td></tr><tr><th>Écrans simultanés</th><td>1</td><td>2</td><td>4</td></tr></tbody></table><p class="mk-small mk-muted">Sans engagement, résiliable en ligne.</p></div>`),
-            css: `.cp-t { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
-.cp-t th, .cp-t td { padding: 7px 5px; border-bottom: 1px solid #eceef2; text-align: center; }
+            css: `.cp-t { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.cp-t th, .cp-t td { padding: 7px 3px; border-bottom: 1px solid #eceef2; text-align: center; overflow-wrap: anywhere; }
+.cp-t th:first-child { width: 34%; }
 .cp-t tbody th { text-align: start; font-weight: 600; color: #3a4152; }`,
           },
           why: 'Même unité de prix, mêmes lignes de critères : les différences sautent aux yeux.',
@@ -543,7 +545,7 @@ Les cookies strictement nécessaires, eux, peuvent rester actifs sans consenteme
 <div class="mk-field" data-hotspot="survey"><span class="mk-label">Pourquoi partez-vous ? (obligatoire)</span><span class="mk-input cn-area">Minimum 50 caractères</span></div>
 <span class="mk-btn mk-btn--block">Garder Premium</span>
 <span class="cn-shame" data-hotspot="shame">Je préfère perdre toute ma musique</span>
-<p class="cn-phone" data-hotspot="phone"><i data-icon="phone" style="--ico:14px"></i><span>Pour finaliser, appelez le 0 892 68 12 34 (0,35 € / min), du lundi au vendredi.</span></p>
+<p class="cn-phone" data-hotspot="phone"><i data-icon="phone" style="--ico:14px"></i><span>Pour finaliser, appelez le 0 892 68 12 34 (0,35 € / min), du lundi au vendredi.</span></p>
 </div></div>`),
         css: `.cn-top { padding: 10px 14px; border-bottom: 1px solid #eceef2; }
 .cn-area { min-height: 64px; color: #6b7280; font-size: 13px; }

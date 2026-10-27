@@ -68,7 +68,7 @@ Avant de concevoir quoi que ce soit, réponds à trois séries de questions :
 2. **Les utilisateurs** : débutants, experts ou les deux ? Curieux ou contraints par leur travail ? Cinq minutes ou trente devant eux ? Viennent-ils d’un concurrent ou découvrent-ils la catégorie ?
 3. **Le succès** : le minimum à apprendre pour réussir, l’action clé (premier projet, première invitation) et sa mesure (taux d’achèvement, temps jusqu’à la valeur).
 
-Enseigne les **20 %** qui apportent 80 % de la valeur, place les concepts importants en premier et garde les fonctions avancées pour une découverte en contexte.`,
+Enseigne les **20 %** qui apportent 80 % de la valeur, place les concepts importants en premier et garde les fonctions avancées pour une découverte en contexte.`,
     },
     {
       id: 'principes',
@@ -107,7 +107,7 @@ La recherche va dans le même sens. Nielsen Norman Group observe que les tutorie
     <li><span class="mk-check"></span><span class="mk-grow">Envoyer le devis à Mme Roux</span></li>
     <li><span class="mk-check"></span><span class="mk-grow">Acheter du café</span></li>
   </ul>
-  <div class="onb-hint"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Tâches d’exemple : cochez-en une pour voir ce qui se passe.</span><span class="mk-btn mk-btn--text mk-btn--s">Passer</span></div>
+  <div class="onb-hint"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Tâches d’exemple&nbsp;: cochez-en une pour voir ce qui se passe.</span><span class="mk-btn mk-btn--text mk-btn--s">Passer</span></div>
 </div>`,
             css: TASKS_CSS,
           },
@@ -364,7 +364,7 @@ Un état vide complet suit la structure d’impeccable : **ce qui apparaîtra ic
   <div class="mk-stack" style="--gap:4px"><div class="mk-row mk-between mk-small"><span>Courses</span><span>212 / 300&nbsp;€</span></div><div class="onb-bar"><span style="width:70%"></span></div></div>
   <div class="mk-stack" style="--gap:4px"><div class="mk-row mk-between mk-small"><span>Loisirs</span><span>64 / 120&nbsp;€</span></div><div class="onb-bar"><span style="width:53%"></span></div></div>
   <div class="mk-stack" style="--gap:4px"><div class="mk-row mk-between mk-small"><span>Transports</span><span>38 / 90&nbsp;€</span></div><div class="onb-bar"><span style="width:42%"></span></div></div>
-  <div class="onb-tip"><span class="mk-grow">Ajoutez votre première dépense : 10 secondes suffisent.</span><span class="onb-tip-skip">Passer</span></div>
+  <div class="onb-tip"><span class="mk-grow">Ajoutez votre première dépense&nbsp;: 10 secondes suffisent.</span><span class="onb-tip-skip">Passer</span></div>
   <span class="mk-btn mk-btn--block"><i data-icon="plus" style="--ico:16px"></i>Ajouter une dépense</span>
 </div>`,
             css: `.onb-bar { height: 8px; border-radius: 4px; background: #e6e9ef; }
@@ -387,7 +387,7 @@ La version recommandée applique les principes d’impeccable : **montrer plutô
       id: 'onboarding-no-results-duel',
       type: 'choice',
       difficulty: 2,
-      context: 'Un commercial cherche « Lefèvre » dans un CRM qui contient 1 240 clients, avec le filtre « Actifs » appliqué. Aucun client ne correspond.',
+      context: 'Un commercial cherche « Lefèvre » dans un CRM qui contient 1 240 clients, avec le filtre « Actifs » appliqué. Aucun client ne correspond.',
       prompt: 'Quel état vide est le plus utile ?',
       options: [
         {
@@ -406,7 +406,7 @@ La version recommandée applique les principes d’impeccable : **montrer plutô
 </div>`,
             css: CRM_CSS,
           },
-          why: 'Un message de premier usage alors que la base contient 1 240 clients : il laisse croire qu’elle est vide et pousse à créer un doublon.',
+          why: 'Un message de premier usage alors que la base contient 1 240 clients : il laisse croire qu’elle est vide et pousse à créer un doublon.',
         },
         {
           id: 'no-results',
@@ -549,7 +549,7 @@ Impeccable demande d’**expliquer pourquoi** l’accès manque et **comment l�
   <div class="mk-img" style="--ratio:16 / 9"></div>
   <p class="mk-h1 mk-center" data-hotspot="title" style="align-self:center">Bienvenue sur Pécule</p>
   <p class="mk-center mk-muted" data-hotspot="pitch">La plateforme nouvelle génération qui révolutionne votre rapport à l’argent.</p>
-  <p class="mk-small mk-row" data-hotspot="time" style="--gap:6px;align-self:center"><i data-icon="clock" style="--ico:14px"></i>Configuration : 2 minutes</p>
+  <p class="mk-small mk-row" data-hotspot="time" style="--gap:6px;align-self:center"><i data-icon="clock" style="--ico:14px"></i>Configuration&nbsp;: 2 minutes</p>
   <span class="mk-btn mk-btn--block" data-hotspot="cta">Commencer</span>
   <span class="onb-skip" data-hotspot="skip">passer</span>
 </div>`,
@@ -594,7 +594,7 @@ Ici, la promesse est du jargon marketing — le détecteur d’impeccable range 
         frame: 'browser',
         html: `<div class="mk-pad mk-stack" style="--gap:12px">
   <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h2">Rapports</p><span class="mk-btn mk-btn--s" data-hotspot="import"><i data-icon="upload" style="--ico:14px"></i>Importer des données</span></div>
-  <div class="onb-astuce" data-hotspot="tip"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Astuce : cliquez sur un bouton pour effectuer une action.</span><i data-icon="x" style="--ico:14px"></i></div>
+  <div class="onb-astuce" data-hotspot="tip"><i data-icon="info" style="--ico:16px"></i><span class="mk-grow">Astuce&nbsp;: cliquez sur un bouton pour effectuer une action.</span><i data-icon="x" style="--ico:14px"></i></div>
   <div class="mk-tabs"><span class="mk-tab mk-tab--on">Vue d’ensemble</span><span class="mk-tab mk-row" style="--gap:6px" data-hotspot="badge">Prévisions<span class="onb-new">Nouveau</span></span></div>
   <div class="mk-grid" style="--gap:10px">
     <div class="onb-metric"><span class="mk-small mk-muted mk-row" style="--gap:6px">Taux de rétention<span class="onb-help" data-hotspot="help">?</span></span><b>—</b></div>
@@ -756,7 +756,7 @@ Pour un vide **choisi par l’utilisateur**, impeccable recommande une **touche 
           why: 'C’est la preuve concrète de la valeur : le produit a fait gagner du temps sur une vraie tâche.',
         },
         { id: 'tour', label: 'La fin de la visite guidée de toutes les fonctions', why: 'Avoir vu des fonctions ne prouve rien : c’est de la cérémonie, pas de la valeur.' },
-        { id: 'profile', label: 'Un profil complété à 100 %', why: 'Une étape de configuration, pas un bénéfice : la personne n’a encore rien obtenu.' },
+        { id: 'profile', label: 'Un profil complété à 100 %', why: 'Une étape de configuration, pas un bénéfice : la personne n’a encore rien obtenu.' },
         { id: 'video', label: 'Le visionnage de la vidéo de présentation', why: 'Regarder n’est pas faire : on retient peu d’une présentation hors contexte.' },
       ],
       answer: 'invoice',
