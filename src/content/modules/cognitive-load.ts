@@ -77,7 +77,7 @@ const cognitiveLoad: ModuleContent = {
     {
       id: 'trois-charges',
       title: 'Trois charges, une seule à éliminer',
-      body: `La **charge cognitive** est l’effort mental total qu’exige une interface. Surchargée, une personne se trompe, s’agace et part. La théorie de John Sweller (1988), reprise par impeccable, en distingue trois types :
+      body: `La **charge cognitive** est l’effort mental total qu’exige une interface. Surchargée, une personne se trompe, s’agace et part. La théorie de la charge cognitive, lancée par John Sweller à la fin des années 1980 et reprise par impeccable, en distingue trois types :
 
 - **Intrinsèque** : la complexité de la tâche elle-même. Déclarer ses revenus ou configurer un serveur est complexe : tu ne peux pas supprimer cette charge, seulement la **structurer** — découper en étapes, fournir modèles, valeurs par défaut et exemples, regrouper les décisions liées, ne montrer que ce qui sert maintenant.
 - **Extrinsèque** : l’effort causé par la conception. Navigation qui oblige à se construire une carte mentale, libellés à deviner, encombrement visuel, motifs incohérents, étapes inutiles entre l’intention et le résultat. C’est du **pur gaspillage** : impeccable demande de l’éliminer sans pitié.
@@ -289,7 +289,7 @@ La règle pratique d’impeccable pour les boutons : **1 principal, 1 à 2 secon
         },
       ],
       answer: 'recap',
-      explanation: `C’est le **pont de mémoire** : la personne doit retenir une information de l’étape 1 pour agir à l’étape 3. La mémoire de travail ne garde que quelques éléments, quelques secondes ; une interruption suffit à les perdre.
+      explanation: `C’est le **pont de mémoire** : la personne doit retenir une information de l’étape 1 pour agir à l’étape 3. La mémoire de travail ne garde que quelques éléments, pendant quelques dizaines de secondes ; une interruption suffit à les perdre.
 
 La correction d’impeccable : **garder le contexte visible ou le répéter là où il sert**. Pour une action engageante comme un virement, le récapitulatif sert aussi de vérification — et un bouton qui nomme le montant (« Confirmer le virement de 250,00 € ») lève toute ambiguïté.`,
       takeaway: 'Ne demande jamais de retenir une information d’un écran précédent : répète-la là où la décision se prend.',

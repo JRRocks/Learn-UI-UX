@@ -64,7 +64,7 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
       <p className="preview-prompt">
         <MdInline text={ex.prompt} />
       </p>
-      {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && <V visual={ex.visual} />}
+      {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && ex.type !== 'grid' && <V visual={ex.visual} />}
 
       {(ex.type === 'choice' || ex.type === 'multi') && (
         <ol className={ex.options.some((o) => o.visual) ? 'preview-options preview-options--visual' : 'preview-options'}>

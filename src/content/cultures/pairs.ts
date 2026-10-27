@@ -96,13 +96,13 @@ export const CULTURE_PAIRS: CulturePair[] = [
   <div class="cnh-banner"><b>双11预售</b><span>跨店每满300减50</span></div>
   <div class="cnh-grid">
     <span><b style="--c:#e11d48"><i data-icon="store"></i></b>超市</span>
-    <span><b style="--c:#c2410c"><i data-icon="badge-check"></i></b>百亿补贴</span>
-    <span><b style="--c:#be185d"><i data-icon="ticket"></i></b>领券中心<span class="cnh-tag">新</span></span>
-    <span><b style="--c:#2563eb"><i data-icon="phone"></i></b>充值中心</span>
+    <span><b style="--c:#c2410c"><i data-icon="badge-check"></i></b>特价</span>
+    <span><b style="--c:#be185d"><i data-icon="ticket"></i></b>领券<span class="cnh-tag">新</span></span>
+    <span><b style="--c:#2563eb"><i data-icon="phone"></i></b>充值</span>
     <span><b style="--c:#7c3aed"><i data-icon="play"></i></b>直播</span>
     <span><b style="--c:#b45309"><i data-icon="utensils"></i></b>外卖</span>
     <span><b style="--c:#0e7490"><i data-icon="plane"></i></b>旅行</span>
-    <span><b style="--c:#15803d"><i data-icon="gift"></i></b>签到领币<span class="cnh-dot"></span></span>
+    <span><b style="--c:#15803d"><i data-icon="gift"></i></b>签到<span class="cnh-dot"></span></span>
     <span><b style="--c:#a16207"><i data-icon="tag"></i></b>拍卖</span>
     <span><b style="--c:#475569"><i data-icon="layout-grid"></i></b>分类</span>
   </div>
@@ -170,7 +170,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
     notes: `Deux accueils de boutique pour le même besoin — trouver un produit — et deux logiques opposées.
 
 - **Densité.** L’accueil américain compte cinq blocs et une action principale par bloc. L’accueil chinois aligne plus de vingt points d’entrée sur la même hauteur : l’appli y est un portail où l’on attend tous les services à portée de pouce, et l’écriture chinoise, compacte, loge plus d’information par ligne.
-- **Grille d’accès (金刚区).** Dix icônes sur deux lignes, libellées en 2 à 4 caractères, ouvrent les canaux (supermarché, coupons, live, voyages). Côté américain, quatre catégories en pastilles suffisent.
+- **Grille d’accès (金刚区).** Dix icônes sur deux lignes, aux libellés de deux caractères, ouvrent les canaux (supermarché, promotions, coupons, live, voyages). Côté américain, quatre catégories en pastilles suffisent.
 - **Flux en cascade (瀑布流).** Des cartes de hauteurs variables sur deux colonnes invitent à défiler et à découvrir ; l’accueil américain propose une sélection courte dans une grille régulière.
 - **Urgence et promotions.** Vente flash avec compte à rebours, remise « 跨店每满300减50 » (50\u00a0¥ de moins par tranche de 300\u00a0¥, tous vendeurs confondus), pastilles rouges : la fête commerciale du 11.11 structure l’écran. Aux États-Unis, la promotion tient dans une bannière.
 - **Preuve sociale.** « 1.2万人付款 » (12 000 acheteurs) ou « 已售10万+ » (plus de 100 000 vendus) remplacent la note en étoiles.

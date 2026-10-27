@@ -765,12 +765,12 @@ Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : u
   <div class="cn-grid">
     <span><b style="--c:#c2410c"><i data-icon="utensils"></i></b>外卖<span class="cn-tag">领券</span></span>
     <span><b style="--c:#2563eb"><i data-icon="car"></i></b>打车</span>
-    <span><b style="--c:#e11d48"><i data-icon="film"></i></b>电影演出</span>
-    <span><b style="--c:#b45309"><i data-icon="zap"></i></b>充值缴费</span>
-    <span><b style="--c:#7c3aed"><i data-icon="hotel"></i></b>酒店民宿</span>
+    <span><b style="--c:#e11d48"><i data-icon="film"></i></b>电影</span>
+    <span><b style="--c:#b45309"><i data-icon="zap"></i></b>充值</span>
+    <span><b style="--c:#7c3aed"><i data-icon="hotel"></i></b>酒店</span>
     <span><b style="--c:#0e7490"><i data-icon="train-front"></i></b>火车票</span>
-    <span><b style="--c:#15803d"><i data-icon="stethoscope"></i></b>医疗健康</span>
-    <span><b style="--c:#be185d"><i data-icon="landmark"></i></b>市民中心</span>
+    <span><b style="--c:#15803d"><i data-icon="stethoscope"></i></b>医疗</span>
+    <span><b style="--c:#be185d"><i data-icon="landmark"></i></b>政务</span>
     <span><b style="--c:#a16207"><i data-icon="chart-column"></i></b>理财<span class="cn-dot"></span></span>
     <span><b style="--c:#475569"><i data-icon="layout-grid"></i></b>更多</span>
   </div>
@@ -1849,7 +1849,7 @@ ${RADIO('ke', '#0f5132')}
       alt: 'Accueil d’une place de marché indonésienne gamifiée : recherche, solde du portefeuille, pièces et bouton de paiement QRIS, bannière 11.11 avec livraison gratuite et cashback, grille de huit raccourcis (livraison gratuite, cashback, pièces du jour, live, recharges et factures, repas, paiement à la livraison), récompenses de connexion quotidienne et vente flash avec compte à rebours et barres « bientôt épuisé ».',
       html: `<div class="id">
   <div class="id-head"><span class="id-search"><i data-icon="search"></i>Cari di Pasar Kita</span><span class="id-ico"><i data-icon="shopping-cart"></i><span class="id-n">3</span></span><span class="id-ico"><i data-icon="message-circle"></i></span></div>
-  <div class="id-wallet"><span><small>Saldo</small><b>Rp125.000</b></span><span><small>Koin</small><b>2.350</b></span><span class="id-qris"><i data-icon="scan-line"></i>Bayar QRIS</span></div>
+  <div class="id-wallet"><span><small>Saldo</small><b>Rp125.000</b></span><span><small>Koin</small><b>2.350</b></span><span class="id-qris"><i data-icon="scan-line"></i>QRIS</span></div>
   <div class="id-banner"><b>11.11 Big Sale</b><span>Gratis Ongkir + Cashback s.d. 50%</span></div>
   <div class="id-grid">
     <span><b style="--c:#d73211"><i data-icon="truck"></i></b>Gratis Ongkir</span>
@@ -1880,11 +1880,11 @@ ${RADIO('ke', '#0f5132')}
 .id-search { flex: 1; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 4px; background: #fff; color: #5a6172; font-size: 12px; --ico: 14px; }
 .id-ico { position: relative; display: flex; }
 .id-n { position: absolute; top: -6px; inset-inline-end: -8px; min-width: 16px; height: 16px; border-radius: 8px; background: #fff; color: #b3261e; font-size: 11px; font-weight: 700; line-height: 16px; text-align: center; }
-.id-wallet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; align-items: center; gap: 6px; margin: 8px; padding: 8px 10px; border-radius: 8px; background: #fff; }
+.id-wallet { display: flex; align-items: center; gap: 14px; margin: 8px; padding: 8px 10px; border-radius: 8px; background: #fff; }
 .id-wallet > span { display: flex; flex-direction: column; line-height: 1.3; }
 .id-wallet small { font-size: 11px; color: #5a6172; }
 .id-wallet b { font-size: 13px; }
-.id-wallet .id-qris { flex-direction: row; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 6px; background: #fdecea; color: #b3261e; font-size: 12px; font-weight: 700; white-space: nowrap; --ico: 15px; }
+.id-wallet .id-qris { margin-inline-start: auto; flex-direction: row; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 6px; background: #fdecea; color: #b3261e; font-size: 12px; font-weight: 700; white-space: nowrap; --ico: 15px; }
 .id-banner { display: flex; flex-direction: column; margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: linear-gradient(90deg, #a61b11, #d73211); color: #fff; }
 .id-banner b { font-size: 15px; }
 .id-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 4px; margin: 8px; padding: 10px 4px; border-radius: 8px; background: #fff; }
