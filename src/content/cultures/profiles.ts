@@ -43,7 +43,7 @@ export const CULTURES: CultureProfile[] = [
     locale: 'fr-FR',
     dir: 'ltr',
     context: 'moyen',
-    hofstede: { pdi: 68, idv: 71, mas: 43, uai: 86, lto: 63, ivr: 48 },
+    hofstede: { pdi: 68, idv: 74, mas: 43, uai: 86, lto: 60, ivr: 48 },
     summary: nb(
       'Un marché très encadré par le droit et attaché à sa langue : RGPD appliqué de près par la CNIL, mentions légales, loi Toubon, accessibilité désormais exigée de nombreux services privés. Le contrôle de l’incertitude est élevé (86) : on veut connaître frais, délais, droit de rétractation et sécurité du paiement avant de s’engager. Les parcours ménagent le choix — point relais ou domicile, carte bancaire ou paiement en plusieurs fois, refus des cookies aussi simple que l’acceptation. Souvent placée entre contexte faible et fort, la France attend un texte explicite sans être sec, une typographie soignée (espaces insécables, guillemets français, virgule décimale) et un choix assumé entre tu et vous.',
     ),
@@ -217,9 +217,9 @@ sup { font-size: 0.7em; line-height: 0; }`,
     locale: 'en-US',
     dir: 'ltr',
     context: 'faible',
-    hofstede: { pdi: 40, idv: 91, mas: 62, uai: 46, lto: 26, ivr: 68 },
+    hofstede: { pdi: 40, idv: 60, mas: 62, uai: 46, lto: 50, ivr: 68 },
     summary: nb(
-      'Un marché à contexte faible et très individualiste (91) : ton direct et décontracté, parcours en libre-service, personnalisation, pages qui vont droit au but. Les formats sont les plus éloignés de l’Europe — mois avant le jour, horloge de 12 heures, unités impériales, prix affichés hors taxes auxquels la « sales tax » s’ajoute au paiement. Il n’existe pas de loi fédérale générale sur les données : les États, Californie en tête, fixent leurs règles, fondées sur le droit d’opposition plutôt que sur le consentement préalable. L’accessibilité est surtout portée par les procès au titre de l’ADA. On paie par carte de crédit, portefeuille mobile ou paiement fractionné, et le pourboire s’invite dans les applis.',
+      'Un marché à contexte faible et individualiste (60) : ton direct et décontracté, parcours en libre-service, personnalisation, pages qui vont droit au but. Les formats sont les plus éloignés de l’Europe — mois avant le jour, horloge de 12 heures, unités impériales, prix affichés hors taxes auxquels la « sales tax » s’ajoute au paiement. Il n’existe pas de loi fédérale générale sur les données : les États, Californie en tête, fixent leurs règles, fondées sur le droit d’opposition plutôt que sur le consentement préalable. L’accessibilité est surtout portée par les procès au titre de l’ADA. On paie par carte de crédit, portefeuille mobile ou paiement fractionné, et le pourboire s’invite dans les applis.',
     ),
     ecosystem: ['Amazon', 'Google', 'Apple Pay', 'PayPal', 'Venmo', 'Cash App', 'Zelle', 'Uber', 'DoorDash', 'Affirm / Klarna / Afterpay'],
     conventions: [
@@ -233,7 +233,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
       {
         topic: 'densite',
         title: 'Libre-service et personnalisation',
-        body: `Individualisme élevé (91) : on valorise le contrôle (filtres, comparaison, retours gratuits), la personnalisation (« Recommended for you ») et les avis détaillés. Les pages respirent : une action principale par écran, le reste replié ou en lien.`,
+        body: `Individualisme marqué (60) : on valorise le contrôle (filtres, comparaison, retours gratuits), la personnalisation (« Recommended for you ») et les avis détaillés. Les pages respirent : une action principale par écran, le reste replié ou en lien.`,
       },
       {
         topic: 'formats',
@@ -342,7 +342,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
 .us-row { display: flex; justify-content: space-between; padding: 2px 0; font-variant-numeric: tabular-nums; }
 .us-help { margin-bottom: 8px; font-size: 12px; color: #5a6172; }
 .us-tips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.us-tips span { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 46px; padding: 4px 2px; border: 1px solid #c7cedb; border-radius: 10px; font-size: 13px; font-weight: 700; line-height: 1.2; text-align: center; }
+.us-tips span { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 46px; padding: 4px 2px; border: 1px solid #868d9c; border-radius: 10px; font-size: 13px; font-weight: 700; line-height: 1.2; text-align: center; }
 .us-tips small { font-size: 11px; font-weight: 500; color: #5a6172; }
 .us-tips .on { border-color: #1d2230; background: #1d2230; color: #fff; }
 .us-tips .on small { color: #dfe3ea; }
@@ -375,7 +375,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
     locale: 'de-DE',
     dir: 'ltr',
     context: 'faible',
-    hofstede: { pdi: 35, idv: 67, mas: 66, uai: 65, lto: 83, ivr: 40 },
+    hofstede: { pdi: 35, idv: 79, mas: 66, uai: 65, lto: 57, ivr: 40 },
     summary: nb(
       'Un marché qui attend des faits vérifiables, une structure claire et une conformité juridique sans faille : Impressum, déclaration de confidentialité, consentement aux traceurs, bouton de commande au libellé encadré par la loi. Le contexte est faible et le contrôle de l’incertitude assez élevé (65) : on lit les conditions, on compare, on veut connaître délais, frais et droit de rétractation avant d’acheter. Le paiement est une affaire de confiance — achat sur facture, PayPal, prélèvement SEPA — plus que de carte. La langue allonge les textes d’environ 30 % et forme de longs mots composés : les composants doivent l’encaisser.',
     ),
@@ -488,7 +488,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
 .de { font-size: 13px; container-type: inline-size; }
 .de-head { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .de-logo { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; color: #5b3a1e; }
-.de-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #c3c8d3; border-radius: 6px; color: #5a6172; white-space: nowrap; overflow: hidden; --ico: 14px; }
+.de-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #868d9c; border-radius: 6px; color: #5a6172; white-space: nowrap; overflow: hidden; --ico: 14px; }
 .de-crumbs { padding: 8px 16px 0; font-size: 12px; color: #5a6172; }
 .de-main { display: flex; flex-wrap: wrap; gap: 16px; padding: 12px 16px 16px; }
 .de-img { flex: 0 0 140px; aspect-ratio: 3 / 4; display: grid; place-items: center; background: linear-gradient(160deg, #7a5233, #3b2414); color: rgb(255 255 255 / 0.6); --ico: 48px; }
@@ -531,7 +531,7 @@ L’humour est bienvenu dans un état vide ou un succès, pas dans une erreur de
     locale: 'sv-SE',
     dir: 'ltr',
     context: 'faible',
-    hofstede: { pdi: 31, idv: 71, mas: 5, uai: 29, lto: 53, ivr: 78 },
+    hofstede: { pdi: 31, idv: 87, mas: 5, uai: 29, lto: 52, ivr: 78 },
     summary: nb(
       'Des interfaces épurées, fonctionnelles et informelles, à l’image de sociétés égalitaires où la confiance dans les institutions est forte : distance hiérarchique faible (31), contrôle de l’incertitude faible (29), orientation « réussite » très faible (5), au profit de la qualité de vie et du consensus. L’identité numérique est centrale : on se connecte et on signe avec BankID (Suède, Norvège) ou MitID (Danemark), et le numéro personnel (personnummer) préremplit l’adresse au paiement. Swish, Vipps MobilePay et la facture remplacent souvent la saisie d’une carte, dans des pays où les espèces ont presque disparu. L’accessibilité et le langage clair sont des attentes, pas des options.',
     ),
@@ -652,7 +652,7 @@ Pour un service sensible, un simple couple e-mail et mot de passe paraît daté.
 .se-body { display: flex; flex-direction: column; gap: 16px; padding: 16px; }
 .se-h { margin-bottom: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #5a6172; }
 .se-label { margin-bottom: 4px; font-weight: 600; }
-.se-input { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border: 1px solid #c3c8d3; border-radius: 8px; font-variant-numeric: tabular-nums; }
+.se-input { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border: 1px solid #868d9c; border-radius: 8px; font-variant-numeric: tabular-nums; }
 .se-input svg { color: #1f7a4d; }
 .se-addr { display: flex; flex-direction: column; gap: 1px; margin-top: 8px; padding: 10px 12px; border-radius: 8px; background: #f4f6f8; }
 .se-addr small { font-size: 12px; color: #5a6172; }
@@ -687,9 +687,9 @@ ${RADIO('se', '#1b1f24')}
     locale: 'zh-CN',
     dir: 'ltr',
     context: 'fort',
-    hofstede: { pdi: 80, idv: 20, mas: 66, uai: 30, lto: 87, ivr: 24 },
+    hofstede: { pdi: 80, idv: 43, mas: 66, uai: 30, lto: 77, ivr: 24 },
     summary: nb(
-      'Un marché mobile d’abord — 98 % des internautes chinois se connectaient depuis un téléphone dès 2018 selon le CNNIC — organisé autour de super-apps (WeChat, Alipay, Meituan) qui regroupent paiement, transport, achats et services publics, souvent sous forme de mini-programmes. Les accueils sont denses : grille d’accès aux services, bannières, pastilles rouges, flux en cascade. Le contexte est fort, la distance hiérarchique élevée (80) et l’individualisme faible (20) : preuve sociale, autorité, garanties officielles et dynamique collective (achats groupés, vente en direct) pèsent dans la décision. L’identité passe par le numéro de mobile, le paiement par QR code, et le rouge porte la fête et la chance.',
+      'Un marché mobile d’abord — 98,6 % des internautes chinois se connectaient depuis un téléphone fin 2018 selon le CNNIC — organisé autour de super-apps (WeChat, Alipay, Meituan) qui regroupent paiement, transport, achats et services publics, souvent sous forme de mini-programmes. Les accueils sont denses : grille d’accès aux services, bannières, pastilles rouges, flux en cascade. Le contexte est fort, la distance hiérarchique élevée (80) et l’individualisme assez faible (43) : preuve sociale, autorité, garanties officielles et dynamique collective (achats groupés, vente en direct) pèsent dans la décision. L’identité passe par le numéro de mobile, le paiement par QR code, et le rouge porte la fête et la chance.',
     ),
     ecosystem: ['微信 WeChat', '支付宝 Alipay', '淘宝 Taobao / 天猫 Tmall', '京东 JD.com', '拼多多 Pinduoduo', '美团 Meituan', '抖音 Douyin', '小红书 Xiaohongshu', '哔哩哔哩 Bilibili', '高德地图 Amap'],
     conventions: [
@@ -868,7 +868,7 @@ Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : u
     locale: 'ja-JP',
     dir: 'ltr',
     context: 'fort',
-    hofstede: { pdi: 54, idv: 46, mas: 95, uai: 92, lto: 88, ivr: 42 },
+    hofstede: { pdi: 54, idv: 62, mas: 95, uai: 92, lto: 100, ivr: 42 },
     summary: nb(
       'Un marché où l’exhaustivité rassure : le contrôle de l’incertitude est très élevé (92), on veut tout savoir avant d’agir et l’omission inquiète. Les sites marchands sont denses — caractéristiques, garanties, frais de port, points, avis et délais près du prix — parce que cette abondance procure un sentiment de sécurité (anshin). Le contexte est fort : politesse codifiée (keigo, honorifique 様), mascottes et illustrations adoucissent la relation. Les formulaires suivent des règles précises (nom de famille d’abord, lecture en katakana, code postal qui remplit l’adresse) et le paiement dépasse la carte : supérette (konbini), QR code, contre-remboursement, programmes de points.',
     ),
@@ -992,7 +992,7 @@ Les lectures se notent en \`ruby\` (furigana) ; l’éditorial utilise parfois l
 .jp-label { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-weight: 700; }
 .jp-req { padding: 0 5px; border-radius: 3px; background: #bf0000; color: #fff; font-size: 11px; line-height: 18px; }
 .jp-req.jp-opt { background: #666; }
-.jp-in { display: flex; align-items: center; justify-content: space-between; min-height: 36px; padding: 6px 10px; border: 1px solid #b5b5b5; border-radius: 4px; background: #fff; }
+.jp-in { display: flex; align-items: center; justify-content: space-between; min-height: 36px; padding: 6px 10px; border: 1px solid #868d9c; border-radius: 4px; background: #fff; }
 .jp-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .jp-zip { display: flex; gap: 8px; }
 .jp-zip .jp-in { flex: 1; }
@@ -1020,9 +1020,9 @@ Les lectures se notent en \`ruby\` (furigana) ; l’éditorial utilise parfois l
     locale: 'ko-KR',
     dir: 'ltr',
     context: 'fort',
-    hofstede: { pdi: 60, idv: 18, mas: 39, uai: 85, lto: 100, ivr: 29 },
+    hofstede: { pdi: 60, idv: 58, mas: 39, uai: 85, lto: 86, ivr: 29 },
     summary: nb(
-      'L’un des marchés les plus connectés au monde, structuré par ses propres plateformes : Naver (recherche, actualités, achats), KakaoTalk, Coupang, Toss. Portails et applis bancaires sont souvent denses — raccourcis, promotions, événements, notifications — même si Toss a montré qu’une interface épurée peut s’imposer. Le contexte est fort, l’orientation long terme maximale (100) et le contrôle de l’incertitude élevé (85) : vérification d’identité par téléphone, avis détaillés et consentements explicites rassurent. La rapidité est une attente forte — on parle de culture « ppalli-ppalli » (vite, vite) : livraison le lendemain ou à l’aube, paiement en un geste, notifications par KakaoTalk.',
+      'L’un des marchés les plus connectés au monde, structuré par ses propres plateformes : Naver (recherche, actualités, achats), KakaoTalk, Coupang, Toss. Portails et applis bancaires sont souvent denses — raccourcis, promotions, événements, notifications — même si Toss a montré qu’une interface épurée peut s’imposer. Le contexte est fort, l’orientation long terme très élevée (86) et le contrôle de l’incertitude élevé (85) : vérification d’identité par téléphone, avis détaillés et consentements explicites rassurent. La rapidité est une attente forte — on parle de culture « ppalli-ppalli » (vite, vite) : livraison le lendemain ou à l’aube, paiement en un geste, notifications par KakaoTalk.',
     ),
     ecosystem: ['네이버 Naver', '카카오톡 KakaoTalk', '카카오페이 Kakao Pay', '쿠팡 Coupang', '토스 Toss', '배달의민족 Baemin', 'PASS (본인인증)', '네이버페이 Naver Pay', '당근 Karrot'],
     conventions: [
@@ -1144,9 +1144,9 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
 .kr-title { margin-bottom: 8px; font-size: 20px; font-weight: 700; line-height: 1.4; }
 .kr-label { margin-top: 6px; font-size: 13px; color: #4e5968; }
 .kr-carriers, .kr-easy { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
-.kr-carriers span { display: grid; place-items: center; min-height: 38px; border: 1px solid #d1d6db; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.kr-carriers span { display: grid; place-items: center; min-height: 38px; border: 1px solid #868d9c; border-radius: 8px; font-size: 13px; font-weight: 600; }
 .kr-carriers .on { border-color: #1a5fd8; background: #eef4ff; color: #1a5fd8; box-shadow: inset 0 0 0 1px #1a5fd8; }
-.kr-in { display: flex; align-items: center; min-height: 40px; padding: 0 4px; border-bottom: 2px solid #d1d6db; font-size: 15px; }
+.kr-in { display: flex; align-items: center; min-height: 40px; padding: 0 4px; border-bottom: 2px solid #868d9c; font-size: 15px; }
 .kr-rrn { display: flex; align-items: center; gap: 8px; }
 .kr-rrn .kr-in { flex: 1; }
 .kr-mask { letter-spacing: 0.12em; color: #4e5968; }
@@ -1184,7 +1184,7 @@ Depuis décembre 2020, l’ancien certificat public (공인인증서) a perdu so
     locale: 'en-IN',
     dir: 'ltr',
     context: 'fort',
-    hofstede: { pdi: 77, idv: 48, mas: 56, uai: 40, lto: 51, ivr: 26 },
+    hofstede: { pdi: 77, idv: 24, mas: 56, uai: 40, lto: 51, ivr: 26 },
     summary: nb(
       'Un marché immense, mobile d’abord et très divers : 22 langues reconnues par la Constitution, des centaines de millions d’internautes récents sur des smartphones Android d’entrée de gamme, des connexions inégales. L’anglais domine les interfaces urbaines, mais l’hindi, les langues régionales et le « Hinglish » ouvrent les marchés suivants. La distance hiérarchique est élevée (77) et le contexte fort : confiance, recommandation et options de repli (paiement à la livraison, retours faciles) comptent beaucoup. UPI a fait du paiement par QR code ou identifiant un geste quotidien, et les montants se lisent en lakhs et en crores.',
     ),
@@ -1338,9 +1338,9 @@ ${RADIO('in', '#1f4fae')}
     locale: 'ar-SA',
     dir: 'rtl',
     context: 'fort',
-    hofstede: { pdi: 95, idv: 25, mas: 60, uai: 80, lto: 36, ivr: 52 },
+    hofstede: { pdi: 72, idv: 48, mas: 43, uai: 64, lto: 27, ivr: 14 },
     summary: nb(
-      'Une contrainte d’écriture avant tout : l’arabe se lit de droite à gauche, ce qui retourne la mise en page, la navigation et les icônes directionnelles — mais pas les nombres, les horloges ni les logos. Dans les pays du Golfe (Arabie saoudite en référence), le contexte est fort et la distance hiérarchique très élevée (95) : relation, respect, autorité des marques et des institutions, images conformes aux normes locales et à la famille. Le marché est très mobile et jeune ; on y paie par carte Mada, Apple Pay, portefeuilles locaux, paiement fractionné (Tabby, Tamara) et encore souvent à la livraison. Le calendrier hégirien, le Ramadan et le week-end vendredi–samedi rythment l’usage.',
+      'Une contrainte d’écriture avant tout : l’arabe se lit de droite à gauche, ce qui retourne la mise en page, la navigation et les icônes directionnelles — mais pas les nombres, les horloges ni les logos. Dans les pays du Golfe (Arabie saoudite en référence), le contexte est fort et la distance hiérarchique élevée (72) : relation, respect, autorité des marques et des institutions, images conformes aux normes locales et à la famille. Le marché est très mobile et jeune ; on y paie par carte Mada, Apple Pay, portefeuilles locaux, paiement fractionné (Tabby, Tamara) et encore souvent à la livraison. Le calendrier hégirien, le Ramadan et le week-end vendredi–samedi rythment l’usage.',
     ),
     ecosystem: ['mada', 'Apple Pay', 'stc pay / STC Bank', 'Tabby', 'Tamara', 'noon', 'Amazon.sa', 'Careem', 'HungerStation', 'Absher / Nafath'],
     conventions: [
@@ -1361,7 +1361,7 @@ ${RADIO('in', '#1f4fae')}
         title: 'Typographie arabe',
         body: `L’arabe est cursif : les lettres se lient, donc **jamais d’espacement entre les lettres** (\`letter-spacing\`), pas de capitales ni d’italique au sens latin. On met en valeur par la graisse ou la couleur.
 
-Choisis une police arabe dédiée (Noto Naskh Arabic, IBM Plex Sans Arabic, Dubai…), un corps un peu plus grand et un interlignage plus généreux que pour le latin. Si tu sers aussi le persan ou l’ourdou, préserve l’antiliant sans chasse (ZWNJ, U+200C) et traite ي/ی et ك/ک comme équivalents dans la recherche.`,
+Choisis une police arabe dédiée (Noto Naskh Arabic, IBM Plex Sans Arabic, Dubai…), un corps un peu plus grand et un interlignage plus généreux que pour le latin. Si tu sers aussi le persan ou l’ourdou, préserve l’antiliant sans chasse (ZWNJ, U+200C) et traite comme équivalents ي et ی, ainsi que ك et ک, dans la recherche.`,
       },
       {
         topic: 'formulaires',
@@ -1510,7 +1510,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
     locale: 'pt-BR',
     dir: 'ltr',
     context: 'fort',
-    hofstede: { pdi: 69, idv: 38, mas: 49, uai: 76, lto: 44, ivr: 59 },
+    hofstede: { pdi: 69, idv: 36, mas: 49, uai: 76, lto: 28, ivr: 59 },
     summary: nb(
       'Un marché mobile, social et chaleureux : on parle aux gens comme à des proches (você), le service client passe par WhatsApp et la recommandation compte beaucoup. Le paiement a ses propres règles : Pix, le paiement instantané lancé par la Banque centrale fin 2020, s’est imposé partout ; la carte se règle souvent en plusieurs fois sans intérêts (parcelamento) ; le boleto sert encore ceux qui n’ont pas de carte. Le contrôle de l’incertitude est élevé (76) : prix par moyen de paiement, frais de port calculés d’après le CEP, délais et garanties doivent être clairs avant l’achat, et le CPF est demandé au paiement.',
     ),
@@ -1638,7 +1638,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
 .br-frete { margin-top: 8px; padding: 10px; border: 1px solid #e1e4ea; border-radius: 10px; }
 .br-label { margin-bottom: 6px; font-weight: 700; }
 .br-cep { display: flex; gap: 6px; }
-.br-in { flex: 1; padding: 6px 10px; border: 1px solid #c3c8d3; border-radius: 6px; }
+.br-in { flex: 1; padding: 6px 10px; border: 1px solid #868d9c; border-radius: 6px; }
 .br-ok { display: grid; place-items: center; padding: 0 14px; border-radius: 6px; background: #1d2230; color: #fff; font-weight: 700; }
 .br-nw { white-space: nowrap; }
 .br-ship { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: #0a7d3c; --ico: 15px; }
@@ -1784,7 +1784,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
 ${RADIO('ke', '#0f5132')}
 .ke-grow { flex: 1; display: flex; flex-direction: column; }
 .ke-grow small { font-size: 12px; color: #5a6172; }
-.ke-in { margin-top: 6px; padding: 7px 10px; border: 1px solid #c3c8d3; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.ke-in { margin-top: 6px; padding: 7px 10px; border: 1px solid #868d9c; border-radius: 6px; font-variant-numeric: tabular-nums; }
 .ke-alt { font-size: 12px; color: #5a6172; }
 .ke-cta { min-height: 44px; background: #0f5132; }
 .ke .mk-overlay { place-items: start center; padding-top: 64px; }
@@ -1811,9 +1811,9 @@ ${RADIO('ke', '#0f5132')}
     locale: 'id-ID',
     dir: 'ltr',
     context: 'fort',
-    hofstede: { pdi: 78, idv: 14, mas: 46, uai: 48, lto: 62, ivr: 38 },
+    hofstede: { pdi: 78, idv: 5, mas: 46, uai: 48, lto: 29, ivr: 38 },
     summary: nb(
-      'Un marché presque exclusivement mobile, jeune et très social. Les super-apps Grab et Gojek regroupent transport, livraison et paiement ; les portefeuilles (GoPay, OVO, DANA, ShopeePay) et le QR code national QRIS ont fait reculer les espèces sans les remplacer : paiement à la livraison et virement sur compte virtuel restent courants. Le commerce est gamifié (pièces, jeux, ventes flash, vente en direct) et rythmé par les fêtes 9.9, 11.11 et 12.12. La distance hiérarchique est élevée (78) et l’individualisme très faible (14) : famille, communauté et recommandation guident les choix, dans un pays à majorité musulmane où le Ramadan est le grand temps fort.',
+      'Un marché presque exclusivement mobile, jeune et très social. Les super-apps Grab et Gojek regroupent transport, livraison et paiement ; les portefeuilles (GoPay, OVO, DANA, ShopeePay) et le QR code national QRIS ont fait reculer les espèces sans les remplacer : paiement à la livraison et virement sur compte virtuel restent courants. Le commerce est gamifié (pièces, jeux, ventes flash, vente en direct) et rythmé par les fêtes 9.9, 11.11 et 12.12. La distance hiérarchique est élevée (78) et l’individualisme très faible (5) : famille, communauté et recommandation guident les choix, dans un pays à majorité musulmane où le Ramadan est le grand temps fort.',
     ),
     ecosystem: ['Gojek / GoPay', 'Grab', 'Shopee / ShopeePay', 'Tokopedia', 'TikTok Shop', 'OVO', 'DANA', 'QRIS', 'WhatsApp', 'Traveloka'],
     conventions: [
@@ -1840,7 +1840,7 @@ ${RADIO('ke', '#0f5132')}
       {
         topic: 'confiance',
         title: 'Recommandation et commerce social',
-        body: `Individualisme très faible (14) : on achète sur la recommandation de proches, d’influenceurs ou de vendeurs joints par WhatsApp et Instagram. Avis avec photos, badge de boutique officielle et discussion avec le vendeur intégrée rassurent.`,
+        body: `Individualisme très faible (5) : on achète sur la recommandation de proches, d’influenceurs ou de vendeurs joints par WhatsApp et Instagram. Avis avec photos, badge de boutique officielle et discussion avec le vendeur intégrée rassurent.`,
       },
       {
         topic: 'ton',

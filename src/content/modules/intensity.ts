@@ -2,7 +2,8 @@ import type { ModuleContent, SourceRef } from '../../engine/types';
 
 /*
  * Contrast ratios quoted below were computed with the WCAG formula of src/engine/grade.ts:
- * #9aa0a6 on #23557a = 3.00:1, #c7dcef on #23557a = 5.62:1, white on #23557a = 7.92:1.
+ * #8f1d1d on #fdecec = 7.79:1 (calm alert), white on #ff1f1f = 3.84:1 (loud tag),
+ * white on hsl(145 100% 28%) = 4.21:1 and on hsl(145 78% 28%) = 5.09:1 (saturation slider).
  */
 
 const LAWS_HICK: SourceRef = { label: 'Laws of UX — Loi de Hick', url: 'https://lawsofux.com/hicks-law/' };
@@ -14,12 +15,35 @@ const SAINT_EX: SourceRef = { label: 'Antoine de Saint-Exupéry — Terre des ho
 
 /* ---------- Shared mock pieces ---------- */
 
-const INVOICE_HEAD = `<div class="mk-row" style="--gap:8px"><p class="mk-h2">Facture <span style="white-space:nowrap">F-2026-118</span></p><span class="mk-badge">Brouillon</span></div>
-  <p class="mk-small mk-muted">Studio Lumen · 2 400,00&nbsp;€ HT · échéance le 30 novembre</p>`;
+/* Restaurant booking app home (primary action duel). */
+const HOME_HEAD = `<p class="mk-h2">Bonsoir Camille</p>`;
 
-const INVOICE_LINES = `<div class="mk-divider"></div>
-  <div class="mk-row mk-between"><span>Refonte du site vitrine</span><span class="mk-price">2 000,00&nbsp;€</span></div>
-  <div class="mk-row mk-between"><span>Hébergement annuel</span><span class="mk-price">400,00&nbsp;€</span></div>`;
+const HOME_TILES = [
+  ['utensils', 'Réserver'],
+  ['calendar', 'Mes réservations'],
+  ['percent', 'Offres'],
+  ['gift', 'Parrainage'],
+  ['info', 'Aide'],
+  ['settings', 'Paramètres'],
+]
+  .map(([icon, label]) => `<div class="int-tile"><i data-icon="${icon}" style="--ico:20px"></i><span>${label}</span></div>`)
+  .join('');
+
+const HOME_CSS = `.int-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 6px; border: 1px solid #e1e4ea; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; color: #36405a; }
+.int-links { --gap: 6px 14px; }
+.int-link { font-size: 13px; font-weight: 600; color: #1f4fd8; }`;
+
+/* Export form (progressive disclosure duel). */
+const exportSelect = (label: string, value: string) =>
+  `<div class="mk-field"><span class="mk-label">${label}</span><span class="mk-input int-sel">${value}<i data-icon="chevron-down" style="--ico:16px"></i></span></div>`;
+
+const EXPORT_ESSENTIALS = exportSelect('Format', 'CSV') + exportSelect('Période', 'Octobre 2026');
+
+const EXPORT_ACTIONS = `<div class="mk-row mk-wrap" style="--gap:8px;justify-content:flex-end"><span class="mk-btn mk-btn--ghost">Annuler</span><span class="mk-btn">Exporter</span></div>`;
+
+const EXPORT_CSS = `.int-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 12px; }
+.int-sel { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.int-sel .mk-ico { color: #5a6172; }`;
 
 const EDITOR_BODY = `<div class="mk-pad mk-stack" style="--gap:8px">
     <p class="mk-h3">Lettre d’information — novembre</p>
@@ -61,11 +85,11 @@ const intensity: ModuleContent = {
       title: 'Trois réglages pour un même but',
       body: `Trois commandes d’impeccable règlent l’**intensité** d’une interface existante, sans changer d’univers :
 
-- **Simplifier** (*distill*) : l’écran est encombré. On retire ce qui ne mérite pas sa place — éléments redondants, informations répétées, bruit décoratif, complexité cosmétique.
-- **Intensifier** (*bolder*) : une partie paraît terne, timide. On l’amène au niveau de conviction que le reste du système implique déjà.
-- **Adoucir** (*quieter*) : l’interface est trop forte, agressive, fatigante. On baisse l’intensité sans perdre la personnalité.
+- **Simplifier** (\`distill\`) : l’écran est encombré. On retire ce qui ne mérite pas sa place — éléments redondants, informations répétées, bruit décoratif, complexité cosmétique.
+- **Intensifier** (\`bolder\`) : une partie paraît terne, timide. On l’amène au niveau de conviction que le reste du système implique déjà.
+- **Adoucir** (\`quieter\`) : l’interface est trop forte, agressive, fatigante. On baisse l’intensité sans perdre la personnalité.
 
-Dans les trois cas, l’identité en place est préservée, et une passe de finition (*polish*) vient ensuite. Avant de choisir, nomme les **sources** du problème :
+Dans les trois cas, l’identité en place est préservée, et une passe de finition (\`polish\`) vient ensuite. Avant de choisir, nomme les **sources** du problème :
 
 - encombrement : trop d’éléments, trop de variations (couleurs, polices, tailles), tout visible à la fois, bordures et ombres sans rôle, hiérarchie confuse, fonctions qui s’accumulent ;
 - excès : couleurs saturées, contrastes extrêmes partout, trop d’éléments gras, animation en excès, tout en grand ;
@@ -270,7 +294,6 @@ Vérifie à la fin : est-ce toujours fonctionnel ? toujours reconnaissable ? plu
     { id: 'skeleton', front: 'Qu’est-ce que le test du squelette ?', back: 'Retirer le texte et regarder la structure nue : si elle ne dit plus pourquoi la section compte, l’audace n’est que dans la taille du texte.' },
     { id: 'desaturate', front: 'Comment adoucir une palette criarde ?', back: 'Désaturer vers 70–85 %, réduire le nombre de couleurs, laisser dominer des neutres teintés et garder la couleur pour les accents.' },
     { id: 'weights', front: 'Comment alléger les graisses sans perdre la hiérarchie ?', back: 'Descendre de deux ou trois crans (900 → 600, 700 → 500) en gardant quelques ancres fortes.' },
-    { id: 'gray-on-color', front: 'Texte secondaire sur fond coloré : quelle couleur ?', back: 'Jamais du gris : une nuance de la couleur du fond (ou du blanc en transparence), avec au moins 4,5:1.' },
     { id: 'generic', front: 'À quoi ressemble un calme générique ?', back: 'Du gris sur blanc, une seule graisse partout, une grille de cartes identiques : de la retenue sans point de vue.' },
     { id: 'quiet-motion', front: 'Comment adoucir une animation ?', back: 'Distances plus courtes (10 à 20 px), décélération douce (*ease-out-quart*), jamais d’effet de rebond ni d’effet élastique — ou pas d’animation si elle ne sert à rien.' },
   ],
@@ -279,37 +302,45 @@ Vérifie à la fin : est-ce toujours fonctionnel ? toujours reconnaissable ? plu
       id: 'intensity-primary-action-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Quel en-tête de facture rend l’action suivante la plus évidente ?',
+      context: 'Tablée, une application de réservation de restaurants : on l’ouvre surtout pour réserver une table.',
+      prompt: 'Quel accueil rend l’action principale la plus évidente ?',
       options: [
         {
-          id: 'all-equal',
+          id: 'tiles',
           visual: {
-            alt: 'En-tête de facture en brouillon suivi de six boutons pleins de même taille : Envoyer, Télécharger le PDF, Dupliquer, Modifier, Partager et Supprimer en rouge.',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px">
-  ${INVOICE_HEAD}
-  <div class="mk-row mk-wrap" style="--gap:8px"><span class="mk-btn mk-btn--s">Envoyer</span><span class="mk-btn mk-btn--s">Télécharger le PDF</span><span class="mk-btn mk-btn--s">Dupliquer</span><span class="mk-btn mk-btn--s">Modifier</span><span class="mk-btn mk-btn--s">Partager</span><span class="mk-btn mk-btn--s mk-btn--danger">Supprimer</span></div>
-  ${INVOICE_LINES}
+            alt: 'Accueil de l’application Tablée sur téléphone : une salutation, puis six tuiles identiques avec icône et libellé : Réserver, Mes réservations, Offres, Parrainage, Aide et Paramètres.',
+            frame: 'phone',
+            html: `<div class="mk-pad mk-stack" style="--gap:14px">
+  ${HOME_HEAD}
+  <div class="mk-grid" style="--gap:10px">${HOME_TILES}</div>
 </div>`,
+            css: HOME_CSS,
           },
-          why: 'Six boutons de même poids : il faut tous les lire pour trouver le bon, et la suppression est aussi visible que l’envoi.',
+          why: 'Six tuiles de même poids : réserver, la raison d’être de l’application, ne pèse pas plus que les paramètres, et il faut tout parcourir pour s’orienter.',
         },
         {
           id: 'one-primary',
           visual: {
-            alt: 'En-tête de facture en brouillon avec un bouton principal Envoyer la facture, un bouton secondaire Télécharger le PDF et un bouton de menu.',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px">
-  ${INVOICE_HEAD}
-  <div class="mk-row mk-wrap" style="--gap:8px"><span class="mk-btn"><i data-icon="send" style="--ico:15px"></i>Envoyer la facture</span><span class="mk-btn mk-btn--ghost">Télécharger le PDF</span><span class="mk-btn mk-btn--ghost" style="padding:0 10px" aria-label="Plus d’actions"><i data-icon="ellipsis"></i></span></div>
-  ${INVOICE_LINES}
+            alt: 'Accueil de l’application Tablée sur téléphone : une salutation, un grand bouton Réserver une table, la prochaine réservation avec un lien vers toutes les réservations, puis une ligne de liens : Offres, Parrainage, Aide et Paramètres.',
+            frame: 'phone',
+            html: `<div class="mk-pad mk-stack" style="--gap:18px">
+  <div class="mk-stack" style="--gap:12px">${HOME_HEAD}<span class="mk-btn mk-btn--block"><i data-icon="utensils" style="--ico:16px"></i>Réserver une table</span></div>
+  <div class="mk-stack" style="--gap:2px">
+    <p class="mk-small mk-muted">Prochaine réservation</p>
+    <p class="mk-strong">Jeudi 20&nbsp;h · Le Comptoir, 2 personnes</p>
+    <span class="int-link" style="margin-top:4px">Toutes mes réservations</span>
+  </div>
+  <div class="mk-row mk-wrap int-links"><span class="int-link">Offres</span><span class="int-link">Parrainage</span><span class="int-link">Aide</span><span class="int-link">Paramètres</span></div>
 </div>`,
+            css: HOME_CSS,
           },
-          why: 'Une action principale évidente, une secondaire, le reste dans un menu : la prochaine étape saute aux yeux.',
+          why: 'Une action principale évidente, l’information qu’on vient vérifier juste dessous, le reste en simples liens : tout reste accessible, et la prochaine étape saute aux yeux.',
         },
       ],
       answer: 'one-primary',
-      explanation: `Simplifier, c’est d’abord trouver **le** but de l’écran. Pour une facture en brouillon, c’est l’envoyer. La loi de Hick le rappelle : plus il y a de choix de même poids, plus la décision prend de temps.
+      explanation: `Simplifier, c’est d’abord trouver **le** but de l’écran. Pour l’accueil d’une application de réservation, c’est réserver une table. La loi de Hick le rappelle : plus il y a de choix de même poids, plus la décision prend de temps.
 
-Impeccable demande **une action principale**, quelques actions secondaires, et le reste en tertiaire ou masqué. Dupliquer, partager ou supprimer restent disponibles — un clic plus loin, ce qui protège au passage de la suppression accidentelle.`,
+Impeccable demande **une action principale**, quelques actions secondaires, et le reste en tertiaire ou masqué. Ici, la prochaine réservation et son lien jouent le rôle secondaire ; offres, parrainage, aide et paramètres restent à portée, en simples liens, sans peser autant que la réservation.`,
       takeaway: 'Un écran, un but : une action principale, quelques secondaires, le reste un niveau plus loin.',
       sources: ['imp:distill', LAWS_HICK],
     },
@@ -408,40 +439,52 @@ Attention au gabarit « grand chiffre, petit libellé, chiffres secondaires, acc
       sources: ['imp:bolder', 'imp:craft-floor', LAWS_RESTORFF],
     },
     {
-      id: 'intensity-gray-on-color-duel',
+      id: 'intensity-disclosure-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Sur quel bandeau le texte secondaire est-il le mieux traité ?',
+      context: 'Une banque en ligne permet d’exporter les opérations d’un compte vers un tableur. La plupart des clients ne changent que le format et la période.',
+      prompt: 'Quel formulaire d’export reste simple sans rien retirer ?',
       options: [
         {
-          id: 'gray',
+          id: 'everything',
           visual: {
-            alt: 'Bandeau bleu d’essai gratuit avec un titre blanc et une phrase secondaire en gris neutre.',
-            html: `<div class="mk-pad"><div class="int-banner"><p class="int-banner-t">Votre essai se termine dans 3 jours</p><p style="color:#9aa0a6">Passez à l’offre Pro pour garder vos 12 projets et tout leur historique.</p><span class="int-banner-btn">Choisir une offre</span></div></div>`,
-            css: `.int-banner { display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: 12px; background: #23557a; }
-.int-banner-t { color: #fff; font-size: 17px; font-weight: 700; }
-.int-banner-btn { align-self: flex-start; margin-top: 4px; padding: 8px 14px; border-radius: 8px; background: #fff; color: #23557a; font-weight: 700; }`,
+            alt: 'Formulaire Exporter les opérations affichant onze réglages à la fois : format, période, séparateur, encodage, colonnes, fuseau horaire, format des dates, séparateur décimal et trois cases à cocher, puis les boutons Annuler et Exporter.',
+            frame: 'browser',
+            html: `<div class="mk-pad mk-stack" style="--gap:14px">
+  <p class="mk-h3">Exporter les opérations</p>
+  <div class="int-form">${EXPORT_ESSENTIALS}${exportSelect('Séparateur', 'Point-virgule')}${exportSelect('Encodage', 'UTF-8')}${exportSelect('Colonnes', 'Toutes (12)')}${exportSelect('Fuseau horaire', 'Europe/Paris')}${exportSelect('Format des dates', 'JJ/MM/AAAA')}${exportSelect('Séparateur décimal', 'Virgule')}</div>
+  <div class="mk-stack" style="--gap:8px"><span class="mk-check mk-check--on">Inclure une ligne d’en-tête</span><span class="mk-check">Mettre les textes entre guillemets</span><span class="mk-check">Compresser en ZIP</span></div>
+  ${EXPORT_ACTIONS}
+</div>`,
+            css: EXPORT_CSS,
           },
-          why: 'Un gris neutre sur un fond bleu paraît sale et délavé, et son contraste tombe à 3:1, sous le seuil de 4,5:1.',
+          why: 'Onze réglages de même poids, affichés d’emblée : il faut tous les parcourir pour trouver les deux qu’on change vraiment.',
         },
         {
-          id: 'tinted',
+          id: 'disclosed',
           visual: {
-            alt: 'Même bandeau bleu avec la phrase secondaire dans un bleu très clair, de la même teinte que le fond.',
-            html: `<div class="mk-pad"><div class="int-banner"><p class="int-banner-t">Votre essai se termine dans 3 jours</p><p style="color:#c7dcef">Passez à l’offre Pro pour garder vos 12 projets et tout leur historique.</p><span class="int-banner-btn">Choisir une offre</span></div></div>`,
-            css: `.int-banner { display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: 12px; background: #23557a; }
-.int-banner-t { color: #fff; font-size: 17px; font-weight: 700; }
-.int-banner-btn { align-self: flex-start; margin-top: 4px; padding: 8px 14px; border-radius: 8px; background: #fff; color: #23557a; font-weight: 700; }`,
+            alt: 'Même formulaire réduit au format et à la période, suivi d’une ligne repliée Options avancées qui annonce séparateur, encodage et colonnes, puis les boutons Annuler et Exporter.',
+            frame: 'browser',
+            html: `<div class="mk-pad mk-stack" style="--gap:14px">
+  <p class="mk-h3">Exporter les opérations</p>
+  <div class="int-form">${EXPORT_ESSENTIALS}</div>
+  <div class="int-adv"><i data-icon="chevron-right" style="--ico:16px"></i><div class="mk-stack" style="--gap:2px"><span class="int-adv-t">Options avancées</span><span class="mk-small mk-muted">Séparateur, encodage, colonnes…</span></div></div>
+  ${EXPORT_ACTIONS}
+</div>`,
+            css: `${EXPORT_CSS}
+.int-adv { display: flex; align-items: flex-start; gap: 8px; padding: 10px 0; border-block: 1px solid #e3e6ec; color: #1f4fd8; }
+.int-adv .mk-ico { margin-top: 2px; }
+.int-adv-t { font-weight: 600; }`,
           },
-          why: 'Le texte secondaire est un bleu très clair de la teinte du fond : il recule sans se salir et reste lisible (5,6:1).',
+          why: 'Format et période d’abord ; les neuf autres réglages gardent leurs valeurs par défaut derrière « Options avancées », une entrée repliée dont le libellé annonce le contenu.',
         },
       ],
-      answer: 'tinted',
-      explanation: `Sur un fond coloré, un gris neutre se mêle visuellement à la couleur et paraît **sale**, et il manque souvent de contraste (ici 3:1). Impeccable et *Refactoring UI* donnent la même règle : **jamais de gris sur une couleur**.
+      answer: 'disclosed',
+      explanation: `Ce qui s’affiche d’emblée se lit comme important. Onze réglages au même niveau disent qu’ils comptent tous autant : il faut les lire avant d’exporter, alors que la plupart des clients ne changent que le format et la période. Impeccable range ce symptôme parmi les sources de complexité (« tout est visible à la fois, sans divulgation progressive ») et demande de **cacher la complexité derrière des points d’entrée clairs** : accordéon, fenêtre modale, parcours par étapes.
 
-Pour faire reculer un texte secondaire sur un fond coloré, choisis une **nuance de la teinte du fond** — plus claire sur fond foncé, plus foncée sur fond clair — ou du blanc en transparence, puis vérifie le contraste : 4,5:1 pour du texte courant.`,
-      takeaway: 'Sur un fond coloré, le texte secondaire prend une nuance de cette couleur, jamais un gris — et garde 4,5:1.',
-      sources: ['imp:quieter', 'imp:craft-floor', 'refactoring-ui', 'imp:detector'],
+Rien n’a été retiré : les neuf autres réglages gardent leurs valeurs par défaut et restent à un clic. Selon Nielsen Norman Group, la divulgation progressive améliore la facilité d’apprentissage, l’efficacité et le taux d’erreur, à deux conditions : ce qui sert souvent reste visible, et l’entrée porte un libellé qui annonce ce qu’on trouvera derrière.`,
+      takeaway: 'Divulgation progressive : l’essentiel visible, le reste derrière une entrée claire et libellée ; rien de supprimé, rien de caché sans indice.',
+      sources: ['imp:distill', NNG_PROGRESSIVE],
     },
     {
       id: 'intensity-generic-quiet-duel',
@@ -643,10 +686,10 @@ L’audace vient alors de ce que la marque possède déjà, utilisé à pleine p
       leftTitle: 'Symptôme',
       rightTitle: 'Commande',
       pairs: [
-        { id: 'distill', left: 'Neuf actions de même poids et trois encadrés qui répètent la même information', right: 'Simplifier (*distill*)' },
-        { id: 'bolder', left: 'La section de lancement se fond dans la page : rien n’y ressort', right: 'Intensifier (*bolder*)' },
-        { id: 'quieter', left: 'Couleurs saturées partout, graisses très fortes, animations qui rebondissent', right: 'Adoucir (*quieter*)' },
-        { id: 'polish', left: 'Tout est en place, mais il reste des états manquants et des espacements irréguliers avant la mise en ligne', right: 'Finir (*polish*)' },
+        { id: 'distill', left: 'Neuf actions de même poids et trois encadrés qui répètent la même information', right: 'Simplifier (`distill`)' },
+        { id: 'bolder', left: 'La section de lancement se fond dans la page : rien n’y ressort', right: 'Intensifier (`bolder`)' },
+        { id: 'quieter', left: 'Couleurs saturées partout, graisses très fortes, animations qui rebondissent', right: 'Adoucir (`quieter`)' },
+        { id: 'polish', left: 'Tout est en place, mais il reste des états manquants et des espacements irréguliers avant la mise en ligne', right: 'Finir (`polish`)' },
       ],
       explanation: `Chaque commande règle un problème différent :
 
@@ -668,7 +711,7 @@ Les trois premières passent ensuite la main à une passe de finition.`,
         { id: 'palette', label: 'Ramener la palette à une couleur d’accent plus des neutres', why: 'C’est le budget recommandé : 1 à 2 couleurs plus des neutres.' },
         { id: 'sizes', label: 'Passer de sept tailles de texte à quatre', why: '3 à 4 tailles suffisent à une hiérarchie claire.' },
         { id: 'cards', label: 'Remplacer des cartes de pure mise en page par de l’espacement et des séparateurs', why: 'Une carte n’est pas nécessaire pour mettre en page : l’espacement et l’alignement suffisent.' },
-        { id: 'labels', label: 'Retirer les libellés des champs et ne garder que le texte indicatif', why: 'On sacrifie l’accessibilité et la compréhension : un texte indicatif (placeholder) n’est pas un libellé.' },
+        { id: 'labels', label: 'Retirer les libellés des champs et ne garder que le texte indicatif (*placeholder*)', why: 'On sacrifie l’accessibilité et la compréhension : un texte indicatif n’est pas un libellé.' },
         { id: 'weight', label: 'Mettre tout le texte dans la même graisse pour un rendu uniforme', why: 'On supprime la hiérarchie : certaines choses doivent ressortir.' },
         { id: 'fees', label: 'Masquer les frais de livraison jusqu’à la dernière étape pour alléger la fiche produit', why: 'On retire une information nécessaire pour décider — et on prépare une mauvaise surprise.' },
       ],
@@ -733,7 +776,7 @@ Plus bas, l’écran reste lisible, mais on retire plus de couleur que nécessai
       id: 'intensity-grayscale-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Pour rendre une interface plus calme, le plus sûr est de la passer en niveaux de gris.',
+      prompt: 'Passer une interface en niveaux de gris est un bon moyen de la rendre plus calme.',
       answer: false,
       explanation: `Faux. Impeccable le dit explicitement : **calme ≠ niveaux de gris**. Retirer toute la couleur supprime aussi l’information qu’elle portait (statuts, sélection, actions) et produit le calme générique : du gris sur blanc, sans point de vue.
 
@@ -745,12 +788,12 @@ On adoucit en **désaturant** (vers 70–85 %), en réduisant le nombre de cou
       id: 'intensity-louder-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Pour rendre une section plus audacieuse, il faut renforcer chacun de ses éléments.',
-      answer: false,
-      explanation: `Faux. « Si tout devient plus fort, la section devient plus plate » : quand tout monte, les écarts se resserrent — on bute vite sur la graisse maximale, la saturation pleine, la place disponible — et chaque renfort ajoute du bruit. Le geste principal ne se lit plus. L’effet d’isolement (von Restorff) va dans le même sens : on retient ce qui diffère du reste.
+      prompt: 'Rendre une section plus audacieuse passe aussi par rendre certains de ses éléments plus discrets.',
+      answer: true,
+      explanation: `Vrai. C’est le principe « s’engager, puis clarifier » d’impeccable : faire **un** geste décisif complètement, puis calmer tout ce qui l’entoure pour qu’il se lise. Le titre passe en typo d’affichage à pleine taille ; les textes secondaires, eux, rapetissent, et les effets superflus disparaissent.
 
-Impeccable demande de **s’engager, puis clarifier** : un geste décisif fait complètement, puis du calme autour pour qu’il se lise.`,
-      takeaway: 'Audace = un geste décisif + du calme autour. Tout renforcer aplatit.',
+À l’inverse, « si tout devient plus fort, la section devient plus plate » : quand chaque élément monte, les écarts se resserrent — on bute vite sur la graisse maximale, la saturation pleine, la place disponible — et le geste principal ne se lit plus. L’effet d’isolement (von Restorff) va dans le même sens : parmi des éléments semblables, on retient celui qui diffère.`,
+      takeaway: 'Audace = un geste décisif + du calme autour : pour qu’un élément ressorte, d’autres doivent baisser d’un cran.',
       sources: ['imp:bolder', LAWS_RESTORFF],
     },
     {

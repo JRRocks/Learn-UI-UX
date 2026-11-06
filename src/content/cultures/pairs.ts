@@ -375,7 +375,7 @@ export const CULTURE_PAIRS: CulturePair[] = [
 .cnl-form { flex: 1 1 210px; display: flex; flex-direction: column; gap: 10px; }
 .cnl-tabs { display: flex; gap: 18px; font-size: 15px; color: #5a6172; }
 .cnl-tabs .on { color: #1f2329; font-weight: 700; box-shadow: inset 0 -2px 0 #e1251b; }
-.cnl-in { display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 10px; border: 1px solid #c7cedb; border-radius: 6px; }
+.cnl-in { display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 10px; border: 1px solid #868d9c; border-radius: 6px; }
 .cnl-cc { display: flex; align-items: center; gap: 2px; padding-inline-end: 8px; border-inline-end: 1px solid #e5e7eb; --ico: 14px; }
 .cnl-ph { flex: 1; color: #6b7280; }
 .cnl-get { color: #d0021b; font-weight: 600; white-space: nowrap; }
