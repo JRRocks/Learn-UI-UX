@@ -5,6 +5,11 @@ Tout ce que l’application enseigne est de la **donnée typée** : un fichier p
 anti-patterns dans `src/content/antipatterns.ts`. Le contrat est dans `src/engine/types.ts`.
 Le module **`typography.ts` est l’étalon** : même ton, même densité, même exigence.
 
+L’application ne charge pas tout le contenu d’office : au build (et en développement), un
+index léger est calculé à partir des modules (`scripts/vite-plugins.mjs`), et chaque leçon se
+télécharge quand on l’ouvre. Rien à régénérer à la main ; seule contrainte : l’`id` d’un
+module est le nom de son fichier.
+
 ## Vérifier son travail
 
 ```bash
@@ -54,7 +59,7 @@ Vise **12 à 16 épreuves par module**, réparties à peu près ainsi :
 | `choice` avec visuels (duel à 2 ou choix à 3–4) | 4+ | « Quel design est le meilleur ? » |
 | `hotspot` | 2+ | « Trouve le(s) problème(s) dans cette maquette » |
 | `choice` / `multi` textuels | 3+ | Situations, choix de solution, réglages |
-| `truefalse` | 2 : une vraie, une fausse | Une règle exacte à confirmer, une idée reçue à démonter |
+| `truefalse` | 2 : une vraie, une fausse | Une règle exacte à confirmer, une idée reçue à démonter (voir plus bas) |
 | `order` | 1 | Priorités, étapes d’une méthode |
 | `match` | 1 | Concept ↔ définition, besoin ↔ réglage |
 | `slider` | 1 si une propriété continue s’y prête | Calibrer un espacement, une durée, un contraste… |
@@ -71,6 +76,11 @@ Chaque épreuve a :
 - `sources` : au moins une référence.
 
 Règles strictes :
+
+- `truefalse` : autant de « Vrai » que de « Faux » dans le module, sinon on gagne en répondant
+  toujours la même chose (le défi chrono tire aussi des affirmations équilibrées). L’explication
+  commence par « Vrai. » ou « Faux. ». Pas d’indice involontaire : un énoncé faux n’est pas
+  systématiquement le plus court, ni le seul à dire « toujours », « jamais » ou « tout ».
 
 - Les options sont **mélangées à l’affichage** : ne jamais écrire « option A », « à gauche »,
   « la première ». Parle de « la version recommandée », « la version avec les capitales »…
@@ -109,6 +119,8 @@ avec un kit de classes neutres (`src/components/mockKit.ts`) :
 - Une maquette tient en largeur dans 320 à 520 px (elle est affichée côte à côte en duel, et
   pleine largeur sur mobile). Évite les hauteurs fixes : laisse le contenu dicter la hauteur.
 - `alt` décrit ce que montre la maquette, sans dire laquelle est la bonne.
+- Une page entière montrée en miniature (texte volontairement minuscule) porte l’attribut
+  `data-miniature` sur son conteneur : `check:mocks` ne la signale pas comme texte trop petit.
 - Le défaut enseigné doit être **visible à l’œil nu** à la taille d’affichage ; la bonne
   version doit être réellement bonne (contraste, espacements, hiérarchie), pas juste
   « moins pire ».

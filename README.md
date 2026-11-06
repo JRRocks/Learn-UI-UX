@@ -38,15 +38,19 @@ arabe, Brésil…) et comment s’y adapter.
 
 Une épreuve ratée revient en révision le jour même ; chaque réussite espace la suivante, selon
 des boîtes de Leitner (1, 3, 7, 16, 35, 90 jours). Tout est utilisable au clavier (1–6 pour
-choisir, Entrée pour valider) et au pouce.
+choisir, Entrée pour valider, actifs quand le focus est dans l’épreuve) et au pouce.
 
 ## Lancer le projet
 
 ```bash
 npm install
-npm run dev        # serveur de développement
-npm test           # tests du moteur + validation de tout le contenu
-npm run build      # vérification des types + build de production dans dist/
+npm run dev              # serveur de développement
+npm test                 # tests du moteur, de l’app et validation de tout le contenu
+npm run build            # vérification des types + build de production dans dist/
+npm run validate         # types + validation du contenu seulement
+npm run check:overflow   # aucune page ne défile horizontalement à 320, 360 et 390 px
+npm run check:mocks      # maquettes : texte coupé, superposé, trop petit ou trop pâle
+npm run shots -- <id>    # captures de chaque exemple et épreuve d’un module (--mobile, --dark)
 ```
 
 Node 20.19+ ou 22.12+. Le fichier `.npmrc` active `legacy-peer-deps` (nécessaire avec npm 10
@@ -60,13 +64,18 @@ Actions*. Le routage par hash (`#/apprendre/…`) et la base relative font fonct
 depuis n’importe quel sous-dossier. La progression est stockée dans le navigateur
 (`localStorage`) : aucun serveur, aucun compte.
 
+L’app fonctionne hors ligne : à la première visite, le service worker (`src/sw.js`, complété
+au build avec la liste des fichiers) met tout en cache ; chaque déploiement installe sa propre
+version et nettoie les anciennes. Les leçons se chargent à la demande à partir d’un index léger,
+si bien que la première page reste légère malgré les 24 leçons et leurs centaines de maquettes.
+
 ## Organisation du code
 
 ```
 src/
   engine/       moteur d’entraînement, sans dépendance à React (types, correction, Leitner, SM-2,
                 progression, sessions, badges) + tests
-  content/      tout le contenu, en données typées
+  content/      tout le contenu, en données typées ; index.ts charge chaque leçon à la demande
     modules/    une leçon et ses épreuves par fichier
     cultures/   profils de marchés, comparaisons, labo de localisation
     antipatterns.ts, resources.ts, sources.ts, detectorRules.ts
@@ -74,7 +83,9 @@ src/
   components/   rendu des maquettes en Shadow DOM isolé (Mock), lecteurs d’épreuves, correction
   pages/        les écrans
   styles/       jetons de design (OKLCH, clair / sombre), base, composants
-scripts/        contrôle visuel du contenu (npm run shots -- <module>, npm run check:mocks), icônes des maquettes
+scripts/        plugins de build (index du contenu, service worker), contrôles visuels (shots,
+                check:mocks, check:overflow), icônes des maquettes
+src/sw.js       service worker (cache hors ligne)
 docs/CONTENU.md guide pour écrire de nouvelles leçons et épreuves
 ```
 
