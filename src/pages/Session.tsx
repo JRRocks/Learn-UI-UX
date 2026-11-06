@@ -64,7 +64,8 @@ export function specLabel(spec: SessionSpec): string {
     case 'exam':
       return 'Examen blanc';
     case 'culture':
-      return spec.cultureId ? `Cultures — ${CULTURE_NAMES[spec.cultureId] ?? spec.cultureId}` : 'Cultures';
+      // The dash stays with « Cultures »: a wrapped label never starts a line with « — Brésil ».
+      return spec.cultureId ? `Cultures — ${CULTURE_NAMES[spec.cultureId] ?? spec.cultureId}` : 'Cultures';
   }
 }
 
@@ -314,6 +315,8 @@ const ICON = { correct: CircleCheck, partial: CircleDot, wrong: CircleX };
 const CLASS = { correct: 'ok', partial: 'partial', wrong: 'ko' };
 const WORD = { correct: 'Juste', partial: 'Presque', wrong: 'À reprendre' };
 
+const AGAIN_STYLE: CSSProperties = { whiteSpace: 'normal', textAlign: 'center', textWrap: 'balance', paddingBlock: 'var(--s2)' };
+
 /** The same kind of session again, named for what it starts (an empty review would lead nowhere). */
 function nextSession(spec: SessionSpec, label: string): { to: string; text: string } {
   switch (spec.kind) {
@@ -353,11 +356,12 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
             return (
               <Fragment key={p}>
                 {i > 0 && (i === parts.length - 1 ? ' et ' : ', ')}
-                <strong className="num">{n}</strong> {word.join(' ')}
+                <strong className="num">{n}</strong>&nbsp;{word.join(' ')}
               </Fragment>
             );
           })}{' '}
-          sur {t.total} · +{t.xp}&nbsp;XP
+          {/* Each number keeps its word, and a line never starts with « · ». */}
+          sur&nbsp;{t.total}&nbsp;· +{t.xp}&nbsp;XP
         </p>
         {message && <p className="muted">{message}</p>}
       </header>
@@ -404,8 +408,9 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
             Refaire mes erreurs
           </Link>
         )}
-        {/* It names the session it starts, which can be long: let it wrap on narrow screens. */}
-        <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'} style={{ whiteSpace: 'normal', textAlign: 'center' }}>
+        {/* It names the session it starts, which can be long: on narrow screens it wraps on two even
+            lines, clear of the button's edges. */}
+        <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'} style={AGAIN_STYLE}>
           {frenchSpacing(again.text)}
         </Link>
         <Link to="/" className="btn btn-ghost">
