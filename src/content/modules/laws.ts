@@ -61,6 +61,10 @@ const WCAG_COLOR: SourceRef = {
   label: 'W3C — Comprendre le critère 1.4.1 (utilisation de la couleur)',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html',
 };
+const NNG_LINKS: SourceRef = {
+  label: 'Nielsen Norman Group — Guidelines for Visualizing Links',
+  url: 'https://www.nngroup.com/articles/guidelines-for-visualizing-links/',
+};
 
 /* ---------- Shared mock pieces ---------- */
 
@@ -115,12 +119,21 @@ const PLAN_CSS = `.plan { min-width: 0; display: flex; flex-direction: column; a
 const plan = (name: string, price: string, desc: string, pick = false) =>
   `<div class="plan${pick ? ' plan--pick' : ''}">${pick ? '<span class="mk-badge plan-badge">Conseillée</span>' : ''}<p class="plan-name">${name}</p><p class="plan-price">${price}<small>/mois</small></p><p class="plan-desc">${desc}</p><span class="mk-btn mk-btn--s${pick ? '' : ' mk-btn--ghost'}">Choisir</span></div>`;
 
-const FIELDS: [string, string][] = [
-  ['Prénom', 'Camille'],
-  ['Nom', 'Durand'],
-  ['E-mail', 'camille.durand@mail.fr'],
-  ['Téléphone', '06 12 34 56 78'],
-];
+/** Espace client d’un opérateur : les informations prennent, ou non, le style des deux vrais liens. */
+const SIM_CSS = `.sim-box { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px 14px; border: 1px solid #e1e4ea; border-radius: 10px; }
+.sim-name { font-size: 15px; font-weight: 700; }
+.sim-meta { color: #3a4152; }
+.sim-a { color: #1f4fd8; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.sim-box > .sim-a { margin-top: 6px; }`;
+
+const simMock = (lookalike: boolean) => {
+  const info = (text: string) => (lookalike ? `<span class="sim-a">${text}</span>` : text);
+  return fr(`<div class="mk-pad mk-stack" style="--gap:12px">
+<div class="mk-row mk-between"><p class="mk-h3">Mon forfait</p><span class="mk-badge">Actif</span></div>
+<div class="sim-box"><p class="sim-name">Essentiel 100 Go</p><p class="sim-meta">${info('5G incluse')} · ${info('Sans engagement')}</p><p class="sim-meta">12,99 € par mois</p><span class="sim-a">Changer de forfait</span></div>
+<div class="sim-box"><p class="sim-meta">Prochaine facture : 12,99 € le ${info('3 décembre')}</p><span class="sim-a">Voir mes factures</span></div>
+</div>`);
+};
 
 const JK_CONTENT = `<div class="mk-pad mk-stack" style="--gap:8px">
 <div class="mk-img" style="--ratio:16/6"></div>
@@ -133,7 +146,7 @@ const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding
 .jk-odd .jk-logo { margin-inline-start: auto; }
 .jk-cart { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #5a6172; }
 .jk-explore { font-size: 13px; font-weight: 600; color: #1f2a44; }
-.jk-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #c3c8d3; border-radius: 999px; color: #5a6172; font-size: 13px; overflow: hidden; white-space: nowrap; }
+.jk-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #868d9c; border-radius: 999px; color: #5a6172; font-size: 13px; overflow: hidden; white-space: nowrap; }
 .jk-icons { display: flex; align-items: center; gap: 12px; }
 .jk-bag { position: relative; display: inline-flex; }
 .jk-bag b { position: absolute; top: -6px; inset-inline-end: -8px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #1f4fd8; color: #fff; font-size: 11px; display: grid; place-items: center; }
@@ -335,7 +348,6 @@ La productivité s’envole quand le système répond en **moins de 400 ms**, co
   ],
   rules: [
     { id: 'fitts', front: 'Que prédit la loi de Fitts ?', back: 'Le temps pour atteindre une cible croît avec la distance et diminue avec la taille. Actions fréquentes : grandes et proches ; actions destructives : à l’écart.' },
-    { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 pt chez Apple, 48 × 48 dp chez Material Design. Le WCAG 2.2 exige au moins 24 × 24 px (niveau AA), sauf exceptions (cible assez espacée, lien dans le texte…).' },
     { id: 'hick', front: 'Que prédit la loi de Hick ?', back: 'Le temps de décision croît (de façon logarithmique) avec le nombre et la complexité des choix. Mets en avant l’option recommandée, sans tout enfouir dans des sous-menus.' },
     { id: 'cowan', front: 'Combien d’éléments tient la mémoire de travail ?', back: 'Environ 4 (Cowan, 2001), pas 7 ± 2. Impeccable : ≤ 4 éléments à considérer ensemble à un point de décision.' },
     { id: 'miller-menu', front: 'La loi de Miller limite-t-elle un menu à 7 entrées ?', back: 'Non : un menu se lit, il ne se mémorise pas (reconnaissance). Ce qui compte, c’est de regrouper et de hiérarchiser.' },
@@ -436,7 +448,7 @@ Pour l’action principale, touchée souvent et au pouce, vise environ 48 px. Au
           visual: {
             alt: 'Page d’aide avec un champ de recherche, trois démarches fréquentes mises en avant et un lien vers toutes les rubriques.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:10px">${HELP_TITLE}<div class="help-search"><i data-icon="search" style="--ico:16px"></i><span>Rechercher : facture, relevé, déménagement…</span></div><p class="mk-small mk-muted mk-strong">Les démarches les plus fréquentes</p><div class="mk-stack" style="--gap:8px"><span class="help-top"><i data-icon="file-text"></i>Comprendre ma facture<i data-icon="chevron-right" class="help-chev"></i></span><span class="help-top"><i data-icon="zap"></i>Transmettre mon relevé<i data-icon="chevron-right" class="help-chev"></i></span><span class="help-top"><i data-icon="truck"></i>Je déménage<i data-icon="chevron-right" class="help-chev"></i></span></div><span class="mk-btn mk-btn--text" style="align-self:flex-start;padding:0;min-height:30px">Voir toutes les rubriques (12)</span></div>`),
-            css: `.help-search { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 12px; border: 1px solid #c3c8d3; border-radius: 8px; color: #5a6172; font-size: 13px; }
+            css: `.help-search { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 12px; border: 1px solid #868d9c; border-radius: 8px; color: #5a6172; font-size: 13px; }
 .help-top { display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 12px; border: 1px solid #d5dae3; border-radius: 10px; font-weight: 600; }
 .help-chev { margin-inline-start: auto; color: #8b92a1; }`,
           },
@@ -483,37 +495,37 @@ Les limites, rappelées par Laws of UX : n’isole qu’un élément à la fois 
       sources: [law('von-restorff-effect', 'Effet Von Restorff'), WCAG_COLOR],
     },
     {
-      id: 'laws-proximity-duel',
+      id: 'laws-similarity-duel',
       type: 'choice',
       difficulty: 2,
-      prompt: 'Dans quel formulaire vois-tu sans hésiter à quel champ appartient chaque libellé ?',
+      context: 'Espace client d’un opérateur mobile.',
+      prompt: 'Sur quel écran vois-tu sans hésiter ce qui est cliquable ?',
       options: [
         {
-          id: 'even',
+          id: 'lookalike',
           visual: {
-            alt: 'Formulaire de coordonnées où chaque libellé est à égale distance du champ qui le précède et du champ qui le suit.',
-            html: fr(`<div class="mk-pad"><p class="mk-h3" style="margin-bottom:14px">Vos coordonnées</p><div class="px-even">${FIELDS.map(([l, v]) => `<span class="mk-label">${l}</span><span class="mk-input">${v}</span>`).join('')}</div></div>`),
-            css: `.px-even { display: flex; flex-direction: column; gap: 14px; }`,
+            alt: 'Espace client « Mon forfait » : « 5G incluse », « Sans engagement » et la date de la prochaine facture sont en bleu souligné, comme les liens « Changer de forfait » et « Voir mes factures ».',
+            html: simMock(true),
+            css: SIM_CSS,
           },
-          why: 'Chaque libellé flotte à mi-distance entre deux champs : l’œil hésite sur le rattachement.',
+          why: '« 5G incluse », « Sans engagement » et la date ont exactement le style des deux vrais liens : on clique dessus pour rien, et les liens utiles se perdent dans la masse.',
         },
         {
-          id: 'grouped',
+          id: 'distinct',
           visual: {
-            alt: 'Même formulaire où chaque libellé est collé à son champ et où les paires libellé-champ sont nettement séparées.',
-            html: fr(`<div class="mk-pad"><p class="mk-h3" style="margin-bottom:14px">Vos coordonnées</p><div class="px-group">${FIELDS.map(([l, v]) => `<div class="mk-field"><span class="mk-label">${l}</span><span class="mk-input">${v}</span></div>`).join('')}</div></div>`),
-            css: `.px-group { display: flex; flex-direction: column; gap: 18px; }
-.px-group .mk-field { gap: 5px; }`,
+            alt: 'Même espace client : seuls « Changer de forfait » et « Voir mes factures » sont en bleu souligné ; les caractéristiques du forfait et la date sont en texte courant.',
+            html: simMock(false),
+            css: SIM_CSS,
           },
-          why: 'Le libellé colle à son champ (5 px) et les paires sont séparées (18 px) : chaque groupe se lit d’un bloc.',
+          why: 'Un seul style, réservé aux deux liens ; les caractéristiques et la date restent en texte courant : on voit d’un regard ce qui ouvre une page.',
         },
       ],
-      answer: 'grouped',
-      explanation: `**Loi de proximité** (Gestalt) : des éléments proches sont perçus comme un groupe. Quand l’espace entre un libellé et son champ égale l’espace entre deux paires, la structure disparaît : il faut lire pour comprendre ce que la mise en page devrait dire d’elle-même.
+      answer: 'distinct',
+      explanation: `**Loi de similarité** (Gestalt) : des éléments qui se ressemblent — par la couleur, la forme, la taille — sont perçus comme liés et semblent avoir la même fonction. Le bleu souligné est la convention de lien la plus ancrée du web : posé sur « Sans engagement » ou sur une date, il promet un clic qui ne mène nulle part, et les deux vrais liens se perdent parmi cinq candidats.
 
-La règle d’impeccable : grouper par le sens et créer un rythme — serré dans un groupe, généreux entre les groupes — avant d’ajouter des bordures ou des conteneurs.`,
-      takeaway: 'Un libellé est nettement plus près de son champ que du champ précédent : serré dans le groupe, aéré entre les groupes.',
-      sources: [law('law-of-proximity', 'Loi de proximité'), 'imp:layout'],
+La version recommandée réserve ce style aux liens et laisse les informations en texte courant. Laws of UX demande de distinguer visuellement les liens du texte normal, et le Nielsen Norman Group de ne souligner aucun texte qui n’est pas un lien. Impeccable le vérifie en critique avec l’heuristique « cohérence et standards » : personne ne devrait se demander si des mots, des situations ou des actions différents veulent dire la même chose.`,
+      takeaway: 'Similarité : ce qui se ressemble semble faire la même chose ; un texte non cliquable ne prend jamais l’apparence d’un lien.',
+      sources: [law('law-of-similarity', 'Loi de similarité'), NNG_LINKS, 'imp:critique'],
     },
     {
       id: 'laws-jakob-duel',
@@ -575,7 +587,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
 .ad-del { min-height: 46px; padding: 0 12px; }`,
       },
       hotspots: [
-        { id: 'close', label: 'Croix de fermeture de 14 px', correct: true, why: 'Une cible de 14 × 14 px sans zone de toucher élargie : très loin des 44 pt recommandés par Apple et des 48 dp de Material Design.' },
+        { id: 'close', label: 'Croix de fermeture de 14 px', correct: true, why: 'Le dessin de la croix fait 14 × 14 px, et sa cible tactile n’est pas plus grande : très loin des 44 pt recommandés par Apple et des 48 dp de Material Design.' },
         { id: 'actions', label: '« Supprimer » collé à « Enregistrer »', correct: true, why: 'Une action destructive à 4 px de l’action la plus fréquente : le moindre écart de pouce supprime l’adresse. « Enregistrer », large et dans la zone du pouce, est bien placé ; c’est « Supprimer » qu’il faut éloigner.' },
         { id: 'title', label: 'Titre de l’écran', correct: false, why: 'Le titre nomme clairement la tâche : rien à corriger.' },
         { id: 'street', label: 'Champ « Adresse »', correct: false, why: 'Champ pleine largeur avec un libellé visible : une cible facile à atteindre.' },
@@ -583,7 +595,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
       ],
       explanation: `La loi de Fitts dit deux choses utiles ici :
 
-- **La taille compte** : une croix de 14 px est une cible minuscule. Le dessin peut rester petit, mais sa zone de toucher devrait atteindre 44 × 44 pt, comme le recommande Apple.
+- **La taille compte** : la croix ne fait que 14 px. Le dessin peut rester petit, mais sa cible tactile devrait atteindre 44 × 44 pt, comme le recommande Apple.
 - **L’espacement compte** : Laws of UX recommande des cibles tactiles bien espacées. Une action destructive collée à l’action fréquente attire les touches accidentelles. Éloigne-la, et préfère une possibilité d’annuler à une simple confirmation.`,
       takeaway: 'Cibles tactiles d’au moins 44 px et bien espacées ; les actions destructives se tiennent à l’écart des actions fréquentes.',
       sources: [law('fittss-law', 'Loi de Fitts'), 'wcag:target', 'hig', 'imp:clarify'],
@@ -730,12 +742,12 @@ Conséquence pratique : un beau prototype rend les gens plus tolérants aux peti
       id: 'laws-choice-overload-tf',
       type: 'truefalse',
       difficulty: 3,
-      prompt: 'Plus on propose d’options, moins les gens achètent : la surcharge de choix est un effet universel.',
-      answer: false,
-      explanation: `L’étude célèbre des confitures (Iyengar et Lepper, 2000) a popularisé l’idée : un stand de 24 variétés attirait plus de monde qu’un stand de 6, mais vendait moins. Pourtant, une méta-analyse de 50 expériences (Scheibehenne, Greifeneder et Todd, 2010) trouve un effet moyen **quasi nul**, avec de fortes variations d’une étude à l’autre.
+      prompt: 'Une méta-analyse de 50 expériences ne trouve, en moyenne, presque aucun effet de surcharge de choix.',
+      answer: true,
+      explanation: `Vrai. L’étude célèbre des confitures (Iyengar et Lepper, 2000) a popularisé l’idée qu’un excès d’options décourage : un stand de 24 variétés attirait plus de monde qu’un stand de 6, mais vendait moins. Pourtant, quand Scheibehenne, Greifeneder et Todd (2010) réunissent 50 expériences (63 conditions, plus de 5 000 participants), l’effet moyen est **quasi nul**, avec de fortes variations d’une étude à l’autre : certaines trouvent une surcharge, d’autres aucun effet, voire un bénéfice à avoir plus de choix.
 
-Une méta-analyse ultérieure (Chernev, Böckenholt et Goodman, 2015) précise les conditions où la surcharge apparaît bien : tâche difficile, options complexes à comparer, préférences floues, envie de décider vite. Le remède n’est donc pas de couper à l’aveugle, mais d’**aider à choisir** : comparaison côte à côte, filtres, option conseillée.`,
-      takeaway: 'La surcharge de choix est conditionnelle : aide à comparer (côte à côte, filtres, option conseillée) plutôt que de couper à l’aveugle.',
+Un effet moyen nul ne veut pas dire un effet absent. En tenant compte des conditions, une méta-analyse ultérieure (Chernev, Böckenholt et Goodman, 2015) retrouve bien la surcharge : quand la tâche est difficile, quand les options sont complexes à comparer, quand les préférences sont floues ou quand on cherche avant tout à décider sans effort. Le remède n’est donc pas de couper à l’aveugle, mais d’**aider à choisir** : comparaison côte à côte, filtres, option conseillée.`,
+      takeaway: 'En moyenne quasi nulle, la surcharge de choix n’apparaît que sous conditions : aide à comparer (côte à côte, filtres, option conseillée) plutôt que de couper à l’aveugle.',
       sources: [law('choice-overload', 'Surcharge de choix'), SCHEIBEHENNE, CHERNEV],
     },
     {

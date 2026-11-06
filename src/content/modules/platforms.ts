@@ -32,6 +32,14 @@ const ANDROID_BACK: SourceRef = {
   url: 'https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture',
 };
 const ANDROID_TARGETS: SourceRef = { label: 'Google — Accessibilité Android : taille des cibles tactiles', url: 'https://support.google.com/accessibility/android/answer/7101858' };
+const ANDROID_ANIM_SCALES: SourceRef = {
+  label: 'Android Developers — Settings.Global (à 0, les échelles d’animation désactivent ou terminent aussitôt les animations)',
+  url: 'https://developer.android.com/reference/android/provider/Settings.Global#ANIMATOR_DURATION_SCALE',
+};
+const AOSP_REMOVE_ANIMATIONS: SourceRef = {
+  label: 'AOSP — DisableAnimationsPreferenceController (« Supprimer les animations » met les trois échelles d’animation à 0)',
+  url: 'https://android.googlesource.com/platform/packages/apps/Settings/+/refs/heads/main/src/com/android/settings/accessibility/DisableAnimationsPreferenceController.java',
+};
 const M3_TYPE: SourceRef = { label: 'Material Design 3 — Type scale tokens', url: 'https://m3.material.io/styles/typography/type-scale-tokens' };
 const M3_SNACKBAR: SourceRef = { label: 'Material Design 3 — Snackbar', url: 'https://m3.material.io/components/snackbar/overview' };
 const M3_FAB: SourceRef = { label: 'Material Design 3 — Floating action button', url: 'https://m3.material.io/components/floating-action-button/overview' };
@@ -113,6 +121,48 @@ const M3_CSS = `
 .ios-head { position: relative; display: flex; align-items: center; height: 44px; }
 .ios-head .ios-title { position: absolute; left: 104px; right: 104px; text-align: center; white-space: nowrap; font-weight: 600; pointer-events: none; }
 `;
+
+/** Photo tiles of the gallery duel: flat gradients that read as a lake, a sunset, a coffee, a beach, a forest, a city at night. */
+const PHOTOS = [
+  'linear-gradient(180deg, #a9cbe8 0 46%, #7d9a74 46% 66%, #4d7f9e 66%)',
+  'linear-gradient(180deg, #f4b48c, #e07f8e 58%, #5d4b70)',
+  'radial-gradient(circle at 50% 52%, #7a4b2c 0 26%, #efe3d2 27% 38%, #cdb89c 39%)',
+  'linear-gradient(180deg, #c3e2f3 0 52%, #e6d6ae 52%)',
+  'linear-gradient(165deg, #b5d29a, #557f4c 58%, #2f4c33)',
+  'linear-gradient(180deg, #1f2a4b 0 58%, #e3b65c 58% 62%, #2b3555 62%)',
+];
+
+const GALLERY_CSS = `${M3_CSS}
+.gl { display: flex; flex-direction: column; }
+.gl-day { padding: 12px 16px 8px; font-size: 14px; font-weight: 600; }
+.gl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.gl-grid > span { aspect-ratio: 1; }
+.gl-foot { position: relative; margin-top: 12px; background: #eceef4; }
+.gl-snack { position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); }
+.gl-nav { display: flex; justify-content: space-around; padding: 12px 0 4px; font-size: 12px; color: #42474e; }
+.gl-nav > span { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.gl-nav .on { color: #1a1c1e; font-weight: 600; }
+.gl-pill { width: 56px; height: 32px; border-radius: 16px; display: grid; place-items: center; }
+.gl-nav .on .gl-pill { background: #d3e4ff; color: #001d36; }
+.gl-dg { width: min(100%, 280px); padding: 24px 24px 14px; border-radius: 28px; background: #eef1f8; }
+.gl-dg-t { font-size: 20px; margin-bottom: 12px; }
+.gl-dg-a { text-align: end; color: #00639b; font-weight: 600; padding: 14px 8px 4px; }
+`;
+
+/** Android gallery of the snackbar duel: `snack` sits just above the navigation bar, `overlay` covers the whole screen. */
+const gallery = (snack: string, overlay = '') =>
+  fr(`<div class="m3 gl">
+  <div class="m3-top"><span class="m3-title" style="padding-inline-start:12px">Galerie</span><span class="m3-ib"><i data-icon="search"></i></span><span class="m3-ib"><i data-icon="ellipsis" class="kebab"></i></span></div>
+  <p class="gl-day">Aujourd’hui</p>
+  <div class="gl-grid">${PHOTOS.slice(0, 3).map((bg) => `<span style="background:${bg}"></span>`).join('')}</div>
+  <p class="gl-day">Hier</p>
+  <div class="gl-grid">${PHOTOS.slice(3).map((bg) => `<span style="background:${bg}"></span>`).join('')}</div>
+  <div class="gl-foot">${snack}
+    <div class="gl-nav"><span class="on"><span class="gl-pill"><i data-icon="image"></i></span>Photos</span><span><span class="gl-pill"><i data-icon="folder"></i></span>Albums</span><span><span class="gl-pill"><i data-icon="users"></i></span>Partage</span></div>
+    <div class="m3-handle"></div>
+  </div>
+  ${overlay}
+</div>`);
 
 const notifRows = (sw: (on: boolean) => string) =>
   fr(`<div class="m3-row"><div class="mk-grow"><p>Messages</p><p class="mk-small" style="color:#42474e">Nouveaux messages privés</p></div>${sw(true)}</div>
@@ -339,7 +389,7 @@ Pars des composants de la plateforme, et ne t’en écarte que pour une raison d
 - **Le Retour système fonctionne toujours** : geste ou bouton, il ramène en arrière ; ne piège jamais la personne et ne détourne pas le geste. Le **Retour prédictif** montre un aperçu de la destination pendant le geste ; intercepter le Retour sans nécessité empêche cette animation.
 - **Bord à bord, avec les marges du système** (*insets*) : barre d’état, barre de navigation du système, découpe de l’écran et clavier. Depuis Android 15, une appli qui cible le SDK 35 s’affiche bord à bord par défaut : sans ces marges, son contenu passe sous les barres ou sous le clavier.
 - **Une barre d’application supérieure** pour le contexte de l’écran (titre, retour, actions), et un **bouton d’action flottant** (FAB) quand l’écran a une seule action principale.
-- **Cibles de 48 × 48 dp**, avec au moins 8 dp entre deux cibles. L’icône peut rester à 24 dp : la zone touchable l’entoure.`,
+- **Cibles de 48 × 48 dp**, avec au moins 8 dp entre deux cibles. Le dessin d’une icône peut rester à 24 dp : sa cible tactile de 48 dp l’entoure.`,
       examples: [
         {
           title: 'Restructurer pour la tablette, pas étirer',
@@ -581,7 +631,7 @@ Material 3 est la référence : barre d’application supérieure avec flèche d
     {
       id: 'platforms-fab-choice',
       type: 'choice',
-      difficulty: 2,
+      difficulty: 1,
       prompt: 'Comment présenter ces trois actions ?',
       context: 'Un écran Android liste les notes d’un carnet. Trois actions : créer une note (très fréquente), trier la liste, exporter le carnet en PDF.',
       options: [
@@ -613,46 +663,36 @@ Le style Body fait **17 pt** au réglage par défaut, et rien ne descend sous **
       id: 'platforms-snackbar-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Après la suppression d’une conversation, quel retour convient dans cette appli Android ?',
+      prompt: 'Après la suppression d’une photo, quel retour convient dans cette galerie Android ?',
       options: [
         {
           id: 'dialog',
           visual: {
-            alt: 'Écran Android de messagerie recouvert d’un dialogue « Conversation supprimée » avec un seul bouton « OK ».',
+            alt: 'Galerie de photos Android, avec une barre de navigation au bas de l’écran, recouverte d’un dialogue « Photo supprimée » avec un seul bouton « OK ».',
             frame: 'phone',
-            html: fr(`<div class="m3" style="min-height:400px">
-  <div class="m3-top"><span class="m3-ib"><i data-icon="menu"></i></span><span class="m3-title">Discussions</span><span class="m3-ib"><i data-icon="search"></i></span></div>
-  <div class="m3-row"><span class="mk-avatar" style="background:#cfe3d4"></span><div class="mk-grow"><p class="mk-strong">Groupe escalade</p><p class="mk-small" style="color:#42474e">Paul : la salle ouvre à 19 h</p></div></div>
-  <div class="m3-row"><span class="mk-avatar" style="background:#d6dcf5"></span><div class="mk-grow"><p class="mk-strong">Paul Girard</p><p class="mk-small" style="color:#42474e">Merci pour le lien !</p></div></div>
-  <div class="m3-row"><span class="mk-avatar" style="background:#efd9ef"></span><div class="mk-grow"><p class="mk-strong">Jeanne Roux</p><p class="mk-small" style="color:#42474e">Photo</p></div></div>
-  <div class="mk-overlay" style="background:rgb(0 0 0 / 0.32)"><div class="dg"><p class="dg-t">Conversation supprimée</p><p style="color:#42474e">La conversation avec Inès Moreau a été supprimée.</p><p class="dg-a">OK</p></div></div>
-</div>`),
-            css: `${M3_CSS} .dg { width: min(100%, 280px); padding: 24px 24px 14px; border-radius: 28px; background: #eef1f8; } .dg-t { font-size: 20px; margin-bottom: 12px; } .dg-a { text-align: end; color: #00639b; font-weight: 600; padding: 14px 8px 4px; }`,
+            html: gallery(
+              '',
+              '<div class="mk-overlay" style="background:rgb(0 0 0 / 0.32)"><div class="gl-dg"><p class="gl-dg-t">Photo supprimée</p><p style="color:#42474e">La photo a été placée dans la corbeille.</p><p class="gl-dg-a">OK</p></div></div>',
+            ),
+            css: GALLERY_CSS,
           },
-          why: 'Un dialogue interrompt pour une simple information et n’offre aucun moyen d’annuler la suppression.',
+          why: 'Un dialogue interrompt pour une simple information et n’offre aucun moyen d’annuler : pour récupérer la photo, il faudra ouvrir la corbeille et l’en sortir.',
         },
         {
           id: 'snackbar',
           visual: {
-            alt: 'Même écran Android avec, au bas de l’écran, une barre sombre « Conversation supprimée » et l’action « Annuler ».',
+            alt: 'Même galerie avec, juste au-dessus de la barre de navigation, une barre sombre « Photo placée dans la corbeille » et l’action « Annuler ».',
             frame: 'phone',
-            html: fr(`<div class="m3" style="min-height:400px">
-  <div class="m3-top"><span class="m3-ib"><i data-icon="menu"></i></span><span class="m3-title">Discussions</span><span class="m3-ib"><i data-icon="search"></i></span></div>
-  <div class="m3-row"><span class="mk-avatar" style="background:#cfe3d4"></span><div class="mk-grow"><p class="mk-strong">Groupe escalade</p><p class="mk-small" style="color:#42474e">Paul : la salle ouvre à 19 h</p></div></div>
-  <div class="m3-row"><span class="mk-avatar" style="background:#d6dcf5"></span><div class="mk-grow"><p class="mk-strong">Paul Girard</p><p class="mk-small" style="color:#42474e">Merci pour le lien !</p></div></div>
-  <div class="m3-row"><span class="mk-avatar" style="background:#efd9ef"></span><div class="mk-grow"><p class="mk-strong">Jeanne Roux</p><p class="mk-small" style="color:#42474e">Photo</p></div></div>
-  <div style="position:absolute;left:0;right:0;bottom:28px"><div class="m3-snack"><span>Conversation supprimée</span><b>Annuler</b></div></div>
-  <div class="m3-handle" style="position:absolute;left:0;right:0;bottom:0"></div>
-</div>`),
-            css: M3_CSS,
+            html: gallery('<div class="m3-snack gl-snack"><span>Photo placée dans la corbeille</span><b>Annuler</b></div>'),
+            css: GALLERY_CSS,
           },
-          why: 'Une snackbar confirme sans interrompre et garde « Annuler » à portée jusqu’à la prochaine action.',
+          why: 'Une snackbar confirme sans interrompre et garde « Annuler » à portée : la photo revient d’un geste, sans détour par la corbeille.',
         },
       ],
       answer: 'snackbar',
-      explanation: `Sur Android, la **snackbar** est faite pour le **retour passager** : un message bref au bas de l’écran, avec au plus une action (souvent « Annuler »). Sans action, elle s’efface d’elle-même ; avec une action, elle reste jusqu’à ce que la personne agisse ou passe à autre chose, pour lui laisser le temps d’annuler. La personne continue sans être interrompue.
+      explanation: `Sur Android, la **snackbar** est faite pour le **retour passager** : un message bref au bas de l’écran, avec au plus une action (souvent « Annuler »). Sans action, elle s’efface d’elle-même ; avec une action, elle reste jusqu’à ce que la personne agisse ou passe à autre chose, pour lui laisser le temps d’annuler. La personne continue de trier ses photos sans être interrompue.
 
-Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, il n’y a rien à décider, et le bouton « OK » ne sert qu’à fermer. En prime, la snackbar offre l’annulation, plus utile qu’une confirmation.`,
+Le **dialogue** est réservé aux **décisions qui doivent interrompre** : ici, il n’y a rien à décider, et le bouton « OK » ne sert qu’à fermer. Il n’offre pas non plus de retour en arrière : la photo reste récupérable, mais il faut aller la chercher dans la corbeille, là où la snackbar la rend d’un geste.`,
       takeaway: 'Retour passager sur Android : une snackbar, avec « Annuler » si utile ; le dialogue est réservé aux décisions qui interrompent.',
       sources: ['imp:android', M3_SNACKBAR, M3_SNACKBAR_CODE],
     },
@@ -785,13 +825,15 @@ Le grand titre, la liste groupée et l’interrupteur montrent au contraire ce q
       id: 'platforms-reduce-motion-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Quand « Réduire les animations » est activé, il faut supprimer toute transition : l’écran suivant doit apparaître d’un coup.',
-      answer: false,
-      explanation: `Le réglage vise les mouvements qui peuvent gêner (parallaxe, grands glissements, zooms), pas tout retour visuel. Sur iOS, la recommandation est de **remplacer** ces mouvements par un **fondu enchaîné** : le changement d’écran reste perceptible, sans déplacement.
+      prompt: 'Sur Android, quand « Supprimer les animations » est activé, passer d’un écran à l’autre par une coupe franche, sans transition, respecte le réglage.',
+      answer: true,
+      explanation: `Vrai. Sur Android, impeccable demande d’honorer le réglage **Supprimer les animations** par un **fondu enchaîné** ou par une **coupe franche** : les deux le respectent. Android applique lui-même cette coupe : le réglage ramène à 0 les trois échelles d’animation du système (fenêtres, transitions, durée des animations), ce qui désactive les animations ou les termine aussitôt.
 
-Sur Android, le réglage **Supprimer les animations** se respecte par un fondu enchaîné ou une coupe franche. La coupe est donc permise, mais pas obligatoire : ce qui compte, c’est de supprimer le mouvement qui déplace le contenu.`,
-      takeaway: 'Réduire les animations : remplace la parallaxe et les grands glissements par un fondu enchaîné, sans forcément tout couper.',
-      sources: ['imp:ios', 'imp:android'],
+L’idée reçue vient d’une règle juste : réduire le mouvement ne veut pas dire supprimer tout retour visuel. Mais un changement d’écran se voit sans animation, puisque le contenu change. Ce qu’il faut protéger, ce sont les retours qui n’existent que par une animation, comme une confirmation discrète.
+
+Sur iOS, impeccable ne cite que le fondu : avec **Réduire les animations**, un **fondu enchaîné** remplace la parallaxe et les grands glissements.`,
+      takeaway: 'Android : « Supprimer les animations » se respecte par un fondu enchaîné ou une coupe franche ; iOS : « Réduire les animations » remplace parallaxe et glissements par un fondu.',
+      sources: ['imp:android', 'imp:ios', AOSP_REMOVE_ANIMATIONS, ANDROID_ANIM_SCALES],
     },
     {
       id: 'platforms-semantic-color-choice',
