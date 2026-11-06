@@ -1,15 +1,30 @@
 import { ChevronDown, CircleCheck, CircleDot, CircleX, X } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
 import { ExerciseView, TYPE_LABEL } from '../components/exercise/ExerciseView';
+import type { Draft } from '../components/exercise/players';
 import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
-import type { Verdict } from '../engine/grade';
+import type { GradeResult } from '../engine/grade';
 import { addSession, recordAttempt } from '../engine/progress';
 import { buildSession, isDuel, type PracticeType, type SessionSpec } from '../engine/session';
 import type { Exercise } from '../engine/types';
-import { Md, MdInline } from '../lib/markdown';
+import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import {
+  answeredCurrent,
+  isUnfinished,
+  newRunId,
+  parseRun,
+  routeOf,
+  scoreParts,
+  seedOf,
+  summaryMessage,
+  tally,
+  withRun,
+  type Played,
+  type Run,
+} from './sessionState';
 
 const TYPES: PracticeType[] = ['duel', 'choice', 'multi', 'truefalse', 'hotspot', 'order', 'match', 'slider', 'grid'];
 
@@ -53,70 +68,115 @@ export function specLabel(spec: SessionSpec): string {
   }
 }
 
-interface Played {
-  id: string;
-  verdict: Verdict;
-  score: number;
-  xp: number;
+/* ---------------------------------------------------------------- saved runs (per tab) */
+
+const PREFIX = 'learn-ui-ux:run:';
+/** Runs saved by earlier versions, keyed by route: never read again (see logic-1). */
+const OLD_PREFIX = 'learn-ui-ux:session:';
+/** Finished runs stay so that Back shows their summary again; keep the latest ones only. */
+const KEEP = 20;
+/** Also kept in memory: the run survives a storage failure and the remount that names it in the URL. */
+const memory = new Map<string, Run>();
+const known = (id: string) => EXERCISE_BY_ID.has(id);
+
+function readRun(id: string): Run | null {
+  const cached = memory.get(id);
+  if (cached) return cached;
+  try {
+    const raw = sessionStorage.getItem(PREFIX + id);
+    const run = raw ? parseRun(JSON.parse(raw), known) : null;
+    if (run) memory.set(id, run);
+    return run;
+  } catch {
+    return null;
+  }
 }
 
-interface Saved {
-  ids: string[];
-  index: number;
-  played: Played[];
-}
-
-const PREFIX = 'learn-ui-ux:session:';
-const keyFor = (raw: string) => `${PREFIX}${raw}`;
-
-/** A session left unfinished in this tab, to offer "Reprendre" on the home page. */
-export function unfinishedSession(): { raw: string; label: string; index: number; total: number } | null {
+function storedRuns(): { id: string; run: Run }[] {
+  const out: { id: string; run: Run }[] = [];
   try {
     for (let i = 0; i < sessionStorage.length; i++) {
       const key = sessionStorage.key(i);
       if (!key?.startsWith(PREFIX)) continue;
-      const raw = key.slice(PREFIX.length);
-      const saved = restore(raw);
-      if (saved && saved.index > 0 && saved.index < saved.ids.length)
-        return { raw, label: specLabel(parseSpec(new URLSearchParams(raw.split('?')[1] ?? ''))), index: saved.index, total: saved.ids.length };
+      const id = key.slice(PREFIX.length);
+      const run = readRun(id);
+      if (run) out.push({ id, run });
     }
   } catch {
-    // Storage unavailable: nothing to resume.
+    // Storage unavailable: only this page's runs (in memory) exist.
   }
-  return null;
+  for (const [id, run] of memory) if (!out.some((x) => x.id === id)) out.push({ id, run });
+  return out;
 }
 
-function restore(raw: string): Saved | null {
+function saveRun(id: string, run: Run) {
+  memory.set(id, run);
   try {
-    const s = JSON.parse(sessionStorage.getItem(keyFor(raw)) ?? 'null') as Saved | null;
-    if (s && Array.isArray(s.ids) && s.ids.every((id) => EXERCISE_BY_ID.has(id))) return s;
+    sessionStorage.setItem(PREFIX + id, JSON.stringify(run));
+    const old: string[] = [];
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i);
+      if (key?.startsWith(OLD_PREFIX)) old.push(key);
+    }
+    old.forEach((k) => sessionStorage.removeItem(k));
+    const runs = storedRuns().sort((a, b) => b.run.t - a.run.t);
+    for (const { id: stale } of runs.slice(KEEP)) {
+      sessionStorage.removeItem(PREFIX + stale);
+      memory.delete(stale);
+    }
   } catch {
-    // ignore
+    // Private mode or full storage: the run lives in memory for this visit.
   }
-  return null;
 }
+
+/** The latest run left unfinished in this tab, to offer « Reprendre » on the home page. */
+export function unfinishedSession(): { raw: string; label: string; index: number; total: number } | null {
+  const latest = storedRuns()
+    .filter(({ run }) => isUnfinished(run))
+    .sort((a, b) => b.run.t - a.run.t)[0];
+  if (!latest) return null;
+  const { id, run } = latest;
+  const query = new URLSearchParams(run.route.split('?')[1] ?? '');
+  return { raw: withRun(run.route, id), label: specLabel(parseSpec(query)), index: run.index, total: run.ids.length };
+}
+
+/* ---------------------------------------------------------------- page */
 
 function typeOf(ex: Exercise): string {
   return isDuel(ex) ? TYPE_LABEL.duel : TYPE_LABEL[ex.type];
 }
 
+/** Restore the run named in the URL, or build a new one for an entry link. */
+function boot(raw: string, query: URLSearchParams, spec: SessionSpec): { id: string; run: Run } {
+  const route = routeOf(raw);
+  const named = query.get('run');
+  const saved = named ? readRun(named) : null;
+  if (named && saved && saved.route === route) {
+    // An exam never shows a correction; nor can a correction without its answer: move on.
+    const skip = answeredCurrent(saved) && (spec.kind === 'exam' || !saved.played[saved.index].draft);
+    return { id: named, run: skip ? { ...saved, index: saved.played.length } : saved };
+  }
+  const ids = buildSession(spec, EXERCISES, store.get()).map((e) => e.id);
+  return { id: newRunId(), run: { route, ids, index: 0, played: [], t: Date.now() } };
+}
+
 export function SessionPage({ query, raw }: { query: URLSearchParams; raw: string }) {
   const spec = useMemo(() => parseSpec(query), [query]);
   const exam = spec.kind === 'exam';
-  const [state, setState] = useState<Saved>(() => {
-    const saved = restore(raw);
-    if (saved) return saved;
-    return { ids: buildSession(spec, EXERCISES, store.get()).map((e) => e.id), index: 0, played: [] };
-  });
-  const recorded = useRef(false);
+  const [{ id: runId, run: first }] = useState(() => boot(raw, query, spec));
+  const [state, setState] = useState<Run>(first);
+  const recorded = useRef(first.recorded === true);
+  const answering = useRef(-1);
 
+  // Save every change. An empty selection is not saved: the next visit builds it again.
   useEffect(() => {
-    try {
-      sessionStorage.setItem(keyFor(raw), JSON.stringify(state));
-    } catch {
-      // ignore
-    }
-  }, [raw, state]);
+    if (state.ids.length) saveRun(runId, { ...state, t: Date.now() });
+  }, [runId, state]);
+
+  // Name the run in the address (replacing the entry), so Back, a reload or « Reprendre » find it.
+  useEffect(() => {
+    if (state.ids.length && query.get('run') !== runId) window.location.replace(`#${withRun(raw, runId)}`);
+  }, [query, raw, runId, state.ids.length]);
 
   const items = state.ids.map((id) => EXERCISE_BY_ID.get(id)!).filter(Boolean);
   const done = state.index >= items.length;
@@ -124,53 +184,59 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
   const xpTotal = state.played.reduce((s, p) => s + p.xp, 0);
   const label = specLabel(spec);
 
-  // Record the finished session once, then forget the saved run.
+  // Record the finished session once: the flag is saved with the run, so a Back to the summary,
+  // a reload or a remount never adds it again.
   useEffect(() => {
-    if (!done || recorded.current || state.played.length === 0) return;
+    if (!done || recorded.current || state.recorded || state.played.length === 0) return;
     recorded.current = true;
+    const t = tally(state.played);
     store.update((s) =>
       addSession(s, {
         id: `${Date.now()}`,
         at: new Date().toISOString(),
         kind: spec.kind,
         label,
-        total: state.played.length,
-        correct: state.played.filter((p) => p.verdict === 'correct').length,
-        partial: state.played.filter((p) => p.verdict === 'partial').length,
-        xp: xpTotal,
+        total: t.total,
+        correct: t.correct,
+        partial: t.partial,
+        xp: t.xp,
         missed: state.played.filter((p) => p.verdict === 'wrong').map((p) => p.id),
       }),
     );
-    try {
-      sessionStorage.removeItem(keyFor(raw));
-    } catch {
-      // ignore
-    }
-  }, [done, label, raw, spec.kind, state.played, xpTotal]);
+    setState((st) => ({ ...st, recorded: true }));
+  }, [done, label, spec.kind, state.played, state.recorded]);
 
   useEffect(() => {
+    // Back on a correction (after « Revoir la leçon », a reload…): ExerciseView brings it into view.
+    if (current && answeredCurrent(state)) return;
     document.getElementById(current ? `prompt-${current.id}` : 'main-title')?.focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
+    // Only when the exercise changes, not after each answer.
   }, [current, done]);
 
   if (items.length === 0) return <EmptySession spec={spec} />;
 
   if (done) return <Summary label={label} items={items} played={state.played} exam={exam} spec={spec} />;
 
-  const onAnswered = (r: { verdict: Verdict; score: number }) => {
+  const onAnswered = (r: GradeResult, draft: Draft) => {
+    // One attempt per exercise and run: XP and spaced repetition never count an answer twice.
+    if (answeredCurrent(state) || answering.current === state.index) return undefined;
+    answering.current = state.index;
     let xp = 0;
     store.update((s) => {
       const out = recordAttempt(s, current, r);
       xp = out.xp;
       return out.state;
     });
-    setState((st) => ({ ...st, played: [...st.played, { id: current.id, verdict: r.verdict, score: r.score, xp }] }));
+    const entry: Played = { id: current.id, verdict: r.verdict, score: r.score, xp, draft };
+    setState((st) => (answeredCurrent(st) ? st : { ...st, played: [...st.played, entry] }));
     return exam ? undefined : xp;
   };
 
-  const next = () => setState((st) => ({ ...st, index: st.index + 1 }));
+  const next = () => setState((st) => (st.index < st.ids.length && answeredCurrent(st) ? { ...st, index: st.index + 1 } : st));
   const module = current.module ? MODULE_BY_ID.get(current.module) : undefined;
   const last = state.index === items.length - 1;
+  const answered = answeredCurrent(state) ? state.played[state.index] : undefined;
 
   return (
     <div className="player">
@@ -207,6 +273,8 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         key={`${current.id}-${state.index}`}
         ex={current}
         mode={exam ? 'exam' : 'practice'}
+        seed={seedOf(runId, state.index)}
+        answered={answered?.draft ? { result: { verdict: answered.verdict, score: answered.score }, draft: answered.draft, xp: answered.xp } : undefined}
         onAnswered={onAnswered}
         onNext={next}
         nextLabel={last ? 'Voir le bilan' : 'Épreuve suivante'}
@@ -246,18 +314,32 @@ const ICON = { correct: CircleCheck, partial: CircleDot, wrong: CircleX };
 const CLASS = { correct: 'ok', partial: 'partial', wrong: 'ko' };
 const WORD = { correct: 'Juste', partial: 'Presque', wrong: 'À reprendre' };
 
+/** The same kind of session again, named for what it starts (an empty review would lead nowhere). */
+function nextSession(spec: SessionSpec, label: string): { to: string; text: string } {
+  switch (spec.kind) {
+    case 'daily':
+      return { to: '/session?mode=daily', text: 'Nouvelle session du jour' };
+    case 'module':
+      return { to: `/session?mode=module&id=${encodeURIComponent(spec.moduleId)}`, text: `Nouvelle session : ${label}` };
+    case 'type':
+      return { to: `/session?mode=type&id=${spec.type}`, text: `Nouvelle session : ${label}` };
+    case 'culture':
+      return { to: `/session?mode=culture${spec.cultureId ? `&id=${encodeURIComponent(spec.cultureId)}` : ''}`, text: `Nouvelle session : ${label}` };
+    case 'exam':
+      return { to: '/session?mode=exam', text: 'Nouvel examen blanc' };
+    case 'review':
+    case 'mistakes':
+      return { to: '/session?mode=daily', text: 'Lancer la session du jour' };
+  }
+}
+
 function Summary({ label, items, played, exam, spec }: { label: string; items: Exercise[]; played: Played[]; exam: boolean; spec: SessionSpec }) {
-  const correct = played.filter((p) => p.verdict === 'correct').length;
-  const partial = played.filter((p) => p.verdict === 'partial').length;
-  const xp = played.reduce((s, p) => s + p.xp, 0);
-  const missed = played.some((p) => p.verdict !== 'correct');
-  const rate = played.length ? correct / played.length : 0;
-  const message =
-    rate === 1
-      ? 'Sans faute. Les épreuves reviendront dans quelques jours pour ancrer ces règles.'
-      : rate >= 0.7
-        ? 'Solide. Relis les corrections des épreuves manquées : elles reviendront demain.'
-        : 'Les épreuves manquées reviendront dès demain. Relire la leçon associée aide beaucoup.';
+  const t = tally(played);
+  const parts = scoreParts(t);
+  const message = summaryMessage(t);
+  // « Mes erreurs » only holds wrong answers: a « presque » is not one (engine/session.ts).
+  const missed = t.wrong > 0;
+  const again = nextSession(spec, label);
 
   return (
     <div className="page page--narrow">
@@ -265,15 +347,19 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
         <h1 id="main-title" tabIndex={-1}>
           Bilan — {label}
         </h1>
-        <p className="summary-score">
-          <strong>
-            {correct}/{played.length}
-          </strong>
-          <span className="lead">
-            justes{partial ? `, ${partial} presque` : ''} · +{xp} XP
-          </span>
+        <p className="lead">
+          {parts.map((p, i) => {
+            const [n, ...word] = p.split(' ');
+            return (
+              <Fragment key={p}>
+                {i > 0 && (i === parts.length - 1 ? ' et ' : ', ')}
+                <strong className="num">{n}</strong> {word.join(' ')}
+              </Fragment>
+            );
+          })}{' '}
+          sur {t.total} · +{t.xp}&nbsp;XP
         </p>
-        <p className="muted">{message}</p>
+        {message && <p className="muted">{message}</p>}
       </header>
 
       <section className="section" aria-labelledby="recap-title">
@@ -318,8 +404,8 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
             Refaire mes erreurs
           </Link>
         )}
-        <Link to={`/session?mode=${spec.kind === 'module' ? `module&id=${spec.moduleId}` : 'daily'}&n=${Date.now()}`} className={missed ? 'btn btn-secondary' : 'btn btn-primary'}>
-          Nouvelle session
+        <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'}>
+          {frenchSpacing(again.text)}
         </Link>
         <Link to="/" className="btn btn-ghost">
           Retour à l’accueil
