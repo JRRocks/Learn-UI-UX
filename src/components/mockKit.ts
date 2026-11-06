@@ -134,13 +134,14 @@ a { color: #1f4fd8; }
 }
 .mk-hit::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
 .mk-hit:hover:not([aria-pressed="true"])::before { outline: 2px dashed rgb(29 34 48 / 0.5); outline-offset: 1px; }
-/* Chosen: a solid blue ring hugging the zone, and a check badge on its corner. */
+/* Chosen: a solid blue ring hugging the zone, and a check badge on its outline. The script centers the
+   badge (left/top) on the first spot of the ring that hides no drawn text, from the end corner on. */
 .mk-hit[aria-pressed="true"]::before { box-shadow: 0 0 0 3px #2f6be0; }
 .mk-hit-badge {
-  position: absolute; top: -9px; inset-inline-end: -9px; display: none; place-items: center;
+  position: absolute; top: 0; left: 100%; margin: -10px 0 0 -10px; display: none; place-items: center;
   width: 20px; height: 20px; border-radius: 50%; background: #2f6be0; box-shadow: 0 0 0 2px #fff;
+  pointer-events: none;
 }
-.mk-hit[data-badge-in] .mk-hit-badge { top: 3px; inset-inline-end: 3px; }
 .mk-hit[aria-pressed="true"] .mk-hit-badge { display: grid; }
 .mk-hit-badge svg { width: 13px; height: 13px; }
 /* Focus: a double ring, white then near-black, set further out than the choice ring. */

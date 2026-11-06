@@ -166,6 +166,99 @@ export function hitBoxes(zones: Box[], width: number, height: number, pad: numbe
   });
 }
 
+/** The check badge of a chosen zone, with its white ring. */
+const BADGE = 24;
+
+/**
+ * Points `offset` px outside a box's outline (negative: inside), along each edge's normal and
+ * diagonally at the corners, so that a badge set there touches the outline all around. They are
+ * sorted from the top end corner (top right in a left-to-right mock), both ways round.
+ */
+function outline(hit: Box, offset: number, rtl: boolean, step = 4): [number, number][] {
+  const { l, r, t, b } = hit;
+  const w = Math.max(0, r - l);
+  const h = Math.max(0, b - t);
+  const perimeter = 2 * (w + h);
+  const corners = [0, w, w + h, 2 * w + h];
+  const d = offset / Math.SQRT2;
+  // From the top end corner: along the top edge, down the start edge, along the bottom, up the end edge.
+  const at = (s: number): [number, number] => {
+    let p: [number, number];
+    if (s === 0) p = [r + d, t - d];
+    else if (s === w) p = [l - d, t - d];
+    else if (s === w + h) p = [l - d, b + d];
+    else if (s === 2 * w + h) p = [r + d, b + d];
+    else if (s < w) p = [r - s, t - offset];
+    else if (s < w + h) p = [l - offset, t + s - w];
+    else if (s < 2 * w + h) p = [l + s - w - h, b + offset];
+    else p = [r + offset, b - (s - 2 * w - h)];
+    return [rtl ? l + r - p[0] : p[0], p[1]];
+  };
+  const steps = new Set(corners);
+  for (let s = step; s < perimeter; s += step) steps.add(s);
+  return [...steps]
+    .sort((a, c) => Math.min(a, perimeter - a) - Math.min(c, perimeter - c) || a - c)
+    .map(at);
+}
+
+interface BadgeRoom {
+  /** Text the mock draws: never hidden if any spot allows it. */
+  text: Box[];
+  /** Targets of the other zones (not nested in this one, nor around it): avoided when possible. */
+  others: Box[];
+  width: number;
+  height: number;
+  rtl: boolean;
+}
+
+/**
+ * Where the check badge of a chosen zone sits (its center), so that it hides no drawn text and is
+ * not cut by the mock's edge: on the zone's outline, else just outside it, else just inside it, each
+ * time from the end corner (top right in a left-to-right mock) both ways round. A spot clear of the
+ * other zones comes first, so that a badge never seems to belong to a neighbour; if every spot covers
+ * some text, the one that covers the least.
+ */
+export function badgeSpot(hit: Box, { text, others, width, height, rtl }: BadgeRoom, size = BADGE): { x: number; y: number } {
+  const half = size / 2;
+  const fits = ([x, y]: [number, number]) => x - half >= 0 && x + half <= width && y - half >= 0 && y + half <= height;
+  const cover = (boxes: Box[], [x, y]: [number, number]) =>
+    boxes.reduce((sum, q) => {
+      const w = Math.min(q.r, x + half) - Math.max(q.l, x - half);
+      const h = Math.min(q.b, y + half) - Math.max(q.t, y - half);
+      return w > 0.5 && h > 0.5 ? sum + w * h : sum;
+    }, 0);
+  // On the outline (the choice ring runs 1 px outside the target), just outside it, just inside it.
+  const tiers = [1, half + 1, -half].map((offset) => outline(hit, offset, rtl).filter(fits));
+  for (const apart of [true, false])
+    for (const spots of tiers)
+      for (const s of spots) if (cover(text, s) === 0 && (!apart || cover(others, s) === 0)) return { x: s[0], y: s[1] };
+  let best: { spot: [number, number]; covered: number } | null = null;
+  for (const s of tiers.flat()) {
+    const covered = cover(text, s);
+    if (!best || covered < best.covered) best = { spot: s, covered };
+  }
+  if (best) return { x: best.spot[0], y: best.spot[1] };
+  // A mock smaller than the badge: the end corner, as far inside as it goes.
+  const clamp = (v: number, max: number) => Math.min(Math.max(v, half), Math.max(half, max - half));
+  return { x: clamp(rtl ? hit.l : hit.r, width), y: clamp(hit.t, height) };
+}
+
+/** The text the mock draws, in layer coordinates: what a check badge must not hide. */
+function drawnText(base: HTMLElement, box: DOMRect, scale: number): Box[] {
+  const out: Box[] = [];
+  const walker = document.createTreeWalker(base, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (!node.textContent?.trim() || node.parentElement?.closest('.mk-hits, .mk-marks')) continue;
+    range.selectNodeContents(node);
+    for (const q of range.getClientRects())
+      if (q.width > 0 && q.height > 0)
+        out.push({ l: (q.left - box.left) / scale, t: (q.top - box.top) / scale, r: (q.right - box.left) / scale, b: (q.bottom - box.top) / scale });
+  }
+  return out;
+}
+
 function placeHits(base: HTMLElement, zones: HTMLElement[], buttons: HTMLButtonElement[]) {
   const box = base.getBoundingClientRect();
   // A scaled ancestor shrinks client rects but not the layer's own coordinates.
@@ -177,15 +270,23 @@ function placeHits(base: HTMLElement, zones: HTMLElement[], buttons: HTMLButtonE
   const coarse = window.matchMedia('(pointer: coarse)').matches;
   const hits = hitBoxes(rects, base.offsetWidth, base.offsetHeight, coarse ? 8 : 4);
   const rtl = getComputedStyle(base).direction === 'rtl';
+  const text = drawnText(base, box, scale);
+  const contains = (a: Box, b: Box) => a.l <= b.l && a.t <= b.t && a.r >= b.r && a.b >= b.b;
+  /** Badges already placed: two chosen zones never stack their badges. */
+  const placed: Box[] = [];
   hits.forEach((h, i) => {
     const b = buttons[i];
     b.style.left = `${h.l}px`;
     b.style.top = `${h.t}px`;
     b.style.width = `${Math.max(0, h.r - h.l)}px`;
     b.style.height = `${Math.max(0, h.b - h.t)}px`;
-    // The check badge sits on the corner, inside the zone when the mock's edge would cut it.
-    const edge = h.t < 10 || (rtl ? h.l < 10 : base.offsetWidth - h.r < 10);
-    b.toggleAttribute('data-badge-in', edge);
+    // The check badge rides the outline wherever it hides no text, never cut by the mock's edge.
+    const others = hits.filter((_, j) => j !== i && !contains(rects[j], rects[i]) && !contains(rects[i], rects[j]));
+    const spot = badgeSpot(h, { text, others: [...others, ...placed], width: base.offsetWidth, height: base.offsetHeight, rtl });
+    placed.push({ l: spot.x - BADGE / 2, t: spot.y - BADGE / 2, r: spot.x + BADGE / 2, b: spot.y + BADGE / 2 });
+    const badge = b.firstElementChild as HTMLElement | null;
+    badge?.style.setProperty('left', `${spot.x - h.l}px`);
+    badge?.style.setProperty('top', `${spot.y - h.t}px`);
   });
 }
 
