@@ -898,7 +898,7 @@ Une équipe étrangère ne peut pas deviner ces associations. La seule méthode 
       culture: 'cn',
       prompt: 'Une appli de méditation qui se lance en Chine gagnerait à copier l’accueil des super-apps : une grille d’icônes de services et des bannières promotionnelles.',
       answer: false,
-      explanation: `**Faux.** La grille d’icônes des super-apps a une raison d’être : Alipay ou Meituan servent de portail vers des dizaines de services — repas, courses, taxi, hôtel —, et leur accueil les montre d’un coup d’œil. Une partie de cette densité sert aussi le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs. Une appli de méditation n’a ni ces services à ranger ni cet espace à vendre : copier la forme sans sa raison d’être n’ajouterait que du bruit.
+      explanation: `Faux. La grille d’icônes des super-apps a une raison d’être : Alipay ou Meituan servent de portail vers des dizaines de services — repas, courses, taxi, hôtel —, et leur accueil les montre d’un coup d’œil. Une partie de cette densité sert aussi le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs. Une appli de méditation n’a ni ces services à ranger ni cet espace à vendre : copier la forme sans sa raison d’être n’ajouterait que du bruit.
 
 La densité des applis chinoises est une tendance, pas une loi. Elle a de vraies causes — une écriture compacte, un usage presque entièrement mobile, les super-apps —, mais les contre-exemples abondent : Douyin s’ouvre en plein écran sur une seule vidéo, la liste de conversations de WeChat reste sobre. Les attentes varient aussi avec l’âge, la ville et la tâche.
 
@@ -1193,9 +1193,9 @@ Trois marchés, trois conventions : vert et rouge en Occident, rouge et vert en 
       type: 'truefalse',
       difficulty: 2,
       culture: 'kr',
-      prompt: 'Avec `word-break: keep-all`, un libellé coréen écrit sans espace, comme 개인정보처리방침, peut déborder d’une colonne étroite.',
+      prompt: 'Avec `word-break: keep-all`, un libellé coréen écrit sans espace, comme 개인정보처리방침, déborde d’une colonne plus étroite que lui.',
       answer: true,
-      explanation: `**Vrai.** \`keep-all\` interdit de couper un mot entre deux syllabes : la ligne ne peut plus se couper qu’aux espaces. Un terme composé écrit d’un bloc, comme 개인정보처리방침 (« politique de confidentialité »), devient alors insécable : dans une tuile, un onglet ou une cellule étroite, il dépasse de sa boîte — comme une référence de commande ou une adresse web.
+      explanation: `Vrai. \`keep-all\` interdit de couper un mot entre deux syllabes : la ligne ne peut plus se couper qu’aux espaces. Un terme composé écrit d’un bloc, comme 개인정보처리방침 (« politique de confidentialité »), devient alors insécable : dans une tuile, un onglet ou une cellule étroite, il dépasse de sa boîte — comme une référence de commande ou une adresse web.
 
 Le filet de sécurité : \`overflow-wrap: anywhere\`. Les mots restent entiers tant qu’ils tiennent sur la ligne ; seul un mot plus large que sa colonne se coupe, entre deux syllabes.
 
@@ -1632,7 +1632,7 @@ Placer le CEP à la fin, comme un code postal occidental, fait saisir à la main
       culture: 'fr',
       prompt: 'Une boutique en ligne qui vend à des consommateurs en France peut présenter ses offres et ses conditions en anglais, sans version française, si sa marque est internationale.',
       answer: false,
-      explanation: `**Faux.** La **loi Toubon** (loi n° 94-665 du 4 août 1994) impose l’usage du français dans la désignation, l’offre, la présentation, le mode d’emploi et les conditions de garantie des biens et des services, ainsi que dans les factures et la publicité destinées aux consommateurs en France.
+      explanation: `Faux. La **loi Toubon** (loi n° 94-665 du 4 août 1994) impose l’usage du français dans la désignation, l’offre, la présentation, le mode d’emploi et les conditions de garantie des biens et des services, ainsi que dans les factures et la publicité destinées aux consommateurs en France.
 
 Une traduction peut accompagner le texte français, à condition que la version française soit **aussi lisible, audible ou intelligible**. Les noms de marque échappent en principe à la règle, pas les slogans ni les descriptions.
 
@@ -1888,7 +1888,7 @@ Le Canada ajoute aussi les taxes au paiement, mais parle de province et de code 
       culture: 'us',
       prompt: 'Pour localiser une appli météo aux États-Unis, il faut convertir les températures en degrés Fahrenheit, pas seulement traduire l’interface et formater les nombres.',
       answer: true,
-      explanation: `**Vrai.** Les États-Unis mesurent en unités usuelles américaines : degrés Fahrenheit, miles, livres, onces, pouces. Une prévision à 20\u00a0°C y devient 68\u00a0°F : c’est la valeur qui change, pas seulement sa présentation.
+      explanation: `Vrai. Les États-Unis mesurent en unités usuelles américaines : degrés Fahrenheit, miles, livres, onces, pouces. Une prévision à 20\u00a0°C y devient 68\u00a0°F : c’est la valeur qui change, pas seulement sa présentation.
 
 \`Intl.NumberFormat\` écrit l’unité selon la locale — \`new Intl.NumberFormat('en-US', { style: 'unit', unit: 'fahrenheit' }).format(68)\` donne « 68°F » —, mais il ne convertit rien : passer de 20 à 68 reste le travail de ton code.
 
@@ -1998,9 +1998,9 @@ Le reste suit la même logique : dates au format ISO (2026-10-27), heures sur 24
       type: 'truefalse',
       difficulty: 2,
       culture: 'nordics',
-      prompt: 'En Suède, une banque doit vouvoyer ses clients (« ni ») pour paraître sérieuse.',
+      prompt: 'En Suède, une banque en ligne doit vouvoyer ses clients (« ni ») dans son appli et ses e-mails pour paraître sérieuse.',
       answer: false,
-      explanation: `**Faux.** Depuis la « du-reformen » de la fin des années 1960, le tutoiement (« du ») est la norme en Suède, y compris avec les banques et les administrations. Le vouvoiement (« ni ») y paraît souvent distant, voire étrange.
+      explanation: `Faux. Depuis la « du-reformen » de la fin des années 1960, le tutoiement (« du ») est la norme en Suède, y compris avec les banques et les administrations. Le vouvoiement (« ni ») y paraît souvent distant, voire étrange.
 
 Ce ton direct va de pair avec une faible distance hiérarchique (31 sur l’échelle de Hofstede). En Allemagne et en France, les banques traditionnelles vouvoient le plus souvent (« Sie », « vous ») : le bon registre dépend du marché, pas d’un réflexe universel de « sérieux ».`,
       takeaway: 'En Suède, le tutoiement (« du ») est la norme, banques et administrations comprises : le ton suit la culture, pas un réflexe de sérieux.',
@@ -2078,7 +2078,7 @@ Pour l’interface, deux moments comptent :
       culture: 'ke',
       prompt: 'Au Kenya, un service peut toucher les utilisateurs de téléphones basiques sans aucune appli, grâce aux menus USSD et aux SMS.',
       answer: true,
-      explanation: `**Vrai.** Les menus **USSD** — des codes comme \`*334#\`, qui ouvre le menu M-Pesa depuis 2020 — et les **SMS** fonctionnent sur n’importe quel téléphone, sans connexion Internet. Banques, assureurs, services agricoles et administrations s’en servent pour toucher tout le monde.
+      explanation: `Vrai. Les menus **USSD** — des codes comme \`*334#\`, qui ouvre le menu M-Pesa depuis 2020 — et les **SMS** fonctionnent sur n’importe quel téléphone, sans connexion Internet. Banques, assureurs, services agricoles et administrations s’en servent pour toucher tout le monde.
 
 Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d’étapes, des libellés compréhensibles sans contexte : une session expire vite. Et pour les applis, rester léger et prévoir un mode hors ligne, car les données mobiles coûtent cher.`,
       takeaway: 'Au Kenya, l’USSD et le SMS touchent tous les téléphones : pense le service au-delà de l’appli, en menus courts et numérotés.',
@@ -2183,7 +2183,7 @@ Le réglage par défaut d’\`Intl.NumberFormat('id-ID', { style: 'currency', cu
       culture: 'sea',
       prompt: 'En Indonésie, un seul QR code QRIS se paie avec n’importe quelle appli bancaire ou portefeuille compatible (GoPay, OVO, DANA…).',
       answer: true,
-      explanation: `**Vrai.** **QRIS** (*Quick Response Code Indonesian Standard*), le standard national lancé par Bank Indonesia en août 2019 et appliqué à tout le pays depuis le 1er janvier 2020, rend les QR codes de paiement interopérables : le marchand n’affiche plus un code par portefeuille, mais un seul code QRIS, au comptoir ou à l’écran.
+      explanation: `Vrai. **QRIS** (*Quick Response Code Indonesian Standard*), le standard national lancé par Bank Indonesia en août 2019 et appliqué à tout le pays depuis le 1er janvier 2020, rend les QR codes de paiement interopérables : le marchand n’affiche plus un code par portefeuille, mais un seul code QRIS, au comptoir ou à l’écran.
 
 Pour un parcours de paiement, l’interface s’en trouve simplifiée : un QR code QRIS et la consigne « scanne avec ton appli bancaire ou ton portefeuille », plutôt qu’une mosaïque de logos et de codes.`,
       takeaway: 'En Indonésie, un seul QR code QRIS est accepté par toutes les applis compatibles : propose-le plutôt qu’un code par portefeuille.',
@@ -2348,7 +2348,7 @@ Le piège n’est pas de les ignorer, mais de les coder à la main.`,
       difficulty: 2,
       prompt: 'Le score de Hofstede d’un pays permet de prédire les préférences d’un utilisateur de ce pays.',
       answer: false,
-      explanation: `**Faux.** Les scores de Hofstede sont des **moyennes nationales**, issues à l’origine d’enquêtes auprès d’employés d’IBM (1967–1973), puis complétées. Ils comparent des populations, pas des personnes : en déduire le profil d’un individu est un sophisme écologique.
+      explanation: `Faux. Les scores de Hofstede sont des **moyennes nationales**, issues à l’origine d’enquêtes auprès d’employés d’IBM (1967–1973), puis complétées. Ils comparent des populations, pas des personnes : en déduire le profil d’un individu est un sophisme écologique.
 
 À l’intérieur d’un pays, l’âge, la ville, le métier ou l’habitude du numérique font varier les attentes. Une étude portant sur près de 170 000 personnes, issues de trois enquêtes internationales (Fischer et Schwartz, 2011), trouve d’ailleurs plus de consensus que de désaccord entre pays sur les priorités de valeurs.
 

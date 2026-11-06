@@ -289,7 +289,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
 - **Rayons** : les cartes restent entre **12 et 16 px** ; la pilule (rayon complet) est réservée aux **petits contrôles**.
 - **Une vraie illustration, ou aucune** : les scènes SVG façon croquis, les classes \`loose-sketch\` ou \`doodle\` et le grain \`feTurbulence\` font amateur. Cela vise le SVG qui imite une image, jamais le SVG qui fait de la géométrie : formes vectorielles nettes, diagrammes, tracés animés et effets de shader restent des médias de premier plan.
 - **Les fonds sont des surfaces**, texturées seulement depuis le monde du sujet. Les rayures en \`repeating-linear-gradient\` et les quadrillages sur deux axes exigent une vraie toile, une carte, un plan ou un outil de mesure dessous.
-- **Honnêteté du matériau** : affirmations et configurations viennent de la vérité fournie ; une valeur illustrative s’étiquette honnêtement. Tourner un concept en dérision (« fini le théâtre de la sécurité ») n’affirme rien : c’est un tic des textes générés, que le détecteur relève (cadrage « théâtre », *theater-slop-phrase*). Dis plutôt ce que la chose fait ou ne fait pas.`,
+- **Honnêteté du matériau** : affirmations et configurations viennent de la vérité fournie ; une valeur illustrative s’étiquette honnêtement. Tourner un concept en dérision (« fini le théâtre de la sécurité ») n’affirme rien : c’est un tic des textes générés, que le détecteur relève (cadrage « théâtre », \`theater-slop-phrase\`). Dis plutôt ce que la chose fait ou ne fait pas.`,
       examples: [
         {
           title: 'Une seule élévation',
@@ -356,7 +356,6 @@ Autrement dit, le plancher protège le visiteur ; il ne remplace pas une idée.`
     },
   ],
   rules: [
-    { id: 'contrast', front: 'Quel contraste pour le texte courant, les textes indicatifs et le grand texte ?', back: '4,5:1 pour le texte courant et les textes indicatifs, 3:1 pour le grand texte. Sur fond coloré, teinte le texte secondaire, jamais de gris.' },
     { id: 'depth', front: 'Qu’est-ce qui distingue une ombre d’un halo décoratif ?', back: 'L’ombre a un décalage et un flou doux. Un halo coloré sans décalage est de la décoration.' },
     { id: 'heading-space', front: 'Autour d’un titre, où mettre le plus d’espace ?', back: 'Au-dessus : le titre se lie au contenu qu’il introduit, pas au bloc précédent.' },
     { id: 'type-floor', front: 'Quelles sont les trois bornes typographiques du plancher ?', back: 'Mesure du corps de 65 à 75 caractères (le haut de la plage de confort 45–75), affichage plafonné à 6rem, approche jamais sous −0,04em.' },
@@ -478,7 +477,7 @@ La correction n’est pas de rendre le libellé plus discret, mais de **le suppr
         },
       ],
       answer: 'dot',
-      explanation: `Le plancher refuse **toute bordure gauche ou droite colorée de plus de 1 px** sur les cartes, éléments de liste, encadrés et alertes. Le détecteur la classe parmi les signes les plus reconnaissables des interfaces générées (règle « Bordure latérale d’accent », *side-tab*).
+      explanation: `Le plancher refuse **toute bordure gauche ou droite colorée de plus de 1 px** sur les cartes, éléments de liste, encadrés et alertes. Le détecteur la classe parmi les signes les plus reconnaissables des interfaces générées (règle « Bordure latérale d’accent », \`side-tab\`).
 
 Pour signaler un état, d’autres moyens sont plus précis : un point, une graisse plus forte, une légère teinte de fond, une icône. Ils marquent l’élément entier, pas un de ses bords.`,
       takeaway: 'Pas de trait coloré de plus de 1 px sur le côté d’une carte : marque l’état par un point, la graisse ou la teinte.',
@@ -560,7 +559,7 @@ Le détecteur la signale quand elle se répète sur une rangée : au moins trois
       answer: 'tint',
       explanation: `Le contraste minimal est nécessaire, pas suffisant. Le plancher le dit en une ligne : **sur une surface colorée, teinte le texte secondaire depuis la couleur du fond ou du premier plan ; jamais de gris.**
 
-Un gris neutre posé sur une couleur saturée paraît délavé, presque sale, parce que l’œil le compare à la teinte qui l’entoure. Une version très claire de la teinte du fond garde la hiérarchie (le texte reste secondaire) tout en s’intégrant. Le détecteur signale ce cas (règle « Texte gris sur fond coloré », *gray-on-color*).`,
+Un gris neutre posé sur une couleur saturée paraît délavé, presque sale, parce que l’œil le compare à la teinte qui l’entoure. Une version très claire de la teinte du fond garde la hiérarchie (le texte reste secondaire) tout en s’intégrant. Le détecteur signale ce cas (règle « Texte gris sur fond coloré », \`gray-on-color\`).`,
       takeaway: 'Sur un fond coloré, le texte secondaire se teinte du fond ou du premier plan, même quand un gris passerait le contraste.',
       sources: ['imp:craft-floor', 'imp:colorize', 'imp:detector'],
     },
@@ -720,7 +719,7 @@ Réécrits, ces trois textes deviennent : « La date de fin précède la date de
       prompt: 'Quelle proposition respecte le plancher de qualité ?',
       options: [
         { id: 'sketch', label: 'Une scène SVG façon croquis, aux traits tremblés et au grain `feTurbulence` : une indépendante qui jongle avec ses factures.', why: 'Du SVG qui imite une image, en croquis et avec du grain : exactement ce que le plancher juge amateur.' },
-        { id: 'shapes', label: 'Des personnages assemblés de cercles et de rectangles autour d’un bureau, en aplats de couleurs vives.', why: 'Une scène bâtie de formes primitives se lit comme un clipart provisoire ; le détecteur la relève (règle « Illustration assemblée de formes », *shape-assembled-illustration*).' },
+        { id: 'shapes', label: 'Des personnages assemblés de cercles et de rectangles autour d’un bureau, en aplats de couleurs vives.', why: 'Une scène bâtie de formes primitives se lit comme un clipart provisoire ; le détecteur la relève (règle « Illustration assemblée de formes », `shape-assembled-illustration`).' },
         { id: 'emoji', label: 'Trois grands emoji alignés en guise d’illustration : un graphique, un billet, un reçu.', why: 'Des glyphes ne font pas une illustration : leur dessin change d’un système à l’autre, et ils ne montrent rien du produit.' },
         { id: 'real', label: 'Une capture réelle de l’écran de facturation, ou un schéma vectoriel net du circuit d’une facture : devis, facture, paiement, rapprochement.', why: 'Une vraie image du produit, ou du SVG qui fait de la géométrie : formes nettes et diagrammes restent des médias de premier plan.' },
       ],
@@ -729,7 +728,7 @@ Réécrits, ces trois textes deviennent : « La date de fin précède la date de
 
 La règle vise le SVG qui **imite une image**, jamais le SVG qui **fait de la géométrie** : formes vectorielles nettes, diagrammes, tracés animés et effets de shader restent des médias de premier plan. Le schéma du circuit d’une facture en fait partie ; une capture réelle, elle, montre le produit au travail.
 
-Le détecteur ajoute un conseil (règle « Illustration assemblée de formes », *shape-assembled-illustration*) : un grand SVG en ligne, d’au moins 200 sur 200, qui assemble huit formes primitives ou plus (rectangles, cercles, ellipses, polygones) en au moins trois couleurs se lit comme un clipart provisoire. Quant aux emoji, ce sont des glyphes : ils ne remplacent ni une illustration ni un système d’icônes.`,
+Le détecteur ajoute un conseil (règle « Illustration assemblée de formes », \`shape-assembled-illustration\`) : un grand SVG en ligne, d’au moins 200 sur 200, qui assemble huit formes primitives ou plus (rectangles, cercles, ellipses, polygones) en au moins trois couleurs se lit comme un clipart provisoire. Quant aux emoji, ce sont des glyphes : ils ne remplacent ni une illustration ni un système d’icônes.`,
       takeaway: 'Une vraie illustration, ou aucune : une capture réelle ou un schéma net plutôt qu’une scène en croquis ou en formes assemblées.',
       sources: ['imp:craft-floor', 'imp:detector'],
     },
@@ -791,9 +790,9 @@ impeccable conclut : quand tout est au vert, **consacre la page au monde choisi*
       id: 'craft-floor-modal-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Pour renommer un projet, une fenêtre modale est le choix le plus sûr.',
+      prompt: 'Dans la liste des projets d’un outil de gestion, une fenêtre modale est le choix le plus sûr pour renommer un projet.',
       answer: false,
-      explanation: `Le plancher refuse **la modale pour une tâche qui n’exige ni interruption ni focus protégé**, et la liste des contraintes produit d’impeccable ajoute : « la modale comme premier réflexe ». Une modale masque le contexte, interrompt et demande un geste de plus pour revenir.
+      explanation: `Faux. Le plancher refuse **la modale pour une tâche qui n’exige ni interruption ni focus protégé**, et la liste des contraintes produit d’impeccable ajoute : « la modale comme premier réflexe ». Une modale masque le contexte, interrompt et demande un geste de plus pour revenir.
 
 Renommer se fait **sur place** : on clique sur le nom, il devient un champ, Entrée valide, Échap annule. La modale reste utile quand il faut vraiment protéger une décision, comme une suppression définitive.`,
       takeaway: 'Pas de modale par réflexe : épuise d’abord l’édition sur place et la divulgation progressive.',

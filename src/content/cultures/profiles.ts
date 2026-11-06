@@ -722,7 +722,7 @@ Le blanc est associé au deuil ; on évite le chapeau vert (allusion à l’infi
       {
         topic: 'typo',
         title: 'Typographie chinoise',
-        body: `Pas d’italique (on souligne par le gras, la couleur ou des points d’emphase), pas d’espaces entre les mots, ponctuation pleine chasse (，。！？) et aucune ponctuation fermante en début de ligne. Interlignage généreux (1,5 à 1,8).
+        body: `Pas d’italique (on souligne par le gras, la couleur ou des points d’emphase), pas d’espaces entre les mots, ponctuation pleine chasse (，。！？) et aucune ponctuation fermante en début de ligne. Interlignage généreux (1,5 à 2, environ 1,7 pour un corps de texte).
 
 Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : une police chinoise complète pèse plusieurs mégaoctets.`,
       },
@@ -754,7 +754,7 @@ Préfère les polices système (PingFang SC, Microsoft YaHei, Noto Sans CJK) : u
         'Construire l’accueil autour d’une grille d’accès aux services et d’un flux de découverte',
         'Afficher ventes, avis photo et garanties (retour sous 7 jours) près du prix',
         'Formater les grands nombres en 万 et 亿 avec `Intl` (`zh-CN`, notation compacte)',
-        'Utiliser les polices système CJK et un interlignage de 1,5 à 1,8',
+        'Utiliser les polices système CJK et un interlignage de 1,5 à 2',
       ],
       dont: [
         'Ne pas utiliser le vert pour une hausse dans une appli boursière',
