@@ -171,6 +171,11 @@ table {
   font-variant-numeric: tabular-nums;
 }
 
+/* Browsers give list numbers tabular figures, hence « 1 . » in this face. */
+li::marker {
+  font-variant-numeric: normal;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

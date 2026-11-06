@@ -19,10 +19,13 @@ export function frenchSpacing(text: string): string {
     .replace(/(\d) (?=\d{3}(?!\d))/g, '$1\u00A0')
     .replace(/(\d) × (?=\d)/g, '$1\u00A0×\u00A0')
     .replace(/(\d) h (?=\d)/g, '$1\u00A0h\u00A0')
+    // A comparison stays with its number: « ≥ 16 px », « < 2,5 s ».
+    .replace(/([≤≥≈<>±]) (?=\d)/g, '$1\u00A0')
     .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\p{L}\d]))/gu, '$1\u00A0');
 }
 
-const INLINE = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
+// Bold may hold italics (**Un sur-titre (*kicker*)**); a lone run of asterisks (139****5678) stays literal.
+const INLINE = /(\*\*(?:[^*]|\*[^*\s][^*]*\*)+\*\*|\*[^*\s][^*]*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
 
 export function inline(text: string, keyPrefix = 'i'): ReactNode[] {
   const out: ReactNode[] = [];
@@ -111,8 +114,10 @@ export function parseBlocks(src: string): Block[] {
   return blocks;
 }
 
-export function Md({ text, className }: { text: string; className?: string }) {
+/** `headingLevel` is the level of `### ` headings: one below the heading the text sits under. */
+export function Md({ text, className, headingLevel = 3 }: { text: string; className?: string; headingLevel?: 2 | 3 | 4 }) {
   const blocks = parseBlocks(text);
+  const H = `h${headingLevel}` as const;
   return (
     <div className={['md', className].filter(Boolean).join(' ')}>
       {blocks.map((b, i) => {
@@ -121,7 +126,7 @@ export function Md({ text, className }: { text: string; className?: string }) {
           case 'p':
             return <p key={k}>{inline(b.text, k)}</p>;
           case 'h':
-            return <h3 key={k}>{inline(b.text, k)}</h3>;
+            return <H key={k}>{inline(b.text, k)}</H>;
           case 'quote':
             return <blockquote key={k}>{inline(b.text, k)}</blockquote>;
           case 'ul':
