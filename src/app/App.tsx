@@ -239,7 +239,8 @@ function focusModeTitle(route: Route): string {
     const m = MODULE_BY_ID.get(route.query.get('module') ?? '');
     return pageTitle(m ? `Fiches — ${m.title}` : 'Fiches de révision');
   }
-  return pageTitle(route.query.get('mode') === 'blitz' ? 'Défi chrono' : specLabel(parseSpec(route.query)));
+  // « Typographie — S’entraîner »: distinct from the lesson page, which is titled « Typographie ».
+  return pageTitle(route.query.get('mode') === 'blitz' ? 'Défi chrono' : specLabel(parseSpec(route.query)), 'S’entraîner');
 }
 
 function Shell() {
