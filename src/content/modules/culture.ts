@@ -1752,12 +1752,12 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
       prompt: 'Quelle version de cet écran de réglages supporte la traduction allemande ?',
       options: [
         {
-          id: 'fixed',
+          id: 'ellipsis',
           visual: {
-            alt: 'Écran « Einstellungen » avec trois tuiles étroites de largeur fixe : les mots composés allemands Benachrichtigungen, Datenschutzeinstellungen et Zahlungsmethoden sont tronqués par des points de suspension.',
+            alt: 'Écran « Einstellungen » avec trois tuiles dont les libellés allemands restent sur une ligne : Benachrichtigungen, Datenschutzeinstellungen et Zahlungsmethoden sont tronqués par des points de suspension.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
-.ds-grid{display:grid;grid-template-columns:repeat(3,76px);gap:6px}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
 .ds-tile span{display:block;width:100%;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}`,
@@ -1770,15 +1770,15 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
   </div>
 </div>`,
           },
-          why: 'Largeurs fixes pensées pour l’anglais : les mots composés allemands sont tronqués et deviennent illisibles.',
+          why: 'Les libellés restent sur une ligne : un mot composé plus large que sa tuile est tronqué et devient illisible.',
         },
         {
-          id: 'flexible',
+          id: 'hyphens',
           visual: {
-            alt: 'Le même écran avec des tuiles souples : les mots composés allemands passent à la ligne, coupés par un trait d’union.',
+            alt: 'Le même écran : les mots composés allemands passent à la ligne, coupés par un trait d’union.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
-.ds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
 .ds-tile span{font-size:13px;font-weight:600;line-height:1.3;-webkit-hyphens:auto;hyphens:auto;overflow-wrap:break-word;max-width:100%}`,
@@ -1791,10 +1791,10 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
   </div>
 </div>`,
           },
-          why: 'Largeurs souples, langue déclarée et césure automatique : les mots longs se coupent au besoin selon les règles allemandes, rien n’est tronqué.',
+          why: 'Langue déclarée et césure automatique : les mots composés se coupent selon les règles allemandes, avec un trait d’union ; rien n’est tronqué.',
         },
       ],
-      answer: 'flexible',
+      answer: 'hyphens',
       explanation: `Un mot composé allemand s’écrit d’un seul tenant : « Privacy settings » devient « Datenschutzeinstellungen », 24 lettres sans espace. Sans césure, le navigateur ne passe à la ligne qu’entre deux mots : dans une tuile étroite, un tel mot déborde, ou il est tronqué si la tuile masque ce qui dépasse. Et les libellés courts gonflent le plus : pour une chaîne de 10 caractères ou moins, IBM prévoit une traduction 2 à 3 fois plus longue.
 
 Deux réglages laissent le navigateur couper ces mots proprement :
@@ -1802,7 +1802,7 @@ Deux réglages laissent le navigateur couper ces mots proprement :
 - \`hyphens: auto\` : le navigateur coupe le mot à un point de césure prévu par les règles de la langue et ajoute un trait d’union ;
 - l’attribut \`lang="de"\` sur le contenu : sans lui, le navigateur ne sait pas quel dictionnaire de césure utiliser et ne coupe rien.
 
-Ajoute \`overflow-wrap: break-word\` en filet de sécurité, pour un mot que le dictionnaire ne sait pas couper, et laisse les tuiles s’élargir avec leur contenu plutôt que de leur imposer une largeur fixe.`,
+Ajoute \`overflow-wrap: break-word\` en filet de sécurité, pour un mot que le dictionnaire ne sait pas couper. Et sur un libellé de quelques mots, préfère le retour à la ligne à la troncature : « Datenschutzeinst… » ne dit plus où mène la tuile.`,
       takeaway: 'Mots composés allemands : déclare `lang="de"` et `hyphens: auto` pour que le navigateur les coupe au lieu de les tronquer.',
       sources: ['imp:harden', S.hyphens, S.overflowWrap, S.w3cTextSize],
     },

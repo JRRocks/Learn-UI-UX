@@ -58,7 +58,7 @@ const LEDGER_PRODUCT: Visual = {
 .tre-h { font-size: 16px; font-weight: 700; }
 .tre-add { background: #1f3a8a; }
 .tre-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 8px; }
-.tre-select, .tre-chip { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 10px; border: 1px solid #c9cfdc; border-radius: 6px; background: #fff; font-size: 12px; }
+.tre-select, .tre-chip { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 10px; border: 1px solid #868d9c; border-radius: 6px; background: #fff; font-size: 12px; }
 .tre-chip--on { background: #e4e9f7; border-color: #1f3a8a; color: #1f3a8a; font-weight: 600; }
 .tre-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .tre-table th { text-align: start; font-size: 12px; font-weight: 600; color: #5a6172; padding: 6px 4px; border-bottom: 1px solid #d9dde6; }
@@ -233,7 +233,7 @@ Le *monde* (l’univers visuel retenu pour le produit) ne prête que **quatre ch
 
 ### Ce que la surface produit s’autorise
 
-Souvent une seule famille de caractères, une échelle fixe en rem au rapport serré (1,125 à 1,2), des transitions de 150 à 250 ms, tous les états des composants, des squelettes de chargement plutôt qu’un indicateur au milieu du contenu, des états vides qui enseignent l’interface. Et ce que les pages de marque ne peuvent pas se permettre : les polices système, les navigations standard (barre et menu latéral, fil d’Ariane, onglets, palette de commandes), la densité, la cohérence plutôt que la surprise.
+Souvent une seule famille de caractères, une échelle fixe en rem au rapport serré (1,125 à 1,2), des transitions de 150 à 250 ms, tous les états des composants, des squelettes de chargement plutôt qu’un indicateur au milieu du contenu, des états vides qui enseignent l’interface. Et ce que les surfaces Persuader et Expérience ne peuvent pas se permettre : les polices système, les navigations standard (barre et menu latéral, fil d’Ariane, onglets, palette de commandes), la densité, la cohérence plutôt que la surprise.
 
 ### … et ce qu’elle s’interdit
 
@@ -315,9 +315,9 @@ Même logique pour choisir un monde. En Opérer et en Lire, on ne le tire jamais
       title: 'Le brief gagne ; affiner n’est pas refaire',
       body: `Quatre principes encadrent tout travail de conception chez impeccable.
 
-- **Le brief gagne.** Honore l’esthétique, l’époque, les matériaux, les polices et les palettes imposés par le brief, même quand le *détecteur* d’impeccable (l’outil qui analyse le code d’une interface pour y repérer défauts et clichés) les classe parmi les *motifs saturés* : des choix devenus clichés à force d’être produits par réflexe, comme un fond crème ou un titre en italique à empattements. Réorienter un brief clair vers ton propre goût est un échec.
+- **Le brief gagne.** Honore l’esthétique, l’époque, les matériaux, les polices et les palettes imposés par le brief, même quand le *détecteur* d’impeccable (l’outil qui analyse le code d’une interface pour y repérer défauts et clichés) les classe parmi les *motifs saturés* : des choix devenus clichés à force d’être produits par réflexe, comme un fond crème ou un titre en italique à empattements. Réorienter un brief clair vers ton propre goût est un échec. Seule limite : les interdits que le plancher de qualité marque comme tels, comme le surtitre au-dessus d’un titre, qu’aucun brief ne rachète.
 - **Affiner préserve ; refaire remplace.** Affiner garde l’identité en place, le comportement, les textes et tout ce qui sort du périmètre ; demande avant de remplacer un texte factuel ou d’ajouter une affirmation. Refaire garde la vérité du produit, le contenu, les fonctions, les affordances natives et les contraintes, mais traite l’ancien look comme une preuve et un anti-modèle : on choisit un monde de remplacement. Ne coupe jamais la poire en deux en polissant l’apparence qu’on abandonne.
-- **L’autorité visuelle est une preuve, pas un nom de fichier.** L’absence de DESIGN.md ne fait pas d’un projet une page blanche : une identité cohérente déjà présente dans le code (tokens, composants, visuels) s’hérite et se documente.
+- **L’autorité visuelle est une preuve, pas un nom de fichier.** L’absence de DESIGN.md ne fait pas d’un projet une page blanche : une identité cohérente déjà présente dans le code (jetons, composants, visuels) s’hérite et se documente.
 - **Les symboles chargés restent hors du décor.** Le monde d’un sujet n’autorise pas les emblèmes liés au militarisme, au suprémacisme ou aux mouvements de haine comme motifs, badges ou ornements : les rayons du drapeau du Soleil levant, le drapeau de bataille confédéré, les insignes de l’ère nazie et leurs variantes stylisées. Prends les formes neutres de ce monde. Un contenu qui documente un tel symbole comme un fait le montre tel qu’il est.
 
 ### La bonne dose d’invention
@@ -341,9 +341,9 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
     { id: 'frame', front: 'En mode Lire, où le monde s’exprime-t-il ?', back: 'Dans le cadre : en-tête, rail, fond, ouvertures, code, tableaux, encadrés. La colonne reste calme : police de lecture, vrai contraste, 60 à 75 caractères.' },
     { id: 'action', front: 'Quelle action le premier écran d’une page Persuader doit-il montrer ?', back: 'Celle de la catégorie, sous sa forme opérante : recherche trajet et dates, créneaux libres, ajout au panier. Un lien décoratif ne compte pas.' },
     { id: 'traps', front: 'Quels sont les deux pièges d’une page Persuader ?', back: 'L’affiche peinte sans partie qui fonctionne, et la page générique : titre, sous-titre, bouton, rangée de cartes égales.' },
-    { id: 'brief', front: 'Le brief impose un style que le détecteur classe parmi les clichés. Que faire ?', back: 'Honorer le brief. Réorienter un brief clair vers son propre goût est un échec.' },
+    { id: 'brief', front: 'Le brief impose un style que le détecteur classe parmi les clichés. Que faire ?', back: 'Honorer le brief, sauf un interdit marqué comme tel (le surtitre au-dessus d’un titre) : réorienter un brief clair vers son propre goût est un échec.' },
     { id: 'refine', front: 'Affiner ou refaire : qu’est-ce qui change ?', back: 'Affiner préserve identité, comportement et textes. Refaire garde la vérité du produit et remplace le monde visuel. Jamais de polissage du look abandonné.' },
-    { id: 'authority', front: 'Pas de DESIGN.md : le projet est-il vierge ?', back: 'Non. L’autorité visuelle se lit dans le code, les tokens et les composants ; une identité cohérente s’hérite et se documente.' },
+    { id: 'authority', front: 'Pas de DESIGN.md : le projet est-il vierge ?', back: 'Non. L’autorité visuelle se lit dans le code, les jetons et les composants ; une identité cohérente s’hérite et se documente.' },
     { id: 'symbols', front: 'Un symbole chargé peut-il servir d’ornement si le sujet s’y prête ?', back: 'Non : rayons du Soleil levant, drapeau confédéré, insignes nazis restent hors du décor. On puise dans les formes neutres du monde.' },
     { id: 'local', front: 'Un composant ajouté à une surface existante appelle-t-il une nouvelle identité ?', back: 'Non : il hérite de la surface. Un ajout local n’est jamais un exercice d’identité.' },
   ],
@@ -462,85 +462,77 @@ Chaque étape ajoutée entre l’intention et l’action fait décrocher une par
       sources: ['imp:mode-persuade'],
     },
     {
-      id: 'modes-operate-costume-duel',
+      id: 'modes-experience-portfolio-duel',
       type: 'choice',
       difficulty: 1,
-      context: 'Supervision des serveurs d’un hébergeur. La direction artistique retenue s’inspire des terminaux informatiques.',
-      prompt: 'Quel écran respecte le mieux le mode Opérer ?',
+      context: 'Portfolio en ligne de Lison Marec, photographe de paysage. Ceux qui l’ouvrent sont surtout des directeurs artistiques et des éditeurs, venus juger son travail.',
+      prompt: 'Quel premier écran sert le mieux le portfolio de cette photographe ?',
       options: [
         {
-          id: 'costume',
+          id: 'template',
           visual: {
-            alt: 'Écran noir façon terminal : invite de commande verte, tableau en texte aligné, curseur et barre de touches F1 Aide, F2 Filtrer, F3 Exporter, F10 Quitter.',
-            html: `<div class="tty">
-  <p class="tty-l"><span class="tty-p">ondine@supervision:~$</span> services --etat</p>
-<pre class="tty-out">SERVICE        ÉTAT     P95
-auth           DÉGRADÉ  1840 ms
-api-paiements  OK       212 ms
-file-emails    OK       95 ms
-base-clients   OK       38 ms</pre>
-  <p class="tty-l"><span class="tty-p">ondine@supervision:~$</span> <span class="tty-cur"></span></p>
-  <div class="tty-keys"><span><b>F1</b>Aide</span><span><b>F2</b>Filtrer</span><span><b>F3</b>Exporter</span><span><b>F10</b>Quitter</span></div>
-</div>`,
-            css: `.tty { background: #0c0f0d; color: #7ee2a0; padding: 14px 14px 0; font: 12px/1.5 "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
-.tty-p { color: #3fb86b; }
-.tty-out { margin: 8px 0; font: inherit; white-space: pre; overflow: hidden; }
-.tty-cur { display: inline-block; width: 8px; height: 15px; vertical-align: -3px; background: #7ee2a0; }
-.tty-keys { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 12px -14px 0; padding: 6px 14px; background: #1a2a20; font-size: 12px; }
-.tty-keys b { margin-inline-end: 4px; padding: 0 4px; background: #7ee2a0; color: #0c0f0d; }`,
-          },
-          why: 'Invite de commande et touches de fonction rejouent l’interface d’un terminal : il faut apprendre ce faux outil avant de pouvoir travailler.',
-        },
-        {
-          id: 'product',
-          visual: {
-            alt: 'Écran de supervision avec un en-tête graphite à onglets, un filtre de région, un champ de recherche et un tableau trié par latence : pastilles d’état « Dégradé » et « Normal », et pour chaque service un petit histogramme de la latence récente.',
-            html: `<div class="ond">
-  <div class="ond-top"><strong class="ond-brand">Ondine</strong><div class="ond-tabs"><span class="on">Services</span><span>Incidents</span><span>Déploiements</span></div></div>
-  <div class="ond-body">
-    <div class="ond-tools"><span class="ond-select">Région&nbsp;: Paris-1 <i data-icon="chevron-down" style="--ico:14px"></i></span><span class="ond-search"><i data-icon="search" style="--ico:14px"></i>Filtrer les services</span></div>
-    <table class="ond-table">
-      <thead><tr><th>Service</th><th>État</th><th class="num">Latence p95 (ms) <i data-icon="chevron-down" style="--ico:12px"></i></th></tr></thead>
-      <tbody>
-        <tr><td class="mono">auth</td><td><span class="ond-st ond-st--warn">Dégradé</span></td><td class="num"><span class="ond-lat"><span class="ond-spark ond-spark--warn"><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:9px"></span><span style="height:12px"></span><span style="height:12px"></span></span><span class="mono">1&#8239;840</span></span></td></tr>
-        <tr><td class="mono">api-paiements</td><td><span class="ond-st">Normal</span></td><td class="num"><span class="ond-lat"><span class="ond-spark"><span style="height:5px"></span><span style="height:6px"></span><span style="height:5px"></span><span style="height:7px"></span><span style="height:6px"></span><span style="height:5px"></span><span style="height:6px"></span><span style="height:5px"></span></span><span class="mono">212</span></span></td></tr>
-        <tr><td class="mono">file-emails</td><td><span class="ond-st">Normal</span></td><td class="num"><span class="ond-lat"><span class="ond-spark"><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span><span style="height:4px"></span><span style="height:3px"></span></span><span class="mono">95</span></span></td></tr>
-        <tr><td class="mono">base-clients</td><td><span class="ond-st">Normal</span></td><td class="num"><span class="ond-lat"><span class="ond-spark"><span style="height:2px"></span><span style="height:2px"></span><span style="height:3px"></span><span style="height:2px"></span><span style="height:2px"></span><span style="height:3px"></span><span style="height:2px"></span><span style="height:2px"></span></span><span class="mono">38</span></span></td></tr>
-      </tbody>
-    </table>
+            alt: 'Premier écran clair : le nom de la photographe et trois liens, le titre « Capturer la beauté du monde », un sous-titre, un bouton « Découvrir » et une rangée de trois cartes identiques à icône : Paysages, Voyages, Lumière.',
+            frame: 'browser',
+            html: `<div class="lmt">
+  <div class="lmt-nav"><strong>Lison Marec Photographie</strong><span>Accueil</span><span>Galerie</span><span>Contact</span></div>
+  <div class="lmt-hero">
+    <p class="lmt-h">Capturer la beauté du monde</p>
+    <p class="lmt-p">Photographe passionnée, je parcours la Bretagne en quête de la lumière parfaite.</p>
+    <span class="mk-btn lmt-btn">Découvrir</span>
+  </div>
+  <div class="lmt-cards">
+    <div class="lmt-card"><span class="lmt-ico"><i data-icon="image" style="--ico:16px"></i></span><b>Paysages</b><span>La nature dans toute sa splendeur.</span></div>
+    <div class="lmt-card"><span class="lmt-ico"><i data-icon="map-pin" style="--ico:16px"></i></span><b>Voyages</b><span>Des lieux qui inspirent.</span></div>
+    <div class="lmt-card"><span class="lmt-ico"><i data-icon="sun" style="--ico:16px"></i></span><b>Lumière</b><span>L’instant magique.</span></div>
   </div>
 </div>`,
-            css: `.ond { background: #f5f6f4; color: #14181a; }
-.ond-top { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; padding: 0 14px; background: #14181a; color: #c7d0d6; }
-.ond-brand { padding: 10px 0; color: #fff; }
-.ond-tabs { display: flex; gap: 2px; font-size: 13px; }
-.ond-tabs span { padding: 10px 8px; }
-.ond-tabs .on { color: #fff; box-shadow: inset 0 -2px 0 #3fb86b; }
-.ond-body { padding: 12px 14px 14px; }
-.ond-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-.ond-select, .ond-search { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 10px; border: 1px solid #c4cbc7; border-radius: 6px; background: #fff; font-size: 12px; }
-.ond-search { color: #5b6470; flex: 1; min-width: 130px; }
-.ond-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border: 1px solid #dde2df; border-radius: 8px; }
-.ond-table th { text-align: start; padding: 7px 6px; font-size: 12px; font-weight: 600; color: #4c555b; border-bottom: 1px solid #dde2df; }
-.ond-table td { padding: 7px 6px; border-bottom: 1px solid #edf0ee; }
-.ond-table .num { text-align: end; }
-.mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
-.ond-st { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e3f4e8; color: #1d6b3c; }
-.ond-st--warn { background: #fdf0d5; color: #7a4b00; }
-.ond-lat { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 3px 8px; }
-.ond-spark { display: inline-flex; align-items: flex-end; gap: 1px; height: 12px; }
-.ond-spark > span { width: 3px; background: #2a8a4f; }
-.ond-spark--warn > span:nth-last-child(-n+3) { background: #b7791f; }`,
+            css: `.lmt { padding-bottom: 16px; background: #f7f5f1; color: #22252b; }
+.lmt-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 10px 16px; font-size: 13px; color: #4a4f59; }
+.lmt-nav strong { margin-inline-end: auto; font-size: 14px; color: #22252b; }
+.lmt-hero { padding: 14px 16px 0; text-align: center; }
+.lmt-h { font-size: 22px; line-height: 1.2; font-weight: 750; }
+.lmt-p { max-width: 36ch; margin: 6px auto 0; font-size: 13px; color: #4a4f59; }
+.lmt-btn { margin-top: 12px; background: #22252b; }
+.lmt-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 16px 16px 0; }
+.lmt-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 6px; text-align: center; background: #fff; border: 1px solid #e3e0da; border-radius: 10px; font-size: 12px; color: #4a4f59; }
+.lmt-card b { font-size: 13px; color: #22252b; }
+.lmt-ico { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #ece8e1; color: #22252b; }`,
           },
-          why: 'Onglets, filtres et tableau triable sont des contrôles standard ; le monde prête la palette graphite et verte, la densité, le monospace des valeurs et un geste : la latence récente en barres serrées, comme un graphique en caractères de terminal.',
+          why: 'Titre, sous-titre, bouton et rangée de cartes égales : le gabarit de la page produit. Aucune photographie dans le premier écran ; l’interface parle de l’œuvre au lieu de la montrer.',
+        },
+        {
+          id: 'work',
+          visual: {
+            alt: 'Premier écran entièrement occupé par une photographie de côte au soleil couchant, ciel bleu virant à l’orangé sur l’horizon et rochers sombres au premier plan ; en haut, le nom « Lison Marec » et trois liens discrets ; en bas, une légende.',
+            frame: 'browser',
+            html: `<div class="lmw">
+  <svg class="lmw-land" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true"><path class="lmw-isle" d="M28 20 C44 14 60 11 78 12 C96 13 110 17 124 20 Z"/><path class="lmw-rock" d="M0 150 L0 92 C26 84 52 90 80 82 C108 74 128 88 156 96 C186 105 204 118 236 124 C276 131 330 128 400 136 L400 150 Z"/></svg>
+  <div class="lmw-top"><strong>Lison Marec</strong><nav><span>Séries</span><span>Livres</span><span>Contact</span></nav></div>
+  <p class="lmw-cap">Basse mer à Plouguerneau, série «&nbsp;Estrans&nbsp;», 2025</p>
+</div>`,
+            css: `.lmw { position: relative; min-height: 290px; color: #fff; background:
+  radial-gradient(ellipse 40% 9% at 64% 56%, rgb(255 222 180 / 0.95), rgb(255 196 140 / 0) 100%),
+  radial-gradient(ellipse 7% 26% at 64% 75%, rgb(255 206 160 / 0.5), rgb(255 206 160 / 0) 100%),
+  linear-gradient(180deg, #1f3150 0%, #2c4266 20%, #5a6d92 34%, #b39aa4 46%, #eaae80 53%, #fbd8a8 56%, #5b7088 56.4%, #3d536d 66%, #22344d 84%, #172539 100%); }
+.lmw-land { position: absolute; inset-inline: 0; bottom: 0; width: 100%; height: 50%; }
+.lmw-isle { fill: #1a2233; }
+.lmw-rock { fill: #080c14; }
+.lmw-top { position: absolute; inset: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; padding: 12px 16px; }
+.lmw-top strong { font-size: 15px; font-weight: 600; letter-spacing: .04em; }
+.lmw-top nav { display: flex; gap: 14px; font-size: 12px; color: #dfe5ee; }
+.lmw-cap { position: absolute; inset-inline: 16px; bottom: 12px; font-size: 12px; color: #d7dde7; }`,
+          },
+          why: 'La photographie ouvre la page, plein cadre : l’œuvre mène dès le premier écran. Le nom et le menu restent lisibles, mais discrets ; l’interface se retire.',
         },
       ],
-      answer: 'product',
-      explanation: `En mode Opérer, l’univers visuel ne prête que **quatre choses** : typographie, palette, densité et un geste signature. Il ne fournit **jamais** la mise en page, la navigation ni les contrôles.
+      answer: 'work',
+      explanation: `En mode **Expérience**, le visiteur est dans l’œuvre elle-même : portfolios, galeries, vitrines. impeccable le dit sans détour : **l’œuvre mène dès le premier écran, et l’interface se retire.** Un directeur artistique ouvre ce portfolio pour juger des photographies ; s’il doit cliquer sur « Découvrir » pour en voir une, la page l’a fait attendre devant de l’interface.
 
-Un monde tiré d’un outil que le public utilise (terminal, oscilloscope, cockpit) revient comme un **costume** : barre de touches de fonction, invite de commande, cadran d’instrument. Le test d’impeccable : un ingénieur pourrait-il construire cet écran avec les composants standard de la plateforme ? Sinon, c’est une image de l’outil, pas l’outil.`,
-      takeaway: 'En Opérer, le monde prête typo, palette, densité et un geste signature ; navigation et contrôles restent standard.',
-      sources: ['imp:mode-operate'],
+La page générique (un titre sur un sous-titre et un bouton, puis une rangée de cartes égales) est l’un des deux pièges qui effacent une direction, quel que soit le monde qui la peint. Ici, elle remplace le travail par une promesse (« Capturer la beauté du monde ») et trois icônes.
+
+Se retirer ne veut pas dire disparaître : le nom de la photographe et le menu restent présents et lisibles, simplement discrets.`,
+      takeaway: 'En Expérience, l’œuvre mène dès le premier écran ; l’interface se retire.',
+      sources: ['imp:skill', 'imp:mode-persuade'],
     },
     {
       id: 'modes-read-column-duel',
@@ -705,7 +697,7 @@ Le monospace est réservé au code, aux paramètres et aux petits libellés. Qua
 .flc-item { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; padding: 8px 0; border-block: 1px solid #e3d6c1; font-size: 14px; }
 .flc-item b { font-variant-numeric: tabular-nums; }
 .flc-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.flc-qty, .flc-sel { display: inline-flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 10px; border: 1px solid #c9b79c; border-radius: 6px; background: #fff; font-size: 13px; }
+.flc-qty, .flc-sel { display: inline-flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 10px; border: 1px solid #a5875a; border-radius: 6px; background: #fff; font-size: 13px; }
 .flc-sel { flex: 1; min-width: 150px; justify-content: space-between; }
 .flc-btn { margin-top: 10px; background: #9e2b25; }
 .flc-meta { margin-top: 8px; font-size: 12px; color: #6b5a48; }`,
@@ -849,15 +841,15 @@ La marque n’en disparaît pas : en mode Lire, son monde possède le cadre (en-
       id: 'modes-grey-tf',
       type: 'truefalse',
       difficulty: 3,
-      prompt: 'Sur un écran de travail (mode Opérer), un fond gris neutre et une seule couleur d’accent, sans autre couleur, sont la meilleure façon de faire preuve de retenue.',
-      answer: false,
-      explanation: `La retenue d’Opérer porte sur l’expression (pas de police d’affichage dans les libellés, pas d’animation décorative, pas de contrôles réinventés), pas sur l’absence de couleur. impeccable est net : **un écran gris avec une seule couleur d’accent, c’est le réglage par défaut de la catégorie sans sa finition, pas de la retenue.**
+      prompt: 'Sur un écran de travail (mode Opérer), un fond gris neutre avec un seul accent reste en deçà de la Retenue, la plus sobre des stratégies de couleur d’impeccable.',
+      answer: true,
+      explanation: `Vrai. Le mot trompe : la *Retenue*, stratégie de couleur par défaut d’un produit, ce sont des neutres **teintés par le monde** et un seul accent, sur des écrans où les règles du mode demandent encore à la couleur de faire de vrais travaux. impeccable est net : **un écran gris avec une seule couleur d’accent, c’est le réglage par défaut de la catégorie sans sa finition, pas de la retenue.**
 
-Attention au mot : la stratégie de couleur par défaut d’un produit s’appelle bien *Retenue*, mais ce sont des neutres **teintés par le monde** et un seul accent, et la couleur y garde ses travaux. Ce qui échoue, c’est le gris neutre, non teinté, avec l’accent pour seule couleur.
+Dans un produit, la couleur travaille : une coque assumée (rail ou en-tête coloré, fond teinté), les couleurs d’état, les séries de données, la sélection, le geste signature. L’accent, lui, reste réservé aux actions principales, à la sélection et aux indicateurs d’état.
 
-Dans un produit, la couleur fait de vrais travaux : une coque assumée (rail ou en-tête coloré, fond teinté), les couleurs d’état, les séries de données, la sélection. L’accent, lui, reste réservé aux actions principales, à la sélection et aux indicateurs d’état.`,
-      takeaway: 'En Opérer, la Retenue, ce sont des neutres teintés par le monde et un accent, et la couleur y travaille (coque, états, données, sélection) : gris neutre plus un accent n’en est pas.',
-      sources: ['imp:mode-operate', 'imp:operate'],
+La retenue d’Opérer porte sur l’expression (pas de police d’affichage dans les libellés, pas d’animation décorative, pas de contrôles réinventés, pas d’accents saturés sur des états inactifs), pas sur l’absence de couleur.`,
+      takeaway: 'En Opérer, la Retenue, ce sont des neutres teintés par le monde, un accent et une couleur qui travaille (coque, états, données, sélection) : un gris neutre plus un accent reste en deçà.',
+      sources: ['imp:mode-operate', 'imp:operate', 'imp:new-work'],
     },
     {
       id: 'modes-refine-copy-choice',
