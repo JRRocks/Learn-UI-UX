@@ -193,7 +193,7 @@ N’empile pas les techniques pour le spectacle : une idée de matière forte su
 
 - **Décalage (*stagger*)** : légitime quand une liste apparaît *en tant que liste*. Plafonne le délai total — 40 lignes décalées de 80 ms font attendre la dernière 3,1 s —, et ne transforme pas chaque section de la page en liste décalée.
 - **Boucles décoratives** : le détecteur les repère à leur forme, pas à leur sens. La règle « Point d’état pulsant » (\`pulsing-dot\`) relève n’importe quel petit point rond qui pulse en boucle : à toi de ne le garder que pour une donnée réellement vivante. Le détecteur relève aussi, avec les règles « Bandeau défilant automatique » (\`marquee\`) et « Curseur clignotant décoratif » (\`blinking-cursor\`), le bandeau qui défile tout seul et le curseur qui clignote dans le premier écran hors d’un champ de saisie. Une boucle non essentielle s’arrête quand elle sort de l’écran ou que l’onglet est masqué.
-- Le WCAG impose de pouvoir **mettre en pause, arrêter ou masquer** tout contenu qui bouge automatiquement plus de 5 secondes à côté d’autre contenu (critère 2.2.2), et interdit ce qui flashe plus de trois fois par seconde au-delà des seuils de flash (critère 2.3.1).`,
+- Les WCAG imposent de pouvoir **mettre en pause, arrêter ou masquer** tout contenu qui bouge automatiquement plus de 5 secondes à côté d’autre contenu (critère 2.2.2), et interdisent ce qui flashe plus de trois fois par seconde au-delà des seuils de flash (critère 2.3.1).`,
     },
     {
       id: 'reduit',
@@ -476,14 +476,14 @@ Le mode réduit, c’est **moins et plus doux, pas zéro** : la confirmation d�
       id: 'motion-reduced-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Sous `prefers-reduced-motion: reduce`, une confirmation peut encore apparaître en fondu : pour le WCAG, un simple changement d’opacité n’est pas une animation de mouvement.',
+      prompt: 'Sous `prefers-reduced-motion: reduce`, une confirmation peut encore apparaître en fondu : pour les WCAG, un simple changement d’opacité n’est pas une animation de mouvement.',
       answer: true,
-      explanation: `Vrai. Le WCAG définit l’**animation de mouvement** comme l’ajout d’étapes entre deux états pour donner l’illusion d’un déplacement ou d’une transition fluide : un élément qui glisse à sa place ou change de taille en apparaissant est animé. La définition exclut les changements de couleur, de flou ou d’opacité qui ne modifient ni la taille, ni la forme, ni la position perçues de l’élément.
+      explanation: `Vrai. Les WCAG définissent l’**animation de mouvement** comme l’ajout d’étapes entre deux états pour donner l’illusion d’un déplacement ou d’une transition fluide : un élément qui glisse à sa place ou change de taille en apparaissant est animé. La définition exclut les changements de couleur, de flou ou d’opacité qui ne modifient ni la taille, ni la forme, ni la position perçues de l’élément.
 
 Le mode réduit demande donc **moins de mouvement et plus de douceur**, pas l’absence de tout changement visuel. On retire les déplacements (glissements, parallaxes, zooms) mais on garde les fondus, les changements de couleur et surtout les retours qui confirment une action.
 
 À l’inverse, une règle globale qui ramène toutes les durées à quasi zéro peut faire disparaître une confirmation qui n’existait que par une animation : la personne ne sait plus si son action a abouti.`,
-      takeaway: 'Mouvement réduit : retire les déplacements, garde les fondus et les retours d’état. Pour le WCAG, un simple changement d’opacité n’est pas du mouvement.',
+      takeaway: 'Mouvement réduit : retire les déplacements, garde les fondus et les retours d’état. Pour les WCAG, un simple changement d’opacité n’est pas du mouvement.',
       sources: ['imp:animate', 'imp:audit', { label: 'W3C — WCAG 2.2, définition de l’animation de mouvement', url: 'https://www.w3.org/TR/WCAG22/#dfn-motion-animation' }, WCAG_233],
     },
     {
@@ -558,7 +558,7 @@ Le mouvement y sert l’état, le retour et la continuité, avec des transitions
 - « Curseur clignotant décoratif » (\`blinking-cursor\`) : un faux curseur dans le titre, là où l’on ne peut rien saisir ;
 - « Bandeau défilant automatique » (\`marquee\`) : des noms qui défilent tout seuls, dont une partie est toujours cachée.
 
-Le curseur du champ e-mail, lui, est légitime : un vrai champ de saisie dessine son propre curseur. Une boucle doit mériter l’attention qu’elle capte. Et au-delà de 5 secondes de mouvement automatique à côté d’autre contenu, le WCAG exige un moyen de le mettre en pause, de l’arrêter ou de le masquer (critère 2.2.2).`,
+Le curseur du champ e-mail, lui, est légitime : un vrai champ de saisie dessine son propre curseur. Une boucle doit mériter l’attention qu’elle capte. Et au-delà de 5 secondes de mouvement automatique à côté d’autre contenu, les WCAG exigent un moyen de le mettre en pause, de l’arrêter ou de le masquer (critère 2.2.2).`,
       takeaway: 'Pas de boucles décoratives : ni point qui pulse sans donnée vivante, ni faux curseur, ni bandeau qui défile tout seul.',
       sources: ['imp:detector', 'imp:craft-floor', WCAG_222],
     },

@@ -363,9 +363,9 @@ Son détecteur, lui, juge une hiérarchie **plate** quand aucune marche entre de
       id: 'typography-allcaps-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Mettre un paragraphe en capitales le rend plus lisible car les lettres sont plus grandes.',
+      prompt: 'Mettre en capitales un paragraphe de 300 caractères le rend plus lisible, car les lettres sont plus grandes.',
       answer: false,
-      explanation: `C’est l’inverse : un paragraphe en capitales se lit **5 à 10 % plus lentement** que le même texte en bas de casse. La raison est l’entraînement : on lit surtout du bas de casse, on y est donc bien plus rapide.
+      explanation: `Faux, c’est l’inverse : un paragraphe en capitales se lit **5 à 10 % plus lentement** que le même texte en bas de casse. La raison est l’entraînement : on lit surtout du bas de casse, on y est donc bien plus rapide.
 
 L’explication par la « silhouette » des mots (les ascendantes et descendantes que les capitales effacent), que reprend impeccable, est populaire, mais la recherche sur la lecture l’a abandonnée : on reconnaît un mot à ses lettres.
 

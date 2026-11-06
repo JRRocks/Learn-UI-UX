@@ -838,7 +838,7 @@ Une information sans décision n’a d’ailleurs pas toujours besoin d’une bo
       difficulty: 1,
       prompt: 'Sur l’écran de suppression définitive d’un compte, une touche d’humour aide à dédramatiser la décision.',
       answer: false,
-      explanation: `Supprimer définitivement son compte est une décision lourde : la personne veut savoir ce qui disparaît (projets, historique, abonnement), si un retour en arrière est possible et comment garder une copie de ses données. Une blague à ce moment-là paraît désinvolte et détourne l’attention de ces conséquences.
+      explanation: `Faux. Supprimer définitivement son compte est une décision lourde : la personne veut savoir ce qui disparaît (projets, historique, abonnement), si un retour en arrière est possible et comment garder une copie de ses données. Une blague à ce moment-là paraît désinvolte et détourne l’attention de ces conséquences.
 
 Impeccable range la suppression, la perte d’accès, le paiement, la vie privée et le travail bloqué parmi les moments à traiter **avec sérieux** : la chaleur est bienvenue (« Vous pouvez d’abord télécharger une copie de vos données »), les blagues non. L’humour peut avoir sa place sur un succès ou un état vide sans enjeu.`,
       takeaway: 'Suppression, perte d’accès, paiement, vie privée : un ton chaleureux mais sérieux, jamais de blague.',
@@ -872,7 +872,7 @@ Le code technique n’est jamais le message principal : il vient en dernier, en 
       rightTitle: 'Texte d’aide',
       pairs: [
         { id: 'iban', left: 'IBAN', right: 'Le format : 27 caractères, commençant par FR' },
-        { id: 'email', left: 'Adresse e-mail', right: 'L’usage : uniquement pour vous envoyer vos factures' },
+        { id: 'address', left: 'Adresse postale', right: 'L’usage : uniquement pour vos bordereaux d’envoi' },
         { id: 'pseudo', left: 'Pseudo', right: 'La visibilité : visible par les autres membres' },
         { id: 'birth', left: 'Date de naissance', right: 'La raison : vérifier que vous avez au moins 18 ans' },
       ],
@@ -881,7 +881,7 @@ Le code technique n’est jamais le message principal : il vient en dernier, en 
 Chaque champ soulève sa propre question :
 
 - **Quel format ?** Un IBAN est long et facile à mal recopier : en annoncer la longueur et le début aide à repérer un caractère oublié avant l’envoi.
-- **À quoi ça sert ?** Savoir que l’adresse ne servira qu’aux factures rassure qui craint la publicité.
+- **À quoi ça sert ?** Savoir que l’adresse ne servira qu’aux bordereaux d’envoi rassure qui craint de la voir affichée ou revendue.
 - **Qui le verra ?** Un pseudo est public : le savoir avant de le choisir évite d’y mettre son vrai nom.
 - **Pourquoi on le demande ?** Une date de naissance paraît intrusive tant qu’on ignore qu’elle sert à vérifier l’âge.
 

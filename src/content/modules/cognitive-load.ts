@@ -618,7 +618,7 @@ Les quatre moyens de paiement, les champs de carte groupés et le découpage de 
       id: 'cognitive-load-germane-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Si une tâche demande un effort mental, c’est que son interface est mal conçue.',
+      prompt: 'Configurer un serveur de messagerie demande un effort mental, même aux habitués : c’est la preuve que son interface est mal conçue.',
       answer: false,
       explanation: `Faux. Seule la charge **extrinsèque** — celle que crée la conception — signale un défaut de l’interface. La charge **intrinsèque** vient de la tâche elle-même : configurer un serveur reste complexe, même avec une interface exemplaire ; on la structure (étapes, modèles, valeurs par défaut), on ne la supprime pas. La charge **essentielle** (*germane*) est l’effort d’apprentissage qui mène à la maîtrise : on la soutient.
 

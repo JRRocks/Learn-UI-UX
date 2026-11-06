@@ -653,7 +653,7 @@ Les actions secondaires (trier, exporter) vont dans la **barre d’application s
       difficulty: 1,
       prompt: 'Sur iOS, figer le corps de texte à 15 pt garantit une mise en page stable : c’est la bonne pratique.',
       answer: false,
-      explanation: `Sur iOS, le texte doit suivre **Dynamic Type** : la personne règle sa taille de lecture dans les réglages du système, et les styles de texte (Body, Headline, Caption…) s’adaptent. Une taille figée ignore ce réglage, au détriment des personnes qui ont besoin d’un texte plus grand.
+      explanation: `Faux. Sur iOS, le texte doit suivre **Dynamic Type** : la personne règle sa taille de lecture dans les réglages du système, et les styles de texte (Body, Headline, Caption…) s’adaptent. Une taille figée ignore ce réglage, au détriment des personnes qui ont besoin d’un texte plus grand.
 
 Le style Body fait **17 pt** au réglage par défaut, et rien ne descend sous **11 pt**. La stabilité vient d’une mise en page qui s’adapte (lignes qui se replient, textes qui ne sont pas tronqués), à vérifier avec une grande taille de texte.`,
       takeaway: 'Sur iOS, utilise les styles Dynamic Type (Body à 17 pt par défaut), jamais des tailles figées.',

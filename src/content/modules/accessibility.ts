@@ -202,7 +202,6 @@ Ces cinq dimensions valent pour le **web**. Pour une appli native (iOS, Android 
   rules: [
     { id: 'contrast', front: 'Contraste minimum du texte courant (WCAG AA) ?', back: '4,5:1. Le grand texte (24 px, ou 18,7 px en gras) descend à 3:1 ; 7:1 pour le niveau AAA.' },
     { id: 'non-text', front: 'Quel contraste pour une bordure de champ, une icône sans texte ou un focus ?', back: '3:1 par rapport aux couleurs adjacentes (critère 1.4.11). Les composants désactivés sont exemptés.' },
-    { id: 'color', front: 'La couleur peut-elle porter seule une information ?', back: 'Non (1.4.1) : double-la d’un texte, d’une icône, d’un soulignement ou d’un motif.' },
     { id: 'alt', front: 'Quel texte alternatif pour une image décorative ?', back: '`alt=""` : le lecteur d’écran l’ignore. Une image informative décrit son information ou sa fonction.' },
     { id: 'target', front: 'Taille minimale d’une cible selon WCAG 2.2 (AA) ?', back: '24 × 24 px CSS (2.5.8), sauf exceptions (espacement, équivalent, lien dans une phrase, contrôle natif, essentiel). Vise 44 × 44 px pour le tactile.' },
     { id: 'focus', front: 'Que dit WCAG du focus clavier ?', back: 'Il doit toujours être visible (2.4.7) et ne pas disparaître sous un bandeau collant (2.4.11). Jamais d’`outline: none` sans remplacement.' },
@@ -550,9 +549,9 @@ Piège courant : figer le bandeau seulement tant que le focus reste dessus ne co
       id: 'accessibility-detector-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Une page que l’outil d’analyse automatique valide sans erreur est accessible.',
+      prompt: 'Une page de paiement que l’outil d’analyse automatique de l’équipe valide sans erreur détectée est accessible.',
       answer: false,
-      explanation: `Un outil automatique repère ce qui se mesure dans le code : contrastes, attributs manquants, niveaux de titre sautés. Il ne sait pas si un texte alternatif est pertinent, si l’ordre du focus a du sens, si un composant sur mesure se pilote vraiment au clavier.
+      explanation: `Faux. Un outil automatique repère ce qui se mesure dans le code : contrastes, attributs manquants, niveaux de titre sautés. Il ne sait pas si un texte alternatif est pertinent, si l’ordre du focus a du sens, si un composant sur mesure se pilote vraiment au clavier.
 
 Impeccable le dit de son propre détecteur : un résultat propre est un **indice, pas une preuve**. L’ampleur des défauts détectables est pourtant énorme — 95,9 % des pages d’accueil en présentaient en 2026 selon WebAIM. Un audit sérieux ajoute toujours un parcours au clavier et au lecteur d’écran.`,
       takeaway: 'Un détecteur muet est un indice, pas une preuve : complète toujours par un test au clavier et au lecteur d’écran.',
@@ -562,7 +561,7 @@ Impeccable le dit de son propre détecteur : un résultat propre est un **indice
       id: 'accessibility-large-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un titre de 24 px peut se contenter d’un contraste de 3:1 avec son fond (niveau AA).',
+      prompt: 'Pour un titre de 24 px, un contraste de 3:1 avec son fond suffit au niveau AA.',
       answer: true,
       explanation: `Vrai. Le critère **1.4.3** abaisse l’exigence à **3:1** pour le **grand texte** : au moins 18 pt (24 px), ou 14 pt en gras (environ 18,7 px). Les grands caractères restent lisibles avec moins de contraste.
 

@@ -156,7 +156,7 @@ La **teinte** se choisit d’après le sens du produit et sa direction visuelle,
     {
       id: 'contraste',
       title: 'Contraste : des seuils et un calcul',
-      body: `Le contraste se **calcule** ; il ne s’estime pas à l’œil. Le WCAG 2.2 fixe des minimums (niveau AA) entre une couleur et son fond :
+      body: `Le contraste se **calcule** ; il ne s’estime pas à l’œil. Les WCAG 2.2 fixent des minimums (niveau AA) entre une couleur et son fond :
 
 - **Texte courant : 4,5:1** — textes indicatifs des champs (*placeholders*) et textes d’aide compris.
 - **Grand texte : 3:1** — au moins 24 px, ou 18,7 px en gras (18 pt, ou 14 pt gras).
@@ -166,14 +166,14 @@ Le niveau AAA monte à 7:1 pour le texte courant.
 
 Quelques repères sur fond blanc : \`#767676\` est le gris neutre le plus clair qui passe (4,54:1), \`#999999\` n’atteint que 2,85:1. Le blanc sur un vert franc (\`#16a34a\`) ou un orange (\`#f59e0b\`) échoue aussi pour un texte courant : 3,3:1 et 2,1:1.
 
-Vérifie **tous les états** — survol, focus, erreur, désactivé —, le texte posé sur une image, les superpositions et **les deux thèmes**. Le WCAG exempte les composants désactivés et le purement décoratif ; impeccable demande tout de même de contrôler les états désactivés.
+Vérifie **tous les états** — survol, focus, erreur, désactivé —, le texte posé sur une image, les superpositions et **les deux thèmes**. Les WCAG exemptent les composants désactivés et le purement décoratif ; impeccable demande tout de même de contrôler les états désactivés.
 
 Préfère des **couleurs explicites** aux empilements de transparences : avec de l’alpha, le contraste dépend de ce qu’il y a dessous.`,
     },
     {
       id: 'jamais-seule',
       title: 'La couleur ne doit jamais être le seul code',
-      body: `Environ **1 homme sur 12** et **1 femme sur 200** perçoivent les couleurs de façon atypique, le plus souvent en confondant le rouge et le vert. Ajoute les écrans en plein soleil, les impressions en noir et blanc, les modes de contraste forcé : une information portée **uniquement** par la couleur est perdue pour une partie du public. C’est le critère 1.4.1 du WCAG (niveau A).
+      body: `Environ **1 homme sur 12** et **1 femme sur 200** perçoivent les couleurs de façon atypique, le plus souvent en confondant le rouge et le vert. Ajoute les écrans en plein soleil, les impressions en noir et blanc, les modes de contraste forcé : une information portée **uniquement** par la couleur est perdue pour une partie du public. C’est le critère 1.4.1 des WCAG (niveau A).
 
 Double toujours la couleur d’un second indice :
 
@@ -363,7 +363,7 @@ La correction d’impeccable : **dériver le texte secondaire de la teinte de la
       target: [30, 46],
       ideal: 44,
       readout: { kind: 'contrast', background: '#ffffff' },
-      explanation: `Le contraste se calcule avec la formule du WCAG, à partir de la luminance relative des deux couleurs. Pour un gris neutre sur blanc, la limite tombe entre deux valeurs voisines : à **46 %** de luminosité (\`#757575\`), le ratio vaut **4,6:1** et le texte passe ; à **47 %** (\`#787878\`), il tombe à **4,4:1** et échoue.
+      explanation: `Le contraste se calcule avec la formule des WCAG, à partir de la luminance relative des deux couleurs. Pour un gris neutre sur blanc, la limite tombe entre deux valeurs voisines : à **46 %** de luminosité (\`#757575\`), le ratio vaut **4,6:1** et le texte passe ; à **47 %** (\`#787878\`), il tombe à **4,4:1** et échoue.
 
 Un texte d’aide doit aussi rester secondaire : en dessous d’environ 30 %, il se rapproche trop du texte principal (\`#1d2230\`) et la hiérarchie s’aplatit. Vers 44 % (\`#707070\`, 4,95:1), tu gardes une marge de sécurité sans perdre la discrétion.
 
@@ -404,7 +404,7 @@ Le texte indicatif du champ (*placeholder*) obéit à la même règle : c’est 
         { id: 'deploy', label: 'Bouton « Déployer »', correct: false, why: 'Action principale nommée, blanc sur bleu à 6,6:1 : rien à corriger.' },
         { id: 'logs', label: 'Lien vers les journaux', correct: false, why: 'Souligné : il se repère comme lien même sans percevoir le bleu.' },
       ],
-      explanation: `Le critère 1.4.1 du WCAG (niveau A) interdit d’utiliser la couleur comme **seul** moyen de transmettre une information. Environ 1 homme sur 12 perçoit mal certaines couleurs, le plus souvent le rouge et le vert — exactement le couple utilisé pour « ça marche » et « ça casse ».
+      explanation: `Le critère 1.4.1 des WCAG (niveau A) interdit d’utiliser la couleur comme **seul** moyen de transmettre une information. Environ 1 homme sur 12 perçoit mal certaines couleurs, le plus souvent le rouge et le vert — exactement le couple utilisé pour « ça marche » et « ça casse ».
 
 - La barre de disponibilité a besoin d’une légende, d’un libellé par segment (au survol et au focus) ou d’une forme distincte pour les incidents.
 - Le champ en erreur a besoin d’un message qui nomme le problème et la correction, idéalement avec une icône.`,
@@ -668,7 +668,7 @@ Mais l’espace affichable (sRGB) se resserre près du blanc et du noir : pour u
       answers: ['g767', 'blue', 'slate'],
       explanation: `L’œil se trompe facilement : \`#767676\` paraît clair mais passe de justesse, tandis que le blanc sur vert franc semble lisible et échoue (3,3:1). Seul le calcul tranche.
 
-Pour un texte courant (moins de 24 px, ou moins de 18,7 px en gras), le WCAG AA exige 4,5:1. Le seuil de 3:1 ne vaut que pour les grands textes, les composants d’interface et les icônes utiles.`,
+Pour un texte courant (moins de 24 px, ou moins de 18,7 px en gras), les WCAG exigent 4,5:1 au niveau AA. Le seuil de 3:1 ne vaut que pour les grands textes, les composants d’interface et les icônes utiles.`,
       takeaway: 'Ne juge pas un contraste à l’œil : calcule-le. 4,5:1 pour un texte courant, 3:1 seulement pour un grand texte.',
       sources: ['wcag:contrast', WCAG_1411],
     },
@@ -718,7 +718,7 @@ Pour un texte courant (moins de 24 px, ou moins de 18,7 px en gras), le WCAG AA 
         },
       ],
       answers: ['focus', 'toggle'],
-      explanation: `Le critère 1.4.11 du WCAG (niveau AA) exige **3:1** contre les couleurs voisines pour tout ce qui permet de repérer un composant et son état — l’icône d’un bouton sans libellé, la forme d’un interrupteur ou d’une case à cocher, l’anneau de focus — et pour les parties d’un graphique nécessaires à sa lecture.
+      explanation: `Le critère 1.4.11 des WCAG (niveau AA) exige **3:1** contre les couleurs voisines pour tout ce qui permet de repérer un composant et son état — l’icône d’un bouton sans libellé, la forme d’un interrupteur ou d’une case à cocher, l’anneau de focus — et pour les parties d’un graphique nécessaires à sa lecture.
 
 Ce seuil est plus bas que pour le texte : le vert \`#16a34a\`, qui échoue sous un texte de 14 px, suffit pour un interrupteur. Mais un gris clair ou un orange vif restent sous 3:1 sur blanc, même quand ils « se voient ». Le décoratif et les composants désactivés en sont exemptés.`,
       takeaway: 'Icônes utiles, contrôles, focus et courbes de graphique : au moins 3:1 contre les couleurs voisines, un seuil plus bas que pour le texte mais tout aussi obligatoire.',
@@ -728,7 +728,7 @@ Ce seuil est plus bas que pour le texte : le vert \`#16a34a\`, qui échoue sous 
       id: 'color-invert-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Inverser les couleurs du thème clair donne un thème sombre bien conçu.',
+      prompt: 'Pour livrer vite le thème sombre d’une appli de prise de notes, inverser les couleurs du thème clair donne un résultat bien conçu.',
       answer: false,
       explanation: `Faux. Une inversion mécanique casse presque tout :
 

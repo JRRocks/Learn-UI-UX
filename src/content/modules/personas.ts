@@ -568,7 +568,7 @@ Les trois autres signaux sont réels, mais ils appartiennent à Jordan, Casey et
       difficulty: 1,
       prompt: 'Quand le contexte du projet ne dit rien du public, mieux vaut inventer un persona propre au projet, plausible, que de s’en tenir aux cinq archétypes.',
       answer: false,
-      explanation: `Impeccable est explicite : on ne crée un persona propre au projet que lorsque le contexte produit décrit **réellement** le public, et on n’invente aucun détail. Sans contexte, on utilise les cinq archétypes.
+      explanation: `Faux. Impeccable est explicite : on ne crée un persona propre au projet que lorsque le contexte produit décrit **réellement** le public, et on n’invente aucun détail. Sans contexte, on utilise les cinq archétypes.
 
 Un persona inventé donne une fausse impression de connaître l’utilisateur, et ses détails imaginaires (âge, goûts, applis préférées) orientent les décisions sur du vide. Le Nielsen Norman Group le rappelle : un persona est fictif, mais il doit s’appuyer sur des données sur de vraies personnes.`,
       takeaway: 'Un persona propre au projet se dérive d’un contexte réel ; sans données sur le public, garde les cinq archétypes.',

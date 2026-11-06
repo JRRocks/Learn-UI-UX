@@ -390,7 +390,6 @@ Pour un **contrôle sur mesure** (curseur, surface à glisser), vérifie au doig
     { id: 'targets', front: 'Taille minimale d’une cible tactile ?', back: '44 × 44 px, avec de l’espace entre les cibles. Le minimum WCAG AA (24 × 24 px) est un plancher, pas un objectif.' },
     { id: 'thumb', front: 'Où placer les actions fréquentes sur téléphone ?', back: 'À portée de pouce, dans la partie basse de l’écran : à une main, le haut est le plus difficile à atteindre.' },
     { id: 'safe', front: 'Comment éviter l’encoche et la barre d’accueil ?', back: '`viewport-fit=cover`, puis des marges `env(safe-area-inset-*)`, par exemple `max(1rem, env(safe-area-inset-bottom))`.' },
-    { id: 'input-size', front: 'Taille minimale du texte d’un champ sur mobile ?', back: '16 px : en dessous, Safari sur iPhone zoome de force au moment de la saisie.' },
     { id: 'srcset', front: '`srcset` et `sizes`, ou `<picture>` ?', back: '`srcset` et `sizes` pour la même image en plusieurs résolutions ; `<picture>` pour changer de cadrage.' },
     { id: 'display-none', front: '`display: none` allège-t-il la page mobile ?', back: 'Non : le contenu caché est livré et ses `<img>` sont téléchargées (sauf en `loading="lazy"`).' },
     { id: 'tables', front: 'Que faire d’un tableau large sur mobile ?', back: 'Chaque ligne devient une carte (`display: block` et `data-label`), ou l’on garde les colonnes clés avec le détail à la demande.' },
