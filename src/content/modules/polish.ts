@@ -35,6 +35,7 @@ const MDN_TOP_LAYER: SourceRef = { label: 'MDN — Couche supérieure (top layer
 const MDN_POSITION: SourceRef = { label: 'MDN — position', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/position' };
 const MDN_SCROLLBAR: SourceRef = { label: 'MDN — scrollbar-color', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/scrollbar-color' };
 const MDN_COLOR_SCHEME: SourceRef = { label: 'MDN — color-scheme', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/color-scheme' };
+const MDN_ACCENT: SourceRef = { label: 'MDN — accent-color', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/accent-color' };
 const CSS_SCROLLBARS: SourceRef = {
   label: 'W3C — CSS Scrollbars Styling Module Level 1 (contraste du pouce et de la piste)',
   url: 'https://www.w3.org/TR/css-scrollbars-1/',
@@ -122,18 +123,19 @@ const polish: ModuleContent = {
     WCAG_FOCUS,
     MDN_TOP_LAYER,
     MDN_COLOR_SCHEME,
+    MDN_ACCENT,
     CSS_SCROLLBARS,
   ],
   sections: [
     {
       id: 'affinage',
       title: 'Polir, c’est affiner — jamais refondre en douce',
-      body: `La passe de **finition** (*polish*) est le dernier contrôle qualité avant la mise en ligne. Elle **préserve** l’univers visuel en place, le contenu, le comportement et tout ce qui sort du périmètre demandé.
+      body: `La passe de **finition** (\`polish\`) est le dernier contrôle qualité avant la mise en ligne. Elle **préserve** l’univers visuel en place, le contenu, le comportement et tout ce qui sort du périmètre demandé.
 
-- Si le concept lui-même est faux, **dis-le** et recommande une refonte (ou une passe *bolder*) au lieu de glisser un remplacement dans la finition. Une refonte déguisée surprend l’équipe, rompt la cohérence avec les écrans voisins et n’a jamais été décidée comme telle.
+- Si le concept lui-même est faux, **dis-le** et recommande une refonte (ou une passe \`bolder\`, qui intensifie une partie trop timide) au lieu de glisser un remplacement dans la finition. Une refonte déguisée surprend l’équipe, rompt la cohérence avec les écrans voisins et n’a jamais été décidée comme telle.
 - Avant de toucher quoi que ce soit, **utilise la fonctionnalité toi-même** aux tailles représentatives (bureau et mobile), avec les états, les longueurs de contenu, les rôles et les modes de saisie que les gens rencontreront vraiment.
 - Établis le niveau d’exigence, le temps disponible et ce qui est volontairement inachevé.
-- Un résultat du détecteur d’anti-patterns est une **preuve de défaut, pas une preuve de qualité** : un scan propre ne remplace ni le regard sur le rendu ni le parcours réel.
+- Un résultat du détecteur d’anti-patterns est un **indice de défaut, à vérifier en contexte, jamais une preuve de qualité** : un scan propre ne remplace ni le regard sur le rendu ni le parcours réel.
 - Demande avant de modifier une affirmation factuelle du contenu.`,
     },
     {
@@ -301,7 +303,7 @@ ${SPIN_CSS}`,
       title: 'Les finitions qu’on oublie',
       body: `Certaines surfaces trahissent une interface « assemblée » plutôt que construite.
 
-- **Les surfaces du navigateur** : la sélection de texte (\`::selection\`), le curseur d’insertion (\`caret-color\`), les barres de défilement (\`scrollbar-color\`), les anneaux de focus, le décalage du soulignement (\`text-underline-offset\`) et les chiffres des tableaux (\`tabular-nums\`) sortent avec les réglages du navigateur, qui n’appartiennent à aucun système de design. Thématise-les depuis la palette : c’est le signal de soin le moins cher. Dans un thème sombre, commence par déclarer \`color-scheme: dark\` : le navigateur dessine alors en sombre ses barres de défilement et ses contrôles de formulaire. Thématiser n’est pas réinventer : on teinte la barre de défilement native, sans descendre sous 3:1 de contraste entre le pouce (la partie qui glisse) et sa piste, et on ne la remplace pas par un composant maison.
+- **Les surfaces du navigateur** : la sélection de texte (\`::selection\`), le curseur d’insertion (\`caret-color\`), les barres de défilement (\`scrollbar-color\`), les anneaux de focus, le décalage du soulignement (\`text-underline-offset\`) et les chiffres des tableaux (\`tabular-nums\`) sortent avec les réglages du navigateur, qui n’appartiennent à aucun système de design. Thématise-les depuis la palette : c’est le signal de soin le moins cher. Dans un thème sombre, commence par déclarer \`color-scheme: dark\` : le navigateur dessine alors en sombre ses barres de défilement et ses contrôles de formulaire. Thématiser n’est pas réinventer : on teinte la barre de défilement native, sans descendre sous 3:1 de contraste entre le pouce (la partie qui glisse) et sa piste, et on ne la remplace pas par un composant maison ; de même, \`accent-color\` teinte les cases à cocher et les boutons radio natifs sans les redessiner.
 - **Les menus qui débordent** : un menu positionné en absolu dans un ancêtre en \`overflow: hidden\` ou \`overflow: auto\` est coupé net. Fais-le échapper à son conteneur : l’attribut \`popover\` (qui le place dans la couche supérieure de la page), un \`<dialog>\` ouvert avec \`showModal()\`, \`position: fixed\` (si aucun ancêtre n’a de \`transform\` ni de \`filter\`) ou un portail (le menu est rendu à la fin du document, hors du conteneur).
 - **La mise en page et la typographie** : aligne tout sur la grille et l’échelle d’espacement du projet, en corrigeant l’alignement optique (ce qui paraît aligné à l’œil) autant que l’alignement mathématique. Resserre ce qui va ensemble, sépare nettement les groupes distincts. Un même rôle garde le même style typographique ; teste les longueurs de ligne, les retours à la ligne, les traductions plus longues, le zoom et le chargement des polices, sur chaque largeur prise en charge.
 - **Des affordances cohérentes** : même forme de bouton, même vocabulaire de contrôles de formulaire, même famille d’icônes (trait, graisse, taille, alignement optique) d’un écran à l’autre.
@@ -403,11 +405,6 @@ Corrige les vrais défauts et ne documente que des exceptions volontaires et ét
       back: 'Il garde sa largeur, nomme l’opération (« Envoi… ») et refuse un second clic.',
     },
     {
-      id: 'skeleton',
-      front: 'Rien, squelette, spinner ou barre de progression : comment choisir ?',
-      back: 'Rien sous 1 s ; un squelette pour une zone de contenu ; un spinner pour un petit module (2 à 10 s) ; une progression réelle avec estimation au-delà de 10 s.',
-    },
-    {
       id: 'false-empty',
       front: 'Pourquoi ne jamais afficher « Aucun résultat » pendant un chargement ?',
       back: 'C’est un état trompeur : les gens pressés concluent que c’est vide et partent avant l’arrivée des données.',
@@ -419,8 +416,8 @@ Corrige les vrais défauts et ne documente que des exceptions volontaires et ét
     },
     {
       id: 'surfaces',
-      front: 'Quelles surfaces du navigateur thématiser depuis la palette ?',
-      back: 'Sélection de texte, curseur d’insertion, barres de défilement, anneaux de focus, décalage du soulignement, chiffres des tableaux — teintés, pas réinventés.',
+      front: 'Barres de défilement, cases à cocher : les teinter ou les refaire ?',
+      back: 'Les teinter depuis la palette (`color-scheme`, `scrollbar-color`, `accent-color`), jamais les remplacer par des composants maison.',
     },
     {
       id: 'consistency',
@@ -430,7 +427,7 @@ Corrige les vrais défauts et ne documente que des exceptions volontaires et ét
     {
       id: 'detector',
       front: 'Un scan du détecteur sans alerte prouve-t-il la qualité ?',
-      back: 'Non : c’est une preuve de défauts quand il signale, jamais une preuve de qualité. Il faut parcourir le vrai chemin, dans tous ses états.',
+      back: 'Non : un signalement est un indice de défaut, à vérifier en contexte ; un rapport vide ne prouve jamais la qualité. Il faut parcourir le vrai chemin, dans tous ses états.',
     },
   ],
   exercises: [
@@ -874,20 +871,22 @@ Se taire n’est pas mieux : le défaut le plus important resterait caché derri
 Mais thématiser n’est pas réinventer. Sur une surface d’application, impeccable refuse aussi les affordances standard refaites « pour le style » (barres de défilement maison, contrôles de formulaire étranges, modales non standard). \`scrollbar-color\` teinte la barre native sans toucher à son comportement.
 
 Dans un thème sombre, des barres claires trahissent souvent un \`color-scheme\` non déclaré. Premier réglage : \`color-scheme: dark\`, pour que le navigateur dessine en sombre ses barres et ses contrôles natifs ; \`scrollbar-color\` affine ensuite la teinte depuis la palette, en gardant au moins 3:1 de contraste entre le pouce (la partie qui glisse) et sa piste.`,
-      takeaway: 'Thématise les surfaces du navigateur depuis la palette (`scrollbar-color`, `::selection`, `caret-color`…), sans les remplacer par des composants maison.',
+      takeaway: 'Thématiser n’est pas réinventer : `color-scheme: dark`, puis `scrollbar-color`, teintent la barre native ; une barre maison risque de casser molette, clavier et accessibilité.',
       sources: ['imp:craft-floor', 'imp:operate', MDN_SCROLLBAR, MDN_COLOR_SCHEME, CSS_SCROLLBARS],
     },
     {
-      id: 'polish-detector-tf',
+      id: 'polish-whole-path-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Quand le détecteur d’anti-patterns ne signale plus rien, la passe de finition est terminée.',
-      answer: false,
-      explanation: `Faux. Pour impeccable, un résultat du détecteur est une **preuve de défaut, pas une preuve de qualité**. Un scan propre ne voit ni un parcours qui ne se raccorde pas, ni un état trompeur, ni un focus perdu après la fermeture d’une fenêtre modale.
+      prompt: 'Une passe de finition doit amener tout le parcours au même niveau, plutôt que perfectionner un seul écran.',
+      answer: true,
+      explanation: `Vrai. Impeccable le formule ainsi : ne perfectionne pas un coin en laissant le reste sous le même niveau d’exigence. Le tri s’applique au **parcours entier** : on règle d’abord les blocages et les états manquants sur tous les écrans, puis on monte d’un cran partout, plutôt que de peaufiner l’ombre d’un bouton pendant qu’un écran voisin perd encore des données.
 
-La finition se vérifie en **utilisant** la fonctionnalité : à la souris, au clavier et au toucher, sur mobile et sur grand écran, avec du contenu long, manquant ou traduit, et dans chaque état.`,
-      takeaway: 'Un scan propre ne prouve pas la qualité : parcours le vrai chemin, dans tous ses états et à toutes les tailles.',
-      sources: ['imp:polish', 'imp:craft-floor'],
+La tentation inverse est forte : soigner l’écran qu’on montre en démonstration et laisser le reste en l’état. Mais l’utilisateur traverse tout le chemin — l’arrivée, les transitions, les états vides, les chemins de reprise. Un écran parfait suivi d’une erreur brute ou d’un état vide bâclé laisse l’impression d’un produit inachevé.
+
+On ne livre que lorsque la fonctionnalité est complète et finie de façon homogène sur tout le parcours.`,
+      takeaway: 'Finis le parcours entier au même niveau : un coin parfait à côté d’écrans bâclés ne fait pas une interface finie.',
+      sources: ['imp:polish'],
     },
     {
       id: 'polish-hover-tf',
