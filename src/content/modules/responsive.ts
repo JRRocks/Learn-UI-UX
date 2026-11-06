@@ -133,7 +133,11 @@ const TABLE_CSS = `
 const order = (n: string, status: string, date: string, items: string, total: string) =>
   `<div class="oc"><div class="mk-row mk-between"><p class="mk-strong">Commande n° ${n}</p><span class="mk-badge">${status}</span></div><p class="mk-small mk-muted">${date} · ${items}</p><p class="mk-price">${total}</p></div>`;
 
-/* The same article card in a wide main column and a narrow sidebar (fixed at 104 px). */
+/*
+ * The same article card in a wide main column and a narrow sidebar (fixed at 104 px).
+ * The recommended version switches to the row layout at a 144 px column: the sidebar always
+ * stacks, and the main column keeps the row from a ~276 px mock up, with its longest word on one line.
+ */
 const CQ_CSS = `
 .cq-top { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid #e3e6ec; }
 .cq-page { display: grid; grid-template-columns: minmax(0, 1fr) 104px; gap: 10px; align-items: start; padding: 10px 8px 12px; }
@@ -789,7 +793,7 @@ Vient ensuite la **stratégie** (mise en page, interactions, contenu, navigation
 
 Une **requête de conteneur** interroge la place dont dispose le composant. On déclare son parent, ici la colonne, comme conteneur avec \`container-type: inline-size\` (la taille dans le sens de la ligne : la largeur, en français) ; la carte choisit ensuite sa mise en page avec \`@container (min-width: …)\` : vignette à côté du texte quand la colonne est large, au-dessus quand elle est étroite.
 
-Le même composant marche alors dans une colonne principale, une barre latérale ou une grille, sans une règle par emplacement. Impeccable range les requêtes de conteneur parmi les techniques d’adaptation de base : adapter selon le conteneur, pas selon la fenêtre.`,
+Le même composant marche alors dans une colonne principale, une barre latérale ou une grille, sans une règle par emplacement. Impeccable range les requêtes de conteneur parmi ses techniques d’adaptation de la mise en page : adapter selon le conteneur, pas selon la fenêtre.`,
       takeaway: 'Un composant réutilisé s’adapte à la place dont il dispose, pas à la fenêtre : `container-type: inline-size` et `@container`.',
       sources: ['imp:adapt', MDN_CONTAINER],
     },

@@ -592,7 +592,7 @@ Impeccable demande d’**expliquer pourquoi** l’accès manque et **comment l�
       ],
       explanation: `L’écran d’accueil a quatre missions selon impeccable : une **proposition de valeur claire**, ce qu’on va accomplir, une **estimation de temps honnête** et une **option pour passer**.
 
-Ici, la promesse est du jargon marketing — le détecteur d’impeccable range d’ailleurs « nouvelle génération » (*next-generation*) parmi les formules creuses. Neuf étapes avant de pouvoir utiliser le produit, c’est le long parcours préalable qu’impeccable range parmi les erreurs à éviter (1 à 3 concepts suffisent, le reste se découvre en contexte). Et la sortie existe mais se cache : un « Passer » caché figure lui aussi parmi ces erreurs. La durée annoncée, elle, est une bonne pratique.`,
+Ici, la promesse est du jargon marketing — le détecteur d’impeccable range d’ailleurs l’équivalent anglais de « nouvelle génération », *next-generation*, parmi les formules creuses (ses règles de texte ne lisent que l’anglais). Neuf étapes avant de pouvoir utiliser le produit, c’est le long parcours préalable qu’impeccable range parmi les erreurs à éviter (1 à 3 concepts suffisent, le reste se découvre en contexte). Et la sortie existe mais se cache : un « Passer » caché figure lui aussi parmi ces erreurs. La durée annoncée, elle, est une bonne pratique.`,
       takeaway: 'Écran d’accueil : ce qu’est le produit en clair, un parcours court, une durée honnête et un « Passer » bien visible.',
       sources: ['imp:onboard', 'imp:detector'],
     },
@@ -739,24 +739,26 @@ Le test boucle la méthode : beaucoup de « Passer » signale un parcours trop l
       id: 'onboarding-carousel-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un carrousel de présentation au premier lancement améliore la réussite des tâches : les gens savent ensuite où trouver les fonctions.',
-      answer: false,
-      explanation: `Faux. Dans une étude de Nielsen Norman Group sur quatre applications mobiles, les personnes qui avaient lu le carrousel n’ont pas mieux réussi les tâches qu’il expliquait (91 % contre 94 % pour celles qui l’avaient passé, un écart non significatif), n’ont pas été plus rapides, et les ont même jugées plus difficiles.
+      prompt: 'Dans une étude de Nielsen Norman Group sur quatre applications mobiles, les personnes qui avaient passé le carrousel de présentation ont réussi les tâches aussi bien que celles qui l’avaient lu.',
+      answer: true,
+      explanation: `Vrai. Nielsen Norman Group a fait tester quatre applications iPhone à 70 personnes réparties en deux groupes : l’un lisait le carrousel de présentation (le tutoriel en « jeu de cartes »), l’autre le passait. Sur les tâches que ce carrousel expliquait, les deux groupes ont très bien réussi : 91 % pour celui qui l’avait lu, 94 % pour celui qui l’avait passé, un écart non significatif. Le carrousel n’a pas rendu ses lecteurs plus rapides non plus.
 
-Le mécanisme : ce qu’on lit avant d’agir, hors contexte, n’est plus là au moment d’en avoir besoin — et beaucoup passent ces écrans sans les lire. D’où la règle d’impeccable : montrer plutôt que dire, et placer l’aide au point d’usage (état vide, infobulle) plutôt qu’en préambule.`,
-      takeaway: 'Un carrousel au premier lancement ne rend pas les gens plus efficaces : montre le vrai produit et place l’aide au point d’usage.',
+Pire, les personnes qui l’avaient lu ont jugé les tâches **plus difficiles** : 4,92 contre 5,49 sur une échelle de 1 (très difficile) à 7 (très facile), un écart cette fois significatif. Présenter le produit en amont peut le faire paraître plus compliqué qu’il n’est.
+
+Le mécanisme : ce qu’on lit avant d’agir, hors contexte, n’est plus là au moment d’en avoir besoin. D’où la règle d’impeccable : montrer plutôt que dire, et placer l’aide au point d’usage (état vide, infobulle) plutôt qu’en préambule. NN/g conclut dans le même sens : pour une application simple, le temps passé à concevoir un tutoriel serait mieux employé à rendre l’interface facile à utiliser.`,
+      takeaway: 'Un carrousel d’accueil n’aide pas à réussir les tâches : les gens qui le passent font aussi bien. Investis plutôt dans une interface claire et une aide au point d’usage.',
       sources: [NNG_MOBILE_TUTORIALS, NNG_TUTORIALS, 'imp:onboard'],
     },
     {
       id: 'onboarding-cleared-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Quand quelqu’un a volontairement supprimé tous ses éléments, il faut lui remontrer l’état vide de premier usage, avec sa présentation complète.',
+      prompt: 'Une personne vient de supprimer elle-même ses dernières notes : l’écran vide doit lui présenter la fonction comme au premier usage, avec ce qui apparaîtra ici, pourquoi c’est utile et comment commencer.',
       answer: false,
-      explanation: `Faux. La personne connaît déjà la fonction : elle vient de s’en servir. Lui remontrer la présentation de bienvenue est au mieux inutile, au pire infantilisant.
+      explanation: `Faux. La personne connaît déjà la fonction : elle vient de s’en servir. Lui présenter à nouveau les notes comme au premier jour est au mieux inutile, au pire infantilisant, et noie la seule information qui compte : il n’y a plus rien, et on peut recréer en un geste.
 
-Pour un vide **choisi par la personne**, impeccable recommande une **touche légère** : un message bref (« Aucune tâche pour l’instant ») et un bouton « Ajouter une tâche » pour recréer en un geste.`,
-      takeaway: 'Vide créé par l’utilisateur : message bref et moyen de recréer, pas le discours du premier usage.',
+La structure complète (ce qui apparaîtra ici, pourquoi c’est utile, comment commencer) sert le **premier usage**, quand la fonction n’a jamais servi. Pour un vide **choisi par la personne**, impeccable recommande une **touche légère** : un message bref (« Aucune note pour l’instant ») et un bouton « Nouvelle note ».`,
+      takeaway: 'Vide créé par l’utilisateur : un message bref et un moyen de recréer ; la présentation complète est réservée au premier usage.',
       sources: ['imp:onboard'],
     },
     {
