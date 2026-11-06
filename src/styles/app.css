@@ -1272,6 +1272,8 @@
     display: grid;
     grid-row: span 2;
     grid-template-rows: subgrid;
+    /* A mock that overflows on purpose must not widen its column, nor the page. */
+    grid-template-columns: minmax(0, 1fr);
     row-gap: var(--s2);
   }
 }
