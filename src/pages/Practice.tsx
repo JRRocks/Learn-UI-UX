@@ -39,13 +39,24 @@ const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIc
   { type: 'grid', title: 'Grille de critique', text: 'Note un écran sur les 10 heuristiques de Nielsen et compare ta grille à celle d’un expert.', Icon: Grid3x3 },
 ];
 
+/**
+ * The « Fiches » legend, true to what the link opens (Cards.tsx): the cards due today, else the ones never
+ * reviewed, else nothing until their next review date.
+ */
+export function cardsHint(due: number, fresh: number, total: number): string {
+  if (due > 0) return 'Fiches à réviser aujourd’hui';
+  const discover = `${count(fresh, 'règle d’or', 'règles d’or')} à découvrir`;
+  if (fresh >= total) return discover;
+  return fresh > 0 ? `Rien à réviser\u00A0· ${discover}` : 'Rien à réviser aujourd’hui';
+}
+
 export function Practice() {
   const p = useProgress();
   const today = dayKey();
   const due = EXERCISES.filter((e) => (p.items[e.id]?.due ?? '9999') <= today).length;
   const mistakes = EXERCISES.filter((e) => p.items[e.id]?.last === 'wrong').length;
   const cardsDue = dueCardKeys(p, today, RULE_CARD_BY_KEY).length;
-  const cardsScheduled = RULE_CARDS.some((c) => p.cards[c.key]);
+  const cardsNew = RULE_CARDS.filter((c) => !p.cards[c.key]).length;
   const [moduleId, setModuleId] = useState(MODULES[0]?.id ?? '');
   const cultureCount = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
   usePageTitle(pageTitle('S’entraîner'));
@@ -91,9 +102,7 @@ export function Practice() {
             <Layers aria-hidden="true" />
             <span>
               Fiches de révision
-              <small>
-                {cardsDue ? 'Fiches à réviser aujourd’hui' : cardsScheduled ? 'Rien à réviser aujourd’hui' : `${RULE_CARDS.length} règles d’or à découvrir`}
-              </small>
+              <small>{cardsHint(cardsDue, cardsNew, RULE_CARDS.length)}</small>
             </span>
             {cardsDue > 0 && <strong>{cardsDue}</strong>}
           </Link>

@@ -8,6 +8,7 @@ import { addDays, dayKey } from '../engine/dates';
 import { dueCardKeys, dueExerciseIds, mastery, masteryLabel, streak, type ProgressState } from '../engine/progress';
 import { count, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
+import { cardsHint } from './Practice';
 import { unfinishedSession } from './Session';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -37,7 +38,7 @@ export function Home() {
   // Same counts as S’entraîner and the sessions: ids gone from the content are left out.
   const due = dueExerciseIds(p, today, EXERCISE_BY_ID).length;
   const cardsDue = dueCardKeys(p, today, RULE_CARD_BY_KEY).length;
-  const cardsScheduled = RULE_CARDS.some((c) => p.cards[c.key]);
+  const cardsNew = RULE_CARDS.filter((c) => !p.cards[c.key]).length;
   const fresh = Object.keys(p.items).length === 0 && Object.keys(p.lessons).length === 0;
   const nextLesson = MODULES.find((m) => !p.lessons[m.id]);
   const dateLabel = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
@@ -118,9 +119,7 @@ export function Home() {
             <Layers aria-hidden="true" />
             <span>
               Fiches
-              <small>
-                {cardsDue ? 'Fiches à réviser aujourd’hui' : cardsScheduled ? 'Rien à réviser aujourd’hui' : `${RULE_CARDS.length} règles d’or à découvrir`}
-              </small>
+              <small>{cardsHint(cardsDue, cardsNew, RULE_CARDS.length)}</small>
             </span>
             {cardsDue > 0 && <strong>{cardsDue}</strong>}
           </Link>
