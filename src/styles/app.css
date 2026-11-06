@@ -1407,6 +1407,14 @@
   color: var(--ink-3);
 }
 
+/* « 7 / 10 critères notés »: says why « Valider » is still unavailable (grid, match). */
+.task-remaining {
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (pointer: coarse) {
   .shortcut-hint {
     display: none;
@@ -1865,13 +1873,6 @@
   padding: 0 var(--s2);
 }
 
-.grid-row[data-state='right'] .grid-label::after,
-.grid-row[data-state='wrong'] .grid-label::after {
-  margin-inline-start: var(--s2);
-  font-size: var(--t-meta);
-  font-weight: 700;
-}
-
 .grid-why {
   grid-column: 1 / -1;
   font-size: var(--t-small);
@@ -1880,6 +1881,31 @@
 
 .grid-why strong {
   color: var(--ink);
+}
+
+.grid-why svg {
+  display: inline;
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+}
+
+/* After validation every row says where it stands, like the other formats: agreement in green,
+   disagreement (beyond the tolerance) on the correction wash with a red cross. */
+.grid-row[data-state='right'] .grid-why svg {
+  color: var(--ok-ink);
+}
+
+.grid-row[data-state='wrong'] {
+  margin-inline: calc(var(--s3) * -1);
+  padding-inline: var(--s3);
+  border-radius: var(--r-control);
+  background: var(--mark-wash);
+}
+
+.grid-row[data-state='wrong'] .grid-why svg,
+.grid-row[data-state='wrong'] .grid-why strong {
+  color: var(--mark-ink);
 }
 
 /* ---------- Feedback (the margin note) ---------- */
@@ -2036,6 +2062,11 @@
 .recap summary svg {
   width: 20px;
   height: 20px;
+}
+
+/* The chevron follows the open state (it pointed down whether the item was open or not). */
+.recap details[open] summary > svg:last-child {
+  transform: rotate(180deg);
 }
 
 .recap .ok {

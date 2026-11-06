@@ -5,6 +5,7 @@ import { shuffle, shuffleAway } from '../../engine/random';
 import type { Exercise } from '../../engine/types';
 import { Md, MdInline } from '../../lib/markdown';
 import { Mock } from '../Mock';
+import { completionHint } from './completion';
 import { Feedback } from './Feedback';
 import {
   ChoicePlayer,
@@ -69,6 +70,7 @@ export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props)
   const promptId = `prompt-${ex.id}`;
   const revealed = result !== null && mode === 'practice';
   const complete = isComplete(ex, draft);
+  const remaining = revealed ? null : completionHint(ex, draft);
 
   const validate = () => {
     if (result || !complete) return;
@@ -177,9 +179,14 @@ export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props)
       <div className="task-actions">
         {!revealed ? (
           <>
-            <button type="button" className="btn btn-primary" onClick={validate} disabled={!complete}>
+            <button type="button" className="btn btn-primary" onClick={validate} disabled={!complete} aria-describedby={remaining ? `left-${ex.id}` : undefined}>
               Valider
             </button>
+            {remaining && (
+              <span id={`left-${ex.id}`} className="task-remaining">
+                {remaining}
+              </span>
+            )}
             <span className="shortcut-hint">{hint}</span>
           </>
         ) : (
