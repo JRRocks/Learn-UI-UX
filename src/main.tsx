@@ -14,11 +14,13 @@ createRoot(document.getElementById('root') as HTMLElement).render(
   </StrictMode>,
 );
 
-// Installable and usable offline once loaded (production builds only).
+// Installable, and usable offline after a first visit: the worker stores every file of the build
+// (production builds only). Registered once the page has loaded, so it never competes with it.
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  const register = () =>
     navigator.serviceWorker.register('./sw.js').catch(() => {
       // Offline support is a bonus; the app works without it.
     });
-  });
+  if (document.readyState === 'complete') register();
+  else window.addEventListener('load', register, { once: true });
 }

@@ -1,12 +1,12 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { contentIndex } from './scripts/vite-plugins.mjs';
+import { contentIndex, serviceWorker } from './scripts/vite-plugins.mjs';
 
 // Relative base so the build works on GitHub Pages (/Learn-UI-UX/) and from any folder.
 export default defineConfig({
   base: './',
-  plugins: [react(), contentIndex()],
+  plugins: [react(), contentIndex(), serviceWorker()],
   build: {
     rolldownOptions: {
       output: {

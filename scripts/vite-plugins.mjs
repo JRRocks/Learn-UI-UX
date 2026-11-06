@@ -4,6 +4,12 @@
 //   chunks, `virtual:content/rules` (every flashcard) and `virtual:content/statements` (every
 //   true/false statement). It evaluates src/content/all.ts with Vite's module runner, so the data
 //   always matches the lessons: nothing to regenerate by hand when a lesson changes.
+//
+// serviceWorker(): writes dist/sw.js from src/sw.js, preceded by `const BUILD = { version, files }`:
+//   every file of the build (precached on install) and an id that changes whenever one of them does
+//   (so the browser installs the new worker and drops the caches of older builds).
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, sep } from 'node:path';
 import { runnerImport } from 'vite';
 
@@ -51,6 +57,52 @@ export function contentIndex() {
     // Same in `vite build --watch`.
     watchChange(id) {
       if (isContent(id)) generated = null;
+    },
+  };
+}
+
+/** Files of a folder, recursively, relative to it with forward slashes. */
+function filesOf(dir) {
+  let out = [];
+  for (const name of readdirSync(dir)) {
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) out = out.concat(filesOf(path).map((f) => `${name}/${f}`));
+    else out.push(name);
+  }
+  return out;
+}
+
+export function serviceWorker() {
+  let config;
+  return {
+    name: 'epreuves:service-worker',
+    apply: 'build',
+    enforce: 'post',
+    configResolved(c) {
+      config = c;
+    },
+    generateBundle(_, bundle) {
+      const source = readFileSync(join(config.root, 'src/sw.js'), 'utf8');
+      const hash = createHash('sha256').update(source);
+      const built = Object.values(bundle)
+        .filter((f) => f.fileName !== 'index.html' && !f.fileName.endsWith('.map'))
+        .map((f) => f.fileName);
+      const publicDir = config.publicDir && config.build.copyPublicDir ? config.publicDir : null;
+      const copied = publicDir ? filesOf(publicDir) : [];
+      for (const f of copied) hash.update(f).update(readFileSync(join(publicDir, f)));
+      // index.html and the copied files keep their names: their content goes into the build id.
+      const html = bundle['index.html'];
+      if (!html || html.type !== 'asset') throw new Error('serviceWorker(): index.html absent du build');
+      hash.update(String(html.source));
+      const files = ['./', ...[...copied, ...built].sort().map((f) => `./${f}`)];
+      hash.update(files.join('\n'));
+      const version = hash.digest('hex').slice(0, 12);
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sw.js',
+        source: `const BUILD = ${JSON.stringify({ version, files })};\n\n${source}`,
+      });
+      config.logger.info(`  sw.js : ${files.length} fichiers mis en cache à l’installation (version ${version})`);
     },
   };
 }
