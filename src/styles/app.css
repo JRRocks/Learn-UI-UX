@@ -1575,7 +1575,9 @@
     background-color var(--dur-fast) var(--ease-out);
 }
 
-.option:hover:not(:disabled) {
+/* Once validated, a tile's input is disabled: no hover, which turned the green and red frames
+   grey and made dim tiles look active. */
+.option:hover:not(:disabled, :has(> input:disabled)) {
   border-color: var(--ink-3);
 }
 
@@ -1641,19 +1643,27 @@
   color: var(--on-ink);
 }
 
-/* Options neither chosen nor recommended, after validation: the frame and the key recede, the
-   text keeps its token colours (opacity 0.72 put the « pourquoi » at 4.04:1). */
+/* Options neither chosen nor recommended, after validation: each part steps down one token
+   instead of opacity 0.72 (which put the « pourquoi » and the captions at 4.04:1). Frame, key and
+   box borders to --rule-strong, key to --ink-3; text to --ink-2, Vrai / Faux included (8.4:1),
+   code with it; caption to --ink-3 (5.9:1). The « pourquoi » stays --ink-2: it is still read. */
 .option[data-state='dim'] {
+  border-color: var(--rule-strong);
+  color: var(--ink-2);
+}
+
+.option[data-state='dim'] .option-key,
+.option[data-state='dim'] .check-box {
   border-color: var(--rule-strong);
 }
 
-.option[data-state='dim'] .option-key {
-  border-color: var(--rule-strong);
+.option[data-state='dim'] .option-key,
+.option[data-state='dim'] .option-label {
   color: var(--ink-3);
 }
 
-.option[data-state='dim'] .option-text {
-  color: var(--ink-2);
+.option[data-state='dim'] code {
+  color: inherit;
 }
 
 .option[data-state='dim'] > .stage {
