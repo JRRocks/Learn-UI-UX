@@ -1630,7 +1630,7 @@ Placer le CEP à la fin, comme un code postal occidental, fait saisir à la main
       type: 'truefalse',
       difficulty: 2,
       culture: 'fr',
-      prompt: 'Une boutique en ligne qui vend à des consommateurs en France peut présenter ses offres et ses conditions uniquement en anglais si sa marque est internationale.',
+      prompt: 'Une boutique en ligne qui vend à des consommateurs en France peut présenter ses offres et ses conditions en anglais, sans version française, si sa marque est internationale.',
       answer: false,
       explanation: `**Faux.** La **loi Toubon** (loi n° 94-665 du 4 août 1994) impose l’usage du français dans la désignation, l’offre, la présentation, le mode d’emploi et les conditions de garantie des biens et des services, ainsi que dans les factures et la publicité destinées aux consommateurs en France.
 

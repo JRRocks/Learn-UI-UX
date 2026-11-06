@@ -512,7 +512,7 @@ Chaque étape ajoutée entre l’intention et l’action fait décrocher une par
 </div>`,
             css: `.lmw { position: relative; min-height: 290px; color: #fff; background:
   radial-gradient(ellipse 40% 9% at 64% 56%, rgb(255 222 180 / 0.95), rgb(255 196 140 / 0) 100%),
-  radial-gradient(ellipse 7% 26% at 64% 75%, rgb(255 206 160 / 0.5), rgb(255 206 160 / 0) 100%),
+  radial-gradient(ellipse 7% 14% at 64% 66%, rgb(255 206 160 / 0.5), rgb(255 206 160 / 0) 100%),
   linear-gradient(180deg, #1f3150 0%, #2c4266 20%, #5a6d92 34%, #b39aa4 46%, #eaae80 53%, #fbd8a8 56%, #5b7088 56.4%, #3d536d 66%, #22344d 84%, #172539 100%); }
 .lmw-land { position: absolute; inset-inline: 0; bottom: 0; width: 100%; height: 50%; }
 .lmw-isle { fill: #1a2233; }
