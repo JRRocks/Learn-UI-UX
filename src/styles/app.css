@@ -1551,9 +1551,11 @@
   height: 40px;
 }
 
-.order-moves .icon-btn:disabled {
+/* At either end, a move stays focusable (aria-disabled) so that the keyboard focus is never lost. */
+.order-moves .icon-btn:is(:disabled, [aria-disabled='true']) {
   opacity: 0.3;
   cursor: default;
+  background: transparent;
 }
 
 .order-correct {
