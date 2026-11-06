@@ -26,13 +26,13 @@ export const BADGES: Badge[] = [
   {
     id: 'streak-3',
     title: 'Trois jours d’affilée',
-    description: 'S’entraîner trois jours de suite.',
+    description: 'Tenir une série de trois jours.',
     earned: (s) => streak(s).best >= 3,
   },
   {
     id: 'streak-7',
     title: 'Une semaine pleine',
-    description: 'S’entraîner sept jours de suite.',
+    description: 'Tenir une série de sept jours.',
     earned: (s) => streak(s).best >= 7,
   },
   {

@@ -37,7 +37,7 @@ const isDayKey = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s);
 const LIST = new Intl.ListFormat('fr-FR', { type: 'conjunction' });
 
 /** « 640 XP, 12 épreuves suivies et 3 fiches programmées »: what a reset or an import would replace. */
-function describe(s: ProgressState): string {
+function summarize(s: ProgressState): string {
   // Only what the learner can see: ids removed from the content no longer count.
   const items = Object.keys(s.items).filter((id) => EXERCISE_BY_ID.has(id)).length;
   const cards = Object.keys(s.cards).filter((k) => RULE_CARD_BY_KEY.has(k)).length;
@@ -73,8 +73,9 @@ export function Progress() {
 
   // A valid backup was picked: ask before replacing anything, the safe answer focused.
   useEffect(() => {
-    if (!pending) return;
-    importRef.current?.showModal();
+    const dialog = importRef.current;
+    if (!pending || !dialog) return;
+    if (!dialog.open) dialog.showModal();
     cancelImportRef.current?.focus();
   }, [pending]);
 
@@ -105,7 +106,7 @@ export function Progress() {
     if (!pending) return;
     setUndo(store.get());
     store.replace(pending);
-    toast(frenchSpacing(`Sauvegarde importée : ${describe(pending)}.`));
+    toast(frenchSpacing(`Sauvegarde importée : ${summarize(pending)}.`));
   };
 
   const undoImport = () => {
@@ -378,7 +379,7 @@ export function Progress() {
       <dialog ref={resetRef} className="dialog" aria-labelledby="reset-title" aria-describedby="reset-desc">
         <h2 id="reset-title">{frenchSpacing('Effacer toute ta progression ?')}</h2>
         <p id="reset-desc">
-          {frenchSpacing(`Seront effacés de ce navigateur : ${describe(p)}, avec tes séries et tes badges.`)} Exporte une sauvegarde d’abord si tu veux
+          {frenchSpacing(`Seront effacés de ce navigateur : ${summarize(p)}, avec tes séries et tes badges.`)} Exporte une sauvegarde d’abord si tu veux
           pouvoir revenir en arrière.
         </p>
         <form method="dialog" className="btn-row">
@@ -404,7 +405,7 @@ export function Progress() {
         <p id="import-desc">
           {pending &&
             frenchSpacing(
-              `Ta progression actuelle (${describe(p)}) et tes réglages seront remplacés par ceux du fichier (${describe(pending)}).`,
+              `Ta progression actuelle (${summarize(p)}) et tes réglages seront remplacés par ceux du fichier (${summarize(pending)}).`,
             )}
         </p>
         <form method="dialog" className="btn-row">

@@ -245,11 +245,9 @@ export function Lesson({ id }: { id: string }) {
               <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
                 Réviser {count(cardsToReview, 'fiche', 'fiches')}
               </Link>
-            ) : (
-              <p className="small muted">
-                {frenchSpacing(`Fiches à jour : prochaine révision le ${nextCard ? longDay(nextCard) : 'bientôt'}.`)}
-              </p>
-            )}
+            ) : nextCard ? (
+              <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(nextCard)}.`)}</p>
+            ) : null}
           </div>
         </aside>
       </div>

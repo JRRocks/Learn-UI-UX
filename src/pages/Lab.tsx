@@ -156,7 +156,7 @@ export function Lab() {
             {ratio > 1.15 && frenchSpacing(' Prévois de la place : boutons et libellés doivent pouvoir s’allonger.')}
             {ratio < 0.7 &&
               frenchSpacing(
-                ` ${COMPACT[base(l.lang)] ?? 'Le texte est bien plus court qu’en anglais'} : il compte bien moins de caractères. Ne fige pas les largeurs sur la version anglaise.`,
+                ` ${COMPACT[base(l.lang)] ?? 'Cette écriture condense le sens'} : le texte compte bien moins de caractères. Ne fige pas les largeurs sur la version anglaise.`,
               )}
           </p>
         </section>
