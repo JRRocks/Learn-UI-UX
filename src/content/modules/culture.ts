@@ -896,15 +896,13 @@ Une équipe étrangère ne peut pas deviner ces associations. La seule méthode 
       type: 'truefalse',
       difficulty: 1,
       culture: 'cn',
-      prompt: 'Les utilisateurs chinois préfèrent toujours les interfaces chargées.',
+      prompt: 'Une appli de méditation qui se lance en Chine gagnerait à copier l’accueil des super-apps : une grille d’icônes de services et des bannières promotionnelles.',
       answer: false,
-      explanation: `**Faux** — c’est une tendance, pas une loi.
+      explanation: `**Faux.** La grille d’icônes des super-apps a une raison d’être : Alipay ou Meituan servent de portail vers des dizaines de services — repas, courses, taxi, hôtel —, et leur accueil les montre d’un coup d’œil. Une partie de cette densité sert aussi le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs. Une appli de méditation n’a ni ces services à ranger ni cet espace à vendre : copier la forme sans sa raison d’être n’ajouterait que du bruit.
 
-La densité des applis chinoises a de vraies causes : une écriture compacte, un usage presque entièrement mobile, des super-apps qui donnent accès à des dizaines de services. Mais une partie de cette densité sert d’abord le **modèle économique** : un portail vend de l’espace à ses services et à ses annonceurs.
+La densité des applis chinoises est une tendance, pas une loi. Elle a de vraies causes — une écriture compacte, un usage presque entièrement mobile, les super-apps —, mais les contre-exemples abondent : Douyin s’ouvre en plein écran sur une seule vidéo, la liste de conversations de WeChat reste sobre. Les attentes varient aussi avec l’âge, la ville et la tâche.
 
-Les contre-exemples abondent : Douyin s’ouvre en plein écran sur une seule vidéo, la liste de conversations de WeChat reste sobre. Les attentes varient aussi avec l’âge, la ville et la tâche ; un paiement ou un formulaire gagnent à être simples partout.
-
-La bonne question n’est pas « chargé ou épuré ? » mais « que faut-il voir ici pour décider et avoir confiance ? » — et la réponse se teste.`,
+La bonne question n’est pas « chargé ou épuré ? » mais « que faut-il voir ici pour décider et avoir confiance ? » — et la réponse se teste avec des utilisateurs locaux.`,
       takeaway: 'La densité est une tendance du marché chinois, pas une règle : elle dépend du produit, de la tâche et du modèle économique. Teste avec des utilisateurs locaux.',
       sources: ['palo-it:china'],
     },
@@ -1756,14 +1754,13 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
         {
           id: 'fixed',
           visual: {
-            alt: 'Écran « Einstellungen » avec trois tuiles de largeur fixe dont les libellés allemands sont tronqués par des points de suspension, et un bouton tronqué lui aussi.',
+            alt: 'Écran « Einstellungen » avec trois tuiles étroites de largeur fixe : les mots composés allemands Benachrichtigungen, Datenschutzeinstellungen et Zahlungsmethoden sont tronqués par des points de suspension.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
 .ds-grid{display:grid;grid-template-columns:repeat(3,76px);gap:6px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
-.ds-tile span{display:block;width:100%;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ds-btn{display:block;width:128px;line-height:38px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}`,
+.ds-tile span{display:block;width:100%;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}`,
             html: `<div class="ds mk-pad">
   <p class="mk-h3">Einstellungen</p>
   <div class="ds-grid">
@@ -1771,7 +1768,6 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
     <div class="ds-tile"><i data-icon="lock"></i><span>Datenschutzeinstellungen</span></div>
     <div class="ds-tile"><i data-icon="credit-card"></i><span>Zahlungsmethoden</span></div>
   </div>
-  <span class="mk-btn ds-btn">Änderungen speichern</span>
 </div>`,
           },
           why: 'Largeurs fixes pensées pour l’anglais : les mots composés allemands sont tronqués et deviennent illisibles.',
@@ -1779,14 +1775,13 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
         {
           id: 'flexible',
           visual: {
-            alt: 'Le même écran avec des tuiles souples : les libellés allemands passent à la ligne, coupés par un trait d’union quand la place manque, et le bouton s’élargit.',
+            alt: 'Le même écran avec des tuiles souples : les mots composés allemands passent à la ligne, coupés par un trait d’union.',
             lang: 'de',
             css: `.ds{display:flex;flex-direction:column;gap:12px}
 .ds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
 .ds-tile{border:1px solid #e1e4ea;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
 .ds-tile .mk-ico{--ico:20px;color:#1f4fd8}
-.ds-tile span{font-size:13px;font-weight:600;line-height:1.3;hyphens:auto;overflow-wrap:break-word;max-width:100%}
-.ds .mk-btn{align-self:flex-start}`,
+.ds-tile span{font-size:13px;font-weight:600;line-height:1.3;-webkit-hyphens:auto;hyphens:auto;overflow-wrap:break-word;max-width:100%}`,
             html: `<div class="ds mk-pad">
   <p class="mk-h3">Einstellungen</p>
   <div class="ds-grid">
@@ -1794,24 +1789,22 @@ Le total, lui, suit le format allemand : point pour les milliers, virgule décim
     <div class="ds-tile"><i data-icon="lock"></i><span>Datenschutzeinstellungen</span></div>
     <div class="ds-tile"><i data-icon="credit-card"></i><span>Zahlungsmethoden</span></div>
   </div>
-  <span class="mk-btn">Änderungen speichern</span>
 </div>`,
           },
           why: 'Largeurs souples, langue déclarée et césure automatique : les mots longs se coupent au besoin selon les règles allemandes, rien n’est tronqué.',
         },
       ],
       answer: 'flexible',
-      explanation: `L’allemand est souvent **30 % plus long** que l’anglais, et bien plus sur les libellés courts : pour une chaîne de moins de 10 caractères, IBM prévoit une traduction 2 à 3 fois plus longue. « Privacy settings » devient « Datenschutzeinstellungen ».
+      explanation: `Un mot composé allemand s’écrit d’un seul tenant : « Privacy settings » devient « Datenschutzeinstellungen », 24 lettres sans espace. Sans césure, le navigateur ne passe à la ligne qu’entre deux mots : dans une tuile étroite, un tel mot déborde, ou il est tronqué si la tuile masque ce qui dépasse. Et les libellés courts gonflent le plus : pour une chaîne de 10 caractères ou moins, IBM prévoit une traduction 2 à 3 fois plus longue.
 
-Trois réglages évitent la troncature :
+Deux réglages laissent le navigateur couper ces mots proprement :
 
-- pas de largeur fixe sur du texte : laisse les boîtes s’adapter au contenu ;
-- \`hyphens: auto\` pour couper les mots longs ;
+- \`hyphens: auto\` : le navigateur coupe le mot à un point de césure prévu par les règles de la langue et ajoute un trait d’union ;
 - l’attribut \`lang="de"\` sur le contenu : sans lui, le navigateur ne sait pas quel dictionnaire de césure utiliser et ne coupe rien.
 
-Impeccable recommande de prévoir 30 à 40 % de place en plus et de tester avec la langue la plus longue — souvent l’allemand.`,
-      takeaway: 'Prévois 30 à 40 % de place en plus pour les traductions et laisse le navigateur couper les mots avec `lang` et `hyphens: auto`.',
-      sources: ['imp:harden', S.w3cTextSize, S.hyphens],
+Ajoute \`overflow-wrap: break-word\` en filet de sécurité, pour un mot que le dictionnaire ne sait pas couper, et laisse les tuiles s’élargir avec leur contenu plutôt que de leur imposer une largeur fixe.`,
+      takeaway: 'Mots composés allemands : déclare `lang="de"` et `hyphens: auto` pour que le navigateur les coupe au lieu de les tronquer.',
+      sources: ['imp:harden', S.hyphens, S.overflowWrap, S.w3cTextSize],
     },
     {
       id: 'culture-de-legal-multi',
