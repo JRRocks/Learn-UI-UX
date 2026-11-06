@@ -65,7 +65,7 @@ const processModule: ModuleContent = {
   category: 'construire',
   summary:
     'Cadrer un écran avant de le dessiner, consigner la vérité produit et le système visuel, décider ce qui fait autorité, et choisir la bonne commande d’impeccable pour chaque problème.',
-  minutes: 12,
+  minutes: 11,
   commands: ['shape', 'init', 'document', 'extract'],
   sources: ['imp:skill', 'imp:shape', INIT, 'imp:new-work', 'imp:document', 'imp:extract', 'imp:polish', 'imp:colorize', 'imp:audit', 'imp:critique'],
   sections: [
