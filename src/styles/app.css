@@ -1068,6 +1068,101 @@
     position: sticky;
     top: var(--s6);
   }
+
+  .lesson-jump {
+    display: none;
+  }
+}
+
+/* Below 1100 px the aside would only come after the whole article: .lesson-jump opens the lesson
+   with the same contents, folded, and the second « S’entraîner » button goes away. */
+@media (max-width: 1099.98px) {
+  .lesson-aside {
+    display: none;
+  }
+}
+
+.lesson-jump {
+  max-width: var(--measure);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-panel);
+  background: var(--sheet);
+}
+
+.lesson-jump summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  min-height: var(--tap);
+  padding: var(--s2) var(--s4);
+  border-radius: inherit;
+  cursor: pointer;
+  list-style: none;
+}
+
+.lesson-jump summary::-webkit-details-marker {
+  display: none;
+}
+
+.lesson-jump summary > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lesson-jump summary small {
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.lesson-jump summary svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--ink-2);
+}
+
+.lesson-jump details[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.lesson-jump ol {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 var(--s4);
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.lesson-jump li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.lesson-jump ol a {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding-block: var(--s2);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.lesson-jump ol a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--mark);
+}
+
+.lesson-jump .btn {
+  margin: var(--s2) var(--s4) var(--s4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lesson-jump summary svg,
+  .recap summary > svg:last-child {
+    transition: transform var(--dur) var(--ease-out);
+  }
 }
 
 .lesson-toc {
