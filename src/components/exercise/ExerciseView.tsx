@@ -1,11 +1,12 @@
 import { ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { grade, type GradeResult } from '../../engine/grade';
-import { shuffle, shuffleAway } from '../../engine/random';
+import { seeded, shuffle, shuffleAway, type Rng } from '../../engine/random';
 import type { Exercise } from '../../engine/types';
 import { Md, MdInline } from '../../lib/markdown';
 import { Mock } from '../Mock';
 import { Feedback } from './Feedback';
+import { SETTLE_MS, digitOf, eventOrigin, handlesOwnKeys, hasModifier, isTextEntry, within } from './keys';
 import {
   ChoicePlayer,
   GridPlayer,
@@ -33,40 +34,61 @@ export const TYPE_LABEL: Record<Exercise['type'] | 'duel', string> = {
   grid: 'Grille de critique',
 };
 
-function displayOrder(ex: Exercise): string[] {
+function displayOrder(ex: Exercise, rng: Rng): string[] {
   switch (ex.type) {
     case 'choice':
     case 'multi':
-      return ex.fixedOrder ? ex.options.map((o) => o.id) : shuffle(ex.options.map((o) => o.id));
+      return ex.fixedOrder ? ex.options.map((o) => o.id) : shuffle(ex.options.map((o) => o.id), rng);
     case 'order':
-      return shuffleAway(ex.items.map((i) => i.id));
+      return shuffleAway(ex.items.map((i) => i.id), rng);
     case 'match':
-      return shuffle(ex.pairs.map((p) => p.id));
+      return shuffle(ex.pairs.map((p) => p.id), rng);
     default:
       return [];
   }
 }
 
-const isTyping = (el: EventTarget | null) =>
-  el instanceof HTMLElement && (el.tagName === 'SELECT' || el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && (el as HTMLInputElement).type === 'text'));
+/** Height of the sticky bars that cover the top and the bottom of the page during a session. */
+function coveredEdges(article: HTMLElement | null): { top: number; bottom: number } {
+  const top = document.querySelector('.player-top')?.getBoundingClientRect().bottom ?? 0;
+  const bar = article?.querySelector('.task-actions')?.getBoundingClientRect();
+  const bottom = bar && bar.top < window.innerHeight ? window.innerHeight - bar.top : 0;
+  return { top: Math.max(0, top), bottom: Math.max(0, bottom) };
+}
+
+/** Scroll `target` just below the top bar, unless it is already wholly visible between the bars. */
+export function keepInView(target: HTMLElement, article: HTMLElement | null) {
+  const r = target.getBoundingClientRect();
+  const edges = coveredEdges(article);
+  if (r.top >= edges.top && r.bottom <= window.innerHeight - edges.bottom) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: window.scrollY + r.top - edges.top - 12, behavior: reduce ? 'auto' : 'smooth' });
+}
 
 interface Props {
   ex: Exercise;
   /** `exam` hides the correction until the end of the session. */
   mode: 'practice' | 'exam';
+  /** Seed of the option order, so that the same run always shows the same order. */
+  seed?: number;
+  /** An answer given earlier (back from a lesson, a reload): the exercise opens on its correction. */
+  answered?: { result: GradeResult; draft: Draft; xp?: number };
   /** Called once when the learner validates; returns the XP earned (shown in the feedback). */
   onAnswered: (result: GradeResult, draft: Draft) => number | undefined;
   onNext: () => void;
   nextLabel: string;
 }
 
-export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props) {
-  const order = useMemo(() => displayOrder(ex), [ex]);
-  const [draft, setDraft] = useState<Draft>(() => initialDraft(ex, order));
-  const [result, setResult] = useState<GradeResult | null>(null);
-  const [xp, setXp] = useState<number | undefined>();
+export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nextLabel }: Props) {
+  const order = useMemo(() => displayOrder(ex, seed === undefined ? Math.random : seeded(seed)), [ex, seed]);
+  const [draft, setDraft] = useState<Draft>(() => answered?.draft ?? initialDraft(ex, order));
+  const [result, setResult] = useState<GradeResult | null>(answered?.result ?? null);
+  const [xp, setXp] = useState<number | undefined>(answered?.xp);
+  const articleRef = useRef<HTMLElement>(null);
   const feedbackRef = useRef<HTMLElement>(null);
+  const settledAt = useRef(0);
   const promptId = `prompt-${ex.id}`;
+  const contextId = ex.context ? `context-${ex.id}` : undefined;
   const revealed = result !== null && mode === 'practice';
   const complete = isComplete(ex, draft);
 
@@ -78,36 +100,44 @@ export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props)
     if (mode === 'exam') onNext();
   };
 
-  // Bring the correction into view once it is rendered.
+  // A new exercise or a new correction on screen: Enter waits a moment before acting again.
+  useEffect(() => {
+    settledAt.current = performance.now();
+  }, [revealed]);
+
+  // Once validated, show what changed: for a hotspot, a slider or a grid, the scene and its marks
+  // (motion-1); otherwise the correction. The focus goes to the correction for screen readers.
   useEffect(() => {
     if (!revealed) return;
     const el = feedbackRef.current;
     if (!el) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     el.focus({ preventScroll: true });
-    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    keepInView(articleRef.current?.querySelector<HTMLElement>('[data-scene]') ?? el, articleRef.current);
   }, [revealed]);
 
-  // Keyboard: digits pick options, V/F answer true/false, Enter validates then continues.
+  // Keyboard: Enter validates then continues; digits pick options and V/F answer, while the focus is in the exercise.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey || isTyping(e.target)) return;
+      if (e.defaultPrevented || hasModifier(e)) return;
+      const origin = eventOrigin(e);
       if (e.key === 'Enter') {
-        const t = e.target as HTMLElement | null;
-        if (t && (t.tagName === 'BUTTON' || t.tagName === 'A') && !t.closest('.task-actions')) return;
+        // Buttons, links and zones of a mock act by themselves; a held Enter never chains two steps.
+        if (e.repeat || handlesOwnKeys(origin) || isTextEntry(origin)) return;
         e.preventDefault();
+        if (performance.now() - settledAt.current < SETTLE_MS) return;
         if (revealed) onNext();
         else validate();
         return;
       }
-      if (revealed || result) return;
-      const n = Number.parseInt(e.key, 10);
+      if (revealed || result || e.repeat || !within(e, articleRef.current) || isTextEntry(origin)) return;
+      const n = digitOf(e);
+      const key = e.key.toLowerCase();
       if (ex.type === 'truefalse') {
-        if (e.key === 'v' || e.key === 'V' || n === 1) setDraft({ type: 'truefalse', value: true });
-        if (e.key === 'f' || e.key === 'F' || n === 2) setDraft({ type: 'truefalse', value: false });
+        if (key === 'v' || n === 1) setDraft({ type: 'truefalse', value: true });
+        if (key === 'f' || n === 2) setDraft({ type: 'truefalse', value: false });
         return;
       }
-      if (!Number.isNaN(n) && n >= 1 && n <= order.length) {
+      if (n !== null && n >= 1 && n <= order.length) {
         const id = order[n - 1];
         if (ex.type === 'choice') setDraft({ type: 'choice', optionId: id });
         if (ex.type === 'multi' && draft.type === 'multi')
@@ -118,7 +148,7 @@ export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props)
     return () => window.removeEventListener('keydown', onKey);
   });
 
-  const common = { revealed, order, labelledBy: promptId };
+  const common = { revealed, order, labelledBy: promptId, describedBy: contextId };
   let body: ReactNode = null;
   switch (ex.type) {
     case 'choice':
@@ -157,10 +187,15 @@ export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props)
           : 'Entrée pour valider.';
 
   return (
-    <article className="task">
+    <article className="task" ref={articleRef}>
       <header className="task-head">
-        {ex.context && <Md text={ex.context} className="task-context" />}
-        <h1 id={promptId} className="task-prompt" tabIndex={-1}>
+        {/* The scenario comes first on screen; the prompt, which gets the focus, points to it. */}
+        {ex.context && (
+          <div id={contextId}>
+            <Md text={ex.context} className="task-context" />
+          </div>
+        )}
+        <h1 id={promptId} className="task-prompt" tabIndex={-1} aria-describedby={contextId}>
           <MdInline text={ex.prompt} />
         </h1>
         {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && ex.type !== 'grid' && (
@@ -191,7 +226,6 @@ export function ExerciseView({ ex, mode, onAnswered, onNext, nextLabel }: Props)
           </>
         )}
       </div>
-
     </article>
   );
 }
