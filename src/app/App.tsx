@@ -233,7 +233,7 @@ function page(route: Route) {
 }
 
 /** Title of the focus-mode views, whose components do not set one. */
-function focusTitle(route: Route): string {
+function focusModeTitle(route: Route): string {
   const [section] = route.path;
   if (section === 'fiches') {
     const m = MODULE_BY_ID.get(route.query.get('module') ?? '');
@@ -292,7 +292,7 @@ function Shell() {
 
   // Session, challenge and flashcards name themselves from the route; every other view sets its own title.
   useEffect(() => {
-    if (focusMode) document.title = focusTitle(route);
+    if (focusMode) document.title = focusModeTitle(route);
   }, [route, focusMode]);
 
   if (Preview && section === 'apercu' && param)
