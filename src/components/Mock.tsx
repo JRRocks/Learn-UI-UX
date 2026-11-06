@@ -44,6 +44,9 @@ interface MockProps {
 
 const ATTR = /([a-zA-Z-:]+)="([^"]*)"/g;
 
+/** The kit, and the frame reset that must come after it and before the visual's own rules. */
+const KIT_CSS = `${MOCK_KIT}\n.mk-framed{background:transparent;border-radius:0;overflow:visible}\n`;
+
 /** `<i data-icon="cart" class="x"></i>` → inline Lucide SVG. */
 export function expandIcons(html: string): string {
   return html.replace(/<i\b([^>]*)><\/i>/g, (whole, attrs: string) => {
@@ -401,8 +404,10 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     const dir = visual.dir ? ` dir="${visual.dir}"` : '';
     const lang = visual.lang ? ` lang="${visual.lang}"` : '';
     const framed = visual.frame && visual.frame !== 'none' ? ' mk-framed' : '';
+    // The kit is the same text in every mock: in its own <style>, the browser parses it once for the
+    // whole page and shares it, instead of once per mock along with the visual's own rules.
     return (
-      `<style>${MOCK_KIT}\n.mk-framed{background:transparent;border-radius:0;overflow:visible}\n${visual.css ?? ''}</style>` +
+      `<style>${KIT_CSS}</style>${visual.css ? `<style>${visual.css}</style>` : ''}` +
       `<div class="mk-root${framed}" part="root"${dir}${lang}>${frame(visual, expandIcons(visual.html))}</div>`
     );
   }, [visual]);
