@@ -5,16 +5,29 @@
 // - activate: the files of this build are kept, and those of the previous build that this one no
 //   longer has (a tab still showing the previous version can still open its lessons); older builds
 //   are deleted, so the storage never grows from one deployment to the next;
-// - the page comes from the network, so it is fresh, unless the network takes more than 3 s and a
-//   stored copy exists (slow or stalled connection): the copy answers, the network updates it;
+// - the page comes from the network, so it is fresh, unless the network takes more than 3 s (slow or
+//   stalled connection) or fails: this build's copy answers then. That copy is the one stored at
+//   install, which names only files of this build; never a later answer of the network, which may
+//   come from a newer build whose files are not stored (yet, or ever if its install fails);
 // - files whose name holds a hash never change: stored copy first. Other files: network first.
 const PREFIX = 'epreuves-';
 const CACHE = PREFIX + BUILD.version;
 const PAGE_TIMEOUT = 3000;
 const SCOPE = new URL('./', self.location).pathname;
 const SHELL = new URL('./', self.location).href;
+const FILES = new Set(BUILD.files.map((f) => new URL(f, self.location).href));
 const isHashed = (pathname) => pathname.startsWith(`${SCOPE}assets/`);
 const isPage = (pathname) => pathname === SCOPE || pathname === `${SCOPE}index.html`;
+
+/**
+ * The page fetched at install names only files of this build: a deployment, or a CDN still serving
+ * the previous page, could otherwise pair this build's files with another build's page.
+ */
+async function checkPage(res) {
+  const named = [...(await res.text()).matchAll(/\.\/assets\/[\w.-]+/g)].map(([m]) => new URL(m, self.location).href);
+  const foreign = named.find((href) => !FILES.has(href));
+  if (!named.length || foreign) throw new Error(`./ : page d’une autre version (${foreign ?? 'aucun fichier'})`);
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -28,6 +41,7 @@ self.addEventListener('install', (event) => {
             // A hashed file stored by an earlier build is the same file: copy it rather than download it.
             const res = (hashed && (await caches.match(url.href))) || (await fetch(url.href, { cache: hashed ? 'default' : 'no-cache' }));
             if (!res.ok) throw new Error(`${file} : ${res.status}`);
+            if (url.href === SHELL) await checkPage(res.clone());
             await cache.put(url.href, res);
           }),
         );
@@ -51,27 +65,22 @@ self.addEventListener('activate', (event) => {
       // The previous build keeps only the files this one no longer has: a tab still showing it finds
       // the others in this build's cache, so nothing is stored twice.
       if (previous) {
-        const now = new Set(BUILD.files.map((f) => new URL(f, self.location).href));
         const old = await caches.open(previous);
-        await Promise.all((await old.keys()).filter((req) => now.has(req.url)).map((req) => old.delete(req)));
+        await Promise.all((await old.keys()).filter((req) => FILES.has(req.url)).map((req) => old.delete(req)));
       }
       await self.clients.claim();
     })(),
   );
 });
 
-/** The app's page: fresh from the network, or the stored copy if the network fails or takes too long. */
+/**
+ * The app's page: fresh from the network, or this build's copy if the network fails or takes too
+ * long. The network's answer is never stored: only this build's copy is sure to name files that are
+ * all in the cache.
+ */
 async function page(event) {
-  const network = fetch(event.request).then((res) => {
-    if (res.ok && (res.headers.get('content-type') ?? '').includes('text/html')) {
-      const copy = res.clone();
-      event.waitUntil(caches.open(CACHE).then((c) => c.put(SHELL, copy)));
-    }
-    return res;
-  });
-  // The network's answer still updates the copy when the copy was served first.
-  event.waitUntil(network.catch(() => {}));
-  const kept = await caches.match(SHELL);
+  const network = fetch(event.request);
+  const kept = await caches.match(SHELL, { cacheName: CACHE });
   if (!kept) return network;
   const late = new Promise((resolve) => setTimeout(() => resolve(kept), PAGE_TIMEOUT));
   return Promise.race([network.then((res) => (res.ok ? res : kept), () => kept), late]);
@@ -89,11 +98,14 @@ async function stored(event) {
   return res;
 }
 
-/** Any other file of the app (manifest, icon): the network, else the stored copy. */
+/**
+ * Any other file of the app (manifest, icon): the network, else the stored copy. The page fetched
+ * by a script rather than opened comes here too, and is not stored either (see `page`).
+ */
 async function fresh(event) {
   try {
     const res = await fetch(event.request);
-    if (res.ok) {
+    if (res.ok && !isPage(new URL(event.request.url).pathname)) {
       const copy = res.clone();
       event.waitUntil(caches.open(CACHE).then((c) => c.put(event.request, copy)));
     }
