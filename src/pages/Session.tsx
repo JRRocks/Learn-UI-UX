@@ -404,7 +404,8 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
             Refaire mes erreurs
           </Link>
         )}
-        <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'}>
+        {/* It names the session it starts, which can be long: let it wrap on narrow screens. */}
+        <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'} style={{ whiteSpace: 'normal', textAlign: 'center' }}>
           {frenchSpacing(again.text)}
         </Link>
         <Link to="/" className="btn btn-ghost">
