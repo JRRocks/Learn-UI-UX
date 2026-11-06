@@ -109,8 +109,8 @@ export function Blitz() {
             {frenchSpacing(`${DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la correction.`)}
           </p>
           <p className="muted">
-            Record : <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
-            disponibles. Clavier : V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
+            Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
+            disponibles. Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
           </p>
         </header>
         <div className="btn-row">

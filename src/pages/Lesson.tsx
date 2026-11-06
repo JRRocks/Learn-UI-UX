@@ -183,10 +183,10 @@ export function Lesson({ id }: { id: string }) {
                   <li key={i}>
                     {r.url ? (
                       <a href={r.url} target="_blank" rel="noopener noreferrer">
-                        {r.label}
+                        {frenchSpacing(r.label)}
                       </a>
                     ) : (
-                      r.label
+                      frenchSpacing(r.label)
                     )}
                   </li>
                 );
@@ -233,7 +233,9 @@ export function Lesson({ id }: { id: string }) {
           </nav>
           <div className="section">
             <div className="field">
-              <span className="field-label">Maîtrise : {masteryLabel(v, touched)}</span>
+              <span className="field-label">
+                Maîtrise{'\u00A0'}: {masteryLabel(v, touched)}
+              </span>
               <span className="meter" style={pct(v)} aria-hidden="true">
                 <span />
               </span>

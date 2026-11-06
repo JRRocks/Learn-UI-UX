@@ -49,7 +49,8 @@ function Sources({ list }: { list: CultureProfile['sources'] }) {
     <ul className="sources">
       {list.map((s, i) => {
         const r = resolveSource(s);
-        return <li key={i}>{r.url ? <a href={r.url} target="_blank" rel="noopener noreferrer">{r.label}</a> : r.label}</li>;
+        const label = frenchSpacing(r.label);
+        return <li key={i}>{r.url ? <a href={r.url} target="_blank" rel="noopener noreferrer">{label}</a> : label}</li>;
       })}
     </ul>
   );
@@ -107,8 +108,9 @@ export function Cultures() {
           Cultures
         </h1>
         <p className="lead">
-          Une interface n’est jamais neutre : densité, couleurs, formulaires, paiement, écriture et cadre légal changent d’un marché à l’autre.
-          Localiser, ce n’est pas traduire — c’est adapter ce que les gens attendent, puis le vérifier avec eux.
+          {frenchSpacing(
+            'Une interface n’est jamais neutre : densité, couleurs, formulaires, paiement, écriture et cadre légal changent d’un marché à l’autre. Localiser, ce n’est pas traduire — c’est adapter ce que les gens attendent, puis le vérifier avec eux.',
+          )}
         </p>
       </header>
 

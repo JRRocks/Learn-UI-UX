@@ -5,7 +5,7 @@ import { MODULE_BY_ID } from '../../content';
 import { resolveSource } from '../../content/sources';
 import type { GradeResult } from '../../engine/grade';
 import type { Exercise } from '../../engine/types';
-import { Md, MdInline } from '../../lib/markdown';
+import { Md, MdInline, frenchSpacing } from '../../lib/markdown';
 import type { Draft } from './players';
 
 const VERDICT = {
@@ -162,17 +162,17 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
                       <li key={i}>
                         {ref.url ? (
                           <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                            {ref.label}
+                            {frenchSpacing(ref.label)}
                           </a>
                         ) : (
-                          ref.label
+                          frenchSpacing(ref.label)
                         )}
                       </li>
                     );
                   })}
                 </ul>
               )}
-              {module && <Link to={`/apprendre/${module.id}`}>Revoir la leçon « {module.title} »</Link>}
+              {module && <Link to={`/apprendre/${module.id}`}>{frenchSpacing(`Revoir la leçon « ${module.title} »`)}</Link>}
             </div>
           )}
         </div>

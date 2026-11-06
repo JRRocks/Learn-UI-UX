@@ -65,7 +65,7 @@ export function Practice() {
       <section className="today" aria-label="Sessions recommandées">
         <div className="today-main">
           <h2>Session du jour</h2>
-          <p>10 épreuves équilibrées : d’abord ce qui est à revoir, puis de nouvelles notions, réparties sur plusieurs leçons.</p>
+          <p>{frenchSpacing(`${SESSION_SIZE.daily} épreuves équilibrées : d’abord ce qui est à revoir, puis de nouvelles notions, réparties sur plusieurs leçons.`)}</p>
           <Link to="/session?mode=daily" className="btn btn-primary">
             Commencer
           </Link>
@@ -103,7 +103,7 @@ export function Practice() {
       <section className="section" aria-labelledby="formats-title">
         <div className="section-head">
           <h2 id="formats-title">Par format d’épreuve</h2>
-          <p className="small">Chaque format entraîne un réflexe différent : voir, repérer, doser, décider.</p>
+          <p className="small">{frenchSpacing('Chaque format entraîne un réflexe différent : voir, repérer, doser, décider.')}</p>
         </div>
         <ul className="formats">
           {FORMATS.map((f) => {
@@ -143,7 +143,7 @@ export function Practice() {
             <select id="module-pick" className="select" value={moduleId} onChange={(e) => setModuleId(e.target.value)}>
               {MODULES.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.title}
+                  {frenchSpacing(m.title)}
                 </option>
               ))}
             </select>

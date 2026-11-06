@@ -42,10 +42,10 @@ function SourceLink({ k }: { k: Source }) {
   const r = resolveSource(k);
   return r.url ? (
     <a href={r.url} target="_blank" rel="noopener noreferrer">
-      {r.label}
+      {frenchSpacing(r.label)}
     </a>
   ) : (
-    <>{r.label}</>
+    <>{frenchSpacing(r.label)}</>
   );
 }
 
