@@ -36,7 +36,7 @@ function awardBadges() {
   if (!earned.length) return;
   const today = dayKey();
   state = { ...state, badges: { ...state.badges, ...Object.fromEntries(earned.map((b) => [b.id, today])) } };
-  for (const b of earned) toast(`Badge obtenu : ${b.title}`, 'badge');
+  for (const b of earned) toast(`Badge obtenu\u00A0: ${b.title}`, 'badge');
 }
 
 export const store = {

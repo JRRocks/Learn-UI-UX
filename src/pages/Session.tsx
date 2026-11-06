@@ -181,7 +181,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         <div className="player-progress">
           <div className="player-progress-label">
             <span>
-              {[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(current)].filter(Boolean).join(' · ')}
+              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(current)].filter(Boolean).join(' · ')} />
             </span>
             <span className="num">
               {state.index + 1} / {items.length}
@@ -263,7 +263,7 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
     <div className="page page--narrow">
       <header className="page-head">
         <h1 id="main-title" tabIndex={-1}>
-          Bilan — {label}
+          Bilan — <MdInline text={label} />
         </h1>
         <p className="summary-score">
           <strong>
@@ -295,10 +295,10 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
                   </summary>
                   <div className="recap-body">
                     <p className="small muted">
-                      {MODULE_BY_ID.get(ex.module ?? '')?.title} · {typeOf(ex)}
+                      <MdInline text={MODULE_BY_ID.get(ex.module ?? '')?.title ?? ''} /> · {typeOf(ex)}
                     </p>
                     <p>
-                      <strong>À retenir :</strong> <MdInline text={ex.takeaway} />
+                      <strong>À retenir{'\u00A0'}:</strong> <MdInline text={ex.takeaway} />
                     </p>
                     <Md text={ex.explanation} className="prose small" />
                     <Link to={`/apprendre/${ex.module}`} className="small">

@@ -178,7 +178,7 @@ export function Blitz() {
         </button>
         <div className="player-progress">
           <div className="player-progress-label">
-            <span>Défi chrono · {module?.title}</span>
+            <span>Défi chrono · {frenchSpacing(module?.title ?? '')}</span>
             <span className="num" aria-live="off">
               {Math.floor(left / 60)}:{String(left % 60).padStart(2, '0')}
             </span>
@@ -230,7 +230,7 @@ export function Blitz() {
               Affirmation suivante
             </button>
           ) : (
-            <span className="shortcut-hint">V ou ← : vrai · F ou → : faux</span>
+            <span className="shortcut-hint">V ou ←{'\u00A0'}: vrai · F ou →{'\u00A0'}: faux</span>
           )}
         </div>
       </article>

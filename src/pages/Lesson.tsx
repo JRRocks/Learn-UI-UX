@@ -92,7 +92,7 @@ export function Lesson({ id }: { id: string }) {
 
   const markRead = () => {
     store.update((s) => markLessonRead(s, m.id));
-    toast(`Leçon lue : +${XP.lesson} XP`);
+    toast(`Leçon lue\u00A0: +${XP.lesson}\u00A0XP`);
   };
 
   const scheduleCards = () => {

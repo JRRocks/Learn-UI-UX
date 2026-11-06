@@ -314,7 +314,7 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
           </span>{' '}
           {needed > 1 ? 'zones sélectionnées' : 'zone sélectionnée'}.{' '}
           {full
-            ? 'Tu as atteint le nombre de zones : désélectionne-en une pour changer.'
+            ? 'Tu as atteint le nombre de zones\u00A0: désélectionne-en une pour changer.'
             : coarse
               ? 'Touche les éléments fautifs, puis valide.'
               : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
@@ -345,7 +345,10 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
                   ·
                 </span>
                 <span>
-                  <strong>Ta sélection : {h.label}</strong> — <MdInline text={h.why} />
+                  <strong>
+                    Ta sélection{'\u00A0'}: <MdInline text={h.label} />
+                  </strong>{' '}
+                  — <MdInline text={h.why} />
                 </span>
               </li>
             ))}
@@ -410,7 +413,7 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
       </ol>
       {revealed && (
         <p className="task-hint">
-          Ordre respecté pour {Math.round(orderConcordance(draft.ids, correct) * 100)} % des paires d’éléments.
+          Ordre respecté pour {Math.round(orderConcordance(draft.ids, correct) * 100)}{'\u00A0'}% des paires d’éléments.
         </p>
       )}
     </div>
@@ -440,7 +443,7 @@ export function MatchPlayer({ ex, draft, setDraft, revealed, order }: P<MatchExe
               disabled={revealed}
               onChange={(e) => setDraft({ type: 'match', pairs: { ...draft.pairs, [p.id]: e.target.value } })}
             >
-              <option value="">{ex.rightTitle} : choisir…</option>
+              <option value="">{ex.rightTitle}{'\u00A0'}: choisir…</option>
               {rights.map((r) => (
                 <option key={r.id} value={r.id}>
                   {plain(r.right)}
@@ -449,7 +452,7 @@ export function MatchPlayer({ ex, draft, setDraft, revealed, order }: P<MatchExe
             </select>
             {revealed && chosen !== p.id && (
               <span className="match-fix">
-                Bonne association : <MdInline text={p.right} />
+                Bonne association{'\u00A0'}: <MdInline text={p.right} />
               </span>
             )}
           </div>
@@ -500,7 +503,7 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
         />
         {ratio !== null && (
           <p className="slider-readout" data-pass={ratio >= 4.5}>
-            Contraste : <strong>{fmt(Math.round(ratio * 100) / 100)}:1</strong> — minimum AA pour un texte courant : 4,5:1
+            Contraste{'\u00A0'}: <strong>{fmt(Math.round(ratio * 100) / 100)}:1</strong> — minimum AA pour un texte courant{'\u00A0'}: 4,5:1
           </p>
         )}
         <div className="btn-row">
@@ -531,7 +534,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
         <Mock visual={ex.visual} />
       </div>
       <p className="task-hint">
-        Échelle : {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
+        Échelle{'\u00A0'}: {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
       </p>
       <div className="grid-score">
         {ex.criteria.map((c) => {
@@ -560,7 +563,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
                 <p className="grid-why">
                   {ok ? <Check aria-hidden="true" width={14} height={14} style={{ display: 'inline' }} /> : null}{' '}
                   <strong>
-                    Toi : {mine} · expert : {c.expert}.
+                    Toi{'\u00A0'}: {mine}{'\u00A0'}· expert{'\u00A0'}: {c.expert}.
                   </strong>{' '}
                   <MdInline text={c.why} />
                 </p>

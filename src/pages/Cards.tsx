@@ -66,12 +66,12 @@ export function Cards({ query }: { query: URLSearchParams }) {
       <div className="page page--narrow">
         <header className="page-head">
           <h1 id="main-title" tabIndex={-1}>
-            {cards.length ? 'Fiches terminées' : title}
+            {cards.length ? 'Fiches terminées' : <MdInline text={title} />}
           </h1>
           <p className="lead">
             {cards.length
               ? `${known} sur ${graded.length} ${plural(known, 'retrouvée', 'retrouvées')} sans aide. Chaque fiche reviendra au moment où tu serais sur le point de l’oublier.`
-              : 'Aucune fiche à réviser pour le moment : les fiches déjà vues reviendront à leur date de révision.'}
+              : 'Aucune fiche à réviser pour le moment\u00A0: les fiches déjà vues reviendront à leur date de révision.'}
           </p>
         </header>
         <div className="btn-row">
@@ -121,7 +121,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
       </div>
       <header className="page-head">
         <h1 id="main-title" tabIndex={-1}>
-          {title}
+          <MdInline text={title} />
         </h1>
         <p className="muted">
           Fiche {index + 1} sur {cards.length}. Essaie de répondre de tête avant de retourner la fiche, puis dis honnêtement comment ça s’est
@@ -138,7 +138,9 @@ export function Cards({ query }: { query: URLSearchParams }) {
               <MdInline text={card.rule.back} />
             </p>
           )}
-          <p className="flashcard-from">Leçon{'\u00A0'}: {from?.title}</p>
+          <p className="flashcard-from">
+            Leçon{'\u00A0'}: <MdInline text={from?.title ?? ''} />
+          </p>
         </div>
         {!shown ? (
           <div className="btn-row">

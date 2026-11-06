@@ -31,7 +31,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
             </p>
           ) : (
             <p>
-              <strong>La version marquée « Recommandé ».</strong>
+              <strong>{frenchSpacing('La version marquée « Recommandé ».')}</strong>
             </p>
           )}
           {/* Its « pourquoi » is already shown under the option itself. */}
@@ -44,7 +44,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
           {ex.options
             .filter((o) => ex.answers.includes(o.id))
             .map((o) => (
-              <li key={o.id}>{o.label ? <MdInline text={o.label} /> : 'Version marquée « À cocher »'}</li>
+              <li key={o.id}>{o.label ? <MdInline text={o.label} /> : frenchSpacing('Version marquée « À cocher »')}</li>
             ))}
         </ul>
       );
@@ -131,7 +131,7 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
         {label}
         {result.verdict === 'partial' && (
           <span className="verdict-xp">
-            {ex.type === 'slider' ? 'proche de la plage recommandée' : `${Math.round(result.score * 100)} % de la réponse`}
+            {ex.type === 'slider' ? 'proche de la plage recommandée' : `${Math.round(result.score * 100)}\u00A0% de la réponse`}
           </span>
         )}
         {xp !== undefined && <span className="verdict-xp">+{xp} XP</span>}
