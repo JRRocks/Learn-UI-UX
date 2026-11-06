@@ -31,7 +31,7 @@ const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIc
   { type: 'slider', title: 'Calibrage', text: 'Règle un interlignage, un contraste, une durée ou un espacement à l’œil, puis compare à la valeur experte.', Icon: SlidersHorizontal },
   { type: 'choice', title: 'Le bon choix', text: 'Une situation, plusieurs solutions : laquelle tient la route, et pourquoi les autres échouent.', Icon: ListTodo },
   { type: 'multi', title: 'Tout ce qui s’applique', text: 'Coche toutes les bonnes réponses, et seulement elles.', Icon: ListChecks },
-  { type: 'truefalse', title: 'Vrai ou faux', text: 'Des idées reçues à démêler, vite.', Icon: Scale },
+  { type: 'truefalse', title: 'Vrai ou faux', text: 'Tranche vite une série d’affirmations, à peu près autant de vraies que de fausses.', Icon: Scale },
   { type: 'order', title: 'Mise en ordre', text: 'Remets une méthode, une échelle ou des priorités dans le bon ordre.', Icon: ListOrdered },
   { type: 'match', title: 'Associations', text: 'Relie concepts et définitions, besoins et réglages, marchés et conventions.', Icon: Link2 },
   { type: 'grid', title: 'Grille de critique', text: 'Note un écran sur les 10 heuristiques de Nielsen et compare ta grille à celle d’un expert.', Icon: Grid3x3 },
@@ -153,7 +153,7 @@ export function Practice() {
             {cultureCount} épreuves sur les différences d’interface entre {Object.keys(CULTURE_NAMES).length} marchés et la façon de s’y adapter.
           </p>
           <div className="btn-row">
-            <Link to="/session?mode=culture" className="btn btn-secondary">
+            <Link to="/session?mode=culture" className="btn btn-secondary" aria-label="Lancer : Cultures">
               Lancer
             </Link>
             <Link to="/cultures" className="btn btn-ghost">

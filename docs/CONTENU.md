@@ -54,7 +54,7 @@ Vise **12 à 16 épreuves par module**, réparties à peu près ainsi :
 | `choice` avec visuels (duel à 2 ou choix à 3–4) | 4+ | « Quel design est le meilleur ? » |
 | `hotspot` | 2+ | « Trouve le(s) problème(s) dans cette maquette » |
 | `choice` / `multi` textuels | 3+ | Situations, choix de solution, réglages |
-| `truefalse` | 2 | Idées reçues |
+| `truefalse` | 2 : une vraie, une fausse | Une règle exacte à confirmer, une idée reçue à démonter |
 | `order` | 1 | Priorités, étapes d’une méthode |
 | `match` | 1 | Concept ↔ définition, besoin ↔ réglage |
 | `slider` | 1 si une propriété continue s’y prête | Calibrer un espacement, une durée, un contraste… |
@@ -77,7 +77,9 @@ Règles strictes :
 - Les `label` d’options visuelles restent **neutres** (ou absents) : ils ne doivent pas
   trahir la réponse. Le `why` est révélé après coup.
 - `hotspot` : 1 à 3 zones correctes **et** au moins 2 leurres (`correct: false`) plausibles.
-  Chaque `data-hotspot` du HTML a son entrée dans `hotspots`, et inversement.
+  Chaque `data-hotspot` du HTML a son entrée dans `hotspots`, et inversement. Les lecteurs
+  d’écran annoncent chaque zone « Zone N : » suivi de son texte ; une zone sans texte (icône,
+  forme, image) reçoit un nom court et neutre avec `data-hotspot-name="…"`, sans trahir la réponse.
 - `slider` : la valeur `initial` est **hors** de la cible ; le CSS du visuel lit `var(--n)`
   (nombre brut) ou `var(--v)` (nombre + unité).
 - Une épreuve enseigne **une** idée. Pas de piège sur la formulation.

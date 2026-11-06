@@ -64,7 +64,9 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
           {ex.hotspots
             .filter((h) => h.correct)
             .map((h) => (
-              <li key={h.id}>{h.label}</li>
+              <li key={h.id}>
+                <MdInline text={h.label} />
+              </li>
             ))}
         </ol>
       );

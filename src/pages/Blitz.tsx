@@ -2,12 +2,15 @@ import { CircleCheck, CircleX, Timer, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, navigate } from '../app/router';
 import { store, useProgress } from '../app/store';
+import { keepInView } from '../components/exercise/ExerciseView';
+import { eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
 import { EXERCISES, MODULE_BY_ID } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
-import { shuffle } from '../engine/random';
 import type { TrueFalseExercise } from '../engine/types';
 import { MdInline } from '../lib/markdown';
+import { pauseClock, remaining, resumeClock, secondsLeft, startClock, type Clock } from './blitzClock';
+import { alternateTrueFalse } from './trueFalseMix';
 
 const DURATION = 90;
 const RECORD_ID = 'blitz';
@@ -15,57 +18,96 @@ const RECORD_ID = 'blitz';
 interface Answered {
   ex: TrueFalseExercise;
   ok: boolean;
+  xp: number;
 }
 
 /** Timed true/false sprint: the clock stops while the correction is on screen. */
 export function Blitz() {
   const progress = useProgress();
-  const pool = useMemo(() => shuffle(EXERCISES.filter((e): e is TrueFalseExercise => e.type === 'truefalse')), []);
-  const [started, setStarted] = useState(false);
-  const [left, setLeft] = useState(DURATION);
+  // « Vrai » and « faux » come as often as each other while both remain (tf-balance-1).
+  const pool = useMemo(() => alternateTrueFalse(EXERCISES.filter((e): e is TrueFalseExercise => e.type === 'truefalse')), []);
+  const [clock, setClock] = useState<Clock | null>(null);
+  const [now, setNow] = useState(() => performance.now());
   const [index, setIndex] = useState(0);
   const [answered, setAnswered] = useState<Answered[]>([]);
   const [last, setLast] = useState<Answered | null>(null);
   const saved = useRef(false);
+  /** The record as it stood when the challenge started: saving the new one must not hide « nouveau record ». */
+  const startBest = useRef(0);
+  const taskRef = useRef<HTMLElement>(null);
+  const feedbackRef = useRef<HTMLElement>(null);
   const best = progress.records[RECORD_ID] ?? 0;
+  const started = clock !== null;
+  const left = clock ? secondsLeft(clock, now) : DURATION;
   const over = started && (left <= 0 || index >= pool.length);
   const current = pool[index];
   const score = answered.filter((a) => a.ok).length;
 
-  // Tick only while a question is waiting for an answer.
+  // Redraw the clock a few times a second while a statement waits for an answer.
   useEffect(() => {
-    if (!started || over || last) return;
-    const t = window.setInterval(() => setLeft((s) => Math.max(0, s - 1)), 1000);
+    if (!clock || clock.since === null || over) return;
+    const t = window.setInterval(() => setNow(performance.now()), 250);
     return () => window.clearInterval(t);
-  }, [started, over, last]);
+  }, [clock, over]);
+
+  const start = () => {
+    const t = performance.now();
+    startBest.current = best;
+    setNow(t);
+    setClock(startClock(DURATION * 1000, t));
+  };
 
   const answer = (value: boolean) => {
-    if (!current || last || over) return;
+    const t = performance.now();
+    if (!current || !clock || last || over || remaining(clock, t) <= 0) return;
     const r = grade(current, { type: 'truefalse', value });
-    store.update((s) => recordAttempt(s, current, r).state);
-    const a = { ex: current, ok: r.verdict === 'correct' };
+    let xp = 0;
+    store.update((s) => {
+      const out = recordAttempt(s, current, r);
+      xp = out.xp;
+      return out.state;
+    });
+    const a = { ex: current, ok: r.verdict === 'correct', xp };
+    setClock(pauseClock(clock, t));
+    setNow(t);
     setAnswered((x) => [...x, a]);
     setLast(a);
   };
 
   const next = () => {
+    const t = performance.now();
+    setClock((c) => c && resumeClock(c, t));
+    setNow(t);
     setLast(null);
     setIndex((i) => i + 1);
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.defaultPrevented || hasModifier(e)) return;
+      // Buttons and links keep their own Enter and Space (« Quitter le défi » quits, logic-16).
+      const own = handlesOwnKeys(eventOrigin(e));
       if (!started) {
-        if (e.key === 'Enter') setStarted(true);
+        if (e.key === 'Enter' && !e.repeat && !own) {
+          e.preventDefault();
+          start();
+        }
         return;
       }
       if (over) return;
-      if (last && (e.key === 'Enter' || e.key === ' ')) {
-        e.preventDefault();
-        next();
-      } else if (!last && (e.key === 'v' || e.key === 'V' || e.key === 'ArrowLeft')) answer(true);
-      else if (!last && (e.key === 'f' || e.key === 'F' || e.key === 'ArrowRight')) answer(false);
+      if (last) {
+        // A held key does not run through the corrections.
+        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat && !own) {
+          e.preventDefault();
+          next();
+        }
+        return;
+      }
+      // V and F answer only while the focus is in the challenge (WCAG 2.1.4).
+      if (e.repeat || !within(e, taskRef.current)) return;
+      const key = e.key.toLowerCase();
+      if (key === 'v' || e.key === 'ArrowLeft') answer(true);
+      else if (key === 'f' || e.key === 'ArrowRight') answer(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -84,7 +126,8 @@ export function Blitz() {
           total: answered.length,
           correct: score,
           partial: 0,
-          xp: 0,
+          // The XP already credited answer by answer (logic-17).
+          xp: answered.reduce((sum, a) => sum + a.xp, 0),
           missed: answered.filter((a) => !a.ok).map((a) => a.ex.id),
         }),
         RECORD_ID,
@@ -96,6 +139,14 @@ export function Blitz() {
   useEffect(() => {
     document.getElementById(current && started && !over ? `blitz-q-${current.id}` : 'main-title')?.focus({ preventScroll: true });
   }, [current, started, over]);
+
+  // The answer buttons switch off once used: the focus moves to the correction instead of being lost.
+  useEffect(() => {
+    const el = feedbackRef.current;
+    if (!last || !el) return;
+    el.focus({ preventScroll: true });
+    keepInView(el, taskRef.current);
+  }, [last]);
 
   if (!started)
     return (
@@ -114,7 +165,7 @@ export function Blitz() {
           </p>
         </header>
         <div className="btn-row">
-          <button type="button" className="btn btn-primary" onClick={() => setStarted(true)}>
+          <button type="button" className="btn btn-primary" onClick={start}>
             <Timer aria-hidden="true" /> Lancer le chrono
           </button>
           <Link to="/entrainement" className="btn btn-ghost">
@@ -124,7 +175,8 @@ export function Blitz() {
       </div>
     );
 
-  if (over)
+  if (over) {
+    const record = startBest.current;
     return (
       <div className="page page--narrow">
         <header className="page-head">
@@ -135,7 +187,9 @@ export function Blitz() {
             <strong>{score}</strong>
             <span className="lead">
               bonne{score > 1 ? 's' : ''} réponse{score > 1 ? 's' : ''} sur {answered.length}
-              {score > best ? ' — nouveau record' : ` · record : ${Math.max(best, score)}`}
+              {score > record
+                ? ` — nouveau record${record > 0 ? ` (ancien\u00A0: ${record})` : ''}`
+                : ` · record\u00A0: ${Math.max(best, score)}`}
             </span>
           </p>
         </header>
@@ -168,6 +222,7 @@ export function Blitz() {
         </div>
       </div>
     );
+  }
 
   const module = current.module ? MODULE_BY_ID.get(current.module) : undefined;
   return (
@@ -186,7 +241,7 @@ export function Blitz() {
           <div
             className="meter meter--mark"
             role="timer"
-            aria-label={`${left} secondes restantes`}
+            aria-label={`${left} seconde${left > 1 ? 's' : ''} restante${left > 1 ? 's' : ''}`}
             style={{ '--value': `${(left / DURATION) * 100}%` } as CSSProperties}
           >
             <span />
@@ -196,7 +251,7 @@ export function Blitz() {
           {score} juste{score > 1 ? 's' : ''}
         </span>
       </div>
-      <article className="task">
+      <article className="task" ref={taskRef}>
         <h1 id={`blitz-q-${current.id}`} className="task-prompt" tabIndex={-1}>
           <MdInline text={current.prompt} />
         </h1>
@@ -214,7 +269,7 @@ export function Blitz() {
           })}
         </div>
         {last && (
-          <section className="feedback" data-verdict={last.ok ? 'correct' : 'wrong'} aria-live="polite">
+          <section ref={feedbackRef} className="feedback" data-verdict={last.ok ? 'correct' : 'wrong'} tabIndex={-1} aria-label="Correction">
             <p className="verdict">
               {last.ok ? <CircleCheck aria-hidden="true" /> : <CircleX aria-hidden="true" />}
               {last.ok ? 'Juste' : 'Raté'}

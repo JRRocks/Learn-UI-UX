@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, Check, RotateCcw, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { contrastRatio, grayHex, orderConcordance, type Answer } from '../../engine/grade';
 import type {
   ChoiceExercise,
@@ -12,8 +12,8 @@ import type {
   SliderExercise,
   TrueFalseExercise,
 } from '../../engine/types';
-import { MdInline } from '../../lib/markdown';
-import { Mock, type HotspotState, type Mark } from '../Mock';
+import { MdInline, frenchSpacing } from '../../lib/markdown';
+import { Mock, MotionControls, type HotspotState, type Mark, type MotionInfo } from '../Mock';
 
 /** Learner's in-progress answer, per exercise type. */
 export type Draft =
@@ -96,6 +96,35 @@ interface P<E extends Exercise, D extends Draft> {
   /** Display order of options / items / right-hand labels. */
   order: string[];
   labelledBy: string;
+  /** The exercise's scenario, read with its answers (a11y-contexte-avant-focus). */
+  describedBy?: string;
+}
+
+/**
+ * Mocks of the options sit inside their labels, where a button cannot go: one set of « Rejouer » /
+ * « Mettre en pause » under the options drives all of them.
+ */
+function useOptionMotion() {
+  const [infos, setInfos] = useState<Record<string, MotionInfo | null>>({});
+  const [paused, setPaused] = useState(false);
+  const [replay, setReplay] = useState(0);
+  const report = useCallback((id: string, info: MotionInfo | null) => setInfos((x) => ({ ...x, [id]: info })), []);
+  const all = Object.values(infos).filter((i): i is MotionInfo => i !== null);
+  const info = all.length ? { finite: all.some((i) => i.finite), long: all.some((i) => i.long) } : null;
+  const controls = info && (
+    <MotionControls
+      info={info}
+      paused={paused}
+      many={all.length > 1}
+      onPause={() => setPaused((p) => !p)}
+      onReplay={() => {
+        setPaused(false);
+        setReplay((r) => r + 1);
+      }}
+    />
+  );
+  const mockProps = (id: string) => ({ controls: false, paused, replay, onMotion: (i: MotionInfo | null) => report(id, i) });
+  return { controls, mockProps };
 }
 
 /* ---------------------------------------------------------------- choice */
@@ -106,11 +135,13 @@ function optionState(selected: boolean, right: boolean, revealed: boolean): stri
   return selected ? 'wrong' : 'dim';
 }
 
-export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy }: P<ChoiceExercise, Extract<Draft, { type: 'choice' }>>) {
+export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy, describedBy }: P<ChoiceExercise, Extract<Draft, { type: 'choice' }>>) {
   const visual = ex.options.some((o) => o.visual);
   const options = order.map((id) => ex.options.find((o) => o.id === id)!);
+  const motion = useOptionMotion();
   return (
-    <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy}>
+    <>
+    <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy} aria-describedby={describedBy}>
       {options.map((o, i) => {
         const selected = draft.optionId === o.id;
         const right = o.id === ex.answer;
@@ -140,7 +171,7 @@ export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy 
                   )}
                 </span>
                 <span className="stage">
-                  <Mock visual={o.visual!} />
+                  <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
                 </span>
                 {o.label && (
                   <span className="option-label">
@@ -168,18 +199,22 @@ export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy 
         );
       })}
     </fieldset>
+    {motion.controls}
+    </>
   );
 }
 
 /* ---------------------------------------------------------------- multi */
 
-export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy }: P<MultiExercise, Extract<Draft, { type: 'multi' }>>) {
+export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy, describedBy }: P<MultiExercise, Extract<Draft, { type: 'multi' }>>) {
   const visual = ex.options.some((o) => o.visual);
   const options = order.map((id) => ex.options.find((o) => o.id === id)!);
+  const motion = useOptionMotion();
   const toggle = (id: string) =>
     setDraft({ type: 'multi', optionIds: draft.optionIds.includes(id) ? draft.optionIds.filter((x) => x !== id) : [...draft.optionIds, id] });
   return (
-    <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy}>
+    <>
+    <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy} aria-describedby={describedBy}>
       {options.map((o) => {
         const selected = draft.optionIds.includes(o.id);
         const right = ex.answers.includes(o.id);
@@ -200,7 +235,7 @@ export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy }
                   {revealed && badge && <span className="option-badge">{badge}</span>}
                 </span>
                 <span className="stage">
-                  <Mock visual={o.visual!} />
+                  <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
                 </span>
                 {o.label && (
                   <span className="option-label">
@@ -226,18 +261,20 @@ export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy }
         );
       })}
     </fieldset>
+    {motion.controls}
+    </>
   );
 }
 
 /* ---------------------------------------------------------------- true / false */
 
-export function TrueFalsePlayer({ ex, draft, setDraft, revealed, labelledBy }: P<TrueFalseExercise, Extract<Draft, { type: 'truefalse' }>>) {
+export function TrueFalsePlayer({ ex, draft, setDraft, revealed, labelledBy, describedBy }: P<TrueFalseExercise, Extract<Draft, { type: 'truefalse' }>>) {
   const choices: { value: boolean; label: string; key: string }[] = [
     { value: true, label: 'Vrai', key: 'V' },
     { value: false, label: 'Faux', key: 'F' },
   ];
   return (
-    <fieldset className="tf" aria-labelledby={labelledBy}>
+    <fieldset className="tf" aria-labelledby={labelledBy} aria-describedby={describedBy}>
       {choices.map((c) => {
         const selected = draft.value === c.value;
         const state = optionState(selected, c.value === ex.answer, revealed);
@@ -300,8 +337,10 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
     [revealed, ex.hotspots, draft.ids],
   );
 
+  const touch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
   return (
-    <div className="section">
+    <div className="section" data-reveal-view="">
       <div className="stage hotspot-stage">
         <Mock visual={ex.visual} onPick={revealed ? undefined : pick} states={states} marks={marks} />
       </div>
@@ -312,8 +351,10 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
           </span>{' '}
           {needed > 1 ? 'zones sélectionnées' : 'zone sélectionnée'}.{' '}
           {full
-            ? 'Tu as atteint le nombre de zones : désélectionne-en une pour changer.'
-            : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
+            ? 'Tu as atteint le nombre de zones\u00A0: désélectionne-en une pour changer.'
+            : touch
+              ? 'Touche les éléments fautifs, puis valide.'
+              : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
         </p>
       )}
       {revealed && (
@@ -328,7 +369,10 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
                     {i + 1}
                   </span>
                   <span>
-                    <strong>{h.label}</strong> — {found ? 'trouvé' : 'manqué'}. <MdInline text={h.why} />
+                    <strong>
+                      <MdInline text={h.label} />
+                    </strong>{' '}
+                    — {found ? 'trouvé' : 'manqué'}. <MdInline text={h.why} />
                   </span>
                 </li>
               );
@@ -341,7 +385,10 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
                   ·
                 </span>
                 <span>
-                  <strong>Ta sélection : {h.label}</strong> — <MdInline text={h.why} />
+                  <strong>
+                    Ta sélection{'\u00A0'}: <MdInline text={h.label} />
+                  </strong>{' '}
+                  — <MdInline text={h.why} />
                 </span>
               </li>
             ))}
@@ -353,12 +400,19 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
 
 /* ---------------------------------------------------------------- order */
 
+const plain = (s: string) => s.replace(/`/g, '').replace(/\*\*/g, '');
+
 export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, Extract<Draft, { type: 'order' }>>) {
+  const [said, setSaid] = useState('');
   const move = (from: number, to: number) => {
+    // At either end, the button stays focusable (aria-disabled) and does nothing: the focus is never lost.
+    if (to < 0 || to >= draft.ids.length) return;
     const ids = draft.ids.slice();
     const [it] = ids.splice(from, 1);
     ids.splice(to, 0, it);
     setDraft({ type: 'order', ids });
+    const label = ex.items.find((x) => x.id === it)?.label ?? '';
+    setSaid(frenchSpacing(`« ${plain(label)} » en position ${to + 1} sur ${ids.length}.`));
   };
   const correct = ex.items.map((i) => i.id);
   return (
@@ -384,8 +438,8 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
                     type="button"
                     className="icon-btn"
                     onClick={() => move(i, i - 1)}
-                    disabled={i === 0}
-                    aria-label={`Monter « ${item.label.replace(/`/g, '')} »`}
+                    aria-disabled={i === 0 || undefined}
+                    aria-label={`Monter « ${plain(item.label)} »`}
                   >
                     <ArrowUp aria-hidden="true" />
                   </button>
@@ -393,8 +447,8 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
                     type="button"
                     className="icon-btn"
                     onClick={() => move(i, i + 1)}
-                    disabled={i === draft.ids.length - 1}
-                    aria-label={`Descendre « ${item.label.replace(/`/g, '')} »`}
+                    aria-disabled={i === draft.ids.length - 1 || undefined}
+                    aria-label={`Descendre « ${plain(item.label)} »`}
                   >
                     <ArrowDown aria-hidden="true" />
                   </button>
@@ -404,9 +458,13 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
           );
         })}
       </ol>
+      {/* Present from the start, so that each move is announced. */}
+      <p className="visually-hidden" aria-live="polite">
+        {revealed ? '' : said}
+      </p>
       {revealed && (
         <p className="task-hint">
-          Ordre respecté pour {Math.round(orderConcordance(draft.ids, correct) * 100)} % des paires d’éléments.
+          Ordre respecté pour {Math.round(orderConcordance(draft.ids, correct) * 100)}{'\u00A0'}% des paires d’éléments.
         </p>
       )}
     </div>
@@ -415,11 +473,10 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
 
 /* ---------------------------------------------------------------- match */
 
-export function MatchPlayer({ ex, draft, setDraft, revealed, order }: P<MatchExercise, Extract<Draft, { type: 'match' }>>) {
+export function MatchPlayer({ ex, draft, setDraft, revealed, order, describedBy }: P<MatchExercise, Extract<Draft, { type: 'match' }>>) {
   const rights = order.map((id) => ex.pairs.find((p) => p.id === id)!);
-  const plain = (s: string) => s.replace(/`/g, '').replace(/\*\*/g, '');
   return (
-    <div className="match-table" role="group" aria-label={`${ex.leftTitle} et ${ex.rightTitle}`}>
+    <div className="match-table" role="group" aria-label={`${ex.leftTitle} et ${ex.rightTitle}`} aria-describedby={describedBy}>
       {ex.pairs.map((p) => {
         const chosen = draft.pairs[p.id] ?? '';
         const state = revealed ? (chosen === p.id ? 'right' : 'wrong') : undefined;
@@ -468,9 +525,9 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
   const ratio = ex.readout?.kind === 'contrast' ? contrastRatio(grayHex(shown), ex.readout.background) : null;
 
   return (
-    <div className="section">
+    <div className="section" data-reveal-view="">
       <div className="stage">
-        <Mock key={replay} visual={ex.visual} vars={vars} />
+        <Mock key={replay} visual={ex.visual} vars={vars} controls={!ex.replayable} />
       </div>
       <div className="slider-box">
         <div className="slider-head">
@@ -530,11 +587,12 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
         Échelle : {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
       </p>
       <div className="grid-score">
-        {ex.criteria.map((c) => {
+        {ex.criteria.map((c, i) => {
           const mine = draft.scores[c.id];
           const ok = mine !== undefined && Math.abs(mine - c.expert) <= tol;
           return (
-            <div key={c.id} className="grid-row" data-state={revealed ? (ok ? 'right' : 'wrong') : undefined}>
+            // The capture does not change once validated: the correction starts on the first row.
+            <div key={c.id} className="grid-row" data-state={revealed ? (ok ? 'right' : 'wrong') : undefined} data-reveal-view={i === 0 ? '' : undefined}>
               <span className="grid-label" id={`g-${ex.id}-${c.id}`}>
                 {c.label}
               </span>

@@ -36,8 +36,9 @@ arabe, Brésil…) et comment s’y adapter.
   grille à celle d’un expert.
 - **Fiches de révision** : les règles d’or de chaque leçon, en répétition espacée (SM-2).
 
-Les épreuves ratées reviennent en révision selon des boîtes de Leitner (1, 3, 7, 16, 35, 90
-jours). Tout est utilisable au clavier (1–6 pour choisir, Entrée pour valider) et au pouce.
+Une épreuve ratée revient en révision le jour même ; chaque réussite espace la suivante, selon
+des boîtes de Leitner (1, 3, 7, 16, 35, 90 jours). Tout est utilisable au clavier (1–6 pour
+choisir, Entrée pour valider) et au pouce.
 
 ## Lancer le projet
 
