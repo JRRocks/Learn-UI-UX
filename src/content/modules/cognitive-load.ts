@@ -65,6 +65,28 @@ const ST_SIDE = (active: boolean) =>
   `<div class="st-side"><span>Général</span><span>Utilisateurs</span><span>Facturation</span><span>Banques</span><span${active ? ' class="on"' : ''}>Taxes</span><span>Exports</span></div>`;
 const ST_FIELDS = `<div class="mk-field"><span class="mk-label">Taux par défaut</span><span class="mk-input">20 %</span></div><div class="mk-field"><span class="mk-label">Arrondi</span><span class="mk-input">À la ligne</span></div>`;
 
+/** Storage plans: [size in plain words, same size in binary units, price]. Sizes count 1 Go as 1 024 MiB, as many consumer services do. */
+const PLANS: [string, string, string][] = [
+  ['15 Go', '15 360 MiB', 'Gratuit'],
+  ['100 Go', '102 400 MiB', '1,99 €/mois'],
+  ['2 To', '2 097 152 MiB', '9,99 €/mois'],
+];
+const PLAN_CSS = `.pl-list { display: flex; flex-direction: column; gap: 6px; }
+.pl { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid #e1e4ea; border-radius: 8px; }
+.pl::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #868d9c; flex: none; }
+.pl--on { border-color: #1f4fd8; background: #f5f8ff; }
+.pl--on::before { border: 5px solid #1f4fd8; }
+.pl-price { margin-inline-start: auto; color: #3a4152; white-space: nowrap; }
+.pl-note { font-size: 13px; color: #3a4152; }`;
+const planMock = (plain: boolean) =>
+  fr(`<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Choisissez votre offre</p><div class="pl-list">${PLANS.map(
+    ([size, binary, price], i) => `<span class="pl${i ? '' : ' pl--on'}"><b>${plain ? size : binary}</b><span class="pl-price">${price}</span></span>`,
+  ).join('')}</div><p class="pl-note">${
+    plain
+      ? 'Dans toutes les offres, vos photos sont copiées dans trois centres de données : si l’un tombe en panne, elles restent accessibles.'
+      : 'Toutes les offres : classe S3 Standard-IA · redondance multi-AZ.'
+  }</p><span class="mk-btn mk-btn--block">Continuer</span></div>`);
+
 const cognitiveLoad: ModuleContent = {
   id: 'cognitive-load',
   title: 'Charge cognitive',
@@ -209,7 +231,7 @@ L’échec typique est le **pont de mémoire** : devoir retenir à l’étape 3 
       title: 'Divulgation progressive : différer sans cacher',
       body: `La **divulgation progressive** montre ce qui sert maintenant et garde le reste à portée : options avancées repliées, étapes successives, fonctions découvertes en contexte. Elle agit sur les trois charges : elle structure l’intrinsèque, retire de l’extrinsèque et dose l’essentielle.
 
-Ses garde-fous, tirés d’impeccable (*distill*, *onboard*) :
+Ses garde-fous, tirés d’impeccable (\`distill\`, \`onboard\`) :
 
 - **Ne cache jamais une information nécessaire à la décision** en cours : un prix, une condition, des frais.
 - **Le mystère n’est pas du minimalisme** : simplifier jusqu’au flou ajoute de la charge au lieu d’en retirer.
@@ -303,36 +325,38 @@ La correction d’impeccable : **garder le contexte visible ou le répéter là 
       id: 'cognitive-load-jargon-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Quel message permet de savoir quoi faire sans rien traduire ?',
-      context: 'Service de stockage de photos, au moment d’un envoi qui échoue.',
+      prompt: 'Sur quel écran sais-tu ce que tu achètes sans rien traduire ?',
+      context: 'Service de sauvegarde de photos, au moment de choisir une offre.',
       options: [
         {
           id: 'jargon',
           visual: {
-            alt: 'Message d’erreur intitulé « Erreur 413 : Payload Too Large », mentionnant un quota S3, un identifiant de bucket et l’administrateur, avec un bouton OK.',
-            html: fr(`<div class="mk-pad"><div class="er mk-stack" style="--gap:8px"><div class="mk-row" style="--gap:8px"><i data-icon="circle-alert"></i><b>Erreur 413 : Payload Too Large</b></div><p class="mk-small">Quota S3 dépassé (bucket user-2291, 15360/15360 MiB). Upload rejeté. Contactez l’administrateur.</p><span class="mk-btn mk-btn--ghost mk-btn--s" style="align-self:flex-start">OK</span></div></div>`),
-            css: `.er { padding: 14px; border-radius: 12px; border: 1px solid #f0c7c3; background: #fdf3f2; }
-.er .mk-ico { color: #b3261e; }`,
+            alt: 'Écran « Choisissez votre offre » d’un service de photos : trois offres de 15 360 MiB (gratuite), 102 400 MiB (1,99 € par mois) et 2 097 152 MiB (9,99 € par mois), la mention « Toutes les offres : classe S3 Standard-IA · redondance multi-AZ » et un bouton « Continuer ».',
+            html: planMock(false),
+            css: PLAN_CSS,
           },
-          why: 'Code technique, nom de service, identifiant interne : il faut traduire avant de comprendre, et « l’administrateur » n’existe pas pour un particulier.',
+          why: 'Des mébioctets à convertir, le nom d’une classe de stockage, un sigle d’architecture : il faut traduire avant de comparer, et l’écran décrit la technique du service plutôt que ce qu’y gagne la personne.',
         },
         {
           id: 'plain',
           visual: {
-            alt: 'Message d’erreur intitulé « Votre espace de stockage est plein », expliquant que trois photos n’ont pas été envoyées, avec deux boutons : « Libérer de l’espace » et « Voir les offres ».',
-            html: fr(`<div class="mk-pad"><div class="er mk-stack" style="--gap:8px"><div class="mk-row" style="--gap:8px"><i data-icon="circle-alert"></i><b>Votre espace de stockage est plein</b></div><p class="mk-small">Les 3 photos n’ont pas été envoyées : vous utilisez 15 Go sur 15 Go. Libérez de la place, ou passez à 100 Go pour 1,99 € par mois.</p><div class="mk-row mk-wrap" style="--gap:8px"><span class="mk-btn mk-btn--s">Libérer de l’espace</span><span class="mk-btn mk-btn--ghost mk-btn--s">Voir les offres</span></div></div></div>`),
-            css: `.er { padding: 14px; border-radius: 12px; border: 1px solid #f0c7c3; background: #fdf3f2; }
-.er .mk-ico { color: #b3261e; }`,
+            alt: 'Même écran avec des offres de 15 Go (gratuite), 100 Go (1,99 € par mois) et 2 To (9,99 € par mois), la phrase « Dans toutes les offres, vos photos sont copiées dans trois centres de données : si l’un tombe en panne, elles restent accessibles » et un bouton « Continuer ».',
+            html: planMock(true),
+            css: PLAN_CSS,
           },
-          why: 'Ce qui s’est passé, en mots courants, avec deux façons d’en sortir.',
+          why: 'Des unités que tout le monde connaît, et la redondance traduite en bénéfice : les photos survivent à la panne d’un centre de données.',
         },
       ],
       answer: 'plain',
-      explanation: `La **barrière du jargon** : un vocabulaire technique ou métier oblige à traduire avant d’agir. C’est une charge **extrinsèque**, née de la conception et non de la tâche. Impeccable demande un langage courant et, si un terme métier est inévitable, sa définition sur place.
+      explanation: `La **barrière du jargon** : un vocabulaire technique ou métier oblige à traduire avant de décider. Ici, il faut convertir des mébioctets (MiB) et décoder « Standard-IA » et « multi-AZ » avant même de comparer trois offres. C’est une charge **extrinsèque** : elle naît de la conception, pas de la tâche.
 
-Un bon message d’erreur dit ce qui a échoué, pourquoi quand c’est utile, et comment s’en sortir — sans jamais faire d’un code interne le message principal.`,
-      takeaway: 'Écris dans la langue de la personne : un terme métier inévitable se définit sur place, un code interne n’est jamais le message.',
-      sources: ['imp:critique', 'imp:clarify'],
+Impeccable demande un langage courant et, si un terme métier est inévitable, sa définition sur place. La version recommandée compte en Go et en To, et dit ce que la redondance change pour la personne : ses photos survivent à la panne d’un centre de données. La traduction reste exacte — la classe Standard-IA d’Amazon S3 garde les données dans au moins trois zones de disponibilité, chacune formée d’un ou de plusieurs centres de données — mais le nom de la classe, détail d’architecture, quitte l’écran.`,
+      takeaway: 'Écris dans la langue de la personne : un terme métier inévitable se définit sur place.',
+      sources: [
+        'imp:critique',
+        'imp:clarify',
+        { label: 'AWS — Amazon S3 storage classes', url: 'https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html' },
+      ],
     },
     {
       id: 'cognitive-load-location-duel',
@@ -486,7 +510,7 @@ L’indicateur d’étape, le champ de surface et le bouton sont clairs.`,
 <div class="mk-tabs" data-hotspot="tabs"><span class="mk-tab mk-tab--on">Toutes</span><span class="mk-tab">À expédier</span><span class="mk-tab">Expédiées</span></div>
 <div class="db-list" data-hotspot="actions"><div class="db-r"><span><b>#1042</b> · Anaïs Roux</span><span class="mk-btn mk-btn--s">Expédier</span></div><div class="db-r"><span><b>#1043</b> · Karim Haddad</span><span class="db-ic"><i data-icon="truck"></i></span></div><div class="db-r"><span><b>#1044</b> · Julie Morel</span><span class="db-ic"><i data-icon="ellipsis"></i></span></div><div class="db-r"><span><b>#1045</b> · Tom Lefèvre</span><span class="db-link">Marquer expédiée</span></div></div>
 </div>`),
-        css: `.db-search { display: flex; align-items: center; gap: 6px; min-height: 34px; min-width: 150px; padding: 0 10px; border: 1px solid #c3c8d3; border-radius: 8px; color: #5a6172; font-size: 13px; }
+        css: `.db-search { display: flex; align-items: center; gap: 6px; min-height: 34px; min-width: 150px; padding: 0 10px; border: 1px solid #868d9c; border-radius: 8px; color: #5a6172; font-size: 13px; }
 .db-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 8px; }
 .db-k { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 10px; font-weight: 700; }
 .db-k b { font-size: 20px; font-weight: 800; }
@@ -545,7 +569,7 @@ Les points en échec désignent déjà les corrections : retirer ce qui distrait
         { id: 'accordion', label: 'Replier les 11 champs de profil dans un accordéon « Plus d’infos », sur la page d’inscription.', why: 'Mieux qu’un mur de champs, mais tout est encore demandé avant que la personne ait vu ce que vaut l’application.' },
       ],
       answer: 'defer',
-      explanation: `La **divulgation progressive** consiste à montrer ce qui sert maintenant et à garder le reste pour plus tard. Pour la prise en main, impeccable (*onboard*) précise : demander le **minimum** à l’inscription et collecter le reste ensuite, conduire vite à une **première réussite**, faire découvrir le reste **en contexte**.
+      explanation: `La **divulgation progressive** consiste à montrer ce qui sert maintenant et à garder le reste pour plus tard. Pour la prise en main, impeccable (\`onboard\`) précise : demander le **minimum** à l’inscription et collecter le reste ensuite, conduire vite à une **première réussite**, faire découvrir le reste **en contexte**.
 
 L’allure ou la fréquence d’entraînement prennent leur sens après une première course. Les demander d’emblée ajoute onze décisions au moment où la personne ne sait pas encore si l’application en vaut la peine — même repliées dans un accordéon.`,
       takeaway: 'À l’inscription, demande le minimum ; collecte le reste au moment où chaque information sert.',
@@ -570,7 +594,7 @@ L’allure ou la fréquence d’entraînement prennent leur sens après une prem
         css: `.pm-promo { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #c2255c; color: #fff; font-size: 12px; }
 .pm-see { margin-inline-start: auto; padding: 4px 10px; border-radius: 999px; background: #fff; color: #c2255c; font-weight: 700; }
 .pm-m { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-.pm-m span { display: grid; place-items: center; min-height: 38px; border: 1px solid #c3c8d3; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.pm-m span { display: grid; place-items: center; min-height: 38px; border: 1px solid #868d9c; border-radius: 8px; font-size: 13px; font-weight: 600; }
 .pm-m .on { border: 2px solid #1f4fd8; color: #1f3fae; }`,
       },
       options: [
@@ -594,25 +618,32 @@ Les quatre moyens de paiement, les champs de carte groupés et le découpage de 
       id: 'cognitive-load-germane-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Une bonne interface élimine toute charge cognitive.',
+      prompt: 'Si une tâche demande un effort mental, c’est que son interface est mal conçue.',
       answer: false,
-      explanation: `Seule la charge **extrinsèque** — celle que crée une mauvaise conception — est à éliminer. La charge **intrinsèque** vient de la tâche : on la structure (étapes, modèles, valeurs par défaut), on ne la supprime pas. La charge **essentielle** (*germane*) est l’effort d’apprentissage qui mène à la maîtrise : on la soutient.
+      explanation: `Faux. Seule la charge **extrinsèque** — celle que crée la conception — signale un défaut de l’interface. La charge **intrinsèque** vient de la tâche elle-même : configurer un serveur reste complexe, même avec une interface exemplaire ; on la structure (étapes, modèles, valeurs par défaut), on ne la supprime pas. La charge **essentielle** (*germane*) est l’effort d’apprentissage qui mène à la maîtrise : on la soutient.
 
-Vouloir tout supprimer mène à simplifier jusqu’à l’abstraction : on retire des informations utiles à la décision, et l’effort revient ailleurs.`,
-      takeaway: 'Élimine la charge extrinsèque, structure l’intrinsèque, soutiens l’essentielle (l’apprentissage).',
+Juger une interface à l’effort total qu’elle demande pousse à simplifier jusqu’au flou : on retire des informations utiles à la décision, et l’effort revient ailleurs.`,
+      takeaway: 'Un effort mental n’est pas forcément un défaut : élimine la charge extrinsèque, structure l’intrinsèque, soutiens l’essentielle (l’apprentissage).',
       sources: ['imp:critique', LAWS_CL],
     },
     {
       id: 'cognitive-load-steps-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un parcours en plusieurs étapes impose forcément plus de charge cognitive qu’une seule longue page.',
-      answer: false,
-      explanation: `La charge dépend de ce qu’on doit considérer **en même temps**, pas du nombre d’écrans. Séquencer permet de se concentrer sur une décision avant la suivante : c’est le point « Une chose à la fois » de la check-list d’impeccable, et la correction du « multitâche imposé ».
+      prompt: 'Répartir un formulaire sur plusieurs pages, une question par page, peut le rendre plus facile à remplir qu’une seule longue page.',
+      answer: true,
+      explanation: `Vrai. La charge cognitive dépend de ce qu’il faut considérer **en même temps**, pas du nombre d’écrans. Une page qui ne pose qu’une question permet de se concentrer sur une décision avant la suivante : c’est le point « Une chose à la fois » de la check-list d’impeccable, et la correction du « multitâche imposé ».
 
-À deux conditions : chaque étape porte une vraie décision (sinon on ajoute des transitions pour rien), et la progression reste visible (« Étape 2 sur 3 »), avec un récapitulatif pour n’avoir rien à retenir.`,
-      takeaway: 'Séquencer réduit la charge quand chaque étape porte une décision et que la progression reste visible.',
-      sources: ['imp:critique', 'imp:distill'],
+Le manuel de conception du gouvernement britannique (GOV.UK) en fait son point de départ : « une seule chose par page », pour aider à comprendre ce qui est demandé, à se concentrer sur la question, à se repérer dans une démarche inconnue et à se remettre d’une erreur ; c’est la recherche utilisateur qui dit ensuite quelles pages regrouper. Dans les tunnels de commande, le Baymard Institute fait un constat voisin : le nombre de champs pèse bien plus sur l’utilisabilité que le nombre d’étapes, du moins sous la barre des huit étapes.
+
+Deux conditions : chaque page porte une vraie décision — découper une saisie triviale ne fait qu’ajouter des transitions — et la progression reste visible (« Question 3 sur 6 »), avec un récapitulatif à la fin pour n’avoir rien à retenir.`,
+      takeaway: 'Plus de pages n’est pas plus de charge : une question par page aide à se concentrer, si chaque page porte une vraie décision et que la progression reste visible.',
+      sources: [
+        'imp:critique',
+        'imp:distill',
+        { label: 'GOV.UK Service Manual — Structuring forms', url: 'https://www.gov.uk/service-manual/design/form-structure' },
+        { label: 'Baymard Institute — Checkout Optimization: 5 Ways to Minimize Form Fields in Checkout', url: 'https://baymard.com/blog/checkout-flow-average-form-fields' },
+      ],
     },
     {
       id: 'cognitive-load-method-order',

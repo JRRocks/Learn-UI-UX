@@ -1,6 +1,7 @@
 import type { ModuleContent, Visual } from '../../engine/types';
 
 const INIT = { label: 'impeccable — init.md (PRODUCT.md)', url: 'https://github.com/pbakaus/impeccable/blob/main/skill/reference/init.md' };
+const RULE_OF_THREE = { label: 'Wikipédia — Rule of three (computer programming)', url: 'https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)' };
 
 /* `.cd-fit` : une déclaration par ligne, jamais coupée au milieu d’un nom de jeton (lignes de 30 caractères au plus). */
 const CODE_CSS = `.cd { margin: 0; padding: 12px 14px; border-radius: 10px; background: #f6f7f9; border: 1px solid #e1e4ea; font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: #1d2230; white-space: pre-wrap; word-break: break-word; }
@@ -73,7 +74,7 @@ const processModule: ModuleContent = {
       title: 'La carte des commandes',
       body: `Impeccable propose **24 commandes**, rangées en six familles. Les connaître, c’est savoir **nommer le problème** avant de le traiter :
 
-- **Construire** : \`shape\` (cadrer l’UX avant le code), \`init\` (consigner la vérité produit dans PRODUCT.md), \`document\` (générer DESIGN.md depuis le code existant), \`extract\` (sortir jetons et composants réutilisables vers le design system). \`craft\` n’est plus qu’un alias obsolète d’une demande de création ordinaire.
+- **Construire** : \`shape\` (cadrer l’UX avant le code), \`init\` (consigner la vérité produit dans PRODUCT.md), \`document\` (générer DESIGN.md depuis le code existant), \`extract\` (sortir jetons et composants réutilisables vers le système de design). \`craft\` n’est plus qu’un alias obsolète d’une demande de création ordinaire.
 - **Évaluer** : \`critique\` (revue UX notée sur les heuristiques, avec personas), \`audit\` (contrôles techniques — accessibilité, performance, responsive — notés sur 20).
 - **Affiner** : \`polish\` (passe finale avant la mise en ligne), \`bolder\` (amplifier un design trop sage), \`quieter\` (calmer un design criard ou surstimulant), \`distill\` (ramener à l’essentiel), \`harden\` (erreurs, traductions, cas limites), \`onboard\` (premiers usages, états vides, activation).
 - **Enrichir** : \`animate\` (mouvement utile), \`colorize\` (couleur stratégique), \`typeset\` (typographie), \`layout\` (espacement, rythme, hiérarchie), \`delight\` (personnalité, moments mémorables), \`overdrive\` (effets techniques hors norme).
@@ -167,9 +168,11 @@ Les composants consomment les jetons sémantiques ; un thème sombre rebranche a
 
 ### Extraire au bon moment
 
-\`extract\` ne sort un motif vers le design system que s’il revient **au moins trois fois avec la même intention**. L’abstraction prématurée coûte plus cher que la duplication, et deux boutons qui se ressemblent mais servent des intentions différentes restent séparés.
+\`extract\` ne sort un motif vers le système de design que s’il revient **au moins trois fois avec la même intention**. L’abstraction prématurée coûte plus cher que la duplication, et deux boutons qui se ressemblent mais servent des intentions différentes restent séparés.
 
-Sans design system, \`extract\` n’en crée pas d’office : il demande d’abord où et comment le bâtir. Et une extraction ne s’arrête pas au nouveau composant : on migre toutes les occurrences, puis on supprime l’ancien code.`,
+Sans système de design, \`extract\` n’en crée pas d’office : il demande d’abord où et comment le bâtir. Et une extraction ne s’arrête pas au nouveau composant : on migre toutes les occurrences, puis on supprime l’ancien code.
+
+Pour classer une dérive avant de la corriger — jeton manquant, implémentation ponctuelle, décalage conceptuel, défaut local —, voir la leçon « États et finition ».`,
       examples: [
         {
           title: 'Nommer par la fonction',
@@ -203,20 +206,6 @@ Sans design system, \`extract\` n’en crée pas d’office : il demande d’abo
         },
       ],
     },
-    {
-      id: 'derive',
-      title: 'Classer une dérive avant de la corriger',
-      body: `Quand un écran s’écarte du système, \`polish\` classe d’abord la dérive, pour la corriger **au niveau le plus étroit qui soit juste** :
-
-- **Jeton manquant** : le système a besoin d’une valeur réutilisable qu’il n’a pas.
-- **Implémentation isolée** : un composant ou un motif partagé existe et devrait la remplacer.
-- **Décalage de concept** : le parcours, l’architecture de l’information ou la hiérarchie diffèrent des zones comparables du produit.
-- **Défaut local** : l’implémentation est simplement incomplète ou incohérente.
-
-Puis on trie : d’abord les tâches bloquées, les pertes de données, les états trompeurs et les parcours inaccessibles ; ensuite les états manquants (chargement, vide, erreur, succès, désactivé, permissions) ; puis les dérives de parcours, de hiérarchie, de responsive et de système ; puis les incohérences visuelles et de mouvement ; enfin le ménage dans le code et les ressources.
-
-\`polish\` affine sans jamais refaire en douce : si le concept lui-même est faux, on le dit et on recommande une refonte ou \`bolder\`.`,
-    },
   ],
   rules: [
     { id: 'shape', front: 'Que produit la commande `shape` ?', back: 'Un entretien de découverte puis un brief confirmé. Jamais de code.' },
@@ -227,8 +216,7 @@ Puis on trie : d’abord les tâches bloquées, les pertes de données, les éta
     { id: 'established', front: 'Pas de DESIGN.md, mais une identité cohérente dans le code : que faire ?', back: 'C’est un monde établi : on en hérite et on le documente (`document`), on n’en invente pas un autre.' },
     { id: 'extension', front: 'Une nouvelle section dans une appli existante : quelle part d’invention ?', back: 'Aucune pour l’identité : elle hérite du monde et de la composition. On résout le contenu, la hiérarchie, les états et le raccord.' },
     { id: 'tokens', front: 'Jeton primitif ou jeton sémantique ?', back: 'Le primitif nomme une valeur (`blue-600`), le sémantique nomme un rôle (`action`). Les composants consomment les sémantiques ; un thème les rebranche sur ses propres valeurs.' },
-    { id: 'extract', front: 'Quand extraire un motif dans le design system ?', back: 'Quand il revient au moins trois fois avec la même intention. L’abstraction prématurée coûte plus cher que la duplication.' },
-    { id: 'drift', front: 'Quelles sont les quatre catégories de dérive selon `polish` ?', back: 'Jeton manquant, implémentation isolée, décalage de concept, défaut local. On corrige la cause au niveau le plus étroit.' },
+    { id: 'extract', front: 'Quand extraire un motif dans le système de design ?', back: 'Quand il revient au moins trois fois avec la même intention. L’abstraction prématurée coûte plus cher que la duplication.' },
     { id: 'commands-refine', front: 'Interface trop chargée, trop criarde, trop sage : quelles commandes ?', back: '`distill` pour ramener à l’essentiel, `quieter` pour calmer, `bolder` pour amplifier.' },
     { id: 'commands-eval', front: '`critique` ou `audit` ?', back: '`critique` juge l’expérience (heuristiques sur 40, personas) ; `audit` mesure l’implémentation (accessibilité, performance, thématisation, responsive, intégrité, sur 20).' },
   ],
@@ -386,8 +374,8 @@ Sans cette couche, chaque composant reçoit ses surcharges sombres une par une. 
 </div>`,
       },
       hotspots: [
-        { id: 'card', label: 'Carte « Catalogue printemps »', correct: true, why: 'Angles vifs, grosse ombre, titre en italique léger : une carte recodée à côté du composant Carte partagé. Implémentation isolée, à remplacer par le composant.' },
-        { id: 'badge', label: 'Badge « EN PAUSE »', correct: true, why: 'Le badge mêle deux dérives. Sa forme (capitales, angle droit) recode le Badge partagé : implémentation isolée, on le remplace par le composant. Son orange, absent du système, révèle un jeton manquant si le statut « en pause » doit vraiment se distinguer.' },
+        { id: 'card', label: 'Carte « Catalogue printemps »', correct: true, why: 'Angles vifs, grosse ombre, titre en italique léger : une carte recodée à côté du composant Carte partagé. Implémentation ponctuelle, à remplacer par le composant.' },
+        { id: 'badge', label: 'Badge « EN PAUSE »', correct: true, why: 'Le badge mêle deux dérives. Sa forme (capitales, angle droit) recode le Badge partagé : implémentation ponctuelle, on le remplace par le composant. Son orange, absent du système, révèle un jeton manquant si le statut « en pause » doit vraiment se distinguer.' },
         { id: 'card1', label: 'Carte « Refonte du site »', correct: false, why: 'Elle suit le système : bord fin, coins de 12 px, badge arrondi, titre en 15 px gras.' },
         { id: 'title', label: 'Titre de la page', correct: false, why: 'Le titre de page suit l’échelle typographique de l’appli.' },
         { id: 'new', label: 'Bouton « Nouveau projet »', correct: false, why: 'C’est le bouton principal standard du système.' },
@@ -395,11 +383,11 @@ Sans cette couche, chaque composant reçoit ses surcharges sombres une par une. 
       ],
       explanation: `Un système se lit dans ce qui se répète : ici, la carte à bord fin et coins de 12 px, le badge arrondi gris-bleu, le titre en 15 px gras. Deux éléments s’en écartent :
 
-- la **carte « Catalogue printemps »** : un composant Carte existe, c’est une **implémentation isolée** — on la remplace par le composant partagé ;
-- le badge **« EN PAUSE »** mêle deux dérives : sa forme (capitales, angle droit) recode le Badge partagé — **implémentation isolée**, on le remplace par le composant ; sa couleur orange, si le statut « en pause » doit vraiment se distinguer, révèle un **jeton manquant** (un statut d’avertissement) à créer, que consommera une variante du Badge.
+- la **carte « Catalogue printemps »** : un composant Carte existe, c’est une **implémentation ponctuelle** — on la remplace par le composant partagé ;
+- le badge **« EN PAUSE »** mêle deux dérives : sa forme (capitales, angle droit) recode le Badge partagé — **implémentation ponctuelle**, on le remplace par le composant ; sa couleur orange, si le statut « en pause » doit vraiment se distinguer, révèle un **jeton manquant** (un statut d’avertissement) à créer, que consommera une variante du Badge.
 
 Classer la dérive dit où corriger : dans le système, dans le composant, ou sur place.`,
-      takeaway: 'Repère le système dans ce qui se répète, puis classe chaque écart : jeton manquant, implémentation isolée, décalage de concept ou défaut local.',
+      takeaway: 'Repère le système dans ce qui se répète, puis classe chaque écart : jeton manquant, implémentation ponctuelle, décalage conceptuel ou défaut local.',
       sources: ['imp:polish', 'imp:extract'],
     },
     {
@@ -452,24 +440,26 @@ Séparer ces trois niveaux — produit, système visuel, surface — évite qu�
       leftTitle: 'Situation',
       rightTitle: 'Commande',
       pairs: [
-        { id: 'distill', left: 'Tout se bat pour l’attention : trop de boutons, d’encadrés et d’options', right: '`distill`' },
-        { id: 'quieter', left: 'Couleurs saturées et animations partout : l’écran fatigue', right: '`quieter`' },
-        { id: 'bolder', left: 'La page est sage et plate, rien ne retient le regard', right: '`bolder`' },
         { id: 'clarify', left: 'Les messages d’erreur et les libellés sont flous', right: '`clarify`' },
+        { id: 'onboard', left: 'Les nouveaux comptes ne savent pas par où commencer et la page Projets est vide', right: '`onboard`' },
+        { id: 'adapt', left: 'Le tableau de bord doit aussi servir sur téléphone et tablette', right: '`adapt`' },
+        { id: 'optimize', left: 'Le contenu principal met 6 s à s’afficher sur un téléphone d’entrée de gamme', right: '`optimize`' },
         { id: 'audit', left: 'Vérifier contraste, clavier, performance et responsive avant la mise en ligne, avec un score sur 20', right: '`audit`' },
         { id: 'critique', left: 'Obtenir une revue UX notée sur les heuristiques, avec personas', right: '`critique`' },
         { id: 'harden', left: 'Textes très longs, erreurs réseau, traductions : l’écran casse', right: '`harden`' },
       ],
       explanation: `Chaque commande traite une cause précise :
 
-- \`distill\` retire ce qui ne mérite pas sa place ; \`quieter\` baisse l’intensité sans perdre le caractère ; \`bolder\` fait l’inverse, sur une section qui reste en retrait.
 - \`clarify\` réécrit les textes d’interface : actions, erreurs, états vides.
-- \`audit\` mesure l’implémentation (cinq dimensions sur 20) ; \`critique\` juge l’expérience (heuristiques sur 40, personas, priorités).
+- \`onboard\` amène les nouveaux venus, au plus vite, au moment qui prouve que le produit vaut leur temps : premier usage, états vides qui disent quoi faire, activation. Son rôle n’est pas d’enseigner tout le produit.
+- \`adapt\` repense l’expérience pour un autre écran, un autre appareil ou un autre mode de saisie : adapter, ce n’est pas rétrécir.
+- \`optimize\` mesure, trouve le vrai goulot d’étranglement, le corrige, puis mesure de nouveau. Ici, 6 s pour afficher le contenu principal, c’est loin des 2,5 s que vise le LCP (*Largest Contentful Paint*).
+- \`audit\` mesure l’implémentation (cinq dimensions sur 20) et documente les défauts sans les corriger ; \`critique\` juge l’expérience (heuristiques sur 40, personas, priorités).
 - \`harden\` prépare aux données réelles : textes extrêmes, erreurs, langues.
 
-Toutes passent la main à \`polish\` pour la finition.`,
-      takeaway: 'Trop chargé : `distill`. Trop criard : `quieter`. Trop sage : `bolder`. Textes flous : `clarify`. Technique : `audit`. Revue UX : `critique`. Cas réels : `harden`.',
-      sources: ['imp:skill', 'imp:distill', 'imp:quieter', 'imp:bolder', 'imp:clarify', 'imp:audit', 'imp:critique', 'imp:harden'],
+Les commandes qui corrigent passent ensuite la main à \`polish\` ; une revue se termine par \`polish\` dès qu’elle recommande des corrections.`,
+      takeaway: 'Textes flous : `clarify`. Premier usage : `onboard`. Autre écran : `adapt`. Lenteur : `optimize`. Technique : `audit`. Revue UX : `critique`. Cas réels : `harden`.',
+      sources: ['imp:skill', 'imp:clarify', 'imp:onboard', 'imp:adapt', 'imp:optimize', 'imp:audit', 'imp:critique', 'imp:harden'],
     },
     {
       id: 'process-authority-match',
@@ -536,30 +526,6 @@ Ce qui est déjà établi ne se redemande pas : on affirme la lecture probable e
       sources: ['imp:shape'],
     },
     {
-      id: 'process-drift-choice',
-      type: 'choice',
-      difficulty: 2,
-      prompt: 'Comment classer cette dérive ?',
-      context: 'Dans l’écran « Notifications », le bouton « Enregistrer » a été recodé à la main — autre bleu, autre arrondi — alors que le composant Bouton du système existe.',
-      options: [
-        { id: 'token', label: 'Jeton manquant', why: 'Le système possède déjà tout : le bleu et l’arrondi existent dans le composant Bouton.' },
-        { id: 'one-off', label: 'Implémentation isolée', why: 'Un composant partagé existe et doit remplacer la copie faite à la main.' },
-        { id: 'concept', label: 'Décalage de concept', why: 'Ni le parcours ni la hiérarchie ne sont en cause, seulement l’implémentation d’un bouton.' },
-        { id: 'local', label: 'Défaut local', why: 'Corriger la couleur sur place laisserait une copie qui divergera de nouveau : la cause est l’absence du composant partagé.' },
-      ],
-      answer: 'one-off',
-      explanation: `\`polish\` classe chaque dérive avant de la corriger :
-
-- **jeton manquant** : le système a besoin d’une valeur qu’il n’a pas ;
-- **implémentation isolée** : un composant ou un motif partagé existe et doit la remplacer ;
-- **décalage de concept** : le parcours ou la hiérarchie diffèrent des zones comparables ;
-- **défaut local** : l’implémentation est simplement incomplète ou incohérente.
-
-Ici, retoucher le bleu sur place soignerait le symptôme ; remplacer la copie par le composant partagé soigne la cause, au niveau le plus étroit qui soit juste.`,
-      takeaway: 'Avant de corriger une dérive, classe-la : jeton manquant, implémentation isolée, décalage de concept ou défaut local — puis corrige la cause.',
-      sources: ['imp:polish'],
-    },
-    {
       id: 'process-invention-choice',
       type: 'choice',
       difficulty: 3,
@@ -605,13 +571,13 @@ Ici, retoucher le bleu sur place soignerait le symptôme ; remplacer la copie pa
       id: 'process-extract-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un composant utilisé une seule fois mérite d’entrer dans le design system, pour préparer l’avenir.',
-      answer: false,
-      explanation: `\`extract\` n’extrait que ce qui revient **au moins trois fois avec la même intention**. Son principe : l’**abstraction prématurée est pire que la duplication**. Un composant généralisé trop tôt fige de mauvaises hypothèses et devient si générique qu’il ne sert plus.
+      prompt: 'Pour `extract`, un motif qui revient deux fois avec la même intention reste dupliqué dans le code.',
+      answer: true,
+      explanation: `Vrai. \`extract\` n’extrait que ce qui revient **au moins trois fois avec la même intention**. Deux occurrences ne disent pas encore ce qui est vraiment commun et ce qui tient de la coïncidence : un composant généralisé à partir de deux cas fige de mauvaises hypothèses et finit si générique qu’il ne sert plus. D’où le principe d’impeccable : l’**abstraction prématurée est pire que la duplication**.
 
-Les design systems grandissent par incréments : on extrait ce qui est clairement réutilisable maintenant, pas tout ce qui pourrait l’être un jour.`,
-      takeaway: 'N’extrais un composant ou un jeton qu’à partir de trois usages avec la même intention : l’abstraction prématurée coûte plus que la duplication.',
-      sources: ['imp:extract'],
+C’est la « règle de trois » des développeurs, attribuée à Don Roberts et popularisée par Martin Fowler dans *Refactoring* : deux morceaux de code semblables ne justifient pas encore une factorisation ; au troisième, on extrait. Les systèmes de design grandissent par incréments : on extrait ce qui est clairement réutilisable maintenant, pas tout ce qui pourrait l’être un jour.`,
+      takeaway: 'Un motif vu deux fois reste dupliqué : n’extrais un composant ou un jeton qu’à partir de trois usages avec la même intention, car l’abstraction prématurée coûte plus que la duplication.',
+      sources: ['imp:extract', RULE_OF_THREE],
     },
     {
       id: 'process-shape-tf',
@@ -619,7 +585,7 @@ Les design systems grandissent par incréments : on extrait ce qui est clairemen
       difficulty: 1,
       prompt: 'Une fois le brief confirmé, la commande `shape` enchaîne sur l’écriture du code.',
       answer: false,
-      explanation: `\`shape\` présente le brief, obtient une confirmation (ou un tour de correction), **puis s’arrête** : il n’écrit jamais de code ni de contrat de direction.
+      explanation: `Faux. \`shape\` présente le brief, obtient une confirmation (ou un tour de correction), **puis s’arrête** : il n’écrit jamais de code ni de contrat de direction.
 
 Séparer le cadrage de la construction protège la décision : on valide ce qu’il faut faire avant que le temps investi dans le code ne pousse à défendre une mauvaise piste. La construction se lance ensuite, à partir du brief confirmé.`,
       takeaway: '`shape` s’arrête au brief confirmé : cadrer et construire sont deux étapes distinctes.',

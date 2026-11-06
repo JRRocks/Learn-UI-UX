@@ -20,6 +20,7 @@ const WEBDEV_INP: SourceRef = { label: 'web.dev — Interaction to Next Paint (I
 const WEBDEV_INP_CWV: SourceRef = { label: 'web.dev — L’INP devient une Core Web Vital le 12 mars 2024', url: 'https://web.dev/blog/inp-cwv-march-12' };
 const WEBDEV_LONG_TASKS: SourceRef = { label: 'web.dev — Optimize long tasks', url: 'https://web.dev/articles/optimize-long-tasks' };
 const WEBDEV_RAIL: SourceRef = { label: 'web.dev — Measure performance with the RAIL model', url: 'https://web.dev/articles/rail' };
+const WEBDEV_RENDERING: SourceRef = { label: 'web.dev — Rendering performance', url: 'https://web.dev/articles/rendering-performance' };
 const WEBDEV_CLS: SourceRef = { label: 'web.dev — Cumulative Layout Shift (CLS)', url: 'https://web.dev/articles/cls' };
 const WEBDEV_LCP: SourceRef = { label: 'web.dev — Optimize Largest Contentful Paint', url: 'https://web.dev/articles/optimize-lcp' };
 const WEBDEV_LAZY: SourceRef = { label: 'web.dev — The performance effects of too much lazy loading', url: 'https://web.dev/articles/lcp-lazy-loading' };
@@ -54,18 +55,33 @@ const frame = (caption: string, inner: string) => `<div><p class="fs-cap">${capt
 
 const LINES = `<div class="fs-l"></div><div class="fs-l"></div><div class="fs-l m"></div>`;
 
-const SKELETON_CSS = `
-.sk-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
-.sk-area { height: 300px; position: relative; }
-.sk-post { padding: 12px 16px; border-bottom: 1px solid #eceef2; }
-.sk-av { width: 32px; height: 32px; border-radius: 50%; background: #e2e6ed; flex: none; }
-.sk-img { margin-top: 10px; height: 96px; border-radius: 8px; background: #e9ecf1; }
-.sk-spin { position: absolute; top: 50%; left: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 3.5px solid #d5dbe5; border-top-color: #1f4fd8; }
+/** A trip page: the ticket is ready, only the "Trajet" card is still loading. */
+const TRIP_CSS = `
+.tj-head { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
+.tj-body { display: flex; flex-direction: column; gap: 10px; padding: 12px; background: #f4f6f9; }
+.tj-card { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 12px; border: 1px solid #e1e4ea; background: #fff; }
+.tj-zone { min-height: 128px; margin-top: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.tj-spin { width: 24px; height: 24px; border-radius: 50%; border: 3px solid #d5dbe5; border-top-color: #1f4fd8; }
+.tj-bar { width: 72%; height: 8px; border-radius: 4px; background: #e2e6ed; overflow: hidden; }
+.tj-bar span { display: block; width: 60%; height: 100%; border-radius: 4px; background: #1f4fd8; }
+.tj-ph { display: inline-block; height: 10px; border-radius: 5px; background: #e2e6ed; vertical-align: middle; }
+.tj-block { border-radius: 8px; background: #e9ecf1; }
 `;
 
-const feedHead = fr(`<div class="sk-head"><p class="mk-h2">Fil</p><div class="mk-row" style="--gap:14px"><i data-icon="search"></i><i data-icon="bell"></i></div></div>`);
+const tripHead = fr(`<div class="tj-head"><i data-icon="arrow-left"></i><p class="mk-h3">Ton voyage</p></div>`);
 
-const skPost = `<div class="sk-post"><div class="mk-row" style="--gap:10px"><span class="sk-av"></span><div class="mk-grow mk-stack" style="--gap:6px"><div class="mk-line mk-line--m"></div><div class="mk-line mk-line--s"></div></div></div><div class="sk-img"></div></div>`;
+/** The page with its ticket displayed; `zone` is what the "Trajet" card shows while it loads. */
+const trip = (zone: string) =>
+  fr(`${tripHead}<div class="tj-body">
+  <div class="tj-card"><p class="mk-h3">Billet</p><p class="mk-strong">Lyon Part-Dieu → Marseille</p><p class="mk-small mk-muted">Sam. 14 juin · 8 h 04 → 9 h 46</p><p class="mk-small mk-muted">Voiture 7 · place 42</p></div>
+  <div class="tj-card"><p class="mk-h3">Trajet</p><div class="tj-zone">${zone}</div></div>
+</div>`);
+
+/** The same page held behind gray blocks (same rows, same heights) until its slowest request returns. */
+const tripSkeleton = `${tripHead}<div class="tj-body">
+  <div class="tj-card"><p class="mk-h3"><span class="tj-ph" style="width:56px;height:12px"></span></p><p class="mk-strong"><span class="tj-ph" style="width:74%"></span></p><p class="mk-small"><span class="tj-ph" style="width:62%"></span></p><p class="mk-small"><span class="tj-ph" style="width:44%"></span></p></div>
+  <div class="tj-card"><p class="mk-h3"><span class="tj-ph" style="width:60px;height:12px"></span></p><div class="tj-zone tj-block"></div></div>
+</div>`;
 
 const UPLOAD_CSS = `
 .vu { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
@@ -312,55 +328,67 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
     { id: 'indicators', front: 'Squelette, spinner ou barre de progression ?', back: 'Rien sous 1 s ; squelette pour charger une page ; spinner pour une attente courte et locale (2 à 10 s) ; barre déterminée au-delà de 10 s.' },
     { id: 'optimistic', front: 'Qu’est-ce qu’une UI optimiste ?', back: 'Montrer le résultat tout de suite, synchroniser en arrière-plan, revenir en arrière avec un message clair en cas d’échec. Jamais pour un paiement.' },
     { id: 'will-change', front: 'Peut-on poser `will-change` partout ?', back: 'Non : chaque déclaration crée une couche et consomme de la mémoire. À réserver à une opération coûteuse connue.' },
-    { id: 'animate', front: 'Quelles propriétés animer pour un mouvement fluide ?', back: '`transform` et `opacity`. Pas `width`, `height`, `top` ou `left`, qui recalculent la mise en page à chaque image.' },
     { id: 'fonts', front: 'Comment charger une police web sans texte invisible ?', back: '`font-display: swap` (ou `optional`), sous-ensemble, préchargement, et une police de repli aux métriques proches.' },
     { id: 'devices', front: 'Sur quoi mesurer la performance ?', back: 'Sur un vrai téléphone d’entrée de gamme et un réseau bridé, avec des données de terrain ; pas sur un ordinateur rapide en fibre.' },
     { id: 'frame', front: 'Combien de temps dure une image à 60 images par seconde ?', back: 'Environ 16 ms (1000 ÷ 60), pour tout le travail du navigateur : script, style, mise en page, peinture.' },
   ],
   exercises: [
     {
-      id: 'performance-skeleton-choice',
+      id: 'performance-module-loading-choice',
       type: 'choice',
-      difficulty: 1,
-      prompt: 'Pendant les deux secondes de chargement de ce fil d’actualité, que montrer ?',
+      difficulty: 3,
+      prompt: 'Que montrer pendant le chargement de la carte « Trajet » ?',
+      context: 'La page est affichée ; seule la carte « Trajet » se charge, en 3 à 4 s.',
       options: [
-        {
-          id: 'blank',
-          visual: {
-            alt: 'Téléphone : l’en-tête « Fil » est affiché, la zone de contenu est entièrement blanche.',
-            frame: 'phone',
-            html: `${feedHead}<div class="sk-area"></div>`,
-            css: SKELETON_CSS,
-          },
-          why: 'Un écran blanc ne dit même pas que quelque chose se charge : on se demande si l’appli fonctionne.',
-        },
         {
           id: 'spinner',
           visual: {
-            alt: 'Téléphone : sous l’en-tête « Fil », un indicateur rotatif au milieu de la zone de contenu vide.',
+            alt: 'Téléphone : la page « Ton voyage » affiche le billet ; dans la carte « Trajet », un petit indicateur rotatif et le texte « Chargement du trajet… ».',
             frame: 'phone',
-            html: `${feedHead}<div class="sk-area"><span class="sk-spin"></span></div>`,
-            css: SKELETON_CSS,
+            html: trip(`<span class="tj-spin"></span><span class="mk-small mk-muted">Chargement du trajet…</span>`),
+            css: TRIP_CSS,
           },
-          why: 'Le spinner dit qu’on attend, sans montrer ce qui arrive : l’attention se fixe sur l’attente elle-même.',
+          why: 'Le billet reste lisible, et seule la carte qui attend le signale, avec un texte qui dit ce qui arrive : le cas où le Nielsen Norman Group conseille le spinner, un seul module, de 2 à 10 s.',
         },
         {
-          id: 'skeleton',
+          id: 'page-skeleton',
           visual: {
-            alt: 'Téléphone : sous l’en-tête « Fil », deux publications apparaissent sous forme de blocs gris (avatar, lignes de texte, image) à leur emplacement définitif.',
+            alt: 'Téléphone : sous l’en-tête « Ton voyage », le billet et la carte « Trajet » sont tous deux remplacés par des blocs gris.',
             frame: 'phone',
-            html: `${feedHead}<div class="sk-area">${skPost}${skPost}</div>`,
-            css: SKELETON_CSS,
+            html: tripSkeleton,
+            css: TRIP_CSS,
           },
-          why: 'La structure de la page apparaît d’emblée : on sait ce qui arrive et où, et l’attente paraît plus courte.',
+          why: 'Le billet est déjà prêt : le cacher derrière des blocs gris, c’est faire attendre toute la page sur sa requête la plus lente. Le squelette sert au chargement de l’écran entier.',
+        },
+        {
+          id: 'nothing',
+          visual: {
+            alt: 'Téléphone : la page « Ton voyage » affiche le billet ; la carte « Trajet » n’affiche que son titre, au-dessus d’une zone vide.',
+            frame: 'phone',
+            html: trip(''),
+            css: TRIP_CSS,
+          },
+          why: 'Pendant 3 à 4 s, une carte vide ressemble à une panne ou à un trajet introuvable : rien ne dit qu’elle arrive. Ne rien montrer ne vaut que sous 1 s.',
+        },
+        {
+          id: 'progress',
+          visual: {
+            alt: 'Téléphone : la page « Ton voyage » affiche le billet ; dans la carte « Trajet », une barre de progression à 60 % et le texte « Chargement du trajet · 60 % ».',
+            frame: 'phone',
+            html: trip(`<div class="tj-bar"><span></span></div><span class="mk-small mk-muted">Chargement du trajet · 60&nbsp;%</span>`),
+            css: TRIP_CSS,
+          },
+          why: 'La barre en pourcentage sert aux attentes de 10 s ou plus, quand il faut une estimation. Pour 3 à 4 s, elle n’apporte rien de plus, et l’avancement d’une telle requête se mesure rarement : le pourcentage risque d’être inventé.',
         },
       ],
-      answer: 'skeleton',
-      explanation: `Pour le **chargement d’une page**, le squelette affiche la mise en page à venir : blocs de texte, avatars, images, à leur place définitive. La personne comprend ce qui arrive, l’attente paraît plus courte, et le contenu remplit ensuite les blocs sans tout réorganiser.
+      answer: 'spinner',
+      explanation: `Le bon indicateur dépend de **ce qui charge** et de **combien de temps**. Ici, la page est affichée et **un seul module** attend, de 3 à 4 s : le Nielsen Norman Group conseille alors un **spinner dans ce module**, avec un court texte qui dit ce qui arrive. Le billet reste lisible et utilisable pendant ce temps.
 
-Le Nielsen Norman Group conseille plutôt le spinner pour **un seul module** (une vidéo, une carte), et le squelette quand **tout l’écran** se charge, pour une attente de moins de 10 s. Impeccable le dit pour les interfaces produit : des squelettes, pas des spinners au milieu du contenu.`,
-      takeaway: 'Pour charger une page, montre un squelette de la mise en page plutôt qu’un spinner au milieu du contenu.',
-      sources: ['imp:operate', 'imp:harden', NNG_SKELETON],
+Le **squelette** sert au chargement de **tout l’écran**, pour une attente de moins de 10 s : impeccable le recommande en mode Opérer (interface produit), plutôt qu’un spinner au milieu du contenu. Ici, il masquerait un billet déjà prêt, le temps de la requête la plus lente.
+
+Aux deux extrêmes, ne **rien** montrer ne vaut que sous 1 s, et la **barre en pourcentage** sert aux attentes de 10 s ou plus, ou au traitement d’une série d’éléments (« Mise à jour de l’adresse 3 sur 50 »).`,
+      takeaway: 'Un seul module qui charge 2 à 10 s dans une page déjà affichée : un spinner dans ce module ; le squelette sert au chargement de la page.',
+      sources: [NNG_SKELETON, NNG_PROGRESS, 'imp:operate'],
     },
     {
       id: 'performance-cls-duel',
@@ -576,7 +604,7 @@ Les autres blocs sont de bons réflexes : élévation en \`transform\`, \`font-d
       id: 'performance-fid-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Le FID (First Input Delay) est toujours l’indicateur de réactivité des Core Web Vitals.',
+      prompt: 'Le FID (First Input Delay) est l’indicateur de réactivité des Core Web Vitals.',
       answer: false,
       explanation: `Depuis le **12 mars 2024**, l’**INP** (*Interaction to Next Paint*) a remplacé le FID parmi les Core Web Vitals. Le FID ne mesurait que le délai avant le traitement de la **première** interaction ; l’INP observe **toutes** les interactions de la visite, jusqu’à l’affichage qui suit, et retient la **plus lente** (en écartant une valeur extrême toutes les 50 interactions).
 
@@ -588,13 +616,13 @@ Un bon INP est **inférieur ou égal à 200 ms**, au 75e centile des visites. On
       id: 'performance-frame-budget-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Pour une animation à 60 images par seconde, le JavaScript de la page dispose à lui seul d’environ 16 ms par image.',
-      answer: false,
-      explanation: `1000 ms ÷ 60 images ≈ **16,7 ms** par image, mais ce budget couvre **tout** le travail du navigateur : JavaScript, calcul des styles, mise en page, peinture et composition. Le navigateur a besoin d’environ 6 ms pour rendre chaque image : web.dev conseille donc de produire chaque image d’une animation en **10 ms** au plus. Sur un écran à 120 Hz, le budget entier tombe à environ 8 ms.
+      prompt: 'Pour une animation à 60 images par seconde, chaque image dure environ 16 ms, mais tout le travail de la page doit tenir en 10 ms environ.',
+      answer: true,
+      explanation: `Vrai. 1000 ms ÷ 60 images ≈ **16,7 ms** : c’est la durée d’une image, la cible qu’impeccable donne pour une animation fluide. Mais ces 16 ms ne sont pas toutes pour la page : selon le modèle RAIL, le navigateur a besoin d’environ 6 ms pour rendre chaque image. web.dev en déduit que **tout ton travail doit tenir en 10 ms** environ par image ; au-delà, des images sautent et l’animation saccade. Sur un écran à 120 Hz, l’image entière ne dure plus qu’environ 8 ms.
 
 D’où les règles de rendu : animer \`transform\` et \`opacity\` plutôt que des propriétés de mise en page, éviter les tâches JavaScript longues pendant une animation, et utiliser \`requestAnimationFrame\` pour les animations pilotées en JavaScript.`,
-      takeaway: 'À 60 images par seconde, les 16 ms de chaque image servent à tout le rendu, pas qu’au script : garde le JavaScript court et anime ce qui ne recalcule pas la mise en page.',
-      sources: ['imp:optimize', WEBDEV_RAIL],
+      takeaway: 'À 60 images par seconde, une image dure 16 ms, mais ton travail doit tenir en 10 ms : garde le JavaScript court et anime ce qui ne recalcule pas la mise en page.',
+      sources: ['imp:optimize', WEBDEV_RAIL, WEBDEV_RENDERING],
     },
     {
       id: 'performance-thresholds-match',
