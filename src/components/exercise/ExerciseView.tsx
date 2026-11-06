@@ -105,14 +105,15 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
     settledAt.current = performance.now();
   }, [revealed]);
 
-  // Once validated, show what changed: for a hotspot, a slider or a grid, the scene and its marks
-  // (motion-1); otherwise the correction. The focus goes to the correction for screen readers.
+  // Once validated, show where the correction starts (`data-reveal-view`): the scene and its marks
+  // for a hotspot, the value against the expert's for a slider (motion-1), the first rated row for a
+  // grid; otherwise the verdict. The focus goes to the correction for screen readers.
   useEffect(() => {
     if (!revealed) return;
     const el = feedbackRef.current;
     if (!el) return;
     el.focus({ preventScroll: true });
-    keepInView(articleRef.current?.querySelector<HTMLElement>('[data-scene]') ?? el, articleRef.current);
+    keepInView(articleRef.current?.querySelector<HTMLElement>('[data-reveal-view]') ?? el, articleRef.current);
   }, [revealed]);
 
   // Keyboard: Enter validates then continues; digits pick options and V/F answer, while the focus is in the exercise.

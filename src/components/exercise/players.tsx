@@ -340,7 +340,7 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
   const touch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
   return (
-    <div className="section" data-scene="">
+    <div className="section" data-reveal-view="">
       <div className="stage hotspot-stage">
         <Mock visual={ex.visual} onPick={revealed ? undefined : pick} states={states} marks={marks} />
       </div>
@@ -525,7 +525,7 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
   const ratio = ex.readout?.kind === 'contrast' ? contrastRatio(grayHex(shown), ex.readout.background) : null;
 
   return (
-    <div className="section" data-scene="">
+    <div className="section" data-reveal-view="">
       <div className="stage">
         <Mock key={replay} visual={ex.visual} vars={vars} controls={!ex.replayable} />
       </div>
@@ -579,7 +579,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
   const tol = ex.tolerance ?? 1;
   const values = Array.from({ length: ex.scale.max - ex.scale.min + 1 }, (_, i) => ex.scale.min + i);
   return (
-    <div className="section" data-scene="">
+    <div className="section">
       <div className="stage">
         <Mock visual={ex.visual} />
       </div>
@@ -587,11 +587,12 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
         Échelle : {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
       </p>
       <div className="grid-score">
-        {ex.criteria.map((c) => {
+        {ex.criteria.map((c, i) => {
           const mine = draft.scores[c.id];
           const ok = mine !== undefined && Math.abs(mine - c.expert) <= tol;
           return (
-            <div key={c.id} className="grid-row" data-state={revealed ? (ok ? 'right' : 'wrong') : undefined}>
+            // The capture does not change once validated: the correction starts on the first row.
+            <div key={c.id} className="grid-row" data-state={revealed ? (ok ? 'right' : 'wrong') : undefined} data-reveal-view={i === 0 ? '' : undefined}>
               <span className="grid-label" id={`g-${ex.id}-${c.id}`}>
                 {c.label}
               </span>
