@@ -115,9 +115,10 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
       title: 'Utilisable : clavier, focus, cibles, mouvement',
       body: `- **Clavier** (2.1.1 et 2.1.2, A) : tout se fait au clavier, et l’on peut sortir de chaque composant — aucun **piège** où le focus reste bloqué.
 - **Ordre et visibilité du focus** (2.4.3, A ; 2.4.7, AA) : le focus suit l’ordre de lecture et se voit toujours. Ne supprime jamais l’\`outline\` sans le remplacer ; \`:focus-visible\` permet de le mettre en forme pour le clavier sans gêner la souris. Depuis WCAG 2.2, l’élément qui a le focus ne doit pas non plus disparaître entièrement sous un bandeau collant (2.4.11, AA).
-- **Taille des cibles** (2.5.8, AA, nouveau en 2.2) : au moins **24 × 24 px CSS**, sauf exceptions — cible assez espacée (un cercle de 24 px centré sur elle ne touche aucune autre cible), fonction équivalente ailleurs dans la page, lien dans une phrase, contrôle natif non modifié, présentation essentielle. Pour le tactile, vise **44 × 44** : c’est le seuil sous lequel l’audit d’impeccable signale une cible, et celui du niveau AAA (2.5.5) ; Apple recommande 44 × 44 pt, Material Design 48 × 48 dp.
+- **Taille des cibles** (2.5.8, AA, nouveau en 2.2) : au moins **24 × 24 px CSS**, sauf exceptions — cible assez espacée (un cercle de 24 px centré sur elle ne chevauche ni une autre cible, ni le cercle d’une autre petite cible), fonction équivalente ailleurs dans la page, lien dans une phrase, contrôle natif non modifié, présentation essentielle. Pour le tactile, vise **44 × 44 px** : c’est le seuil sous lequel l’audit d’impeccable signale une cible, et celui du niveau AAA (2.5.5) ; Apple recommande 44 × 44 pt, Material Design 48 × 48 dp.
 - **Glissement** (2.5.7, AA, nouveau en 2.2) : ce qui se fait en faisant glisser (curseur de valeur, liste triée par glisser-déposer) se fait aussi d’un seul pointeur sans glisser, par des boutons ou un clic, sauf si le glissement est essentiel.
 - **Temps** (2.2.1, A) : un délai imposé peut être désactivé, ajusté ou prolongé.
+- **Mettre en pause, arrêter, masquer** (2.2.2, A) : ce qui bouge, clignote ou défile tout seul plus de 5 secondes à côté d’autre contenu (bandeau défilant, animation en boucle) peut être mis en pause, arrêté ou masqué, sauf si ce mouvement est essentiel. Même exigence, sans le seuil de 5 secondes, pour un contenu qui se met à jour tout seul (carrousel qui avance seul, fil d’actualité) : on peut aussi en régler la fréquence.
 - **Mouvement** : respecte \`prefers-reduced-motion\` avec une alternative pensée, qui garde l’information du changement d’état — pas un arrêt brutal de toutes les transitions. Rien ne doit clignoter plus de trois fois par seconde, sauf si les flashs restent sous les seuils de flash général et de flash rouge (2.3.1, A) ; le niveau AAA (2.3.2) supprime cette exception.`,
       examples: [
         {
@@ -131,14 +132,14 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
           },
           badNote: '18 px séparés de 2 px : sous les 24 px du minimum AA, et la corbeille touche le partage.',
           good: {
-            alt: 'Même ligne : les trois icônes restent petites, mais chacune est posée dans une zone tactile de 44 px, légèrement teintée.',
+            alt: 'Même ligne : les trois icônes restent petites, mais chacune est posée dans une cible tactile de 44 px, légèrement teintée.',
             css: `.tb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; border: 1px solid #e1e4ea; border-radius: 12px; }
 .tb-row > .mk-grow { flex: 1 1 150px; padding-block: 4px; }
 .tb-acts { display: flex; gap: 4px; margin-inline-start: auto; }
 .tb-ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; background: #f4f6f9; color: #36405a; }`,
             html: `<div class="mk-pad"><div class="tb-row"><div class="mk-grow"><p class="mk-strong">Facture F-118</p><p class="mk-small mk-muted">Atelier Brune · 1 480,00 €</p></div><div class="tb-acts"><span class="tb-ico"><i data-icon="download" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="share-2" style="--ico:16px"></i></span><span class="tb-ico"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
           },
-          goodNote: 'L’icône reste discrète ; c’est la zone tactile qui grandit, jusqu’à 44 px.',
+          goodNote: 'Le dessin reste discret ; c’est la cible tactile qui grandit, jusqu’à 44 px.',
         },
       ],
     },
@@ -147,7 +148,7 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
       title: 'Compréhensible et robuste : sémantique, formulaires, annonces',
       body: `- **HTML natif d’abord** : un \`<button>\` apporte gratuitement le focus, l’activation par Entrée et Espace et le rôle annoncé ; une \`<div>\` cliquable n’apporte rien de tout cela. C’est la première règle d’ARIA : si un élément natif fait l’affaire, utilise-le plutôt que de détourner un autre élément avec un rôle.
 - **Structure** (1.3.1, A) : ce que la mise en page montre (titres, listes, tableaux, zones) doit exister dans le code. Bonne pratique : des titres hiérarchisés sans saut de niveau (h1 puis h2, pas h1 puis h4) et des **repères** (\`header\`, \`nav\`, \`main\`, \`footer\`) qui permettent au lecteur d’écran de sauter d’une zone à l’autre. Le détecteur d’impeccable signale les niveaux de titre sautés.
-- **Étiquettes** (3.3.2, A) : toute saisie attendue a une étiquette ou une instruction ; la liaison de l’étiquette au champ dans le code (\`<label for>\`) relève de 1.3.1 et 4.1.2. La bonne pratique : une étiquette visible et persistante. Un placeholder (le texte indicatif grisé affiché dans le champ vide) n’en est pas une : il disparaît dès qu’on tape.
+- **Étiquettes** (3.3.2, A) : toute saisie attendue a une étiquette ou une instruction ; la liaison de l’étiquette au champ dans le code (\`<label for>\`) relève de 1.3.1 et 4.1.2. La bonne pratique : une étiquette visible et persistante. Un texte indicatif (*placeholder*, le texte grisé affiché dans le champ vide) n’en est pas une : il disparaît dès qu’on tape.
 - **Erreurs** (3.3.1, A ; 3.3.3, AA) : l’erreur est identifiée **en texte**, près du champ, avec une suggestion de correction.
 - **Saisie redondante** (3.3.7, A, nouveau en 2.2) : une information déjà donnée dans le même parcours est préremplie ou proposée, sauf si la ressaisir est essentiel ou exigé pour la sécurité.
 - **Messages d’état** (4.1.3, AA) : une confirmation ou un compteur mis à jour sans rechargement est annoncé grâce à \`role="status"\` (ou \`aria-live="polite"\`), sans déplacer le focus. \`role="alert"\` est réservé à ce qui est important et urgent.
@@ -178,7 +179,7 @@ Le problème n’a rien de théorique : dans l’analyse WebAIM 2026 d’un mill
 2. **Performance** : recalculs de mise en page en boucle, animations coûteuses, images non optimisées, scripts trop lourds.
 3. **Thématisation** : couleurs codées en dur, mode sombre cassé, jetons incohérents.
 4. **Responsive** : largeurs fixes, cibles tactiles, gestes cassés au toucher, défilement horizontal, texte agrandi.
-5. **Intégrité d’implémentation**, la dimension jugée critique : raccourcis répétés, dérive du design system, contenu décoratif ou trompeur, structure interchangeable avec celle d’un produit sans rapport, vérifiés avec le détecteur. Le rapport commence par ce verdict, réussi ou échoué : l’implémentation forme-t-elle un système propre au produit ?
+5. **Intégrité d’implémentation**, la dimension jugée critique : raccourcis répétés, dérive du système de design, contenu décoratif ou trompeur, structure interchangeable avec celle d’un produit sans rapport, vérifiés avec le détecteur. Le rapport commence par ce verdict, réussi ou échoué : l’implémentation forme-t-elle un système propre au produit ?
 
 Le total sur **20** se lit en bandes : **18–20** excellent, **14–17** bon, **10–13** acceptable, **6–9** faible, **0–5** critique. Chaque problème reçoit une sévérité de **P0 à P3**, et une **violation WCAG AA est au moins P1**. Pour chacun : emplacement, catégorie, impact, critère violé, recommandation, commande suggérée.
 
@@ -203,10 +204,10 @@ Ces cinq dimensions valent pour le **web**. Pour une appli native (iOS, Android 
     { id: 'non-text', front: 'Quel contraste pour une bordure de champ, une icône sans texte ou un focus ?', back: '3:1 par rapport aux couleurs adjacentes (critère 1.4.11). Les composants désactivés sont exemptés.' },
     { id: 'color', front: 'La couleur peut-elle porter seule une information ?', back: 'Non (1.4.1) : double-la d’un texte, d’une icône, d’un soulignement ou d’un motif.' },
     { id: 'alt', front: 'Quel texte alternatif pour une image décorative ?', back: '`alt=""` : le lecteur d’écran l’ignore. Une image informative décrit son information ou sa fonction.' },
-    { id: 'target', front: 'Taille minimale d’une cible selon WCAG 2.2 (AA) ?', back: '24 × 24 px CSS (2.5.8), sauf exceptions (espacement, équivalent, lien dans une phrase, contrôle natif, essentiel). Vise 44 × 44 pour le tactile.' },
+    { id: 'target', front: 'Taille minimale d’une cible selon WCAG 2.2 (AA) ?', back: '24 × 24 px CSS (2.5.8), sauf exceptions (espacement, équivalent, lien dans une phrase, contrôle natif, essentiel). Vise 44 × 44 px pour le tactile.' },
     { id: 'focus', front: 'Que dit WCAG du focus clavier ?', back: 'Il doit toujours être visible (2.4.7) et ne pas disparaître sous un bandeau collant (2.4.11). Jamais d’`outline: none` sans remplacement.' },
     { id: 'button', front: 'Bouton codé avec une `div` cliquable : que faire ?', back: 'Utiliser un `<button>` : focus, activation par Entrée et Espace et rôle annoncé sont fournis nativement.' },
-    { id: 'label', front: 'Un placeholder peut-il servir d’étiquette ?', back: 'Non : il disparaît à la saisie. Chaque champ a une étiquette visible, persistante et liée.' },
+    { id: 'label', front: 'Un texte indicatif (*placeholder*) peut-il servir d’étiquette ?', back: 'Non : il disparaît à la saisie. Chaque champ a une étiquette visible, persistante et liée.' },
     { id: 'status', front: 'Comment annoncer « Article ajouté au panier » sans déplacer le focus ?', back: 'Avec une région `role="status"` (ou `aria-live="polite"`) : critère 4.1.3.' },
     { id: 'motion', front: 'Comment respecter `prefers-reduced-motion` ?', back: 'Par une alternative pensée qui garde l’information du changement d’état, pas par un arrêt global de toutes les transitions.' },
     { id: 'reflow', front: 'Zoom et redistribution : quelles exigences ?', back: 'Texte agrandi à 200 % sans perte (1.4.4) ; contenu lisible à 320 px de large sans défilement horizontal (1.4.10).' },
@@ -242,10 +243,10 @@ Le gris très pâle passe pour « élégant » sur un bon écran, au calme. En p
         { id: 'labels', visual: delivery(true), why: 'Chaque champ garde son étiquette, et les champs facultatifs sont annoncés.' },
       ],
       answer: 'labels',
-      explanation: `Un **placeholder**, le texte indicatif affiché dans le champ vide, **n’est pas une étiquette**. Il disparaît dès qu’on tape : pour relire ou corriger, il faut se souvenir de ce que chaque champ demandait. Les lecteurs d’écran ne le restituent pas toujours comme un nom, et il est souvent trop pâle.
+      explanation: `Un **texte indicatif** (*placeholder*), affiché dans le champ vide, **n’est pas une étiquette**. Il disparaît dès qu’on tape : pour relire ou corriger, il faut se souvenir de ce que chaque champ demandait. Les lecteurs d’écran ne le restituent pas toujours comme un nom, et il est souvent trop pâle.
 
 Le critère **3.3.2 (A)** demande des étiquettes ou des instructions quand une saisie est attendue. Une étiquette visible, persistante et liée au champ (\`<label for>\`) sert tout le monde : Sam au lecteur d’écran, la personne qui découvre le service et relit sa saisie, celle qui reprend après une interruption.`,
-      takeaway: 'Chaque champ a une étiquette visible et persistante ; le placeholder ne sert qu’à donner un exemple.',
+      takeaway: 'Chaque champ a une étiquette visible et persistante ; le texte indicatif ne sert qu’à donner un exemple.',
       sources: [U('labels-or-instructions', '3.3.2 (étiquettes ou instructions)'), 'imp:clarify'],
     },
     {
@@ -282,34 +283,34 @@ La bonne pratique : un anneau d’au moins 2 px, contrasté à 3:1 avec ce qui l
       sources: [U('focus-visible', '2.4.7 (focus visible)'), 'imp:audit'],
     },
     {
-      id: 'accessibility-target-slider',
+      id: 'accessibility-spacing-slider',
       type: 'slider',
       difficulty: 2,
-      prompt: 'Règle la zone tactile des boutons « Partager » et « Supprimer » de cette liste mobile.',
+      prompt: 'Sans les agrandir, règle l’espace entre les icônes « Partager » et « Supprimer », de 16 × 16 px chacune, pour qu’elles respectent le critère 2.5.8 (AA).',
+      context: 'Chaque cercle en pointillés, de 24 px de diamètre, est centré sur une icône.',
       visual: {
-        alt: 'Ligne de liste de courses avec deux boutons icônes dont la zone tactile, délimitée en pointillés, varie avec le curseur.',
-        css: `.tg-row { display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 12px; border: 1px solid #e1e4ea; border-radius: 12px; }
-.tg-acts { display: flex; gap: 4px; }
-.tg-btn { width: var(--v, 20px); height: var(--v, 20px); display: grid; place-items: center; border-radius: 8px; background: #eef1f7; outline: 1px dashed #8b92a1; outline-offset: -1px; color: #36405a; flex: none; }`,
-        html: `<div class="mk-pad"><div class="tg-row"><div class="mk-grow"><p class="mk-strong">Courses du samedi</p><p class="mk-small mk-muted">12 articles · modifiée hier</p></div><div class="tg-acts"><span class="tg-btn"><i data-icon="share-2" style="--ico:16px"></i></span><span class="tg-btn"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
+        alt: 'En-tête d’une liste de courses partagée, « Courses du samedi », avec deux icônes de 16 px, Partager et Supprimer, chacune au centre d’un cercle en pointillés de 24 px ; l’espace entre les deux icônes varie avec le curseur.',
+        css: `.sp-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #e1e4ea; border-radius: 12px; }
+.sp-acts { position: relative; z-index: 0; display: flex; align-items: center; gap: var(--v, 2px); padding: 4px; flex: none; }
+.sp-t { position: relative; width: 16px; height: 16px; display: grid; place-items: center; color: #36405a; flex: none; }
+.sp-t::before { content: ""; position: absolute; z-index: -1; left: -4px; top: -4px; width: 24px; height: 24px; border-radius: 50%; border: 1px dashed #1f4fd8; background: rgb(31 79 216 / 0.12); }`,
+        html: `<div class="mk-pad"><div class="sp-row"><div class="mk-grow"><p class="mk-strong">Courses du samedi</p><p class="mk-small mk-muted">12 articles · partagée avec Inès</p></div><div class="sp-acts"><span class="sp-t"><i data-icon="share-2" style="--ico:16px"></i></span><span class="sp-t"><i data-icon="trash" style="--ico:16px"></i></span></div></div></div>`,
       },
-      control: 'Zone tactile',
-      min: 16,
-      max: 72,
-      step: 2,
-      initial: 20,
+      control: 'Espace entre les cibles',
+      min: 0,
+      max: 24,
+      step: 1,
+      initial: 2,
       unit: 'px',
-      target: [44, 60],
-      ideal: 48,
-      explanation: `Trois repères à connaître :
+      target: [8, 24],
+      ideal: 8,
+      explanation: `Sous 24 × 24 px, une cible est trop petite pour le critère **2.5.8 (AA)**, mais elle peut encore passer grâce à l’**exception d’espacement** : le cercle de **24 px de diamètre** centré sur elle ne doit chevaucher **ni une autre cible, ni le cercle d’une autre petite cible**.
 
-- **24 × 24 px CSS** : le minimum du critère 2.5.8 (AA) de WCAG 2.2 — en dessous, la cible échoue, sauf exceptions (espacement suffisant, équivalent ailleurs, lien dans une phrase…).
-- **44 × 44** : le seuil sous lequel l’audit d’impeccable signale une cible tactile, celui du niveau AAA (2.5.5) et des recommandations d’Apple (44 × 44 pt).
-- **48 × 48 dp** : la recommandation de Material Design.
+Ici, les centres des deux icônes sont écartés de 16 px plus l’espace qui les sépare. Leurs cercles cessent de se chevaucher quand cet écart atteint 24 px : il faut donc **8 px d’espace**. Dès 4 px, chaque cercle ne déborde plus sur l’icône voisine, mais les deux cercles se chevauchent encore : échec. Le W3C donne le même repère : des cibles de 20 × 20 px séparées de 4 px passent.
 
-Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zone : 44 à 48 px suffisent ; au-delà, chaque ligne s’épaissit et l’écran affiche moins d’éléments. L’icône dessinée peut rester à 16 px : c’est la zone sensible qui doit grandir, pas forcément le dessin.`,
-      takeaway: 'Zone tactile : 24 × 24 px au minimum WCAG 2.2 (AA), 44 à 48 px pour un usage confortable au doigt.',
-      sources: ['wcag:target', 'imp:audit', 'hig', 'material3'],
+Ce n’est qu’un plancher, valable pour tous les pointeurs, souris comprise. Au doigt, vise une **cible tactile de 44 × 44 px** : le dessin peut rester à 16 px, c’est la cible qui grandit.`,
+      takeaway: 'Sous 24 × 24 px, une cible passe 2.5.8 si son cercle de 24 px ne chevauche ni une autre cible ni le cercle d’une autre petite cible : 8 px entre deux icônes de 16 px. Au doigt, vise 44 px.',
+      sources: ['wcag:target', 'imp:audit'],
     },
     {
       id: 'accessibility-login-hotspot',
@@ -394,7 +395,7 @@ Pour deux boutons voisins dans une liste tactile, vise **au moins 44 px** de zon
 
 - **1.4.1 (A)** : les pastilles de statut ne parlent qu’en couleur — une personne qui distingue mal le rouge du vert peut confondre ces pastilles, et le lecteur d’écran ne lit rien.
 - **1.4.11 (AA)** : une case à cocher doit se repérer ; sa bordure doit atteindre 3:1.
-- **2.5.8 (AA)** : chaque cible fait au moins 24 × 24 px, ou reste assez isolée pour qu’un cercle de 24 px centré sur elle ne touche aucune autre cible.
+- **2.5.8 (AA)** : chaque cible fait au moins 24 × 24 px, ou reste assez isolée pour que le cercle de 24 px centré sur elle ne chevauche ni une autre cible, ni le cercle d’une autre petite cible.
 
 C’est le travail de la dimension « Accessibilité » de l’audit : des défauts mesurables, chacun rattaché à un critère.`,
       takeaway: 'Un audit rattache chaque défaut à un critère mesurable : couleur seule (1.4.1), contraste des contrôles (1.4.11), taille des cibles (2.5.8).',
@@ -464,14 +465,14 @@ Un \`<button>\` sait tout faire seul : il entre dans l’ordre de tabulation, s�
       options: [
         { id: 'big', label: 'Un bouton de 32 × 32 px', why: 'Au-dessus de 24 × 24 px : conforme.' },
         { id: 'inline', label: 'Un lien au milieu d’une phrase, dans un paragraphe', why: 'Exception « en ligne » : sa taille est contrainte par la hauteur de ligne du texte.' },
-        { id: 'isolated', label: 'Une icône de 20 × 20 px, isolée, à plus de 24 px de toute autre cible', why: 'Exception d’espacement : un cercle de 24 px centré sur elle ne touche aucune autre cible.' },
+        { id: 'isolated', label: 'Une icône de 20 × 20 px, isolée, à plus de 24 px de toute autre cible', why: 'Exception d’espacement : le cercle de 24 px centré sur elle ne chevauche aucune autre cible.' },
         { id: 'tight', label: 'Trois icônes de 16 × 16 px séparées de 2 px', why: 'Trop petites et trop proches : les cercles de 24 px centrés sur chacune se chevauchent.' },
         { id: 'close', label: 'Une croix de 14 × 14 px qui ferme une notification, collée au bouton « Voir »', why: 'Sous 24 px et sans espace : le cercle de 24 px centré sur la croix déborde sur le bouton voisin.' },
       ],
       answers: ['big', 'inline', 'isolated'],
       explanation: `Le critère **2.5.8** fixe **24 × 24 px CSS**, avec cinq exceptions :
 
-- **espacement** : une cible plus petite passe si un cercle de 24 px centré sur elle ne touche aucune autre cible (ni le cercle d’une autre petite cible) ;
+- **espacement** : une cible plus petite passe si le cercle de 24 px centré sur elle ne chevauche aucune autre cible (ni le cercle d’une autre petite cible) ;
 - **équivalent** : la même fonction existe ailleurs dans la page avec une cible conforme ;
 - **en ligne** : un lien dans une phrase ;
 - **contrôle du navigateur** : un contrôle natif dont l’auteur n’a pas modifié la taille ;
@@ -501,7 +502,7 @@ Le critère est un plancher. Pour le tactile, vise 44 × 44.`,
 - **Performance** : images non optimisées, animations coûteuses, recalculs de mise en page, poids des scripts.
 - **Thématisation** : jetons de design, couleurs codées en dur, mode sombre.
 - **Responsive** : largeurs fixes, cibles tactiles, gestes au toucher, défilement horizontal.
-- **Intégrité d’implémentation** : dérive du design system et raccourcis répétés, vérifiés avec le détecteur.
+- **Intégrité d’implémentation** : dérive du système de design et raccourcis répétés, vérifiés avec le détecteur.
 
 Bandes : 18–20 excellent, 14–17 bon, 10–13 acceptable, 6–9 faible, 0–5 critique.`,
       takeaway: 'L’audit web note cinq dimensions sur 4 (accessibilité, performance, thématisation, responsive, intégrité), soit un total sur 20.',
@@ -532,22 +533,24 @@ Le lecteur d’écran (VoiceOver ou NVDA) révèle en chemin ce que l’œil ne 
       sources: ['wcag22', 'imp:critique'],
     },
     {
-      id: 'accessibility-motion-tf',
+      id: 'accessibility-pause-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Pour respecter `prefers-reduced-motion`, la bonne pratique est de ramener toutes les durées d’animation à 0,01 ms.',
-      answer: false,
-      explanation: `L’audit d’impeccable signale justement ce réflexe : un arrêt global à 0,01 ms **détruit des retours utiles** — l’ouverture d’un panneau, le déplacement d’un élément, la confirmation d’une action.
+      prompt: 'Un bandeau qui défile tout seul plus de 5 secondes, à côté d’autre contenu, doit pouvoir être mis en pause, arrêté ou masqué.',
+      answer: true,
+      explanation: `Vrai. C’est le critère **2.2.2 (mettre en pause, arrêter, masquer)**, de niveau **A**, le minimum. Il vise ce qui bouge, clignote ou défile quand trois conditions sont réunies : le mouvement **démarre tout seul**, **dure plus de 5 secondes** et s’affiche **à côté d’autre contenu**. Seul un mouvement essentiel à l’activité y échappe.
 
-Les personnes qui activent ce réglage (troubles vestibulaires, migraines) veulent **moins de mouvement**, pas moins d’information. L’alternative pensée remplace les grands déplacements, zooms et parallaxes par un fondu bref ou un changement d’état net, qui préserve la hiérarchie et le lien de cause à effet. Et aucun mouvement ne doit bloquer le focus, la lecture ou la tâche.`,
-      takeaway: 'Avec `prefers-reduced-motion`, remplace les grands mouvements par des transitions sobres ; ne supprime pas l’information du changement d’état.',
-      sources: ['imp:audit', 'imp:animate', U('animation-from-interactions', '2.3.3 (animation issue d’interactions)')],
+Un mouvement continu capte l’œil : une personne qui a un trouble de l’attention peine à se concentrer sur le reste de la page, et celle qui lit lentement ne peut pas suivre un texte qui défile. Le W3C a retenu 5 secondes : assez pour attirer l’attention, assez court pour qu’on puisse en attendre la fin.
+
+Piège courant : figer le bandeau seulement tant que le focus reste dessus ne compte pas comme une pause, car la page devient inutilisable pendant ce temps. Il faut un vrai moyen de l’arrêter, comme un bouton Pause.`,
+      takeaway: 'Tout mouvement automatique de plus de 5 s, à côté d’autre contenu, doit pouvoir se mettre en pause, s’arrêter ou se masquer, sauf s’il est essentiel (WCAG 2.2.2, niveau A).',
+      sources: [U('pause-stop-hide', '2.2.2 (mettre en pause, arrêter, masquer)')],
     },
     {
       id: 'accessibility-detector-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Si l’outil d’analyse automatique ne trouve aucune erreur, la page est accessible.',
+      prompt: 'Une page que l’outil d’analyse automatique valide sans erreur est accessible.',
       answer: false,
       explanation: `Un outil automatique repère ce qui se mesure dans le code : contrastes, attributs manquants, niveaux de titre sautés. Il ne sait pas si un texte alternatif est pertinent, si l’ordre du focus a du sens, si un composant sur mesure se pilote vraiment au clavier.
 

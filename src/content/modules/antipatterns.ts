@@ -61,9 +61,9 @@ La correction n’est pas « une autre couleur à la mode », mais une palette *
     },
     {
       id: 'typo-titres',
-      title: 'Typographie : la pastille, le sur-titre et le titre géant',
-      body: `- **La pastille *eyebrow* du héros** : un minuscule libellé en capitales espacées, ou une pastille arrondie, juste au-dessus d’un très grand titre. C’est devenu le héros SaaS généré par défaut.
-- **Le sur-titre** (*kicker*) au-dessus de n’importe quel titre de section : interdit sans exception par impeccable, répété ou non. Le titre porte son propre poids.
+      title: 'Typographie : la pastille, le surtitre et le titre géant',
+      body: `- **La pastille (ou le surtitre) du héros** : un minuscule libellé en capitales espacées, ou une pastille arrondie, juste au-dessus d’un très grand titre. C’est devenu le héros SaaS généré par défaut.
+- **Le surtitre** (*kicker*) au-dessus de n’importe quel titre de section : interdit sans exception par impeccable, répété ou non. Le titre porte son propre poids.
 - **Les petits numéros de section** (01, 02, 03) répétés de section en section : une page qui numérote ses chapitres au lieu de laisser la hiérarchie porter sa structure.
 - **Le titre italique à empattements** (Fraunces, Recoleta, Playfair) en héros de startup. Le registre éditorial peut le vouloir : juge selon le contexte.
 - **Le titre surdimensionné** : une phrase entière en taille d’affichage, qui mange tout le premier écran.
@@ -216,7 +216,7 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
 - **Vérifie chaque résultat en contexte.** Le détecteur repère des formes, pas des intentions : le quadrillage d’un éditeur de plans est un faux positif, à consigner avec sa raison.
 - **Un avertissement se corrige pour de bon.** Un cliché se réécrit : une pastille rendue plus pâle reste une pastille, et devient en plus illisible. Un défaut de qualité se corrige en réglant la valeur en cause (contraste, interlignage, largeur de ligne) ; une dérive du système se corrige, ou s’ajoute à DESIGN.md si elle est voulue.
 - **Un conseil est une invitation à vérifier**, pas une preuve. L’ombre dure décalée est légitime dans un univers néobrutaliste ; un mot seul en fin de paragraphe peut être voulu. Même parmi les avertissements, le titre italique à empattements peut convenir au registre d’un magazine : la règle demande de juger selon le contexte.
-- **Le brief gagne, sauf contre un interdit.** Un choix imposé par le brief ou confirmé par l’utilisateur se consigne comme une exception, avec sa raison ; un sur-titre au-dessus d’un titre ne se justifie jamais, même si le brief le demande. On n’ignore jamais une règle pour éviter une vraie correction.
+- **Le brief gagne, sauf contre un interdit.** Un choix imposé par le brief ou confirmé par l’utilisateur se consigne comme une exception, avec sa raison ; un surtitre au-dessus d’un titre ne se justifie jamais, même si le brief le demande. On n’ignore jamais une règle pour éviter une vraie correction.
 - **Un rapport vide est un indice, pas une preuve.** Il ne remplace ni l’examen du rendu aux tailles utiles, ni la question de fond : ce design pourrait-il appartenir à n’importe quel autre produit ?`,
     },
   ],
@@ -224,14 +224,14 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
     { id: 'slop', front: 'Que désigne le « slop » dans les interfaces ?', back: 'Les tics des interfaces générées : des choix faits par réflexe, devenus si fréquents qu’ils signalent l’absence de décision.' },
     { id: 'test', front: 'Quel est le test de spécificité d’un design ?', back: 'Se demander si un produit sans rapport pourrait le reprendre tel quel. Si oui, le design n’est pas ancré dans ce produit.' },
     { id: 'purple', front: 'Quels tics de couleur le détecteur juge-t-il les plus reconnaissables ?', back: 'Les dégradés violets et le cyan sur fond sombre. Un dégradé dans ces teintes suffit à le signaler.' },
-    { id: 'eyebrow', front: 'Que faire d’une pastille ou d’un sur-titre au-dessus d’un grand titre ?', back: 'Le supprimer, intégrer l’information au titre, ou en faire un fil d’Ariane. Jamais l’adoucir.' },
+    { id: 'eyebrow', front: 'Que faire d’une pastille ou d’un surtitre au-dessus d’un grand titre ?', back: 'Le supprimer, intégrer l’information au titre, ou en faire un fil d’Ariane. Jamais l’adoucir.' },
     { id: 'icon-tile', front: 'Comment sortir du gabarit « tuile d’icône au-dessus du titre » ?', back: 'Mettre l’icône à côté du titre, ou la laisser dans le flux sans conteneur.' },
     { id: 'glow', front: 'Par quoi remplacer un halo lumineux coloré ?', back: 'Par des ombres d’élévation neutres et un éclairage discret et motivé.' },
     { id: 'ghost', front: 'Qu’est-ce que la « carte fantôme » ?', back: 'Une bordure d’un pixel plus une large ombre diffuse sur chaque carte d’une rangée. On choisit l’un ou l’autre.' },
     { id: 'copy', front: 'Quels sont les quatre tics de rédaction du détecteur ?', back: 'Le jargon marketing, la cadence aphoristique (« Pas un X. Un Y. »), l’abus de tirets cadratins et le cadrage « théâtre ».' },
     { id: 'errors', front: 'Quelles règles ont la sévérité « erreur » ?', back: 'L’erreur de script au chargement et le contenu invisible au repos. On les corrige avant tout le reste.' },
     { id: 'advisory', front: 'Que signifie une règle de sévérité « conseil » ?', back: 'Une invitation à vérifier, pas une preuve : une ombre dure décalée peut appartenir à un univers néobrutaliste voulu.' },
-    { id: 'sizes', front: 'Quelles tailles minimales pour le texte ?', back: 'Texte courant : jamais sous 12 px (14 px au moins, 16 px idéalement). Texte fonctionnel : 11 px ; 10 px pour les seules mentions légales non interactives.' },
+    { id: 'sizes', front: 'Quelles tailles minimales pour le texte ?', back: 'Corps de texte : 16 px (1rem), le plancher d’impeccable, et 14 px seulement pour un texte vraiment secondaire ; le détecteur ne signale le texte courant que sous 12 px. Texte fonctionnel : 11 px au moins ; 10 px pour les seules mentions légales non interactives.' },
     { id: 'caps', front: 'Quand les capitales posent-elles problème ?', back: 'Sur un passage qui se lit comme une phrase : 80 caractères ou plus. Boutons, navigation et courts libellés restent permis.' },
     { id: 'padding', front: 'Quelle marge intérieure pour un conteneur bordé ou coloré ?', back: '8 px au moins, idéalement 12 à 16 px.' },
     { id: 'clean', front: 'Un rapport vide signifie-t-il un design réussi ?', back: 'Non : c’est un indice, pas une preuve. Il faut encore regarder le rendu aux tailles utiles.' },
@@ -273,11 +273,11 @@ Attention : ces règles de rédaction lisent l’anglais (*security theater*, *N
         { id: 'sub', label: 'Sous-titre', correct: false, why: 'Le seul texte précis de la page : il dit ce que fait le produit, et quand.' },
         { id: 'demo', label: 'Lien vers la démo', correct: false, why: 'Une action secondaire claire, avec sa durée.' },
       ],
-      explanation: `Trois règles du détecteur se cumulent dans ce héros :
+      explanation: `Trois tics se cumulent dans ce héros, chacun signalé par le détecteur :
 
-- **Hero eyebrow / pill chip** : un minuscule libellé en capitales espacées, ou une pastille, juste au-dessus d’un très grand titre ;
-- **Gradient text**, ici en plus dans la **palette « IA »** (violet vers rose) ;
-- **Glowing shadow accents** : une ombre colorée sans décalage autour du bouton.
+- **Surtitre ou pastille au-dessus du titre de héros** (\`hero-eyebrow-chip\`) : un minuscule libellé en capitales espacées, ou une pastille, juste au-dessus d’un très grand titre ;
+- **Texte en dégradé** (\`gradient-text\`), ici en plus dans les teintes de la **palette « IA »** (\`ai-color-palette\`), du violet au rose ;
+- **Halo lumineux coloré** (\`dark-glow\`) : une ombre colorée sans décalage autour du bouton.
 
 Le correctif n’est pas de les atténuer, mais de réécrire : un titre uni qui dit ce que fait Facturo (le sous-titre le fait déjà), une palette tirée du produit, un bouton sans halo.`,
       takeaway: 'Pastille au-dessus du titre, texte en dégradé violet, bouton lumineux : trois réflexes à réécrire, pas à atténuer.',
@@ -321,9 +321,9 @@ Le correctif n’est pas de les atténuer, mais de réécrire : un titre uni qui
       ],
       explanation: `Trois règles de la famille cliché :
 
-- **Tiny numbered section labels** : un petit index numérique à côté de chaque titre de section, répété de section en section (règle consultative) ;
-- **Icon tile stacked above heading** : le carré arrondi contenant une icône, posé au-dessus du titre ;
-- **Side-tab accent border** : la bordure colorée épaisse sur un côté d’une carte arrondie.
+- **Petits numéros de section** (\`numbered-section-labels\`) : un petit index numérique à côté de chaque titre de section, répété de section en section (règle consultative) ;
+- **Tuile d’icône au-dessus du titre** (\`icon-tile-stack\`) : le carré arrondi contenant une icône, posé au-dessus du titre ;
+- **Bordure latérale d’accent** (\`side-tab\`) : la bordure colorée épaisse sur un côté d’une carte arrondie.
 
 Les textes, eux, sont précis : le problème n’est pas le contenu mais l’habillage par défaut. Place les icônes à côté des titres, signale la nouveauté par une petite pastille, et laisse la hiérarchie porter l’ordre des sections.`,
       takeaway: 'Numéros de section, tuiles d’icônes, trait latéral coloré : l’habillage par défaut d’une section générée.',
@@ -387,9 +387,9 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
       ],
       explanation: `Deux clichés et un défaut de qualité :
 
-- **Pulsing status dot** : réserve la pulsation aux indicateurs liés à des données **réellement** en direct. Ici, un libellé fixe (« mis à jour à 02:00 ») est honnête et plus calme ;
-- **Glowing shadow accents** : sur fond sombre, toute ombre colorée floue est le réflexe « cool » ; une élévation neutre suffit ;
-- **Undersized functional text** : les cellules d’un tableau sont du texte fonctionnel, qui ne descend pas sous **11 px**.`,
+- **Point d’état pulsant** (\`pulsing-dot\`) : réserve la pulsation aux indicateurs liés à des données **réellement** en direct. Ici, un libellé fixe (« mis à jour à 02:00 ») est honnête et plus calme ;
+- **Halo lumineux coloré** (\`dark-glow\`) : sur fond sombre, toute ombre colorée floue est le réflexe « cool » ; une élévation neutre suffit ;
+- **Texte fonctionnel trop petit** (\`undersized-ui-text\`) : les cellules d’un tableau sont du texte fonctionnel, qui ne descend pas sous **11 px**.`,
       takeaway: 'Pas de pulsation sur des données qui ne bougent pas, pas de halo coloré, et jamais de texte fonctionnel sous 11 px.',
       sources: ['imp:detector'],
     },
@@ -426,9 +426,9 @@ Les textes, eux, sont précis : le problème n’est pas le contenu mais l’hab
       ],
       explanation: `Trois règles de rédaction du détecteur :
 
-- **Marketing buzzword** : le détecteur cherche les tournures anglaises (*supercharge your*, *next-generation*, *cutting-edge*…) ; « booste » et « de nouvelle génération » trahissent le même réflexe en français ;
-- **Aphoristic-cadence copy** : une fois, ça passe ; **trois sections ou plus** qui retombent sur « X. Pas de Y. » ou « Pas un outil. Un partenaire. », c’est une cadence, pas une voix ;
-- **Theater framing copy** : dire simplement ce que la chose fait ou ne fait pas.
+- **Jargon marketing** (\`marketing-buzzword\`) : le détecteur cherche les tournures anglaises (*supercharge your*, *next-generation*, *cutting-edge*…) ; « booste » et « de nouvelle génération » trahissent le même réflexe en français ;
+- **Cadence aphoristique** (\`aphoristic-cadence\`) : une fois, ça passe ; **trois sections ou plus** qui retombent sur « X. Pas de Y. » ou « Pas un outil. Un partenaire. », c’est une cadence, pas une voix ;
+- **Cadrage « théâtre »** (\`theater-slop-phrase\`) : dire simplement ce que la chose fait ou ne fait pas.
 
 Ces trois règles cherchent des formules anglaises : sur un texte français, le détecteur ne les verra pas, c’est à toi de les repérer. La phrase sur l’export montre la voie : un verbe précis, un format, un destinataire, une date.`,
       takeaway: 'Remplace le jargon, les chutes en formule et le cadrage « théâtre » par des faits précis : verbe, objet, chiffre.',
@@ -477,7 +477,7 @@ Ces trois règles cherchent des formules anglaises : sur un texte français, le 
       answer: 'specific',
       explanation: `La critique d’impeccable commence par une question : **ce design est-il ancré dans ce produit, ou un produit sans rapport pourrait-il le reprendre tel quel ?** Remplace « chantier » par « recrutement » dans la version sombre : rien d’autre ne bouge. C’est la signature du réflexe.
 
-Elle cumule d’ailleurs cinq règles du détecteur (halo radial, pastille eyebrow, texte en dégradé, palette « IA », halo lumineux autour du bouton), plus un « révolutionne » qui relève du jargon marketing. La version claire, elle, montre la scène réelle du produit et l’action qu’on vient y faire.`,
+Elle cumule d’ailleurs cinq règles du détecteur (halo radial, pastille du héros, texte en dégradé, palette « IA », halo lumineux autour du bouton), plus un « révolutionne » qui relève du jargon marketing. La version claire, elle, montre la scène réelle du produit et l’action qu’on vient y faire.`,
       takeaway: 'Masque le nom du produit : si un produit voisin pouvait reprendre la page telle quelle, elle reste générique.',
       sources: ['imp:critique', 'imp:detector'],
     },
@@ -515,7 +515,7 @@ Elle cumule d’ailleurs cinq règles du détecteur (halo radial, pastille eyebr
         },
       ],
       answer: 'inline',
-      explanation: `La règle *Icon tile stacked above heading* décrit le gabarit universel de la carte de fonctionnalité générée : un petit carré arrondi contenant une icône, posé au-dessus du titre. Le détecteur propose deux sorties : **l’icône à côté du titre**, ou **dans le flux sans conteneur**.
+      explanation: `La règle « Tuile d’icône au-dessus du titre » (\`icon-tile-stack\`) décrit le gabarit universel de la carte de fonctionnalité générée : un petit carré arrondi contenant une icône, posé au-dessus du titre. Le détecteur propose deux sorties : **l’icône à côté du titre**, ou **dans le flux sans conteneur**.
 
 La liste permet aussi des titres plus longs et précis, là où trois cartes égales poussent à des titres d’un mot (« Ateliers ») qui ne disent presque rien.`,
       takeaway: 'Pas de tuile d’icône empilée sur le titre : pose l’icône à côté, et laisse le contenu dicter la forme.',
@@ -558,60 +558,59 @@ La liste permet aussi des titres plus longs et précis, là où trois cartes ég
         },
       ],
       answer: 'neutral',
-      explanation: `La règle *Glowing shadow accents* vise les **ombres colorées lumineuses** : un halo chromatique sans décalage, sur n’importe quel fond, ou toute ombre colorée floue sur fond sombre. C’est le look « cool » par défaut des interfaces générées.
+      explanation: `La règle « Halo lumineux coloré » (\`dark-glow\`) vise les **ombres colorées lumineuses** : un halo chromatique sans décalage, sur n’importe quel fond, ou toute ombre colorée floue sur fond sombre. C’est le look « cool » par défaut des interfaces générées.
 
 Sur fond sombre, la profondeur vient d’abord de la **surface** (un ton un peu plus clair, une bordure discrète), puis d’une **ombre neutre** avec un décalage et un flou doux. Le plancher de qualité le dit autrement : un halo coloré sans décalage est de la décoration, pas de la profondeur.`,
       takeaway: 'Sur fond sombre, détache avec une surface plus claire et une ombre neutre, jamais avec un halo coloré.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
     {
-      id: 'antipatterns-nested-duel',
+      id: 'antipatterns-occlusion-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Quel panneau d’abonnement est le plus lisible ?',
+      context: 'Page « Promotions » de Fonte & Cuivre, une boutique en ligne d’ustensiles de cuisine. La remise doit se voir au premier coup d’œil.',
+      prompt: 'Quelle vignette de produit retiens-tu ?',
       options: [
         {
-          id: 'nested',
+          id: 'over',
           visual: {
-            alt: 'Panneau « Abonnement » contenant deux cartes bordées et ombrées, elles-mêmes contenant d’autres cadres.',
-            html: `<div class="ab"><div class="ab-c"><b class="ab-t">Abonnement</b><div class="ab-c ab-in"><span>Formule</span><div class="ab-c ab-in2"><b>Équipe</b><span>29&nbsp;€&nbsp;/&nbsp;mois</span></div></div><div class="ab-c ab-in"><span>Paiement</span><div class="ab-c ab-in2"><b>Visa&nbsp;••••&nbsp;4821</b><span>Expire 08/27</span></div></div></div></div>`,
-            css: `.ab { padding: 14px; background: #f6f7f9; }
-.ab-c { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid #dfe3ea; border-radius: 12px; background: #fff; font-size: 13px; box-shadow: 0 4px 12px rgb(15 23 42 / 0.06); }
-.ab-t { font-size: 15px; }
-.ab-in { background: #fafbfc; }
-.ab-in > span { font-size: 12px; color: #5a6172; }
-.ab-in2 { gap: 2px; padding: 8px 10px; }
-.ab-in2 span { color: #5a6172; font-size: 12px; }`,
+            alt: 'Vignette d’une cocotte en fonte : une photo, puis le nom du produit, sa description et son prix ; la pastille rouge « −20 % » est posée en travers du nom, dont elle cache une partie.',
+            html: `<div class="oc"><div class="oc-card"><div class="oc-img"></div><div class="oc-body"><span class="oc-badge oc-badge--over">−20&nbsp;%</span><b class="oc-name">Cocotte ronde en fonte 24&nbsp;cm</b><span>Émaillée · 4 coloris</span><span class="oc-price"><b>71,20&nbsp;€</b> au lieu de 89&nbsp;€</span></div></div></div>`,
+            css: `.oc { padding: 18px; background: #f5f3ef; }
+.oc-card { display: flex; flex-direction: column; gap: 10px; max-width: 250px; margin-inline: auto; padding: 10px 10px 14px; border-radius: 12px; background: #fff; border: 1px solid #e3ded6; }
+.oc-img { aspect-ratio: 4 / 3; border-radius: 8px; padding: 8px; background: linear-gradient(150deg, #f0e3d6, #d27a5c 55%, #8f3b26); }
+.oc-body { position: relative; display: flex; flex-direction: column; gap: 2px; padding-inline: 4px; font-size: 13px; color: #4b5262; }
+.oc-name { font-size: 15px; color: #1d2230; }
+.oc-price { margin-top: 4px; }
+.oc-price b { font-size: 15px; color: #1d2230; }
+.oc-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; background: #c42b2b; color: #fff; font-size: 13px; font-weight: 700; }
+.oc-badge--over { position: absolute; left: 26px; top: -5px; }`,
           },
-          why: 'Trois niveaux de boîtes pour deux informations : la profondeur n’exprime aucune hiérarchie.',
+          why: 'La pastille se pose en travers du nom : le mot qui dit ce qu’on achète devient illisible sous la remise.',
         },
         {
-          id: 'flat',
+          id: 'image',
           visual: {
-            alt: 'Panneau « Abonnement » à plat : deux lignes séparées par un filet, chacune avec un libellé, une valeur et un lien « Modifier ».',
-            html: `<div class="ab"><div class="ab-c"><b class="ab-t">Abonnement</b><dl class="ab-dl"><div><dt>Formule</dt><dd><b>Équipe</b> · 29&nbsp;€&nbsp;/&nbsp;mois</dd><span>Modifier</span></div><div><dt>Paiement</dt><dd><b>Visa&nbsp;••••&nbsp;4821</b> · expire 08/27</dd><span>Modifier</span></div></dl></div></div>`,
-            css: `.ab { padding: 14px; background: #f6f7f9; container-type: inline-size; }
-.ab-c { display: flex; flex-direction: column; gap: 6px; padding: 14px; border: 1px solid #dfe3ea; border-radius: 12px; background: #fff; font-size: 13px; }
-.ab-t { font-size: 15px; }
-.ab-dl { margin: 0; }
-.ab-dl div { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; padding: 10px 0; border-top: 1px solid #edf0f3; }
-.ab-dl dt { color: #5a6172; }
-.ab-dl dd { margin: 0; }
-.ab-dl span { color: #1f4fd8; font-weight: 600; }
-@container (max-width: 380px) {
-  .ab-dl div { grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
-  .ab-dl dd { grid-column: 1 / -1; grid-row: 2; }
-}`,
+            alt: 'Vignette d’une cocotte en fonte : la pastille rouge « −20 % » est posée dans le coin de la photo, puis viennent le nom du produit, entièrement lisible, sa description et son prix.',
+            html: `<div class="oc"><div class="oc-card"><div class="oc-img"><span class="oc-badge">−20&nbsp;%</span></div><div class="oc-body"><b class="oc-name">Cocotte ronde en fonte 24&nbsp;cm</b><span>Émaillée · 4 coloris</span><span class="oc-price"><b>71,20&nbsp;€</b> au lieu de 89&nbsp;€</span></div></div></div>`,
+            css: `.oc { padding: 18px; background: #f5f3ef; }
+.oc-card { display: flex; flex-direction: column; gap: 10px; max-width: 250px; margin-inline: auto; padding: 10px 10px 14px; border-radius: 12px; background: #fff; border: 1px solid #e3ded6; }
+.oc-img { aspect-ratio: 4 / 3; border-radius: 8px; padding: 8px; background: linear-gradient(150deg, #f0e3d6, #d27a5c 55%, #8f3b26); }
+.oc-body { display: flex; flex-direction: column; gap: 2px; padding-inline: 4px; font-size: 13px; color: #4b5262; }
+.oc-name { font-size: 15px; color: #1d2230; }
+.oc-price { margin-top: 4px; }
+.oc-price b { font-size: 15px; color: #1d2230; }
+.oc-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; background: #c42b2b; color: #fff; font-size: 13px; font-weight: 700; }`,
           },
-          why: 'Une seule carte ; les filets, l’alignement et la graisse font la hiérarchie.',
+          why: 'La pastille occupe un coin de la photo, où elle ne cache aucun mot : la remise saute aux yeux, et le nom se lit en entier.',
         },
       ],
-      answer: 'flat',
-      explanation: `Des cartes dans des cartes créent du bruit visuel et une profondeur excessive (règle *Nested cards*). Le plancher de qualité est plus net encore : **les cartes imbriquées sont toujours une erreur**.
+      answer: 'image',
+      explanation: `La règle « Texte masqué par un élément » (\`text-occlusion\`), de la famille qualité, repère un texte peint sous un élément opaque ou sous un autre texte : une partie des mots devient illisible. Les causes habituelles sont une boîte décorative, une couche empilée en position absolue, ou un élément en ligne dont la marge intérieure déborde sur les mots voisins.
 
-Pour regrouper des informations à l’intérieur d’une carte, impeccable recommande l’**espacement**, la **typographie** et les **filets séparateurs** : ils structurent sans ajouter de couche.`,
-      takeaway: 'Jamais de cartes dans des cartes : groupe avec l’espace, la typographie et des filets.',
-      sources: ['imp:detector', 'imp:craft-floor'],
+Ici, la pastille est posée par-dessus le bloc de texte et recouvre une partie du nom, l’information que le client cherche en premier. La règle propose deux sorties : donner de la place aux couches qui se chevauchent, ou sortir le texte de sous la couche supérieure. Sur la photo, qui ne porte aucun texte, la pastille reste aussi visible et ne cache plus rien.`,
+      takeaway: 'Un élément posé sur du texte le rend illisible : donne de la place aux couches, ou sors le texte de dessous.',
+      sources: ['imp:detector'],
     },
     {
       id: 'antipatterns-grid-duel',
@@ -637,7 +636,7 @@ Pour regrouper des informations à l’intérieur d’une carte, impeccable reco
             html: `<div class="pl"><div class="pl-tools"><span class="on">Mur</span><span>Porte</span><span>Fenêtre</span><span class="pl-scale">1 carreau = 50&nbsp;cm</span></div><div class="pl-canvas"><div class="pl-room pl-r1"><span>Séjour<br>12&nbsp;m²</span></div><div class="pl-room pl-r2"><span>Chambre<br>7,5&nbsp;m²</span></div><span class="pl-dim">4,00&nbsp;m</span></div></div>`,
             css: `.pl { background: #fff; }
 .pl-tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #dfe3ea; font-size: 12px; }
-.pl-tools span { padding: 4px 10px; border-radius: 6px; border: 1px solid #cfd5df; }
+.pl-tools span { padding: 4px 10px; border-radius: 6px; border: 1px solid #868d9c; }
 .pl-tools .on { background: #1f4fd8; border-color: #1f4fd8; color: #fff; }
 .pl-tools .pl-scale { margin-inline-start: auto; border: 0; color: #5a6172; }
 .pl-canvas { position: relative; height: 160px; background-color: #f8fafc; background-image: linear-gradient(#dbe3ee 1px, transparent 1px), linear-gradient(90deg, #dbe3ee 1px, transparent 1px); background-size: 16px 16px; }
@@ -651,7 +650,7 @@ Pour regrouper des informations à l’intérieur d’une carte, impeccable reco
         },
       ],
       answer: 'plan',
-      explanation: `Le plancher de qualité est précis : **les fonds sont des surfaces**, texturées seulement depuis le monde du sujet. Les quadrillages sur deux axes exigent **une vraie toile, une carte, un plan ou un outil de mesure** dessous. La règle *Decorative grid-line background* signale le quadrillage décoratif, tracé en fines couches de \`linear-gradient\` sur une cellule fixe.
+      explanation: `Le plancher de qualité est précis : **les fonds sont des surfaces**, texturées seulement depuis le monde du sujet. Les quadrillages sur deux axes exigent **une vraie toile, une carte, un plan ou un outil de mesure** dessous. La règle « Fond quadrillé décoratif » (\`codex-grid-background\`) signale le quadrillage décoratif, tracé en fines couches de \`linear-gradient\` sur une cellule fixe.
 
 Le même motif est donc un tic sous un message marketing, et une fonction dans un éditeur de plans, où chaque carreau correspond à une distance réelle.`,
       takeaway: 'Un quadrillage se justifie s’il sert à mesurer ou à tracer (toile, carte, plan) ; ailleurs, c’est un décor.',
@@ -665,7 +664,7 @@ Le même motif est donc un tic sous un message marketing, et une fonction dans u
       leftTitle: 'Règle',
       rightTitle: 'Ce qu’elle repère',
       pairs: [
-        { id: 'eyebrow', left: 'Pastille eyebrow du héros', right: 'Un minuscule libellé en capitales espacées, nu ou en gélule, posé juste au-dessus d’un titre géant' },
+        { id: 'eyebrow', left: 'Pastille du héros', right: 'Un minuscule libellé en capitales espacées, nu ou en gélule, posé juste au-dessus d’un titre géant' },
         { id: 'ghost', left: 'Carte fantôme', right: 'Un filet d’un pixel et une large ombre floue, répétés sur tous les blocs d’une rangée' },
         { id: 'halo', left: 'Halo radial', right: 'Une lueur colorée, saturée au centre, qui s’efface vers le transparent sur le fond d’une page sombre' },
         { id: 'cadence', left: 'Cadence aphoristique', right: 'Trois sections ou plus qui retombent sur « X. Pas de Y. »' },
@@ -674,7 +673,7 @@ Le même motif est donc un tic sous un message marketing, et une fonction dans u
       ],
       explanation: `Chaque règle décrit une forme précise, pas un goût :
 
-- la **pastille eyebrow** et la **tuile d’icône** sont des gabarits de mise en page ;
+- la **pastille du héros** et la **tuile d’icône** sont des gabarits de mise en page ;
 - la **carte fantôme** et le **halo radial** sont des réflexes de lumière et d’élévation ;
 - la **cadence aphoristique** est un tic de rédaction, qui ne compte qu’à partir de trois répétitions ;
 - les **cartes collées au bord** sont un défaut de qualité : le panneau défilant est plus large que sa zone de découpe.`,
@@ -685,12 +684,12 @@ Le même motif est donc un tic sous un message marketing, et une fonction dans u
       id: 'antipatterns-hard-shadow-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Une ombre dure décalée (box-shadow: 4px 4px 0) est toujours une faute à corriger.',
-      answer: false,
-      explanation: `La règle *Hard offset shadow* est de sévérité **conseil** et rangée dans la famille qualité, pas cliché. Sa description le dit en toutes lettres : une ombre visible, sans flou, décalée d’au moins 4 px **peut appartenir à une direction néobrutaliste voulue** ; c’est une invitation à vérifier, pas une preuve de génération par IA ni une demande de suppression automatique.
+      prompt: 'Pour le détecteur d’impeccable, l’ombre dure décalée (`box-shadow: 4px 4px 0`) relève de la famille qualité, pas des clichés d’interfaces générées.',
+      answer: true,
+      explanation: `Vrai. La règle « Ombre dure décalée » (\`hard-offset-shadow\`) est rangée dans la famille **qualité**, avec la sévérité **conseil**. Sa description le dit en toutes lettres : une ombre visible, sans flou, décalée d’au moins 4 px **peut appartenir à une direction néobrutaliste voulue** ; le signalement invite à vérifier, ce n’est ni une preuve de génération par IA ni une demande de suppression automatique.
 
-Le plancher de qualité la refuse **hors d’un univers réellement néobrutaliste**. Dans un tel univers, on la garde et on marque l’usage voulu avec \`data-impeccable-ignore="hard-offset-shadow"\`.`,
-      takeaway: 'L’ombre dure décalée est un conseil : légitime dans un univers néobrutaliste assumé, un costume ailleurs.',
+Ce n’est pas un feu vert pour autant : le plancher de qualité la refuse **hors d’un univers réellement néobrutaliste**, où elle n’est qu’un costume. Dans un tel univers, on la garde et on marque l’usage voulu avec \`data-impeccable-ignore="hard-offset-shadow"\`.`,
+      takeaway: 'Pour le détecteur, l’ombre dure décalée n’est pas un cliché, juste un conseil de la famille qualité : légitime dans un univers néobrutaliste assumé, un costume ailleurs.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
     {
@@ -709,13 +708,13 @@ Le détecteur repère des formes précises. Il ne dit pas si la page sert son vi
       id: 'antipatterns-emdash-tf',
       type: 'truefalse',
       difficulty: 3,
-      prompt: 'Le détecteur signale chaque tiret cadratin présent dans le texte courant.',
-      answer: false,
-      explanation: `La règle *Em-dash overuse* est **consultative**, précisément parce que les humains emploient ce tiret légitimement. Elle ne se déclenche qu’en cas de **saturation** : au moins **8 tirets cadratins** (— ou --) à une densité proche d’**un pour 500 caractères** de texte courant. Un long article qui en contient quelques-uns ne déclenche rien.
+      prompt: 'Dans un article de 15 000 caractères, vingt tirets cadratins ne suffisent pas à déclencher le détecteur.',
+      answer: true,
+      explanation: `Vrai. La règle « Abus de tirets cadratins » (\`em-dash-overuse\`) n’est qu’un **conseil**, précisément parce que les humains emploient ce tiret légitimement. Elle a deux verrous, et le texte doit franchir les deux : **au moins 8 tirets cadratins** (— ou --), et **au moins un tiret pour 500 caractères** de texte. Vingt tirets sur 15 000 caractères, c’est un pour 750 : la règle reste muette. Sur un texte de cette longueur, il en faudrait 30.
 
 C’est la saturation qui trahit une cadence générée, pas le signe lui-même. Quand elle est là, la virgule, les deux-points, le point ou les parenthèses font souvent mieux le travail.`,
-      takeaway: 'Le tiret cadratin n’est signalé qu’en saturation : au moins 8, environ un pour 500 caractères.',
-      sources: ['imp:detector'],
+      takeaway: 'Le tiret cadratin n’est signalé qu’en saturation : au moins 8 tirets, et au moins un pour 500 caractères de texte.',
+      sources: ['imp:detector', { label: 'impeccable — text_rules.rs (les deux seuils de em-dash-overuse)', url: 'https://github.com/pbakaus/impeccable/blob/main/crates/core/src/checks/text_rules.rs' }],
     },
     {
       id: 'antipatterns-slop-multi',
@@ -746,7 +745,7 @@ Les trois autres n’en sont pas :
       type: 'choice',
       difficulty: 2,
       context:
-        'Le détecteur rend trois résultats sur ta page d’accueil : *Uncaught script error on load* (erreur), *Side-tab accent border* (avertissement) et *Straggler* (conseil).',
+        'Le détecteur rend trois résultats sur ta page d’accueil : « Erreur de script au chargement » (`script-error`, erreur), « Bordure latérale d’accent » (`side-tab`, avertissement) et « Mot seul en fin de paragraphe » (`straggler`, conseil).',
       prompt: 'Par quoi commences-tu ?',
       options: [
         { id: 'script', label: 'Par l’erreur de script.', why: 'Un script cassé peut tuer les révélations et laisser une partie de la page invisible : tout le reste en dépend.' },
@@ -755,7 +754,7 @@ Les trois autres n’en sont pas :
         { id: 'order', label: 'Par l’ordre d’apparition dans la page, de haut en bas.', why: 'L’ordre de la page ne dit rien de la gravité des problèmes.' },
       ],
       answer: 'script',
-      explanation: `La description de la règle *Uncaught script error on load* est sans ambiguïté : un JavaScript cassé tue en silence les révélations, les interactions et le contenu dynamique, et peut laisser l’essentiel de la page invisible. **Corrige l’erreur avant de juger quoi que ce soit d’autre.**
+      explanation: `La description de la règle « Erreur de script au chargement » (\`script-error\`) est sans ambiguïté : un JavaScript cassé tue en silence les révélations, les interactions et le contenu dynamique, et peut laisser l’essentiel de la page invisible. **Corrige l’erreur avant de juger quoi que ce soit d’autre.**
 
 Les deux seules règles de sévérité *erreur* (script cassé, contenu invisible au repos) passent en premier. Viennent ensuite les avertissements (ici la bordure latérale, un cliché à réécrire), puis les conseils, qu’on examine au regard de la direction choisie.`,
       takeaway: 'Traite d’abord les erreurs (script cassé, contenu invisible), puis les avertissements, puis les conseils.',
@@ -770,14 +769,14 @@ Les deux seules règles de sévérité *erreur* (script cassé, contenu invisibl
       options: [
         { id: 'integrate', label: 'Supprimer la pastille et faire entrer l’information dans le titre : « Tes relances d’impayés partent seules, à J+7 ».', why: 'C’est la correction proposée par la règle : l’information survit, la forme générée disparaît.' },
         { id: 'soften', label: 'Garder la pastille, mais en gris clair pour qu’elle se fasse discrète.', why: 'Adoucir n’est pas corriger : le gabarit reste, et le texte devient en plus difficile à lire.' },
-        { id: 'unpill', label: 'Retirer la forme de pastille, en gardant le libellé en capitales espacées au-dessus du titre.', why: 'Le tic reste : sans sa pastille, c’est la forme de base de la même règle, et un sur-titre au-dessus d’un titre est interdit sans exception.' },
+        { id: 'unpill', label: 'Retirer la forme de pastille, en gardant le libellé en capitales espacées au-dessus du titre.', why: 'Le tic reste : sans sa pastille, c’est la forme de base de la même règle, et un surtitre au-dessus d’un titre est interdit sans exception.' },
         { id: 'animate', label: 'L’animer légèrement pour qu’elle attire l’œil sans prendre de place.', why: 'Une animation décorative ajoute un tic au tic.' },
       ],
       answer: 'integrate',
-      explanation: `La règle *Hero eyebrow / pill chip* propose trois sorties : **supprimer** le libellé, **l’intégrer au titre**, ou en faire un **fil d’Ariane** de navigation. Le plancher de qualité ajoute que reconnaître un réflexe veut dire **réécrire l’élément, pas l’adoucir**.
+      explanation: `La règle « Surtitre ou pastille au-dessus du titre de héros » (\`hero-eyebrow-chip\`) propose trois sorties : **supprimer** le libellé, **l’intégrer au titre**, ou en faire un **fil d’Ariane** de navigation. Le plancher de qualité ajoute que reconnaître un réflexe veut dire **réécrire l’élément, pas l’adoucir**.
 
-Retirer seulement la forme de pastille ne suffit pas : il reste un sur-titre en capitales au-dessus du titre, et celui-là est un interdit absolu pour impeccable.`,
-      takeaway: 'Une pastille eyebrow se supprime ou entre dans le titre ; l’atténuer ou la transformer en sur-titre ne corrige rien.',
+Retirer seulement la forme de pastille ne suffit pas : il reste un surtitre en capitales au-dessus du titre, et celui-là est un interdit absolu pour impeccable.`,
+      takeaway: 'Une pastille au-dessus du titre se supprime ou entre dans le titre ; l’atténuer ou la réduire à un surtitre sans capsule ne corrige rien.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
     {
@@ -820,7 +819,7 @@ Retirer seulement la forme de pastille ne suffit pas : il reste un sur-titre en 
       unit: 'px',
       target: [12, 16],
       ideal: 14,
-      explanation: `La règle *Cramped padding* demande **au moins 8 px**, et **idéalement 12 à 16 px**, d’espace entre le texte et la limite visible d’un conteneur bordé, entouré ou coloré.
+      explanation: `La règle « Marge intérieure étriquée » (\`cramped-padding\`) demande **au moins 8 px**, et **idéalement 12 à 16 px**, d’espace entre le texte et la limite visible d’un conteneur bordé, entouré ou coloré.
 
 En dessous, le texte semble pressé contre la bordure et l’œil a du mal à le séparer du cadre. Bien au-delà, il flotte et l’encadré prend plus de place que son contenu : la plage de 12 à 16 px est celle que recommande la règle.`,
       takeaway: 'Dans un conteneur bordé ou coloré, laisse au moins 8 px, idéalement 12 à 16 px, entre le texte et la bordure.',
@@ -831,7 +830,7 @@ En dessous, le texte semble pressé contre la bordure et l’œil a du mal à le
       type: 'choice',
       difficulty: 3,
       context:
-        'Le détecteur signale *Italic serif display headline* sur deux projets : la page d’accueil d’une application de prise de notes, et la une d’un magazine littéraire en ligne.',
+        'Le détecteur signale « Titre italique à empattements » (`italic-serif-display`) sur deux projets : la page d’accueil d’une application de prise de notes, et la une d’un magazine littéraire en ligne.',
       prompt: 'Que fais-tu ?',
       options: [
         { id: 'context', label: 'Corriger l’application (titre romain ou sans empattements) et garder l’italique du magazine, dont le registre éditorial le justifie.', why: 'La règle elle-même demande de juger selon le contexte : le magazine peut vouloir cet italique, la startup le reçoit par défaut.' },
@@ -840,7 +839,7 @@ En dessous, le texte semble pressé contre la bordure et l’œil a du mal à le
         { id: 'gradient', label: 'Remplacer l’italique par du texte en dégradé dans les deux cas, pour garder de l’emphase.', why: 'On remplace un tic par un autre : l’emphase vient de la graisse ou de la taille.' },
       ],
       answer: 'context',
-      explanation: `La règle *Italic serif display headline* décrit un grand titre en italique à empattements (Fraunces, Recoleta, Playfair, Newsreader en italique) qui a l’air raffiné isolément, mais qui est devenu **le héros universel des pages d’accueil de startups générées**. Sa description ajoute : **le registre éditorial ou magazine peut légitimement le vouloir ; juge selon le contexte.**
+      explanation: `La règle « Titre italique à empattements » (\`italic-serif-display\`) décrit un grand titre en italique à empattements (Fraunces, Recoleta, Playfair, Newsreader en italique) qui a l’air raffiné isolément, mais qui est devenu **le héros universel des pages d’accueil de startups générées**. Sa description ajoute : **le registre éditorial ou magazine peut légitimement le vouloir ; juge selon le contexte.**
 
 Un détecteur repère des formes ; c’est toi qui sais si la forme est un réflexe ou un choix. Pour le magazine, on consigne l’exception avec sa raison ; pour l’application, on passe en romain ou à une police d’affichage sans empattements.`,
       takeaway: 'Un même signal n’appelle pas la même réponse partout : juge le contexte avant de corriger, et consigne les exceptions.',

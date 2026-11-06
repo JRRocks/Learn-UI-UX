@@ -42,7 +42,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
       body: `- **Contraste** : texte courant et texte indicatif (*placeholder*) à **4,5:1** au moins, grand texte à **3:1** (au sens des WCAG : 24 px et plus, ou environ 18,7 px en gras). Sur une surface colorée, teinte le texte secondaire depuis la couleur du fond ou du premier plan, **jamais en gris**.
 - **Profondeur** : une ombre porte un **décalage** et un **flou doux**. Un halo coloré sans décalage est de la décoration, pas de la profondeur.
 - **Espacement** : groupes serrés, séparations généreuses, **plus d’espace au-dessus d’un titre qu’en dessous**. On lit les valeurs calculées, pas l’intention.
-- **Typographie** : mesure du corps de **65 à 75 caractères**, affichage plafonné à **6rem**, approche jamais sous **−0,04em**, titres équilibrés, marches d’échelle et de graisse évidentes. On teste le vrai texte à chaque point de rupture et on corrige ce qui déborde.`,
+- **Typographie** : mesure du corps de **65 à 75 caractères** (le haut de la plage de confort 45–75), affichage plafonné à **6rem**, approche jamais sous **−0,04em**, titres équilibrés, marches d’échelle et de graisse évidentes. On teste le vrai texte à chaque point de rupture et on corrige ce qui déborde.`,
       examples: [
         {
           title: 'Texte secondaire sur un fond coloré',
@@ -90,7 +90,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
     {
       id: 'verifier-finition',
       title: 'Vérifier : mouvement, états, navigateur, texte, couverture',
-      body: `- **Mouvement** : **un seul moment signé**, pas des effets dispersés ni la même entrée sur chaque section. Une sortie exponentielle (*ease-out*) depuis un état par défaut **déjà visible**. La palette dépasse \`transform\` et \`opacity\` : flou, \`backdrop-filter\`, \`clip-path\`, masque et ombre en font partie tant qu’ils restent fluides.
+      body: `- **Mouvement** : **un seul moment signé**, pas des effets dispersés ni la même entrée sur chaque section. Une décélération exponentielle (*ease-out-expo*) depuis un état par défaut **déjà visible**. La palette dépasse \`transform\` et \`opacity\` : flou, \`backdrop-filter\`, \`clip-path\`, masque et ombre en font partie tant qu’ils restent fluides.
 - **États** : survol, désactivé, chargement, erreur, vide. Plus du vrai contenu, des contrôles qui fonctionnent, une composition qui s’adapte et un focus clavier visible.
 - **Surfaces du navigateur** : ce que tu n’as pas dessiné porte aussi le design. La sélection de texte, le curseur de saisie, les barres de défilement, les anneaux de focus, le décalage du soulignement et les chiffres des données tabulaires sortent avec les réglages par défaut du navigateur, qui n’appartiennent à aucun système. Thématise-les depuis la palette (\`::selection\`, \`caret-color\`, \`scrollbar-color\`, \`:focus-visible\`, \`text-underline-offset\`, \`font-variant-numeric: tabular-nums\`). C’est le signal le moins cher qu’une page a été **construite** plutôt qu’**assemblée**, et celui que les modèles oublient le plus souvent. Dans le même esprit, \`accent-color\` teinte les contrôles natifs (cases à cocher, boutons radio). Thématiser n’est pas réinventer : on colore l’élément natif sans le redessiner ; en mode Opérer, impeccable refuse les barres de défilement et les contrôles de formulaire réinventés pour le style.
 - **Texte** : la langue du produit. Les contrôles nomment leur action ; les erreurs nomment le problème et la façon d’en sortir.
@@ -169,12 +169,12 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
 
 - **Des cartes identiques** (icône, titre, texte) comme structure de page. La carte est le conteneur paresseux ; **des cartes imbriquées sont toujours une erreur**.
 - **Le modèle « chiffre héros »** : un gros nombre, un petit libellé, des statistiques d’appoint, une couleur d’accent.
-- **Un sur-titre (*kicker*, *eyebrow*) au-dessus d’un titre.** Celui-ci est un **interdit, pas un réglage par défaut** : aucun brief ne le rachète. Le titre porte son propre poids ; supprime le libellé et laisse parler le titre. Si ses mots comptent, fais-les entrer dans le titre ou dans le texte.
+- **Un surtitre (*kicker*, *eyebrow*) au-dessus d’un titre.** Celui-ci est un **interdit, pas un réglage par défaut** : aucun brief ne le rachète. Le titre porte son propre poids ; supprime le libellé et laisse parler le titre. Si ses mots comptent, fais-les entrer dans le titre ou dans le texte.
 - **Des numéros de section** (01 / 02 / 03), sauf si la séquence porte une information dont le lecteur a besoin, comme les étapes d’une installation.
 - **Une modale** pour une tâche qui n’exige ni interruption ni focus protégé. Renommer un projet se fait sur place.`,
       examples: [
         {
-          title: 'Le sur-titre au-dessus du titre',
+          title: 'Le surtitre au-dessus du titre',
           bad: {
             alt: 'Section avec un petit libellé « FONCTIONNALITÉS » en capitales espacées violettes au-dessus du titre « Tout ce qu’il faut pour gérer vos stocks ».',
             html: fr(`<div class="ey"><p class="ey-k">FONCTIONNALITÉS</p><p class="ey-h">Tout ce qu’il faut pour gérer vos stocks</p><p class="ey-p">Suivez vos niveaux de stock, recevez des alertes et exportez vos inventaires.</p></div>`),
@@ -185,7 +185,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
           },
           badNote: 'Le libellé répète ce que la page sait déjà, et le titre reste vague.',
           good: {
-            alt: 'Section sans sur-titre, avec le titre « Vos stocks à jour, sans inventaire du dimanche » et un texte précis.',
+            alt: 'Section sans surtitre, avec le titre « Vos stocks à jour, sans inventaire du dimanche » et un texte précis.',
             html: fr(`<div class="ey"><p class="ey-h">Vos stocks à jour, sans inventaire du dimanche</p><p class="ey-p">Chaque vente en caisse décompte l’article. Une alerte part dès qu’un produit passe sous son seuil.</p></div>`),
             css: `.ey { padding: 22px 18px; }
 .ey-h { font-size: 22px; line-height: 1.2; font-weight: 750; letter-spacing: -0.01em; text-wrap: balance; }
@@ -350,7 +350,7 @@ Et une phrase à garder en tête dès maintenant : **le plancher n’est pas le 
 
 - Le plancher élimine les erreurs que tout le monde remarque ; la direction fait ce que personne d’autre n’aurait fait pour ce produit.
 - Un résultat propre mais interchangeable, qu’un produit voisin pourrait reprendre tel quel, n’a pas fini son travail.
-- Le détecteur suit la même logique : ce qu’il trouve prouve un défaut, mais un rapport vide ne prouve ni la qualité visuelle ni l’accessibilité. Il ne remplace pas l’examen du rendu aux tailles utiles.
+- Le détecteur suit la même logique : ce qu’il signale est un indice de défaut, à vérifier en contexte (il a ses faux positifs) ; un rapport vide ne prouve ni la qualité visuelle ni l’accessibilité. Il ne remplace pas l’examen du rendu aux tailles utiles.
 
 Autrement dit, le plancher protège le visiteur ; il ne remplace pas une idée.`,
     },
@@ -359,11 +359,11 @@ Autrement dit, le plancher protège le visiteur ; il ne remplace pas une idée.`
     { id: 'contrast', front: 'Quel contraste pour le texte courant, les textes indicatifs et le grand texte ?', back: '4,5:1 pour le texte courant et les textes indicatifs, 3:1 pour le grand texte. Sur fond coloré, teinte le texte secondaire, jamais de gris.' },
     { id: 'depth', front: 'Qu’est-ce qui distingue une ombre d’un halo décoratif ?', back: 'L’ombre a un décalage et un flou doux. Un halo coloré sans décalage est de la décoration.' },
     { id: 'heading-space', front: 'Autour d’un titre, où mettre le plus d’espace ?', back: 'Au-dessus : le titre se lie au contenu qu’il introduit, pas au bloc précédent.' },
-    { id: 'type-floor', front: 'Quelles sont les trois bornes typographiques du plancher ?', back: 'Mesure du corps de 65 à 75 caractères, affichage plafonné à 6rem, approche jamais sous −0,04em.' },
-    { id: 'motion', front: 'Quel mouvement le plancher attend-il ?', back: 'Un seul moment signé, en sortie exponentielle depuis un état déjà visible. Pas la même entrée sur chaque section.' },
+    { id: 'type-floor', front: 'Quelles sont les trois bornes typographiques du plancher ?', back: 'Mesure du corps de 65 à 75 caractères (le haut de la plage de confort 45–75), affichage plafonné à 6rem, approche jamais sous −0,04em.' },
+    { id: 'motion', front: 'Quel mouvement le plancher attend-il ?', back: 'Un seul moment signé, en décélération exponentielle, depuis un état déjà visible. Pas la même entrée sur chaque section.' },
     { id: 'browser', front: 'Quelles surfaces du navigateur faut-il thématiser ?', back: 'Sélection, curseur de saisie, barres de défilement, anneaux de focus, décalage du soulignement, chiffres des tableaux.' },
     { id: 'states', front: 'Quels états livrer, et que doit dire une erreur ?', back: 'Survol, désactivé, chargement, erreur, vide, plus le focus clavier. Une erreur nomme le problème et la façon d’en sortir.' },
-    { id: 'kicker', front: 'Le sur-titre au-dessus d’un titre : réglage par défaut ou interdit ?', back: 'Un interdit, explicitement marqué comme tel : aucun brief ne le rachète. Supprime le libellé et laisse parler le titre.' },
+    { id: 'kicker', front: 'Le surtitre au-dessus d’un titre : réglage par défaut ou interdit ?', back: 'Un interdit, explicitement marqué comme tel : aucun brief ne le rachète. Supprime le libellé et laisse parler le titre.' },
     { id: 'stripe', front: 'Bordure latérale colorée : quelle limite ?', back: '1 px au plus sur les cartes, éléments de liste, encadrés et alertes.' },
     { id: 'elevation', front: 'Bordure et ombre sur une même carte ?', back: 'Non : une seule élévation. Une bordure de 1 px sous une large ombre douce, c’est la carte fantôme.' },
     { id: 'radius', front: 'Quels rayons pour les cartes, et pour les pilules ?', back: 'Cartes : 12 à 16 px. La pilule est réservée aux petits contrôles.' },
@@ -373,32 +373,37 @@ Autrement dit, le plancher protège le visiteur ; il ne remplace pas une idée.`
   ],
   exercises: [
     {
-      id: 'craft-floor-placeholder-slider',
+      id: 'craft-floor-radius-slider',
       type: 'slider',
       difficulty: 1,
-      prompt: 'Règle la luminosité du texte indicatif du champ « Adresse e-mail » pour qu’il soit lisible sans passer pour une vraie saisie.',
-      context: 'Le champ « Nom » est déjà rempli : compare les deux.',
+      prompt: 'Règle le rayon des cartes de paniers pour qu’elles se lisent comme des surfaces, distinctes de leurs boutons.',
+      context: 'Seul le rayon des cartes change ; les boutons « Choisir » gardent leur forme de pilule.',
       visual: {
-        alt: 'Formulaire avec un champ Nom rempli et un champ Adresse e-mail vide dont le texte indicatif s’éclaircit ou s’assombrit avec le curseur.',
-        html: fr(`<div class="mk-pad mk-stack" style="--gap:14px"><div class="mk-field"><span class="mk-label">Nom</span><span class="mk-input">Camille Martin</span></div><div class="mk-field"><span class="mk-label">Adresse e-mail</span><span class="mk-input ph">prenom.nom@exemple.fr</span></div></div>`),
-        css: `.ph { color: hsl(0 0% var(--v, 74%)); }`,
+        alt: 'Trois cartes de paniers de légumes (Petit, Famille, Grand) avec leur prix et un bouton « Choisir » en pilule ; le rayon des coins des cartes varie avec le curseur.',
+        html: fr(`<div class="pn"><p class="pn-h">Paniers de légumes bio, livrés le jeudi</p><div class="pn-row"><div class="pn-c"><b>Petit</b><span class="pn-p">15 €</span><span>2 personnes</span><span class="pn-btn">Choisir</span></div><div class="pn-c"><b>Famille</b><span class="pn-p">24 €</span><span>4 personnes</span><span class="pn-btn">Choisir</span></div><div class="pn-c"><b>Grand</b><span class="pn-p">32 €</span><span>6 personnes</span><span class="pn-btn">Choisir</span></div></div></div>`),
+        css: `.pn { display: flex; flex-direction: column; gap: 12px; padding: 18px 16px; background: #f3f5f8; }
+.pn-h { font-size: 16px; font-weight: 700; }
+.pn-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }
+.pn-c { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 14px 12px; border-radius: var(--v, 32px); background: #fff; border: 1px solid #dfe3ea; font-size: 12px; color: #5a6172; }
+.pn-c b { font-size: 14px; color: #1d2230; }
+.pn-p { font-size: 20px; font-weight: 750; color: #1d2230; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pn-btn { margin-top: 10px; padding: 5px 14px; border-radius: 999px; background: #1f6b4f; color: #fff; font-size: 13px; font-weight: 650; }`,
       },
-      control: 'Luminosité du texte indicatif',
-      min: 10,
-      max: 90,
+      control: 'Rayon des cartes',
+      min: 0,
+      max: 40,
       step: 1,
-      initial: 74,
-      unit: '%',
-      target: [28, 46],
-      ideal: 42,
-      readout: { kind: 'contrast', background: '#ffffff' },
-      explanation: `Le plancher de qualité exige **4,5:1** pour le texte courant **et pour le texte indicatif** (*placeholder*). Le gris très clair qu’on voit partout (environ 1,9:1 au départ) échoue : beaucoup de gens ne le lisent tout simplement pas.
+      initial: 32,
+      unit: 'px',
+      target: [12, 16],
+      ideal: 14,
+      explanation: `Le dernier bloc du plancher, celui des finitions qui trahissent un générateur, garde les cartes **entre 12 et 16 px** de rayon et réserve **la pilule (rayon complet) aux petits contrôles** : boutons compacts, pastilles, interrupteurs.
 
-L’autre borne est un risque d’usage : un texte indicatif presque aussi foncé que la vraie saisie (15,9:1 ici) peut passer pour une valeur déjà remplie, et le champ semble complété. Entre environ 9:1 et 4,6:1, il reste lisible et nettement plus clair que « Camille Martin ».
+La forme aide à classer ce qu’on voit. Des bouts entièrement arrondis signalent un petit objet qu’on actionne ; des coins doux sur un grand rectangle, une surface qui contient. Vers 30 à 40 px, la carte prend elle-même l’allure d’une bulle : elle se rapproche de la forme de ses boutons, et ses coins mangent l’espace autour du contenu.
 
-Mieux encore : ne confie pas d’information indispensable au seul texte indicatif, qui disparaît dès qu’on tape. Le libellé reste au-dessus du champ.`,
-      takeaway: 'Le texte indicatif vise 4,5:1 au moins, tout en restant nettement plus clair qu’une vraie saisie.',
-      sources: ['imp:craft-floor', 'wcag:contrast', { label: 'Nielsen Norman Group — Placeholders in Form Fields Are Harmful', url: 'https://www.nngroup.com/articles/form-design-placeholders/' }],
+Vers 14 px, la carte reste nettement plus carrée que ses boutons : la différence de rôle se voit d’un coup d’œil. Plus bas, elle se durcit ; un univers anguleux voulu par le brief peut le choisir, mais ce n’est pas le réglage par défaut.`,
+      takeaway: 'Cartes : un rayon de 12 à 16 px ; la forme pilule reste aux petits contrôles.',
+      sources: ['imp:craft-floor'],
     },
     {
       id: 'craft-floor-kicker-duel',
@@ -416,7 +421,7 @@ Mieux encore : ne confie pas d’information indispensable au seul texte indicat
 .pk-h { margin-top: 8px; font-size: 22px; line-height: 1.2; font-weight: 750; letter-spacing: -0.01em; }
 .pk-p { margin: 8px 0 16px; font-size: 14px; color: #4b5262; }`,
           },
-          why: 'Le libellé « TARIFS » au-dessus du titre est un sur-titre : un interdit sans exception.',
+          why: 'Le libellé « TARIFS » au-dessus du titre est un surtitre : un interdit sans exception.',
         },
         {
           id: 'heading',
@@ -431,10 +436,10 @@ Mieux encore : ne confie pas d’information indispensable au seul texte indicat
         },
       ],
       answer: 'heading',
-      explanation: `Dans la liste « Refuser », impeccable marque explicitement le sur-titre (*kicker* ou *eyebrow*) comme **un interdit, pas un réglage par défaut** : aucun brief ne le rachète. Il répète ce que le contexte dit déjà et pousse le titre à rester vague.
+      explanation: `Dans la liste « Refuser », impeccable marque explicitement le surtitre (*kicker* ou *eyebrow*) comme **un interdit, pas un réglage par défaut** : aucun brief ne le rachète. Il répète ce que le contexte dit déjà et pousse le titre à rester vague.
 
 La correction n’est pas de rendre le libellé plus discret, mais de **le supprimer et de laisser parler le titre**. Si ses mots comptent, ils entrent dans le titre : ici, le prix lui-même.`,
-      takeaway: 'Pas de sur-titre au-dessus d’un titre : supprime-le et fais porter l’information par le titre.',
+      takeaway: 'Pas de surtitre au-dessus d’un titre : supprime-le et fais porter l’information par le titre.',
       sources: ['imp:craft-floor'],
     },
     {
@@ -560,42 +565,60 @@ Un gris neutre posé sur une couleur saturée paraît délavé, presque sale, pa
       sources: ['imp:craft-floor', 'imp:colorize', 'imp:detector'],
     },
     {
-      id: 'craft-floor-heading-duel',
+      id: 'craft-floor-glass-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Dans quelle page d’aide les intertitres se rattachent-ils clairement à leur section ?',
+      context: 'Application de suivi de course à pied. Le brief ne demande aucun effet de transparence.',
+      prompt: 'Quel écran de réglages suit le plancher de qualité ?',
       options: [
         {
-          id: 'equal',
+          id: 'glass',
           visual: {
-            alt: 'Page d’aide dont les intertitres ont autant d’espace au-dessus qu’en dessous.',
-            html: fr(`<div class="fq"><p class="fq-t">Exporter ta comptabilité</p><p class="fq-p">L’export regroupe tes factures, avoirs et encaissements de la période choisie.</p><p class="fq-h">Choisir le format</p><p class="fq-p">FEC pour ton expert-comptable, CSV pour un tableur.</p><p class="fq-h">Envoyer l’export</p><p class="fq-p">Le fichier part par e-mail ; le lien reste valable 7 jours.</p></div>`),
-            css: `.fq { padding: 18px; }
-.fq-t { font-size: 19px; font-weight: 750; margin-bottom: 8px; }
-.fq-p { font-size: 14px; line-height: 1.55; color: #3a4150; }
-.fq-h { margin: 14px 0 14px; font-size: 15px; font-weight: 700; }`,
+            alt: 'Écran de réglages avec deux panneaux translucides en verre dépoli, à liseré blanc et ombre douce, posés sur un dégradé orangé parsemé de taches de couleur floutées.',
+            html: fr(`<div class="rg rg--glass"><span class="rg-blob rg-blob--a"></span><span class="rg-blob rg-blob--b"></span><p class="rg-h">Réglages</p><div class="rg-p"><p class="rg-t">Notifications</p><div class="rg-r"><span>Rappel avant ta sortie</span><span class="mk-toggle mk-toggle--on"></span></div><div class="rg-r"><span>Bilan du dimanche</span><span class="mk-toggle"></span></div></div><div class="rg-p"><p class="rg-t">Unités</p><div class="rg-r"><span>Distance</span><b>Kilomètres</b></div><div class="rg-r"><span>Allure</span><b>min/km</b></div></div></div>`),
+            css: `.rg { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 10px; padding: 16px; color: #1d2230; }
+.rg-h { font-size: 18px; font-weight: 750; }
+.rg-p { display: flex; flex-direction: column; padding: 2px 14px; border-radius: 14px; }
+.rg-t { padding: 10px 0 2px; font-size: 13px; font-weight: 700; color: #2f3442; }
+.rg-r { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; font-size: 14px; }
+.rg-r b { font-weight: 600; }
+.rg .mk-toggle--on { background: #c2410c; }
+.rg--glass { background: linear-gradient(150deg, #f6d365 0%, #fda085 55%, #f5878f 100%); }
+.rg-blob { position: absolute; z-index: -1; border-radius: 50%; }
+.rg-blob--a { width: 160px; height: 160px; top: 36px; right: -40px; background: #ff5e7e; }
+.rg-blob--b { width: 130px; height: 130px; bottom: -30px; left: -24px; background: #ffd166; }
+.rg--glass .rg-p { background: rgb(255 255 255 / 0.3); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgb(255 255 255 / 0.6); box-shadow: 0 8px 28px rgb(124 45 18 / 0.18); }
+.rg--glass .rg-r + .rg-r { border-top: 1px solid rgb(255 255 255 / 0.5); }`,
           },
-          why: 'Autant d’espace au-dessus qu’en dessous : l’intertitre flotte entre deux blocs.',
+          why: 'Verre dépoli, liseré blanc, ombre et taches floutées sur un dégradé : de la matière pour la matière, sans effet précis à rendre. Et le contraste du texte change selon la tache qui se trouve derrière.',
         },
         {
-          id: 'above',
+          id: 'solid',
           visual: {
-            alt: 'Page d’aide dont les intertitres ont nettement plus d’espace au-dessus qu’en dessous.',
-            html: fr(`<div class="fq"><p class="fq-t">Exporter ta comptabilité</p><p class="fq-p">L’export regroupe tes factures, avoirs et encaissements de la période choisie.</p><p class="fq-h">Choisir le format</p><p class="fq-p">FEC pour ton expert-comptable, CSV pour un tableur.</p><p class="fq-h">Envoyer l’export</p><p class="fq-p">Le fichier part par e-mail ; le lien reste valable 7 jours.</p></div>`),
-            css: `.fq { padding: 18px; }
-.fq-t { font-size: 19px; font-weight: 750; margin-bottom: 8px; }
-.fq-p { font-size: 14px; line-height: 1.55; color: #3a4150; }
-.fq-h { margin: 24px 0 4px; font-size: 15px; font-weight: 700; }`,
+            alt: 'Même écran de réglages avec deux panneaux blancs unis, bordés d’un filet gris, sur un fond gris très clair.',
+            html: fr(`<div class="rg rg--solid"><p class="rg-h">Réglages</p><div class="rg-p"><p class="rg-t">Notifications</p><div class="rg-r"><span>Rappel avant ta sortie</span><span class="mk-toggle mk-toggle--on"></span></div><div class="rg-r"><span>Bilan du dimanche</span><span class="mk-toggle"></span></div></div><div class="rg-p"><p class="rg-t">Unités</p><div class="rg-r"><span>Distance</span><b>Kilomètres</b></div><div class="rg-r"><span>Allure</span><b>min/km</b></div></div></div>`),
+            css: `.rg { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 10px; padding: 16px; color: #1d2230; }
+.rg-h { font-size: 18px; font-weight: 750; }
+.rg-p { display: flex; flex-direction: column; padding: 2px 14px; border-radius: 14px; }
+.rg-t { padding: 10px 0 2px; font-size: 13px; font-weight: 700; color: #2f3442; }
+.rg-r { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; font-size: 14px; }
+.rg-r b { font-weight: 600; }
+.rg .mk-toggle--on { background: #c2410c; }
+.rg--solid { background: #f3f4f6; }
+.rg--solid .rg-p { background: #fff; border: 1px solid #dfe3ea; }
+.rg--solid .rg-r + .rg-r { border-top: 1px solid #eceef2; }`,
           },
-          why: 'Beaucoup d’air au-dessus, peu en dessous : chaque intertitre ouvre clairement sa section.',
+          why: 'Des surfaces unies et une seule élévation (un filet fin) : la hiérarchie vient du contenu, et le contraste reste le même partout.',
         },
       ],
-      answer: 'above',
-      explanation: `Un titre se lie au contenu qu’il introduit. Selon la loi de proximité, l’œil groupe ce qui est proche : si l’intertitre est aussi près du bloc précédent que du sien, il semble légender ce qui précède.
+      answer: 'solid',
+      explanation: `Le plancher range dans sa liste « Refuser » **le verre et le flou** (*glassmorphism*) **employés comme décoration plutôt que comme effet précis**. Panneaux translucides en \`backdrop-filter: blur\`, liseré blanc, ombre et taches de couleur derrière : sur un écran de réglages qui n’a rien à laisser voir, c’est un réglage par défaut de la catégorie, pas une décision.
 
-Le plancher demande donc **plus d’espace au-dessus d’un titre qu’en dessous**, avec des groupes serrés et des séparations généreuses. Le détecteur le vérifie sur les valeurs calculées (règle « Titre collé au bloc précédent », *heading-rhythm*).`,
-      takeaway: 'Mets plus d’espace au-dessus d’un titre qu’en dessous : il appartient au bloc qu’il ouvre.',
-      sources: ['imp:craft-floor', 'imp:detector', 'lawsofux'],
+La transparence a aussi un coût de lecture : le contraste du texte dépend de ce qui se trouve derrière le panneau, et il peut suffire à un endroit et manquer à un autre. Des surfaces unies, avec **une seule déclaration d’élévation** (ici un filet fin), gardent un contraste stable et laissent le contenu porter la hiérarchie.
+
+Le verre reste légitime quand il rend un effet précis voulu par le brief : une barre qui laisse deviner le contenu qui défile dessous, des commandes posées sur une vidéo. Sur iOS, impeccable demande alors les matériaux du système plutôt qu’un verre fait main.`,
+      takeaway: 'Le verre et le flou ne sont pas un décor par défaut : sans effet précis à rendre, préfère des surfaces unies.',
+      sources: ['imp:craft-floor', 'imp:ios', { label: 'Nielsen Norman Group — Glassmorphism: Definition and Best Practices', url: 'https://www.nngroup.com/articles/glassmorphism/' }],
     },
     {
       id: 'craft-floor-dashboard-hotspot',
@@ -617,7 +640,7 @@ Le plancher demande donc **plus d’espace au-dessus d’un titre qu’en dessou
         css: `.td { padding: 14px; display: flex; flex-direction: column; gap: 10px; background: #f6f7f9; }
 .td-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .td-h { font-size: 16px; font-weight: 700; }
-.td-filter { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid #cdd3dc; border-radius: 6px; background: #fff; font-size: 12px; }
+.td-filter { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid #868d9c; border-radius: 6px; background: #fff; font-size: 12px; }
 .td-row { display: flex; flex-wrap: wrap; gap: 10px; }
 .td-hero { flex: 999 1 170px; min-width: 0; display: flex; flex-direction: column; padding: 12px; border-radius: 12px; background: #fff; box-shadow: 0 6px 18px rgb(15 23 42 / 0.08); border-top: 3px solid #10b981; }
 .td-big { font-size: 30px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
@@ -690,23 +713,25 @@ Réécrits, ces trois textes deviennent : « La date de fin précède la date de
       sources: ['imp:craft-floor', 'imp:operate'],
     },
     {
-      id: 'craft-floor-motion-choice',
+      id: 'craft-floor-illustration-choice',
       type: 'choice',
       difficulty: 2,
-      context: 'Page d’accueil d’un logiciel de montage vidéo (mode Persuader). L’équipe veut « du mouvement ».',
+      context: 'Page d’accueil d’un logiciel de comptabilité pour indépendants. L’équipe veut une illustration en tête de page.',
       prompt: 'Quelle proposition respecte le plancher de qualité ?',
       options: [
-        { id: 'one', label: 'Un seul moment signé : l’aperçu du logiciel, affiché d’emblée, s’anime au chargement (léger zoom et mise au point) en sortie exponentielle.', why: 'Un moment unique et pensé, sans conditionner l’affichage du contenu à une animation.' },
-        { id: 'every', label: 'Chaque section apparaît en fondu avec un léger glissement quand on fait défiler la page.', why: 'La même entrée sur chaque section : exactement ce que le plancher refuse.' },
-        { id: 'bounce', label: 'Les boutons et les cartes rebondissent au survol pour donner de la vie.', why: 'Des effets dispersés, et un amorti élastique qui fait daté.' },
-        { id: 'hidden', label: 'Tout le contenu part invisible et apparaît quand le script de révélation s’exécute.', why: 'Si le script échoue, la page reste vide : l’état par défaut doit être visible.' },
+        { id: 'sketch', label: 'Une scène SVG façon croquis, aux traits tremblés et au grain `feTurbulence` : une indépendante qui jongle avec ses factures.', why: 'Du SVG qui imite une image, en croquis et avec du grain : exactement ce que le plancher juge amateur.' },
+        { id: 'shapes', label: 'Des personnages assemblés de cercles et de rectangles autour d’un bureau, en aplats de couleurs vives.', why: 'Une scène bâtie de formes primitives se lit comme un clipart provisoire ; le détecteur la relève (règle « Illustration assemblée de formes », *shape-assembled-illustration*).' },
+        { id: 'emoji', label: 'Trois grands emoji alignés en guise d’illustration : un graphique, un billet, un reçu.', why: 'Des glyphes ne font pas une illustration : leur dessin change d’un système à l’autre, et ils ne montrent rien du produit.' },
+        { id: 'real', label: 'Une capture réelle de l’écran de facturation, ou un schéma vectoriel net du circuit d’une facture : devis, facture, paiement, rapprochement.', why: 'Une vraie image du produit, ou du SVG qui fait de la géométrie : formes nettes et diagrammes restent des médias de premier plan.' },
       ],
-      answer: 'one',
-      explanation: `Pour le mouvement, le plancher attend **un seul moment signé**, pas des effets dispersés, et **pas la même entrée sur chaque section**. Ce moment part d’un état par défaut **déjà visible**, avec une **sortie exponentielle** (une décélération franche, comme \`cubic-bezier(0.16, 1, 0.3, 1)\`).
+      answer: 'real',
+      explanation: `Le plancher le dit en une ligne : **une vraie illustration, ou aucune**. Les scènes SVG façon croquis, les classes \`loose-sketch\` ou \`doodle\` et le grain \`feTurbulence\` font amateur. Une image ombrée, en perspective ou peuplée de personnages reste une image, même dessinée au trait.
 
-Masquer le contenu en attendant un script est risqué : le détecteur classe « contenu invisible au repos » parmi ses deux règles de sévérité *erreur*. Et les rebonds par réflexe font daté : les objets réels décélèrent en douceur.`,
-      takeaway: 'Un seul moment de mouvement signé, en ease-out exponentiel, depuis une page déjà visible.',
-      sources: ['imp:craft-floor', 'imp:animate', 'imp:detector'],
+La règle vise le SVG qui **imite une image**, jamais le SVG qui **fait de la géométrie** : formes vectorielles nettes, diagrammes, tracés animés et effets de shader restent des médias de premier plan. Le schéma du circuit d’une facture en fait partie ; une capture réelle, elle, montre le produit au travail.
+
+Le détecteur ajoute un conseil (règle « Illustration assemblée de formes », *shape-assembled-illustration*) : un grand SVG en ligne, d’au moins 200 sur 200, qui assemble huit formes primitives ou plus (rectangles, cercles, ellipses, polygones) en au moins trois couleurs se lit comme un clipart provisoire. Quant aux emoji, ce sont des glyphes : ils ne remplacent ni une illustration ni un système d’icônes.`,
+      takeaway: 'Une vraie illustration, ou aucune : une capture réelle ou un schéma net plutôt qu’une scène en croquis ou en formes assemblées.',
+      sources: ['imp:craft-floor', 'imp:detector'],
     },
     {
       id: 'craft-floor-theme-choice',
@@ -737,7 +762,7 @@ Ici, la scène tranche : un écran très lumineux éblouit dans un couloir sombr
         { id: 'steps', label: 'Des numéros 01, 02, 03 devant les étapes d’une procédure d’installation', why: 'Ici, la séquence porte une information dont le lecteur a besoin.' },
         { id: 'brutal', label: 'Des ombres dures décalées dans un univers néobrutaliste assumé', why: 'Hors de ce monde, c’est un costume ; dans un monde qui l’a choisi, c’est son système de profondeur.' },
         { id: 'glass', label: 'Un effet de verre dépoli précis, demandé par le brief pour un lecteur vidéo', why: 'Le verre est refusé comme décoration, pas comme effet précis et voulu.' },
-        { id: 'kicker', label: 'Un sur-titre en capitales espacées au-dessus de chaque titre de section', why: 'Le sur-titre est un interdit, pas un réglage par défaut : aucun brief ne le rachète.' },
+        { id: 'kicker', label: 'Un surtitre en capitales espacées au-dessus de chaque titre de section', why: 'Le surtitre est un interdit, pas un réglage par défaut : aucun brief ne le rachète.' },
         { id: 'system', label: 'Une police système en titre d’affichage parce qu’elle est déjà installée', why: 'La commodité n’est pas un brief : la police installée la plus proche est un échec, pas un repli.' },
       ],
       answers: ['steps', 'brutal', 'glass'],
@@ -745,21 +770,21 @@ Ici, la scène tranche : un écran très lumineux éblouit dans un couloir sombr
 
 Deux exceptions de nature différente :
 
-- le **sur-titre** au-dessus d’un titre est un **interdit** : aucun brief ne le rachète ;
+- le **surtitre** au-dessus d’un titre est un **interdit** : aucun brief ne le rachète ;
 - une raison de **commodité** (« elle est déjà installée ») n’est pas un brief. Une police système peut être imposée par le brief, jamais choisie parce qu’elle est là.`,
-      takeaway: 'Le brief peut justifier un réflexe de la liste « Refuser », jamais le sur-titre ; la commodité ne vaut pas un brief.',
+      takeaway: 'Le brief peut justifier un réflexe de la liste « Refuser », jamais le surtitre ; la commodité ne vaut pas un brief.',
       sources: ['imp:craft-floor', 'imp:skill'],
     },
     {
       id: 'craft-floor-ceiling-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Une page qui passe toutes les vérifications du plancher de qualité est terminée.',
-      answer: false,
-      explanation: `Le plancher tient **la mécanique** : contraste, espacement, états, surfaces du navigateur. Il ne choisit jamais la direction. Une page qui le passe est **sans défaut mécanique**, pas encore réussie.
+      prompt: 'Quand toutes les vérifications du plancher de qualité sont au vert, il reste du travail sur la page.',
+      answer: true,
+      explanation: `Vrai. Le plancher tient **la mécanique** : contraste, espacement, états, surfaces du navigateur. Il ne choisit jamais la direction. Une page qui le passe est **sans défaut mécanique**, pas encore réussie.
 
-impeccable conclut : quand tout est au vert, **consacre la page au monde choisi**, et entre raffiné et engagé, **engage-toi**. Un résultat propre mais interchangeable n’a pas fini son travail.`,
-      takeaway: 'Le plancher n’est pas le plafond : une fois tout au vert, engage la page dans son monde.',
+impeccable conclut : quand tout est au vert, **consacre la page au monde choisi**, et entre raffiné et engagé, **engage-toi**. Un résultat propre mais interchangeable, qu’un produit voisin pourrait reprendre tel quel, n’a pas fini son travail.`,
+      takeaway: 'Le plancher n’est pas le plafond : une fois tout au vert, il reste à engager la page dans son monde.',
       sources: ['imp:craft-floor'],
     },
     {
@@ -792,7 +817,7 @@ Renommer se fait **sur place** : on clique sur le nom, il devient un champ, Entr
       explanation: `Ces valeurs forment le socle mécanique du plancher :
 
 - **4,5:1** pour le texte courant et les textes indicatifs, **3:1** pour le grand texte (seuils WCAG AA) ;
-- **65 à 75 caractères** de mesure pour le corps, un affichage plafonné à **6rem** ;
+- **65 à 75 caractères** de mesure pour le corps (le haut de la plage de confort 45–75), un affichage plafonné à **6rem** ;
 - une approche qui s’arrête à **−0,04em** (−0,02 à −0,03em se lit souvent mieux) ;
 - des cartes entre **12 et 16 px** de rayon, la pilule réservée aux petits contrôles.`,
       takeaway: '4,5:1 et 3:1, 65–75 caractères, 6rem, −0,04em, 12–16 px : le socle chiffré du plancher.',
