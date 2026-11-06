@@ -49,9 +49,10 @@ export function Cards({ query }: { query: URLSearchParams }) {
   };
 
   // The grades take the place of « Retourner la fiche »: the second click of a double click lands
-  // on « À revoir » and must not grade a card whose answer was never read (logic-21).
+  // on « À revoir » and must not grade a card whose answer was never read (logic-21). Only a pointer
+  // click can be that second click: Enter or Space on a grade button (detail 0) always grades.
   const onGradeClick = (e: MouseEvent, g: CardGrade) => {
-    if (e.detail > 1 || performance.now() - shownAt.current < SETTLE_MS) return;
+    if (e.detail > 1 || (e.detail > 0 && performance.now() - shownAt.current < SETTLE_MS)) return;
     gradeCard(g);
   };
 
