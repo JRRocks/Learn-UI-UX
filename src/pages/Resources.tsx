@@ -158,8 +158,9 @@ function Catalog() {
                       : `Aucune règle${FAMILY_LABEL[family]}.`,
                   )}
                 </p>
+                {/* One label whatever was narrowed, and short enough for a 320 px column. */}
                 <button type="button" className="btn btn-secondary" onClick={clear}>
-                  {family === 'all' ? 'Effacer la recherche' : 'Effacer la recherche et le filtre'}
+                  Afficher les {count(list.length, 'règle', 'règles')}
                 </button>
               </div>
             )}
