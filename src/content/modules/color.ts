@@ -26,7 +26,7 @@ const INVOICES_CSS = `
 .fx-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
 `;
 
-const CHART_GRID = `<g stroke="#e3e6ec" stroke-width="1"><line x1="8" y1="30" x2="256" y2="30"/><line x1="8" y1="60" x2="256" y2="60"/><line x1="8" y1="90" x2="256" y2="90"/><line x1="8" y1="120" x2="256" y2="120"/></g><g fill="#5a6172" font-size="10"><text x="12" y="144" text-anchor="middle">oct.</text><text x="60" y="144" text-anchor="middle">nov.</text><text x="108" y="144" text-anchor="middle">déc.</text><text x="156" y="144" text-anchor="middle">janv.</text><text x="204" y="144" text-anchor="middle">févr.</text><text x="252" y="144" text-anchor="middle">mars</text></g>`;
+const CHART_GRID = `<g stroke="#e3e6ec" stroke-width="1"><line x1="8" y1="30" x2="256" y2="30"/><line x1="8" y1="60" x2="256" y2="60"/><line x1="8" y1="90" x2="256" y2="90"/><line x1="8" y1="120" x2="256" y2="120"/></g><g fill="#5a6172" font-size="16"><text x="12" y="144" text-anchor="middle">oct.</text><text x="60" y="144" text-anchor="middle">nov.</text><text x="108" y="144" text-anchor="middle">déc.</text><text x="156" y="144" text-anchor="middle">janv.</text><text x="204" y="144" text-anchor="middle">févr.</text><text x="252" y="144" text-anchor="middle">mars</text></g>`;
 const ONLINE = '12,90 60,75 108,80 156,60 204,45 252,35';
 const STORE = '12,50 60,55 108,52 156,60 204,64 252,70';
 
@@ -90,7 +90,7 @@ Les surfaces *Persuader* et *Expérience* ont droit aux stratégies audacieuses 
 
 **L’accent tire sa force de sa rareté.** Une couleur qui apparaît partout n’attire plus l’œil nulle part ; laisse la plus forte posséder une région ou un rôle délibéré plutôt que la saupoudrer en petites touches.
 
-La « règle des 10 % » que cite la commande *quieter* (laisser les neutres dominer, l’accent autour de 10 %) est une **heuristique** pour calmer une interface criarde, pas une loi : *colorize* refuse explicitement les pourcentages fixes. Pour calmer une palette, *quieter* propose aussi de baisser la saturation (vers 70–85 %), de réduire le nombre de teintes et de garder le contraste fort là où il compte.`,
+La « règle des 10 % » que cite la commande \`quieter\` (laisser les neutres dominer, l’accent autour de 10 %) est une **heuristique** pour calmer une interface criarde, pas une loi : \`colorize\` refuse explicitement les pourcentages fixes. Pour calmer une palette, \`quieter\` propose aussi de baisser la saturation (vers 70–85 %), de réduire le nombre de teintes et de garder le contraste fort là où il compte.`,
     },
     {
       id: 'roles',
@@ -158,7 +158,7 @@ La **teinte** se choisit d’après le sens du produit et sa direction visuelle,
       title: 'Contraste : des seuils et un calcul',
       body: `Le contraste se **calcule** ; il ne s’estime pas à l’œil. Le WCAG 2.2 fixe des minimums (niveau AA) entre une couleur et son fond :
 
-- **Texte courant : 4,5:1** — textes d’exemple dans les champs (placeholders) et textes d’aide compris.
+- **Texte courant : 4,5:1** — textes indicatifs des champs (*placeholders*) et textes d’aide compris.
 - **Grand texte : 3:1** — au moins 24 px, ou 18,7 px en gras (18 pt, ou 14 pt gras).
 - **Composants d’interface, icônes et graphiques utiles, indicateurs de focus : 3:1** contre les couleurs voisines (critère 1.4.11).
 
@@ -190,7 +190,7 @@ Un champ en erreur s’accompagne d’un message qui dit quoi corriger, pas d’
             alt: 'Graphique linéaire de ventes avec deux courbes rouge et verte de même épaisseur qui se croisent, et une légende sous le graphique.',
             html: `<div class="mk-pad mk-stack" style="--gap:8px">
   <p class="mk-h3">Ventes par canal · 6 derniers mois</p>
-  <svg viewBox="0 0 320 150" style="width:100%;max-width:380px">${CHART_GRID}<polyline points="${ONLINE}" fill="none" stroke="#d93025" stroke-width="2.5"/><polyline points="${STORE}" fill="none" stroke="#1e8e3e" stroke-width="2.5"/></svg>
+  <svg viewBox="-5 0 335 150" style="width:100%;max-width:300px">${CHART_GRID}<polyline points="${ONLINE}" fill="none" stroke="#d93025" stroke-width="2.5"/><polyline points="${STORE}" fill="none" stroke="#1e8e3e" stroke-width="2.5"/></svg>
   <div class="mk-row mk-small" style="--gap:16px"><span class="mk-row" style="--gap:6px"><b class="lg" style="background:#d93025"></b>En ligne</span><span class="mk-row" style="--gap:6px"><b class="lg" style="background:#1e8e3e"></b>Boutique</span></div>
 </div>`,
             css: `.lg { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }`,
@@ -200,7 +200,7 @@ Un champ en erreur s’accompagne d’un message qui dit quoi corriger, pas d’
             alt: 'Même graphique : une courbe bleue continue et une courbe orange en pointillés, chacune étiquetée directement à son extrémité.',
             html: `<div class="mk-pad mk-stack" style="--gap:8px">
   <p class="mk-h3">Ventes par canal · 6 derniers mois</p>
-  <svg viewBox="0 0 320 150" style="width:100%;max-width:380px">${CHART_GRID}<polyline points="${ONLINE}" fill="none" stroke="#1f4fd8" stroke-width="2.5"/><polyline points="${STORE}" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-dasharray="6 4"/><text x="262" y="39" font-size="12" font-weight="600" fill="#1f4fd8">En ligne</text><text x="262" y="74" font-size="12" font-weight="600" fill="#c2410c">Boutique</text></svg>
+  <svg viewBox="-5 0 335 150" style="width:100%;max-width:300px">${CHART_GRID}<polyline points="${ONLINE}" fill="none" stroke="#1f4fd8" stroke-width="2.5"/><polyline points="${STORE}" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-dasharray="6 4"/><text x="258" y="40" font-size="16" font-weight="600" fill="#1f4fd8">En ligne</text><text x="258" y="75" font-size="16" font-weight="600" fill="#c2410c">Boutique</text></svg>
 </div>`,
           },
           goodNote: 'Un bleu et un orange, que les daltonismes rouge-vert distinguent bien, un trait continu contre des pointillés et des étiquettes directes : la couleur n’est plus le seul indice.',
@@ -210,7 +210,7 @@ Un champ en erreur s’accompagne d’un message qui dit quoi corriger, pas d’
     {
       id: 'gris-sur-couleur',
       title: 'Sur une surface colorée, teinte au lieu de griser',
-      body: `Un gris neutre est réglé pour un fond blanc. Posé sur une surface colorée, il paraît **sale et délavé**, et il perd souvent son contraste : c’est la règle *Gray text on colored background* du détecteur d’impeccable, et un point du plancher de qualité.
+      body: `Un gris neutre est réglé pour un fond blanc. Posé sur une surface colorée, il paraît **sale et délavé**, et il perd souvent son contraste : c’est la règle « Texte gris sur fond coloré » (\`gray-on-color\`) du détecteur d’impeccable, et un point du plancher de qualité.
 
 - Sur une surface **claire et colorée**, prends une nuance **plus foncée de la même teinte** : un brun ambré sur un encart jaune pâle, un vert profond sur un vert tendre.
 - Sur une surface **foncée et colorée**, prends une teinte **très claire dérivée du fond**, ou un blanc à peine atténué.
@@ -246,7 +246,13 @@ La même logique vaut pour les bordures et les icônes secondaires posées sur l
 - **Désature les accents** : une couleur saturée vibre sur fond sombre ; prends une version plus claire et moins intense de la teinte.
 - **Revérifie chaque contraste** : le bleu \`#1f4fd8\` fait 6,6:1 sur blanc, mais 3,2:1 sur noir.
 
-Le détecteur relève aussi les réflexes du « sombre qui fait chic » : lueurs colorées autour des cartes (*glowing shadow accents*), nappes de dégradé radial derrière un titre (*radial halo*, *spotlight glow*), dégradés violets et cyan néon (*AI color palette*). Côté clair, le fond crème ou beige choisi par défaut joue le même rôle de réflexe (*cream palette*).`,
+Le détecteur relève aussi les réflexes du « sombre qui fait chic » :
+
+- « Halo lumineux coloré » (\`dark-glow\`) : des lueurs colorées autour des cartes, des boutons ou des titres ;
+- « Halo radial en fond » (\`radial-halo\`) et « Projecteur radial décoratif » (\`radial-spotlight-glow\`) : des nappes de dégradé radial en fond de page ou derrière un titre ;
+- Palette « IA » (\`ai-color-palette\`) : des dégradés violets et du cyan néon sur fond sombre.
+
+Côté clair, le fond crème ou beige choisi par défaut joue le même rôle de réflexe : « Palette crème ou beige » (\`cream-palette\`).`,
       examples: [
         {
           title: 'Inverser ou composer',
@@ -292,14 +298,14 @@ Par exemple : \`oklch(97% 0.012 255)\` pour un fond teinté, \`oklch(55% 0.17 25
   rules: [
     { id: 'roles', front: 'Que faire avant de choisir une teinte ?', back: 'Auditer l’existant, nommer la stratégie, puis définir des rôles (surfaces, textes, action, focus, états, données) plutôt qu’un nuancier.' },
     { id: 'strategy', front: 'Quelles sont les quatre stratégies de couleur d’impeccable ?', back: 'Retenue (neutres et un accent), engagée (une couleur sur 30 à 60 % de la surface), palette complète (3–4 rôles), immersion (la surface est la couleur).' },
-    { id: 'aa-text', front: 'Contraste minimal d’un texte courant (WCAG AA) ?', back: '4,5:1, placeholders compris. Le grand texte (24 px, ou 18,7 px en gras) descend à 3:1.' },
-    { id: 'non-text', front: 'Contraste minimal d’un contrôle, d’une icône utile ou d’un focus ?', back: '3:1 contre les couleurs voisines (critère 1.4.11).' },
+    { id: 'aa-text', front: 'Un texte indicatif (*placeholder*) doit-il atteindre 4,5:1 ?', back: 'Oui : c’est du texte, comme une aide ou un libellé. Sur blanc, aucun gris neutre plus clair que `#767676` ne passe.' },
+    { id: 'non-text', front: 'Une courbe de graphique doit-elle contraster ?', back: 'Oui, si elle porte l’information : 3:1 contre le fond (1.4.11), et un indice autre que la couleur (motif, libellé direct) pour distinguer les séries (1.4.1).' },
     { id: 'lightest-gray', front: 'Quel est le gris neutre le plus clair lisible sur blanc pour du texte courant ?', back: '`#767676` (4,54:1). `#999999` n’atteint que 2,85:1.' },
     { id: 'color-only', front: 'Comment signaler un état sans dépendre de la couleur ?', back: 'Double-la d’un texte, d’une icône, d’une forme ou d’un motif : la couleur ne doit jamais être le seul code (WCAG 1.4.1).' },
     { id: 'gray-on-color', front: 'Texte secondaire sur une surface colorée : quelle couleur ?', back: 'Une nuance dérivée de la teinte du fond (plus foncée sur fond clair, très claire sur fond foncé), jamais un gris neutre.' },
     { id: 'dark', front: 'Comment construire un thème sombre ?', back: 'Le composer : gris très sombre plutôt que noir, surfaces plus claires quand elles s’élèvent, accents désaturés, contrastes revérifiés.' },
     { id: 'accent', front: 'D’où un accent tire-t-il sa force ?', back: 'De sa rareté : réservé à l’action principale, à la sélection et aux états, jamais dépensé en décoration.' },
-    { id: 'ten-percent', front: 'Les « 10 % d’accent » sont-ils une règle ?', back: 'Une heuristique de *quieter* pour calmer une interface criarde. *colorize* refuse les pourcentages fixes : le dosage suit la stratégie.' },
+    { id: 'ten-percent', front: 'Les « 10 % d’accent » sont-ils une règle ?', back: 'Une heuristique de `quieter` pour calmer une interface criarde. `colorize` refuse les pourcentages fixes : le dosage suit la stratégie.' },
     { id: 'hue', front: 'Comment choisir la teinte principale ?', back: 'D’après le sens du produit et sa direction visuelle, jamais par réflexe de catégorie (« finance = bleu »).' },
     { id: 'oklch', front: 'Pourquoi construire une rampe en OKLCH ?', back: 'Sa luminosité est perceptive : des pas réguliers de L paraissent réguliers. On réduit la chroma près du blanc et du noir.' },
     { id: 'alpha', front: 'Couleur translucide ou explicite pour un texte ?', back: 'Explicite dès que le texte peut changer de fond : l’alpha rend le contraste dépendant de ce qu’il y a dessous. Un blanc translucide sur une surface fixe et connue reste possible, contraste vérifié.' },
@@ -344,7 +350,7 @@ La correction d’impeccable : **dériver le texte secondaire de la teinte de la
       difficulty: 1,
       prompt: 'Règle le gris de ce texte d’aide : il doit rester discret, tout en atteignant 4,5:1 sur le fond blanc.',
       visual: {
-        alt: 'Champ « Adresse e-mail » avec un exemple grisé dans le champ et un texte d’aide dessous, dont le gris varie avec le curseur.',
+        alt: 'Champ « Adresse e-mail » avec un texte indicatif grisé et un texte d’aide dessous, dont le gris varie avec le curseur.',
         html: `<div class="mk-pad mk-stack" style="--gap:6px"><p class="mk-label">Adresse e-mail</p><div class="mk-input hx-ph">prenom.nom@exemple.fr</div><p class="hx-help">Nous l’utilisons uniquement pour vous envoyer vos reçus.</p></div>`,
         css: `.hx-ph, .hx-help { color: hsl(0 0% var(--v, 72%)); } .hx-help { font-size: 13px; }`,
       },
@@ -361,8 +367,8 @@ La correction d’impeccable : **dériver le texte secondaire de la teinte de la
 
 Un texte d’aide doit aussi rester secondaire : en dessous d’environ 30 %, il se rapproche trop du texte principal (\`#1d2230\`) et la hiérarchie s’aplatit. Vers 44 % (\`#707070\`, 4,95:1), tu gardes une marge de sécurité sans perdre la discrétion.
 
-Le texte d’exemple dans le champ (placeholder) obéit à la même règle : c’est du texte, il lui faut 4,5:1.`,
-      takeaway: 'Aide et placeholder : au moins 4,5:1. Sur blanc, le gris neutre le plus clair qui passe est `#767676` (≈ 46 %).',
+Le texte indicatif du champ (*placeholder*) obéit à la même règle : c’est du texte, il lui faut 4,5:1.`,
+      takeaway: 'Aide et texte indicatif : au moins 4,5:1. Sur blanc, le gris neutre le plus clair qui passe est `#767676` (≈ 46 %).',
       sources: ['wcag:contrast', 'imp:craft-floor', 'imp:colorize'],
     },
     {
@@ -411,7 +417,7 @@ Le texte d’exemple dans le champ (placeholder) obéit à la même règle : c�
       difficulty: 1,
       prompt: 'Trouve les trois textes dont le contraste est insuffisant.',
       visual: {
-        alt: 'Carte d’inscription à une lettre d’information : titre, paragraphe, champ e-mail avec un exemple, bouton orange à texte blanc, une mention sous le bouton et une mention légale.',
+        alt: 'Carte d’inscription à une lettre d’information : titre, paragraphe, champ e-mail avec un texte indicatif, bouton orange à texte blanc, une mention sous le bouton et une mention légale.',
         html: `<div class="mk-pad-l mk-stack" style="--gap:12px">
   <p class="mk-h2" data-hotspot="title">La lettre du dimanche</p>
   <p data-hotspot="intro">Chaque semaine, trois idées de balades à moins d’une heure de Lyon, testées par notre équipe.</p>
@@ -423,7 +429,7 @@ Le texte d’exemple dans le champ (placeholder) obéit à la même règle : c�
         css: `.nl-ph { color: #b0b0b0; } .nl-btn { background: #f5a524; color: #fff; align-self: flex-start; } .nl-meta { color: #aaaaaa; }`,
       },
       hotspots: [
-        { id: 'placeholder', label: 'Exemple dans le champ', correct: true, why: '#b0b0b0 sur blanc : 2,2:1. Un placeholder est du texte : il lui faut 4,5:1.' },
+        { id: 'placeholder', label: 'Texte indicatif du champ', correct: true, why: '#b0b0b0 sur blanc : 2,2:1. Un texte indicatif reste du texte : il lui faut 4,5:1.' },
         { id: 'button', label: 'Libellé du bouton', correct: true, why: 'Blanc sur orange vif : 2,0:1. Un texte foncé sur cet orange atteindrait 7,8:1.' },
         { id: 'meta', label: 'Mention sous le bouton', correct: true, why: '#aaaaaa sur blanc : 2,3:1, une information utile rendue presque invisible.' },
         { id: 'title', label: 'Titre', correct: false, why: 'Texte presque noir sur blanc : 15,9:1.' },
@@ -432,12 +438,12 @@ Le texte d’exemple dans le champ (placeholder) obéit à la même règle : c�
       ],
       explanation: `Ces trois textes paraissent légers et élégants sur l’écran du designer, mais aucun n’atteint le minimum de 4,5:1 exigé pour du texte courant :
 
-- exemple dans le champ \`#b0b0b0\` : 2,2:1 ;
+- texte indicatif du champ \`#b0b0b0\` : 2,2:1 ;
 - blanc sur l’orange du bouton : 2,0:1 ;
 - mention \`#aaaaaa\` : 2,3:1.
 
 Le titre et le paragraphe (15,9:1) comme la mention légale (6,2:1) passent. Ne te fie pas à ton écran : calcule chaque paire.`,
-      takeaway: 'Calcule chaque paire texte / fond : 4,5:1 pour tout texte courant, placeholders et libellés de boutons compris.',
+      takeaway: 'Calcule chaque paire texte / fond : 4,5:1 pour tout texte courant, textes indicatifs et libellés de boutons compris.',
       sources: ['wcag:contrast', 'imp:craft-floor', 'imp:detector'],
     },
     {
@@ -458,7 +464,7 @@ Le titre et le paragraphe (15,9:1) comme la mention légale (6,2:1) passent. Ne 
 .dk-card { border: 1px solid rgb(34 211 238 / 0.5); box-shadow: 0 0 16px rgb(34 211 238 / 0.35); background: rgb(15 15 40 / 0.6); }
 .dk-ok { color: #22d3ee; } .dk-warn { color: #f0abfc; } .dk-meta { color: #94a3b8; }`,
           },
-          why: 'Halo radial violet, lueurs colorées, dégradé violet-cyan : les réflexes que le détecteur relève (dark glow, radial halo, AI color palette). Tout brille, rien ne hiérarchise.',
+          why: 'Halo radial violet, lueurs colorées, dégradé violet-cyan : le détecteur relève ces réflexes, « Halo radial en fond » (`radial-halo`), « Halo lumineux coloré » (`dark-glow`) et palette « IA » (`ai-color-palette`). Tout brille, rien ne hiérarchise.',
         },
         {
           id: 'composed',
@@ -587,7 +593,7 @@ Garde l’accent pour l’action principale, la sélection et les états. Le res
         { id: 'meaning', label: 'Partir de l’univers du produit (le métier, ses matières, son public), puis éprouver la teinte dans tous ses rôles.', why: 'C’est la démarche d’impeccable : la teinte découle du sens du produit et de la direction visuelle, puis passe l’épreuve des rôles et du contraste.' },
         { id: 'blue', label: 'S’appuyer sur la psychologie des couleurs : le bleu inspire confiance, c’est la teinte attendue pour l’épargne.', why: 'Un réflexe de catégorie présenté comme une méthode : « finance = bleu » rend le produit interchangeable avec ses concurrents.' },
         { id: 'contrast', label: 'Prendre la teinte qui contraste le mieux avec le blanc, puis construire le reste de la palette autour d’elle.', why: 'Le contraste dépend surtout de la luminosité, pas de la teinte : presque toute teinte, assez assombrie, atteint 4,5:1 sur blanc. Il se vérifie dans chaque rôle ; il ne choisit pas la teinte.' },
-        { id: 'cream', label: 'Suivre la tendance du moment : un fond crème et des tons beiges, chaleureux et élégants sans prendre de risque.', why: 'Le crème par défaut est devenu le « bon goût » réflexe des interfaces générées (règle « cream palette » du détecteur).' },
+        { id: 'cream', label: 'Suivre la tendance du moment : un fond crème et des tons beiges, chaleureux et élégants sans prendre de risque.', why: 'Le crème par défaut est devenu le « bon goût » réflexe des interfaces générées ; le détecteur le signale avec la règle « Palette crème ou beige » (`cream-palette`).' },
       ],
       answer: 'meaning',
       explanation: `Impeccable demande de choisir la teinte **d’après le sens du produit et la direction visuelle, jamais par association de catégorie**. « Finance = bleu », « écologie = vert », « tech = violet » donnent des produits interchangeables ; suivre la tendance du moment aussi.
@@ -722,9 +728,9 @@ Ce seuil est plus bas que pour le texte : le vert \`#16a34a\`, qui échoue sous 
       id: 'color-invert-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Pour obtenir un thème sombre, il suffit d’inverser les couleurs du thème clair.',
+      prompt: 'Inverser les couleurs du thème clair donne un thème sombre bien conçu.',
       answer: false,
-      explanation: `Une inversion mécanique casse presque tout :
+      explanation: `Faux. Une inversion mécanique casse presque tout :
 
 - le blanc devient noir pur : un texte clair y contraste plus durement que sur un gris très sombre (jusqu’à 21:1 pour du blanc), ce qui fatigue les yeux ;
 - les ombres, qui créaient l’élévation, deviennent invisibles ;
@@ -739,13 +745,15 @@ Un thème sombre se **compose** : surfaces plus claires à mesure qu’elles s�
       id: 'color-ten-percent-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'La « règle des 10 % » est une loi : une interface réussie ne consacre jamais plus de 10 % de sa surface à la couleur d’accent.',
-      answer: false,
-      explanation: `La commande *quieter* d’impeccable cite bien cette proportion — laisser les neutres dominer et garder l’accent autour de 10 % — pour **calmer une interface trop criarde**. C’est une heuristique de correction, pas une loi.
+      prompt: 'Une interface réussie peut consacrer plus de la moitié de sa surface à une seule couleur saturée.',
+      answer: true,
+      explanation: `Vrai. La « règle des 10 % » (laisser les neutres dominer, garder l’accent autour de 10 %) vient de la commande \`quieter\` d’impeccable : c’est une heuristique pour **calmer une interface criarde**, pas une loi.
 
-La commande *colorize* refuse explicitement les pourcentages fixes : la stratégie suit le brief et l’univers choisi. Une stratégie *engagée* laisse une couleur saturée couvrir 30 à 60 % de la surface ; une stratégie d’*immersion* fait de la surface la couleur elle-même. Ce qui ne change pas : chaque couleur doit avoir un rôle.`,
-      takeaway: 'Les « 10 % d’accent » sont une heuristique pour calmer une interface, pas une loi : le dosage suit la stratégie et le brief.',
-      sources: ['imp:quieter', 'imp:colorize', 'imp:new-work'],
+La commande \`colorize\` refuse explicitement les pourcentages fixes : le dosage suit la stratégie, et la stratégie suit le brief. Une stratégie *engagée* laisse une couleur saturée couvrir **30 à 60 %** de la surface ; une stratégie d’*immersion* fait de la surface la couleur elle-même.
+
+Les surfaces *Persuader* et *Expérience* y ont droit. Dans une application, la retenue reste le plancher, mais un écran peut aller plus loin : un tableau de bord dont une couleur de catégorie porte le rapport, un écran de bienvenue baigné de couleur au début d’un parcours d’accueil. Ce qui ne change pas : chaque couleur a un rôle, et chaque contraste se vérifie.`,
+      takeaway: 'Le dosage suit la stratégie, pas un pourcentage : une couleur saturée peut couvrir 30 à 60 % de la surface, voire toute la surface. Les « 10 % d’accent » servent à calmer une interface criarde.',
+      sources: ['imp:quieter', 'imp:colorize', 'imp:new-work', 'imp:operate'],
     },
     {
       id: 'color-method-order',
@@ -759,7 +767,7 @@ La commande *colorize* refuse explicitement les pourcentages fixes : la stratég
         { id: 'apply', label: 'Appliquer à l’échelle du système, avec des jetons sémantiques' },
         { id: 'verify', label: 'Vérifier contrastes, indices non colorés et deux thèmes, dans chaque état' },
       ],
-      explanation: `C’est la démarche de la commande *colorize* :
+      explanation: `C’est la démarche de la commande \`colorize\` :
 
 1. on **audite** avant de choisir, pour ne pas écraser une marque déjà établie ;
 2. on nomme une **stratégie** avant de toucher une teinte ;

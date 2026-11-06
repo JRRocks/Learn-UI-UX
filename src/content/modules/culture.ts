@@ -191,6 +191,7 @@ const culture: ModuleContent = {
     'mdn:intl',
     S.w3cNames,
     'cnil:cookies',
+    S.tiktok,
     S.toubon,
     S.bgb312j,
     S.japanTax,
@@ -257,11 +258,11 @@ Côté rédaction, impeccable demande des messages complets plutôt que des frag
 ### Les dimensions de Hofstede
 À partir d’enquêtes menées chez IBM entre 1967 et 1973, puis complétées, Geert Hofstede note les pays sur six dimensions (de 0 à 100 environ) :
 
-- **Distance hiérarchique** : acceptation d’un pouvoir inégalement réparti (Arabie saoudite 95, Chine 80, Suède 31).
-- **Individualisme** face au collectivisme (États-Unis 91, Corée du Sud 18, Indonésie 14).
+- **Distance hiérarchique** : acceptation d’un pouvoir inégalement réparti (Chine 80, Arabie saoudite 72, Suède 31).
+- **Individualisme** face au collectivisme (Suède 87, États-Unis 60, Indonésie 5).
 - **Orientation réussite**, dite « masculinité » : compétition, performance (Japon 95, Suède 5).
 - **Contrôle de l’incertitude** : besoin de règles et de prévisibilité (Japon 92, France 86, Chine 30).
-- **Orientation long terme** (Corée du Sud 100, États-Unis 26).
+- **Orientation long terme** (Japon 100, Arabie saoudite 27).
 - **Indulgence**, ajoutée en 2010 (Suède 78, Chine 24).
 
 Marcus et Gould (2000) en ont tiré des hypothèses d’interface pour les cinq dimensions alors publiées :
@@ -277,7 +278,7 @@ L’anthropologue Edward T. Hall oppose les cultures à **contexte fort**, où u
 
 ### Les limites
 - Ce sont des **moyennes nationales** : elles ne décrivent aucun individu. Une étude portant sur près de 170 000 personnes, issues de trois enquêtes internationales (Fischer et Schwartz, 2011), trouve même plus de consensus que de désaccord entre pays sur les priorités de valeurs.
-- Les données sont **anciennes** et régulièrement révisées (The Culture Factor publie des valeurs mises à jour).
+- Les données d’origine sont **anciennes** et régulièrement révisées : en octobre 2023, The Culture Factor a mis à jour l’individualisme et l’orientation long terme de nombreux pays — les États-Unis passent de 91 à 60 en individualisme. Les scores cités ici sont ces valeurs révisées.
 - Les prédictions **se contredisent** parfois : selon Marcus, un fort contrôle de l’incertitude appelle des écrans simples ; or le Japon (92) a certains des sites les plus denses au monde, précisément pour rassurer.
 - Le risque est de **plaquer un stéréotype**. Une grille sert à poser des questions ; seules la recherche et les tests avec des utilisateurs locaux y répondent.`,
     },
@@ -424,7 +425,7 @@ Le coréen **espace ses mots**. Par défaut, le navigateur le coupe pourtant ent
 - À corps égal, l’arabe paraît plus petit que le latin et porte des signes au-dessus et au-dessous des lettres : monte la taille et l’interlignage, et choisis une police arabe dédiée (Noto Naskh Arabic, IBM Plex Sans Arabic, Dubai).
 
 ### Allemand et expansion du texte
-L’allemand est souvent **30 % plus long** que l’anglais, et ses mots composés (*Datenschutzeinstellungen*) ne se coupent pas seuls. Plus un libellé est court, plus l’expansion relative est forte : IBM prévoit une traduction 2 à 3 fois plus longue pour une chaîne de moins de 10 caractères. Prévois 30 à 40 % de marge, aucune largeur fixe sur du texte, et \`hyphens: auto\` — qui ne fonctionne que si l’attribut \`lang\` indique la langue du contenu.`,
+L’allemand est souvent **30 % plus long** que l’anglais, et ses mots composés (*Datenschutzeinstellungen*) ne se coupent pas seuls. Plus un libellé est court, plus l’expansion relative est forte : IBM prévoit une traduction 2 à 3 fois plus longue pour une chaîne de 10 caractères ou moins. Prévois 30 à 40 % de marge, aucune largeur fixe sur du texte, et \`hyphens: auto\` — qui ne fonctionne que si l’attribut \`lang\` indique la langue du contenu.`,
       examples: [
         {
           title: 'Mettre en valeur un texte chinois',
@@ -1505,7 +1506,7 @@ Impeccable recommande ce réflexe dans toute interface destinée à plusieurs la
             css: `.ck{display:flex;flex-direction:column;gap:10px}
 .ck-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
 .ck-total b{font-size:18px;font-variant-numeric:tabular-nums}
-.ck-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.ck-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #868d9c;border-radius:10px}
 .ck-opt--on{border-color:#0b7a3b;box-shadow:0 0 0 1px #0b7a3b}
 .ck-opt .mk-ico{--ico:20px;color:#36405a;margin-top:1px}
 .ck-opt p{line-height:1.35}
@@ -1531,7 +1532,7 @@ Impeccable recommande ce réflexe dans toute interface destinée à plusieurs la
             css: `.ck{display:flex;flex-direction:column;gap:10px}
 .ck-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;border-radius:10px;background:#f4f6f9}
 .ck-total b{font-size:18px;font-variant-numeric:tabular-nums}
-.ck-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.ck-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #868d9c;border-radius:10px}
 .ck-opt--on{border-color:#0b7a3b;box-shadow:0 0 0 1px #0b7a3b}
 .ck-opt .mk-ico{--ico:20px;color:#36405a;margin-top:1px}
 .ck-opt p{line-height:1.35}
@@ -1626,48 +1627,6 @@ Placer le CEP à la fin, comme un code postal occidental, fait saisir à la main
     },
 
     /* ---------- France ---------- */
-    {
-      id: 'culture-fr-cookies-hotspot',
-      type: 'hotspot',
-      difficulty: 1,
-      culture: 'fr',
-      prompt: 'Ce bandeau de cookies s’adresse à des visiteurs en France. Trouve les deux défauts que la CNIL sanctionne.',
-      visual: {
-        alt: 'Site d’actualité avec un bandeau de cookies : un titre, une description des finalités, la phrase « En poursuivant votre navigation, vous acceptez leur utilisation », un lien discret « Personnaliser » à côté d’un bouton « Tout accepter », et un lien vers la politique de confidentialité.',
-        frame: 'browser',
-        lang: 'fr',
-        css: `.ck2{display:flex;flex-direction:column;gap:12px;padding:14px 14px 16px}
-.ck2-logo{font-weight:800;font-size:17px;letter-spacing:-.01em}
-.ck2-head{font-size:19px;font-weight:700;line-height:1.3}
-.ck2-banner{border:1px solid #d5d9e2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgb(15 20 35 / .12)}
-.ck2-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
-.ck2-link{font-size:13px;color:#1f4fd8;text-decoration:underline;align-self:flex-start}`,
-        html: `<div class="ck2">
-  <p class="ck2-logo">L’Écho des Calanques</p>
-  <p class="ck2-head">Les marchés de producteurs reviennent tous les samedis matin</p>
-  <div class="ck2-banner">
-    <p class="mk-h3">Votre vie privée nous importe</p>
-    <p class="mk-small" data-hotspot="purposes">Avec nos 214 partenaires, nous utilisons des cookies pour mesurer l’audience et vous proposer des publicités personnalisées.</p>
-    <p class="mk-small" data-hotspot="continue">En poursuivant votre navigation, vous acceptez leur utilisation.</p>
-    <div class="ck2-row" data-hotspot="buttons"><span class="mk-btn mk-btn--text mk-btn--s">Personnaliser</span><span class="mk-btn">Tout accepter</span></div>
-    <span class="ck2-link" data-hotspot="policy">Politique de confidentialité</span>
-  </div>
-</div>`,
-      },
-      hotspots: [
-        { id: 'buttons', label: 'Boutons « Personnaliser » et « Tout accepter »', correct: true, why: 'Accepter se fait en un clic, refuser oblige à passer par « Personnaliser » : la CNIL exige un refus aussi simple, au même niveau.' },
-        { id: 'continue', label: '« En poursuivant votre navigation… »', correct: true, why: 'Poursuivre la navigation ne vaut pas consentement : il faut un acte positif clair.' },
-        { id: 'purposes', label: 'Description des finalités', correct: false, why: 'Informer sur les finalités (mesure d’audience, publicité) est requis : rien à corriger.' },
-        { id: 'policy', label: 'Lien vers la politique de confidentialité', correct: false, why: 'Le lien vers la politique complète est attendu : correct.' },
-      ],
-      explanation: `Pour la **CNIL**, refuser les cookies doit être **aussi simple** que les accepter : un bouton « Tout refuser » au même niveau et du même format que « Tout accepter », ou un lien « Continuer sans accepter ». Un « Personnaliser » qui cache le refus derrière plusieurs écrans ne suffit pas.
-
-Et depuis le RGPD, le consentement doit résulter d’un **acte positif clair** : « en poursuivant votre navigation, vous acceptez » n’est plus valable.
-
-Les sanctions sont lourdes : 150 M€ pour Google et 60 M€ pour Facebook (décembre 2021), 5 M€ pour TikTok, qui demandait plusieurs clics pour refuser contre un seul pour accepter (décembre 2022).`,
-      takeaway: 'En France, « Tout refuser » doit être aussi simple et visible que « Tout accepter », et poursuivre la navigation ne vaut pas consentement.',
-      sources: ['cnil:cookies', S.tiktok, 'cnil:banners'],
-    },
     {
       id: 'culture-fr-toubon-tf',
       type: 'truefalse',
@@ -2174,7 +2133,7 @@ Concevoir pour l’USSD, c’est écrire des menus courts et numérotés, peu d�
 .ic-total b{font-size:18px;font-variant-numeric:tabular-nums}
 .ic .mk-btn--block{background:#0b7a3b}
 .ic-group{display:flex;flex-direction:column;gap:6px}
-.ic-opt{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid #e1e4ea;border-radius:10px}
+.ic-opt{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid #868d9c;border-radius:10px}
 .ic-opt--on{border-color:#0b7a3b;box-shadow:0 0 0 1px #0b7a3b}
 .ic-opt .mk-ico{--ico:18px;color:#36405a}
 .ic-opt p{line-height:1.3}

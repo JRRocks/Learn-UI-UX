@@ -22,7 +22,7 @@ const PAGE_COLUMN = `${PAGE_CSS}
 .pg-art { max-width: 50ch; margin-inline: auto; }`;
 
 const page = (site: string, nav: string[], title: string, meta: string, paras: string[]) =>
-  `<div class="pg"><div class="pg-in"><div class="pg-bar"><b>${site}</b>${nav.map((n) => `<span>${n}</span>`).join('')}</div><div class="pg-art"><p class="pg-h">${title}</p><p class="pg-meta">${meta}</p>${paras.map((p) => `<p class="pg-p">${p}</p>`).join('')}</div></div></div>`;
+  `<div class="pg" data-miniature><div class="pg-in"><div class="pg-bar"><b>${site}</b>${nav.map((n) => `<span>${n}</span>`).join('')}</div><div class="pg-art"><p class="pg-h">${title}</p><p class="pg-meta">${meta}</p>${paras.map((p) => `<p class="pg-p">${p}</p>`).join('')}</div></div></div>`;
 
 const MEETINGS_PAGE = page('Opale', ['Produit', 'Tarifs', 'Blog'], 'Pourquoi nos réunions raccourcissent', 'Camille Roux · 12 mars · 4 min de lecture', [
   'Depuis janvier, aucune réunion de l’équipe produit ne dépasse vingt-cinq minutes. La règle tient en trois points : un ordre du jour envoyé la veille, une personne qui surveille l’heure, et des décisions notées en direct dans le document partagé.',
@@ -133,10 +133,10 @@ Pour reprendre la typographie d’un écran existant, impeccable suit cet ordre 
       title: 'Une échelle, pas une collection de valeurs',
       body: `Une **échelle typographique** relie les tailles par un rapport constant : avec un rapport de 1,2 et un corps de 16 px, les marches suivantes valent 19, 23 puis 28 px.
 
-- **Interface produit** : rapport serré, 1,125 à 1,2 entre les marches ; échelle fixe en \`rem\`, pas de titres fluides qui rétrécissent dans une barre latérale.
-- **Pages éditoriales et marketing** : un contraste plus franc entre les tailles, et une taille d’affichage qui peut répondre à la largeur avec \`clamp()\`, plafonnée à **6rem**.
+- **Mode Opérer (interface produit)** : rapport serré, 1,125 à 1,2 entre les marches ; échelle fixe en \`rem\`, pas de titres fluides qui rétrécissent dans une barre latérale.
+- **Modes Persuader et Expérience** (page d’accueil, campagne, portfolio) : un contraste plus franc entre les tailles, et une taille d’affichage qui peut répondre à la largeur avec \`clamp()\`, plafonnée à **6rem**.
 - Le détecteur d’impeccable juge une hiérarchie **plate** quand aucune marche entre deux rôles voisins n’atteint **1,25×**. Avec des marches de 1,125 à 1,2, la hiérarchie passe donc aussi par la graisse (titres à 600 ou plus pour un corps à 400 : le détecteur n’en fait alors qu’un conseil), ou l’échelle contient au moins un saut de 1,25×, souvent le titre de page.
-- **Approche (letter-spacing)** : on resserre un titre d’affichage optiquement (−0,01 à −0,03em), jamais au-delà de **−0,04em**. Sur du texte courant, au-delà de +0,05em on ralentit la lecture ; l’espacement large est réservé aux courts libellés en capitales.`,
+- **Approche (letter-spacing)** : on resserre un titre d’affichage optiquement (−0,02 à −0,03em), jamais au-delà de **−0,04em**. Sur du texte courant, au-delà de +0,05em on ralentit la lecture ; l’espacement large est réservé aux courts libellés en capitales.`,
     },
     {
       id: 'retours-ligne',
@@ -173,7 +173,7 @@ Ensuite, les **défauts de lisibilité**, quel que soit l’auteur :
     { id: 'ch', front: 'Combien de caractères tient une colonne de `60ch` ?', back: 'Environ 75 : `1ch` est la largeur du chiffre « 0 », plus large qu’un caractère moyen.' },
     { id: 'leading', front: 'Quel interlignage pour un corps de texte courant ?', back: '1,5 à 1,7 pour commencer, davantage quand la ligne s’allonge, puis à régler selon la police et la langue. Jamais sous 1,3.' },
     { id: 'body-size', front: 'Taille plancher du corps de texte sur le web ?', back: '16 px (1rem) pour le corps. Et des champs de saisie à 16 px au moins, sinon iOS Safari zoome quand on les touche.' },
-    { id: 'ratio', front: 'Quel saut de taille l’échelle doit-elle contenir au moins une fois ?', back: '1,25×, sinon le détecteur juge la hiérarchie plate. Avec des marches de 1,125 à 1,2 en interface produit, des titres nettement plus gras que le corps (600 contre 400) portent la hiérarchie.' },
+    { id: 'ratio', front: 'Quel saut de taille l’échelle doit-elle contenir au moins une fois ?', back: '1,25×, sinon le détecteur juge la hiérarchie plate. Avec des marches de 1,125 à 1,2 en mode Opérer (interface produit), des titres nettement plus gras que le corps (600 contre 400) portent la hiérarchie.' },
     { id: 'tracking', front: 'Limite de resserrement de l’approche sur un titre ?', back: '−0,04em au maximum ; −0,02 à −0,03em se lit généralement mieux.' },
     { id: 'roles', front: 'Combien de familles pour une interface produit ?', back: 'Souvent une seule, bien réglée. Une seconde famille doit avoir un rôle qu’elle seule peut tenir.' },
     { id: 'dark', front: 'Texte clair sur fond sombre : que compenser ?', back: 'Il paraît plus gras (irradiation) : un peu plus d’interlignage, un soupçon d’approche, et une graisse de plus seulement si une police fine se délite.' },
@@ -304,10 +304,10 @@ La version recommandée combine plusieurs leviers à la fois — taille (20 px c
         },
       ],
       answer: 'tight',
-      explanation: `En grande taille, l’espace entre les lettres paraît proportionnellement plus grand : on **resserre optiquement** les titres d’affichage, typiquement de −0,01 à −0,03em.
+      explanation: `En grande taille, l’espace entre les lettres paraît proportionnellement plus grand : on **resserre optiquement** les titres d’affichage, typiquement de −0,02 à −0,03em.
 
-Le plancher de qualité d’impeccable s’arrête à **−0,04em**, et −0,02 à −0,03em se lit généralement mieux. Le détecteur, lui, ne signale l’approche écrasée (*Crushed letter spacing*) qu’au-delà de −0,07em, ou −0,09em à partir de 40 px : un réglage peut donc passer le scan et rester trop serré. L’espacement positif est réservé aux libellés courts en capitales.`,
-      takeaway: 'Resserre les grands titres de −0,01 à −0,03em, jamais au-delà de −0,04em.',
+Le plancher de qualité d’impeccable s’arrête à **−0,04em**. Le détecteur, lui, ne déclenche sa règle « Approche écrasée » (\`extreme-negative-tracking\`) qu’au-delà de −0,07em, ou de −0,09em à partir de 40 px : un réglage peut donc passer le scan et rester trop serré. L’espacement positif est réservé aux libellés courts en capitales.`,
+      takeaway: 'Resserre les grands titres de −0,02 à −0,03em, jamais au-delà de −0,04em.',
       sources: ['imp:craft-floor', 'imp:detector'],
     },
     {
@@ -335,8 +335,8 @@ Le plancher de qualité d’impeccable s’arrête à **−0,04em**, et −0,02 
       ],
       explanation: `Deux règles du détecteur d’impeccable s’appliquent ici :
 
-- **All-caps body text** : les capitales conviennent aux courts libellés, pas à une phrase de 80 caractères ou plus.
-- **Undersized functional text** : un texte porteur d’information sous **11 px** est un échec de lisibilité, pas un choix de style — encore pire en gris clair, qui ne respecte plus le contraste minimum de 4,5:1.`,
+- **Texte courant en capitales** (\`all-caps-body\`) : les capitales conviennent aux courts libellés, pas à une phrase de 80 caractères ou plus.
+- **Texte fonctionnel trop petit** (\`undersized-ui-text\`) : un texte porteur d’information sous **11 px** est un échec de lisibilité, pas un choix de style — encore pire en gris clair, qui ne respecte plus le contraste minimum de 4,5:1.`,
       takeaway: 'Pas de paragraphes en capitales, et aucun texte utile sous 11 px.',
       sources: ['imp:detector', 'imp:typeset', LARSON],
     },
@@ -507,23 +507,25 @@ Au-delà de 19–20 px sur téléphone, chaque ligne ne porte plus que quelques 
         },
       ],
       answer: 'ragged',
-      explanation: `La justification répartit l’espace restant de chaque ligne **entre les mots**. Dans une colonne étroite, il y a peu de mots par ligne : les espaces gonflent de façon irrégulière, des trous s’ouvrent entre les mots et, d’une ligne à l’autre, peuvent s’aligner en **rivières** blanches verticales. Le détecteur d’impeccable le signale (*justified text*).
+      explanation: `La justification répartit l’espace restant de chaque ligne **entre les mots**. Dans une colonne étroite, il y a peu de mots par ligne : les espaces gonflent de façon irrégulière, des trous s’ouvrent entre les mots et, d’une ligne à l’autre, peuvent s’aligner en **rivières** blanches verticales. Le détecteur d’impeccable le signale : règle « Texte justifié » (\`justified-text\`).
 
 Aligne à gauche (\`text-align: start\`, qui suit aussi le sens d’écriture), élargis la mesure, ou, si la justification est indispensable, active la césure avec \`hyphens: auto\` et un attribut \`lang\` correct. Les écritures qui justifient autrement (chinois, japonais, thaï, arabe) ne sont pas concernées.`,
       takeaway: 'Colonne étroite : aligne à gauche, ou justifie seulement avec `hyphens: auto` et la bonne langue.',
       sources: ['imp:detector', 'butterick'],
     },
     {
-      id: 'typography-italic-serif-tf',
+      id: 'typography-mono-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Un magazine peut légitimement titrer sa page d’accueil en grand italique à empattements.',
+      prompt: 'Dans une documentation pour développeurs, composer les extraits de code et les valeurs mesurées en monospace est un choix légitime.',
       answer: true,
-      explanation: `C’est vrai. Le détecteur d’impeccable signale le titre d’accueil en italique à empattements (type Fraunces, Playfair, Recoleta) parce qu’il est devenu **l’uniforme des pages d’accueil de startups générées par IA** : choisi par réflexe, il ne dit plus rien du produit.
+      explanation: `Vrai. Le plancher de qualité d’impeccable refuse le monospace **en costume « technique »** : une police à chasse fixe posée sur des titres ou du texte courant pour donner à la page un air d’outil de développeur. La même règle précise à quoi le monospace sert : **le code, les données et les mesures**.
 
-Mais la règle elle-même précise : **« juge selon le contexte »**. Un magazine, une maison d’édition ou une marque au registre éditorial peuvent légitimement le vouloir, à condition que ce soit une décision qui découle du monde visuel choisi, pas un réflexe. Et une règle d’impeccable passe avant tout : **le brief gagne**.`,
-      takeaway: 'Ce qui est à refuser, c’est le réflexe : un titre italique à empattements doit découler d’un choix éditorial assumé.',
-      sources: ['imp:detector', 'imp:skill'],
+Une documentation est son terrain naturel. À chasse fixe, chaque caractère occupe la même largeur : l’indentation et les colonnes d’un extrait de code restent alignées, et une valeur à recopier telle quelle (\`max-width: 50ch\`, \`120 ms\`) se détache de la phrase qui l’entoure. Le mode Lire d’impeccable le confirme : le monospace sert au code, aux paramètres et aux petits libellés, jamais par défaut au texte courant ni aux titres.
+
+Ce qui est à refuser, c’est le réflexe, pas la police.`,
+      takeaway: 'Le monospace sert le code, les données et les mesures ; c’est en costume « technique » sur du texte courant qu’il devient un réflexe.',
+      sources: ['imp:craft-floor', 'imp:mode-read'],
     },
     {
       id: 'typography-real-content-multi',
@@ -584,9 +586,9 @@ Le faux texte et une seule largeur d’écran sont précisément ce qui fait pas
       ],
       explanation: `Trois règles du détecteur d’impeccable s’appliquent ici :
 
-- **Titre de héros surdimensionné** : une phrase complète en taille d’affichage domine le premier écran (le détecteur vise un titre d’au moins 72 px et 40 caractères qui occupe une grande part de l’écran). Un titre d’un ou deux mots peut être énorme ; une phrase longue se compose plus petit, ou se raccourcit.
-- **Approche large sur le texte courant** : au-delà de +0,05em, les lettres se détachent et la lecture ralentit. L’espacement large reste aux courts libellés en capitales, comme la navigation.
-- **Interlignage serré** : sous 1,3, les lignes se collent. Le corps de texte respire entre 1,5 et 1,7.`,
+- **Titre de héros surdimensionné** (\`oversized-h1\`) : une phrase complète en taille d’affichage domine le premier écran (le détecteur vise un titre d’au moins 72 px et 40 caractères qui occupe une grande part de l’écran). Un titre d’un ou deux mots peut être énorme ; une phrase longue se compose plus petit, ou se raccourcit.
+- **Approche large sur le texte courant** (\`wide-tracking\`) : au-delà de +0,05em, les lettres se détachent et la lecture ralentit. L’espacement large reste aux courts libellés en capitales, comme la navigation.
+- **Interlignage serré** (\`tight-leading\`) : sous 1,3, les lignes se collent. Le corps de texte respire entre 1,5 et 1,7.`,
       takeaway: 'Un titre long se compose plus petit, l’approche large reste aux courts libellés, et le corps garde un interlignage d’au moins 1,5.',
       sources: ['imp:detector', 'imp:typeset'],
     },
