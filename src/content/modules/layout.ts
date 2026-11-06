@@ -58,6 +58,19 @@ const PHONE_KPI_CSS = `
 .mk-tabbar { font-size: 11px; }
 `;
 
+/** Help-desk dashboard of the squint duel: the same data in both versions, both blurred. */
+const DESK_URGENT = [
+  ['Paiement refusé', '25 min'],
+  ['Compte bloqué', '40 min'],
+  ['Facture en double', '1 h'],
+];
+const DESK_TEAM = [
+  ['Léa', 'Disponible', 'green'],
+  ['Malik', 'Occupé', 'orange'],
+  ['Zoé', 'Absente', 'gray'],
+];
+const SQUINT_DUEL_CSS = `.sd { filter: blur(2px); }`;
+
 const layout: ModuleContent = {
   id: 'layout',
   title: 'Espace, grille et rythme',
@@ -147,10 +160,10 @@ Garde distincts les contenus distincts, sans transformer chaque groupe en compos
     {
       id: 'rythme',
       title: 'Rythme : une échelle et des contrastes d’espace',
-      body: `Le **rythme** naît du contraste délibéré entre intervalles serrés et intervalles généreux. Une même valeur répétée partout donne le même poids à tout : le détecteur d’impeccable signale cet *espacement monotone* quand une même valeur représente plus de 60 % des espacements relevés, avec trois valeurs distinctes au plus.
+      body: `Le **rythme** naît du contraste délibéré entre intervalles serrés et intervalles généreux. Une même valeur répétée partout donne le même poids à tout : le détecteur d’impeccable le signale par la règle « Espacement monotone » (\`monotonous-spacing\`), quand une même valeur représente plus de 60 % des espacements relevés, avec trois valeurs distinctes au plus.
 
 - Utilise une **échelle documentée** plutôt que des valeurs au cas par cas. Une base de **4** (4, 8, 12, 16, 24, 32, 48, 64…) offre en général les marches intermédiaires utiles (4 ou 12, par exemple) qu’une base de 8 seule ne permet pas.
-- **Plus d’espace au-dessus d’un titre qu’en dessous** : le titre se lie au contenu qu’il introduit. Quand il colle au bloc précédent, chaque section semble légender la précédente (règle *heading-rhythm*).
+- **Plus d’espace au-dessus d’un titre qu’en dessous** : le titre se lie au contenu qu’il introduit. Quand il colle au bloc précédent, chaque section semble légender la précédente : c’est la règle « Titre collé au bloc précédent » (\`heading-rhythm\`).
 - Utilise \`gap\` quand l’écart est le même entre tous les frères (les lignes d’une liste, les champs d’un groupe) : la relation est portée par le parent, sans marge parasite après le dernier élément. Pour des écarts différenciés, imbrique des groupes, chacun avec son \`gap\`, ou donne une marge à l’élément qui doit s’écarter.
 - Nomme par leur rôle les espacements qui se répètent (\`--space-group\`, \`--space-section\`).
 
@@ -187,8 +200,8 @@ La variation n’est pas un but : la répétition aide à reconnaître, on la ro
 - **Une carte se justifie** pour un objet autonome, qu’on parcourt et qu’on ouvre d’un clic, avec ses propres actions — surtout quand ses voisines contiennent autre chose (un tableau de bord, un fil d’actualité). Pour **comparer** ou **chercher** parmi des éléments semblables, une liste ou un tableau se lisent mieux (Nielsen Norman Group).
 - **Jamais de cartes imbriquées** : une carte dans une carte crée du bruit et une profondeur inutile. Aplatis avec l’espacement, la typographie et des séparateurs.
 - **La profondeur** (ombre, élévation) ne sert qu’à clarifier un état ou une hiérarchie. Déclare-la une fois : une bordure *ou* une ombre, pas une bordure fine sous une large ombre.
-- **Marge intérieure** : au moins 8 px, idéalement 12 à 16 px, dans tout conteneur bordé ou coloré ; sinon le texte touche le bord (règle *cramped-padding*).
-- Dans un carrousel horizontal, garde **le même retrait des deux côtés** : une carte collée au bord, coins coupés, trahit un panneau plus large que sa zone visible (règle *edge-flush-cards*).`,
+- **Marge intérieure** : au moins 8 px, idéalement 12 à 16 px, dans tout conteneur bordé ou coloré ; sinon le texte touche le bord : c’est la règle « Marge intérieure étriquée » (\`cramped-padding\`).
+- Dans un carrousel horizontal, garde **le même retrait des deux côtés** : une carte collée au bord, coins coupés, trahit un panneau plus large que sa zone visible. C’est la règle « Cartes collées au bord du défilement » (\`edge-flush-cards\`).`,
       examples: [
         {
           title: 'Une page « Équipe »',
@@ -223,7 +236,7 @@ La variation n’est pas un but : la répétition aide à reconnaître, on la ro
 - **Persuader** et **Expérience** : la composition peut être asymétrique, fluide ou volontairement disruptive quand l’univers le justifie.
 - **Lire** : une colonne de lecture confortable et une navigation linéaire.
 
-Pour simplifier un écran (commande *distill*) : **une** action principale, peu d’actions secondaires, le reste en divulgation progressive ; un flux vertical plutôt qu’une grille complexe ; un seul alignement ; des cartes retirées quand l’espacement suffit.
+Pour simplifier un écran (commande \`distill\`) : **une** action principale, peu d’actions secondaires, le reste en divulgation progressive ; un flux vertical plutôt qu’une grille complexe ; un seul alignement ; des cartes retirées quand l’espacement suffit.
 
 Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clair, oui ; retirer ce dont la personne a besoin pour décider, non. Un écran si épuré qu’on ne sait plus quoi faire n’est pas minimaliste, il est obscur.`,
     },
@@ -237,7 +250,7 @@ Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clai
 - Teste les extrêmes : textes longs, traductions, zoom, états vides, éléments collants, encoches. Un contenu qui déborde de son conteneur, ou une colonne qui s’étire loin sous la ligne de flottaison pendant que sa voisine flotte dans le vide, sont des défauts de structure.
 - Le texte courant ne touche jamais le bord de l’écran : vise au moins 16 px de marge latérale, idéalement 24 à 32 px. Le détecteur signale moins de 12 px sur un écran de 480 px de large ou moins, moins de 16 px au-delà.
 
-**Cibles tactiles.** Une icône peut être petite à l’œil ; sa **zone d’appui**, non. Le WCAG 2.2 (critère 2.5.8, niveau AA) exige au moins **24 × 24 px CSS**, ou un espacement équivalent ; le niveau AAA et les guides de plateformes visent **au moins 44 × 44** (Apple : 44 pt, Material : 48 dp). Agrandis la zone avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
+**Cibles tactiles.** Une icône peut être petite à l’œil ; sa **cible tactile** (la zone qui reçoit le toucher), non. Le WCAG 2.2 (critère 2.5.8, niveau AA) exige au moins **24 × 24 px CSS**, ou un espacement suffisant. Au toucher, impeccable fixe le minimum à **44 × 44 px**, comme le niveau AAA (critère 2.5.5) ; iOS demande 44 × 44 pt, Android 48 × 48 dp. Agrandis la cible avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
       examples: [
         {
           title: 'Une barre d’outils sur téléphone',
@@ -249,12 +262,12 @@ Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clai
           },
           badNote: 'Des cibles de 16 × 16 px collées : un pouce en touche deux à la fois.',
           good: {
-            alt: 'Même barre d’outils : les icônes gardent leur dessin de 16 px, mais chacune occupe une zone ronde de 44 px.',
+            alt: 'Même barre d’outils : les icônes gardent leur dessin de 16 px, mais chacune est au centre d’une cible ronde de 44 px.',
             frame: 'phone',
             html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h3">Le retour des tramways</p><p class="mk-small mk-muted">Lecture 6 min</p><div class="mk-row tb" style="--gap:4px;margin-inline-start:-12px">${TOOL_ICONS.map((i) => `<span class="tb-b"><i data-icon="${i}" style="--ico:16px"></i></span>`).join('')}</div><p>Dans vingt villes françaises, le tram redevient l’épine dorsale des transports…</p></div>`,
             css: `.tb { color: #36405a; } .tb-b { width: 44px; height: 44px; border-radius: 50%; display: inline-grid; place-items: center; background: #f1f3f6; }`,
           },
-          goodNote: 'Même dessin de 16 px, zone d’appui de 44 × 44 px : facile à viser, sans alourdir.',
+          goodNote: 'Même dessin de 16 px, cible tactile de 44 × 44 px : facile à viser, sans alourdir.',
         },
       ],
     },
@@ -272,7 +285,7 @@ Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clai
     { id: 'density', front: 'Comment choisir la densité d’un écran ?', back: 'Selon la fréquence d’usage, la complexité des décisions et le mode : un outil quotidien peut être dense, une page d’accueil respire.' },
     { id: 'responsive', front: 'Qu’est-ce qu’un responsive structurel ?', back: 'Réordonner, replier, faire refluer ou révéler selon ce qui reste important — pas seulement rétrécir.' },
     { id: 'edge', front: 'Quelle marge latérale pour le texte courant ?', back: 'Vise au moins 16 px, idéalement 24 à 32. Le détecteur signale moins de 12 px sur un écran de 480 px de large ou moins, moins de 16 px au-delà.' },
-    { id: 'targets', front: 'La zone d’appui d’une icône doit-elle avoir la taille de son dessin ?', back: 'Non : le dessin peut rester petit. Agrandis la zone avec du `padding` ou un pseudo-élément : 24 × 24 px au moins (WCAG 2.2 AA), idéalement 44 × 44.' },
+    { id: 'targets', front: 'La cible tactile d’une icône doit-elle avoir la taille de son dessin ?', back: 'Non : le dessin peut rester petit. Agrandis la cible avec du `padding` ou un pseudo-élément : 24 × 24 px au moins (WCAG 2.2 AA), 44 × 44 px au toucher.' },
   ],
   exercises: [
     {
@@ -338,7 +351,7 @@ La version recommandée crée deux intervalles très différents — serré à l
       ideal: 32,
       explanation: `Un intertitre appartient au contenu qu’il **introduit**. Il lui faut donc plus d’espace au-dessus qu’en dessous : ici, 8 px le séparent de son paragraphe, et 12 px séparent deux paragraphes d’une même section.
 
-- De 0 à 8 px, l’intertitre est aussi près, voire plus près, du paragraphe précédent que du sien : il semble le conclure au lieu d’ouvrir une section (règle *heading-rhythm* du détecteur). De 10 à une vingtaine de pixels, la coupure reste à peine plus marquée que l’écart de 12 px entre deux paragraphes.
+- De 0 à 8 px, l’intertitre est aussi près, voire plus près, du paragraphe précédent que du sien : il semble le conclure au lieu d’ouvrir une section. Le détecteur le relève par la règle « Titre collé au bloc précédent » (\`heading-rhythm\`). De 10 à une vingtaine de pixels, la coupure reste à peine plus marquée que l’écart de 12 px entre deux paragraphes.
 - Autour de 32 px — quatre fois l’espace sous le titre, près de trois fois l’écart entre paragraphes —, la coupure se voit sans effort.
 - Au-delà d’environ 40 px, dans une colonne aussi compacte, les sections se détachent et la page se fragmente.`,
       takeaway: 'Plus d’espace au-dessus d’un titre qu’en dessous, et nettement plus que l’écart entre deux paragraphes.',
@@ -369,7 +382,7 @@ La version recommandée crée deux intervalles très différents — serré à l
       answer: 'rhythm',
       explanation: `Le **rythme** vient du contraste entre intervalles serrés et généreux, chacun lié à une relation : un libellé et sa valeur forment un tout, deux lignes d’une section sont voisines, deux sections sont distinctes.
 
-Les deux autres versions échouent différemment : l’espacement monotone efface les groupes (règle *monotonous-spacing*) ; l’espacement inversé rattache chaque intertitre au mauvais bloc (règle *heading-rhythm*).`,
+Les deux autres versions échouent différemment. L’espacement monotone efface les groupes : c’est la règle « Espacement monotone » (\`monotonous-spacing\`). L’espacement inversé rattache chaque intertitre au mauvais bloc : c’est la règle « Titre collé au bloc précédent » (\`heading-rhythm\`).`,
       takeaway: 'Rythme : serré dans un groupe, plus large entre les lignes, généreux avant chaque section — et plus d’espace au-dessus d’un titre qu’en dessous.',
       sources: ['imp:layout', 'imp:craft-floor', 'imp:detector'],
     },
@@ -414,7 +427,7 @@ Les deux autres versions échouent différemment : l’espacement monotone effac
         },
       ],
       answer: 'flat',
-      explanation: `Une carte dans une carte n’apporte aucune information : elle ajoute du bruit visuel, de la profondeur inutile et des marges qui s’empilent. C’est un cliché que le détecteur d’impeccable relève (*nested cards*).
+      explanation: `Une carte dans une carte n’apporte aucune information : elle ajoute du bruit visuel, de la profondeur inutile et des marges qui s’empilent. C’est un cliché que le détecteur d’impeccable relève par la règle « Cartes imbriquées » (\`nested-cards\`).
 
 Pour séparer des sous-parties, aplatis : l’**espacement**, la **typographie** (un total plus grand et plus gras) et de **fins séparateurs** suffisent.`,
       takeaway: 'Jamais de cartes imbriquées : sépare les sous-parties par l’espace, la typographie et des séparateurs.',
@@ -434,7 +447,7 @@ Pour séparer des sous-parties, aplatis : l’**espacement**, la **typographie**
       answer: 'flatten',
       explanation: `Impeccable appelle la carte **le conteneur paresseux**. Un bon test : l’élément est-il un objet autonome, qu’on ouvre d’un clic et qui porte ses propres actions ? Un réglage n’en est pas un : il se règle sur place, au milieu d’éléments semblables. Or, pour des éléments homogènes, une liste se parcourt mieux que des cartes (Nielsen Norman Group).
 
-La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à la mise en page ; l’**espacement** et l’**alignement** suffisent. Groupe les réglages par thème, sous des intertitres, et garde les boîtes pour les vrais objets.`,
+La commande \`distill\` le dit simplement : les cartes ne sont pas nécessaires à la mise en page ; l’**espacement** et l’**alignement** suffisent. Groupe les réglages par thème, sous des intertitres, et garde les boîtes pour les vrais objets.`,
       takeaway: 'Une carte se mérite : réserve-la aux objets autonomes et organise le reste par l’espace, les intertitres et les séparateurs.',
       sources: ['imp:craft-floor', 'imp:distill', NNG_CARDS],
     },
@@ -474,9 +487,9 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
       ],
       explanation: `Trois règles du détecteur d’impeccable s’appliquent ici :
 
-- **cramped-padding** : du texte collé au bord d’un conteneur coloré ou bordé ; il faut au moins 8 px de marge intérieure, idéalement 12 à 16.
-- **nested-cards** : des boîtes dans des boîtes ; on aplatit avec l’espace, la typographie et des séparateurs.
-- **heading-rhythm** : un intertitre plus proche du bloc précédent que de son contenu ; on ouvre l’espace au-dessus.`,
+- « Marge intérieure étriquée » (\`cramped-padding\`) : du texte collé au bord d’un conteneur coloré ou bordé ; il faut au moins 8 px de marge intérieure, idéalement 12 à 16.
+- « Cartes imbriquées » (\`nested-cards\`) : des boîtes dans des boîtes ; on aplatit avec l’espace, la typographie et des séparateurs.
+- « Titre collé au bloc précédent » (\`heading-rhythm\`) : un intertitre plus proche du bloc précédent que de son contenu ; on ouvre l’espace au-dessus.`,
       takeaway: 'Marge intérieure de 12–16 px, jamais de cartes imbriquées, et plus d’espace au-dessus d’un titre qu’en dessous.',
       sources: ['imp:detector', 'imp:craft-floor', 'imp:layout'],
     },
@@ -511,9 +524,9 @@ La commande *distill* le dit simplement : les cartes ne sont pas nécessaires à
       explanation: `Deux contraintes physiques du mobile :
 
 - **Marges latérales** : un texte collé au bord de l’écran se lit mal et paraît coupé. Le détecteur d’impeccable le signale sous 16 px (12 px sur les écrans de 480 px ou moins) et recommande 24 à 32 px.
-- **Cibles tactiles** : le WCAG 2.2 exige au moins 24 × 24 px CSS par cible (critère 2.5.8), et 44 × 44 est recommandé. Le dessin peut rester petit : c’est la zone d’appui qu’on agrandit, avec du \`padding\`.`,
-      takeaway: 'Sur mobile : vise 16 px de marge latérale (jamais moins de 12), et des zones d’appui d’au moins 24 px, idéalement 44.',
-      sources: ['imp:detector', 'wcag:target', 'imp:layout'],
+- **Cibles tactiles** : le WCAG 2.2 exige au moins 24 × 24 px CSS par cible (critère 2.5.8, niveau AA), sauf espacement suffisant ; au toucher, impeccable fixe le minimum à 44 × 44 px. Le dessin peut rester petit : c’est la cible qu’on agrandit, avec du \`padding\`.`,
+      takeaway: 'Sur mobile : vise 16 px de marge latérale (jamais moins de 12) et des cibles tactiles de 44 × 44 px au toucher (24 × 24 px pour le WCAG 2.2 AA).',
+      sources: ['imp:detector', 'wcag:target', 'imp:layout', 'imp:adapt'],
     },
     {
       id: 'layout-density-choice',
@@ -616,12 +629,12 @@ Ces valeurs varient selon la densité du produit ; l’**ordre**, lui, ne change
       ],
       explanation: `Chaque règle du détecteur a sa correction structurelle :
 
-- *heading-rhythm* : un titre se lie à ce qu’il introduit ;
-- *cramped-padding* : 8 px au minimum, 12 à 16 px idéalement ;
-- *nested-cards* : on retire des boîtes au lieu d’en ajouter ;
-- *monotonous-spacing* : on crée des contrastes d’espace ;
-- *edge-flush-cards* : un panneau plus large que sa zone visible coupe ses cartes ;
-- *text-overflow* : un contenu plus large que son conteneur ; on le laisse passer à la ligne ou on contraint sa largeur.`,
+- « Titre collé au bloc précédent » (\`heading-rhythm\`) : un titre se lie à ce qu’il introduit ;
+- « Marge intérieure étriquée » (\`cramped-padding\`) : 8 px au minimum, 12 à 16 px idéalement ;
+- « Cartes imbriquées » (\`nested-cards\`) : on retire des boîtes au lieu d’en ajouter ;
+- « Espacement monotone » (\`monotonous-spacing\`) : on crée des contrastes d’espace ;
+- « Cartes collées au bord du défilement » (\`edge-flush-cards\`) : un panneau plus large que sa zone visible coupe ses cartes ;
+- « Contenu qui déborde de son conteneur » (\`text-overflow\`) : on le laisse passer à la ligne ou on contraint sa largeur.`,
       takeaway: 'Chaque défaut d’espace a sa correction : ouvrir au-dessus des titres, marger les encadrés, aplatir, rythmer, aligner les retraits, laisser le texte passer à la ligne.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
@@ -629,9 +642,9 @@ Ces valeurs varient selon la densité du produit ; l’**ordre**, lui, ne change
       id: 'layout-whitespace-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'L’espace vide est de l’espace perdu : il vaut toujours mieux le remplir avec plus d’information.',
+      prompt: 'L’espace vide est de l’espace perdu : mieux vaut le remplir avec plus d’information.',
       answer: false,
-      explanation: `L’espace n’est pas du vide : c’est lui qui **groupe** et **sépare**. Sans intervalles différenciés, les éléments se mélangent et la hiérarchie disparaît — il faut lire pour comprendre ce qui va ensemble.
+      explanation: `Faux. L’espace n’est pas du vide : c’est lui qui **groupe** et **sépare**. Sans intervalles différenciés, les éléments se mélangent et la hiérarchie disparaît — il faut lire pour comprendre ce qui va ensemble.
 
 La bonne question n’est pas « plein ou vide » mais « quelle **densité** pour cet usage ». Un outil utilisé toute la journée peut être dense ; une page d’accueil gagne à respirer. Dans les deux cas, l’espace reste structuré par une échelle.`,
       takeaway: 'L’espace groupe et sépare : on ne le remplit pas, on le dose selon l’usage.',
@@ -641,13 +654,13 @@ La bonne question n’est pas « plein ou vide » mais « quelle **densité** po
       id: 'layout-touch-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Une icône dessinée en 16 px impose une zone tactile de 16 px.',
-      answer: false,
-      explanation: `La **zone d’appui** et le **dessin** sont indépendants. Impeccable demande de garder les cibles utilisables même quand leur marque visible est petite : on agrandit la zone avec du \`padding\` ou un pseudo-élément, sans grossir l’icône.
+      prompt: 'Une icône dessinée en 16 px peut offrir une cible tactile de 44 × 44 px, sans que son dessin grossisse d’un pixel.',
+      answer: true,
+      explanation: `Vrai. La **cible tactile** est la zone qui reçoit le toucher ; le **dessin** n’en est que la partie visible. Le WCAG définit d’ailleurs la cible comme la région de l’écran qui accepte l’action du pointeur, et le W3C évoque la possibilité d’agrandir cette zone active sans agrandir ce qu’on voit. Impeccable en fait une règle : garder les cibles utilisables même quand leur marque visible est petite. Du \`padding\` ou un pseudo-élément agrandit la cible ; l’icône garde ses 16 px.
 
-Le WCAG 2.2 exige au moins **24 × 24 px CSS** par cible (critère 2.5.8, niveau AA), sauf espacement suffisant ; le niveau AAA et les guides d’Apple (44 pt) et de Material (48 dp) visent plus grand.`,
-      takeaway: 'Le dessin peut être petit, pas la zone d’appui : au moins 24 × 24 px, idéalement 44 × 44.',
-      sources: ['imp:layout', 'wcag:target', WCAG_255],
+Les seuils portent donc sur la cible, pas sur le dessin : au moins **24 × 24 px CSS** pour le critère 2.5.8 du WCAG 2.2 (niveau AA), sauf espacement suffisant ; **44 × 44 px** au toucher pour impeccable, comme le critère 2.5.5 (niveau AAA) ; 44 × 44 pt sur iOS, 48 × 48 dp sur Android.`,
+      takeaway: 'Le dessin peut rester petit, pas la cible tactile : au moins 24 × 24 px (WCAG 2.2 AA), 44 × 44 px au toucher.',
+      sources: ['imp:layout', 'imp:adapt', 'wcag:target', WCAG_255],
     },
     {
       id: 'layout-spacing-multi',
@@ -670,52 +683,75 @@ Les trois autres sont des défauts classiques : titre à égale distance de deux
       sources: ['imp:layout', 'imp:craft-floor', 'imp:detector', COMMON_REGION],
     },
     {
-      id: 'layout-distill-choice',
+      id: 'layout-squint-duel',
       type: 'choice',
       difficulty: 3,
-      prompt: 'L’accueil d’une application de réservation de restaurants est trop chargé. Quelle simplification est la plus juste ?',
+      context:
+        'Deux versions du tableau de bord d’une équipe d’assistance, avec les mêmes informations : demandes en attente, délai de première réponse, demandes urgentes et équipe.',
+      prompt: 'Floutés, lequel de ces deux tableaux de bord montre encore l’élément principal, le secondaire et les groupes ?',
       options: [
         {
-          id: 'grid',
+          id: 'loud',
           visual: {
-            alt: 'Accueil composé de six tuiles identiques avec icône et libellé : Réserver, Mes réservations, Offres, Parrainage, Aide, Paramètres.',
-            html: `<div class="mk-pad mk-stack" style="--gap:12px"><p class="mk-h2">Tablée</p><div class="mk-grid" style="--cols:3;--gap:8px">${[
-              ['utensils', 'Réserver'],
-              ['calendar', 'Mes réservations'],
-              ['percent', 'Offres'],
-              ['gift', 'Parrainage'],
-              ['info', 'Aide'],
-              ['settings', 'Paramètres'],
-            ]
-              .map(([i, l]) => `<div class="ds-tile"><i data-icon="${i}" style="--ico:20px"></i><span>${l}</span></div>`)
-              .join('')}</div></div>`,
-            css: `.ds-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 12px 6px; border: 1px solid #e1e4ea; border-radius: 12px; font-size: 12px; font-weight: 600; color: #36405a; }`,
+            alt: 'Tableau de bord d’assistance flouté : un bouton plein en haut, un bandeau rouge, deux pavés sombres de même taille pour les chiffres, puis deux listes en gras ponctuées de pastilles colorées, le tout séparé par le même petit espace.',
+            frame: 'browser',
+            html: `<div class="mk-pad sd ld">
+  <div class="mk-row mk-between"><p class="ld-h">Assistance</p><span class="mk-btn mk-btn--s">Nouvelle demande</span></div>
+  <p class="ld-alert"><i data-icon="triangle-alert" style="--ico:16px"></i>3 demandes urgentes</p>
+  <div class="mk-grid" style="--gap:10px"><div class="ld-kpi"><b>12</b><span>en attente</span></div><div class="ld-kpi"><b>1 h 40</b><span>première réponse</span></div></div>
+  <p class="ld-h">Urgentes</p>
+  ${DESK_URGENT.map(([t, d]) => `<div class="mk-row ld-row"><span class="mk-grow">${t}</span><span>${d}</span><span class="ld-pill ld-pill--red">Urgent</span></div>`).join('')}
+  <p class="ld-h">Équipe</p>
+  ${DESK_TEAM.map(([n, s, c]) => `<div class="mk-row ld-row"><span class="mk-grow">${n}</span><span class="ld-pill ld-pill--${c}">${s}</span></div>`).join('')}
+</div>`,
+            css: `${SQUINT_DUEL_CSS}
+.ld { display: flex; flex-direction: column; gap: 10px; }
+.ld-h { font-size: 16px; font-weight: 800; }
+.ld-alert { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 8px; background: #c42b2b; color: #fff; font-weight: 700; }
+.ld-kpi { display: flex; flex-direction: column; padding: 10px 12px; border-radius: 10px; background: #1f2a44; color: #fff; font-weight: 600; }
+.ld-kpi b { font-size: 26px; line-height: 1.15; }
+.ld-row { font-weight: 700; }
+.ld-pill { padding: 2px 10px; border-radius: 999px; font-size: 12px; color: #fff; }
+.ld-pill--red { background: #c42b2b; }
+.ld-pill--green { background: #1e7a46; }
+.ld-pill--orange { background: #b45309; }
+.ld-pill--gray { background: #5a6172; }`,
           },
-          why: 'Six actions de même poids : la tâche principale, réserver, ne ressort pas plus que les paramètres.',
+          why: 'Flouté, tout crie : le bouton plein, le bandeau rouge, deux pavés sombres identiques, une pastille par ligne. Aucun élément ne mène, et le même petit écart partout fond les deux listes en une seule colonne.',
         },
         {
-          id: 'focused',
+          id: 'ordered',
           visual: {
-            alt: 'Accueil avec une salutation, un grand bouton « Réserver une table », la prochaine réservation suivie d’un lien vers toutes les réservations, et une ligne de liens secondaires dont les paramètres.',
-            html: `<div class="mk-pad mk-stack" style="--gap:16px"><div class="mk-stack" style="--gap:10px"><p class="mk-h2">Bonsoir Camille</p><span class="mk-btn mk-btn--block">Réserver une table</span></div><div class="mk-stack" style="--gap:4px"><p class="mk-small mk-muted">Prochaine réservation</p><p class="mk-strong">Jeudi 20&nbsp;h · Le Comptoir, 2 personnes</p><span class="mk-btn--text mk-small" style="padding:0;margin-top:2px;align-self:flex-start">Toutes mes réservations</span></div><div class="mk-row mk-wrap mk-small" style="--gap:14px;row-gap:6px"><span class="mk-btn--text" style="padding:0">Offres</span><span class="mk-btn--text" style="padding:0">Parrainage</span><span class="mk-btn--text" style="padding:0">Aide</span><span class="mk-btn--text" style="padding:0">Paramètres</span></div></div>`,
+            alt: 'Tableau de bord d’assistance flouté : un titre et un bouton discrets en haut, un très grand chiffre suivi d’un chiffre plus petit et plus pâle, puis deux listes à filets fins séparées par un large espace.',
+            frame: 'browser',
+            html: `<div class="mk-pad sd od">
+  <div class="mk-row mk-between"><p class="od-t">Assistance</p><span class="mk-btn mk-btn--s mk-btn--ghost">Nouvelle demande</span></div>
+  <div class="od-kpis"><div><b class="od-big">12</b><span class="mk-muted">en attente</span></div><div><b class="od-mid">1 h 40</b><span class="mk-small mk-muted">première réponse</span></div></div>
+  <div class="od-g"><p class="od-gh">Urgentes · 3</p><ul class="mk-list">${DESK_URGENT.map(([t, d]) => `<li><span class="od-dot"></span><span class="mk-grow">${t}</span><span class="mk-small mk-muted">${d}</span></li>`).join('')}</ul></div>
+  <div class="od-g"><p class="od-gh">Équipe</p><ul class="mk-list">${DESK_TEAM.map(([n, s]) => `<li><span class="mk-grow">${n}</span><span class="mk-small mk-muted">${s}</span></li>`).join('')}</ul></div>
+</div>`,
+            css: `${SQUINT_DUEL_CSS}
+.od { display: flex; flex-direction: column; }
+.od-t { font-size: 15px; font-weight: 650; }
+.od-kpis { display: flex; flex-wrap: wrap; align-items: flex-end; column-gap: 28px; row-gap: 12px; margin-top: 20px; }
+.od-kpis > div { display: flex; flex-direction: column; gap: 2px; }
+.od-big { font-size: 44px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
+.od-mid { font-size: 20px; line-height: 1.2; font-weight: 600; color: #3d4556; }
+.od-g { margin-top: 32px; }
+.od-gh { font-size: 13px; font-weight: 700; }
+.od-dot { width: 8px; height: 8px; border-radius: 50%; background: #c42b2b; flex: none; }`,
           },
-          why: 'Une action principale, l’information utile juste après, le reste en liens secondaires : simple, sans perdre l’essentiel.',
-        },
-        {
-          id: 'empty',
-          visual: {
-            alt: 'Accueil réduit à un logo et un unique bouton « Réserver » centré, sans aucune autre information.',
-            html: `<div class="mk-pad mk-stack mk-center" style="--gap:18px;padding-block:40px"><p class="mk-h2">Tablée</p><span class="mk-btn" style="align-self:center">Réserver</span></div>`,
-          },
-          why: 'Trop épuré : la réservation à venir et l’accès à ses réservations ont disparu. Le minimalisme est devenu un mystère.',
+          why: 'Flouté, on voit d’abord le grand chiffre, puis le second, plus petit et plus pâle, puis deux groupes séparés par un large espace : l’ordre de lecture survit au flou.',
         },
       ],
-      answer: 'focused',
-      explanation: `La commande *distill* d’impeccable demande **une** action principale, peu d’actions secondaires et le reste en divulgation progressive — mais elle met aussi en garde : ne pas retirer une information nécessaire, ne pas simplifier au point de devenir obscur.
+      answer: 'ordered',
+      explanation: `Plisser les yeux, ou flouter la capture, efface les mots et ne laisse que les masses : taille, graisse, contraste, couleur et espace. Le **test du plissement d’yeux** ne demande pas que tout reste visible ; il demande qu’un **ordre** se lise encore : l’élément principal, puis le secondaire, puis les grands groupes.
 
-La version recommandée garde la réservation à venir (ce qu’on vient vérifier) et relègue le reste en liens. La grille de tuiles égales est le réflexe inverse : elle donne autant de poids aux paramètres qu’à la tâche principale.`,
-      takeaway: 'Simplifier : une action principale, l’essentiel visible, le reste en second plan — sans rien retirer dont on a besoin.',
-      sources: ['imp:distill', 'imp:craft-floor'],
+La version chargée échoue sans être plate : elle souligne tout. Bouton plein, bandeau rouge, deux chiffres en pavés sombres de même taille, une pastille par ligne : autant de points forts que d’éléments, donc aucun qui mène. Impeccable le résume : si tout est important, rien ne l’est. Et le même petit écart partout fond les deux listes ensemble.
+
+La version recommandée réserve le poids à un seul chiffre, donne au délai de réponse un rang visible mais inférieur, et sépare les groupes par l’espace plutôt que par la couleur.`,
+      takeaway: 'Test du plissement d’yeux : flouté, l’écran doit encore montrer l’élément principal, le secondaire et les grands groupes, dans l’ordre.',
+      sources: ['imp:layout', 'imp:critique'],
     },
   ],
 };

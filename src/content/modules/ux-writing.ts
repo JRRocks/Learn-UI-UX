@@ -40,6 +40,10 @@ const CLDR_PLURALS: SourceRef = {
   label: 'Unicode CLDR — Règles de pluriel par langue',
   url: 'https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html',
 };
+const HIG_ALERTS: SourceRef = {
+  label: 'Apple — Human Interface Guidelines : Alerts (libellés des boutons)',
+  url: 'https://developer.apple.com/design/human-interface-guidelines/alerts',
+};
 
 /* ---------- Shared mock pieces ---------- */
 
@@ -349,12 +353,12 @@ Vérifie enfin avec de vrais contenus : noms très longs, montants, dates, pluri
     { id: 'valider', front: 'Pourquoi éviter « Valider » sur un bouton ?', back: 'C’est le *Submit* français : il ne dit pas ce qui va se passer. Nomme le résultat : « Envoyer la demande », « Payer 89,00 € ».' },
     { id: 'destructive', front: 'Que doit dire une confirmation de suppression ?', back: 'L’objet et la conséquence (« 40 fichiers supprimés définitivement »), et un bouton qui répète l’action : « Vider la corbeille » face à « Annuler ».' },
     { id: 'undo', front: 'Confirmer ou permettre d’annuler ?', back: 'Si la récupération est sûre, agis et propose « Annuler ». Réserve la confirmation aux actions irréversibles ou coûteuses, sinon elle devient un réflexe.' },
-    { id: 'placeholder', front: 'Un placeholder peut-il remplacer l’étiquette ?', back: 'Non : il disparaît à la saisie, il est souvent trop pâle et il passe pour une valeur remplie. Étiquette persistante ; le placeholder montre au plus un exemple.' },
+    { id: 'placeholder', front: 'À quoi sert un texte indicatif (*placeholder*) ?', back: 'À montrer au plus un exemple de format (« ex. 06 12 34 56 78 ») ; il ne remplace ni l’étiquette ni l’aide, car il disparaît à la saisie.' },
     { id: 'error', front: 'À quelles questions répond un message d’erreur ?', back: 'Qu’est-ce qui a échoué, pourquoi (si on le sait et que c’est utile), et comment s’en sortir. Sans accuser, près de l’élément en cause.' },
     { id: 'codes', front: 'Où mettre un code d’erreur interne ?', back: 'Jamais en message principal. En détail secondaire, pour le support.' },
     { id: 'empty', front: 'Que fait un bon état vide ?', back: 'Il distingue sa cause (premier usage, aucun résultat, filtres, accès, panne), l’explique et propose l’action suivante utile.' },
     { id: 'loading', front: 'Qu’est-ce qu’un texte de chargement honnête ?', back: 'Il nomme l’opération réelle et annonce une durée quand l’attente compte. Progression déterminée si elle existe, jamais inventée.' },
-    { id: 'help', front: 'À quoi sert un texte d’aide sous un champ ?', back: 'À répondre à une question implicite (format, usage, visibilité), pas à répéter l’étiquette.' },
+    { id: 'help', front: 'À quoi sert un texte d’aide sous un champ ?', back: 'À répondre à la question que l’étiquette laisse ouverte (format, usage, visibilité, raison de la demande), pas à la répéter.' },
     { id: 'links', front: 'Pourquoi bannir « Cliquez ici » et « En savoir plus » ?', back: 'Un lien doit avoir du sens hors contexte : les lecteurs d’écran listent les liens seuls. Écris la destination : « Lire les conditions de remboursement ».' },
     { id: 'voice', front: 'Voix ou ton : qu’est-ce qui change selon le moment ?', back: 'Le ton. La voix (personnalité, registre, vocabulaire) reste constante ; le ton devient plus sobre sur une erreur de paiement que sur un succès.' },
     { id: 'tu-vous', front: 'Tu ou vous ?', back: 'Choisis selon ton public et la marque, puis tiens-le partout : écrans, e-mails, notifications, aide.' },
@@ -589,7 +593,7 @@ La version recommandée explique l’état et offre **l’action suivante utile*
       answer: 'honest',
       explanation: `Un texte de chargement dit **ce qui se passe vraiment** et fixe une **attente honnête** quand l’attente compte. « Génération du PDF » explique pourquoi ça prend du temps ; « environ 5 secondes » dit quand commencer à s’inquiéter.
 
-De 2 à 9 secondes, une animation en boucle suffit ; à partir de 10 secondes, montre une progression réelle (pourcentage, étapes). Mais **n’invente jamais de progression** : une barre qui avance sans lien avec le travail réel est un mensonge que la personne finit par découvrir.`,
+De 2 à 10 secondes, une animation en boucle suffit ; au-delà de 10 secondes, montre une progression réelle (pourcentage, étapes). Mais **n’invente jamais de progression** : une barre qui avance sans lien avec le travail réel est un mensonge que la personne finit par découvrir.`,
       takeaway: 'Le texte d’attente nomme l’opération réelle et annonce une durée honnête ; jamais de progression inventée.',
       sources: ['imp:clarify', NNG_PROGRESS],
     },
@@ -815,16 +819,18 @@ On ne varie pas les termes pour éviter une répétition, comme on le ferait dan
       sources: ['imp:clarify', 'imp:polish'],
     },
     {
-      id: 'ux-writing-short-label-tf',
+      id: 'ux-writing-ok-info-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un libellé de bouton doit tenir en un seul mot pour rester lisible sur mobile.',
-      answer: false,
-      explanation: `La brièveté n’est utile que si le sens reste. Un verbe seul suffit quand l’objet est évident : « Enregistrer » dans un éditeur, « Envoyer » sous un message. Sinon, il faut le verbe **et** l’objet : « Supprimer » seul laisse deviner quoi (le fichier, le dossier, le compte ?), « Supprimer le projet » se comprend même lu seul, en balayant l’écran.
+      prompt: 'Sur le bouton qui referme un message purement informatif, un seul mot, « OK », suffit.',
+      answer: true,
+      explanation: `Vrai. Un libellé dit ce que le bouton va faire, aussi brièvement que possible sans perdre le sens. Quand le message n’appelle aucune décision, le bouton ne fait que le refermer : « OK », qui veut dire « j’ai compris », dit tout. Les recommandations d’Apple l’admettent pour ce seul cas : « OK » dans une alerte purement informative.
 
-Sur mobile, un bouton pleine largeur accueille sans peine « Continuer vers le paiement ». La règle d’impeccable : le texte final est **aussi court que possible sans retirer le sens ni la sortie de secours**.`,
-      takeaway: 'Un libellé est aussi court que possible, mais il garde l’objet quand le résultat n’est pas évident : « Supprimer le projet », pas « Supprimer ».',
-      sources: ['imp:clarify'],
+Dès que le bouton déclenche une action, « OK » devient ambigu : veut-il dire « d’accord, fais-le » ou « d’accord, j’ai compris le risque » ? Le bouton nomme alors l’action, comme le demande impeccable : « Vider la corbeille » face à « Annuler », pas « OK », « Oui » ni « Valider ».
+
+Une information sans décision n’a d’ailleurs pas toujours besoin d’une boîte de dialogue : un bandeau temporaire l’affiche sans interrompre.`,
+      takeaway: '« OK » suffit pour refermer un message purement informatif ; dès que le bouton déclenche une action, il la nomme : « Vider la corbeille », pas « OK ».',
+      sources: ['imp:clarify', HIG_ALERTS],
     },
     {
       id: 'ux-writing-humor-tf',
@@ -836,7 +842,7 @@ Sur mobile, un bouton pleine largeur accueille sans peine « Continuer vers le p
 
 Impeccable range la suppression, la perte d’accès, le paiement, la vie privée et le travail bloqué parmi les moments à traiter **avec sérieux** : la chaleur est bienvenue (« Vous pouvez d’abord télécharger une copie de vos données »), les blagues non. L’humour peut avoir sa place sur un succès ou un état vide sans enjeu.`,
       takeaway: 'Suppression, perte d’accès, paiement, vie privée : un ton chaleureux mais sérieux, jamais de blague.',
-      sources: ['imp:clarify'],
+      sources: ['imp:clarify', 'imp:delight'],
     },
     {
       id: 'ux-writing-error-order',
@@ -857,30 +863,31 @@ Le code technique n’est jamais le message principal : il vient en dernier, en 
       sources: ['imp:clarify', NNG_ERRORS],
     },
     {
-      id: 'ux-writing-empty-match',
+      id: 'ux-writing-help-match',
       type: 'match',
       difficulty: 2,
-      prompt: 'Associe chaque situation d’état vide au message qui lui convient.',
-      leftTitle: 'Situation',
-      rightTitle: 'Message',
+      prompt: 'Associe chaque champ au texte d’aide qui lui convient.',
+      context: 'Formulaire d’inscription d’une plateforme de vente entre particuliers.',
+      leftTitle: 'Champ',
+      rightTitle: 'Texte d’aide',
       pairs: [
-        { id: 'first', left: 'Inscription toute récente', right: 'Tes projets apparaîtront ici. Crée le premier ou pars d’un modèle.' },
-        { id: 'search', left: 'Faute de frappe dans la requête', right: 'Aucun résultat pour « facture mrs ». Vérifie l’orthographe ou cherche par montant.' },
-        { id: 'filters', left: 'Plusieurs critères cochés à la fois', right: 'Aucune commande avec ces 3 filtres. Effacer les filtres' },
-        { id: 'access', left: 'Page réservée à un autre rôle', right: 'Seuls les administrateurs voient la facturation. Demande l’accès à Léa Martin.' },
-        { id: 'failure', left: 'Réseau coupé pendant l’ouverture', right: 'Impossible de charger tes messages. Vérifie ta connexion, puis réessaie.' },
+        { id: 'iban', left: 'IBAN', right: 'Le format : 27 caractères, commençant par FR' },
+        { id: 'email', left: 'Adresse e-mail', right: 'L’usage : uniquement pour vous envoyer vos factures' },
+        { id: 'pseudo', left: 'Pseudo', right: 'La visibilité : visible par les autres membres' },
+        { id: 'birth', left: 'Date de naissance', right: 'La raison : vérifier que vous avez au moins 18 ans' },
       ],
-      explanation: `« Aucun élément » couvre cinq situations qui n’appellent pas la même réponse :
+      explanation: `Une étiquette nomme le champ, mais elle laisse souvent une question ouverte. Le texte d’aide sert à y répondre ; s’il répète l’étiquette (« Saisissez votre adresse e-mail » sous « Adresse e-mail »), il n’apprend rien et alourdit le formulaire.
 
-- **Premier usage** : ce qui viendra et comment commencer.
-- **Recherche sans résultat** : rappeler la requête et proposer une correction.
-- **Filtres** : nommer leur rôle et offrir de les effacer.
-- **Accès refusé** : dire qui a accès et à qui le demander.
-- **Panne** : dire ce qui n’a pas pu se charger et proposer de réessayer.
+Chaque champ soulève sa propre question :
 
-Confondre ces cas envoie la personne dans la mauvaise direction : créer un projet quand il fallait effacer un filtre, ou réessayer quand il fallait demander un accès.`,
-      takeaway: 'Un état vide distingue premier usage, recherche, filtres, accès et panne, et propose l’action qui correspond.',
-      sources: ['imp:clarify', 'imp:onboard', NNG_EMPTY],
+- **Quel format ?** Un IBAN est long et facile à mal recopier : en annoncer la longueur et le début aide à repérer un caractère oublié avant l’envoi.
+- **À quoi ça sert ?** Savoir que l’adresse ne servira qu’aux factures rassure qui craint la publicité.
+- **Qui le verra ?** Un pseudo est public : le savoir avant de le choisir évite d’y mettre son vrai nom.
+- **Pourquoi on le demande ?** Une date de naissance paraît intrusive tant qu’on ignore qu’elle sert à vérifier l’âge.
+
+N’écris une aide que si la question se pose vraiment, et garde le détail rare derrière un lien « Détails » ou une section repliable.`,
+      takeaway: 'Un texte d’aide répond à la question que l’étiquette laisse ouverte : quel format, à quoi ça sert, qui le verra, pourquoi on le demande.',
+      sources: ['imp:clarify'],
     },
   ],
 };
