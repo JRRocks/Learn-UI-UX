@@ -582,7 +582,7 @@ Un persona inventé donne une fausse impression de connaître l’utilisateur, e
       answer: true,
       explanation: `Vrai. La critique d’impeccable choisit **deux ou trois personas** selon le type d’interface, et son tableau de sélection n’en propose jamais plus de trois : Alex et Sam pour un tableau de bord, Jordan et Casey pour un onboarding, Jordan, Riley et Casey pour une page d’accueil.
 
-Le but n’est pas d’aller plus vite. Chaque persona retenu demande de **dérouler l’action principale dans sa peau** et de nommer l’élément qui casse pour lui. Ajouter les deux autres dilue l’attention et produit des remarques génériques ; la critique le rappelle : si tout est important, plus rien ne l’est. Mieux vaut deux parcours approfondis, avec des signaux d’alerte précis, que cinq survols.
+Le critère est la pertinence, pas le temps disponible : on retient les personas dont les défaillances sont les plus probables pour ce type d’interface, puis on **déroule l’action principale** dans la peau de chacun, jusqu’à nommer l’élément qui casse pour lui. Les faire passer tous les cinq dilue l’attention et produit des remarques génériques, alors que la critique exige de prioriser : si tout est important, plus rien ne l’est. Mieux vaut deux parcours approfondis, avec des signaux d’alerte précis, que cinq survols.
 
 Quand un vrai contexte produit décrit le public, la critique peut ajouter un ou deux personas propres au projet : ils complètent les archétypes retenus, sans ramener les cinq.`,
       takeaway: 'Deux ou trois personas suffisent, même pour un test approfondi : choisis-les selon le type d’interface et parcours vraiment l’action principale avec chacun.',

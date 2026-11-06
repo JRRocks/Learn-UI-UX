@@ -765,7 +765,7 @@ Vient ensuite la **stratégie** (mise en page, interactions, contenu, navigation
         {
           id: 'media',
           visual: {
-            alt: 'Page d’un magazine en ligne dans un navigateur. Dans la colonne principale, deux cartes d’article ont leur vignette à côté du texte ; dans l’étroite barre latérale « Les plus lus », la même carte garde sa vignette à côté du texte, qui s’écrase en une colonne de quelques lettres.',
+            alt: 'Page d’un magazine en ligne dans un navigateur : une colonne principale « À la une » avec deux cartes d’article, et une étroite barre latérale « Les plus lus » avec la même carte. Partout, la carte garde sa vignette à côté du texte ; dans la barre latérale, ce texte s’écrase en une colonne de quelques lettres.',
             frame: 'browser',
             html: CQ_PAGE,
             css: CQ_CSS + CQ_ROW,
@@ -775,13 +775,13 @@ Vient ensuite la **stratégie** (mise en page, interactions, contenu, navigation
         {
           id: 'container',
           visual: {
-            alt: 'Page d’un magazine en ligne dans un navigateur. Dans la colonne principale, deux cartes d’article ont leur vignette à côté du texte ; dans l’étroite barre latérale « Les plus lus », la même carte place sa vignette au-dessus du texte, lisible sur toute la largeur.',
+            alt: 'Page d’un magazine en ligne dans un navigateur : une colonne principale « À la une » avec deux cartes d’article, et une étroite barre latérale « Les plus lus » avec la même carte. Dans la barre latérale, la carte place sa vignette au-dessus du texte, lisible sur toute la largeur ; dans la colonne principale, elle la garde à côté du texte tant que la place le permet.',
             frame: 'browser',
             html: CQ_PAGE,
             css: `${CQ_CSS}.cq-col { container-type: inline-size; container-name: colonne; }
-@container colonne (min-width: 128px) { ${CQ_ROW} }`,
+@container colonne (min-width: 144px) { ${CQ_ROW} }`,
           },
-          why: 'Chaque colonne est déclarée conteneur (`container-type: inline-size`) et la carte lit sa largeur avec `@container` : vignette à côté du texte dans la colonne principale, au-dessus dans la barre latérale.',
+          why: 'Chaque colonne est déclarée conteneur (`container-type: inline-size`) et la carte lit sa largeur avec `@container` : quand la place manque, comme dans la barre latérale, la vignette passe au-dessus du texte.',
         },
       ],
       answer: 'container',
