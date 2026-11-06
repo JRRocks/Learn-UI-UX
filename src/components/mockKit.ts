@@ -117,14 +117,35 @@ a { color: #1f4fd8; }
 /* ---------- Icons: <i data-icon="search"></i> becomes an inline Lucide SVG ---------- */
 .mk-ico { width: var(--ico, 18px); height: var(--ico, 18px); flex: none; display: inline-block; vertical-align: middle; }
 
-/* ---------- Hotspots ---------- */
+/* ---------- Drawn controls ----------
+   Links, fields and buttons in a mock picture another product: a click goes through them (to the
+   option a mock may sit in) instead of following, ticking or submitting anything. */
+.mk-root :is(a[href], button:not(.mk-hit), input, select, textarea, label, summary) { pointer-events: none; }
+
+/* ---------- Hotspots ----------
+   In a hotspot exercise, a layer of real buttons lies over the zones (one per zone). The zones keep
+   their own colors: being chosen and having the focus are two different marks. */
 [data-hotspot] { border-radius: 4px; outline-offset: 3px; }
-:host([data-interactive]) [data-hotspot] { cursor: pointer; }
-:host([data-interactive]:not([data-revealed])) [data-hotspot]:hover { outline: 2px dashed rgb(29 34 48 / 0.4); }
-[data-hotspot]:focus-visible { outline: 3px solid #2f6be0; }
-:host([data-interactive]) [data-hotspot][data-state="picked"],
-:host([data-interactive]) [data-hotspot][data-state="picked"]:hover { outline: 3px solid #2f6be0; background-color: rgb(47 107 224 / 0.08); }
-:host([data-revealed]) [data-hotspot] { cursor: default; }
+.mk-hits { position: absolute; inset: 0; z-index: 2147483000; pointer-events: none; }
+.mk-hit {
+  position: absolute; margin: 0; padding: 0; border: 0; border-radius: 6px;
+  background: transparent; color: #fff; cursor: pointer; pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.mk-hit::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.mk-hit:hover:not([aria-pressed="true"])::before { outline: 2px dashed rgb(29 34 48 / 0.5); outline-offset: 1px; }
+/* Chosen: a solid blue ring hugging the zone, and a check badge on its corner. */
+.mk-hit[aria-pressed="true"]::before { box-shadow: 0 0 0 3px #2f6be0; }
+.mk-hit-badge {
+  position: absolute; top: -9px; inset-inline-end: -9px; display: none; place-items: center;
+  width: 20px; height: 20px; border-radius: 50%; background: #2f6be0; box-shadow: 0 0 0 2px #fff;
+}
+.mk-hit[data-badge-in] .mk-hit-badge { top: 3px; inset-inline-end: 3px; }
+.mk-hit[aria-pressed="true"] .mk-hit-badge { display: grid; }
+.mk-hit-badge svg { width: 13px; height: 13px; }
+/* Focus: a double ring, white then near-black, set further out than the choice ring. */
+.mk-hit:focus { outline: none; }
+.mk-hit:focus-visible { outline: 3px solid #10162b; outline-offset: 5px; box-shadow: 0 0 0 5px #fff; }
 :host([data-revealed]) [data-hotspot][data-state="wrong"] { outline: 2px dashed #8d93a3; }
 
 /* Correction marks overlay (drawn after reveal). */
@@ -136,6 +157,18 @@ a { color: #1f4fd8; }
 @media (prefers-reduced-motion: no-preference) {
   .mk-marks .draw path { stroke-dasharray: var(--len) var(--len); stroke-dashoffset: var(--len); animation: mk-draw 520ms cubic-bezier(0.25, 1, 0.5, 1) forwards; }
   .mk-marks .draw.miss path { stroke-dasharray: 6 5; stroke-dashoffset: 0; animation: none; }
+  /* Marks revealed off screen wait for the learner to see them. */
+  .mk-marks[data-wait] g { visibility: hidden; }
+  .mk-marks[data-wait] .draw path { animation-play-state: paused; }
 }
 @keyframes mk-draw { to { stroke-dashoffset: 0; } }
+
+/* ---------- Motion ----------
+   Reduced motion: a loop plays once, so the state it shows still appears (the content's own
+   reduced versions are kept). Pause holds every animation still; restart replays them. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+:host([data-paused]) *, :host([data-paused]) *::before, :host([data-paused]) *::after { animation-play-state: paused !important; }
+:host([data-restart]) *, :host([data-restart]) *::before, :host([data-restart]) *::after { animation: none !important; }
 `;

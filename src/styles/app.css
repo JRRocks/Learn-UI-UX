@@ -611,6 +611,15 @@
   background: var(--stage);
 }
 
+/* « Rejouer l’animation » / « Mettre en pause » under an animated mock. */
+.mock-motion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--s1) var(--s2);
+  margin-top: var(--s2);
+}
+
 /* =========================================================================
    Home
    ========================================================================= */
