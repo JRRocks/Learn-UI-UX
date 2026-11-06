@@ -47,6 +47,30 @@ const ATTR = /([a-zA-Z-:]+)="([^"]*)"/g;
 /** The kit, and the frame reset that must come after it and before the visual's own rules. */
 const KIT_CSS = `${MOCK_KIT}\n.mk-framed{background:transparent;border-radius:0;overflow:visible}\n`;
 
+/**
+ * Shared style sheets: the kit is parsed once for the whole page and adopted by every mock, and a
+ * visual's own rules once per visual, instead of a copy of their text in each shadow root. Without
+ * constructable style sheets (older browsers), `<style>` elements carry them.
+ */
+const SHARED_SHEETS =
+  typeof CSSStyleSheet !== 'undefined' && 'replaceSync' in CSSStyleSheet.prototype && typeof ShadowRoot !== 'undefined' && 'adoptedStyleSheets' in ShadowRoot.prototype;
+let kitSheet: CSSStyleSheet | null = null;
+const ownSheets = new WeakMap<Visual, CSSStyleSheet>();
+
+function sheet(css: string): CSSStyleSheet {
+  const s = new CSSStyleSheet();
+  s.replaceSync(css);
+  return s;
+}
+
+function sheetsOf(visual: Visual): CSSStyleSheet[] {
+  kitSheet ??= sheet(KIT_CSS);
+  if (!visual.css) return [kitSheet];
+  let own = ownSheets.get(visual);
+  if (!own) ownSheets.set(visual, (own = sheet(visual.css)));
+  return [kitSheet, own];
+}
+
 /** `<i data-icon="cart" class="x"></i>` → inline Lucide SVG. */
 export function expandIcons(html: string): string {
   return html.replace(/<i\b([^>]*)><\/i>/g, (whole, attrs: string) => {
@@ -404,12 +428,10 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     const dir = visual.dir ? ` dir="${visual.dir}"` : '';
     const lang = visual.lang ? ` lang="${visual.lang}"` : '';
     const framed = visual.frame && visual.frame !== 'none' ? ' mk-framed' : '';
-    // The kit is the same text in every mock: in its own <style>, the browser parses it once for the
-    // whole page and shares it, instead of once per mock along with the visual's own rules.
-    return (
-      `<style>${KIT_CSS}</style>${visual.css ? `<style>${visual.css}</style>` : ''}` +
-      `<div class="mk-root${framed}" part="root"${dir}${lang}>${frame(visual, expandIcons(visual.html))}</div>`
-    );
+    // Without shared sheets, the kit gets its own <style>: the same text in every mock, which the
+    // browser parses once for the whole page, instead of once per mock with the visual's rules.
+    const styles = SHARED_SHEETS ? '' : `<style>${KIT_CSS}</style>${visual.css ? `<style>${visual.css}</style>` : ''}`;
+    return `${styles}<div class="mk-root${framed}" part="root"${dir}${lang}>${frame(visual, expandIcons(visual.html))}</div>`;
   }, [visual]);
 
   // Render the mock into its own shadow root so its CSS never leaks either way.
@@ -419,6 +441,7 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     const host = hostRef.current;
     if (!host) return;
     const root = host.shadowRoot ?? host.attachShadow({ mode: 'open' });
+    if (SHARED_SHEETS) root.adoptedStyleSheets = sheetsOf(visual);
     root.innerHTML = markup;
     marksBefore.current = 'unknown';
     const info = moves ? readMotion(root.querySelector('.mk-root')) : null;
@@ -426,7 +449,7 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     // A still mock tells its player nothing, unless it replaces one that moved.
     if (info || reported.current) motionRef.current?.(info);
     reported.current = info;
-  }, [markup, moves]);
+  }, [markup, moves, visual]);
 
   // Drawn controls stay out of the tab order; in a picture (role="img") they are inert altogether.
   useLayoutEffect(() => {

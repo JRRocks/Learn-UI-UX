@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { DETECTOR_RULES } from '../content/detectorRules';
@@ -96,14 +96,17 @@ function Catalog() {
   const { value: loaded, failed } = useLoadState('catalog', loadCatalog);
   // The detector's own (English) names stand in only when the French catalog cannot be fetched.
   const list = loaded?.length ? loaded : failed ? FALLBACK : null;
+  // The field answers each key at once; the list (up to a hundred mocks) follows when the browser has time.
+  const query = useDeferredValue(q);
+  const shownFamily = useDeferredValue(family);
   const shown = useMemo(() => {
-    const needle = q.trim().toLowerCase();
+    const needle = query.trim().toLowerCase();
     return (list ?? []).filter(
       (a) =>
-        (family === 'all' || a.family === family) &&
+        (shownFamily === 'all' || a.family === shownFamily) &&
         (!needle || `${a.name} ${EN_NAME.get(a.id) ?? ''} ${a.id} ${a.description} ${a.fix}`.toLowerCase().includes(needle)),
     );
-  }, [q, family, list]);
+  }, [query, shownFamily, list]);
   const clear = () => {
     setQ('');
     setFamily('all');
@@ -155,9 +158,9 @@ function Catalog() {
               <div className="btn-row">
                 <p className="small">
                   {frenchSpacing(
-                    q.trim()
-                      ? `Aucune règle ne correspond à « ${q.trim()} »${FAMILY_LABEL[family]}. Essaie un autre mot, par exemple « contraste ».`
-                      : `Aucune règle${FAMILY_LABEL[family]}.`,
+                    query.trim()
+                      ? `Aucune règle ne correspond à « ${query.trim()} »${FAMILY_LABEL[shownFamily]}. Essaie un autre mot, par exemple « contraste ».`
+                      : `Aucune règle${FAMILY_LABEL[shownFamily]}.`,
                   )}
                 </p>
                 {/* One label whatever was narrowed, and short enough for a 320 px column. */}
