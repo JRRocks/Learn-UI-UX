@@ -303,6 +303,8 @@ export function TrueFalsePlayer({ ex, draft, setDraft, revealed, labelledBy, des
 
 export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExercise, Extract<Draft, { type: 'hotspot' }>>) {
   const needed = ex.hotspots.filter((h) => h.correct).length;
+  // On a touch screen the instruction speaks of touching, not of clicking and tabbing.
+  const coarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
   const [full, setFull] = useState(false);
 
   const pick = (id: string) => {
@@ -337,8 +339,6 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
     [revealed, ex.hotspots, draft.ids],
   );
 
-  const touch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-
   return (
     <div className="section" data-reveal-view="">
       <div className="stage hotspot-stage">
@@ -352,7 +352,7 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
           {needed > 1 ? 'zones sélectionnées' : 'zone sélectionnée'}.{' '}
           {full
             ? 'Tu as atteint le nombre de zones\u00A0: désélectionne-en une pour changer.'
-            : touch
+            : coarse
               ? 'Touche les éléments fautifs, puis valide.'
               : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
         </p>
@@ -493,7 +493,7 @@ export function MatchPlayer({ ex, draft, setDraft, revealed, order, describedBy 
               disabled={revealed}
               onChange={(e) => setDraft({ type: 'match', pairs: { ...draft.pairs, [p.id]: e.target.value } })}
             >
-              <option value="">{ex.rightTitle} : choisir…</option>
+              <option value="">{ex.rightTitle}{'\u00A0'}: choisir…</option>
               {rights.map((r) => (
                 <option key={r.id} value={r.id}>
                   {plain(r.right)}
@@ -502,7 +502,7 @@ export function MatchPlayer({ ex, draft, setDraft, revealed, order, describedBy 
             </select>
             {revealed && chosen !== p.id && (
               <span className="match-fix">
-                Bonne association : <MdInline text={p.right} />
+                Bonne association{'\u00A0'}: <MdInline text={p.right} />
               </span>
             )}
           </div>
@@ -536,7 +536,7 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
           </label>
           <output htmlFor={inputId} className="slider-value">
             {fmt(shown)}
-            {ex.unit && ex.unit !== '%' ? ` ${ex.unit}` : ex.unit}
+            {ex.unit ? `\u00A0${ex.unit}` : ''}
           </output>
         </div>
         <input
@@ -553,7 +553,7 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
         />
         {ratio !== null && (
           <p className="slider-readout" data-pass={ratio >= 4.5}>
-            Contraste : <strong>{fmt(Math.round(ratio * 100) / 100)}:1</strong> — minimum AA pour un texte courant : 4,5:1
+            Contraste{'\u00A0'}: <strong>{fmt(Math.round(ratio * 100) / 100)}:1</strong> — minimum AA pour un texte courant{'\u00A0'}: 4,5:1
           </p>
         )}
         <div className="btn-row">
@@ -584,7 +584,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
         <Mock visual={ex.visual} />
       </div>
       <p className="task-hint">
-        Échelle : {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
+        Échelle{'\u00A0'}: {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
       </p>
       <div className="grid-score">
         {ex.criteria.map((c, i) => {
@@ -614,7 +614,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
                 <p className="grid-why">
                   {ok ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}{' '}
                   <strong>
-                    Toi : {mine} · expert : {c.expert}.
+                    Toi{'\u00A0'}: {mine}{'\u00A0'}· expert{'\u00A0'}: {c.expert}.
                   </strong>{' '}
                   <MdInline text={c.why} />
                 </p>

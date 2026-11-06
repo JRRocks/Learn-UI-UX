@@ -1,14 +1,18 @@
-import { ArrowLeft, CircleCheck, CircleX } from 'lucide-react';
+import { ArrowLeft, CircleCheck, CircleX, FlaskConical, Target } from 'lucide-react';
 import { useMemo, useState, type CSSProperties } from 'react';
-import { Link, navigate } from '../app/router';
+import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { EXERCISES, MODULE_BY_ID } from '../content';
-import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, useCultures, type CultureData } from '../content/cultures';
+import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
 import { resolveSource } from '../content/sources';
 import type { CulturePair, CultureProfile } from '../engine/types';
-import { Md, MdInline } from '../lib/markdown';
+import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import { useLoadState } from '../lib/useLoad';
 import { NotFound } from './NotFound';
+
+/** Profiles and pairs, fetched on demand (same cache key as `useCultures`), with the failure state. */
+const useCultureData = () => useLoadState('cultures', loadCultures);
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v)}%` }) as CSSProperties;
 const norm = (s: string) => s.replace(/'/g, '’');
@@ -45,7 +49,8 @@ function Sources({ list }: { list: CultureProfile['sources'] }) {
     <ul className="sources">
       {list.map((s, i) => {
         const r = resolveSource(s);
-        return <li key={i}>{r.url ? <a href={r.url} target="_blank" rel="noopener noreferrer">{r.label}</a> : r.label}</li>;
+        const label = frenchSpacing(r.label);
+        return <li key={i}>{r.url ? <a href={r.url} target="_blank" rel="noopener noreferrer">{label}</a> : label}</li>;
       })}
     </ul>
   );
@@ -53,7 +58,30 @@ function Sources({ list }: { list: CultureProfile['sources'] }) {
 
 /* ------------------------------------------------------------------ overview */
 
-function Loading() {
+function Loading({ failed }: { failed: boolean }) {
+  if (failed)
+    return (
+      <div className="page page--narrow">
+        <header className="page-head">
+          <h1 id="main-title" tabIndex={-1}>
+            Impossible de charger les marchés
+          </h1>
+          <p className="lead">
+            {frenchSpacing(
+              'Les profils de marchés n’ont pas pu être téléchargés : la connexion a peut-être été coupée. Vérifie-la, puis recharge la page.',
+            )}
+          </p>
+        </header>
+        <div className="btn-row">
+          <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
+            Recharger la page
+          </button>
+          <Link to="/entrainement" className="btn btn-secondary">
+            S’entraîner en attendant
+          </Link>
+        </div>
+      </div>
+    );
   return (
     <div className="page">
       <p className="muted" role="status">
@@ -64,10 +92,11 @@ function Loading() {
 }
 
 export function Cultures() {
-  const data = useCultures();
+  const { value: data, failed } = useCultureData();
   const [a, setA] = useState('fr');
   const [b, setB] = useState('cn');
-  if (!data) return <Loading />;
+  usePageTitle(pageTitle('Cultures'));
+  if (!data) return <Loading failed={failed} />;
   const { profiles: CULTURES, pairs: CULTURE_PAIRS } = data;
   const lesson = MODULE_BY_ID.get('culture');
   const count = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
@@ -79,15 +108,18 @@ export function Cultures() {
           Cultures
         </h1>
         <p className="lead">
-          Une interface n’est jamais neutre : densité, couleurs, formulaires, paiement, écriture et cadre légal changent d’un marché à l’autre.
-          Localiser, ce n’est pas traduire — c’est adapter ce que les gens attendent, puis le vérifier avec eux.
+          {frenchSpacing(
+            'Une interface n’est jamais neutre : densité, couleurs, formulaires, paiement, écriture et cadre légal changent d’un marché à l’autre. Localiser, ce n’est pas traduire — c’est adapter ce que les gens attendent, puis le vérifier avec eux.',
+          )}
         </p>
       </header>
 
       <section className="today" aria-label="Apprendre et s’entraîner">
         <div className="today-main">
-          <h2>{lesson ? lesson.title : 'UI interculturelle'}</h2>
-          <p>{lesson?.summary ?? 'Les grilles de lecture (Hofstede, Hall), la densité, l’écriture de droite à gauche, les formats et les obligations locales.'}</p>
+          <h2>{frenchSpacing(lesson ? lesson.title : 'UI interculturelle')}</h2>
+          <p>
+            <MdInline text={lesson?.summary ?? 'Les grilles de lecture (Hofstede, Hall), la densité, l’écriture de droite à gauche, les formats et les obligations locales.'} />
+          </p>
           <div className="btn-row">
             {lesson && (
               <Link to="/apprendre/culture" className="btn btn-primary">
@@ -98,13 +130,14 @@ export function Cultures() {
         </div>
         <div className="today-side">
           <Link to="/session?mode=culture" className="side-link">
+            <Target aria-hidden="true" />
             <span>
               S’entraîner sur les cultures
-              <small>Duels, chasses aux erreurs culturelles, associations</small>
+              <small>{frenchSpacing(`${count} épreuves : comparaisons visuelles, chasses aux erreurs, associations`)}</small>
             </span>
-            <strong>{count}</strong>
           </Link>
           <Link to="/cultures/labo" className="side-link">
+            <FlaskConical aria-hidden="true" />
             <span>
               Labo de localisation
               <small>Un même panier dans {LAB_LOCALES.length} langues et formats</small>
@@ -116,7 +149,9 @@ export function Cultures() {
       <section className="section" aria-labelledby="markets-title">
         <div className="section-head">
           <h2 id="markets-title">Les marchés</h2>
-          <p className="small">Des tendances observées et des contraintes réelles, pas des lois : chaque profil se vérifie avec des utilisateurs locaux.</p>
+          <p className="small">
+            {frenchSpacing('Des tendances observées et des contraintes réelles, pas des lois : chaque profil se vérifie avec des utilisateurs locaux.')}
+          </p>
         </div>
         {CULTURES.length === 0 && <p className="muted">Les profils de marchés arrivent.</p>}
         {byRegion(CULTURES).map(([region, list]) => (
@@ -126,12 +161,12 @@ export function Cultures() {
               {list.map((c) => (
                 <Link key={c.id} to={`/cultures/${c.id}`} className="market">
                   <span className="market-name">
-                    {c.name} <code>{c.locale}</code>
+                    {c.name} <code className="code-short">{c.locale}</code>
                   </span>
                   <p>
                     <MdInline text={c.summary} />
                   </p>
-                  <span className="market-formats">
+                  <span className="market-formats" lang={c.locale}>
                     {sampleDate(c.locale)} · {sampleNumber(c.locale)}
                   </span>
                 </Link>
@@ -203,8 +238,9 @@ export function Cultures() {
         <div className="section-head">
           <h2 id="dims-title">Lire les dimensions culturelles</h2>
           <p className="small">
-            Hofstede résume des valeurs moyennes par pays sur six axes ; Aaron Marcus en a tiré des pistes pour l’interface. Ce sont des
-            hypothèses à tester, jamais des étiquettes à coller sur une personne.
+            {frenchSpacing(
+              'Hofstede résume des valeurs moyennes par pays sur six axes ; Aaron Marcus en a tiré des pistes pour l’interface. Ce sont des hypothèses à tester, jamais des étiquettes à coller sur une personne.',
+            )}
           </p>
         </div>
         <dl className="defs">
@@ -212,16 +248,16 @@ export function Cultures() {
             <div key={d.key}>
               <dt>{d.label}</dt>
               <dd>
-                {d.low} ↔ {d.high}. {d.ui}
+                {d.low} ↔ {d.high}. <MdInline text={d.ui} />
               </dd>
             </div>
           ))}
           <div>
             <dt>Contexte fort / faible</dt>
             <dd>
-              Edward T. Hall : dans une culture à contexte fort, une grande partie du sens passe par l’implicite et l’environnement ; à
-              contexte faible, on attend des messages explicites et autonomes. En interface, cela joue sur la densité, la place des
-              signaux sociaux et le degré d’explication.
+              {frenchSpacing(
+                'Edward T. Hall : dans une culture à contexte fort, une grande partie du sens passe par l’implicite et l’environnement ; à contexte faible, on attend des messages explicites et autonomes. En interface, cela joue sur la densité, la place des signaux sociaux et le degré d’explication.',
+              )}
             </dd>
           </div>
         </dl>
@@ -234,7 +270,11 @@ export function Cultures() {
 
 function Dims({ c }: { c: CultureProfile }) {
   if (!c.hofstede)
-    return <p className="muted small">Pas de scores Hofstede fiables publiés pour ce marché : on s’appuie sur l’observation et la recherche locale.</p>;
+    return (
+      <p className="muted small">
+        {frenchSpacing('Pas de scores Hofstede fiables publiés pour ce marché : on s’appuie sur l’observation et la recherche locale.')}
+      </p>
+    );
   return (
     <ul className="dims">
       {HOFSTEDE.map((d) => (
@@ -254,9 +294,10 @@ function Dims({ c }: { c: CultureProfile }) {
 }
 
 export function CultureDetail({ id }: { id: string }) {
-  const data = useCultures();
-  if (!data) return <Loading />;
-  const c = data.byId.get(id);
+  const { value: data, failed } = useCultureData();
+  const c = data?.byId.get(id);
+  usePageTitle(!data ? pageTitle('Cultures') : c ? pageTitle(c.name, 'Cultures') : null);
+  if (!data) return <Loading failed={failed} />;
   if (!c) return <NotFound />;
   const exercises = EXERCISES.filter((e) => e.culture === c.id);
   const pairs = data.pairs.filter((p) => p.a === c.id || p.b === c.id);
@@ -303,7 +344,7 @@ export function CultureDetail({ id }: { id: string }) {
                 .filter((x) => x.topic === t)
                 .map((x, i) => (
                   <div key={i} className="convention">
-                    <h4 style={{ fontSize: 'var(--t-body)' }}>{x.title}</h4>
+                    <h4 style={{ fontSize: 'var(--t-body)' }}>{frenchSpacing(x.title)}</h4>
                     <Md text={x.body} className="small" />
                   </div>
                 ))}
@@ -346,8 +387,8 @@ export function CultureDetail({ id }: { id: string }) {
             <tbody>
               {c.formats.map((f, i) => (
                 <tr key={i}>
-                  <th scope="row">{f.label}</th>
-                  <td lang={c.locale} dir="auto">
+                  <th scope="row">{frenchSpacing(f.label)}</th>
+                  <td lang={f.lang ?? c.locale} dir="auto">
                     {f.value}
                   </td>
                 </tr>
@@ -358,7 +399,7 @@ export function CultureDetail({ id }: { id: string }) {
         <section className="section" aria-labelledby="dims-title">
           <h2 id="dims-title">Dimensions de Hofstede</h2>
           <Dims c={c} />
-          <p className="small muted">Scores de l’édition classique (0–100), à lire comme des moyennes nationales et non des portraits.</p>
+          <p className="small muted">{frenchSpacing('Scores de l’édition classique (0–100), à lire comme des moyennes nationales et non des portraits.')}</p>
         </section>
       </div>
 
@@ -380,7 +421,7 @@ export function CultureDetail({ id }: { id: string }) {
             {pairs.map((p) => (
               <li key={p.id} className="toc-row">
                 <Link to={`/cultures/paire/${p.id}`}>
-                  <span className="toc-title">{p.title}</span>
+                  <span className="toc-title">{frenchSpacing(p.title)}</span>
                 </Link>
               </li>
             ))}
@@ -410,8 +451,9 @@ export function CultureDetail({ id }: { id: string }) {
 /* ------------------------------------------------------------------ compare */
 
 export function CultureCompare({ query }: { query: URLSearchParams }) {
-  const data = useCultures();
-  if (!data) return <Loading />;
+  const { value: data, failed } = useCultureData();
+  usePageTitle(data ? null : pageTitle('Cultures'));
+  if (!data) return <Loading failed={failed} />;
   return <Compare data={data} query={query} />;
 }
 
@@ -419,13 +461,16 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
   const CULTURES = data.profiles;
   const a = data.byId.get(query.get('a') ?? '') ?? CULTURES[0];
   const b = data.byId.get(query.get('b') ?? '') ?? CULTURES[1];
+  // Picking a market only changes the form; « Comparer » loads the page (no context change on input, WCAG 3.2.2).
+  const [pickA, setPickA] = useState(a?.id ?? '');
+  const [pickB, setPickB] = useState(b?.id ?? '');
   const pair = useMemo(
     () => data.pairs.find((p) => (p.a === a?.id && p.b === b?.id) || (p.a === b?.id && p.b === a?.id)),
     [a, b, data.pairs],
   );
+  usePageTitle(a && b ? pageTitle(`${a.name} et ${b.name}`, 'Cultures') : null);
   if (!a || !b) return <NotFound />;
   const topics = [...new Set([...a.conventions, ...b.conventions].map((x) => x.topic))];
-  const set = (which: 'a' | 'b', v: string) => navigate(`/cultures/comparer?a=${which === 'a' ? v : a.id}&b=${which === 'b' ? v : b.id}`);
 
   return (
     <div className="page">
@@ -436,11 +481,17 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
         <h1 id="main-title" tabIndex={-1}>
           {a.name} et {b.name}
         </h1>
-        <div className="btn-row">
+        <form
+          className="btn-row"
+          onSubmit={(e) => {
+            e.preventDefault();
+            navigate(`/cultures/comparer?a=${pickA}&b=${pickB}`);
+          }}
+        >
           <label className="visually-hidden" htmlFor="ca">
             Premier marché
           </label>
-          <select id="ca" className="select" value={a.id} onChange={(e) => set('a', e.target.value)}>
+          <select id="ca" className="select" value={pickA} onChange={(e) => setPickA(e.target.value)}>
             {CULTURES.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -450,14 +501,17 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
           <label className="visually-hidden" htmlFor="cb">
             Second marché
           </label>
-          <select id="cb" className="select" value={b.id} onChange={(e) => set('b', e.target.value)}>
+          <select id="cb" className="select" value={pickB} onChange={(e) => setPickB(e.target.value)}>
             {CULTURES.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>
             ))}
           </select>
-        </div>
+          <button type="submit" className="btn btn-secondary">
+            Comparer
+          </button>
+        </form>
       </header>
 
       {pair && <PairBlock pair={pair} />}
@@ -470,14 +524,16 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
               <li key={d.key} className="dim dim--pair">
                 <span className="dim-label">{d.label}</span>
                 <span className="dim-value" aria-hidden="true" />
-                <span className="meter" style={pct(a.hofstede![d.key])} aria-label={`${a.name} : ${a.hofstede![d.key]}`}>
+                {/* The scores are written in the note below: the gauges only draw them. */}
+                <span className="meter" style={pct(a.hofstede![d.key])} aria-hidden="true">
                   <span />
                 </span>
-                <span className="meter meter--mark" style={pct(b.hofstede![d.key])} aria-label={`${b.name} : ${b.hofstede![d.key]}`}>
+                <span className="meter meter--mark" style={pct(b.hofstede![d.key])} aria-hidden="true">
                   <span />
                 </span>
                 <span className="dim-note">
-                  {a.name} {a.hofstede![d.key]} · <span style={{ color: 'var(--mark-ink)' }}>{b.name} {b.hofstede![d.key]}</span> — {d.ui}
+                  {a.name} {a.hofstede![d.key]} · <span style={{ color: 'var(--mark-ink)' }}>{b.name} {b.hofstede![d.key]}</span> —{' '}
+                  <MdInline text={d.ui} />
                 </span>
               </li>
             ))}
@@ -507,7 +563,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                           .filter((x) => x.topic === t)
                           .map((x, i) => (
                             <li key={i}>
-                              <strong>{x.title}.</strong> <MdInline text={x.body.split('\n')[0]} />
+                              <strong>{frenchSpacing(x.title)}.</strong> <MdInline text={x.body.split('\n')[0]} />
                             </li>
                           ))}
                       </ul>
@@ -536,7 +592,11 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                     <ul>
                       {c.formats.map((f, i) => (
                         <li key={i}>
-                          {f.label} : <code dir="auto">{f.value}</code>
+                          {frenchSpacing(f.label)}
+                          {'\u00A0'}:{' '}
+                          <code lang={f.lang ?? c.locale} dir="auto">
+                            {f.value}
+                          </code>
                         </li>
                       ))}
                     </ul>
@@ -560,7 +620,7 @@ function PairBlock({ pair, main = false }: { pair: CulturePair; main?: boolean }
   return (
     <section className="section" aria-labelledby={main ? 'main-title' : `pair-${pair.id}`}>
       <Heading id={main ? 'main-title' : `pair-${pair.id}`} tabIndex={main ? -1 : undefined}>
-        {pair.title}
+        {frenchSpacing(pair.title)}
       </Heading>
       <div className="pair-view">
         <figure>
@@ -576,15 +636,16 @@ function PairBlock({ pair, main = false }: { pair: CulturePair; main?: boolean }
           </div>
         </figure>
       </div>
-      <Md text={pair.notes} className="prose" />
+      <Md text={pair.notes} className="prose" headingLevel={main ? 2 : 3} />
     </section>
   );
 }
 
 export function CulturePairPage({ id }: { id: string }) {
-  const data = useCultures();
-  if (!data) return <Loading />;
-  const pair = data.pairs.find((p) => p.id === id);
+  const { value: data, failed } = useCultureData();
+  const pair = data?.pairs.find((p) => p.id === id);
+  usePageTitle(!data ? pageTitle('Cultures') : pair ? pageTitle(pair.title, 'Cultures') : null);
+  if (!data) return <Loading failed={failed} />;
   if (!pair) return <NotFound />;
   return (
     <div className="page">

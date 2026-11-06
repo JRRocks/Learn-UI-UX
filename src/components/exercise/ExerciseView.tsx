@@ -182,11 +182,11 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
 
   const hint =
     ex.type === 'choice'
-      ? 'Raccourcis : 1–' + order.length + ' pour choisir, Entrée pour valider.'
+      ? 'Raccourcis\u00A0: 1–\u2060' + order.length + ' pour choisir, Entrée pour valider.'
       : ex.type === 'multi'
-        ? 'Coche toutes les bonnes réponses (touches 1–' + order.length + '), puis Entrée.'
+        ? 'Coche toutes les bonnes réponses (touches 1–\u2060' + order.length + '), puis Entrée.'
         : ex.type === 'truefalse'
-          ? 'Raccourcis : V (vrai), F (faux), Entrée pour valider.'
+          ? 'Raccourcis\u00A0: V (vrai), F (faux), Entrée pour valider.'
           : 'Entrée pour valider.';
 
   return (

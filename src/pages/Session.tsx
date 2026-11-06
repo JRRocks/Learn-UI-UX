@@ -55,7 +55,7 @@ export function specLabel(spec: SessionSpec): string {
     case 'daily':
       return 'Session du jour';
     case 'module':
-      return MODULE_BY_ID.get(spec.moduleId)?.title ?? 'Module';
+      return MODULE_BY_ID.get(spec.moduleId)?.title ?? 'Leçon introuvable';
     case 'type':
       return TYPE_LABEL[spec.type];
     case 'review':
@@ -261,7 +261,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         <div className="player-progress">
           <div className="player-progress-label">
             <span>
-              {[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(current)].filter(Boolean).join(' · ')}
+              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(current)].filter(Boolean).join(' · ')} />
             </span>
             <span className="num">
               {state.index + 1} / {items.length}
@@ -279,7 +279,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
             <span />
           </div>
         </div>
-        <span className="player-xp" aria-label={`${exam ? 'Examen' : `${xpTotal} XP gagnés`}`}>
+        <span className="player-xp">
           {exam ? 'Examen' : `+${xpTotal} XP`}
         </span>
       </div>
@@ -317,7 +317,7 @@ function EmptySession({ spec }: { spec: SessionSpec }) {
           Lancer la session du jour
         </Link>
         <Link to="/entrainement" className="btn btn-secondary">
-          Choisir un autre format
+          Choisir un autre entraînement
         </Link>
       </div>
     </div>
@@ -361,7 +361,7 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
     <div className="page page--narrow">
       <header className="page-head">
         <h1 id="main-title" tabIndex={-1}>
-          Bilan — {label}
+          Bilan — <MdInline text={label} />
         </h1>
         <p className="lead">
           {parts.map((p, i) => {
@@ -398,10 +398,10 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
                   </summary>
                   <div className="recap-body">
                     <p className="small muted">
-                      {MODULE_BY_ID.get(ex.module ?? '')?.title} · {typeOf(ex)}
+                      <MdInline text={MODULE_BY_ID.get(ex.module ?? '')?.title ?? ''} /> · {typeOf(ex)}
                     </p>
                     <p>
-                      <strong>À retenir :</strong> <MdInline text={ex.takeaway} />
+                      <strong>À retenir{'\u00A0'}:</strong> <MdInline text={ex.takeaway} />
                     </p>
                     <Md text={ex.explanation} className="prose small" />
                     <Link to={`/apprendre/${ex.module}`} className="small">

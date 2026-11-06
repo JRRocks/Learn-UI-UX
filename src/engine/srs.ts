@@ -51,7 +51,8 @@ export function scheduleCard(prev: CardState | undefined, g: CardGrade, today: s
   } else {
     interval = reps === 0 ? 1 : reps === 1 ? 3 : Math.round(interval * ease);
     if (g === 3) {
-      interval = Math.round(interval * 1.3) || 2;
+      // « Facile » always waits longer than « Bien », first review included (1 day → 2).
+      interval = Math.max(interval + 1, Math.round(interval * 1.3));
       ease += 0.15;
     }
     reps += 1;

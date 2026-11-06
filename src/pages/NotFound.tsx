@@ -1,6 +1,7 @@
-import { Link } from '../app/router';
+import { Link, pageTitle, usePageTitle } from '../app/router';
 
 export function NotFound() {
+  usePageTitle(pageTitle('Page introuvable'));
   return (
     <div className="page page--narrow">
       <header className="page-head">

@@ -1,7 +1,7 @@
 import { BookOpen, ChartColumn, Globe, House, Library, Moon, Sparkles, Sun, Target, type LucideIcon } from 'lucide-react';
-import { Suspense, lazy, useEffect, useLayoutEffect } from 'react';
-import { EXERCISES, MODULES } from '../content';
-import { streak } from '../engine/progress';
+import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { EXERCISES, MODULES, MODULE_BY_ID } from '../content';
+import { emptyProgress, streak } from '../engine/progress';
 import { About } from '../pages/About';
 import { Blitz } from '../pages/Blitz';
 import { Cards } from '../pages/Cards';
@@ -14,9 +14,9 @@ import { NotFound } from '../pages/NotFound';
 import { Practice } from '../pages/Practice';
 import { Progress } from '../pages/Progress';
 import { Resources } from '../pages/Resources';
-import { SessionPage } from '../pages/Session';
-import { Link, useRoute, type Route } from './router';
-import { store, useProgress } from './store';
+import { SessionPage, parseSpec, specLabel } from '../pages/Session';
+import { Link, pageTitle, useRoute, type Route } from './router';
+import { STORAGE_KEY, store, useProgress } from './store';
 import { dismissToast, useToasts } from './toasts';
 
 store.setBadgeContext({ exercises: EXERCISES, moduleIds: MODULES.map((m) => m.id) });
@@ -60,10 +60,23 @@ function Brand() {
   );
 }
 
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+
+function subscribeScheme(onChange: () => void) {
+  const mq = window.matchMedia(DARK_QUERY);
+  mq.addEventListener('change', onChange);
+  return () => mq.removeEventListener('change', onChange);
+}
+
+/** The system scheme, kept live: in « Comme le système », the toggle follows an OS switch at once. */
+function useSystemDark(): boolean {
+  return useSyncExternalStore(subscribeScheme, () => window.matchMedia(DARK_QUERY).matches, () => false);
+}
+
 function ThemeToggle() {
   const p = useProgress();
-  const dark =
-    p.settings.theme === 'dark' || (p.settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const systemDark = useSystemDark();
+  const dark = p.settings.theme === 'dark' || (p.settings.theme === 'system' && systemDark);
   return (
     <button
       type="button"
@@ -75,6 +88,16 @@ function ThemeToggle() {
       {dark ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
     </button>
   );
+}
+
+/** A CSS color as `#rrggbb` (theme-color is read by browser chrome that may not parse oklch()). */
+function hexColor(css: string): string | null {
+  const ctx = document.createElement('canvas').getContext('2d');
+  if (!ctx) return null;
+  ctx.fillStyle = css;
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+  return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
 function Toasts() {
@@ -89,6 +112,99 @@ function Toasts() {
       ))}
     </div>
   );
+}
+
+/** Last resort when a view throws: say so, keep the data safe, offer a way out. */
+function PageError() {
+  const [confirming, setConfirming] = useState(false);
+  const askRef = useRef<HTMLButtonElement>(null);
+  const asked = useRef(false);
+  useEffect(() => {
+    document.title = pageTitle('Erreur');
+    document.getElementById('main-title')?.focus({ preventScroll: true });
+  }, []);
+  // « Garder mes données » goes away with its group: the focus returns to the button that opened it.
+  useEffect(() => {
+    if (confirming) asked.current = true;
+    else if (asked.current) askRef.current?.focus();
+  }, [confirming]);
+  const download = () => {
+    let raw = '';
+    try {
+      raw = localStorage.getItem(STORAGE_KEY) ?? '';
+    } catch {
+      raw = JSON.stringify(store.get());
+    }
+    const url = URL.createObjectURL(new Blob([raw], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'epreuves-donnees.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  const wipe = () => {
+    store.replace(emptyProgress());
+    window.location.hash = '/';
+    window.location.reload();
+  };
+  return (
+    <div className="page page--narrow">
+      <header className="page-head">
+        <h1 id="main-title" tabIndex={-1}>
+          Cette page n’a pas pu s’afficher
+        </h1>
+        <p className="lead">
+          Une erreur l’a interrompue. Recharge la page{' '}; si l’erreur revient, tes données enregistrées sont peut-être abîmées{' '}:
+          télécharge-les pour les garder, puis efface-les pour repartir de zéro.
+        </p>
+      </header>
+      <div className="btn-row">
+        <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
+          Recharger la page
+        </button>
+        <button type="button" className="btn btn-secondary" onClick={download}>
+          Télécharger mes données
+        </button>
+        {!confirming && (
+          <button ref={askRef} type="button" className="btn btn-ghost" onClick={() => setConfirming(true)}>
+            Effacer mes données…
+          </button>
+        )}
+      </div>
+      {confirming && (
+        <div className="danger-zone" role="group" aria-labelledby="wipe-title">
+          <p id="wipe-title" className="small">
+            Toute ta progression sera effacée de ce navigateur, sans retour possible. Télécharge tes données d’abord si tu veux les garder.
+          </p>
+          <div className="btn-row">
+            <button type="button" className="btn btn-danger" onClick={wipe}>
+              Effacer et repartir de zéro
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => setConfirming(false)} autoFocus>
+              Garder mes données
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+class Boundary extends Component<{ resetKey?: string; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidUpdate(prev: { resetKey?: string }) {
+    // Another page was opened: give it its chance.
+    if (this.state.failed && prev.resetKey !== this.props.resetKey) this.setState({ failed: false });
+  }
+
+  render() {
+    return this.state.failed ? <PageError /> : this.props.children;
+  }
 }
 
 function page(route: Route) {
@@ -108,7 +224,8 @@ function page(route: Route) {
     case 'cultures':
       if (!a) return <Cultures />;
       if (a === 'labo') return <Lab />;
-      if (a === 'comparer') return <CultureCompare query={route.query} />;
+      // Remounted per pair, so its selects start from the markets shown.
+      if (a === 'comparer') return <CultureCompare key={route.raw} query={route.query} />;
       if (a === 'paire' && b) return <CulturePairPage id={b} />;
       return <CultureDetail id={a} />;
     case 'ressources':
@@ -122,41 +239,69 @@ function page(route: Route) {
   }
 }
 
-export function App() {
+/** Title of the focus-mode views, whose components do not set one. */
+function focusModeTitle(route: Route): string {
+  const [section] = route.path;
+  if (section === 'fiches') {
+    const m = MODULE_BY_ID.get(route.query.get('module') ?? '');
+    return pageTitle(m ? `Fiches — ${m.title}` : 'Fiches de révision');
+  }
+  // « Typographie — S’entraîner »: distinct from the lesson page, which is titled « Typographie ».
+  return pageTitle(route.query.get('mode') === 'blitz' ? 'Défi chrono' : specLabel(parseSpec(route.query)), 'S’entraîner');
+}
+
+function Shell() {
   const route = useRoute();
   const progress = useProgress();
   const [section, param] = route.path;
   const focusMode = section === 'session' || section === 'fiches';
 
-  // Theme: follow the system unless the learner picked one.
+  // Theme: follow the system unless the learner picked one; the browser chrome follows too.
   useLayoutEffect(() => {
     const t = progress.settings.theme;
     if (t === 'system') delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = t;
+    const forced = t === 'system' ? null : hexColor(getComputedStyle(document.body).backgroundColor);
+    for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) {
+      // index.html gives one value per system scheme; a forced theme overrides both.
+      meta.dataset.system ??= meta.content;
+      meta.content = forced ?? meta.dataset.system;
+    }
   }, [progress.settings.theme]);
 
   // New page: start at the top and move focus to its title for screen readers.
   useEffect(() => {
-    if (section === 'session' || section === 'fiches') return;
+    if (focusMode) return;
     window.scrollTo({ top: 0 });
-    document.getElementById('main-title')?.focus({ preventScroll: true });
-  }, [route.raw, section]);
-
-  useEffect(() => {
-    const titles: Record<string, string> = {
-      apprendre: 'Apprendre',
-      entrainement: 'S’entraîner',
-      session: 'Session',
-      fiches: 'Fiches',
-      cultures: 'Cultures',
-      ressources: 'Ressources',
-      progression: 'Progression',
-      'a-propos': 'À propos',
+    const title = () => document.getElementById('main-title');
+    const h = title();
+    if (h) {
+      h.focus({ preventScroll: true });
+      return;
+    }
+    // Views that load their data on demand (Cultures) render their title later: focus it on arrival,
+    // unless the learner has moved on in the meantime.
+    const from = document.activeElement;
+    const main = document.getElementById('main');
+    if (!main) return;
+    const observer = new MutationObserver(() => {
+      const t = title();
+      if (!t) return;
+      observer.disconnect();
+      if (document.activeElement === from || document.activeElement === document.body) t.focus({ preventScroll: true });
+    });
+    observer.observe(main, { childList: true, subtree: true });
+    const stop = window.setTimeout(() => observer.disconnect(), 15000);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(stop);
     };
-    const lesson = section === 'apprendre' && param ? MODULES.find((m) => m.id === param)?.title : undefined;
-    const name = lesson ?? (section ? titles[section] : undefined);
-    document.title = name ? `${name} — Épreuves` : 'Épreuves — atelier UI/UX';
-  }, [section, param]);
+  }, [route.raw, focusMode]);
+
+  // Session, challenge and flashcards name themselves from the route; every other view sets its own title.
+  useEffect(() => {
+    if (focusMode) document.title = focusModeTitle(route);
+  }, [route, focusMode]);
 
   if (Preview && section === 'apercu' && param)
     return (
@@ -204,11 +349,13 @@ export function App() {
         </div>
         <div className="rail-foot">
           <div className="rail-streak">
-            <strong>{st.current}</strong> jour{st.current > 1 ? 's' : ''} de suite · {progress.xp} XP
+            <strong>{st.current}</strong>
+            {st.current > 1 ? 'jours' : 'jour'} de série · {progress.xp}
+            {'\u00A0'}XP
           </div>
           <div className="btn-row">
             <ThemeToggle />
-            <Link to="/a-propos" className="small">
+            <Link to="/a-propos" className="small" aria-current={current === 'a-propos' ? 'page' : undefined}>
               À propos
             </Link>
           </div>
@@ -216,7 +363,7 @@ export function App() {
       </nav>
 
       <main id="main" className="main" tabIndex={-1}>
-        {page(route)}
+        <Boundary resetKey={route.raw}>{page(route)}</Boundary>
       </main>
 
       {!focusMode && (
@@ -231,5 +378,13 @@ export function App() {
       )}
       <Toasts />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <Boundary>
+      <Shell />
+    </Boundary>
   );
 }

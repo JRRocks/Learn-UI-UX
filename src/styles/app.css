@@ -2841,6 +2841,7 @@
   margin: 0;
   color: var(--ink-2);
   max-width: var(--measure);
+  text-wrap: pretty;
 }
 
 /* =========================================================================
@@ -3037,6 +3038,13 @@
 .dialog p {
   color: var(--ink-2);
   margin-bottom: var(--s5);
+}
+
+/* A long label (« Remplacer ma progression ») wraps inside the dialog instead of running past its edge at 320 px. */
+.dialog .btn {
+  white-space: normal;
+  padding-block: var(--s2);
+  text-align: center;
 }
 
 /* ---------- Toasts ---------- */

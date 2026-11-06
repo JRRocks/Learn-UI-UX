@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Mock, type Mark } from '../components/Mock';
 import type { AntipatternEntry, CulturePair, CultureProfile, Exercise, ModuleContent, Visual } from '../engine/types';
-import { Md, MdInline } from '../lib/markdown';
+import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 
 /**
  * Authoring preview: every lesson example and exercise of one module with its
@@ -31,7 +31,7 @@ async function load(target: string): Promise<Loaded> {
     return l ? { kind: 'antipatterns', list: (await l()).ANTIPATTERNS ?? [] } : { kind: 'error', message: 'Catalogue absent' };
   }
   const entry = Object.entries(moduleFiles).find(([f]) => f.endsWith(`/${target}.ts`));
-  if (!entry) return { kind: 'error', message: `Module « ${target} » introuvable` };
+  if (!entry) return { kind: 'error', message: frenchSpacing(`Module « ${target} » introuvable`) };
   return { kind: 'module', module: (await entry[1]()).default };
 }
 
@@ -39,7 +39,7 @@ function Shot({ id, title, children }: { id: string; title: string; children: Re
   return (
     <section className="preview-item" data-shot={id}>
       <h2 className="preview-title">
-        <code>{id}</code> {title}
+        <code>{id}</code> {frenchSpacing(title)}
       </h2>
       {children}
     </section>
@@ -52,7 +52,11 @@ function V({ visual, marks, vars, caption }: { visual: Visual; marks?: Mark[]; v
       <div className="stage">
         <Mock visual={visual} marks={marks} vars={vars} />
       </div>
-      {caption && <figcaption>{caption}</figcaption>}
+      {caption && (
+        <figcaption>
+          <MdInline text={caption} />
+        </figcaption>
+      )}
     </figure>
   );
 }
@@ -84,7 +88,7 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
           })}
         </ol>
       )}
-      {ex.type === 'truefalse' && <p>Réponse : {ex.answer ? 'Vrai' : 'Faux'}</p>}
+      {ex.type === 'truefalse' && <p>Réponse{'\u00A0'}: {ex.answer ? 'Vrai' : 'Faux'}</p>}
       {ex.type === 'hotspot' && (
         <>
           <V
@@ -102,8 +106,8 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
       )}
       {ex.type === 'slider' && (
         <div className="preview-pair">
-          <V visual={ex.visual} vars={{ '--v': `${ex.initial}${ex.unit}`, '--n': String(ex.initial) }} caption={`Départ : ${ex.initial}${ex.unit}`} />
-          <V visual={ex.visual} vars={{ '--v': `${ex.ideal}${ex.unit}`, '--n': String(ex.ideal) }} caption={`Idéal : ${ex.ideal}${ex.unit} (cible ${ex.target[0]}–${ex.target[1]})`} />
+          <V visual={ex.visual} vars={{ '--v': `${ex.initial}${ex.unit}`, '--n': String(ex.initial) }} caption={`Départ : ${ex.initial}${ex.unit ? `\u00A0${ex.unit}` : ''}`} />
+          <V visual={ex.visual} vars={{ '--v': `${ex.ideal}${ex.unit}`, '--n': String(ex.ideal) }} caption={`Idéal : ${ex.ideal}${ex.unit ? `\u00A0${ex.unit}` : ''} (cible ${ex.target[0]}–${ex.target[1]})`} />
         </div>
       )}
       {ex.type === 'order' && (
@@ -140,22 +144,29 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
       {ex.type === 'grid' && (
         <>
           <V visual={ex.visual} />
-          <table className="preview-table">
-            <tbody>
-              {ex.criteria.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.label}</td>
-                  <td>{c.expert}</td>
-                  <td>{c.why}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Three columns do not fit a phone: the table scrolls instead of overflowing the page. */}
+          <div className="table-scroll">
+            <table className="preview-table">
+              <tbody>
+                {ex.criteria.map((c) => (
+                  <tr key={c.id}>
+                    <td>
+                      <MdInline text={c.label} />
+                    </td>
+                    <td>{c.expert}</td>
+                    <td>
+                      <MdInline text={c.why} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
       <Md text={ex.explanation} className="preview-explanation" />
       <p>
-        <strong>À retenir :</strong> <MdInline text={ex.takeaway} />
+        <strong>À retenir{'\u00A0'}:</strong> <MdInline text={ex.takeaway} />
       </p>
     </Shot>
   );
@@ -174,7 +185,7 @@ export function Preview({ target }: { target: string }) {
     <div className="preview" data-preview-ready="ok">
       {data.kind === 'module' && (
         <>
-          <h1>{data.module.title}</h1>
+          <h1>{frenchSpacing(data.module.title)}</h1>
           {data.module.sections.flatMap((s) =>
             (s.examples ?? []).map((e, i) => (
               <Shot key={`${s.id}-${i}`} id={`lesson-${s.id}-${i + 1}`} title={e.title}>
@@ -195,7 +206,9 @@ export function Preview({ target }: { target: string }) {
           <h1>Cultures</h1>
           {data.profiles.map((p) => (
             <Shot key={p.id} id={`culture-${p.id}`} title={`${p.name} (${p.locale})`}>
-              <p>{p.summary}</p>
+              <p>
+                <MdInline text={p.summary} />
+              </p>
               {p.visual && <V visual={p.visual} />}
             </Shot>
           ))}

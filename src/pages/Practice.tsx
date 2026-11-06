@@ -17,13 +17,15 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useState } from 'react';
-import { Link, navigate } from '../app/router';
+import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
-import { EXERCISES, MODULES, RULE_CARDS } from '../content';
+import { EXERCISES, MODULES, RULE_CARDS, RULE_CARD_BY_KEY } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import { dayKey } from '../engine/dates';
 import { dueCardKeys } from '../engine/progress';
-import { matchesType, type PracticeType } from '../engine/session';
+import { SESSION_SIZE, matchesType, type PracticeType } from '../engine/session';
+import { count } from '../lib/french';
+import { frenchSpacing } from '../lib/markdown';
 
 const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIcon }[] = [
   { type: 'duel', title: 'Comparaison visuelle', text: 'Deux à quatre versions d’une même interface : choisis celle qu’un expert recommanderait.', Icon: Columns2 },
@@ -37,14 +39,27 @@ const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIc
   { type: 'grid', title: 'Grille de critique', text: 'Note un écran sur les 10 heuristiques de Nielsen et compare ta grille à celle d’un expert.', Icon: Grid3x3 },
 ];
 
+/**
+ * The « Fiches » legend, true to what the link opens (Cards.tsx): the cards due today, else the ones never
+ * reviewed, else nothing until their next review date.
+ */
+export function cardsHint(due: number, fresh: number, total: number): string {
+  if (due > 0) return 'Fiches à réviser aujourd’hui';
+  const discover = `${count(fresh, 'règle d’or', 'règles d’or')} à découvrir`;
+  if (fresh >= total) return discover;
+  return fresh > 0 ? `Rien à réviser\u00A0· ${discover}` : 'Rien à réviser aujourd’hui';
+}
+
 export function Practice() {
   const p = useProgress();
   const today = dayKey();
   const due = EXERCISES.filter((e) => (p.items[e.id]?.due ?? '9999') <= today).length;
   const mistakes = EXERCISES.filter((e) => p.items[e.id]?.last === 'wrong').length;
-  const cardsDue = dueCardKeys(p, today).length;
+  const cardsDue = dueCardKeys(p, today, RULE_CARD_BY_KEY).length;
+  const cardsNew = RULE_CARDS.filter((c) => !p.cards[c.key]).length;
   const [moduleId, setModuleId] = useState(MODULES[0]?.id ?? '');
   const cultureCount = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
+  usePageTitle(pageTitle('S’entraîner'));
 
   return (
     <div className="page">
@@ -61,7 +76,7 @@ export function Practice() {
       <section className="today" aria-label="Sessions recommandées">
         <div className="today-main">
           <h2>Session du jour</h2>
-          <p>10 épreuves équilibrées : d’abord ce qui est à revoir, puis de nouvelles notions, réparties sur plusieurs leçons.</p>
+          <p>{frenchSpacing(`${SESSION_SIZE.daily} épreuves équilibrées : d’abord ce qui est à revoir, puis de nouvelles notions, réparties sur plusieurs leçons.`)}</p>
           <Link to="/session?mode=daily" className="btn btn-primary">
             Commencer
           </Link>
@@ -71,25 +86,25 @@ export function Practice() {
             <Repeat aria-hidden="true" />
             <span>
               Révisions espacées
-              <small>Épreuves programmées pour aujourd’hui</small>
+              <small>{due ? 'Épreuves à revoir aujourd’hui' : 'Rien à revoir aujourd’hui'}</small>
             </span>
-            <strong>{due}</strong>
+            {due > 0 && <strong>{due}</strong>}
           </Link>
           <Link to="/session?mode=mistakes" className="side-link">
             <RotateCcw aria-hidden="true" />
             <span>
               Mes erreurs
-              <small>Jusqu’à ce qu’elles soient réussies</small>
+              <small>{mistakes ? 'Épreuves ratées, jusqu’à ce que tu les réussisses' : 'Aucune erreur en attente'}</small>
             </span>
-            <strong>{mistakes}</strong>
+            {mistakes > 0 && <strong>{mistakes}</strong>}
           </Link>
           <Link to="/fiches" className="side-link">
             <Layers aria-hidden="true" />
             <span>
               Fiches de révision
-              <small>{RULE_CARDS.length} règles d’or, à se réciter</small>
+              <small>{cardsHint(cardsDue, cardsNew, RULE_CARDS.length)}</small>
             </span>
-            <strong>{cardsDue}</strong>
+            {cardsDue > 0 && <strong>{cardsDue}</strong>}
           </Link>
         </div>
       </section>
@@ -97,18 +112,18 @@ export function Practice() {
       <section className="section" aria-labelledby="formats-title">
         <div className="section-head">
           <h2 id="formats-title">Par format d’épreuve</h2>
-          <p className="small">Chaque format entraîne un réflexe différent : voir, repérer, doser, décider.</p>
+          <p className="small">{frenchSpacing('Chaque format entraîne un réflexe différent : voir, repérer, doser, décider.')}</p>
         </div>
         <ul className="formats">
           {FORMATS.map((f) => {
-            const count = EXERCISES.filter((e) => matchesType(e, f.type)).length;
+            const n = EXERCISES.filter((e) => matchesType(e, f.type)).length;
             return (
               <li key={f.type} className="format">
                 <f.Icon aria-hidden="true" />
                 <div>
                   <h3>{f.title}</h3>
                   <p>
-                    {f.text} <span className="num">({count})</span>
+                    {frenchSpacing(f.text)} <span className="num">({n})</span>
                   </p>
                 </div>
                 <Link to={`/session?mode=type&id=${f.type}`} className="btn btn-secondary" aria-label={`Lancer : ${f.title}`}>
@@ -123,7 +138,7 @@ export function Practice() {
       <div className="split">
         <section className="section" aria-labelledby="module-title">
           <h2 id="module-title">Par leçon</h2>
-          <p className="muted">Toutes les épreuves d’une leçon, les nouvelles d’abord.</p>
+          <p className="muted">{SESSION_SIZE.module} épreuves d’une leçon à la fois, les nouvelles d’abord.</p>
           <form
             className="btn-row"
             onSubmit={(e) => {
@@ -137,7 +152,7 @@ export function Practice() {
             <select id="module-pick" className="select" value={moduleId} onChange={(e) => setModuleId(e.target.value)}>
               {MODULES.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.title}
+                  {frenchSpacing(m.title)}
                 </option>
               ))}
             </select>
@@ -172,8 +187,8 @@ export function Practice() {
           <div>
             <h3>Défi chrono</h3>
             <p>
-              90 secondes de vrai ou faux, toutes leçons confondues. Le chrono s’arrête pendant la correction.
-              {p.records.blitz ? ` Ton record : ${p.records.blitz}.` : ''}
+              90{'\u00A0'}secondes de vrai ou faux, toutes leçons confondues. Le chrono s’arrête pendant la correction.
+              {p.records.blitz ? frenchSpacing(` Ton record : ${count(p.records.blitz, 'bonne réponse', 'bonnes réponses')}.`) : ''}
             </p>
           </div>
           <Link to="/session?mode=blitz" className="btn btn-secondary">
@@ -184,15 +199,19 @@ export function Practice() {
           <GraduationCap aria-hidden="true" />
           <div>
             <h3>Examen blanc</h3>
-            <p>30 épreuves de toutes les leçons, sans correction pendant l’examen : tout est expliqué dans le bilan. 80 % de réussite débloque un badge.</p>
+            <p>
+              {frenchSpacing(
+                `${SESSION_SIZE.exam} épreuves de toutes les leçons, sans correction pendant l’examen : tout est expliqué dans le bilan. 80 % de réussite débloque un badge.`,
+              )}
+            </p>
           </div>
           <Link to="/session?mode=exam" className="btn btn-primary">
             Passer l’examen
           </Link>
         </div>
         <p className="small muted">
-          <CalendarCheck aria-hidden="true" width={14} height={14} style={{ display: 'inline', verticalAlign: '-2px' }} /> Astuce : une session
-          par jour vaut mieux qu’un marathon par semaine — la répétition espacée fait le reste.
+          <CalendarCheck aria-hidden="true" width={14} height={14} style={{ display: 'inline', verticalAlign: '-2px' }} />{' '}
+          {frenchSpacing('Astuce : une session par jour vaut mieux qu’un marathon par semaine — la répétition espacée fait le reste.')}
         </p>
       </section>
     </div>

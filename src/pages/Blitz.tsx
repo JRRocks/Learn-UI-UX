@@ -8,7 +8,8 @@ import { EXERCISES, MODULE_BY_ID } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
 import type { TrueFalseExercise } from '../engine/types';
-import { MdInline } from '../lib/markdown';
+import { count } from '../lib/french';
+import { MdInline, frenchSpacing } from '../lib/markdown';
 import { pauseClock, remaining, resumeClock, secondsLeft, startClock, type Clock } from './blitzClock';
 import { alternateTrueFalse } from './trueFalseMix';
 
@@ -156,12 +157,11 @@ export function Blitz() {
             Défi chrono
           </h1>
           <p className="lead">
-            {DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la
-            correction.
+            {frenchSpacing(`${DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la correction.`)}
           </p>
           <p className="muted">
-            Record : <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
-            disponibles. Clavier : V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
+            Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
+            disponibles. Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
           </p>
         </header>
         <div className="btn-row">
@@ -217,7 +217,7 @@ export function Blitz() {
             Rejouer
           </Link>
           <Link to="/entrainement" className="btn btn-secondary">
-            Autres formats
+            Autres entraînements
           </Link>
         </div>
       </div>
@@ -233,7 +233,7 @@ export function Blitz() {
         </button>
         <div className="player-progress">
           <div className="player-progress-label">
-            <span>Défi chrono · {module?.title}</span>
+            <span>Défi chrono · {frenchSpacing(module?.title ?? '')}</span>
             <span className="num" aria-live="off">
               {Math.floor(left / 60)}:{String(left % 60).padStart(2, '0')}
             </span>
@@ -241,7 +241,7 @@ export function Blitz() {
           <div
             className="meter meter--mark"
             role="timer"
-            aria-label={`${left} seconde${left > 1 ? 's' : ''} restante${left > 1 ? 's' : ''}`}
+            aria-label={count(left, 'seconde restante', 'secondes restantes')}
             style={{ '--value': `${(left / DURATION) * 100}%` } as CSSProperties}
           >
             <span />
@@ -272,7 +272,7 @@ export function Blitz() {
           <section ref={feedbackRef} className="feedback" data-verdict={last.ok ? 'correct' : 'wrong'} tabIndex={-1} aria-label="Correction">
             <p className="verdict">
               {last.ok ? <CircleCheck aria-hidden="true" /> : <CircleX aria-hidden="true" />}
-              {last.ok ? 'Juste' : 'Raté'}
+              {last.ok ? 'Juste' : 'À reprendre'}
             </p>
             <p className="takeaway">
               <MdInline text={current.takeaway} />
@@ -285,7 +285,7 @@ export function Blitz() {
               Affirmation suivante
             </button>
           ) : (
-            <span className="shortcut-hint">V ou ← : vrai · F ou → : faux</span>
+            <span className="shortcut-hint">V ou ←{'\u00A0'}: vrai · F ou →{'\u00A0'}: faux</span>
           )}
         </div>
       </article>

@@ -1,6 +1,6 @@
 import { ArrowLeft, Check, ChevronDown, CircleCheck, CircleX } from 'lucide-react';
-import type { CSSProperties } from 'react';
-import { Link } from '../app/router';
+import type { CSSProperties, MouseEvent } from 'react';
+import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
 import { Mock } from '../components/Mock';
@@ -8,8 +8,11 @@ import { MODULES, MODULE_BY_ID, exercisesOf } from '../content';
 import { resolveSource } from '../content/sources';
 import { dayKey } from '../engine/dates';
 import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
+import { SESSION_SIZE } from '../engine/session';
 import type { LessonExample } from '../engine/types';
-import { Md, MdInline } from '../lib/markdown';
+import { count, longDay } from '../lib/french';
+import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import { Commands } from './Learn';
 import { NotFound } from './NotFound';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -17,7 +20,7 @@ const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%
 function Example({ e }: { e: LessonExample }) {
   return (
     <div className="example">
-      <h3>{e.title}</h3>
+      <h3>{frenchSpacing(e.title)}</h3>
       <div className="example-pair">
         {e.bad && (
           <figure>
@@ -58,9 +61,19 @@ function Example({ e }: { e: LessonExample }) {
   );
 }
 
+/** Table of contents: scroll to the section and move focus there, so Tab and screen readers follow. */
+function goTo(e: MouseEvent, headingId: string) {
+  e.preventDefault();
+  const h = document.getElementById(headingId);
+  if (!h) return;
+  (h.closest('section') ?? h).scrollIntoView();
+  h.focus({ preventScroll: true });
+}
+
 export function Lesson({ id }: { id: string }) {
   const p = useProgress();
   const m = MODULE_BY_ID.get(id);
+  usePageTitle(m ? pageTitle(m.title) : null);
   if (!m) return <NotFound />;
 
   const exercises = exercisesOf(m.id);
@@ -70,14 +83,19 @@ export function Lesson({ id }: { id: string }) {
   const read = Boolean(p.lessons[m.id]);
   const idx = MODULES.findIndex((x) => x.id === m.id);
   const next = MODULES[idx + 1];
+  const today = dayKey();
+  // What « Réviser » will really show: the lesson's cards due today, or never reviewed yet.
+  const cardKeys = m.rules.map((r) => `${m.id}/${r.id}`);
+  const cardsToReview = cardKeys.filter((k) => !p.cards[k] || p.cards[k].due <= today).length;
+  const nextCard = cardKeys.map((k) => p.cards[k]?.due).filter((d): d is string => Boolean(d)).sort()[0];
+  const sessionSize = Math.min(exercises.length, SESSION_SIZE.module);
 
   const markRead = () => {
     store.update((s) => markLessonRead(s, m.id));
-    toast(`Leçon lue : +${XP.lesson} XP`);
+    toast(`Leçon lue\u00A0: +${XP.lesson}\u00A0XP`);
   };
 
   const scheduleCards = () => {
-    const today = dayKey();
     store.update((s) => {
       const cards = { ...s.cards };
       for (const r of m.rules) {
@@ -88,13 +106,6 @@ export function Lesson({ id }: { id: string }) {
     });
   };
 
-  // Compact contents (below 1100 px): scroll to the part and move focus to its heading.
-  const jump = (id: string) => {
-    document.getElementById(id)?.scrollIntoView();
-    const h = document.getElementById(`h-${id}`);
-    h?.setAttribute('tabindex', '-1');
-    h?.focus({ preventScroll: true });
-  };
   const parts = [...m.sections.map((s) => ({ id: s.id, title: s.title })), { id: 'regles', title: 'Règles d’or' }];
 
   return (
@@ -105,18 +116,20 @@ export function Lesson({ id }: { id: string }) {
 
       <header className="page-head">
         <h1 id="main-title" tabIndex={-1}>
-          {m.title}
+          {frenchSpacing(m.title)}
         </h1>
-        <p className="lead">{m.summary}</p>
+        <p className="lead">
+          <MdInline text={m.summary} />
+        </p>
         <p className="meta">
-          <span>{m.minutes} min de lecture</span>
-          <span>{exercises.length} épreuves</span>
+          <span>
+            {m.minutes}
+            {'\u00A0'}min de lecture
+          </span>
+          <span>{count(exercises.length, 'épreuve', 'épreuves')}</span>
           {m.commands?.length ? (
             <span>
-              impeccable{' '}
-              {m.commands.map((c) => (
-                <code key={c}>/{c} </code>
-              ))}
+              <Commands list={m.commands} />
             </span>
           ) : null}
           {read && (
@@ -142,8 +155,8 @@ export function Lesson({ id }: { id: string }) {
           <ol>
             {parts.map((s) => (
               <li key={s.id}>
-                <a href={`#/apprendre/${m.id}`} onClick={(e) => (e.preventDefault(), jump(s.id))}>
-                  {s.title}
+                <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, `h-${s.id}`)}>
+                  {frenchSpacing(s.title)}
                 </a>
               </li>
             ))}
@@ -158,7 +171,9 @@ export function Lesson({ id }: { id: string }) {
         <article className="lesson-article">
           {m.sections.map((s) => (
             <section key={s.id} id={s.id} className="lesson-section" aria-labelledby={`h-${s.id}`}>
-              <h2 id={`h-${s.id}`}>{s.title}</h2>
+              <h2 id={`h-${s.id}`} tabIndex={-1}>
+                {frenchSpacing(s.title)}
+              </h2>
               <Md text={s.body} className="prose" />
               {s.examples?.length ? (
                 <div className="examples">
@@ -171,7 +186,9 @@ export function Lesson({ id }: { id: string }) {
           ))}
 
           <section id="regles" className="lesson-section" aria-labelledby="h-regles">
-            <h2 id="h-regles">Règles d’or</h2>
+            <h2 id="h-regles" tabIndex={-1}>
+              Règles d’or
+            </h2>
             <ul className="rules-list">
               {m.rules.map((r) => (
                 <li key={r.id}>
@@ -195,10 +212,10 @@ export function Lesson({ id }: { id: string }) {
                   <li key={i}>
                     {r.url ? (
                       <a href={r.url} target="_blank" rel="noopener noreferrer">
-                        {r.label}
+                        {frenchSpacing(r.label)}
                       </a>
                     ) : (
-                      r.label
+                      frenchSpacing(r.label)
                     )}
                   </li>
                 );
@@ -217,7 +234,7 @@ export function Lesson({ id }: { id: string }) {
             )}
             {next && (
               <Link to={`/apprendre/${next.id}`} className="btn btn-ghost">
-                Leçon suivante : {next.title}
+                {frenchSpacing(`Leçon suivante : ${next.title}`)}
               </Link>
             )}
           </div>
@@ -231,13 +248,13 @@ export function Lesson({ id }: { id: string }) {
             <ol>
               {m.sections.map((s) => (
                 <li key={s.id}>
-                  <a href={`#/apprendre/${m.id}`} onClick={(e) => (e.preventDefault(), document.getElementById(s.id)?.scrollIntoView())}>
-                    {s.title}
+                  <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, `h-${s.id}`)}>
+                    {frenchSpacing(s.title)}
                   </a>
                 </li>
               ))}
               <li>
-                <a href={`#/apprendre/${m.id}`} onClick={(e) => (e.preventDefault(), document.getElementById('regles')?.scrollIntoView())}>
+                <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, 'h-regles')}>
                   Règles d’or
                 </a>
               </li>
@@ -245,17 +262,23 @@ export function Lesson({ id }: { id: string }) {
           </nav>
           <div className="section">
             <div className="field">
-              <span className="field-label">Maîtrise : {masteryLabel(v, touched)}</span>
+              <span className="field-label">
+                Maîtrise{'\u00A0'}: {masteryLabel(v, touched)}
+              </span>
               <span className="meter" style={pct(v)} aria-hidden="true">
                 <span />
               </span>
             </div>
             <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
-              S’entraîner ({exercises.length})
+              S’entraîner ({count(sessionSize, 'épreuve', 'épreuves')})
             </Link>
-            <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-              Réviser les {m.rules.length} fiches
-            </Link>
+            {cardsToReview > 0 ? (
+              <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
+                Réviser {count(cardsToReview, 'fiche', 'fiches')}
+              </Link>
+            ) : nextCard ? (
+              <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(nextCard)}.`)}</p>
+            ) : null}
           </div>
         </aside>
       </div>

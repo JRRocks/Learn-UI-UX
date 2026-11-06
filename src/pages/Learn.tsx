@@ -1,15 +1,35 @@
 import { Check } from 'lucide-react';
 import type { CSSProperties } from 'react';
-import { Link } from '../app/router';
+import { Link, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
 import { CATEGORIES, MODULES, exercisesOf } from '../content';
 import { mastery, masteryLabel } from '../engine/progress';
+import { count } from '../lib/french';
+import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
+
+/** impeccable's command families, in the order the curriculum shows them. */
+const FAMILIES = CATEGORIES.filter((c) => ['enrichir', 'affiner', 'corriger', 'evaluer', 'construire'].includes(c.id)).map((c) => c.title.toLowerCase());
+
+/** `/impeccable typeset`: the command as impeccable's own documentation writes it. */
+export function Commands({ list }: { list: string[] }) {
+  return (
+    <>
+      {list.map((c, i) => (
+        <span key={c}>
+          {i > 0 && ', '}
+          <code className="code-short">/impeccable {c}</code>
+        </span>
+      ))}
+    </>
+  );
+}
 
 export function Learn() {
   const p = useProgress();
   const read = MODULES.filter((m) => p.lessons[m.id]).length;
+  usePageTitle(pageTitle('Sommaire'));
   return (
     <div className="page">
       <header className="page-head">
@@ -17,8 +37,10 @@ export function Learn() {
           Sommaire
         </h1>
         <p className="lead">
-          {MODULES.length} leçons, organisées comme les commandes d’impeccable : évaluer, affiner, enrichir, corriger, construire — plus la
-          psychologie, l’éthique et les cultures. {read > 0 && `Tu en as lu ${read}.`}
+          {frenchSpacing(
+            `${MODULES.length} leçons : les fondations, la psychologie et l’éthique, puis les familles de commandes d’impeccable (${FAMILIES.join(', ')}) et les cultures.`,
+          )}
+          {read > 0 && ` Tu en as lu ${read}.`}
         </p>
       </header>
 
@@ -30,7 +52,7 @@ export function Learn() {
             <section key={cat.id} className="toc-group" aria-labelledby={`cat-${cat.id}`}>
               <div className="toc-group-head">
                 <h2 id={`cat-${cat.id}`}>{cat.title}</h2>
-                <p>{cat.description}</p>
+                <p>{frenchSpacing(cat.description)}</p>
               </div>
               <ul className="toc-list">
                 {mods.map((m) => {
@@ -41,18 +63,19 @@ export function Learn() {
                     <li key={m.id} className="toc-row">
                       <Link to={`/apprendre/${m.id}`}>
                         <span className="toc-title">
-                          {m.title}
+                          {frenchSpacing(m.title)}
                           {p.lessons[m.id] && <Check aria-label="Leçon lue" />}
                         </span>
-                        <span className="toc-summary">{m.summary}</span>
+                        <span className="toc-summary">
+                          <MdInline text={m.summary} />
+                        </span>
                         <span className="toc-meta">
-                          {m.minutes} min de lecture · {ids.length} épreuves
+                          {m.minutes}
+                          {' '}min de lecture · {count(ids.length, 'épreuve', 'épreuves')}
                           {m.commands?.length ? (
                             <>
                               {' · '}
-                              {m.commands.map((c) => (
-                                <code key={c}>/{c} </code>
-                              ))}
+                              <Commands list={m.commands} />
                             </>
                           ) : null}
                         </span>

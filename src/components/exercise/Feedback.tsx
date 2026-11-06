@@ -5,7 +5,7 @@ import { MODULE_BY_ID } from '../../content';
 import { resolveSource } from '../../content/sources';
 import type { GradeResult } from '../../engine/grade';
 import type { Exercise } from '../../engine/types';
-import { Md, MdInline } from '../../lib/markdown';
+import { Md, MdInline, frenchSpacing } from '../../lib/markdown';
 import type { Draft } from './players';
 
 const VERDICT = {
@@ -31,14 +31,10 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
             </p>
           ) : (
             <p>
-              <strong>La version marquée « Recommandé ».</strong>
+              <strong>{frenchSpacing('La version marquée « Recommandé ».')}</strong>
             </p>
           )}
-          {o.why && (
-            <p className="muted">
-              <MdInline text={o.why} />
-            </p>
-          )}
+          {/* Its « pourquoi » is already shown under the option itself. */}
         </div>
       );
     }
@@ -48,7 +44,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
           {ex.options
             .filter((o) => ex.answers.includes(o.id))
             .map((o) => (
-              <li key={o.id}>{o.label ? <MdInline text={o.label} /> : 'Version marquée « À cocher »'}</li>
+              <li key={o.id}>{o.label ? <MdInline text={o.label} /> : frenchSpacing('Version marquée « À cocher »')}</li>
             ))}
         </ul>
       );
@@ -91,13 +87,13 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
         </ul>
       );
     case 'slider': {
-      const unit = ex.unit === '%' || !ex.unit ? ex.unit : ` ${ex.unit}`;
+      const unit = ex.unit ? `\u00A0${ex.unit}` : '';
       const mine = draft.type === 'slider' ? draft.value : ex.initial;
       return (
         <p>
           Entre <strong>{fmt(ex.target[0])}</strong> et <strong>{fmt(ex.target[1])}</strong>
           {unit}, idéalement <strong>{fmt(ex.ideal)}</strong>
-          {unit}. Ta valeur : {fmt(mine)}
+          {unit}. Ta valeur{'\u00A0'}: {fmt(mine)}
           {unit}.
         </p>
       );
@@ -109,7 +105,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
       const total = ex.criteria.reduce((s, c) => s + c.expert, 0);
       return (
         <p>
-          Note de l’expert : <strong>{total}</strong> / {ex.criteria.length * ex.scale.max}. Accord avec toi sur{' '}
+          Note de l’expert{'\u00A0'}: <strong>{total}</strong> / {ex.criteria.length * ex.scale.max}. Accord avec toi sur{' '}
           <strong>
             {agree} / {ex.criteria.length}
           </strong>{' '}
@@ -137,7 +133,7 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
         {label}
         {result.verdict === 'partial' && (
           <span className="verdict-xp">
-            {ex.type === 'slider' ? 'proche de la plage recommandée' : `${Math.round(result.score * 100)} % de la réponse`}
+            {ex.type === 'slider' ? 'proche de la plage recommandée' : `${Math.round(result.score * 100)}\u00A0% de la réponse`}
           </span>
         )}
         {xp !== undefined && <span className="verdict-xp">+{xp} XP</span>}
@@ -168,17 +164,17 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
                       <li key={i}>
                         {ref.url ? (
                           <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                            {ref.label}
+                            {frenchSpacing(ref.label)}
                           </a>
                         ) : (
-                          ref.label
+                          frenchSpacing(ref.label)
                         )}
                       </li>
                     );
                   })}
                 </ul>
               )}
-              {module && <Link to={`/apprendre/${module.id}`}>Revoir la leçon « {module.title} »</Link>}
+              {module && <Link to={`/apprendre/${module.id}`}>{frenchSpacing(`Revoir la leçon « ${module.title} »`)}</Link>}
             </div>
           )}
         </div>

@@ -1,6 +1,31 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { expandIcons } from '../components/Mock';
-import { frenchSpacing, parseBlocks } from './markdown';
+import { MODULES } from '../content';
+import { ANTIPATTERNS } from '../content/antipatterns';
+import { LAB_LOCALES } from '../content/cultures/lab';
+import { CULTURE_PAIRS } from '../content/cultures/pairs';
+import { CULTURES } from '../content/cultures/profiles';
+import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
+import { Md, frenchSpacing, parseBlocks } from './markdown';
+
+/** Text as rendered by Md, without its code spans. */
+function renderedText(md: string): string {
+  return renderToStaticMarkup(createElement(Md, { text: md }))
+    .replace(/<code[^>]*>[\s\S]*?<\/code>/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&');
+}
+
+/** Every string of the content that is shown as text (mock markup and its alternative excluded). */
+function texts(v: unknown, where: string, out: [string, string][] = []): [string, string][] {
+  if (typeof v === 'string') out.push([where, v]);
+  else if (Array.isArray(v)) v.forEach((x, i) => texts(x, `${where}[${i}]`, out));
+  else if (v && typeof v === 'object')
+    for (const [k, x] of Object.entries(v)) if (!['html', 'css', 'alt', 'url', 'id'].includes(k)) texts(x, `${where}.${k}`, out);
+  return out;
+}
 
 describe('markdown subset', () => {
   it('splits paragraphs, lists, headings and quotes', () => {
@@ -31,12 +56,48 @@ describe('markdown subset', () => {
     expect(frenchSpacing('avant – après')).toBe('avant – après');
   });
 
+  it('keeps a comparison sign with its number', () => {
+    expect(frenchSpacing('≥ 16 px, ≤ 6 rem et < 2,5 s')).toBe('≥\u00A016\u00A0px, ≤\u00A06\u00A0rem et <\u00A02,5\u00A0s');
+    expect(frenchSpacing('a < b')).toBe('a < b');
+  });
+
+  it('renders italics inside bold and keeps literal asterisks', () => {
+    const html = renderToStaticMarkup(createElement(Md, { text: '**Un sur-titre (*kicker*, *eyebrow*) au-dessus d’un titre.** Et **La pastille *eyebrow* du héros** : non.' }));
+    expect(html).toContain('<strong>Un sur-titre (<em>kicker</em>, <em>eyebrow</em>) au-dessus d’un titre.</strong>');
+    expect(html).toContain('<strong>La pastille <em>eyebrow</em> du héros</strong>');
+    expect(renderedText('- le numéro masqué (139****5678) ;\n- surtout, le **numéro ICP**')).toContain('139****5678');
+  });
+
+  it('starts headings at the requested level', () => {
+    expect(renderToStaticMarkup(createElement(Md, { text: '### Comment adapter', headingLevel: 2 }))).toContain('<h2>Comment adapter</h2>');
+  });
+
   it('keeps numbers attached to their unit', () => {
     expect(frenchSpacing('1 280 px, 44 × 44 pt, 18 h 30, 50 % et 75 caractères')).toBe(
       '1\u00A0280\u00A0px, 44\u00A0×\u00A044\u00A0pt, 18\u00A0h\u00A030, 50\u00A0% et 75\u00A0caractères',
     );
     // Not a unit: a word that merely starts like one.
     expect(frenchSpacing('3 points, 2 semaines, 4 heures')).toBe('3 points, 2 semaines, 4 heures');
+  });
+});
+
+describe('content Markdown', () => {
+  it('leaves no stray asterisk or backtick in the rendered text', () => {
+    const all = [
+      ...texts(MODULES, 'modules'),
+      ...texts(CULTURES, 'cultures'),
+      ...texts(CULTURE_PAIRS, 'pairs'),
+      ...texts(ANTIPATTERNS, 'catalog'),
+      ...texts(LAB_LOCALES.map((l) => l.notes), 'lab'),
+      ...texts({ CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY }, 'resources'),
+    ];
+    const stray = all
+      .filter(([, t]) => /[*`]/.test(t))
+      // Wanted literals: a masked number (139****5678) and USSD codes (*334#).
+      .map(([where, t]) => [where, renderedText(t).replace(/\d\*+\d|\*[\d*]+#/g, '')] as const)
+      .filter(([, t]) => /[*`]/.test(t))
+      .map(([where, t]) => `${where}: ${t.slice(0, 120)}`);
+    expect(stray).toEqual([]);
   });
 });
 
