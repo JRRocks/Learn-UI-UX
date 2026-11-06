@@ -138,7 +138,7 @@ Test final : **retirer** l’animation doit faire perdre du sens ou du caractèr
 - **300–500 ms** : mise en page, superposition ou transition de vue (panneau, fenêtre modale, page) ;
 - **500–800 ms** : une entrée signée, délibérément mise en scène.
 
-En interface produit, la plupart des transitions tiennent entre **150 et 250 ms** : la personne est dans son flux, ne la fais pas attendre.
+En mode Opérer (interface produit), la plupart des transitions tiennent entre **150 et 250 ms** : la personne est dans son flux, ne la fais pas attendre.
 
 **La sortie est plus rapide que l’entrée.** À l’entrée, on doit comprendre d’où vient l’élément ; à la sortie, la décision est prise, chaque milliseconde de plus est de l’attente. Et un retour trop long se perçoit comme de la latence.`,
     },
@@ -149,7 +149,7 @@ En interface produit, la plupart des transitions tiennent entre **150 et 250 ms
 
 - **Entrée** : une courbe qui décélère (*ease-out* quart, quint ou exponentielle : des décélérations de plus en plus marquées).
 - **Sortie** : plus courte ; elle peut accélérer (*ease-in*), puisque l’élément quitte la scène.
-- **Pas de rebond ni d’élastique par réflexe.** Le détecteur relève les animations nommées *bounce*, *elastic*, *wobble*, *jiggle* ou *spring*, et les \`cubic-bezier\` dont un point de contrôle sort de l’intervalle −0,1 à 1,1 en ordonnée : la courbe dépasse son point de départ ou d’arrivée, puis revient. Ces effets datent l’interface et retardent l’instant où l’élément se stabilise.
+- **Pas de rebond ni d’élastique par réflexe.** La règle « Amorti à rebond ou élastique » (\`bounce-easing\`) du détecteur relève les animations nommées *bounce*, *elastic*, *wobble*, *jiggle* ou *spring*, et les \`cubic-bezier\` dont un point de contrôle sort de l’intervalle −0,1 à 1,1 en ordonnée : la courbe dépasse son point de départ ou d’arrivée, puis revient. Ces effets datent l’interface et retardent l’instant où l’élément se stabilise.
 - **Linéaire** : un rythme mécanique, qui convient surtout aux mouvements continus (barre de progression, rotation d’un indicateur de chargement).`,
       examples: [
         {
@@ -184,7 +184,7 @@ N’empile pas les techniques pour le spectacle : une idée de matière forte su
 
 **Une animation se laisse interrompre.** Si l’on referme un menu pendant son ouverture, il repart de sa position du moment, sans saut ni attente. Les transitions CSS le font d’elles-mêmes ; une animation à images-clés, elle, redémarre de son début. Pour interrompre, enchaîner ou calculer des valeurs, passe par l’API Web Animations ou par la bibliothèque déjà en place. Un mouvement lié au défilement ne se justifie que si ce lien porte du sens, avec un repli statique.
 
-**Le contenu est visible par défaut.** Une page dont le texte attend un script pour passer de \`opacity: 0\` à visible reste vide si le script échoue ou tarde : le détecteur classe ce défaut en erreur (contenu invisible au repos, \`content-hidden-at-rest\`). L’animation embellit l’arrivée ; elle ne conditionne jamais l’existence du contenu.`,
+**Le contenu est visible par défaut.** Une page dont le texte attend un script pour passer de \`opacity: 0\` à visible reste vide si le script échoue ou tarde : le détecteur classe ce défaut en erreur, avec la règle « Contenu invisible au repos » (\`content-hidden-at-rest\`). L’animation embellit l’arrivée ; elle ne conditionne jamais l’existence du contenu.`,
     },
     {
       id: 'sequences',
@@ -192,7 +192,7 @@ N’empile pas les techniques pour le spectacle : une idée de matière forte su
       body: `Le plancher de qualité d’impeccable demande **un seul moment signé**, pas des effets dispersés, et pas la même apparition sur chaque section. Ce moment vient du produit et de sa surface : un fondu-montée générique, une carte qui se soulève au survol, une parallaxe ou une révélation au défilement ne constituent pas une idée.
 
 - **Décalage (*stagger*)** : légitime quand une liste apparaît *en tant que liste*. Plafonne le délai total — 40 lignes décalées de 80 ms font attendre la dernière 3,1 s —, et ne transforme pas chaque section de la page en liste décalée.
-- **Boucles décoratives** : le détecteur les repère à leur forme, pas à leur sens. Il relève le point d’état pulsant (\`pulsing-dot\`) : n’importe quel petit point rond qui pulse en boucle, à toi de ne le garder que pour une donnée réellement vivante. Il relève aussi le bandeau défilant automatique (\`marquee\`) et le curseur clignotant décoratif (\`blinking-cursor\`), qui clignote dans le premier écran hors d’un champ de saisie. Une boucle non essentielle s’arrête quand elle sort de l’écran ou que l’onglet est masqué.
+- **Boucles décoratives** : le détecteur les repère à leur forme, pas à leur sens. La règle « Point d’état pulsant » (\`pulsing-dot\`) relève n’importe quel petit point rond qui pulse en boucle : à toi de ne le garder que pour une donnée réellement vivante. Le détecteur relève aussi, avec les règles « Bandeau défilant automatique » (\`marquee\`) et « Curseur clignotant décoratif » (\`blinking-cursor\`), le bandeau qui défile tout seul et le curseur qui clignote dans le premier écran hors d’un champ de saisie. Une boucle non essentielle s’arrête quand elle sort de l’écran ou que l’onglet est masqué.
 - Le WCAG impose de pouvoir **mettre en pause, arrêter ou masquer** tout contenu qui bouge automatiquement plus de 5 secondes à côté d’autre contenu (critère 2.2.2), et interdit ce qui flashe plus de trois fois par seconde au-delà des seuils de flash (critère 2.3.1).`,
     },
     {
@@ -232,7 +232,7 @@ Respecte aussi les préférences de lecture automatique et de son : rien ne dém
   rules: [
     { id: 'jobs', front: 'Quand une animation d’interface a-t-elle sa place ?', back: 'Pour accuser réception, rendre lisible un changement d’état, assurer la continuité, diriger l’attention ou incarner l’univers. Sinon, c’est de la dette.' },
     { id: 'feedback', front: 'Durée d’un retour immédiat (appui, case cochée) ?', back: '100 à 150 ms.' },
-    { id: 'state', front: 'Durée d’un changement d’état courant (menu, onglet) ?', back: '150 à 300 ms ; en interface produit, la plupart des transitions tiennent entre 150 et 250 ms.' },
+    { id: 'state', front: 'Durée d’un changement d’état courant (menu, onglet) ?', back: '150 à 300 ms ; en mode Opérer (interface produit), la plupart des transitions tiennent entre 150 et 250 ms.' },
     { id: 'overlay', front: 'Durée d’une superposition ou d’une transition de vue ?', back: '300 à 500 ms. 500 à 800 ms seulement pour une entrée signée.' },
     { id: 'exit', front: 'Entrée ou sortie : laquelle est la plus rapide ?', back: 'La sortie. On veut voir arriver un élément, pas le regarder partir.' },
     { id: 'easing', front: 'Quelle courbe pour une arrivée assurée ?', back: 'Une décélération naturelle, par exemple `cubic-bezier(0.16, 1, 0.3, 1)`. Pas de rebond ni d’élastique par réflexe.' },
@@ -375,7 +375,7 @@ Les durées restent dans les repères : environ 300 ms pour une superposition q
         },
       ],
       answer: 'visible',
-      explanation: `C’est un défaut que le détecteur d’impeccable classe en **erreur**, le contenu invisible au repos (\`content-hidden-at-rest\`) : une grande part du texte reste invisible après le passage des scripts. Un script bloqué, une erreur JavaScript ou une connexion lente suffisent à livrer une page vide.
+      explanation: `C’est un défaut que le détecteur d’impeccable classe en **erreur**, avec la règle « Contenu invisible au repos » (\`content-hidden-at-rest\`) : une grande part du texte reste invisible après le passage des scripts. Un script bloqué, une erreur JavaScript ou une connexion lente suffisent à livrer une page vide.
 
 La règle : **le contenu est visible dans l’état par défaut**. Le CSS de base affiche tout ; l’animation d’entrée s’ajoute ensuite — par exemple seulement quand une classe posée par le script est présente, et sous \`prefers-reduced-motion: no-preference\`.`,
       takeaway: 'Le contenu est visible par défaut ; l’animation d’entrée l’embellit sans jamais conditionner son existence.',
@@ -414,7 +414,7 @@ La règle : **le contenu est visible dans l’état par défaut**. Le CSS de bas
         },
       ],
       answer: 'static',
-      explanation: `Le détecteur d’impeccable relève le **point d’état pulsant** (\`pulsing-dot\`) : il simule une activité en direct. La pulsation se réserve aux indicateurs liés à des données **réellement vivantes** et changeantes ; ailleurs, un indicateur statique clairement libellé est plus honnête, et plus calme.
+      explanation: `Le détecteur d’impeccable relève ce cliché avec la règle « Point d’état pulsant » (\`pulsing-dot\`) : le point simule une activité en direct. La pulsation se réserve aux indicateurs liés à des données **réellement vivantes** et changeantes ; ailleurs, un indicateur statique clairement libellé est plus honnête, et plus calme.
 
 Une animation en boucle attire l’œil en permanence : elle doit le mériter.`,
       takeaway: 'Ne fais pulser un indicateur que si la donnée est vraiment vivante ; sinon, un libellé statique et précis.',
@@ -444,12 +444,14 @@ Une animation en boucle attire l’œil en permanence : elle doit le mériter.`,
       id: 'motion-interrupt-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Quand on referme un menu pendant son animation d’ouverture, mieux vaut laisser l’ouverture se terminer avant de lancer la fermeture.',
-      answer: false,
-      explanation: `Attendre la fin de l’ouverture, c’est imposer une animation que la personne vient d’annuler : l’interface ne répond plus à son geste. Une animation interrompue **repart de sa position du moment**, dans l’autre sens, sans saut ni attente.
+      prompt: 'Quand un menu s’ouvre et se ferme par une transition CSS, le refermer en pleine ouverture le fait repartir de sa position du moment, sans rien coder de plus.',
+      answer: true,
+      explanation: `Vrai. La spécification CSS Transitions le prévoit : si la valeur change pendant une transition, le navigateur annule celle-ci et en lance une nouvelle qui **part de la valeur en cours**. Le menu à moitié ouvert se referme depuis là où il est, sans saut ni attente.
 
-Les transitions CSS le font d’elles-mêmes : la nouvelle transition part de la valeur en cours. Une animation à images-clés, elle, redémarre de son début. Pour interrompre, enchaîner ou calculer des valeurs, impeccable conseille l’API Web Animations ou la bibliothèque déjà en place, et demande de vérifier qu’une interruption ou un usage répété se comporte correctement.`,
-      takeaway: 'Une animation se laisse interrompre : elle repart de sa position du moment, sans saut et sans faire attendre la fin.',
+C’est ce qu’impeccable attend d’une animation : elle se laisse **interrompre**. Attendre la fin de l’ouverture, ce serait imposer un mouvement que la personne vient d’annuler.
+
+Le piège est ailleurs : une **animation à images-clés** (\`@keyframes\`) ne part pas de la position du moment. Si l’on ouvre et ferme le menu avec deux animations de ce type, la fermeture démarre de sa première image-clé : le menu saute. Pour interrompre, enchaîner ou calculer des valeurs, impeccable conseille l’API Web Animations ou la bibliothèque déjà en place, et demande de vérifier qu’une interruption ou un usage répété se comporte correctement.`,
+      takeaway: 'Une animation se laisse interrompre : une transition CSS repart d’elle-même de sa valeur en cours ; une animation à images-clés redémarre de son début.',
       sources: ['imp:animate', { label: 'W3C — CSS Transitions, démarrage d’une transition', url: 'https://www.w3.org/TR/css-transitions-1/#starting' }],
     },
     {
@@ -474,21 +476,23 @@ Le mode réduit, c’est **moins et plus doux, pas zéro** : la confirmation d�
       id: 'motion-reduced-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Respecter `prefers-reduced-motion`, c’est supprimer toutes les animations et transitions de l’interface.',
-      answer: false,
-      explanation: `Le mode réduit demande **moins de mouvement et plus de douceur**, pas l’absence de tout changement visuel. On retire les déplacements (glissements, parallaxes, zooms) mais on garde les fondus, les changements de couleur et surtout les retours qui confirment une action.
+      prompt: 'Sous `prefers-reduced-motion: reduce`, une confirmation peut encore apparaître en fondu : pour le WCAG, un simple changement d’opacité n’est pas une animation de mouvement.',
+      answer: true,
+      explanation: `Vrai. Le WCAG définit l’**animation de mouvement** comme l’ajout d’étapes entre deux états pour donner l’illusion d’un déplacement ou d’une transition fluide : un élément qui glisse à sa place ou change de taille en apparaissant est animé. La définition exclut les changements de couleur, de flou ou d’opacité qui ne modifient ni la taille, ni la forme, ni la position perçues de l’élément.
 
-Une règle globale qui ramène toutes les durées à quasi zéro peut faire disparaître une confirmation qui n’existait que par une animation : la personne ne sait plus si son action a abouti.`,
-      takeaway: 'Mouvement réduit : moins et plus doux, pas zéro. Les retours d’état restent lisibles.',
-      sources: ['imp:animate', 'imp:audit', WCAG_233],
+Le mode réduit demande donc **moins de mouvement et plus de douceur**, pas l’absence de tout changement visuel. On retire les déplacements (glissements, parallaxes, zooms) mais on garde les fondus, les changements de couleur et surtout les retours qui confirment une action.
+
+À l’inverse, une règle globale qui ramène toutes les durées à quasi zéro peut faire disparaître une confirmation qui n’existait que par une animation : la personne ne sait plus si son action a abouti.`,
+      takeaway: 'Mouvement réduit : retire les déplacements, garde les fondus et les retours d’état. Pour le WCAG, un simple changement d’opacité n’est pas du mouvement.',
+      sources: ['imp:animate', 'imp:audit', { label: 'W3C — WCAG 2.2, définition de l’animation de mouvement', url: 'https://www.w3.org/TR/WCAG22/#dfn-motion-animation' }, WCAG_233],
     },
     {
       id: 'motion-loading-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Dans une application de gestion, une séquence d’apparition animée à chaque chargement d’écran rend l’outil plus agréable.',
+      prompt: 'Dans une application de gestion, une séquence d’apparition animée au chargement des écrans rend l’outil plus agréable.',
       answer: false,
-      explanation: `Dans une surface **Opérer**, la personne est dans son flux : elle veut sa liste, son formulaire, son tableau. Impeccable est explicite : pas de séquence orchestrée au chargement — le produit se charge dans la tâche, personne ne veut le regarder se charger.
+      explanation: `Faux. Dans une surface **Opérer**, la personne est dans son flux : elle veut sa liste, son formulaire, son tableau. Impeccable est explicite : pas de séquence orchestrée au chargement — le produit se charge dans la tâche, personne ne veut le regarder se charger.
 
 Le mouvement y sert l’état, le retour et la continuité, avec des transitions de 150 à 250 ms. Le délice se garde pour des moments précis, pas pour chaque écran.`,
       takeaway: 'En application, pas de chorégraphie au chargement : le mouvement sert l’état et le retour, en 150 à 250 ms.',
@@ -550,9 +554,9 @@ Le mouvement y sert l’état, le retour et la continuité, avec des transitions
       ],
       explanation: `Trois clichés de mouvement, que le détecteur d’impeccable relève tous les trois :
 
-- **point d’état pulsant** (\`pulsing-dot\`) : ici, aucune donnée vivante derrière la pastille « Nouveau » ;
-- **curseur clignotant décoratif** (\`blinking-cursor\`) : un faux curseur dans le titre, là où l’on ne peut rien saisir ;
-- **bandeau défilant automatique** (\`marquee\`) : des noms qui défilent tout seuls, dont une partie est toujours cachée.
+- « Point d’état pulsant » (\`pulsing-dot\`) : ici, aucune donnée vivante derrière la pastille « Nouveau » ;
+- « Curseur clignotant décoratif » (\`blinking-cursor\`) : un faux curseur dans le titre, là où l’on ne peut rien saisir ;
+- « Bandeau défilant automatique » (\`marquee\`) : des noms qui défilent tout seuls, dont une partie est toujours cachée.
 
 Le curseur du champ e-mail, lui, est légitime : un vrai champ de saisie dessine son propre curseur. Une boucle doit mériter l’attention qu’elle capte. Et au-delà de 5 secondes de mouvement automatique à côté d’autre contenu, le WCAG exige un moyen de le mettre en pause, de l’arrêter ou de le masquer (critère 2.2.2).`,
       takeaway: 'Pas de boucles décoratives : ni point qui pulse sans donnée vivante, ni faux curseur, ni bandeau qui défile tout seul.',
@@ -593,7 +597,7 @@ Le curseur du champ e-mail, lui, est légitime : un vrai champ de saisie dessine
       explanation: `Une fiche de spécification se relit avec trois questions : **quelle propriété**, **quelle durée**, **quelle courbe**.
 
 - Le tiroir anime \`left\`, qui recalcule la mise en page à chaque image, et dépasse la fourchette de 300 à 500 ms d’une superposition.
-- La notification rebondit (*bounce*) pendant 900 ms : un effet daté, et une durée plus longue encore qu’une entrée signée (500–800 ms) pour un simple message.
+- La notification rebondit (*bounce*) pendant 900 ms : un effet daté, que relève la règle « Amorti à rebond ou élastique » (\`bounce-easing\`), et une durée plus longue encore qu’une entrée signée (500–800 ms) pour un simple message.
 - La liste décale chaque ligne sans plafond : 39 × 80 ms, soit 3,1 s avant que la dernière ligne ne démarre. Plafonne le délai total.`,
       takeaway: 'Relis chaque animation : propriété (transform, opacity), durée (dans sa fourchette), courbe (décélérer, pas rebondir), délai total plafonné.',
       sources: ['imp:animate', 'imp:detector', 'imp:audit'],

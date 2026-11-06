@@ -48,6 +48,14 @@ const MDN_IMAGES: SourceRef = {
   label: 'MDN — Images adaptatives (srcset, sizes, picture)',
   url: 'https://developer.mozilla.org/fr/docs/Web/HTML/Guides/Responsive_images',
 };
+const MDN_IMG_LOADING: SourceRef = {
+  label: 'MDN — Élément img, attribut loading',
+  url: 'https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/img#loading',
+};
+const MDN_CONTAINER: SourceRef = {
+  label: 'MDN — Requêtes de conteneur CSS',
+  url: 'https://developer.mozilla.org/fr/docs/Web/CSS/Guides/Containment/Container_queries',
+};
 const HOOBER: SourceRef = {
   label: 'Steven Hoober — How Do Users Really Hold Mobile Devices? (UXmatters, 2013)',
   url: 'https://www.uxmatters.com/mt/archives/2013/02/how-do-users-really-hold-mobile-devices.php',
@@ -71,7 +79,7 @@ const PRODUCT_DESK_CSS = `
 const PRODUCT_MOBILE_CSS = `
 .pm-bar { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; border-bottom: 1px solid #e3e6ec; }
 .pm-ico { width: 44px; height: 44px; display: grid; place-items: center; }
-.pm-size { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid #c3c8d3; border-radius: 8px; font-weight: 600; }
+.pm-size { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid #868d9c; border-radius: 8px; font-weight: 600; }
 .pm-size.on { border: 2px solid #1d2230; }
 .pm-cta { min-height: 48px; }
 `;
@@ -125,18 +133,28 @@ const TABLE_CSS = `
 const order = (n: string, status: string, date: string, items: string, total: string) =>
   `<div class="oc"><div class="mk-row mk-between"><p class="mk-strong">Commande n° ${n}</p><span class="mk-badge">${status}</span></div><p class="mk-small mk-muted">${date} · ${items}</p><p class="mk-price">${total}</p></div>`;
 
-const THUMB_CSS = `
-.th-bar { display: flex; align-items: center; gap: 4px; padding: 0 10px 0 0; border-bottom: 1px solid #e3e6ec; }
-.th-bar .mk-strong { flex: 1; }
-.th-ico { width: 44px; height: 44px; display: grid; place-items: center; }
-.th-map { height: 150px; display: grid; place-items: center; color: #c42b2b; background: linear-gradient(135deg, #e5eee0 0 42%, #dde6f1 42% 100%); }
-.th-cta { min-height: 48px; }
+/* The same article card in a wide main column and a narrow sidebar (fixed at 104 px). */
+const CQ_CSS = `
+.cq-top { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid #e3e6ec; }
+.cq-page { display: grid; grid-template-columns: minmax(0, 1fr) 104px; gap: 10px; align-items: start; padding: 10px 8px 12px; }
+.cq-col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cq-sec { font-size: 11px; font-weight: 700; color: #5a6172; }
+.ac { display: grid; gap: 6px 8px; align-items: start; padding: 6px; border: 1px solid #e1e4ea; border-radius: 8px; }
+.ac .mk-img { --ratio: 16 / 9; border-radius: 5px; }
+.ac-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ac-cat { font-size: 11px; font-weight: 600; color: #1f4fd8; }
+.ac-t { font-size: 13px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.ac-m { font-size: 11px; color: #5a6172; overflow-wrap: anywhere; }
 `;
+const CQ_ROW = `.ac { grid-template-columns: 48px minmax(0, 1fr); } .ac .mk-img { --ratio: 1 / 1; }`;
 
-const BIKE_INFO = fr(`<div class="mk-pad mk-stack" style="--gap:4px">
-  <p class="mk-h3">Station Bastille</p>
-  <p class="mk-muted">Vélo électrique · batterie 82 % · à 120 m</p>
-  <p>0,25 € la minute, déverrouillage 1 €</p>
+const articleCard = (cat: string, title: string, minutes: number) =>
+  `<div class="ac"><div class="mk-img"></div><div class="ac-txt"><p class="ac-cat">${cat}</p><p class="ac-t">${title}</p><p class="ac-m">${minutes} min de lecture</p></div></div>`;
+
+const CQ_PAGE = fr(`<div class="cq-top"><b>Carnets urbains</b><span class="mk-grow"></span><i data-icon="search" style="--ico:16px"></i></div>
+<div class="cq-page">
+  <div class="cq-col"><p class="cq-sec">À la une</p>${articleCard('Mobilité', 'Le vélo cargo séduit les familles', 6)}${articleCard('Quartiers', 'Quatre jardins partagés ouvrent ce printemps', 4)}</div>
+  <div class="cq-col"><p class="cq-sec">Les plus lus</p>${articleCard('Travail', 'Cinq idées reçues sur le télétravail', 5)}</div>
 </div>`);
 
 const HERO_CSS = `
@@ -175,7 +193,7 @@ const responsive: ModuleContent = {
     'Repenser une interface pour chaque contexte (écran, mode de saisie, connexion, usage) au lieu de la mettre à l’échelle : mobile d’abord, points de rupture dictés par le contenu, cibles tactiles, zones sûres et images adaptées.',
   minutes: 11,
   commands: ['adapt'],
-  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', WCAG_REFLOW, WCAG_RESIZE, MDN_POINTER, MDN_HOVER, MDN_ANY_POINTER, MDN_IMAGES, HOOBER],
+  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', WCAG_REFLOW, WCAG_RESIZE, MDN_POINTER, MDN_HOVER, MDN_ANY_POINTER, MDN_CONTAINER, MDN_IMAGES, MDN_IMG_LOADING, HOOBER],
   sections: [
     {
       id: 'repenser',
@@ -247,7 +265,7 @@ Ne suppose pas qu’un ordinateur est puissant (il peut être ancien ou modeste)
 **Les points de rupture viennent du contenu**, pas d’une liste d’appareils. Pars de l’étroit, élargis la fenêtre jusqu’à ce que la mise en page casse (lignes trop longues, colonnes trop maigres, vide inutile) et place un point de rupture à cet endroit. Trois suffisent souvent ; impeccable cite 640, 768 et 1024 px comme repères, pas comme une loi.
 
 - \`clamp()\` règle les valeurs fluides (marges, tailles d’affichage) sans multiplier les points de rupture.
-- Les **requêtes de conteneur** (\`@container\`) adaptent un composant à la place dont il dispose, pas à la largeur de la fenêtre : la même carte vit dans une colonne étroite ou dans une grille large.
+- Les **requêtes de conteneur** adaptent un composant à la place dont il dispose, pas à la largeur de la fenêtre : on déclare son parent comme conteneur (\`container-type: inline-size\`), puis \`@container (min-width: …)\` règle sa mise en page. La même carte vit ainsi dans une colonne étroite ou dans une grille large.
 - Dans une interface produit, le responsive est **structurel** : on replie une barre latérale, on transforme un tableau, on change le nombre de colonnes. Une typographie fluide ne remplace pas ces décisions.
 - Un seul code pour tous les écrans : pas de site mobile séparé, pas de détection d’appareil par le *user agent*.`,
     },
@@ -263,7 +281,7 @@ Ces deux requêtes ne décrivent que le mode de saisie **principal**. Sur un por
 
 **Rien d’essentiel ne dépend du survol** : au doigt, il n’existe pas. Remplace-le par un **retour au toucher** : un état \`:active\` visible (léger assombrissement, enfoncement) confirme que le doigt a atteint la bonne cible.
 
-**Des cibles faites pour le doigt** : au moins **44 × 44 px** (la recommandation d’impeccable, d’Apple, et du critère WCAG 2.5.5 de niveau AAA), avec de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, ou un espacement suffisant autour d’une cible plus petite : c’est un plancher, pas un objectif. L’icône peut rester petite ; c’est la zone touchable qui compte.
+**Des cibles faites pour le doigt** : au moins **44 × 44 px**, le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (niveau AAA) ; Apple demande 44 × 44 pt sur iOS, Android 48 × 48 dp. Garde de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, ou un espacement suffisant autour d’une cible plus petite : c’est un plancher, pas un objectif. Le dessin de l’icône peut rester petit ; c’est la cible tactile qui compte.
 
 **La zone du pouce** : à une main, le bas de l’écran s’atteint mieux que le haut. Dans l’étude de Steven Hoober (1 333 observations, 2013), parmi les personnes qui touchaient leur écran, 49 % tenaient et touchaient le téléphone d’une seule main, 36 % le tenaient à deux mains mais ne touchaient l’écran que d’une (le plus souvent avec le pouce), et 15 % tapaient des deux pouces. Les prises changent très souvent, parfois en quelques secondes. Place les actions fréquentes à portée de pouce, sans oublier les autres prises.`,
       examples: [
@@ -277,7 +295,7 @@ Ces deux requêtes ne décrivent que le mode de saisie **principal**. Sur un por
 </div>`),
             css: TARGETS_CSS,
           },
-          badNote: 'Des zones de 24 px sans espace : le doigt en couvre deux à la fois.',
+          badNote: 'Des cibles de 24 px sans espace : le doigt en couvre deux à la fois.',
           good: {
             alt: 'Même barre avec des boutons de 44 pixels espacés de 8 pixels ; le disque de la taille d’un doigt tient dans un seul bouton.',
             html: fr(`<div class="mk-pad mk-stack" style="--gap:12px">
@@ -286,7 +304,7 @@ Ces deux requêtes ne décrivent que le mode de saisie **principal**. Sur un por
 </div>`),
             css: TARGETS_CSS,
           },
-          goodNote: 'Des zones de 44 px espacées : chaque toucher atteint la bonne action.',
+          goodNote: 'Des cibles de 44 px espacées : chaque toucher atteint la bonne action.',
         },
       ],
     },
@@ -439,9 +457,9 @@ Règle de fond : **rien d’essentiel ne dépend du survol**. Le survol peut enr
       id: 'responsive-target-slider',
       type: 'slider',
       difficulty: 1,
-      prompt: 'Règle la taille de la zone touchable de ces boutons d’icône pour un usage au doigt.',
+      prompt: 'Règle la taille de la cible tactile de ces boutons d’icône pour un usage au doigt.',
       visual: {
-        alt: 'Téléphone affichant un e-mail ; au sommet, quatre boutons d’icône (archiver, supprimer, marquer non lu, plus) dont la zone touchable, en pointillés, varie avec le curseur.',
+        alt: 'Téléphone affichant un e-mail ; au sommet, quatre boutons d’icône (archiver, supprimer, marquer non lu, plus) dont la cible tactile, en pointillés, varie avec le curseur.',
         frame: 'phone',
         html: fr(`<div class="mk-pad mk-stack" style="--gap:14px">
   <div class="sl-bar"><span class="sl-b"><i data-icon="folder"></i></span><span class="sl-b"><i data-icon="trash"></i></span><span class="sl-b"><i data-icon="mail"></i></span><span class="sl-b"><i data-icon="ellipsis"></i></span></div>
@@ -452,7 +470,7 @@ Règle de fond : **rien d’essentiel ne dépend du survol**. Le survol peut enr
 .sl-b { width: var(--v, 24px); height: var(--v, 24px); display: grid; place-items: center; flex: none; border-radius: 10px; outline: 1.5px dashed #8b93a5; outline-offset: -1px; }
 .sl-b .mk-ico { width: 18px; height: 18px; }`,
       },
-      control: 'Zone touchable',
+      control: 'Cible tactile',
       min: 16,
       max: 64,
       step: 2,
@@ -460,10 +478,10 @@ Règle de fond : **rien d’essentiel ne dépend du survol**. Le survol peut enr
       unit: 'px',
       target: [44, 56],
       ideal: 44,
-      explanation: `Une cible tactile d’au moins **44 × 44 px** se touche sans viser : c’est la recommandation d’impeccable, d’Apple (44 × 44 pt) et du critère WCAG 2.5.5 (niveau AAA). Android recommande 48 × 48 dp.
+      explanation: `Une cible tactile d’au moins **44 × 44 px** se touche sans viser : c’est le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (niveau AAA). Apple demande 44 × 44 pt sur iOS, Android 48 × 48 dp.
 
-La valeur de départ, 24 px, est le **plancher** du niveau AA (critère 2.5.8), pas un objectif. L’icône peut rester à 18 px : c’est la zone touchable qui grandit. Au-delà de 56 px, une barre d’outils prend une place disproportionnée.`,
-      takeaway: 'Zone touchable de 44 × 44 px au moins, même autour d’une petite icône ; 24 px n’est qu’un plancher.',
+La valeur de départ, 24 px, est le **plancher** du niveau AA (critère 2.5.8), pas un objectif. Le dessin de l’icône peut rester à 18 px : c’est la cible tactile qui grandit. Au-delà de 56 px, une barre d’outils prend une place disproportionnée.`,
+      takeaway: 'Une cible tactile de 44 × 44 px au moins, même quand le dessin de l’icône reste petit ; 24 px n’est qu’un plancher.',
       sources: ['imp:adapt', 'wcag:target', WCAG_TARGET_AAA],
     },
     {
@@ -601,13 +619,15 @@ Impeccable recommande de **transformer chaque ligne en carte** sur mobile : en C
       id: 'responsive-display-none-tf',
       type: 'truefalse',
       difficulty: 3,
-      prompt: 'Masquer un carrousel de photos avec `display: none` sous 768 px évite au téléphone de télécharger ses images.',
-      answer: false,
-      explanation: `\`display: none\` **masque** l’élément, mais le balisage est livré quand même, et les navigateurs téléchargent les images \`<img>\` qu’il contient. Seules les images en \`loading="lazy"\` attendent d’être affichées.
+      prompt: 'Un carrousel de photos masqué par `display: none` sous 768 px fait quand même télécharger ses `<img>` au téléphone, sauf celles en `loading="lazy"`.',
+      answer: true,
+      explanation: `Vrai. \`display: none\` **masque** l’élément sans l’empêcher d’exister : le balisage est livré, et une \`<img>\` se charge par défaut tout de suite, qu’elle soit dans la zone visible ou non (c’est la valeur \`loading="eager"\`, rappelle MDN). Le téléphone paie donc le poids de photos qu’il n’affichera jamais.
+
+Seule une image en \`loading="lazy"\` attend d’approcher de la zone visible. Masquée, elle ne s’en approche jamais, donc elle ne se télécharge pas.
 
 Si le carrousel n’a pas sa place sur mobile, ne l’envoie pas (amélioration progressive : le contenu essentiel d’abord, les enrichissements pour les grands écrans), ou charge ses images en différé. Impeccable résume : \`display: none\` avec parcimonie, car le contenu caché est quand même téléchargé.`,
-      takeaway: '`display: none` cache sans alléger : le contenu masqué est livré et ses images sont téléchargées.',
-      sources: ['imp:adapt'],
+      takeaway: '`display: none` cache sans alléger : les `<img>` masquées se téléchargent quand même, sauf en `loading="lazy"`.',
+      sources: ['imp:adapt', MDN_IMG_LOADING],
     },
     {
       id: 'responsive-hide-feature-tf',
@@ -615,7 +635,7 @@ Si le carrousel n’a pas sa place sur mobile, ne l’envoie pas (amélioration 
       difficulty: 1,
       prompt: 'Pour alléger l’écran mobile d’une boutique de vêtements, on peut retirer le filtre par taille, qui prend trop de place.',
       answer: false,
-      explanation: `Le filtre par taille est **essentiel** dans une boutique de vêtements : sans lui, la personne fait défiler des dizaines d’articles indisponibles dans sa taille, puis abandonne.
+      explanation: `Faux. Le filtre par taille est **essentiel** dans une boutique de vêtements : sans lui, la personne fait défiler des dizaines d’articles indisponibles dans sa taille, puis abandonne.
 
 Impeccable est explicite : ne cache jamais une fonction essentielle sur mobile ; si elle compte, elle doit marcher. Elle change de **forme** : un bouton « Filtres (2) » qui ouvre une feuille montant du bas de l’écran, par exemple. L’architecture reste la même d’un écran à l’autre.`,
       takeaway: 'Ne retire pas une fonction essentielle sur mobile : change sa forme (feuille, menu, accordéon), pas son existence.',
@@ -677,7 +697,7 @@ ${block('safe', ['.barre-bas {', '  padding-bottom: max(1rem, env(safe-area-inse
       },
       hotspots: [
         { id: 'hover', label: 'Sous-menu au survol', correct: true, why: 'Au doigt, le survol n’est qu’émulé, et chaque navigateur le fait à sa façon : le premier toucher ouvre le sous-menu ici, suit le lien là, et le menu se referme mal. Il faut une ouverture explicite (bouton, `details`) ou un menu visible.' },
-        { id: 'icon', label: 'Bouton d’icône de 28 px', correct: true, why: 'Sous les 44 × 44 px recommandés : agrandis la zone touchable, quitte à garder l’icône petite.' },
+        { id: 'icon', label: 'Bouton d’icône de 28 px', correct: true, why: 'Sous les 44 × 44 px du toucher : agrandis la cible tactile, quitte à garder le dessin de l’icône petit.' },
         { id: 'input', label: 'Champs en 13 px', correct: true, why: 'Sous 16 px, Safari sur iPhone zoome de force au moment de la saisie et casse la mise en page.' },
         { id: 'grid', label: 'Grille auto-fit', correct: false, why: 'Une grille qui choisit seule son nombre de colonnes selon la place, sans jamais déborder grâce à `min(16rem, 100%)` : bonne pratique.' },
         { id: 'img', label: 'Images fluides', correct: false, why: 'Les images ne débordent jamais de leur conteneur : bonne pratique.' },
@@ -736,44 +756,42 @@ Vient ensuite la **stratégie** (mise en page, interactions, contenu, navigation
       sources: ['imp:adapt'],
     },
     {
-      id: 'responsive-thumb-duel',
+      id: 'responsive-container-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Laquelle de ces applications de location de vélos se prête le mieux à un usage d’une main ?',
+      context: 'Un magazine en ligne place le même composant « carte d’article » dans sa colonne principale et dans une barre latérale étroite.',
+      prompt: 'Dans quelle version la carte s’adapte-t-elle à chaque emplacement ?',
       options: [
         {
-          id: 'top',
+          id: 'media',
           visual: {
-            alt: 'Téléphone : en-tête avec un bouton retour, le titre « Vélo n° 214 » et un petit lien « Réserver » en haut à droite, puis une carte et les informations de la station.',
-            frame: 'phone',
-            html: fr(`<div class="th-bar"><span class="th-ico"><i data-icon="arrow-left"></i></span><p class="mk-strong">Vélo n° 214</p><span class="mk-btn mk-btn--text mk-btn--s">Réserver</span></div>
-<div class="th-map"><i data-icon="map-pin" style="--ico:30px"></i></div>
-${BIKE_INFO}
-<div style="height:64px"></div>`),
-            css: THUMB_CSS,
+            alt: 'Page d’un magazine en ligne dans un navigateur. Dans la colonne principale, deux cartes d’article ont leur vignette à côté du texte ; dans l’étroite barre latérale « Les plus lus », la même carte garde sa vignette à côté du texte, qui s’écrase en une colonne de quelques lettres.',
+            frame: 'browser',
+            html: CQ_PAGE,
+            css: CQ_CSS + CQ_ROW,
           },
-          why: 'L’action principale est un petit lien tout en haut de l’écran, hors de portée du pouce : il faut changer de prise pour réserver.',
+          why: 'La carte suit une requête média, donc la largeur de la fenêtre : la fenêtre est large, alors la carte garde partout sa vignette à côté du texte, même dans la barre latérale, où ce texte s’écrase.',
         },
         {
-          id: 'bottom',
+          id: 'container',
           visual: {
-            alt: 'Téléphone : même écran, avec un grand bouton « Réserver ce vélo » pleine largeur sous les informations de la station.',
-            frame: 'phone',
-            html: fr(`<div class="th-bar"><span class="th-ico"><i data-icon="arrow-left"></i></span><p class="mk-strong">Vélo n° 214</p></div>
-<div class="th-map"><i data-icon="map-pin" style="--ico:30px"></i></div>
-${BIKE_INFO}
-<div class="mk-pad" style="padding-top:4px"><span class="mk-btn mk-btn--block th-cta">Réserver ce vélo</span></div>`),
-            css: THUMB_CSS,
+            alt: 'Page d’un magazine en ligne dans un navigateur. Dans la colonne principale, deux cartes d’article ont leur vignette à côté du texte ; dans l’étroite barre latérale « Les plus lus », la même carte place sa vignette au-dessus du texte, lisible sur toute la largeur.',
+            frame: 'browser',
+            html: CQ_PAGE,
+            css: `${CQ_CSS}.cq-col { container-type: inline-size; container-name: colonne; }
+@container colonne (min-width: 128px) { ${CQ_ROW} }`,
           },
-          why: 'L’action principale est grande et dans la partie basse de l’écran, à portée de pouce.',
+          why: 'Chaque colonne est déclarée conteneur (`container-type: inline-size`) et la carte lit sa largeur avec `@container` : vignette à côté du texte dans la colonne principale, au-dessus dans la barre latérale.',
         },
       ],
-      answer: 'bottom',
-      explanation: `À une main, le pouce atteint facilement la **partie basse et centrale** de l’écran ; le haut de l’écran, surtout le coin opposé à la main qui tient le téléphone, oblige à changer de prise. Dans l’étude de Steven Hoober (1 333 observations), 49 % des personnes qui touchaient leur écran le tenaient d’une seule main.
+      answer: 'container',
+      explanation: `Une **requête média** (\`@media\`) interroge la **fenêtre**, pas l’emplacement du composant. Sur un grand écran, sa condition est vraie pour toute la page : la carte garde sa vignette à côté du texte partout, y compris dans la barre latérale, où il ne reste au texte que quelques lettres par ligne.
 
-Impeccable demande donc des **commandes à portée de pouce** et des cibles généreuses (44 px au moins). L’action principale, ici « Réserver », mérite un bouton large dans la partie basse ; les commandes rares peuvent rester dans la partie haute.`,
-      takeaway: 'Place l’action principale d’un écran mobile dans la partie basse, à portée de pouce, en grand.',
-      sources: ['imp:adapt', HOOBER],
+Une **requête de conteneur** interroge la place dont dispose le composant. On déclare son parent, ici la colonne, comme conteneur avec \`container-type: inline-size\` (la taille dans le sens de la ligne : la largeur, en français) ; la carte choisit ensuite sa mise en page avec \`@container (min-width: …)\` : vignette à côté du texte quand la colonne est large, au-dessus quand elle est étroite.
+
+Le même composant marche alors dans une colonne principale, une barre latérale ou une grille, sans une règle par emplacement. Impeccable range les requêtes de conteneur parmi les techniques d’adaptation de base : adapter selon le conteneur, pas selon la fenêtre.`,
+      takeaway: 'Un composant réutilisé s’adapte à la place dont il dispose, pas à la fenêtre : `container-type: inline-size` et `@container`.',
+      sources: ['imp:adapt', MDN_CONTAINER],
     },
     {
       id: 'responsive-art-direction-duel',

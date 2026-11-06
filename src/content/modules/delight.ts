@@ -190,7 +190,7 @@ La voix reste constante ; le ton s’adapte au moment — plus léger pour un ja
       title: 'Découvrir, et dépasser les conventions avec discernement',
       body: `**La découverte** récompense la curiosité **sans cacher une fonction nécessaire** : un raccourci clavier proposé après trois sélections une à une, un geste qui accélère une tâche fréquente. La récompense, c’est l’utilité elle-même.
 
-La commande *overdrive* d’impeccable va plus loin : **pousser une interface au-delà des conventions**, avec discernement. Elle change la **sensation** d’une interface, pas ce que fait le produit : une coédition en temps réel ou un mode hors ligne relèvent de décisions produit. Ce qui est « extraordinaire » dépend du contexte : un système de particules impressionne sur un portfolio et embarrasse sur une page de réglages — mais une page de réglages aux enregistrements instantanés et aux transitions d’état fluides est extraordinaire, elle aussi.
+La commande \`overdrive\` d’impeccable va plus loin : **pousser une interface au-delà des conventions**, avec discernement. Elle change la **sensation** d’une interface, pas ce que fait le produit : une coédition en temps réel ou un mode hors ligne relèvent de décisions produit. Ce qui est « extraordinaire » dépend du contexte : un système de particules impressionne sur un portfolio et embarrasse sur une page de réglages — mais une page de réglages aux enregistrements instantanés et aux transitions d’état fluides est extraordinaire, elle aussi.
 
 - Propose deux ou trois directions et fais choisir avant de construire.
 - **Amélioration progressive** obligatoire : sans l’effet, l’expérience doit rester bonne.
@@ -210,7 +210,7 @@ La commande *overdrive* d’impeccable va plus loin : **pousser une interface au
     { id: 'jokes', front: 'Peut-on plaisanter dans un message d’erreur ?', back: 'La chaleur oui, la blague non quand il s’agit d’argent, de vie privée, d’une suppression, d’une perte ou d’un travail bloqué.' },
     { id: 'voice', front: 'Fantaisie générique ou clarté neutre ?', back: 'La clarté neutre. La personnalité passe par le langage du produit, pas par des formules amusantes interchangeables.' },
     { id: 'empty', front: 'Que faire passer en premier dans un état vide ?', back: 'L’action suivante, évidente. La personnalité vient ensuite.' },
-    { id: 'peak-end', front: 'Que dit la règle pic-fin ?', back: 'On juge une expérience surtout sur son moment le plus intense et sur sa fin. Soigne l’accomplissement, la reprise et la sortie.' },
+    { id: 'peak-end', front: 'Où investir le délice, selon la règle pic-fin ?', back: 'On juge une expérience surtout sur son moment le plus intense et sur sa fin. Soigne l’accomplissement, la reprise et la sortie.' },
     { id: 'discovery', front: 'Qu’est-ce qu’une bonne découverte ?', back: 'Une récompense de la curiosité qui révèle une vraie utilité, sans jamais cacher une fonction nécessaire.' },
     { id: 'sound', front: 'Un son de célébration ?', back: 'Seulement avec l’accord de la personne, et jamais en ignorant le mode silencieux.' },
     { id: 'overdrive', front: 'Pousser une interface au-delà des conventions : à quelles conditions ?', back: 'Un effet adapté au contexte, une version de repli, 60 images par seconde, et un seul moment extraordinaire à la fois.' },
@@ -378,13 +378,15 @@ La rédaction suit la même règle : le texte de chargement nomme l’opération
       id: 'delight-hundredth-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Une animation de célébration qui ravit la première fois ravira encore à la centième.',
-      answer: false,
-      explanation: `La répétition change tout. Ce qui surprend agréablement la première fois devient prévisible, puis lent, puis agaçant — surtout si l’animation retarde la suite ou demande un clic.
+      prompt: 'Pour une action répétée des dizaines de fois par jour, comme archiver un e-mail, un retour prévisible vaut mieux qu’une animation qui change à chaque fois pour surprendre.',
+      answer: true,
+      explanation: `Vrai. La surprise s’use : ce qui étonne au premier archivage devient attendu, puis lassant. Et une animation qui change à chaque fois oblige à la regarder pour savoir ce qui s’est passé, là où un retour constant se reconnaît d’un coup d’œil.
 
-Impeccable demande que toute interaction répétée reste **satisfaisante à la centième utilisation**. D’où deux réflexes : réserver les célébrations aux moments rares, et donner aux actions fréquentes un retour bref et certain.`,
-      takeaway: 'Teste chaque micro-interaction à la centième fois : ce qui est charmant une fois devient une friction à la répétition.',
-      sources: ['imp:delight'],
+Impeccable demande qu’une interaction répétée reste **satisfaisante à la centième utilisation**, et précise que la variation n’aide que si elle reste **cohérente et assez prévisible pour qu’on s’y fie**. Comme un enregistrement courant, qui doit « simplement paraître certain », l’archivage appelle un retour bref : impeccable compte 100 à 150 ms pour un retour immédiat.
+
+La surprise et l’ampleur se gardent pour les moments rares, comme un jalon.`,
+      takeaway: 'Sur une action fréquente, vise la certitude plutôt que la surprise : une variation n’aide que si elle reste cohérente et assez prévisible pour qu’on s’y fie.',
+      sources: ['imp:delight', 'imp:animate'],
     },
     {
       id: 'delight-delay-tf',
@@ -392,7 +394,7 @@ Impeccable demande que toute interaction répétée reste **satisfaisante à la 
       difficulty: 2,
       prompt: 'Retarder d’une seconde l’affichage d’un résultat pour laisser jouer une animation de succès est acceptable si l’animation est réussie.',
       answer: false,
-      explanation: `Le premier garde-fou d’impeccable : le délice ne doit jamais **retarder, bloquer ou masquer** la tâche principale. Et pendant une attente, on ne simule pas de travail et on ne retarde pas la fin pour mettre en scène un effet.
+      explanation: `Faux. Le premier garde-fou d’impeccable : le délice ne doit jamais **retarder, bloquer ou masquer** la tâche principale. Et pendant une attente, on ne simule pas de travail et on ne retarde pas la fin pour mettre en scène un effet.
 
 Une animation réussie peut accompagner l’arrivée du résultat — en parallèle, interruptible, rapide —, mais elle ne passe jamais devant lui.`,
       takeaway: 'Le délice accompagne la tâche, il ne la retarde jamais : aucune seconde ajoutée pour une animation.',
@@ -499,7 +501,7 @@ Ici, l’humour tombe sur les deux sujets les plus sensibles de la page : le par
         { id: 'repeat', left: 'Une action répétée cinquante fois par jour', right: 'Un retour bref, certain et prévisible' },
         { id: 'milestone', left: 'Un jalon rare et important', right: 'Un moment plus ample, que l’on peut passer' },
       ],
-      explanation: `Chaque situation émotionnelle a sa réponse, tirée de la commande *delight* :
+      explanation: `Chaque situation émotionnelle a sa réponse, tirée de la commande \`delight\` :
 
 - **premier usage** : orienter avant de briller ;
 - **attente** : informer, jamais simuler ;
@@ -535,11 +537,11 @@ L’astuce de sélection arrive au moment où la personne fait un geste répéti
       options: [
         { id: 'fluid', label: 'Un défilement qui reste fluide à 60 images par seconde, et un filtre qui répond sans à-coup.', why: 'Sur un outil de travail, l’extraordinaire se sent : un tableau énorme qui ne fait jamais hésiter. C’est l’un des exemples qu’impeccable donne pour une interface fonctionnelle.' },
         { id: 'backdrop', label: 'Un fond animé en 3D derrière le tableau, qui ondule au rythme du défilement.', why: 'Un effet de vitrine : à sa place sur un portfolio, il détourne ici l’attention des chiffres.' },
-        { id: 'coedit', label: 'La coédition du tableau en temps réel, avec les curseurs des collègues affichés.', why: 'Tentant, mais c’est une nouvelle capacité, pas une meilleure sensation : overdrive change la façon dont l’interface se ressent, pas ce que fait le produit.' },
+        { id: 'coedit', label: 'La coédition du tableau en temps réel, avec les curseurs des collègues affichés.', why: 'Tentant, mais c’est une nouvelle capacité, pas une meilleure sensation : `overdrive` change la façon dont l’interface se ressent, pas ce que fait le produit.' },
         { id: 'cinema', label: 'Une transition cinématographique d’une seconde et demie à chaque changement de page.', why: 'Une mise en scène qui fait attendre à chaque clic : l’inverse d’un outil qui ne fait jamais hésiter.' },
       ],
       answer: 'fluid',
-      explanation: `La commande *overdrive* pousse une interface au-delà des conventions, mais **le contexte décide de ce qui est extraordinaire**. Sur une interface fonctionnelle, l’effet « waouh » est dans la sensation. Impeccable cite justement un tableau de 100 000 lignes affiché à 60 images par seconde grâce au **défilement virtualisé** (seules les lignes visibles sont dessinées), ou une recherche qui filtre 50 000 éléments sans scintillement.
+      explanation: `La commande \`overdrive\` pousse une interface au-delà des conventions, mais **le contexte décide de ce qui est extraordinaire**. Sur une interface fonctionnelle, l’effet « waouh » est dans la sensation. Impeccable cite justement un tableau de 100 000 lignes affiché à 60 images par seconde grâce au **défilement virtualisé** (seules les lignes visibles sont dessinées), ou une recherche qui filtre 50 000 éléments sans scintillement.
 
 Le fond animé appartient aux surfaces de vitrine, et la transition longue fait attendre à chaque clic. La coédition en temps réel est tentante, mais elle change ce que fait le produit : c’est une décision produit, pas une amélioration de l’interface.`,
       takeaway: 'L’extraordinaire dépend du contexte : sur un outil, il se sent dans la réactivité, pas dans le spectacle ni dans une fonction de plus.',
