@@ -77,7 +77,9 @@ Règles strictes :
 - Les `label` d’options visuelles restent **neutres** (ou absents) : ils ne doivent pas
   trahir la réponse. Le `why` est révélé après coup.
 - `hotspot` : 1 à 3 zones correctes **et** au moins 2 leurres (`correct: false`) plausibles.
-  Chaque `data-hotspot` du HTML a son entrée dans `hotspots`, et inversement.
+  Chaque `data-hotspot` du HTML a son entrée dans `hotspots`, et inversement. Les lecteurs
+  d’écran annoncent chaque zone « Zone N : » suivi de son texte ; une zone sans texte (icône,
+  forme, image) reçoit un nom court et neutre avec `data-hotspot-name="…"`, sans trahir la réponse.
 - `slider` : la valeur `initial` est **hors** de la cible ; le CSS du visuel lit `var(--n)`
   (nombre brut) ou `var(--v)` (nombre + unité).
 - Une épreuve enseigne **une** idée. Pas de piège sur la formulation.
