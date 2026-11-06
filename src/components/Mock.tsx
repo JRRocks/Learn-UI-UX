@@ -191,6 +191,13 @@ function placeHits(base: HTMLElement, zones: HTMLElement[], buttons: HTMLButtonE
 
 /* ---------------------------------------------------------------- motion */
 
+/**
+ * Only a mock whose own CSS or inline styles declare an animation can move (about 20 visuals out of
+ * 600). The others never read their animations: each read forces a style pass, and a page of a
+ * hundred mocks paid for a hundred of them.
+ */
+export const declaresMotion = (visual: Pick<Visual, 'css' | 'html'>): boolean => /animation/i.test(`${visual.css ?? ''}\n${visual.html}`);
+
 function readMotion(base: Element | null): MotionInfo | null {
   const anims = base?.getAnimations?.({ subtree: true }) ?? [];
   let finite = false;
@@ -300,16 +307,20 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
   }, [visual]);
 
   // Render the mock into its own shadow root so its CSS never leaks either way.
+  const moves = useMemo(() => declaresMotion(visual), [visual]);
+  const reported = useRef<MotionInfo | null>(null);
   useLayoutEffect(() => {
     const host = hostRef.current;
     if (!host) return;
     const root = host.shadowRoot ?? host.attachShadow({ mode: 'open' });
     root.innerHTML = markup;
     marksBefore.current = 'unknown';
-    const info = readMotion(root.querySelector('.mk-root'));
+    const info = moves ? readMotion(root.querySelector('.mk-root')) : null;
     setMotion(info);
-    motionRef.current?.(info);
-  }, [markup]);
+    // A still mock tells its player nothing, unless it replaces one that moved.
+    if (info || reported.current) motionRef.current?.(info);
+    reported.current = info;
+  }, [markup, moves]);
 
   // Drawn controls stay out of the tab order; in a picture (role="img") they are inert altogether.
   useLayoutEffect(() => {
@@ -405,17 +416,21 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     const root = host?.shadowRoot;
     const base = root?.querySelector<HTMLElement>('.mk-root');
     if (!host || !root || !base) return;
-    if (marks?.length) host.setAttribute('data-revealed', '');
-    else host.removeAttribute('data-revealed');
     const appearing = Boolean(marks?.length) && marksBefore.current === 'none';
     marksBefore.current = marks?.length ? 'shown' : 'none';
+    // No marks: nothing to measure nor to keep aligned (most mocks, which never get any).
+    if (!marks?.length) {
+      host.removeAttribute('data-revealed');
+      root.querySelector('.mk-marks')?.remove();
+      return;
+    }
+    host.setAttribute('data-revealed', '');
 
     let drawnSize = '';
     const sizeOf = () => `${base.offsetWidth}x${base.offsetHeight}`;
-    const draw = (animate: boolean): SVGSVGElement | null => {
+    const draw = (animate: boolean): SVGSVGElement => {
       root.querySelector('.mk-marks')?.remove();
       drawnSize = sizeOf();
-      if (!marks?.length) return null;
       const box = base.getBoundingClientRect();
       const svgNS = 'http://www.w3.org/2000/svg';
       const svg = document.createElementNS(svgNS, 'svg');
@@ -452,7 +467,7 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     };
 
     const svg = draw(appearing);
-    const animated = appearing && svg && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+    const animated = appearing && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
     const stopWaiting = animated ? startWhenSeen(host, svg) : () => {};
     // ResizeObserver also reports the size it starts with: redraw only on a real change (logic-26).
     const ro = new ResizeObserver(() => {
