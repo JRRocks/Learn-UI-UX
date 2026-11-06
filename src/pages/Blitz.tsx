@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, Timer, X } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useEffectEvent, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, navigate } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { keepInView } from '../components/exercise/ExerciseView';
@@ -56,25 +56,20 @@ export function Blitz() {
     return () => window.clearInterval(t);
   }, [clock, over]);
 
-  const start = () => {
-    if (!statements) {
-      setWaiting(true);
-      return;
-    }
+  const begin = () => {
     const t = performance.now();
     startBest.current = best;
     setNow(t);
     setClock(startClock(DURATION * 1000, t));
   };
-
+  // Before the statements have arrived, « Lancer le chrono » waits for them.
+  const start = () => (statements ? begin() : setWaiting(true));
+  const beginWhenReady = useEffectEvent(begin);
   useEffect(() => {
     if (!waiting || !statements) return;
     setWaiting(false);
-    const t = performance.now();
-    startBest.current = best;
-    setNow(t);
-    setClock(startClock(DURATION * 1000, t));
-  }, [waiting, statements, best]);
+    beginWhenReady();
+  }, [waiting, statements]);
 
   const answer = (value: boolean) => {
     const t = performance.now();
