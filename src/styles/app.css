@@ -77,6 +77,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s3);
+  min-height: var(--topbar-h);
   padding: var(--s2) var(--s4);
   padding-top: max(var(--s2), env(safe-area-inset-top));
   background: color-mix(in oklch, var(--paper) 92%, transparent);
@@ -130,7 +131,8 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  min-height: 56px;
+  min-width: 0;
+  min-height: var(--tabbar-h);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--ink-3);
@@ -148,6 +150,26 @@
 
 .tabbar a[aria-current='page'] svg {
   color: var(--mark);
+}
+
+/* Below 360 px a fifth of the bar is 64 px: « Apprendre » and « S’entraîner » would touch. */
+@media (max-width: 359.98px) {
+  .tabbar a {
+    font-size: 0.6875rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Keep a focused control clear of the bars that stay on screen (WCAG 2.4.11): the browser
+   scrolls it into the region left free by scroll-padding. */
+@media (max-width: 959.98px) {
+  html:has(.topbar) {
+    scroll-padding-top: calc(var(--topbar-h) + env(safe-area-inset-top) + var(--s3));
+  }
+
+  html:has(.tabbar) {
+    scroll-padding-bottom: calc(var(--tabbar-h) + 1px + env(safe-area-inset-bottom) + var(--s3));
+  }
 }
 
 /* ---------- Desktop rail ---------- */
@@ -252,10 +274,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--s3);
+}
+
+/* The lead and the rest keep the reading measure; the title keeps its own, set by its own size. */
+.page-head > * {
   max-width: var(--measure);
 }
 
 .page-head h1 {
+  max-width: 18em;
   font-size: var(--t-h1);
 }
 
@@ -296,6 +323,21 @@
   display: flex;
   flex-direction: column;
   gap: var(--s4);
+}
+
+/* A heading sits closer to what it introduces than to what precedes it (craft-floor Spacing):
+   inside a section, 40 px above a later heading for 16 below; a sub-group (h3 and its content,
+   as in Cultures) keeps 8 px under its heading and 32 px from the previous group. */
+.section > :is(h2, h3):not(:first-child) {
+  margin-top: var(--s5);
+}
+
+.section > .section {
+  gap: var(--s2);
+}
+
+.section > .section + .section {
+  margin-top: var(--s4);
 }
 
 .section-head {
@@ -379,19 +421,21 @@
    Buttons and controls
    ========================================================================= */
 
+/* Long labels (« Leçon suivante : … ») wrap inside the button instead of widening the page. */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--s2);
+  max-width: 100%;
   min-height: var(--tap);
-  padding: 0 var(--s5);
+  padding: var(--s2) var(--s5);
   border: 1px solid transparent;
   border-radius: var(--r-control);
   font-weight: 650;
   line-height: 1.2;
+  text-align: center;
   text-decoration: none;
-  white-space: nowrap;
   transition:
     background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
@@ -434,10 +478,13 @@
   border-color: var(--ink-3);
 }
 
+/* A ghost button reads as a link: when its label wraps, its lines start on the left. */
 .btn-ghost {
+  justify-content: flex-start;
   background: transparent;
   color: var(--ink-2);
   padding-inline: var(--s3);
+  text-align: start;
 }
 
 .btn-ghost:hover:not(:disabled) {
@@ -485,7 +532,11 @@
   color: var(--ink);
 }
 
+/* A select is as wide as its longest option: cap it to its container. */
 .select {
+  min-width: 0;
+  max-width: 100%;
+  text-overflow: ellipsis;
   padding-inline-end: var(--s6);
   appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
@@ -500,32 +551,100 @@
   display: inline-flex;
   flex-wrap: wrap;
   gap: 2px;
+  max-width: 100%;
   padding: 3px;
   border-radius: calc(var(--r-control) + 3px);
   background: var(--paper-2);
   border: 1px solid var(--rule);
 }
 
+/* The track hugs its options instead of stretching across a column (.field, grid rows). */
+.field > .segmented,
+.grid-row .segmented {
+  align-self: flex-start;
+  justify-self: start;
+}
+
 .segmented button,
 .segmented a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 38px;
-  padding: 0 var(--s4);
+  padding: var(--s1) var(--s4);
   border: 0;
   border-radius: var(--r-control);
   background: transparent;
   color: var(--ink-2);
   font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
 }
 
+.segmented button:hover:not(:disabled, [aria-pressed='true']),
+.segmented a:hover:not([aria-current='page']) {
+  background: color-mix(in oklch, var(--ink) 7%, transparent);
+  color: var(--ink);
+}
+
+.segmented button:disabled {
+  cursor: default;
+}
+
+/* The chosen option is filled with ink, like a chosen answer key: well above 3:1 against the
+   track in both themes (a white chip on the grey track gave 1.12:1, and 1.02:1 in dark). */
 .segmented [aria-pressed='true'],
 .segmented [aria-selected='true'],
 .segmented [aria-current='page'] {
-  background: var(--sheet);
-  color: var(--ink);
-  box-shadow: 0 1px 2px oklch(0.24 0.032 262 / 0.12), 0 0 0 1px var(--rule);
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+@media (pointer: coarse) {
+  .segmented button,
+  .segmented a {
+    min-height: var(--tap);
+  }
+}
+
+/* Phones: one row of equal options across the width, the six Ressources tabs on two rows. */
+@media (max-width: 599.98px) {
+  .segmented {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    width: 100%;
+  }
+
+  .field > .segmented,
+  .grid-row .segmented {
+    align-self: stretch;
+    justify-self: stretch;
+  }
+
+  .segmented button,
+  .segmented a {
+    padding-inline: var(--s2);
+    font-size: var(--t-small);
+  }
+
+  /* 13 px, like a platform segmented control: « Aide-mémoire » no longer breaks at its hyphen. */
+  nav.segmented {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  nav.segmented a {
+    padding-inline: var(--s1);
+    font-size: var(--t-meta);
+  }
+}
+
+@media (max-width: 359.98px) {
+  nav.segmented {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ---------- Meter (labelled progress) ---------- */
@@ -626,6 +745,7 @@
 
 .today {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
 }
 
@@ -675,8 +795,9 @@
   background: color-mix(in oklch, var(--hero-fg) 22%, var(--hero-bg));
 }
 
+/* Progress toward the goal, not an error: the hero's own ink (7:1 against the track). */
 .today-main .meter > span {
-  background: var(--mark);
+  background: var(--hero-fg);
 }
 
 .today-side {
@@ -756,7 +877,7 @@
   content: counter(step);
   font-weight: 750;
   font-size: var(--t-h2);
-  color: var(--mark);
+  color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
 
@@ -782,7 +903,7 @@
 }
 
 .streak-strip i[data-level='3'] {
-  background: var(--mark);
+  background: var(--heat-3);
 }
 
 /* =========================================================================
@@ -797,6 +918,7 @@
 
 .toc-group {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s3);
 }
 
@@ -807,8 +929,14 @@
   }
 }
 
+/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire);
+   the Atlas, one level lower (h3 under « Atlas de maîtrise »), sets its rows at body size. */
 .toc-group-head h2 {
-  font-size: var(--t-h3);
+  font-size: var(--t-h2);
+}
+
+.toc-group:has(> .toc-group-head > h3) .toc-title {
+  font-size: var(--t-body);
 }
 
 .toc-group-head p {
@@ -897,12 +1025,33 @@
   width: 100%;
 }
 
+@media (max-width: 759.98px) {
+  .toc-row a {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .toc-mastery {
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--s3);
+    width: auto;
+  }
+
+  .toc-mastery .meter {
+    flex: none;
+    width: 6rem;
+  }
+}
+
 /* =========================================================================
    Lesson
    ========================================================================= */
 
 .lesson {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s7);
 }
 
@@ -924,7 +1073,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--s4);
-  scroll-margin-top: var(--s7);
+  scroll-margin-top: var(--s5);
 }
 
 .lesson-section > h2 {
@@ -941,6 +1090,101 @@
   .lesson-aside {
     position: sticky;
     top: var(--s6);
+  }
+
+  .lesson-jump {
+    display: none;
+  }
+}
+
+/* Below 1100 px the aside would only come after the whole article: .lesson-jump opens the lesson
+   with the same contents, folded, and the second « S’entraîner » button goes away. */
+@media (max-width: 1099.98px) {
+  .lesson-aside {
+    display: none;
+  }
+}
+
+.lesson-jump {
+  max-width: var(--measure);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-panel);
+  background: var(--sheet);
+}
+
+.lesson-jump summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  min-height: var(--tap);
+  padding: var(--s2) var(--s4);
+  border-radius: inherit;
+  cursor: pointer;
+  list-style: none;
+}
+
+.lesson-jump summary::-webkit-details-marker {
+  display: none;
+}
+
+.lesson-jump summary > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lesson-jump summary small {
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.lesson-jump summary svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--ink-2);
+}
+
+.lesson-jump details[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.lesson-jump ol {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 var(--s4);
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.lesson-jump li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.lesson-jump ol a {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding-block: var(--s2);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.lesson-jump ol a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--mark);
+}
+
+.lesson-jump .btn {
+  margin: var(--s2) var(--s4) var(--s4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lesson-jump summary svg,
+  .recap summary > svg:last-child {
+    transition: transform var(--dur) var(--ease-out);
   }
 }
 
@@ -982,18 +1226,27 @@
   gap: var(--s3);
 }
 
+/* Mocks are drawn for 320 to 520 px (docs/CONTENU.md). Two of them sit side by side only when the
+   pair's own container leaves each stage 352 px (320 + its padding), whatever the viewport and
+   the lesson's aside: at 1100–1300 px wide the old media query gave them 222 to 262 px. */
+.example,
+.catalog > li {
+  container-type: inline-size;
+}
+
 .example h3 {
   font-size: var(--t-body);
 }
 
 .example-pair {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
 }
 
-@media (min-width: 760px) {
+@container (min-width: 45rem) {
   .example-pair {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1140,8 +1393,10 @@
   }
 }
 
+/* minmax(0, 1fr): an implicit auto track grew to the longest <option> (411 px at 320 px). */
 .split {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -1221,14 +1476,17 @@
   gap: var(--s5);
 }
 
+/* The question's mock keeps its width (44rem, as with the former 68ch); its context text keeps the
+   reading measure. */
 .task-head {
   display: flex;
   flex-direction: column;
   gap: var(--s3);
-  max-width: var(--measure);
+  max-width: 44rem;
 }
 
 .task-context {
+  max-width: var(--measure);
   color: var(--ink-2);
 }
 
@@ -1248,16 +1506,45 @@
   color: var(--ink-2);
 }
 
+/* One row: the button, then what « Valider » waits for and the keyboard hint, which wrap beside it
+   (wrapped under it, they made the sticky bar up to 137 px tall). */
 .task-actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--s3) var(--s4);
+}
+
+.task-actions > .btn {
+  flex: none;
+}
+
+.task-actions > span {
+  min-width: 0;
+}
+
+@media (max-width: 639.98px) {
+  .task-actions {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: 2px;
+  }
+
+  .task-actions > .btn {
+    grid-row: 1 / span 2;
+  }
 }
 
 .shortcut-hint {
   font-size: var(--t-meta);
   color: var(--ink-3);
+}
+
+/* « 7 / 10 critères notés »: says why « Valider » is still unavailable (grid, match). */
+.task-remaining {
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
 }
 
 @media (pointer: coarse) {
@@ -1308,7 +1595,9 @@
     background-color var(--dur-fast) var(--ease-out);
 }
 
-.option:hover:not(:disabled) {
+/* Once validated, a tile's input is disabled: no hover, which turned the green and red frames
+   grey and made dim tiles look active. */
+.option:hover:not(:disabled, :has(> input:disabled)) {
   border-color: var(--ink-3);
 }
 
@@ -1332,6 +1621,13 @@
 
 .option-text {
   padding-top: 2px;
+}
+
+/* Text options: key and text stay on one line, the text taking the remaining width
+   (flex-basis auto made it as wide as its own sentence, so it wrapped under the key). */
+.option:not(.option--visual) .option-text {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .option[data-state='selected'] {
@@ -1367,7 +1663,30 @@
   color: var(--on-ink);
 }
 
+/* Options neither chosen nor recommended, after validation: each part steps down one token
+   instead of opacity 0.72 (which put the « pourquoi » and the captions at 4.04:1). Frame, key and
+   box borders to --rule-strong, key to --ink-3; text to --ink-2, Vrai / Faux included (8.4:1),
+   code with it; caption to --ink-3 (5.9:1). The « pourquoi » stays --ink-2: it is still read. */
 .option[data-state='dim'] {
+  border-color: var(--rule-strong);
+  color: var(--ink-2);
+}
+
+.option[data-state='dim'] .option-key,
+.option[data-state='dim'] .check-box {
+  border-color: var(--rule-strong);
+}
+
+.option[data-state='dim'] .option-key,
+.option[data-state='dim'] .option-label {
+  color: var(--ink-3);
+}
+
+.option[data-state='dim'] code {
+  color: inherit;
+}
+
+.option[data-state='dim'] > .stage {
   opacity: 0.72;
 }
 
@@ -1573,6 +1892,13 @@
   opacity: 0.3;
 }
 
+@media (pointer: coarse) {
+  .order-moves .icon-btn {
+    width: var(--tap);
+    height: var(--tap);
+  }
+}
+
 .order-correct {
   font-size: var(--t-small);
   color: var(--ink-2);
@@ -1695,13 +2021,6 @@
   padding: 0 var(--s2);
 }
 
-.grid-row[data-state='right'] .grid-label::after,
-.grid-row[data-state='wrong'] .grid-label::after {
-  margin-inline-start: var(--s2);
-  font-size: var(--t-meta);
-  font-weight: 700;
-}
-
 .grid-why {
   grid-column: 1 / -1;
   font-size: var(--t-small);
@@ -1710,6 +2029,31 @@
 
 .grid-why strong {
   color: var(--ink);
+}
+
+.grid-why svg {
+  display: inline;
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+}
+
+/* After validation every row says where it stands, like the other formats: agreement in green,
+   disagreement (beyond the tolerance) on the correction wash with a red cross. */
+.grid-row[data-state='right'] .grid-why svg {
+  color: var(--ok-ink);
+}
+
+.grid-row[data-state='wrong'] {
+  margin-inline: calc(var(--s3) * -1);
+  padding-inline: var(--s3);
+  border-radius: var(--r-control);
+  background: var(--mark-wash);
+}
+
+.grid-row[data-state='wrong'] .grid-why svg,
+.grid-row[data-state='wrong'] .grid-why strong {
+  color: var(--mark-ink);
 }
 
 /* ---------- Feedback (the margin note) ---------- */
@@ -1758,6 +2102,7 @@
 
 .feedback-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -1801,7 +2146,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--mark);
+  border: 2px solid var(--ink-3);
   flex: none;
 }
 
@@ -1865,6 +2210,11 @@
 .recap summary svg {
   width: 20px;
   height: 20px;
+}
+
+/* The chevron follows the open state (it pointed down whether the item was open or not). */
+.recap details[open] summary > svg:last-child {
+  transform: rotate(180deg);
 }
 
 .recap .ok {
@@ -1942,7 +2292,6 @@
   flex-direction: column;
   gap: 0;
   min-height: 60px;
-  white-space: normal;
 }
 
 .grades .btn small {
@@ -1969,6 +2318,56 @@
 @media (min-width: 1100px) {
   .markets {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* « Les marchés »: the regions share one grid, so that a region with a single market takes one
+   column and the next region starts beside it (four one-market regions left 9 empty cells). */
+@media (min-width: 700px) {
+  .section:has(> .section > .markets) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s6) var(--s3);
+  }
+
+  .section:has(> .section > .markets) > :not(.section) {
+    grid-column: 1 / -1;
+  }
+
+  /* Cards of one band share its height: the card rows stretch under the region heading. */
+  .section:has(> .section > .markets) > .section {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: auto;
+    grid-auto-rows: 1fr;
+    gap: var(--s2) var(--s3);
+    margin-top: 0;
+  }
+
+  .section:has(> .section > .markets) > .section:has(.market:nth-child(2)) {
+    grid-column: 1 / -1;
+  }
+
+  .section:has(> .section > .markets) > .section > h3 {
+    grid-column: 1 / -1;
+  }
+
+  .section:has(> .section > .markets) .markets {
+    display: contents;
+  }
+}
+
+@media (min-width: 1100px) {
+  .section:has(> .section > .markets) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .section:has(> .section > .markets) > .section:has(.market:nth-child(2)) {
+    grid-column: span 2;
+  }
+
+  .section:has(> .section > .markets) > .section:has(.market:nth-child(3)) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -2025,6 +2424,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--s3);
+  max-width: 40rem;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -2055,6 +2455,7 @@
 
 .dim-note {
   grid-column: 1 / -1;
+  max-width: var(--measure);
   font-size: var(--t-meta);
   color: var(--ink-2);
 }
@@ -2065,6 +2466,7 @@
 
 .conventions {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
 }
 
@@ -2092,6 +2494,7 @@
 
 .dodont {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
 }
 
@@ -2148,13 +2551,23 @@
   width: 38%;
 }
 
+/* Format samples are set in the interface face, as a localized product would show them: the mono
+   turned names, addresses and day names into code and spread them over three or four lines. */
 .formats-table td {
-  font-family: var(--font-mono);
+  overflow-wrap: break-word;
 }
 
+/* A region that scrolls sideways shows it: edge shadows appear on the side where there is more
+   (the covers move with the content, the shadows stay with the box). */
 .table-scroll {
   overflow-x: auto;
   max-width: 100%;
+  container-type: inline-size;
+  background:
+    linear-gradient(to right, var(--paper) 30%, transparent) left center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--paper) 30%, transparent) right center / 2.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--scroll-shadow), transparent) left center / 0.875rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--scroll-shadow), transparent) right center / 0.875rem 100% no-repeat scroll;
 }
 
 .compare-table {
@@ -2189,8 +2602,59 @@
   padding-inline-start: 1em;
 }
 
+/* Narrower than the table's own 38rem (phones, 200 % zoom): one block per subject, every cell
+   labelled with its column (data-label), instead of a second market hidden off-screen. */
+@container (max-width: 37.99rem) {
+  .compare-table {
+    min-width: 0;
+  }
+
+  .compare-table,
+  .compare-table tbody,
+  .compare-table tr,
+  .compare-table th,
+  .compare-table td {
+    display: block;
+  }
+
+  .compare-table thead {
+    display: none;
+  }
+
+  .compare-table tbody tr {
+    padding-block: var(--s3);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .compare-table tbody th,
+  .compare-table td {
+    width: auto;
+    padding: 0;
+    border: 0;
+  }
+
+  .compare-table tbody th {
+    color: var(--ink);
+    font-size: var(--t-body);
+  }
+
+  .compare-table td {
+    margin-top: var(--s3);
+  }
+
+  .compare-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: var(--s1);
+    font-size: var(--t-meta);
+    font-weight: 650;
+    color: var(--ink-2);
+  }
+}
+
 .pair-view {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
 }
 
@@ -2213,6 +2677,7 @@
 
 .lab {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -2254,6 +2719,7 @@
 
 .cheats {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -2288,7 +2754,7 @@
 
 .cheat td {
   font-weight: 700;
-  white-space: nowrap;
+  overflow-wrap: break-word;
 }
 
 .catalog-filters {
@@ -2405,7 +2871,7 @@
 }
 
 .heatmap i[data-level='3'] {
-  background: var(--mark);
+  background: var(--heat-3);
 }
 
 .heatmap i[data-future] {
@@ -2435,6 +2901,50 @@
 
 .mastery-table .meter {
   width: 6rem;
+}
+
+/* Phones: the four columns fit in the screen (366 px of table at 390 px before). */
+@media (max-width: 479.98px) {
+  .mastery-table th,
+  .mastery-table td {
+    padding-inline-end: var(--s2);
+  }
+
+  .mastery-table .meter {
+    width: 3.5rem;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .mastery-table {
+    font-size: var(--t-meta);
+  }
+
+  .mastery-table th,
+  .mastery-table td {
+    padding-inline-end: var(--s1);
+  }
+
+  .mastery-table .meter {
+    width: 2.5rem;
+  }
+}
+
+/* Touch: text links standing alone in lists and tables get a 44 px target (WCAG 2.5.5, --tap). */
+@media (pointer: coarse) {
+  .mastery-table a,
+  .sources a,
+  .section-head a,
+  .recap-body > a,
+  .note > a,
+  .section > a:not(.btn) {
+    display: inline-block;
+    padding-block: 10px;
+  }
+
+  .lesson-toc a {
+    padding-block: 10px;
+  }
 }
 
 .badges {
@@ -2475,7 +2985,7 @@
 }
 
 .badge[data-earned] svg {
-  color: var(--mark);
+  color: var(--ok);
 }
 
 .badge:not([data-earned]) {
@@ -2535,7 +3045,7 @@
   position: fixed;
   z-index: 60;
   inset-inline: var(--s4);
-  bottom: calc(72px + env(safe-area-inset-bottom));
+  bottom: calc(var(--tabbar-h) + 1px + var(--s4) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2697,6 +3207,10 @@
   padding-inline-start: calc(28px + var(--s3));
 }
 
+.option:has(> .check-box) .option-why {
+  padding-inline-start: calc(24px + var(--s3));
+}
+
 fieldset.options,
 fieldset.tf {
   margin: 0;
@@ -2739,5 +3253,25 @@ fieldset.tf {
 }
 
 .shell[data-focus] .toasts {
-  bottom: calc(96px + env(safe-area-inset-bottom));
+  bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
+}
+
+/* Session bars: the focused control stays clear of them (WCAG 2.4.11). */
+@media (min-height: 30rem) {
+  html:has(.player-top) {
+    scroll-padding-top: calc(var(--player-top-h) + env(safe-area-inset-top) + var(--s3));
+  }
+
+  html:has(.task-actions) {
+    scroll-padding-bottom: calc(var(--actions-h) + env(safe-area-inset-bottom) + var(--s3));
+  }
+}
+
+/* Short viewports (phone held sideways, 200 % zoom and more): the session bars scroll away with the
+   page instead of keeping a third of the screen. */
+@media (max-height: 29.99rem) {
+  .player-top,
+  .task-actions {
+    position: static;
+  }
 }

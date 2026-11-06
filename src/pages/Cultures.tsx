@@ -297,7 +297,7 @@ export function CultureDetail({ id }: { id: string }) {
         <h2 id="conv-title">Conventions et attentes</h2>
         {topics.map((t) => (
           <div key={t} className="section">
-            <h3 className="small muted">{TOPIC_LABEL[t] ?? t}</h3>
+            <h3>{TOPIC_LABEL[t] ?? t}</h3>
             <div className="conventions">
               {c.conventions
                 .filter((x) => x.topic === t)
@@ -501,7 +501,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                 <tr key={t}>
                   <th scope="row">{TOPIC_LABEL[t] ?? t}</th>
                   {[a, b].map((c) => (
-                    <td key={c.id}>
+                    <td key={c.id} data-label={c.name}>
                       <ul>
                         {c.conventions
                           .filter((x) => x.topic === t)
@@ -518,7 +518,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
               <tr>
                 <th scope="row">À faire</th>
                 {[a, b].map((c) => (
-                  <td key={c.id}>
+                  <td key={c.id} data-label={c.name}>
                     <ul>
                       {c.adapt.do.map((x, i) => (
                         <li key={i}>
@@ -532,7 +532,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
               <tr>
                 <th scope="row">Formats</th>
                 {[a, b].map((c) => (
-                  <td key={c.id}>
+                  <td key={c.id} data-label={c.name}>
                     <ul>
                       {c.formats.map((f, i) => (
                         <li key={i}>

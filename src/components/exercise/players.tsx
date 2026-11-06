@@ -612,7 +612,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
               </span>
               {revealed && (
                 <p className="grid-why">
-                  {ok ? <Check aria-hidden="true" width={14} height={14} style={{ display: 'inline' }} /> : null}{' '}
+                  {ok ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}{' '}
                   <strong>
                     Toi : {mine} · expert : {c.expert}.
                   </strong>{' '}

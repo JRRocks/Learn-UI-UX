@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, CircleCheck, CircleX } from 'lucide-react';
+import { ArrowLeft, Check, ChevronDown, CircleCheck, CircleX } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link } from '../app/router';
 import { store, useProgress } from '../app/store';
@@ -88,6 +88,15 @@ export function Lesson({ id }: { id: string }) {
     });
   };
 
+  // Compact contents (below 1100 px): scroll to the part and move focus to its heading.
+  const jump = (id: string) => {
+    document.getElementById(id)?.scrollIntoView();
+    const h = document.getElementById(`h-${id}`);
+    h?.setAttribute('tabindex', '-1');
+    h?.focus({ preventScroll: true });
+  };
+  const parts = [...m.sections.map((s) => ({ id: s.id, title: s.title })), { id: 'regles', title: 'Règles d’or' }];
+
   return (
     <div className="page">
       <Link to="/apprendre" className="back">
@@ -117,6 +126,33 @@ export function Lesson({ id }: { id: string }) {
           )}
         </p>
       </header>
+
+      {/* Below 1100 px the aside would only come after the whole article: its contents open the lesson, folded. */}
+      <nav className="lesson-jump" aria-label="Dans cette leçon">
+        <details>
+          <summary>
+            <span>
+              <strong>Dans cette leçon</strong>{' '}
+              <small>
+                {parts.length} parties · maîtrise&nbsp;: {masteryLabel(v, touched).toLowerCase()}
+              </small>
+            </span>
+            <ChevronDown aria-hidden="true" />
+          </summary>
+          <ol>
+            {parts.map((s) => (
+              <li key={s.id}>
+                <a href={`#/apprendre/${m.id}`} onClick={(e) => (e.preventDefault(), jump(s.id))}>
+                  {s.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+          <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
+            Réviser les {m.rules.length} fiches
+          </Link>
+        </details>
+      </nav>
 
       <div className="lesson">
         <article className="lesson-article">

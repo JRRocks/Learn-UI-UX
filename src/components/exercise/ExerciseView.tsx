@@ -5,6 +5,7 @@ import { seeded, shuffle, shuffleAway, type Rng } from '../../engine/random';
 import type { Exercise } from '../../engine/types';
 import { Md, MdInline } from '../../lib/markdown';
 import { Mock } from '../Mock';
+import { completionHint } from './completion';
 import { Feedback } from './Feedback';
 import { SETTLE_MS, digitOf, eventOrigin, handlesOwnKeys, hasModifier, isTextEntry, within } from './keys';
 import {
@@ -91,6 +92,7 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
   const contextId = ex.context ? `context-${ex.id}` : undefined;
   const revealed = result !== null && mode === 'practice';
   const complete = isComplete(ex, draft);
+  const remaining = revealed ? null : completionHint(ex, draft);
 
   const validate = () => {
     if (result || !complete) return;
@@ -213,9 +215,14 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
       <div className="task-actions">
         {!revealed ? (
           <>
-            <button type="button" className="btn btn-primary" onClick={validate} disabled={!complete}>
+            <button type="button" className="btn btn-primary" onClick={validate} disabled={!complete} aria-describedby={remaining ? `left-${ex.id}` : undefined}>
               Valider
             </button>
+            {remaining && (
+              <span id={`left-${ex.id}`} className="task-remaining">
+                {remaining}
+              </span>
+            )}
             <span className="shortcut-hint">{hint}</span>
           </>
         ) : (
