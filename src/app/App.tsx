@@ -341,10 +341,9 @@ function Shell() {
         </div>
         <div className="rail-foot">
           <div className="rail-streak">
-            Série{' '}: <strong>{st.current}</strong>
-            {' '}
-            {st.current > 1 ? 'jours' : 'jour'} · {progress.xp}
-            {' '}XP
+            <strong>{st.current}</strong>
+            {st.current > 1 ? 'jours' : 'jour'} de série · {progress.xp}
+            {'\u00A0'}XP
           </div>
           <div className="btn-row">
             <ThemeToggle />

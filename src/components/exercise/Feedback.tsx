@@ -91,7 +91,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
         <p>
           Entre <strong>{fmt(ex.target[0])}</strong> et <strong>{fmt(ex.target[1])}</strong>
           {unit}, idéalement <strong>{fmt(ex.ideal)}</strong>
-          {unit}. Ta valeur : {fmt(mine)}
+          {unit}. Ta valeur{'\u00A0'}: {fmt(mine)}
           {unit}.
         </p>
       );
@@ -103,7 +103,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
       const total = ex.criteria.reduce((s, c) => s + c.expert, 0);
       return (
         <p>
-          Note de l’expert : <strong>{total}</strong> / {ex.criteria.length * ex.scale.max}. Accord avec toi sur{' '}
+          Note de l’expert{'\u00A0'}: <strong>{total}</strong> / {ex.criteria.length * ex.scale.max}. Accord avec toi sur{' '}
           <strong>
             {agree} / {ex.criteria.length}
           </strong>{' '}
