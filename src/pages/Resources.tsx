@@ -86,6 +86,8 @@ function Cheatsheet() {
 }
 
 const FALLBACK: AntipatternEntry[] = DETECTOR_RULES.map((r) => ({ ...r, description: '', fix: '' }));
+/** The detector's official (English) rule names, which lessons quote: shown and searchable too. */
+const EN_NAME = new Map(DETECTOR_RULES.map((r) => [r.id, r.name]));
 
 function Catalog() {
   const [q, setQ] = useState('');
@@ -99,7 +101,7 @@ function Catalog() {
     return (list ?? []).filter(
       (a) =>
         (family === 'all' || a.family === family) &&
-        (!needle || `${a.name} ${a.id} ${a.description} ${a.fix}`.toLowerCase().includes(needle)),
+        (!needle || `${a.name} ${EN_NAME.get(a.id) ?? ''} ${a.id} ${a.description} ${a.fix}`.toLowerCase().includes(needle)),
     );
   }, [q, family, list]);
   const clear = () => {
@@ -173,6 +175,11 @@ function Catalog() {
             <div className="catalog-head">
               <h2>{frenchSpacing(a.name)}</h2>
               <code>{a.id}</code>
+              {EN_NAME.get(a.id) !== a.name && (
+                <span className="small muted" lang="en">
+                  {EN_NAME.get(a.id)}
+                </span>
+              )}
               <span className="chip">{a.family === 'cliche' ? 'Cliché' : 'Qualité'}</span>
               <span className="chip">{SEVERITY_LABEL[a.severity]}</span>
             </div>

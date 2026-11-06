@@ -273,8 +273,8 @@ export interface CultureProfile {
   summary: string;
   /** Edward T. Hall's communication context. */
   context: 'faible' | 'moyen' | 'fort';
-  /** Hofstede scores (classic 2010 edition), when published for the country. */
-  hofstede?: Record<HofstedeKey, number>;
+  /** Hofstede scores as published by The Culture Factor (0–100); a dimension it does not publish is left out. */
+  hofstede?: Partial<Record<HofstedeKey, number>>;
   /** Apps and services that shape local expectations. */
   ecosystem: string[];
   conventions: Convention[];

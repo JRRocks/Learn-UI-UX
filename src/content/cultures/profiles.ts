@@ -1666,8 +1666,9 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
     dir: 'ltr',
     context: 'fort',
     summary: nb(
-      'La référence mondiale de l’argent mobile : depuis 2007, M-Pesa (Safaricom) permet d’envoyer, recevoir et payer avec un simple téléphone, y compris un téléphone basique via le menu de la carte SIM et les codes USSD. Une interface kényane doit fonctionner sur un Android d’entrée de gamme, avec des données chères et un réseau irrégulier, et s’intégrer aux usages M-Pesa : numéros Paybill et Till, invite de paiement envoyée sur le téléphone (STK push), confirmation par SMS. L’anglais et le swahili coexistent, souvent mêlés ; le commerce passe beaucoup par WhatsApp. Faute de scores Hofstede fiables publiés, appuie-toi sur la recherche utilisateur locale.',
+      'La référence mondiale de l’argent mobile : depuis 2007, M-Pesa (Safaricom) permet d’envoyer, recevoir et payer avec un simple téléphone, y compris un téléphone basique via le menu de la carte SIM et les codes USSD. Une interface kényane doit fonctionner sur un Android d’entrée de gamme, avec des données chères et un réseau irrégulier, et s’intégrer aux usages M-Pesa : numéros Paybill et Till, invite de paiement envoyée sur le téléphone (STK push), confirmation par SMS. L’anglais et le swahili coexistent, souvent mêlés ; le commerce passe beaucoup par WhatsApp. The Culture Factor publie cinq des six scores de Hofstede pour le Kenya (pas l’indulgence) : complète-les par la recherche utilisateur locale.',
     ),
+    hofstede: { pdi: 70, idv: 4, mas: 60, uai: 50, lto: 11 },
     ecosystem: ['M-PESA', 'Safaricom', 'Airtel Money', 'Fuliza / M-Shwari', 'WhatsApp', 'Jumia', 'Bolt', 'Glovo', 'eCitizen'],
     conventions: [
       {

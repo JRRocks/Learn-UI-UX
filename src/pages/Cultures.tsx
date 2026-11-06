@@ -280,12 +280,12 @@ function Dims({ c }: { c: CultureProfile }) {
       {HOFSTEDE.map((d) => (
         <li key={d.key} className="dim">
           <span className="dim-label">{d.label}</span>
-          <span className="dim-value">{c.hofstede![d.key]}</span>
-          <span className="meter" style={pct(c.hofstede![d.key])} aria-hidden="true">
+          <span className="dim-value">{c.hofstede![d.key] ?? '—'}</span>
+          <span className="meter" style={pct(c.hofstede![d.key] ?? 0)} aria-hidden="true">
             <span />
           </span>
           <span className="dim-note">
-            {d.low} ↔ {d.high}
+            {c.hofstede![d.key] === undefined ? 'Score non publié par la source' : `${d.low} ↔ ${d.high}`}
           </span>
         </li>
       ))}
@@ -399,7 +399,7 @@ export function CultureDetail({ id }: { id: string }) {
         <section className="section" aria-labelledby="dims-title">
           <h2 id="dims-title">Dimensions de Hofstede</h2>
           <Dims c={c} />
-          <p className="small muted">{frenchSpacing('Scores de l’édition classique (0–100), à lire comme des moyennes nationales et non des portraits.')}</p>
+          <p className="small muted">{frenchSpacing('Scores publiés par The Culture Factor (0–100), à lire comme des moyennes nationales et non des portraits.')}</p>
         </section>
       </div>
 
@@ -525,14 +525,18 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                 <span className="dim-label">{d.label}</span>
                 <span className="dim-value" aria-hidden="true" />
                 {/* The scores are written in the note below: the gauges only draw them. */}
-                <span className="meter" style={pct(a.hofstede![d.key])} aria-hidden="true">
+                <span className="meter" style={pct(a.hofstede![d.key] ?? 0)} aria-hidden="true">
                   <span />
                 </span>
-                <span className="meter meter--mark" style={pct(b.hofstede![d.key])} aria-hidden="true">
+                <span className="meter meter--mark" style={pct(b.hofstede![d.key] ?? 0)} aria-hidden="true">
                   <span />
                 </span>
                 <span className="dim-note">
-                  {a.name} {a.hofstede![d.key]} · <span style={{ color: 'var(--mark-ink)' }}>{b.name} {b.hofstede![d.key]}</span> —{' '}
+                  {a.name} {a.hofstede![d.key] ?? 'non publié'} ·{' '}
+                  <span style={{ color: 'var(--mark-ink)' }}>
+                    {b.name} {b.hofstede![d.key] ?? 'non publié'}
+                  </span>{' '}
+                  —{' '}
                   <MdInline text={d.ui} />
                 </span>
               </li>
