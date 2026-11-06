@@ -140,17 +140,24 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
       {ex.type === 'grid' && (
         <>
           <V visual={ex.visual} />
-          <table className="preview-table">
-            <tbody>
-              {ex.criteria.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.label}</td>
-                  <td>{c.expert}</td>
-                  <td>{c.why}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Three columns do not fit a phone: the table scrolls instead of overflowing the page. */}
+          <div className="table-scroll">
+            <table className="preview-table">
+              <tbody>
+                {ex.criteria.map((c) => (
+                  <tr key={c.id}>
+                    <td>
+                      <MdInline text={c.label} />
+                    </td>
+                    <td>{c.expert}</td>
+                    <td>
+                      <MdInline text={c.why} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
       <Md text={ex.explanation} className="preview-explanation" />
@@ -195,7 +202,9 @@ export function Preview({ target }: { target: string }) {
           <h1>Cultures</h1>
           {data.profiles.map((p) => (
             <Shot key={p.id} id={`culture-${p.id}`} title={`${p.name} (${p.locale})`}>
-              <p>{p.summary}</p>
+              <p>
+                <MdInline text={p.summary} />
+              </p>
               {p.visual && <V visual={p.visual} />}
             </Shot>
           ))}

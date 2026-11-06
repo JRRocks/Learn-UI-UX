@@ -1,9 +1,22 @@
 /** Reference material for the Ressources tab. Figures come from impeccable's references unless noted. */
 
+import type { Source } from '../engine/types';
+
+const WCAG_NON_TEXT: Source = {
+  label: 'W3C — Comprendre le critère 1.4.11 (contraste du non-textuel)',
+  url: 'https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html',
+};
+const WCAG_AAA: Source = {
+  label: 'W3C — Comprendre le critère 1.4.6 (contraste amélioré, AAA)',
+  url: 'https://www.w3.org/WAI/WCAG22/Understanding/contrast-enhanced.html',
+};
+
 export interface CheatGroup {
   title: string;
-  source: string;
-  rows: [string, string][];
+  /** Where the group's figures come from… */
+  source: Source;
+  /** …unless a row names its own source (third item). */
+  rows: [label: string, value: string, source?: Source][];
 }
 
 export const CHEATSHEET: CheatGroup[] = [
@@ -13,35 +26,36 @@ export const CHEATSHEET: CheatGroup[] = [
     rows: [
       ['Corps de texte (web)', '≥ 16 px'],
       ['Longueur de ligne', '45–75 caractères'],
-      ['Interlignage du corps', '1,5–1,7'],
-      ['Resserrement maximal', '−0,04em'],
-      ['Titre d’affichage', '≤ 6rem'],
-      ['Rapport d’échelle (produit)', '1,125–1,2'],
-      ['Écart minimal entre rôles', '≥ 1,25×'],
-      ['Texte fonctionnel', '≥ 11 px'],
+      // A detector threshold, not a universal ratio: typeset.md tunes leading to the face.
+      ['Interlignage du corps, selon la police', '1,5–1,7', 'imp:detector'],
+      ['Resserrement maximal', '−0,04 em', 'imp:craft-floor'],
+      ['Titre d’affichage', '≤ 6 rem', 'imp:craft-floor'],
+      ['Rapport d’échelle (produit)', '1,125–1,2', 'imp:operate'],
+      ['Écart minimal entre rôles', '≥ 1,25×', 'imp:detector'],
+      ['Texte fonctionnel', '≥ 11 px', 'imp:detector'],
     ],
   },
   {
-    title: 'Contraste (WCAG 2.2 AA)',
+    title: 'Contraste (WCAG 2.2)',
     source: 'wcag:contrast',
     rows: [
       ['Texte courant', '4,5:1'],
       ['Grand texte (24 px, ou 18,66 px gras)', '3:1'],
-      ['Contrôles, icônes, focus', '3:1'],
-      ['Niveau AAA (texte courant)', '7:1'],
+      ['Contrôles, icônes, focus', '3:1', WCAG_NON_TEXT],
+      ['Niveau AAA (texte courant)', '7:1', WCAG_AAA],
     ],
   },
   {
     title: 'Cibles et plateformes',
     source: 'imp:audit',
     rows: [
-      ['WCAG 2.5.8 (minimum)', '24 × 24 px'],
+      ['WCAG 2.5.8 (minimum)', '24 × 24 px', 'wcag:target'],
       ['Recommandé tactile', '44 × 44 px'],
-      ['iOS', '44 × 44 pt'],
-      ['Android', '48 × 48 dp, 8 dp d’écart'],
-      ['Barre d’onglets iOS', '2–5 sections'],
-      ['Barre de navigation Android', '3–5 destinations'],
-      ['Corps iOS / plancher', '17 pt / 11 pt'],
+      ['iOS', '44 × 44 pt', 'imp:ios'],
+      ['Android', '48 × 48 dp, 8 dp d’écart', 'imp:android'],
+      ['Barre d’onglets iOS', '2–5 sections', 'imp:ios'],
+      ['Barre de navigation Android', '3–5 destinations', 'imp:android'],
+      ['Corps iOS / plancher', '17 pt / 11 pt', 'imp:ios'],
     ],
   },
   {
@@ -52,7 +66,7 @@ export const CHEATSHEET: CheatGroup[] = [
       ['Changement d’état', '150–300 ms'],
       ['Mise en page, panneau, vue', '300–500 ms'],
       ['Entrée signée (rare)', '500–800 ms'],
-      ['Transitions en interface produit', '150–250 ms'],
+      ['Transitions en interface produit', '150–250 ms', 'imp:operate'],
       ['Courbe d’arrivée', 'cubic-bezier(0.16, 1, 0.3, 1)'],
       ['Sortie', 'plus rapide que l’entrée'],
     ],
@@ -75,7 +89,7 @@ export const CHEATSHEET: CheatGroup[] = [
       ['LCP (affichage du contenu principal)', '< 2,5 s'],
       ['INP (réactivité)', '< 200 ms'],
       ['CLS (stabilité)', '< 0,1'],
-      ['Seuil de Doherty', '≈ 400 ms'],
+      ['Seuil de Doherty', '≈ 400 ms', 'lawsofux'],
     ],
   },
   {
@@ -95,7 +109,7 @@ export const CHEATSHEET: CheatGroup[] = [
       ['Heuristiques de Nielsen', '10 × 0–4 = /40'],
       ['Bandes', '36+ excellent · 28+ bon · 20+ acceptable'],
       ['Interfaces réelles', 'souvent 20–32/40'],
-      ['Audit technique', '5 × 0–4 = /20'],
+      ['Audit technique', '5 × 0–4 = /20', 'imp:audit'],
       ['Sévérité', 'P0 bloquant → P3 finition'],
     ],
   },

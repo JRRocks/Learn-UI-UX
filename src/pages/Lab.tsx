@@ -1,10 +1,11 @@
 import { ArrowLeft } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link } from '../app/router';
+import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { CULTURE_NAMES } from '../content/cultures';
 import { LAB_LOCALES, type LabLocale } from '../content/cultures/lab';
 import type { Visual } from '../engine/types';
+import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -16,6 +17,31 @@ function safe<T>(fn: () => T, fallback: T): T {
   }
 }
 
+const base = (lang: string) => lang.toLowerCase().split('-')[0];
+
+/**
+ * « Libellé : valeur » as each language writes it: French puts a no-break space before the colon,
+ * Chinese and Japanese use the full-width colon with no space, the others a plain colon.
+ */
+export function labelSeparator(lang: string): string {
+  const b = base(lang);
+  if (b === 'fr') return '\u00A0: ';
+  if (b === 'zh' || b === 'ja') return '：';
+  return ': ';
+}
+
+/** « japonais (Japon) »: the locale named in French, for the alternative text of the preview. */
+function frenchName(l: LabLocale): string {
+  return safe(() => new Intl.DisplayNames('fr', { type: 'language', languageDisplay: 'standard' }).of(l.locale) ?? l.label, l.label);
+}
+
+/** Why a much shorter text than English, by writing system. */
+const COMPACT: Record<string, string> = {
+  zh: 'Les sinogrammes condensent le sens',
+  ja: 'Les kanji et les kana condensent le sens',
+  ko: 'Le hangeul est un alphabet, mais ses lettres se regroupent en blocs syllabiques',
+};
+
 /** The same checkout card for any locale, laid out with logical properties so RTL mirrors itself. */
 function cartVisual(l: LabLocale): Visual {
   const money = (n: number) => new Intl.NumberFormat(l.locale, { style: 'currency', currency: l.currency }).format(n);
@@ -24,22 +50,23 @@ function cartVisual(l: LabLocale): Visual {
   const date = new Intl.DateTimeFormat(l.locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(delivery);
   const qty = new Intl.NumberFormat(l.locale).format(1);
   const s = l.strings;
+  const sep = labelSeparator(l.lang);
   return {
-    alt: `Récapitulatif de panier en ${l.label}, mis en page ${l.dir === 'rtl' ? 'de droite à gauche' : 'de gauche à droite'}.`,
+    alt: `Récapitulatif de panier en ${frenchName(l)}, mis en page ${l.dir === 'rtl' ? 'de droite à gauche' : 'de gauche à droite'}.`,
     dir: l.dir,
     lang: l.lang,
     html: `<div class="lab-cart">
   <p class="lab-title">${esc(s.title)}</p>
   <div class="lab-item">
     <div class="mk-img lab-thumb" style="--ratio:1"></div>
-    <div class="lab-item-text"><p class="mk-strong">${esc(s.item)}</p><p class="mk-small mk-muted">${esc(s.qty)} : ${qty}</p></div>
+    <div class="lab-item-text"><p class="mk-strong">${esc(s.item)}</p><p class="mk-small mk-muted">${esc(s.qty)}${sep}${qty}</p></div>
     <p class="mk-price">${esc(money(l.price))}</p>
   </div>
   <div class="mk-divider"></div>
   <div class="lab-line"><span>${esc(s.subtotal)}</span><span class="mk-price">${esc(money(l.price))}</span></div>
   <div class="lab-line"><span>${esc(s.shipping)}</span><span>${esc(s.free)}</span></div>
   <div class="lab-line lab-total"><span>${esc(s.total)}</span><span class="mk-price">${esc(money(l.price))}</span></div>
-  <p class="mk-small mk-muted">${esc(s.delivery)} : ${esc(date)}</p>
+  <p class="mk-small mk-muted">${esc(s.delivery)}${sep}${esc(date)}</p>
   <span class="mk-btn mk-btn--block">${esc(s.pay)} <i data-icon="arrow-right" class="lab-arrow"></i></span>
   <p class="mk-small mk-muted lab-returns"><i data-icon="refresh-cw" style="--ico:14px"></i> ${esc(s.returns)}</p>
 </div>`,
@@ -66,6 +93,7 @@ export function Lab() {
   const length = (x: LabLocale) => Object.values(x.strings).join('').length;
   const ratio = length(l) / length(en);
   const culture = l.culture ? { id: l.culture, name: CULTURE_NAMES[l.culture] ?? l.culture } : undefined;
+  usePageTitle(pageTitle('Labo de localisation', 'Cultures'));
 
   const plural = safe(() => {
     const pr = new Intl.PluralRules(l.locale);
@@ -103,8 +131,7 @@ export function Lab() {
           Labo de localisation
         </h1>
         <p className="lead">
-          Le même récapitulatif de panier, rendu avec l’API <code>Intl</code> du navigateur : formats, longueur des textes, sens de lecture.
-          Change de langue et observe ce qui bouge.
+          <MdInline text="Le même récapitulatif de panier, rendu avec l’API `Intl` du navigateur : formats, longueur des textes, sens de lecture. Change de langue et observe ce qui bouge." />
         </p>
       </header>
 
@@ -112,7 +139,7 @@ export function Lab() {
         <label htmlFor="lab-locale">Langue et région</label>
         <select id="lab-locale" className="select" value={locale} onChange={(e) => setLocale(e.target.value)}>
           {LAB_LOCALES.map((x) => (
-            <option key={x.locale} value={x.locale}>
+            <option key={x.locale} value={x.locale} lang={x.lang}>
               {x.label} — {x.locale}
             </option>
           ))}
@@ -125,9 +152,12 @@ export function Lab() {
             <Mock key={l.locale} visual={visual} />
           </div>
           <p className="small muted">
-            Longueur des textes : <strong className="num">{Math.round(ratio * 100)} %</strong> de l’anglais.
-            {ratio > 1.15 && ' Prévois de la place : boutons et libellés doivent pouvoir s’allonger.'}
-            {ratio < 0.7 && ' Les écritures logographiques sont compactes : ne fige pas les largeurs sur la version anglaise.'}
+            Longueur des textes{'\u00A0'}: <strong className="num">{Math.round(ratio * 100)}{'\u00A0'}%</strong> de l’anglais.
+            {ratio > 1.15 && frenchSpacing(' Prévois de la place : boutons et libellés doivent pouvoir s’allonger.')}
+            {ratio < 0.7 &&
+              frenchSpacing(
+                ` ${COMPACT[base(l.lang)] ?? 'Le texte est bien plus court qu’en anglais'} : il compte bien moins de caractères. Ne fige pas les largeurs sur la version anglaise.`,
+              )}
           </p>
         </section>
         <section className="section" aria-labelledby="lab-facts">
@@ -144,12 +174,14 @@ export function Lab() {
           </dl>
           <ul className="md" style={{ paddingInlineStart: '1.2em' }}>
             {l.notes.map((n, i) => (
-              <li key={i}>{n}</li>
+              <li key={i}>
+                <MdInline text={n} />
+              </li>
             ))}
           </ul>
           {culture && (
             <Link to={`/cultures/${culture.id}`} className="btn btn-secondary" style={{ alignSelf: 'flex-start' }}>
-              Profil : {culture.name}
+              Profil{'\u00A0'}: {culture.name}
             </Link>
           )}
         </section>
