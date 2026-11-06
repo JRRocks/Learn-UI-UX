@@ -482,7 +482,7 @@ Attention au gabarit « grand chiffre, petit libellé, chiffres secondaires, acc
       answer: 'disclosed',
       explanation: `Ce qui s’affiche d’emblée se lit comme important. Onze réglages au même niveau disent qu’ils comptent tous autant : il faut les lire avant d’exporter, alors que la plupart des clients ne changent que le format et la période. Impeccable range ce symptôme parmi les sources de complexité (« tout est visible à la fois, sans divulgation progressive ») et demande de **cacher la complexité derrière des points d’entrée clairs** : accordéon, fenêtre modale, parcours par étapes.
 
-Rien n’a été retiré : les neuf autres réglages gardent leurs valeurs par défaut et restent à un clic. Selon Nielsen Norman Group, la divulgation progressive améliore la facilité d’apprentissage, l’efficacité et le taux d’erreur, à deux conditions : ce qui sert souvent reste visible, et l’entrée porte un libellé qui annonce ce qu’on trouvera derrière.`,
+Rien n’a été retiré : les neuf autres réglages gardent leurs valeurs par défaut et restent à un clic. Selon Nielsen Norman Group, la divulgation progressive rend une interface plus facile à apprendre, plus efficace et moins propice aux erreurs, à deux conditions : ce qui sert souvent reste visible, et l’entrée porte un libellé qui annonce ce qu’on trouvera derrière.`,
       takeaway: 'Divulgation progressive : l’essentiel visible, le reste derrière une entrée claire et libellée ; rien de supprimé, rien de caché sans indice.',
       sources: ['imp:distill', NNG_PROGRESSIVE],
     },
@@ -788,9 +788,9 @@ On adoucit en **désaturant** (vers 70–85 %), en réduisant le nombre de cou
       id: 'intensity-louder-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Rendre une section plus audacieuse passe aussi par rendre certains de ses éléments plus discrets.',
+      prompt: 'Pour rendre une section plus audacieuse, il faut rendre certains de ses éléments plus discrets.',
       answer: true,
-      explanation: `Vrai. C’est le principe « s’engager, puis clarifier » d’impeccable : faire **un** geste décisif complètement, puis calmer tout ce qui l’entoure pour qu’il se lise. Le titre passe en typo d’affichage à pleine taille ; les textes secondaires, eux, rapetissent, et les effets superflus disparaissent.
+      explanation: `Vrai. C’est le principe « s’engager, puis clarifier » d’impeccable : faire **un** geste décisif complètement, puis calmer tout ce qui l’entoure pour qu’il se lise. Par exemple, le titre passe en typo d’affichage à pleine taille, pendant que les textes secondaires rapetissent et que les effets superflus disparaissent.
 
 À l’inverse, « si tout devient plus fort, la section devient plus plate » : quand chaque élément monte, les écarts se resserrent — on bute vite sur la graisse maximale, la saturation pleine, la place disponible — et le geste principal ne se lit plus. L’effet d’isolement (von Restorff) va dans le même sens : parmi des éléments semblables, on retient celui qui diffère.`,
       takeaway: 'Audace = un geste décisif + du calme autour : pour qu’un élément ressorte, d’autres doivent baisser d’un cran.',
