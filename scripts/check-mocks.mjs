@@ -116,9 +116,13 @@ function scan() {
         range.selectNodeContents(n);
         const label = `« ${text.slice(0, 48)}${text.length > 48 ? '…' : ''} »`;
         check(label, range.getBoundingClientRect(), el, el);
-        // impeccable's undersized-ui-text: functional text under 11 px (scaled-down thumbnails excepted).
-        const px = parseFloat(getComputedStyle(el).fontSize);
-        if (px < 11 && visible(el) && !srOnly(el) && !el.closest('[aria-hidden="true"], .mk-phone-status, .mk-browser-bar, sup, sub'))
+        // impeccable's undersized-ui-text: functional text under 11 px. SVG text is measured as drawn
+        // (viewBox scale included); miniatures of whole pages ([data-miniature]) are small on purpose.
+        let px = parseFloat(getComputedStyle(el).fontSize);
+        const ctm = el instanceof SVGElement ? el.getScreenCTM() : null;
+        if (ctm) px *= Math.hypot(ctm.a, ctm.b);
+        px = Math.round(px * 10) / 10;
+        if (px < 11 && visible(el) && !srOnly(el) && !el.closest('[data-miniature], [aria-hidden="true"], .mk-phone-status, .mk-browser-bar, sup, sub'))
           found.push({ label, x: 0, y: 0, how: `texte de ${px} px` });
         // Text contrast (WCAG 1.4.3); disabled controls are exempt.
         if (visible(el) && !srOnly(el) && !el.closest('[disabled], [aria-disabled="true"], .mk-btn--disabled, .mk-phone-status, .mk-browser-bar')) {
