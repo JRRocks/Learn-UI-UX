@@ -39,7 +39,7 @@ export function specLabel(spec: SessionSpec): string {
     case 'daily':
       return 'Session du jour';
     case 'module':
-      return MODULE_BY_ID.get(spec.moduleId)?.title ?? 'Module';
+      return MODULE_BY_ID.get(spec.moduleId)?.title ?? 'Leçon introuvable';
     case 'type':
       return TYPE_LABEL[spec.type];
     case 'review':
@@ -199,7 +199,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
             <span />
           </div>
         </div>
-        <span className="player-xp" aria-label={`${exam ? 'Examen' : `${xpTotal} XP gagnés`}`}>
+        <span className="player-xp">
           {exam ? 'Examen' : `+${xpTotal} XP`}
         </span>
       </div>
@@ -235,7 +235,7 @@ function EmptySession({ spec }: { spec: SessionSpec }) {
           Lancer la session du jour
         </Link>
         <Link to="/entrainement" className="btn btn-secondary">
-          Choisir un autre format
+          Choisir un autre entraînement
         </Link>
       </div>
     </div>

@@ -34,11 +34,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
               <strong>La version marquée « Recommandé ».</strong>
             </p>
           )}
-          {o.why && (
-            <p className="muted">
-              <MdInline text={o.why} />
-            </p>
-          )}
+          {/* Its « pourquoi » is already shown under the option itself. */}
         </div>
       );
     }
@@ -89,7 +85,7 @@ function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
         </ul>
       );
     case 'slider': {
-      const unit = ex.unit === '%' || !ex.unit ? ex.unit : ` ${ex.unit}`;
+      const unit = ex.unit ? `\u00A0${ex.unit}` : '';
       const mine = draft.type === 'slider' ? draft.value : ex.initial;
       return (
         <p>

@@ -266,6 +266,8 @@ export function TrueFalsePlayer({ ex, draft, setDraft, revealed, labelledBy }: P
 
 export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExercise, Extract<Draft, { type: 'hotspot' }>>) {
   const needed = ex.hotspots.filter((h) => h.correct).length;
+  // On a touch screen the instruction speaks of touching, not of clicking and tabbing.
+  const coarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
   const [full, setFull] = useState(false);
 
   const pick = (id: string) => {
@@ -313,7 +315,9 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
           {needed > 1 ? 'zones sélectionnées' : 'zone sélectionnée'}.{' '}
           {full
             ? 'Tu as atteint le nombre de zones : désélectionne-en une pour changer.'
-            : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
+            : coarse
+              ? 'Touche les éléments fautifs, puis valide.'
+              : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
         </p>
       )}
       {revealed && (
@@ -479,7 +483,7 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
           </label>
           <output htmlFor={inputId} className="slider-value">
             {fmt(shown)}
-            {ex.unit && ex.unit !== '%' ? ` ${ex.unit}` : ex.unit}
+            {ex.unit ? `\u00A0${ex.unit}` : ''}
           </output>
         </div>
         <input

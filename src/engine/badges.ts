@@ -62,7 +62,7 @@ export const BADGES: Badge[] = [
   {
     id: 'slop-hunter',
     title: 'Chasseur de clichés',
-    description: 'Réussir toutes les épreuves du module Anti-patterns.',
+    description: 'Réussir toutes les épreuves de la leçon « Anti-patterns et clichés générés ».',
     earned: (s, c) => {
       const pool = c.exercises.filter((e) => e.module === 'antipatterns');
       return pool.length > 0 && pool.every((e) => (s.items[e.id]?.correct ?? 0) > 0);

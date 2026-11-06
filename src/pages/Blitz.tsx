@@ -7,7 +7,8 @@ import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
 import { shuffle } from '../engine/random';
 import type { TrueFalseExercise } from '../engine/types';
-import { MdInline } from '../lib/markdown';
+import { count } from '../lib/french';
+import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const DURATION = 90;
 const RECORD_ID = 'blitz';
@@ -105,8 +106,7 @@ export function Blitz() {
             Défi chrono
           </h1>
           <p className="lead">
-            {DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la
-            correction.
+            {frenchSpacing(`${DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la correction.`)}
           </p>
           <p className="muted">
             Record : <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
@@ -163,7 +163,7 @@ export function Blitz() {
             Rejouer
           </Link>
           <Link to="/entrainement" className="btn btn-secondary">
-            Autres formats
+            Autres entraînements
           </Link>
         </div>
       </div>
@@ -186,7 +186,7 @@ export function Blitz() {
           <div
             className="meter meter--mark"
             role="timer"
-            aria-label={`${left} secondes restantes`}
+            aria-label={count(left, 'seconde restante', 'secondes restantes')}
             style={{ '--value': `${(left / DURATION) * 100}%` } as CSSProperties}
           >
             <span />
@@ -217,7 +217,7 @@ export function Blitz() {
           <section className="feedback" data-verdict={last.ok ? 'correct' : 'wrong'} aria-live="polite">
             <p className="verdict">
               {last.ok ? <CircleCheck aria-hidden="true" /> : <CircleX aria-hidden="true" />}
-              {last.ok ? 'Juste' : 'Raté'}
+              {last.ok ? 'Juste' : 'À reprendre'}
             </p>
             <p className="takeaway">
               <MdInline text={current.takeaway} />

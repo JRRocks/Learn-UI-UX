@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
 import { MODULE_BY_ID, RULE_CARDS, type RuleCard } from '../content';
@@ -7,6 +7,7 @@ import { dayKey } from '../engine/dates';
 import { recordCard } from '../engine/progress';
 import { shuffle } from '../engine/random';
 import { CARD_GRADES, type CardGrade } from '../engine/srs';
+import { plural } from '../lib/french';
 import { MdInline } from '../lib/markdown';
 
 const SIZE = 20;
@@ -69,7 +70,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
           </h1>
           <p className="lead">
             {cards.length
-              ? `${known} sur ${graded.length} retrouvées sans aide. Chaque fiche reviendra au moment où tu serais sur le point de l’oublier.`
+              ? `${known} sur ${graded.length} ${plural(known, 'retrouvée', 'retrouvées')} sans aide. Chaque fiche reviendra au moment où tu serais sur le point de l’oublier.`
               : 'Aucune fiche à réviser pour le moment : les fiches déjà vues reviendront à leur date de révision.'}
           </p>
         </header>
@@ -87,15 +88,37 @@ export function Cards({ query }: { query: URLSearchParams }) {
 
   const from = MODULE_BY_ID.get(card.moduleId);
   return (
-    <div className="page page--narrow">
-      <button
-        type="button"
-        className="btn btn-ghost"
-        style={{ alignSelf: 'flex-start', marginInlineStart: 'calc(var(--s3) * -1)' }}
-        onClick={() => (module ? navigate(`/apprendre/${module.id}`) : navigate('/entrainement'))}
-      >
-        <X aria-hidden="true" /> Arrêter la révision
-      </button>
+    <div className="player">
+      {/* Same way out as a session or the timed challenge: the labelled X of the top bar. */}
+      <div className="player-top">
+        <button
+          type="button"
+          className="icon-btn"
+          onClick={() => (module ? navigate(`/apprendre/${module.id}`) : navigate('/entrainement'))}
+          aria-label="Arrêter la révision"
+        >
+          <X aria-hidden="true" />
+        </button>
+        <div className="player-progress">
+          <div className="player-progress-label">
+            <span>Révision des fiches</span>
+            <span className="num">
+              {index + 1} / {cards.length}
+            </span>
+          </div>
+          <div
+            className="meter meter--mark"
+            role="progressbar"
+            aria-label="Avancement de la révision"
+            aria-valuemin={0}
+            aria-valuemax={cards.length}
+            aria-valuenow={index}
+            style={{ '--value': `${(index / cards.length) * 100}%` } as CSSProperties}
+          >
+            <span />
+          </div>
+        </div>
+      </div>
       <header className="page-head">
         <h1 id="main-title" tabIndex={-1}>
           {title}
