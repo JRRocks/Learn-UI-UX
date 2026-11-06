@@ -18,6 +18,10 @@ const MDN_STATUS: SourceRef = { label: 'MDN — Codes de réponse HTTP', url: 'h
 const MDN_MINWIDTH: SourceRef = { label: 'MDN — min-width', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/min-width' };
 const MDN_TEXT_OVERFLOW: SourceRef = { label: 'MDN — text-overflow', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/text-overflow' };
 const MDN_PLURAL: SourceRef = { label: 'MDN — Intl.PluralRules', url: 'https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules' };
+const CLDR_PLURALS: SourceRef = {
+  label: 'Unicode CLDR — Règles de pluriel par langue',
+  url: 'https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html',
+};
 const MDN_IDEMPOTENT: SourceRef = { label: 'MDN — Idempotent', url: 'https://developer.mozilla.org/fr/docs/Glossary/Idempotent' };
 const MDN_POINTER: SourceRef = { label: 'MDN — Évènements de pointeur', url: 'https://developer.mozilla.org/fr/docs/Web/API/Pointer_events' };
 const OWASP_VALIDATION: SourceRef = {
@@ -284,10 +288,9 @@ Côté réseau : un message clair, un nouvel essai, un mode hors ligne si l’us
     { id: 'expansion', front: 'Quelle marge prévoir pour les traductions ?', back: '30 à 40 % d’espace en plus, avec des conteneurs qui s’adaptent ; l’allemand est souvent ~30 % plus long que l’anglais, et les chaînes courtes gonflent le plus.' },
     { id: 'min-width', front: 'Un texte long pousse les boutons hors d’une rangée flex : que faire ?', back: '`min-width: 0` sur l’enfant flex (et `min-height: 0` en grille) : par défaut, il ne rétrécit pas sous la largeur de son contenu.' },
     { id: 'numbers', front: 'Peut-on tronquer un montant trop long ?', back: "Non : un nombre tronqué devient faux. Dans un tableau, on élargit la colonne ; dans une tuile, notation compacte (`Intl.NumberFormat`, `notation: 'compact'`) et valeur exacte accessible." },
-    { id: 'rtl', front: 'Comment préparer une mise en page pour l’arabe ou l’hébreu ?', back: '`dir="rtl"` et propriétés logiques (`margin-inline-start`, `padding-inline`…) ; on retourne les icônes directionnelles.' },
     { id: 'zwnj', front: 'Pourquoi ne jamais supprimer le ZWNJ (U+200C) d’un texte persan ?', back: 'Il coupe la liaison cursive à l’intérieur d’un mot composé : le retirer change l’orthographe, voire le sens.' },
-    { id: 'yeh-kaf', front: 'Recherche en persan : que faire des variantes ي/ی et ك/ک ?', back: 'Conserver la forme d’origine en base, mais les traiter comme équivalentes pour la recherche et la validation.' },
-    { id: 'intl', front: 'Comment afficher dates, nombres et devises selon la langue ?', back: 'Avec `Intl.DateTimeFormat` et `Intl.NumberFormat` et la locale de l’utilisateur (voire son calendrier), jamais à la main.' },
+    { id: 'yeh-kaf', front: 'Recherche en persan : que faire des variantes ي et ی, ou ك et ک ?', back: 'Conserver la forme d’origine en base, mais les traiter comme équivalentes pour la recherche et la validation.' },
+    { id: 'intl', front: 'Quels chiffres et quel calendrier pour un utilisateur en Iran ?', back: "Chiffres persans et calendrier hégirien solaire, via `Intl.NumberFormat('fa-IR')` et `Intl.DateTimeFormat('fa-IR')`, jamais des chiffres occidentaux codés en dur." },
     { id: 'plural', front: 'Pourquoi un « s » ajouté quand le nombre est différent de 1 ne suffit-il pas ?', back: 'Les pluriels varient : six catégories en arabe, « quelques » et « beaucoup » en polonais, 0 au singulier en français. `Intl.PluralRules` ou une bibliothèque i18n.' },
     { id: 'http', front: '401 ou 403 : quelle différence pour l’interface ?', back: '401 : pas (ou plus) connecté — reconnexion, en gardant le travail. 403 : connecté mais pas autorisé — expliquer et dire comment obtenir l’accès.' },
     { id: 'local-failure', front: 'Un seul composant ne se charge pas : que devient le reste de l’écran ?', back: 'Il continue de fonctionner. La panne reste locale : le composant dit ce qui a échoué et propose de réessayer.' },
@@ -484,8 +487,10 @@ Le message suit la structure d’une erreur utile : **ce qui a échoué** (le gr
       answer: 'rtl',
       explanation: `Traduire en arabe ne suffit pas : l’arabe se lit **de la droite vers la gauche**, et toute la mise en page suit — point de départ de la lecture, ordre des éléments dans une rangée, direction des flèches.
 
-Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inline-start\`, \`padding-inline\`, \`inset-inline-end\`…) au lieu de \`left\` et \`right\`, la mise en page se retourne d’elle-même. Restent les icônes directionnelles — flèche retour, chevron « suivant » — à retourner explicitement.`,
-      takeaway: 'En arabe ou en hébreu, tout se met en miroir : `dir="rtl"`, propriétés logiques, icônes directionnelles retournées.',
+Avec \`dir="rtl"\` sur la racine et des **propriétés logiques** (\`margin-inline-start\`, \`padding-inline\`, \`inset-inline-end\`…) au lieu de \`left\` et \`right\`, la mise en page se retourne d’elle-même. Restent les icônes directionnelles — flèche retour, chevron « suivant » — à retourner explicitement.
+
+Tout ne se retourne pas pour autant : dans la liste, les heures changent de côté, mais leurs chiffres se lisent de gauche à droite, comme tous les nombres. Les commandes de lecture média, les coches et les logos restent eux aussi tels quels.`,
+      takeaway: 'En arabe ou en hébreu, la mise en page se met en miroir (`dir="rtl"`, propriétés logiques) et les icônes directionnelles se retournent ; lecture média, coches, logos et nombres ne se retournent pas.',
       sources: ['imp:harden', 'mdn:logical', 'material:bidi'],
     },
     {
@@ -674,21 +679,16 @@ La validation et l’assainissement côté **serveur** sont donc **toujours** ob
       sources: ['imp:harden', OWASP_VALIDATION],
     },
     {
-      id: 'harden-plural-tf',
+      id: 'harden-plural-zero-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Pour gérer les pluriels d’une interface traduite, il suffit d’ajouter un « s » quand le nombre est différent de 1.',
-      answer: false,
-      explanation: `Faux, même en français. Les règles de pluriel varient d’une langue à l’autre :
+      prompt: 'En français, les règles de pluriel d’Unicode (CLDR) mettent 0 au singulier (« 0 fichier »), alors que l’anglais écrit « 0 files ».',
+      answer: true,
+      explanation: `Vrai. Le CLDR, la base d’Unicode sur laquelle s’appuie \`Intl\`, range chaque nombre dans une **catégorie** de pluriel. En français, la catégorie \`one\` couvre tout nombre dont la partie entière vaut 0 ou 1 : « 0 fichier », « 1 fichier », et même « 1,5 kilo ». En anglais, \`one\` ne couvre que 1 : « 0 files ».
 
-- l’**arabe** a six catégories (zéro, un, deux, quelques, beaucoup, autre) ;
-- le **polonais** et le **russe** distinguent « quelques » (2, 3, 4, 22…) et « beaucoup » (5, 11, 100…) ;
-- en **français**, les règles CLDR rangent 0 avec 1 : « 0 fichier », là où l’anglais écrit « 0 files » ;
-- le **japonais** n’a qu’une seule forme.
-
-\`Intl.PluralRules\` connaît ces règles : \`new Intl.PluralRules('ar').select(2)\` renvoie \`'two'\`. Une bibliothèque i18n s’appuie dessus pour choisir la bonne phrase.`,
-      takeaway: 'Les pluriels se gèrent avec `Intl.PluralRules` ou une bibliothèque i18n, jamais avec un « s » conditionnel.',
-      sources: ['imp:harden', MDN_PLURAL],
+Le nom d’une catégorie n’est donc pas un nombre : \`new Intl.PluralRules('fr').select(0)\` renvoie \`'one'\`, la même ligne avec \`'en'\` renvoie \`'other'\`. Le réflexe \`count !== 1 ? 's' : ''\` recopie la règle anglaise. Il écrit « 0 fichiers » en français, et il casse ailleurs : six catégories en arabe, « quelques » (2, 3, 4, 22…) et « beaucoup » (5, 11, 100…) en polonais et en russe, une seule forme en japonais.`,
+      takeaway: 'Chaque langue a ses règles de pluriel (0 au singulier en français, au pluriel en anglais, six catégories en arabe) : laisse `Intl.PluralRules` choisir.',
+      sources: ['imp:harden', MDN_PLURAL, CLDR_PLURALS],
     },
     {
       id: 'harden-input-size-slider',
@@ -731,7 +731,7 @@ La correction est simple : **16 px minimum** dans les champs sur mobile — le 
       options: [
         {
           id: 'equiv',
-          label: 'Stocker le texte tel quel et rendre ك/ک et ي/ی équivalents pour chercher et valider.',
+          label: 'Stocker le texte tel quel et rendre équivalents ك et ک, ainsi que ي et ی, pour chercher et valider.',
           why: 'La recherche trouve le livre quel que soit le clavier, et le texte stocké reste fidèle.',
         },
         {
@@ -759,7 +759,7 @@ La correction est simple : **16 px minimum** dans les champs sur mobile — le 
       explanation: `Le persan et l’arabe partagent un alphabet, mais deux lettres ont des formes Unicode distinctes : **ی** (U+06CC) et **ک** (U+06A9) en persan, **ي** (U+064A) et **ك** (U+0643) en arabe. Selon le clavier utilisé, la même personne peut taper l’une ou l’autre.
 
 Impeccable recommande de **conserver** la forme d’origine en stockage et de **traiter les variantes comme équivalentes** pour la recherche et la validation. La normalisation Unicode (NFC, NFKC…) n’y suffit pas : pour elle, ces lettres restent des caractères distincts. L’équivalence se code explicitement, avec une table de correspondance appliquée à la requête et à l’index. Et on ne retire jamais le ZWNJ (U+200C), l’antiliant qui coupe la liaison cursive à l’intérieur des mots composés persans.`,
-      takeaway: 'Écritures arabes : conserve le texte d’origine (ZWNJ compris) et rends ي/ی et ك/ک équivalents pour chercher et valider.',
+      takeaway: 'Écritures arabes : conserve le texte d’origine (ZWNJ compris) et rends équivalents ي et ی, ainsi que ك et ک, pour chercher et valider.',
       sources: ['imp:harden', 'w3c:alreq'],
     },
     {
