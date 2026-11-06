@@ -1,5 +1,5 @@
 import { BookOpen, ChartColumn, Globe, House, Library, Moon, Sparkles, Sun, Target, type LucideIcon } from 'lucide-react';
-import { Component, Suspense, lazy, useEffect, useLayoutEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { EXERCISES, MODULES, MODULE_BY_ID } from '../content';
 import { emptyProgress, streak } from '../engine/progress';
 import { About } from '../pages/About';
@@ -117,10 +117,17 @@ function Toasts() {
 /** Last resort when a view throws: say so, keep the data safe, offer a way out. */
 function PageError() {
   const [confirming, setConfirming] = useState(false);
+  const askRef = useRef<HTMLButtonElement>(null);
+  const asked = useRef(false);
   useEffect(() => {
     document.title = pageTitle('Erreur');
     document.getElementById('main-title')?.focus({ preventScroll: true });
   }, []);
+  // « Garder mes données » goes away with its group: the focus returns to the button that opened it.
+  useEffect(() => {
+    if (confirming) asked.current = true;
+    else if (asked.current) askRef.current?.focus();
+  }, [confirming]);
   const download = () => {
     let raw = '';
     try {
@@ -159,7 +166,7 @@ function PageError() {
           Télécharger mes données
         </button>
         {!confirming && (
-          <button type="button" className="btn btn-ghost" onClick={() => setConfirming(true)}>
+          <button ref={askRef} type="button" className="btn btn-ghost" onClick={() => setConfirming(true)}>
             Effacer mes données…
           </button>
         )}

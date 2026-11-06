@@ -53,6 +53,7 @@ export function Progress() {
   const lvl = levelOf(p.xp);
   const today = dayKey();
   const fileRef = useRef<HTMLInputElement>(null);
+  const importButtonRef = useRef<HTMLButtonElement>(null);
   const resetRef = useRef<HTMLDialogElement>(null);
   const keepRef = useRef<HTMLButtonElement>(null);
   const importRef = useRef<HTMLDialogElement>(null);
@@ -113,6 +114,8 @@ export function Progress() {
     if (!undo) return;
     store.replace(undo);
     setUndo(null);
+    // This button goes away with the import it undoes: the focus returns to the one that started the import.
+    importButtonRef.current?.focus();
     toast('Ta progression d’avant l’import est rétablie.');
   };
 
@@ -329,7 +332,7 @@ export function Progress() {
             <button type="button" className="btn btn-secondary" onClick={exportData}>
               <Download aria-hidden="true" /> Exporter ma progression
             </button>
-            <button type="button" className="btn btn-secondary" onClick={() => fileRef.current?.click()}>
+            <button ref={importButtonRef} type="button" className="btn btn-secondary" onClick={() => fileRef.current?.click()}>
               <Upload aria-hidden="true" /> Importer une sauvegarde
             </button>
             <input

@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { DETECTOR_RULES } from '../content/detectorRules';
@@ -90,6 +90,7 @@ const FALLBACK: AntipatternEntry[] = DETECTOR_RULES.map((r) => ({ ...r, descript
 function Catalog() {
   const [q, setQ] = useState('');
   const [family, setFamily] = useState<'all' | 'cliche' | 'qualite'>('all');
+  const searchRef = useRef<HTMLInputElement>(null);
   const { value: loaded, failed } = useLoadState('catalog', loadCatalog);
   // The detector's own (English) names stand in only when the French catalog cannot be fetched.
   const list = loaded?.length ? loaded : failed ? FALLBACK : null;
@@ -104,6 +105,8 @@ function Catalog() {
   const clear = () => {
     setQ('');
     setFamily('all');
+    // The button disappears with the empty state: the focus goes to the search field, ready for another word.
+    searchRef.current?.focus();
   };
 
   return (
@@ -116,7 +119,7 @@ function Catalog() {
       <div className="catalog-filters">
         <div className="field">
           <label htmlFor="ap-q">Rechercher</label>
-          <input id="ap-q" className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="ex. contraste, dégradé, carte" />
+          <input ref={searchRef} id="ap-q" className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="ex. contraste, dégradé, carte" />
         </div>
         <div className="segmented" role="group" aria-label="Famille">
           {(
