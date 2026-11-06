@@ -1,7 +1,8 @@
 import { X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
+import { SETTLE_MS, digitOf, eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
 import { MODULE_BY_ID, RULE_CARDS, type RuleCard } from '../content';
 import { dayKey } from '../engine/dates';
 import { recordCard } from '../engine/progress';
@@ -28,26 +29,45 @@ export function Cards({ query }: { query: URLSearchParams }) {
   const [index, setIndex] = useState(0);
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<CardGrade[]>([]);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const answerRef = useRef<HTMLParagraphElement>(null);
+  const shownAt = useRef(0);
   const card = cards[index];
   const module = moduleId ? MODULE_BY_ID.get(moduleId) : undefined;
 
+  const flip = () => {
+    shownAt.current = performance.now();
+    setShown(true);
+  };
+
   const gradeCard = (g: CardGrade) => {
-    if (!card) return;
+    if (!card || !shown) return;
     store.update((s) => recordCard(s, card.key, g));
     setGraded((x) => [...x, g]);
     setShown(false);
     setIndex((i) => i + 1);
   };
 
+  // The grades take the place of « Retourner la fiche »: the second click of a double click lands
+  // on « À revoir » and must not grade a card whose answer was never read (logic-21).
+  const onGradeClick = (e: MouseEvent, g: CardGrade) => {
+    if (e.detail > 1 || performance.now() - shownAt.current < SETTLE_MS) return;
+    gradeCard(g);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!card || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (!card || e.defaultPrevented || hasModifier(e) || e.repeat) return;
       if (!shown && (e.key === ' ' || e.key === 'Enter')) {
+        // Buttons and links keep their own Enter and Space: « Arrêter la révision » stops (logic-9).
+        if (handlesOwnKeys(eventOrigin(e))) return;
         e.preventDefault();
-        setShown(true);
-      } else if (shown && ['1', '2', '3', '4'].includes(e.key)) {
-        gradeCard((Number(e.key) - 1) as CardGrade);
+        flip();
+        return;
       }
+      // Digits grade only while the focus is on the card (WCAG 2.1.4); AZERTY sends « & é " ' » there (logic-8).
+      const n = digitOf(e);
+      if (shown && n !== null && n >= 1 && n <= CARD_GRADES.length && within(e, stackRef.current)) gradeCard((n - 1) as CardGrade);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -56,6 +76,11 @@ export function Cards({ query }: { query: URLSearchParams }) {
   useEffect(() => {
     document.getElementById('main-title')?.focus({ preventScroll: true });
   }, [index]);
+
+  // « Retourner la fiche » disappears once used: the focus moves to the answer instead of being lost.
+  useEffect(() => {
+    if (shown) answerRef.current?.focus({ preventScroll: true });
+  }, [shown]);
 
   const title = module ? `Fiches — ${module.title}` : 'Fiches de révision';
 
@@ -105,13 +130,14 @@ export function Cards({ query }: { query: URLSearchParams }) {
           passé.
         </p>
       </header>
-      <div className="card-stack">
-        <div className="flashcard" aria-live="polite">
-          <p className="flashcard-q">
+      <div className="card-stack" ref={stackRef}>
+        <div className="flashcard">
+          {/* Each new question is announced; the answer gets the focus when the card turns. */}
+          <p className="flashcard-q" aria-live="polite">
             <MdInline text={card.rule.front} />
           </p>
           {shown && (
-            <p className="flashcard-a">
+            <p className="flashcard-a" ref={answerRef} tabIndex={-1}>
               <MdInline text={card.rule.back} />
             </p>
           )}
@@ -119,7 +145,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
         </div>
         {!shown ? (
           <div className="btn-row">
-            <button type="button" className="btn btn-primary" onClick={() => setShown(true)}>
+            <button type="button" className="btn btn-primary" onClick={flip}>
               Retourner la fiche
             </button>
             <span className="shortcut-hint">Espace ou Entrée</span>
@@ -128,7 +154,13 @@ export function Cards({ query }: { query: URLSearchParams }) {
           <>
             <div className="grades" role="group" aria-label="Comment ça s’est passé ?">
               {CARD_GRADES.map((g, i) => (
-                <button key={g.grade} type="button" className="btn btn-secondary" aria-keyshortcuts={String(i + 1)} onClick={() => gradeCard(g.grade)}>
+                <button
+                  key={g.grade}
+                  type="button"
+                  className="btn btn-secondary"
+                  aria-keyshortcuts={String(i + 1)}
+                  onClick={(e) => onGradeClick(e, g.grade)}
+                >
                   {g.label}
                   <small>{g.hint}</small>
                 </button>
