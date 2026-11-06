@@ -193,7 +193,7 @@ const responsive: ModuleContent = {
     'Repenser une interface pour chaque contexte (écran, mode de saisie, connexion, usage) au lieu de la mettre à l’échelle : mobile d’abord, points de rupture dictés par le contenu, cibles tactiles, zones sûres et images adaptées.',
   minutes: 11,
   commands: ['adapt'],
-  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'wcag:target', WCAG_REFLOW, WCAG_RESIZE, MDN_POINTER, MDN_HOVER, MDN_ANY_POINTER, MDN_CONTAINER, MDN_IMAGES, MDN_IMG_LOADING, HOOBER],
+  sources: ['imp:adapt', 'imp:audit', 'imp:harden', 'imp:operate', 'imp:ios', 'imp:android', 'wcag:target', WCAG_REFLOW, WCAG_RESIZE, MDN_POINTER, MDN_HOVER, MDN_ANY_POINTER, MDN_CONTAINER, MDN_IMAGES, MDN_IMG_LOADING, HOOBER],
   sections: [
     {
       id: 'repenser',
@@ -281,7 +281,7 @@ Ces deux requêtes ne décrivent que le mode de saisie **principal**. Sur un por
 
 **Rien d’essentiel ne dépend du survol** : au doigt, il n’existe pas. Remplace-le par un **retour au toucher** : un état \`:active\` visible (léger assombrissement, enfoncement) confirme que le doigt a atteint la bonne cible.
 
-**Des cibles faites pour le doigt** : au moins **44 × 44 px**, le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (niveau AAA) ; Apple demande 44 × 44 pt sur iOS, Android 48 × 48 dp. Garde de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, ou un espacement suffisant autour d’une cible plus petite : c’est un plancher, pas un objectif. Le dessin de l’icône peut rester petit ; c’est la cible tactile qui compte.
+**Des cibles faites pour le doigt** : au moins **44 × 44 px**, le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (niveau AAA) ; les plateformes fixent le leur : 44 × 44 pt sur iOS, 48 × 48 dp sur Android. Garde de l’espace entre deux cibles. Le minimum du niveau AA (critère 2.5.8) est de 24 × 24 px, ou un espacement suffisant autour d’une cible plus petite : c’est un plancher, pas un objectif. Le dessin de l’icône peut rester petit ; c’est la cible tactile qui compte.
 
 **La zone du pouce** : à une main, le bas de l’écran s’atteint mieux que le haut. Dans l’étude de Steven Hoober (1 333 observations, 2013), parmi les personnes qui touchaient leur écran, 49 % tenaient et touchaient le téléphone d’une seule main, 36 % le tenaient à deux mains mais ne touchaient l’écran que d’une (le plus souvent avec le pouce), et 15 % tapaient des deux pouces. Les prises changent très souvent, parfois en quelques secondes. Place les actions fréquentes à portée de pouce, sans oublier les autres prises.`,
       examples: [
@@ -478,11 +478,11 @@ Règle de fond : **rien d’essentiel ne dépend du survol**. Le survol peut enr
       unit: 'px',
       target: [44, 56],
       ideal: 44,
-      explanation: `Une cible tactile d’au moins **44 × 44 px** se touche sans viser : c’est le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (niveau AAA). Apple demande 44 × 44 pt sur iOS, Android 48 × 48 dp.
+      explanation: `Une cible tactile d’au moins **44 × 44 px** se touche sans viser : c’est le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (niveau AAA). Les plateformes fixent le leur : 44 × 44 pt sur iOS, 48 × 48 dp sur Android.
 
 La valeur de départ, 24 px, est le **plancher** du niveau AA (critère 2.5.8), pas un objectif. Le dessin de l’icône peut rester à 18 px : c’est la cible tactile qui grandit. Au-delà de 56 px, une barre d’outils prend une place disproportionnée.`,
       takeaway: 'Une cible tactile de 44 × 44 px au moins, même quand le dessin de l’icône reste petit ; 24 px n’est qu’un plancher.',
-      sources: ['imp:adapt', 'wcag:target', WCAG_TARGET_AAA],
+      sources: ['imp:adapt', 'wcag:target', WCAG_TARGET_AAA, 'imp:ios', 'imp:android'],
     },
     {
       id: 'responsive-safe-area-choice',

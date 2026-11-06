@@ -24,17 +24,17 @@ const bankHome = (labels: boolean): Visual => ({
 const slotPicker = (bottom: boolean): Visual => ({
   frame: 'phone',
   alt: bottom
-    ? 'Choix d’un créneau de livraison : liste de créneaux et grand bouton « Valider · 18:00 – 20:00 » fixé dans le bas de l’écran.'
+    ? 'Choix d’un créneau de livraison : liste de créneaux et grand bouton « Réserver 18:00 – 20:00 » fixé dans le bas de l’écran.'
     : 'Choix d’un créneau de livraison : liste de créneaux et petit lien « Valider » dans l’angle de l’en-tête.',
   css: `.sl-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid #e3e6ec; }
 .sl-ok { font-size: 13px; font-weight: 600; color: #1f4fd8; }
-.sl-opt { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; border: 1px solid #c7cedb; border-radius: 10px; }
+.sl-opt { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; border: 1px solid #868d9c; border-radius: 10px; }
 .sl-opt--on { border-color: #1f4fd8; box-shadow: inset 0 0 0 1px #1f4fd8; }
 .sl-foot { padding: 12px 14px 14px; border-top: 1px solid #e3e6ec; }
 .sl-foot .mk-btn { min-height: 48px; white-space: normal; text-align: center; }`,
   html: `<div class="sl-head"><i data-icon="chevron-left" style="--ico:20px"></i><span class="mk-strong">Livraison</span>${bottom ? '<span style="width:20px"></span>' : '<span class="sl-ok">Valider</span>'}</div>
 <div class="mk-pad mk-stack" style="--gap:8px"><p class="mk-h3">Choisir un créneau</p><p class="mk-small mk-muted">Mardi 17 novembre</p><div class="sl-opt"><span>8:00 – 10:00</span><span class="mk-small mk-muted">Gratuit</span></div><div class="sl-opt sl-opt--on"><span class="mk-strong">18:00 – 20:00</span><span class="mk-small mk-muted">Gratuit</span></div><div class="sl-opt"><span>20:00 – 22:00</span><span class="mk-small mk-muted">2,90&nbsp;€</span></div></div>
-${bottom ? '<div class="sl-foot"><span class="mk-btn mk-btn--block">Valider · 18:00&nbsp;–&nbsp;20:00</span></div>' : '<div style="height:84px"></div>'}`,
+${bottom ? '<div class="sl-foot"><span class="mk-btn mk-btn--block">Réserver 18:00&nbsp;–&nbsp;20:00</span></div>' : '<div style="height:84px"></div>'}`,
 });
 
 const personas: ModuleContent = {
@@ -196,10 +196,10 @@ La règle est stricte : **on n’invente pas de détails sur le public**. Sans c
             frame: 'phone',
             alt: 'Même prise de rendez-vous : jours proposés en pastilles, trois créneaux libres en gros boutons et un bouton Réserver qui rappelle le choix.',
             css: `.pc-days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.pc-day { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #c7cedb; border-radius: 10px; font-size: 12px; color: #36405a; }
+.pc-day { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #868d9c; border-radius: 10px; font-size: 12px; color: #36405a; }
 .pc-day b { font-size: 16px; color: #1d2230; }
 .pc-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.pc-slot { display: grid; place-items: center; min-height: 44px; border: 1px solid #c7cedb; border-radius: 10px; font-weight: 600; }
+.pc-slot { display: grid; place-items: center; min-height: 44px; border: 1px solid #868d9c; border-radius: 10px; font-weight: 600; }
 .pc-on { border-color: #1f4fd8; box-shadow: inset 0 0 0 1px #1f4fd8; color: #1f4fd8; }`,
             html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-h2">Prendre rendez-vous</p><p class="mk-small mk-muted">Salon Ciseaux d’Or · Coupe et brushing · 45&nbsp;min</p><p class="mk-label">Jour</p><div class="pc-days"><span class="pc-day pc-on">Auj.<b>12</b></span><span class="pc-day">Ven.<b>13</b></span><span class="pc-day">Sam.<b>14</b></span><span class="pc-day">Mar.<b>17</b></span></div><p class="mk-label">Heure</p><div class="pc-slots"><span class="pc-slot">17:30</span><span class="pc-slot pc-on">18:15</span><span class="pc-slot">19:00</span></div><span class="mk-btn mk-btn--block">Réserver jeudi 12 à 18:15</span></div>`,
           },
@@ -578,12 +578,14 @@ Un persona inventé donne une fausse impression de connaître l’utilisateur, e
       id: 'personas-five-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Pour un test sérieux, il faut passer chaque écran au crible des cinq personas.',
-      answer: false,
-      explanation: `Impeccable recommande de choisir **deux ou trois personas** pertinents pour le type d’interface : Alex et Sam pour un tableau de bord, Jordan et Casey pour un onboarding…
+      prompt: 'Pour un test approfondi, impeccable ne fait parcourir l’écran qu’à deux ou trois de ses cinq personas.',
+      answer: true,
+      explanation: `Vrai. La critique d’impeccable choisit **deux ou trois personas** selon le type d’interface, et son tableau de sélection n’en propose jamais plus de trois : Alex et Sam pour un tableau de bord, Jordan et Casey pour un onboarding, Jordan, Riley et Casey pour une page d’accueil.
 
-Passer les cinq sur chaque écran dilue l’attention et produit des remarques génériques. Mieux vaut deux parcours approfondis, avec des signaux d’alerte précis, que cinq survols.`,
-      takeaway: 'Choisis deux ou trois personas selon le type d’interface, et parcours vraiment l’action principale avec chacun.',
+Le but n’est pas d’aller plus vite. Chaque persona retenu demande de **dérouler l’action principale dans sa peau** et de nommer l’élément qui casse pour lui. Ajouter les deux autres dilue l’attention et produit des remarques génériques ; la critique le rappelle : si tout est important, plus rien ne l’est. Mieux vaut deux parcours approfondis, avec des signaux d’alerte précis, que cinq survols.
+
+Quand un vrai contexte produit décrit le public, la critique peut ajouter un ou deux personas propres au projet : ils complètent les archétypes retenus, sans ramener les cinq.`,
+      takeaway: 'Deux ou trois personas suffisent, même pour un test approfondi : choisis-les selon le type d’interface et parcours vraiment l’action principale avec chacun.',
       sources: ['imp:critique'],
     },
     {
