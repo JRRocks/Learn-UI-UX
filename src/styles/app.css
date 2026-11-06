@@ -274,10 +274,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--s3);
+}
+
+/* The lead and the rest keep the reading measure; the title keeps its own, set by its own size. */
+.page-head > * {
   max-width: var(--measure);
 }
 
 .page-head h1 {
+  max-width: 18em;
   font-size: var(--t-h1);
 }
 
@@ -624,9 +629,15 @@
     font-size: var(--t-small);
   }
 
+  /* 13 px, like a platform segmented control: « Aide-mémoire » no longer breaks at its hyphen. */
   nav.segmented {
     grid-auto-flow: row;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  nav.segmented a {
+    padding-inline: var(--s1);
+    font-size: var(--t-meta);
   }
 }
 
@@ -1445,14 +1456,17 @@
   gap: var(--s5);
 }
 
+/* The question's mock keeps its width (44rem, as with the former 68ch); its context text keeps the
+   reading measure. */
 .task-head {
   display: flex;
   flex-direction: column;
   gap: var(--s3);
-  max-width: var(--measure);
+  max-width: 44rem;
 }
 
 .task-context {
+  max-width: var(--measure);
   color: var(--ink-2);
 }
 
