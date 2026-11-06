@@ -153,7 +153,7 @@ export function Practice() {
             {cultureCount} épreuves sur les différences d’interface entre {Object.keys(CULTURE_NAMES).length} marchés et la façon de s’y adapter.
           </p>
           <div className="btn-row">
-            <Link to="/session?mode=culture" className="btn btn-secondary">
+            <Link to="/session?mode=culture" className="btn btn-secondary" aria-label="Lancer : Cultures">
               Lancer
             </Link>
             <Link to="/cultures" className="btn btn-ghost">
