@@ -196,12 +196,12 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
 
   const items = state.ids.map((id) => EXERCISE_BY_ID.get(id)).filter((e): e is ExerciseEntry => Boolean(e));
   const done = state.index >= items.length;
-  const entry = items[state.index];
+  const item = items[state.index];
   // What the screen shows: the exercise at hand (its lesson is downloaded first), or every exercise
   // of the run on the summary.
-  const shown = useMemo(() => (done ? state.ids : entry ? [entry.id] : []), [done, entry, state.ids]);
+  const shown = useMemo(() => (done ? state.ids : item ? [item.id] : []), [done, item, state.ids]);
   const { value: loaded, failed } = useExercises(shown);
-  const current = entry && loaded?.get(entry.id);
+  const current = item && loaded?.get(item.id);
   const xpTotal = state.played.reduce((s, p) => s + p.xp, 0);
   const label = specLabel(spec);
 
@@ -261,7 +261,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
   };
 
   const next = () => setState((st) => (st.index < st.ids.length && answeredCurrent(st) ? { ...st, index: st.index + 1 } : st));
-  const module = MODULE_BY_ID.get(entry.module);
+  const module = MODULE_BY_ID.get(item.module);
   const last = state.index === items.length - 1;
   const answered = answeredCurrent(state) ? state.played[state.index] : undefined;
 
@@ -274,7 +274,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         <div className="player-progress">
           <div className="player-progress-label">
             <span>
-              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(entry)].filter(Boolean).join(' · ')} />
+              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(item)].filter(Boolean).join(' · ')} />
             </span>
             <span className="num">
               {state.index + 1} / {items.length}
