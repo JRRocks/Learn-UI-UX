@@ -217,8 +217,8 @@ function Commands() {
                 <th scope="row">
                   <code>/impeccable {c.cmd}</code>
                 </th>
-                <td>{c.family}</td>
-                <td>{c.when}</td>
+                <td data-label="Famille">{c.family}</td>
+                <td data-label="Quand l’utiliser">{c.when}</td>
               </tr>
             ))}
           </tbody>

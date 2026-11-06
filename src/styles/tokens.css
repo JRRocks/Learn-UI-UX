@@ -79,6 +79,8 @@
   --dur: 220ms;
 
   --shadow-float: 0 10px 30px -8px oklch(0.24 0.032 262 / 0.22), 0 2px 6px oklch(0.24 0.032 262 / 0.08);
+  /* Edge shadow of a region that scrolls sideways (drawn by .table-scroll). */
+  --scroll-shadow: oklch(0.24 0.032 262 / 0.2);
   --rail-w: 15rem;
   --measure: 68ch;
 }
@@ -111,6 +113,7 @@
     --hero-bg: oklch(0.3 0.05 262);
     --hero-fg: oklch(0.96 0.008 258);
     --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
+    --scroll-shadow: oklch(0 0 0 / 0.55);
   }
 }
 

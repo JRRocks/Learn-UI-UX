@@ -528,32 +528,94 @@
   display: inline-flex;
   flex-wrap: wrap;
   gap: 2px;
+  max-width: 100%;
   padding: 3px;
   border-radius: calc(var(--r-control) + 3px);
   background: var(--paper-2);
   border: 1px solid var(--rule);
 }
 
+/* The track hugs its options instead of stretching across a column (.field, grid rows). */
+.field > .segmented,
+.grid-row .segmented {
+  align-self: flex-start;
+  justify-self: start;
+}
+
 .segmented button,
 .segmented a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 38px;
-  padding: 0 var(--s4);
+  padding: var(--s1) var(--s4);
   border: 0;
   border-radius: var(--r-control);
   background: transparent;
   color: var(--ink-2);
   font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
 }
 
+.segmented button:hover:not(:disabled, [aria-pressed='true']),
+.segmented a:hover:not([aria-current='page']) {
+  background: color-mix(in oklch, var(--ink) 7%, transparent);
+  color: var(--ink);
+}
+
+.segmented button:disabled {
+  cursor: default;
+}
+
+/* The chosen option is filled with ink, like a chosen answer key: well above 3:1 against the
+   track in both themes (a white chip on the grey track gave 1.12:1, and 1.02:1 in dark). */
 .segmented [aria-pressed='true'],
 .segmented [aria-selected='true'],
 .segmented [aria-current='page'] {
-  background: var(--sheet);
-  color: var(--ink);
-  box-shadow: 0 1px 2px oklch(0.24 0.032 262 / 0.12), 0 0 0 1px var(--rule);
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+@media (pointer: coarse) {
+  .segmented button,
+  .segmented a {
+    min-height: var(--tap);
+  }
+}
+
+/* Phones: one row of equal options across the width, the six Ressources tabs on two rows. */
+@media (max-width: 599.98px) {
+  .segmented {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    width: 100%;
+  }
+
+  .field > .segmented,
+  .grid-row .segmented {
+    align-self: stretch;
+    justify-self: stretch;
+  }
+
+  .segmented button,
+  .segmented a {
+    padding-inline: var(--s2);
+    font-size: var(--t-small);
+  }
+
+  nav.segmented {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 359.98px) {
+  nav.segmented {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ---------- Meter (labelled progress) ---------- */
@@ -918,6 +980,26 @@
   width: 100%;
 }
 
+@media (max-width: 759.98px) {
+  .toc-row a {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .toc-mastery {
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--s3);
+    width: auto;
+  }
+
+  .toc-mastery .meter {
+    flex: none;
+    width: 6rem;
+  }
+}
+
 /* =========================================================================
    Lesson
    ========================================================================= */
@@ -1004,18 +1086,27 @@
   gap: var(--s3);
 }
 
+/* Mocks are drawn for 320 to 520 px (docs/CONTENU.md). Two of them sit side by side only when the
+   pair's own container leaves each stage 352 px (320 + its padding), whatever the viewport and
+   the lesson's aside: at 1100–1300 px wide the old media query gave them 222 to 262 px. */
+.example,
+.catalog > li {
+  container-type: inline-size;
+}
+
 .example h3 {
   font-size: var(--t-body);
 }
 
 .example-pair {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
 }
 
-@media (min-width: 760px) {
+@container (min-width: 45rem) {
   .example-pair {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1366,6 +1457,13 @@
 
 .option-text {
   padding-top: 2px;
+}
+
+/* Text options: key and text stay on one line, the text taking the remaining width
+   (flex-basis auto made it as wide as its own sentence, so it wrapped under the key). */
+.option:not(.option--visual) .option-text {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .option[data-state='selected'] {
@@ -2182,9 +2280,17 @@
   font-family: var(--font-mono);
 }
 
+/* A region that scrolls sideways shows it: edge shadows appear on the side where there is more
+   (the covers move with the content, the shadows stay with the box). */
 .table-scroll {
   overflow-x: auto;
   max-width: 100%;
+  container-type: inline-size;
+  background:
+    linear-gradient(to right, var(--paper) 30%, transparent) left center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--paper) 30%, transparent) right center / 2.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--scroll-shadow), transparent) left center / 0.875rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--scroll-shadow), transparent) right center / 0.875rem 100% no-repeat scroll;
 }
 
 .compare-table {
@@ -2217,6 +2323,56 @@
   flex-direction: column;
   gap: var(--s2);
   padding-inline-start: 1em;
+}
+
+/* Narrower than the table's own 38rem (phones, 200 % zoom): one block per subject, every cell
+   labelled with its column (data-label), instead of a second market hidden off-screen. */
+@container (max-width: 37.99rem) {
+  .compare-table {
+    min-width: 0;
+  }
+
+  .compare-table,
+  .compare-table tbody,
+  .compare-table tr,
+  .compare-table th,
+  .compare-table td {
+    display: block;
+  }
+
+  .compare-table thead {
+    display: none;
+  }
+
+  .compare-table tbody tr {
+    padding-block: var(--s3);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .compare-table tbody th,
+  .compare-table td {
+    width: auto;
+    padding: 0;
+    border: 0;
+  }
+
+  .compare-table tbody th {
+    color: var(--ink);
+    font-size: var(--t-body);
+  }
+
+  .compare-table td {
+    margin-top: var(--s3);
+  }
+
+  .compare-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: var(--s1);
+    font-size: var(--t-meta);
+    font-weight: 650;
+    color: var(--ink-2);
+  }
 }
 
 .pair-view {
@@ -2728,6 +2884,10 @@
 .option:not(.option--visual) .option-why {
   flex-basis: 100%;
   padding-inline-start: calc(28px + var(--s3));
+}
+
+.option:has(> .check-box) .option-why {
+  padding-inline-start: calc(24px + var(--s3));
 }
 
 fieldset.options,
