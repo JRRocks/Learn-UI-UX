@@ -1,8 +1,11 @@
 import { streak, type ProgressState } from './progress';
 import type { Exercise } from './types';
 
+/** What badges read of an exercise: the light index of the content lists it without loading the lessons. */
+export type BadgeExercise = Pick<Exercise, 'id' | 'type' | 'module' | 'culture'>;
+
 export interface BadgeContext {
-  exercises: Exercise[];
+  exercises: readonly BadgeExercise[];
   moduleIds: string[];
 }
 
@@ -13,7 +16,7 @@ export interface Badge {
   earned: (s: ProgressState, ctx: BadgeContext) => boolean;
 }
 
-const correctWhere = (s: ProgressState, ctx: BadgeContext, pred: (e: Exercise) => boolean) =>
+const correctWhere = (s: ProgressState, ctx: BadgeContext, pred: (e: BadgeExercise) => boolean) =>
   ctx.exercises.filter((e) => pred(e) && (s.items[e.id]?.correct ?? 0) > 0).length;
 
 export const BADGES: Badge[] = [

@@ -9,6 +9,7 @@ import { resolveSource } from '../content/sources';
 import type { CulturePair, CultureProfile } from '../engine/types';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
+import { LoadFailed, Loading as LoadingLine } from './LoadFailed';
 import { NotFound } from './NotFound';
 
 /** Profiles and pairs, fetched on demand (same cache key as `useCultures`), with the failure state. */
@@ -64,29 +65,19 @@ function Loading({ failed }: { failed: boolean }) {
       <div className="page page--narrow">
         <header className="page-head">
           <h1 id="main-title" tabIndex={-1}>
-            Impossible de charger les marchés
+            Marchés indisponibles
           </h1>
-          <p className="lead">
-            {frenchSpacing(
-              'Les profils de marchés n’ont pas pu être téléchargés : la connexion a peut-être été coupée. Vérifie-la, puis recharge la page.',
-            )}
-          </p>
         </header>
-        <div className="btn-row">
-          <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
-            Recharger la page
-          </button>
+        <LoadFailed what="les profils de marchés">
           <Link to="/entrainement" className="btn btn-secondary">
             S’entraîner en attendant
           </Link>
-        </div>
+        </LoadFailed>
       </div>
     );
   return (
     <div className="page">
-      <p className="muted" role="status">
-        Chargement des marchés…
-      </p>
+      <LoadingLine what="des marchés" />
     </div>
   );
 }

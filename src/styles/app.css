@@ -1234,6 +1234,27 @@
   container-type: inline-size;
 }
 
+/* A lesson or the catalog holds up to a hundred mocks: those far from the screen are styled and laid
+   out only when they come near it. Until then, a typical height stands for theirs (about 800 px
+   with the pair stacked, 440 px side by side); once laid out, their real height is remembered. */
+.examples,
+.catalog {
+  container-type: inline-size;
+}
+
+.example,
+.catalog > li {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 800px;
+}
+
+@container (min-width: 45rem) {
+  .example,
+  .catalog > li {
+    contain-intrinsic-block-size: auto 440px;
+  }
+}
+
 .example h3 {
   font-size: var(--t-body);
 }
