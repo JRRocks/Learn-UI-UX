@@ -279,8 +279,11 @@ export interface CultureProfile {
   ecosystem: string[];
   conventions: Convention[];
   adapt: { do: string[]; dont: string[] };
-  /** Typical formats, displayed as examples. */
-  formats: { label: string; value: string }[];
+  /**
+   * Typical formats, displayed as examples. A value is announced in the profile's `locale`
+   * unless it sets its own `lang` (BCP 47), e.g. `sw` for a Swahili time in an `en-KE` profile.
+   */
+  formats: { label: string; value: string; lang?: string }[];
   /** Representative mock of a local interface. */
   visual?: Visual;
   sources: Source[];

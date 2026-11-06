@@ -1,6 +1,6 @@
 import { addDays, dayKey, daysBetween } from './dates';
 import type { GradeResult, Verdict } from './grade';
-import { scheduleCard, scheduleExercise, type CardGrade, type CardState } from './srs';
+import { MAX_BOX, scheduleCard, scheduleExercise, type CardGrade, type CardState } from './srs';
 import type { Exercise } from './types';
 
 export interface ItemState {
@@ -46,11 +46,17 @@ export interface ProgressState {
   cards: Record<string, CardState>;
   lessons: Record<string, string>;
   badges: Record<string, string>;
+  /** The most recent sessions only (see SESSION_HISTORY). */
   sessions: SessionRecord[];
+  /** Every session ever finished, including those dropped from `sessions`. */
+  sessionsDone: number;
   settings: Settings;
   /** Best scores of timed challenges, by challenge id. */
   records: Record<string, number>;
 }
+
+/** How many finished sessions are kept in the history. */
+export const SESSION_HISTORY = 60;
 
 export const XP = {
   correct: 10,
@@ -70,29 +76,115 @@ export function emptyProgress(): ProgressState {
     lessons: {},
     badges: {},
     sessions: [],
+    sessionsDone: 0,
     settings: { theme: 'system', dailyGoal: 60 },
     records: {},
   };
 }
 
-/** Accept anything parsed from storage or an imported file; fill gaps, drop garbage. */
+/* ---------- Reading untrusted data (localStorage, imported files) ---------- */
+
+type Dict = Record<string, unknown>;
+
+const isDict = (v: unknown): v is Dict => typeof v === 'object' && v !== null && !Array.isArray(v);
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+const isDay = (v: unknown): v is string => typeof v === 'string' && DAY.test(v);
+/** A finite number ≥ 0, or the fallback. */
+const count = (v: unknown, fallback = 0): number => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : fallback);
+const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+const VERDICTS: readonly string[] = ['correct', 'partial', 'wrong'];
+const THEMES: readonly string[] = ['system', 'light', 'dark'];
+
+/** Keeps the entries `clean` accepts (it returns undefined to drop one). */
+function entries<T>(v: unknown, clean: (x: unknown, key: string) => T | undefined): Record<string, T> {
+  const out: Record<string, T> = {};
+  if (!isDict(v)) return out;
+  for (const [k, x] of Object.entries(v)) {
+    const c = clean(x, k);
+    if (c !== undefined) out[k] = c;
+  }
+  return out;
+}
+
+function cleanItem(v: unknown): ItemState | undefined {
+  if (!isDict(v) || !isDay(v.due)) return undefined;
+  const item: ItemState = {
+    seen: Math.round(count(v.seen)),
+    correct: Math.round(count(v.correct)),
+    box: Math.min(MAX_BOX, Math.round(count(v.box))),
+    due: v.due,
+  };
+  if (typeof v.last === 'string' && VERDICTS.includes(v.last)) item.last = v.last as Verdict;
+  if (isDay(v.lastSeen)) item.lastSeen = v.lastSeen;
+  return item;
+}
+
+function cleanCard(v: unknown): CardState | undefined {
+  if (!isDict(v) || !isDay(v.due)) return undefined;
+  return { ease: Math.max(1.3, count(v.ease, 2.5)), interval: Math.round(count(v.interval)), reps: Math.round(count(v.reps)), due: v.due };
+}
+
+function cleanDay(v: unknown): DayStats | undefined {
+  if (!isDict(v)) return undefined;
+  return { xp: count(v.xp), answered: count(v.answered), correct: count(v.correct) };
+}
+
+function cleanSession(v: unknown): SessionRecord | undefined {
+  if (!isDict(v)) return undefined;
+  return {
+    id: str(v.id),
+    at: str(v.at),
+    kind: str(v.kind),
+    label: str(v.label),
+    total: count(v.total),
+    correct: count(v.correct),
+    partial: count(v.partial),
+    xp: count(v.xp),
+    missed: Array.isArray(v.missed) ? v.missed.filter((x): x is string => typeof x === 'string') : [],
+  };
+}
+
+/**
+ * Accept anything parsed from storage or an imported file: fill gaps and drop, entry by entry,
+ * whatever does not have the expected shape, so one damaged entry cannot break the app.
+ */
 export function normalizeProgress(raw: unknown): ProgressState {
   const base = emptyProgress();
-  if (!raw || typeof raw !== 'object') return base;
-  const r = raw as Partial<ProgressState>;
-  const obj = <T>(v: unknown, fallback: T): T => (v && typeof v === 'object' && !Array.isArray(v) ? (v as T) : fallback);
+  if (!isDict(raw)) return base;
+  const sessions = (Array.isArray(raw.sessions) ? raw.sessions : []).map(cleanSession).filter((s): s is SessionRecord => Boolean(s));
+  const settings = isDict(raw.settings) ? raw.settings : {};
+  const goal = settings.dailyGoal;
   return {
     version: 1,
-    xp: typeof r.xp === 'number' && Number.isFinite(r.xp) ? r.xp : 0,
-    days: obj(r.days, base.days),
-    items: obj(r.items, base.items),
-    cards: obj(r.cards, base.cards),
-    lessons: obj(r.lessons, base.lessons),
-    badges: obj(r.badges, base.badges),
-    sessions: Array.isArray(r.sessions) ? r.sessions.slice(-60) : [],
-    settings: { ...base.settings, ...obj(r.settings, {}) },
-    records: obj(r.records, base.records),
+    xp: count(raw.xp),
+    days: entries(raw.days, (v, k) => (DAY.test(k) ? cleanDay(v) : undefined)),
+    items: entries(raw.items, cleanItem),
+    cards: entries(raw.cards, cleanCard),
+    lessons: entries(raw.lessons, (v) => (typeof v === 'string' ? v : undefined)),
+    badges: entries(raw.badges, (v) => (typeof v === 'string' ? v : undefined)),
+    sessions: sessions.slice(-SESSION_HISTORY),
+    // Older saves have no counter: the history is the best estimate.
+    sessionsDone: Math.max(Math.round(count(raw.sessionsDone)), sessions.length),
+    settings: {
+      theme: typeof settings.theme === 'string' && THEMES.includes(settings.theme) ? (settings.theme as Settings['theme']) : base.settings.theme,
+      dailyGoal: typeof goal === 'number' && Number.isFinite(goal) && goal > 0 ? goal : base.settings.dailyGoal,
+    },
+    records: entries(raw.records, (v) => (typeof v === 'number' && Number.isFinite(v) ? v : undefined)),
   };
+}
+
+/**
+ * Read a file the learner wants to import. Unlike `normalizeProgress`, which repairs what it can,
+ * this refuses anything that is not a backup written by « Exporter ma progression »
+ * (a `package.json`, an array, another app's export…), so nothing gets replaced by mistake.
+ */
+export function parseBackup(raw: unknown): ProgressState | null {
+  if (!isDict(raw) || raw.version !== 1) return null;
+  if (typeof raw.xp !== 'number' || !Number.isFinite(raw.xp)) return null;
+  if (!isDict(raw.items) || !isDict(raw.days) || !isDict(raw.cards)) return null;
+  for (const k of ['lessons', 'badges', 'records', 'settings'] as const) if (k in raw && !isDict(raw[k])) return null;
+  if ('sessions' in raw && !Array.isArray(raw.sessions)) return null;
+  return normalizeProgress(raw);
 }
 
 export function xpFor(ex: Exercise, verdict: Verdict): number {
@@ -161,7 +253,7 @@ export function setRecord(state: ProgressState, id: string, score: number): Prog
 }
 
 export function addSession(state: ProgressState, rec: SessionRecord): ProgressState {
-  return { ...state, sessions: [...state.sessions, rec].slice(-60) };
+  return { ...state, sessions: [...state.sessions, rec].slice(-SESSION_HISTORY), sessionsDone: state.sessionsDone + 1 };
 }
 
 /** Consecutive active days ending today, or yesterday when today has no activity yet. */
@@ -210,15 +302,25 @@ export function masteryLabel(m: number, touched: boolean): string {
   return 'Maîtrisé';
 }
 
-export function dueExerciseIds(state: ProgressState, today: string = dayKey()): string[] {
+/** The ids that still exist in the content (a `Map` or `Set` of them). */
+export interface KnownIds {
+  has(id: string): boolean;
+}
+
+/**
+ * Exercises due today, most overdue first. Pass `known` to ignore the ones the content no longer
+ * has (renamed or removed ids stay in storage, so they would be due forever).
+ */
+export function dueExerciseIds(state: ProgressState, today: string = dayKey(), known?: KnownIds): string[] {
   return Object.entries(state.items)
-    .filter(([, s]) => s.due <= today)
+    .filter(([id, s]) => s.due <= today && (!known || known.has(id)))
     .sort(([, a], [, b]) => (a.due < b.due ? -1 : a.due > b.due ? 1 : a.box - b.box))
     .map(([id]) => id);
 }
 
-export function dueCardKeys(state: ProgressState, today: string = dayKey()): string[] {
+/** Flashcards due today; `known` works as in `dueExerciseIds`. */
+export function dueCardKeys(state: ProgressState, today: string = dayKey(), known?: KnownIds): string[] {
   return Object.entries(state.cards)
-    .filter(([, s]) => s.due <= today)
+    .filter(([k, s]) => s.due <= today && (!known || known.has(k)))
     .map(([k]) => k);
 }
