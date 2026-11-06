@@ -59,6 +59,9 @@ async function stored(registration: ServiceWorkerRegistration | undefined): Prom
 // A page that no worker stores (no service worker in this browser, site data blocked, an install
 // that failed, a page newer than the stored version) downloads its lessons in the background
 // instead and keeps them in memory: a dropped connection then leaves them all at hand.
+// Until the worker or the page is done (the first seconds of a first visit: about 4 s after the app
+// shows on a slow mobile link), a lesson not opened yet still needs the network: the cost of
+// sending each lesson only when it is needed, which shows the app sooner.
 if (import.meta.env.PROD) {
   const start = () => {
     if (!('serviceWorker' in navigator)) return void preloadContent();

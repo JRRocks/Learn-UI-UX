@@ -23,10 +23,11 @@ const isPage = (pathname) => pathname === SCOPE || pathname === `${SCOPE}index.h
 
 /**
  * The page fetched at install names only files of this build: a deployment, or a CDN still serving
- * the previous page, could otherwise pair this build's files with another build's page.
+ * the previous page, could otherwise pair this build's files with another build's page. Its
+ * addresses are read as the page reads them, whatever the `base` of the build.
  */
 async function checkPage(res) {
-  const named = [...(await res.text()).matchAll(/\.\/assets\/[\w.-]+/g)].map(([m]) => new URL(m, self.location).href);
+  const named = [...(await res.text()).matchAll(/[\w./-]*assets\/[\w.-]+/g)].map(([m]) => new URL(m, SHELL).href);
   const foreign = named.find((href) => !FILES.has(href));
   if (!named.length || foreign) throw new Error(`./ : page d’une autre version (${foreign ?? 'aucun fichier'})`);
 }
