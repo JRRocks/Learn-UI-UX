@@ -12,7 +12,8 @@
     "test": "vitest run",
     "validate": "tsc --noEmit && vitest run src/content",
     "shots": "node scripts/shots.mjs",
-    "check:mocks": "node scripts/check-mocks.mjs"
+    "check:mocks": "node scripts/check-mocks.mjs",
+    "check:overflow": "node scripts/check-overflow.mjs"
   },
   "dependencies": {
     "@fontsource-variable/atkinson-hyperlegible-mono": "5.3.0",

@@ -66,6 +66,13 @@
   --r-panel: 12px;
   --tap: 44px;
 
+  /* Bars that stay on screen. Their heights feed scroll-padding (app.css), so that a control
+     reached with Tab never ends up hidden underneath one of them (WCAG 2.4.11). */
+  --topbar-h: 4.25rem;
+  --tabbar-h: 3.5rem;
+  --player-top-h: calc(var(--tap) + 2 * var(--s3) + 1px);
+  --actions-h: calc(var(--tap) + 2 * var(--s3) + var(--s1));
+
   --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 140ms;
@@ -134,4 +141,12 @@
   --hero-bg: oklch(0.3 0.05 262);
   --hero-fg: oklch(0.96 0.008 258);
   --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
+  --scroll-shadow: oklch(0 0 0 / 0.55);
+}
+
+/* Under 480 px the counter and the keyboard hint of the « Valider » bar can take three lines. */
+@media (max-width: 479.98px) {
+  :root {
+    --actions-h: 6rem;
+  }
 }

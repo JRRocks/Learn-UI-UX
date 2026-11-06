@@ -77,6 +77,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s3);
+  min-height: var(--topbar-h);
   padding: var(--s2) var(--s4);
   padding-top: max(var(--s2), env(safe-area-inset-top));
   background: color-mix(in oklch, var(--paper) 92%, transparent);
@@ -130,7 +131,8 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  min-height: 56px;
+  min-width: 0;
+  min-height: var(--tabbar-h);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--ink-3);
@@ -148,6 +150,26 @@
 
 .tabbar a[aria-current='page'] svg {
   color: var(--mark);
+}
+
+/* Below 360 px a fifth of the bar is 64 px: « Apprendre » and « S’entraîner » would touch. */
+@media (max-width: 359.98px) {
+  .tabbar a {
+    font-size: 0.6875rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Keep a focused control clear of the bars that stay on screen (WCAG 2.4.11): the browser
+   scrolls it into the region left free by scroll-padding. */
+@media (max-width: 959.98px) {
+  html:has(.topbar) {
+    scroll-padding-top: calc(var(--topbar-h) + env(safe-area-inset-top) + var(--s3));
+  }
+
+  html:has(.tabbar) {
+    scroll-padding-bottom: calc(var(--tabbar-h) + 1px + env(safe-area-inset-bottom) + var(--s3));
+  }
 }
 
 /* ---------- Desktop rail ---------- */
@@ -379,19 +401,21 @@
    Buttons and controls
    ========================================================================= */
 
+/* Long labels (« Leçon suivante : … ») wrap inside the button instead of widening the page. */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--s2);
+  max-width: 100%;
   min-height: var(--tap);
-  padding: 0 var(--s5);
+  padding: var(--s2) var(--s5);
   border: 1px solid transparent;
   border-radius: var(--r-control);
   font-weight: 650;
   line-height: 1.2;
+  text-align: center;
   text-decoration: none;
-  white-space: nowrap;
   transition:
     background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
@@ -485,7 +509,11 @@
   color: var(--ink);
 }
 
+/* A select is as wide as its longest option: cap it to its container. */
 .select {
+  min-width: 0;
+  max-width: 100%;
+  text-overflow: ellipsis;
   padding-inline-end: var(--s6);
   appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
@@ -617,6 +645,7 @@
 
 .today {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
 }
 
@@ -788,6 +817,7 @@
 
 .toc-group {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s3);
 }
 
@@ -894,6 +924,7 @@
 
 .lesson {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s7);
 }
 
@@ -915,7 +946,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--s4);
-  scroll-margin-top: var(--s7);
+  scroll-margin-top: var(--s5);
 }
 
 .lesson-section > h2 {
@@ -1120,8 +1151,10 @@
   }
 }
 
+/* minmax(0, 1fr): an implicit auto track grew to the longest <option> (411 px at 320 px). */
 .split {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -1228,11 +1261,32 @@
   color: var(--ink-2);
 }
 
+/* One row: the button, then what « Valider » waits for and the keyboard hint, which wrap beside it
+   (wrapped under it, they made the sticky bar up to 137 px tall). */
 .task-actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--s3) var(--s4);
+}
+
+.task-actions > .btn {
+  flex: none;
+}
+
+.task-actions > span {
+  min-width: 0;
+}
+
+@media (max-width: 639.98px) {
+  .task-actions {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: 2px;
+  }
+
+  .task-actions > .btn {
+    grid-row: 1 / span 2;
+  }
 }
 
 .shortcut-hint {
@@ -1732,6 +1786,7 @@
 
 .feedback-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -1916,7 +1971,6 @@
   flex-direction: column;
   gap: 0;
   min-height: 60px;
-  white-space: normal;
 }
 
 .grades .btn small {
@@ -2039,6 +2093,7 @@
 
 .conventions {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
 }
 
@@ -2066,6 +2121,7 @@
 
 .dodont {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
 }
 
@@ -2165,6 +2221,7 @@
 
 .pair-view {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
 }
 
@@ -2187,6 +2244,7 @@
 
 .lab {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -2228,6 +2286,7 @@
 
 .cheats {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s6);
 }
 
@@ -2262,7 +2321,7 @@
 
 .cheat td {
   font-weight: 700;
-  white-space: nowrap;
+  overflow-wrap: break-word;
 }
 
 .catalog-filters {
@@ -2509,7 +2568,7 @@
   position: fixed;
   z-index: 60;
   inset-inline: var(--s4);
-  bottom: calc(72px + env(safe-area-inset-bottom));
+  bottom: calc(var(--tabbar-h) + 1px + var(--s4) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2713,5 +2772,25 @@ fieldset.tf {
 }
 
 .shell[data-focus] .toasts {
-  bottom: calc(96px + env(safe-area-inset-bottom));
+  bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
+}
+
+/* Session bars: the focused control stays clear of them (WCAG 2.4.11). */
+@media (min-height: 30rem) {
+  html:has(.player-top) {
+    scroll-padding-top: calc(var(--player-top-h) + env(safe-area-inset-top) + var(--s3));
+  }
+
+  html:has(.task-actions) {
+    scroll-padding-bottom: calc(var(--actions-h) + env(safe-area-inset-bottom) + var(--s3));
+  }
+}
+
+/* Short viewports (phone held sideways, 200 % zoom and more): the session bars scroll away with the
+   page instead of keeping a third of the screen. */
+@media (max-height: 29.99rem) {
+  .player-top,
+  .task-actions {
+    position: static;
+  }
 }
