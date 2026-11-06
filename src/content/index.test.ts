@@ -1,0 +1,108 @@
+import { describe, expect, it } from 'vitest';
+import RULES from 'virtual:content/rules';
+import STATEMENTS from 'virtual:content/statements';
+import { newBadges } from '../engine/badges';
+import { emptyProgress, recordAttempt, type ProgressState } from '../engine/progress';
+import { seeded } from '../engine/random';
+import { buildSession, isDuel, matchesType, type PracticeType, type SessionSpec } from '../engine/session';
+import type { ModuleContent } from '../engine/types';
+import { ALL_MODULES } from './all';
+import { contentIndex, fileId, modulesFromFiles, ruleCards, statements } from './derive';
+import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, exercisesOf, loadModule } from './index';
+import { MODULE_ORDER } from './order';
+
+/**
+ * The light index is written by the build from the lessons (scripts/vite-plugins.mjs). These tests
+ * check that what the app receives matches the lessons as they are on disk, and that everything the
+ * app computes from the index (sessions, counts, badges) comes out as it would from the full content.
+ */
+const FULL = ALL_MODULES.flatMap((m) => m.exercises);
+
+describe('light index', () => {
+  it('is what the lessons give, as the build serves it', () => {
+    expect({ modules: MODULES, exercises: EXERCISES }).toEqual(contentIndex(ALL_MODULES));
+    expect(RULES).toEqual(ruleCards(ALL_MODULES));
+    expect(STATEMENTS).toEqual(statements(ALL_MODULES));
+  });
+
+  it('lists the lessons in curriculum order', () => {
+    const known = MODULES.map((m) => m.id).filter((id) => MODULE_ORDER.includes(id));
+    expect(known).toEqual(MODULE_ORDER.filter((id) => known.includes(id)));
+    expect(MODULES).toHaveLength(ALL_MODULES.length);
+  });
+
+  it('lists every exercise with its lesson, type, difficulty, market and duel flag', () => {
+    expect(EXERCISES.map((e) => e.id)).toEqual(FULL.map((e) => e.id));
+    for (const e of FULL) {
+      const entry = EXERCISE_BY_ID.get(e.id);
+      expect(entry).toMatchObject({ module: e.module, type: e.type, difficulty: e.difficulty, duel: isDuel(e) });
+      expect(entry?.culture).toBe(e.culture);
+      if (e.type === 'truefalse') expect(entry?.answer).toBe(e.answer);
+      for (const t of ['duel', 'choice', 'multi', 'truefalse', 'hotspot', 'order', 'match', 'slider', 'grid'] as PracticeType[])
+        expect(matchesType(entry!, t)).toBe(matchesType(e, t));
+    }
+    for (const m of ALL_MODULES) expect(exercisesOf(m.id).map((e) => e.id)).toEqual(m.exercises.map((e) => e.id));
+  });
+
+  it('lists every flashcard', () => {
+    expect(RULE_CARDS.map((c) => c.key)).toEqual(ALL_MODULES.flatMap((m) => m.rules.map((r) => `${m.id}/${r.id}`)));
+  });
+
+  it('holds plain data only, written as JSON by the build', () => {
+    expect(JSON.parse(JSON.stringify(ALL_MODULES))).toEqual(ALL_MODULES);
+  });
+});
+
+describe('sessions and badges from the light index', () => {
+  // Some answers: wrong and due, right and due, right and scheduled later.
+  let state: ProgressState = emptyProgress();
+  FULL.slice(0, 60).forEach((e, i) => {
+    state = recordAttempt(state, e, { verdict: i % 3 ? 'correct' : 'wrong', score: i % 3 ? 1 : 0 }, new Date(2026, 9, 1 + (i % 20))).state;
+  });
+  state = { ...state, lessons: { typography: '2026-10-02', color: '2026-10-03' } };
+  const now = new Date(2026, 9, 27);
+  const cultures = [...new Set(FULL.map((e) => e.culture).filter((c): c is string => Boolean(c)))];
+  const specs: SessionSpec[] = [
+    { kind: 'daily' },
+    { kind: 'review' },
+    { kind: 'mistakes' },
+    { kind: 'exam' },
+    { kind: 'culture' },
+    ...cultures.map((cultureId) => ({ kind: 'culture' as const, cultureId })),
+    ...ALL_MODULES.map((m) => ({ kind: 'module' as const, moduleId: m.id })),
+    ...(['duel', 'choice', 'multi', 'truefalse', 'hotspot', 'order', 'match', 'slider', 'grid'] as PracticeType[]).map((type) => ({ kind: 'type' as const, type })),
+  ];
+
+  it('draws the same exercises as the full content', () => {
+    for (const spec of specs)
+      for (const seed of [1, 2, 3]) {
+        const light = buildSession(spec, EXERCISES, state, seeded(seed), now).map((e) => e.id);
+        const full = buildSession(spec, FULL, state, seeded(seed), now).map((e) => e.id);
+        expect(light, JSON.stringify(spec)).toEqual(full);
+      }
+  });
+
+  it('awards the same badges', () => {
+    let s = state;
+    for (const e of FULL) s = recordAttempt(s, e, { verdict: 'correct', score: 1 }, now).state;
+    const ids = ALL_MODULES.map((m) => m.id);
+    expect(newBadges(s, { exercises: EXERCISES, moduleIds: ids }).map((b) => b.id)).toEqual(newBadges(s, { exercises: FULL, moduleIds: ids }).map((b) => b.id));
+  });
+});
+
+describe('lessons on demand', () => {
+  it('loads a lesson in full, its exercises naming it', async () => {
+    const m = await loadModule('typography');
+    expect(m).toEqual(ALL_MODULES.find((x) => x.id === 'typography'));
+  });
+
+  it('refuses a lesson it does not know', async () => {
+    await expect(loadModule('nope')).rejects.toThrow();
+  });
+
+  it('needs the id of a lesson to be its file name', () => {
+    const m = { ...ALL_MODULES[0], id: 'autre' } as ModuleContent;
+    expect(fileId('./modules/craft-floor.ts')).toBe('craft-floor');
+    expect(() => modulesFromFiles({ './modules/craft-floor.ts': { default: m } })).toThrow(/nom du fichier/);
+  });
+});

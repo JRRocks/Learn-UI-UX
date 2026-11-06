@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { expandIcons } from '../components/Mock';
-import { MODULES } from '../content';
+import { ALL_MODULES } from '../content/all';
 import { ANTIPATTERNS } from '../content/antipatterns';
 import { LAB_LOCALES } from '../content/cultures/lab';
 import { CULTURE_PAIRS } from '../content/cultures/pairs';
@@ -84,7 +84,7 @@ describe('markdown subset', () => {
 describe('content Markdown', () => {
   it('leaves no stray asterisk or backtick in the rendered text', () => {
     const all = [
-      ...texts(MODULES, 'modules'),
+      ...texts(ALL_MODULES, 'modules'),
       ...texts(CULTURES, 'cultures'),
       ...texts(CULTURE_PAIRS, 'pairs'),
       ...texts(ANTIPATTERNS, 'catalog'),

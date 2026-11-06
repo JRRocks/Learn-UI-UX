@@ -3,18 +3,19 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEve
 import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
 import { SETTLE_MS, digitOf, eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
-import { MODULE_BY_ID, RULE_CARDS, type RuleCard } from '../content';
+import { MODULE_BY_ID, RULE_CARDS, useRuleTexts, type RuleRef } from '../content';
 import { dayKey } from '../engine/dates';
 import { recordCard } from '../engine/progress';
 import { shuffle } from '../engine/random';
 import { CARD_GRADES, type CardGrade } from '../engine/srs';
 import { plural } from '../lib/french';
 import { MdInline } from '../lib/markdown';
+import { LoadFailed, Loading } from './LoadFailed';
 
 const SIZE = 20;
 
 /** Due cards first, then new ones (from the chosen module, or across all lessons). */
-function pickCards(moduleId: string | null): RuleCard[] {
+function pickCards(moduleId: string | null): RuleRef[] {
   const s = store.get();
   const today = dayKey();
   const pool = moduleId ? RULE_CARDS.filter((c) => c.moduleId === moduleId) : RULE_CARDS;
@@ -35,6 +36,9 @@ export function Cards({ query }: { query: URLSearchParams }) {
   const shownAt = useRef(0);
   const card = cards[index];
   const module = moduleId ? MODULE_BY_ID.get(moduleId) : undefined;
+  // The cards are picked from the light index; their text comes with the lesson, or in one small chunk.
+  const { value: texts, failed } = useRuleTexts(module ? module.id : null);
+  const rule = card && texts?.get(card.key);
 
   const flip = () => {
     shownAt.current = performance.now();
@@ -42,7 +46,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
   };
 
   const gradeCard = (g: CardGrade) => {
-    if (!card || !shown) return;
+    if (!card || !rule || !shown) return;
     store.update((s) => recordCard(s, card.key, g));
     setGraded((x) => [...x, g]);
     setShown(false);
@@ -59,7 +63,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!card || e.defaultPrevented || hasModifier(e) || e.repeat) return;
+      if (!rule || e.defaultPrevented || hasModifier(e) || e.repeat) return;
       if (!shown && (e.key === ' ' || e.key === 'Enter')) {
         // Buttons and links keep their own Enter and Space: « Arrêter la révision » stops (logic-9).
         if (handlesOwnKeys(eventOrigin(e))) return;
@@ -154,48 +158,56 @@ export function Cards({ query }: { query: URLSearchParams }) {
           passé.
         </p>
       </header>
-      <div className="card-stack" ref={stackRef}>
-        <div className="flashcard">
-          {/* Each new question is announced; the answer gets the focus when the card turns. */}
-          <p className="flashcard-q" aria-live="polite">
-            <MdInline text={card.rule.front} />
-          </p>
-          {shown && (
-            <p className="flashcard-a" ref={answerRef} tabIndex={-1}>
-              <MdInline text={card.rule.back} />
-            </p>
-          )}
-          <p className="flashcard-from">
-            Leçon{'\u00A0'}: <MdInline text={from?.title ?? ''} />
-          </p>
-        </div>
-        {!shown ? (
-          <div className="btn-row">
-            <button type="button" className="btn btn-primary" onClick={flip}>
-              Retourner la fiche
-            </button>
-            <span className="shortcut-hint">Espace ou Entrée</span>
-          </div>
+      {!rule ? (
+        failed ? (
+          <LoadFailed what="les fiches" />
         ) : (
-          <>
-            <div className="grades" role="group" aria-label="Comment ça s’est passé ?">
-              {CARD_GRADES.map((g, i) => (
-                <button
-                  key={g.grade}
-                  type="button"
-                  className="btn btn-secondary"
-                  aria-keyshortcuts={String(i + 1)}
-                  onClick={(e) => onGradeClick(e, g.grade)}
-                >
-                  {g.label}
-                  <small>{g.hint}</small>
-                </button>
-              ))}
+          <Loading what="des fiches" />
+        )
+      ) : (
+        <div className="card-stack" ref={stackRef}>
+          <div className="flashcard">
+            {/* Each new question is announced; the answer gets the focus when the card turns. */}
+            <p className="flashcard-q" aria-live="polite">
+              <MdInline text={rule.front} />
+            </p>
+            {shown && (
+              <p className="flashcard-a" ref={answerRef} tabIndex={-1}>
+                <MdInline text={rule.back} />
+              </p>
+            )}
+            <p className="flashcard-from">
+              Leçon{'\u00A0'}: <MdInline text={from?.title ?? ''} />
+            </p>
+          </div>
+          {!shown ? (
+            <div className="btn-row">
+              <button type="button" className="btn btn-primary" onClick={flip}>
+                Retourner la fiche
+              </button>
+              <span className="shortcut-hint">Espace ou Entrée</span>
             </div>
-            <span className="shortcut-hint">Touches 1 à 4</span>
-          </>
-        )}
-      </div>
+          ) : (
+            <>
+              <div className="grades" role="group" aria-label="Comment ça s’est passé ?">
+                {CARD_GRADES.map((g, i) => (
+                  <button
+                    key={g.grade}
+                    type="button"
+                    className="btn btn-secondary"
+                    aria-keyshortcuts={String(i + 1)}
+                    onClick={(e) => onGradeClick(e, g.grade)}
+                  >
+                    {g.label}
+                    <small>{g.hint}</small>
+                  </button>
+                ))}
+              </div>
+              <span className="shortcut-hint">Touches 1 à 4</span>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

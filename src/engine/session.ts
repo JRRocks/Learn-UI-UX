@@ -1,10 +1,27 @@
 import { dayKey } from './dates';
 import type { ProgressState } from './progress';
 import { shuffle, type Rng } from './random';
-import type { Exercise, ExerciseType } from './types';
+import type { Difficulty, Exercise, ExerciseType } from './types';
 
 /** "duel" = a choice between visuals; it is a mode, not a separate exercise type. */
 export type PracticeType = ExerciseType | 'duel';
+
+/**
+ * What building a session reads of an exercise. The light index of the content (src/content/index.ts)
+ * lists every exercise this way, so a session is drawn before any lesson is downloaded.
+ */
+export interface ExerciseSummary {
+  id: string;
+  module?: string;
+  type: ExerciseType;
+  difficulty: Difficulty;
+  culture?: string;
+  /** A choice between visuals (see `isDuel`). */
+  duel: boolean;
+}
+
+/** A full exercise, or its summary in the light index. */
+export type SessionItem = Exercise | ExerciseSummary;
 
 export type SessionSpec =
   | { kind: 'daily' }
@@ -25,26 +42,27 @@ export const SESSION_SIZE: Record<SessionSpec['kind'], number> = {
   culture: 12,
 };
 
-export function isDuel(ex: Exercise): boolean {
+export function isDuel(ex: SessionItem): boolean {
+  if ('duel' in ex) return ex.duel;
   return ex.type === 'choice' && ex.options.length >= 2 && ex.options.every((o) => o.visual);
 }
 
 /** "choice" here means the non-visual or 3+ option choices; visual 2-way choices are duels. */
-export function matchesType(ex: Exercise, type: PracticeType): boolean {
+export function matchesType(ex: SessionItem, type: PracticeType): boolean {
   if (type === 'duel') return isDuel(ex);
   if (type === 'choice') return ex.type === 'choice' && !isDuel(ex);
   return ex.type === type;
 }
 
 /** 0 = wrong and due, 1 = due, 2 = never seen, 3 = scheduled later. */
-function priority(ex: Exercise, state: ProgressState, today: string): number {
+function priority(ex: SessionItem, state: ProgressState, today: string): number {
   const s = state.items[ex.id];
   if (!s) return 2;
   if (s.due <= today) return s.last === 'wrong' ? 0 : 1;
   return 3;
 }
 
-function byPriority(pool: Exercise[], state: ProgressState, today: string, rng: Rng): Exercise[] {
+function byPriority<E extends SessionItem>(pool: E[], state: ProgressState, today: string, rng: Rng): E[] {
   const shuffled = shuffle(pool, rng);
   return shuffled
     .map((ex, i) => ({ ex, i, p: priority(ex, state, today), box: state.items[ex.id]?.box ?? 0 }))
@@ -53,14 +71,14 @@ function byPriority(pool: Exercise[], state: ProgressState, today: string, rng: 
 }
 
 /** Take items round-robin across modules so a session is not one topic in a row. */
-function spreadAcrossModules(items: Exercise[], size: number): Exercise[] {
-  const groups = new Map<string, Exercise[]>();
+function spreadAcrossModules<E extends SessionItem>(items: E[], size: number): E[] {
+  const groups = new Map<string, E[]>();
   for (const ex of items) {
     const key = ex.module ?? '';
     groups.set(key, [...(groups.get(key) ?? []), ex]);
   }
   const queues = [...groups.values()];
-  const out: Exercise[] = [];
+  const out: E[] = [];
   while (out.length < size && queues.some((q) => q.length)) {
     for (const q of queues) {
       const next = q.shift();
@@ -72,9 +90,9 @@ function spreadAcrossModules(items: Exercise[], size: number): Exercise[] {
 }
 
 /** Avoid two exercises of the same type back to back when the mix allows it. */
-export function interleaveTypes(items: Exercise[]): Exercise[] {
+export function interleaveTypes<E extends SessionItem>(items: E[]): E[] {
   const rest = items.slice();
-  const out: Exercise[] = [];
+  const out: E[] = [];
   while (rest.length) {
     const prev = out[out.length - 1];
     const idx = prev ? rest.findIndex((e) => e.type !== prev.type) : 0;
@@ -83,13 +101,14 @@ export function interleaveTypes(items: Exercise[]): Exercise[] {
   return out;
 }
 
-export function buildSession(
+/** The exercises of a new session, drawn from `all` (full exercises or their summaries, same result). */
+export function buildSession<E extends SessionItem>(
   spec: SessionSpec,
-  all: Exercise[],
+  all: E[],
   state: ProgressState,
   rng: Rng = Math.random,
   now: Date = new Date(),
-): Exercise[] {
+): E[] {
   const today = dayKey(now);
   const size = SESSION_SIZE[spec.kind];
 

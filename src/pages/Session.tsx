@@ -4,13 +4,14 @@ import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
 import { ExerciseView, TYPE_LABEL } from '../components/exercise/ExerciseView';
 import type { Draft } from '../components/exercise/players';
-import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID } from '../content';
+import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID, preloadExercises, useExercises, type ExerciseEntry } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import type { GradeResult } from '../engine/grade';
 import { addSession, recordAttempt } from '../engine/progress';
-import { SESSION_SIZE, buildSession, isDuel, type PracticeType, type SessionSpec } from '../engine/session';
-import type { Exercise, TrueFalseExercise } from '../engine/types';
+import { SESSION_SIZE, buildSession, isDuel, type PracticeType, type SessionItem, type SessionSpec } from '../engine/session';
+import type { Exercise } from '../engine/types';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import { LoadFailed, Loading } from './LoadFailed';
 import {
   answeredCurrent,
   isUnfinished,
@@ -144,19 +145,20 @@ export function unfinishedSession(): { raw: string; label: string; index: number
 
 /* ---------------------------------------------------------------- page */
 
-function typeOf(ex: Exercise): string {
+function typeOf(ex: SessionItem): string {
   return isDuel(ex) ? TYPE_LABEL.duel : TYPE_LABEL[ex.type];
 }
 
-/** The exercises of a new run. « Vrai ou faux » draws true and false statements evenly (tf-balance-1). */
-function newRun(spec: SessionSpec): Exercise[] {
+/**
+ * The exercises of a new run, drawn from the light index (no lesson needs to be downloaded for it).
+ * « Vrai ou faux » draws true and false statements evenly (tf-balance-1).
+ */
+function newRun(spec: SessionSpec): ExerciseEntry[] {
   const state = store.get();
   if (spec.kind !== 'type' || spec.type !== 'truefalse') return buildSession(spec, EXERCISES, state);
   // Each side in the engine's order (due first, then new ones).
   const side = (answer: boolean) =>
-    buildSession(spec, EXERCISES.filter((e) => e.type === 'truefalse' && e.answer === answer), state).filter(
-      (e): e is TrueFalseExercise => e.type === 'truefalse',
-    );
+    buildSession(spec, EXERCISES.filter((e) => e.type === 'truefalse' && e.answer === answer), state).map((e) => ({ ...e, answer }));
   return evenTrueFalse(side(true), side(false), SESSION_SIZE.type);
 }
 
@@ -192,11 +194,22 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
     if (state.ids.length && query.get('run') !== runId) window.location.replace(`#${withRun(raw, runId)}`);
   }, [query, raw, runId, state.ids.length]);
 
-  const items = state.ids.map((id) => EXERCISE_BY_ID.get(id)!).filter(Boolean);
+  const items = state.ids.map((id) => EXERCISE_BY_ID.get(id)).filter((e): e is ExerciseEntry => Boolean(e));
   const done = state.index >= items.length;
-  const current = items[state.index];
+  const entry = items[state.index];
+  // What the screen shows: the exercise at hand (its lesson is downloaded first), or every exercise
+  // of the run on the summary.
+  const shown = useMemo(() => (done ? state.ids : entry ? [entry.id] : []), [done, entry, state.ids]);
+  const { value: loaded, failed } = useExercises(shown);
+  const current = entry && loaded?.get(entry.id);
   const xpTotal = state.played.reduce((s, p) => s + p.xp, 0);
   const label = specLabel(spec);
+
+  // While the first exercise is answered, the lessons of the next ones download.
+  const started = Boolean(current);
+  useEffect(() => {
+    if (started) preloadExercises(state.ids);
+  }, [started, state.ids]);
 
   // Record the finished session once: the flag is saved with the run, so a Back to the summary,
   // a reload or a remount never adds it again.
@@ -230,11 +243,11 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
 
   if (items.length === 0) return <EmptySession spec={spec} />;
 
-  if (done) return <Summary label={label} items={items} played={state.played} exam={exam} spec={spec} />;
+  if (done) return <Summary label={label} exercises={loaded} failed={failed} played={state.played} exam={exam} spec={spec} />;
 
   const onAnswered = (r: GradeResult, draft: Draft) => {
     // One attempt per exercise and run: XP and spaced repetition never count an answer twice.
-    if (answeredCurrent(state) || answering.current === state.index) return undefined;
+    if (!current || answeredCurrent(state) || answering.current === state.index) return undefined;
     answering.current = state.index;
     let xp = 0;
     store.update((s) => {
@@ -248,7 +261,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
   };
 
   const next = () => setState((st) => (st.index < st.ids.length && answeredCurrent(st) ? { ...st, index: st.index + 1 } : st));
-  const module = current.module ? MODULE_BY_ID.get(current.module) : undefined;
+  const module = MODULE_BY_ID.get(entry.module);
   const last = state.index === items.length - 1;
   const answered = answeredCurrent(state) ? state.played[state.index] : undefined;
 
@@ -261,7 +274,7 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         <div className="player-progress">
           <div className="player-progress-label">
             <span>
-              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(current)].filter(Boolean).join(' · ')} />
+              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(entry)].filter(Boolean).join(' · ')} />
             </span>
             <span className="num">
               {state.index + 1} / {items.length}
@@ -283,16 +296,22 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
           {exam ? 'Examen' : `+${xpTotal} XP`}
         </span>
       </div>
-      <ExerciseView
-        key={`${current.id}-${state.index}`}
-        ex={current}
-        mode={exam ? 'exam' : 'practice'}
-        seed={seedOf(runId, state.index)}
-        answered={answered?.draft ? { result: { verdict: answered.verdict, score: answered.score }, draft: answered.draft, xp: answered.xp } : undefined}
-        onAnswered={onAnswered}
-        onNext={next}
-        nextLabel={last ? 'Voir le bilan' : 'Épreuve suivante'}
-      />
+      {current ? (
+        <ExerciseView
+          key={`${current.id}-${state.index}`}
+          ex={current}
+          mode={exam ? 'exam' : 'practice'}
+          seed={seedOf(runId, state.index)}
+          answered={answered?.draft ? { result: { verdict: answered.verdict, score: answered.score }, draft: answered.draft, xp: answered.xp } : undefined}
+          onAnswered={onAnswered}
+          onNext={next}
+          nextLabel={last ? 'Voir le bilan' : 'Épreuve suivante'}
+        />
+      ) : failed ? (
+        <LoadFailed what="cette épreuve" />
+      ) : (
+        <Loading what="de l’épreuve" />
+      )}
     </div>
   );
 }
@@ -349,7 +368,17 @@ function nextSession(spec: SessionSpec, label: string): { to: string; text: stri
   }
 }
 
-function Summary({ label, items, played, exam, spec }: { label: string; items: Exercise[]; played: Played[]; exam: boolean; spec: SessionSpec }) {
+interface SummaryProps {
+  label: string;
+  /** The exercises of the run, once their lessons are downloaded (the score needs none of them). */
+  exercises: Map<string, Exercise> | undefined;
+  failed: boolean;
+  played: Played[];
+  exam: boolean;
+  spec: SessionSpec;
+}
+
+function Summary({ label, exercises, failed, played, exam, spec }: SummaryProps) {
   const t = tally(played);
   const parts = scoreParts(t);
   const message = summaryMessage(t);
@@ -381,9 +410,10 @@ function Summary({ label, items, played, exam, spec }: { label: string; items: E
 
       <section className="section" aria-labelledby="recap-title">
         <h2 id="recap-title">{exam ? 'Corrections' : 'Revoir les épreuves'}</h2>
+        {!exercises && (failed ? <LoadFailed what="les corrections" /> : <Loading what="des corrections" />)}
         <ul className="recap">
           {played.map((p, i) => {
-            const ex = items.find((e) => e.id === p.id);
+            const ex = exercises?.get(p.id);
             if (!ex) return null;
             const Icon = ICON[p.verdict];
             return (

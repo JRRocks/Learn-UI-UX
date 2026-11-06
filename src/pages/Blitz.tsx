@@ -4,13 +4,14 @@ import { Link, navigate } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { keepInView } from '../components/exercise/ExerciseView';
 import { eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
-import { EXERCISES, MODULE_BY_ID } from '../content';
+import { EXERCISES, MODULE_BY_ID, useStatements } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
 import type { TrueFalseExercise } from '../engine/types';
 import { count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { pauseClock, remaining, resumeClock, secondsLeft, startClock, type Clock } from './blitzClock';
+import { LoadFailed, Loading } from './LoadFailed';
 import { alternateTrueFalse } from './trueFalseMix';
 
 const DURATION = 90;
@@ -25,8 +26,12 @@ interface Answered {
 /** Timed true/false sprint: the clock stops while the correction is on screen. */
 export function Blitz() {
   const progress = useProgress();
-  // « Vrai » and « faux » come as often as each other while both remain (tf-balance-1).
-  const pool = useMemo(() => alternateTrueFalse(EXERCISES.filter((e): e is TrueFalseExercise => e.type === 'truefalse')), []);
+  // « Vrai » and « faux » come as often as each other while both remain (tf-balance-1). The order is
+  // drawn from the light index; the statements themselves come in one small chunk.
+  const pool = useMemo(() => alternateTrueFalse(EXERCISES.filter((e) => e.type === 'truefalse').map((e) => ({ id: e.id, answer: Boolean(e.answer) }))), []);
+  const { value: statements, failed } = useStatements();
+  /** « Lancer le chrono » was used before the statements arrived: the challenge starts with them. */
+  const [waiting, setWaiting] = useState(false);
   const [clock, setClock] = useState<Clock | null>(null);
   const [now, setNow] = useState(() => performance.now());
   const [index, setIndex] = useState(0);
@@ -40,8 +45,8 @@ export function Blitz() {
   const best = progress.records[RECORD_ID] ?? 0;
   const started = clock !== null;
   const left = clock ? secondsLeft(clock, now) : DURATION;
-  const over = started && (left <= 0 || index >= pool.length);
-  const current = pool[index];
+  const current = pool[index] && statements?.get(pool[index].id);
+  const over = started && (left <= 0 || !current);
   const score = answered.filter((a) => a.ok).length;
 
   // Redraw the clock a few times a second while a statement waits for an answer.
@@ -52,11 +57,24 @@ export function Blitz() {
   }, [clock, over]);
 
   const start = () => {
+    if (!statements) {
+      setWaiting(true);
+      return;
+    }
     const t = performance.now();
     startBest.current = best;
     setNow(t);
     setClock(startClock(DURATION * 1000, t));
   };
+
+  useEffect(() => {
+    if (!waiting || !statements) return;
+    setWaiting(false);
+    const t = performance.now();
+    startBest.current = best;
+    setNow(t);
+    setClock(startClock(DURATION * 1000, t));
+  }, [waiting, statements, best]);
 
   const answer = (value: boolean) => {
     const t = performance.now();
@@ -164,18 +182,29 @@ export function Blitz() {
             disponibles. Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
           </p>
         </header>
-        <div className="btn-row">
-          <button type="button" className="btn btn-primary" onClick={start}>
-            <Timer aria-hidden="true" /> Lancer le chrono
-          </button>
-          <Link to="/entrainement" className="btn btn-ghost">
-            Retour
-          </Link>
-        </div>
+        {failed ? (
+          <LoadFailed what="les affirmations du défi">
+            <Link to="/entrainement" className="btn btn-ghost">
+              Retour
+            </Link>
+          </LoadFailed>
+        ) : (
+          <>
+            <div className="btn-row">
+              <button type="button" className="btn btn-primary" onClick={start}>
+                <Timer aria-hidden="true" /> Lancer le chrono
+              </button>
+              <Link to="/entrainement" className="btn btn-ghost">
+                Retour
+              </Link>
+            </div>
+            {waiting && <Loading what="des affirmations" />}
+          </>
+        )}
       </div>
     );
 
-  if (over) {
+  if (over || !current) {
     const record = startBest.current;
     return (
       <div className="page page--narrow">

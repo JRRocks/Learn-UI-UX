@@ -4,15 +4,16 @@ import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
 import { Mock } from '../components/Mock';
-import { MODULES, MODULE_BY_ID, exercisesOf } from '../content';
+import { MODULES, MODULE_BY_ID, exercisesOf, useModule } from '../content';
 import { resolveSource } from '../content/sources';
 import { dayKey } from '../engine/dates';
 import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
 import { SESSION_SIZE } from '../engine/session';
-import type { LessonExample } from '../engine/types';
+import type { LessonExample, ModuleContent } from '../engine/types';
 import { count, longDay } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { Commands } from './Learn';
+import { LoadFailed, Loading } from './LoadFailed';
 import { NotFound } from './NotFound';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -70,9 +71,75 @@ function goTo(e: MouseEvent, headingId: string) {
   h.focus({ preventScroll: true });
 }
 
+/** Its sections, then its key rules: the parts the contents list jumps to. */
+const partsOf = (m: ModuleContent) => [...m.sections.map((s) => ({ id: s.id, title: s.title })), { id: 'regles', title: 'Règles d’or' }];
+
+/** The text of the lesson, once its chunk has arrived. */
+function Article({ m }: { m: ModuleContent }) {
+  return (
+    <>
+      {m.sections.map((s) => (
+        <section key={s.id} id={s.id} className="lesson-section" aria-labelledby={`h-${s.id}`}>
+          <h2 id={`h-${s.id}`} tabIndex={-1}>
+            {frenchSpacing(s.title)}
+          </h2>
+          <Md text={s.body} className="prose" />
+          {s.examples?.length ? (
+            <div className="examples">
+              {s.examples.map((e, i) => (
+                <Example key={i} e={e} />
+              ))}
+            </div>
+          ) : null}
+        </section>
+      ))}
+
+      <section id="regles" className="lesson-section" aria-labelledby="h-regles">
+        <h2 id="h-regles" tabIndex={-1}>
+          Règles d’or
+        </h2>
+        <ul className="rules-list">
+          {m.rules.map((r) => (
+            <li key={r.id}>
+              <span className="q">
+                <MdInline text={r.front} />
+              </span>
+              <span className="a">
+                <MdInline text={r.back} />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="lesson-section" aria-labelledby="h-sources">
+        <h2 id="h-sources">Sources</h2>
+        <ul className="sources">
+          {m.sources.map((s, i) => {
+            const r = resolveSource(s);
+            return (
+              <li key={i}>
+                {r.url ? (
+                  <a href={r.url} target="_blank" rel="noopener noreferrer">
+                    {frenchSpacing(r.label)}
+                  </a>
+                ) : (
+                  frenchSpacing(r.label)
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </>
+  );
+}
+
 export function Lesson({ id }: { id: string }) {
   const p = useProgress();
   const m = MODULE_BY_ID.get(id);
+  // The title, summary, counts and buttons come from the light index at once; the text follows.
+  const { value: full, failed } = useModule(id);
   usePageTitle(m ? pageTitle(m.title) : null);
   if (!m) return <NotFound />;
 
@@ -85,7 +152,7 @@ export function Lesson({ id }: { id: string }) {
   const next = MODULES[idx + 1];
   const today = dayKey();
   // What « Réviser » will really show: the lesson's cards due today, or never reviewed yet.
-  const cardKeys = m.rules.map((r) => `${m.id}/${r.id}`);
+  const cardKeys = m.rules.map((r) => `${m.id}/${r}`);
   const cardsToReview = cardKeys.filter((k) => !p.cards[k] || p.cards[k].due <= today).length;
   const nextCard = cardKeys.map((k) => p.cards[k]?.due).filter((d): d is string => Boolean(d)).sort()[0];
   const sessionSize = Math.min(exercises.length, SESSION_SIZE.module);
@@ -99,14 +166,14 @@ export function Lesson({ id }: { id: string }) {
     store.update((s) => {
       const cards = { ...s.cards };
       for (const r of m.rules) {
-        const key = `${m.id}/${r.id}`;
+        const key = `${m.id}/${r}`;
         if (!cards[key]) cards[key] = { ease: 2.5, interval: 0, reps: 0, due: today };
       }
       return { ...s, cards };
     });
   };
 
-  const parts = [...m.sections.map((s) => ({ id: s.id, title: s.title })), { id: 'regles', title: 'Règles d’or' }];
+  const parts = full ? partsOf(full) : null;
 
   return (
     <div className="page">
@@ -141,146 +208,101 @@ export function Lesson({ id }: { id: string }) {
       </header>
 
       {/* Below 1100 px the aside would only come after the whole article: its contents open the lesson, folded. */}
-      <nav className="lesson-jump" aria-label="Dans cette leçon">
-        <details>
-          <summary>
-            <span>
-              <strong>Dans cette leçon</strong>{' '}
-              <small>
-                {parts.length} parties · maîtrise&nbsp;: {masteryLabel(v, touched).toLowerCase()}
-              </small>
-            </span>
-            <ChevronDown aria-hidden="true" />
-          </summary>
-          <ol>
-            {parts.map((s) => (
-              <li key={s.id}>
-                <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, `h-${s.id}`)}>
-                  {frenchSpacing(s.title)}
-                </a>
-              </li>
-            ))}
-          </ol>
-          <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-            Réviser les {m.rules.length} fiches
-          </Link>
-        </details>
-      </nav>
-
-      <div className="lesson">
-        <article className="lesson-article">
-          {m.sections.map((s) => (
-            <section key={s.id} id={s.id} className="lesson-section" aria-labelledby={`h-${s.id}`}>
-              <h2 id={`h-${s.id}`} tabIndex={-1}>
-                {frenchSpacing(s.title)}
-              </h2>
-              <Md text={s.body} className="prose" />
-              {s.examples?.length ? (
-                <div className="examples">
-                  {s.examples.map((e, i) => (
-                    <Example key={i} e={e} />
-                  ))}
-                </div>
-              ) : null}
-            </section>
-          ))}
-
-          <section id="regles" className="lesson-section" aria-labelledby="h-regles">
-            <h2 id="h-regles" tabIndex={-1}>
-              Règles d’or
-            </h2>
-            <ul className="rules-list">
-              {m.rules.map((r) => (
-                <li key={r.id}>
-                  <span className="q">
-                    <MdInline text={r.front} />
-                  </span>
-                  <span className="a">
-                    <MdInline text={r.back} />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="lesson-section" aria-labelledby="h-sources">
-            <h2 id="h-sources">Sources</h2>
-            <ul className="sources">
-              {m.sources.map((s, i) => {
-                const r = resolveSource(s);
-                return (
-                  <li key={i}>
-                    {r.url ? (
-                      <a href={r.url} target="_blank" rel="noopener noreferrer">
-                        {frenchSpacing(r.label)}
-                      </a>
-                    ) : (
-                      frenchSpacing(r.label)
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-
-          <div className="btn-row">
-            <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
-              S’entraîner sur cette leçon
-            </Link>
-            {!read && (
-              <button type="button" className="btn btn-secondary" onClick={markRead}>
-                Marquer comme lue
-              </button>
-            )}
-            {next && (
-              <Link to={`/apprendre/${next.id}`} className="btn btn-ghost">
-                {frenchSpacing(`Leçon suivante : ${next.title}`)}
-              </Link>
-            )}
-          </div>
-        </article>
-
-        <aside className="lesson-aside" aria-label="Dans cette leçon">
-          <nav className="lesson-toc" aria-labelledby="toc-title">
-            <h2 id="toc-title" className="small" style={{ fontSize: 'var(--t-small)' }}>
-              Dans cette leçon
-            </h2>
+      {parts && (
+        <nav className="lesson-jump" aria-label="Dans cette leçon">
+          <details>
+            <summary>
+              <span>
+                <strong>Dans cette leçon</strong>{' '}
+                <small>
+                  {parts.length} parties · maîtrise&nbsp;: {masteryLabel(v, touched).toLowerCase()}
+                </small>
+              </span>
+              <ChevronDown aria-hidden="true" />
+            </summary>
             <ol>
-              {m.sections.map((s) => (
+              {parts.map((s) => (
                 <li key={s.id}>
                   <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, `h-${s.id}`)}>
                     {frenchSpacing(s.title)}
                   </a>
                 </li>
               ))}
-              <li>
-                <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, 'h-regles')}>
-                  Règles d’or
-                </a>
-              </li>
             </ol>
-          </nav>
-          <div className="section">
-            <div className="field">
-              <span className="field-label">
-                Maîtrise{'\u00A0'}: {masteryLabel(v, touched)}
-              </span>
-              <span className="meter" style={pct(v)} aria-hidden="true">
-                <span />
-              </span>
-            </div>
-            <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
-              S’entraîner ({count(sessionSize, 'épreuve', 'épreuves')})
+            <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
+              Réviser les {m.rules.length} fiches
             </Link>
-            {cardsToReview > 0 ? (
-              <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-                Réviser {count(cardsToReview, 'fiche', 'fiches')}
+          </details>
+        </nav>
+      )}
+
+      <div className="lesson">
+        <article className="lesson-article">
+          {full ? (
+            <>
+              <Article m={full} />
+              <div className="btn-row">
+                <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
+                  S’entraîner sur cette leçon
+                </Link>
+                {!read && (
+                  <button type="button" className="btn btn-secondary" onClick={markRead}>
+                    Marquer comme lue
+                  </button>
+                )}
+                {next && (
+                  <Link to={`/apprendre/${next.id}`} className="btn btn-ghost">
+                    {frenchSpacing(`Leçon suivante : ${next.title}`)}
+                  </Link>
+                )}
+              </div>
+            </>
+          ) : failed ? (
+            <LoadFailed what="cette leçon" />
+          ) : (
+            <Loading what="de la leçon" />
+          )}
+        </article>
+
+        {/* With the text, in one go: nothing in the column moves when its contents list arrives. */}
+        {parts && (
+          <aside className="lesson-aside" aria-label="Dans cette leçon">
+            <nav className="lesson-toc" aria-labelledby="toc-title">
+              <h2 id="toc-title" className="small" style={{ fontSize: 'var(--t-small)' }}>
+                Dans cette leçon
+              </h2>
+              <ol>
+                {parts.map((s) => (
+                  <li key={s.id}>
+                    <a href={`#/apprendre/${m.id}`} onClick={(e) => goTo(e, `h-${s.id}`)}>
+                      {frenchSpacing(s.title)}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <div className="section">
+              <div className="field">
+                <span className="field-label">
+                  Maîtrise{'\u00A0'}: {masteryLabel(v, touched)}
+                </span>
+                <span className="meter" style={pct(v)} aria-hidden="true">
+                  <span />
+                </span>
+              </div>
+              <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
+                S’entraîner ({count(sessionSize, 'épreuve', 'épreuves')})
               </Link>
-            ) : nextCard ? (
-              <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(nextCard)}.`)}</p>
-            ) : null}
-          </div>
-        </aside>
+              {cardsToReview > 0 ? (
+                <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
+                  Réviser {count(cardsToReview, 'fiche', 'fiches')}
+                </Link>
+              ) : nextCard ? (
+                <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(nextCard)}.`)}</p>
+              ) : null}
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );
