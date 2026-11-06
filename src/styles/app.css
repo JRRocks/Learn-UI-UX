@@ -473,10 +473,13 @@
   border-color: var(--ink-3);
 }
 
+/* A ghost button reads as a link: when its label wraps, its lines start on the left. */
 .btn-ghost {
+  justify-content: flex-start;
   background: transparent;
   color: var(--ink-2);
   padding-inline: var(--s3);
+  text-align: start;
 }
 
 .btn-ghost:hover:not(:disabled) {
@@ -2859,6 +2862,17 @@
 
   .mastery-table .meter {
     width: 3.5rem;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .mastery-table th,
+  .mastery-table td {
+    padding-inline-end: var(--s1);
+  }
+
+  .mastery-table .meter {
+    width: 2.5rem;
   }
 }
 

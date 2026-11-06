@@ -132,7 +132,7 @@ export function Lesson({ id }: { id: string }) {
         <details>
           <summary>
             <span>
-              <strong>Dans cette leçon</strong>
+              <strong>Dans cette leçon</strong>{' '}
               <small>
                 {parts.length} parties · maîtrise&nbsp;: {masteryLabel(v, touched).toLowerCase()}
               </small>
