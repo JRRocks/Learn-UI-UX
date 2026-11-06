@@ -583,7 +583,7 @@ C’est la « règle de trois » des développeurs, attribuée à Don Roberts et
       id: 'process-shape-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Une fois le brief confirmé, la commande `shape` enchaîne sur l’écriture du code.',
+      prompt: 'Après l’entretien de découverte et la confirmation du brief, la commande `shape` enchaîne sur l’écriture du code de l’écran.',
       answer: false,
       explanation: `Faux. \`shape\` présente le brief, obtient une confirmation (ou un tour de correction), **puis s’arrête** : il n’écrit jamais de code ni de contrat de direction.
 

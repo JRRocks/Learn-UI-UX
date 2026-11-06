@@ -265,7 +265,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     severity: 'conseil',
     description:
       'Les courbes à rebond ou élastiques font daté et un peu toc. Les objets réels décélèrent en douceur.',
-    fix: 'Utilise une décélération exponentielle (ease-out-quart, -quint ou -expo), par exemple `cubic-bezier(0.16, 1, 0.3, 1)`. Un rebond reste légitime quand le sujet rebondit vraiment, comme une balle.',
+    fix: 'Utilise une décélération (ease-out-quart, -quint ou -expo), par exemple `cubic-bezier(0.16, 1, 0.3, 1)`. Un rebond reste légitime quand le sujet rebondit vraiment, comme une balle.',
     demo: {
       bad: v(
         'Graphique de la progression d’une animation dans le temps : la courbe monte, retombe et rebondit trois fois avant de se stabiliser.',
@@ -277,9 +277,10 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
       ),
       good: v(
         'Même graphique avec une courbe qui monte vite puis ralentit doucement jusqu’à l’arrivée, sans dépasser.',
-        `<div class="ez"><p class="ez-t">Sortie exponentielle (ease-out-expo)</p><svg viewBox="0 0 270 120" role="presentation"><path d="M24 104 H258 M24 104 V14" stroke="#c3c8d3" fill="none"/><path d="M24 24 H258" stroke="#e3e6ec" stroke-dasharray="4 4" fill="none"/><path d="M24.0 104.0L29.8 91.3L35.6 80.6L41.4 71.6L47.2 64.0L53.0 57.6L58.8 52.3L64.6 47.8L70.4 44.0L76.2 40.8L82.0 38.1L87.8 35.9L93.6 34.0L99.4 32.4L105.2 31.1L111.0 29.9L116.8 29.0L122.6 28.2L128.4 27.5L134.2 27.0L140.0 26.5L145.8 26.1L151.6 25.8L157.4 25.5L163.2 25.3L169.0 25.1L174.8 24.9L180.6 24.7L186.4 24.6L192.2 24.5L198.0 24.4L203.8 24.4L209.6 24.3L215.4 24.3L221.2 24.2L227.0 24.2L232.8 24.2L238.6 24.1L244.4 24.1L250.2 24.1L256.0 24.0" stroke="#1d6b3c" stroke-width="2.5" fill="none"/></svg><p class="ez-l"><span>temps</span><span>arrivée</span></p></div>`,
+        `<div class="ez"><p class="ez-t">Décélération exponentielle <span>(ease-out-expo)</span></p><svg viewBox="0 0 270 120" role="presentation"><path d="M24 104 H258 M24 104 V14" stroke="#c3c8d3" fill="none"/><path d="M24 24 H258" stroke="#e3e6ec" stroke-dasharray="4 4" fill="none"/><path d="M24.0 104.0L29.8 91.3L35.6 80.6L41.4 71.6L47.2 64.0L53.0 57.6L58.8 52.3L64.6 47.8L70.4 44.0L76.2 40.8L82.0 38.1L87.8 35.9L93.6 34.0L99.4 32.4L105.2 31.1L111.0 29.9L116.8 29.0L122.6 28.2L128.4 27.5L134.2 27.0L140.0 26.5L145.8 26.1L151.6 25.8L157.4 25.5L163.2 25.3L169.0 25.1L174.8 24.9L180.6 24.7L186.4 24.6L192.2 24.5L198.0 24.4L203.8 24.4L209.6 24.3L215.4 24.3L221.2 24.2L227.0 24.2L232.8 24.2L238.6 24.1L244.4 24.1L250.2 24.1L256.0 24.0" stroke="#1d6b3c" stroke-width="2.5" fill="none"/></svg><p class="ez-l"><span>temps</span><span>arrivée</span></p></div>`,
         `.ez { padding: 14px 16px; }
 .ez-t { font-size: 13px; font-weight: 650; }
+.ez-t span { white-space: nowrap; }
 .ez svg { width: 100%; height: auto; }
 .ez-l { display: flex; justify-content: space-between; font-size: 11px; color: #5a6172; padding: 0 6px; }`,
       ),

@@ -201,7 +201,7 @@ Pour chaque loi, retiens trois choses : **ce qu’elle prédit**, **son applicat
       body: `### Loi de Fitts (1954)
 Le temps pour atteindre une cible croît avec sa **distance** et diminue avec sa **taille** — plus exactement, avec le logarithme du rapport entre les deux. Aller vite vers une petite cible produit des erreurs.
 
-- **Application** : l’action principale est large et proche de la main (le pouce sur mobile). Cibles tactiles d’au moins **44 × 44 pt** (Apple) ou **48 × 48 dp** (Material Design) ; le WCAG 2.2 fixe un minimum de 24 × 24 px (niveau AA), sauf exceptions (cible assez espacée de ses voisines, lien dans une phrase, contrôle équivalent ailleurs sur la page…).
+- **Application** : l’action principale est large et proche de la main (le pouce sur mobile). Cibles tactiles d’au moins **44 × 44 pt** (Apple) ou **48 × 48 dp** (Material Design) ; les WCAG 2.2 fixent un minimum de 24 × 24 px (niveau AA), sauf exceptions (cible assez espacée de ses voisines, lien dans une phrase, contrôle équivalent ailleurs sur la page…).
 - **L’espacement compte** : des cibles serrées attirent les erreurs. Éloigne « Supprimer » des actions fréquentes : la distance protège aussi.
 - **Mauvais usage** : tout agrandir. Si chaque bouton est énorme, aucun n’est plus facile qu’un autre et l’écran perd sa hiérarchie.
 
@@ -420,10 +420,10 @@ L’écran recommandé joue sur les deux leviers : une cible pleine largeur de 4
       unit: 'px',
       target: [44, 64],
       ideal: 48,
-      explanation: `La **loi de Fitts** : plus une cible est grande, plus on l’atteint vite et sans erreur. Les plateformes fixent des minimums : **44 × 44 pt** chez Apple, **48 × 48 dp** chez Material Design. Le WCAG 2.2 pose un minimum de 24 × 24 px (niveau AA) — un seuil de conformité, pas une cible de confort.
+      explanation: `La **loi de Fitts** : plus une cible est grande, plus on l’atteint vite et sans erreur. Les plateformes fixent des minimums : **44 × 44 pt** chez Apple, **48 × 48 dp** chez Material Design. Les WCAG 2.2 posent un minimum de 24 × 24 px (niveau AA) — un seuil de conformité, pas une cible de confort.
 
 Pour l’action principale, touchée souvent et au pouce, vise environ 48 px. Au-delà d’une soixantaine de pixels, le bouton mange la place du contenu pour un gain de précision faible.`,
-      takeaway: 'Action principale tactile : environ 48 px de haut (44 pt minimum chez Apple, 48 dp chez Material), jamais sous les 24 px du WCAG.',
+      takeaway: 'Action principale tactile : environ 48 px de haut (44 pt minimum chez Apple, 48 dp chez Material), jamais sous les 24 px des WCAG.',
       sources: [law('fittss-law', 'Loi de Fitts'), 'hig', 'material3', 'wcag:target'],
     },
     {
@@ -730,7 +730,7 @@ Fitts et Pareto sont, eux, appliqués à bon escient.`,
       difficulty: 1,
       prompt: 'En test, si un design plus esthétique est jugé plus facile à utiliser, c’est qu’il l’est réellement.',
       answer: false,
-      explanation: `L’**effet esthétique-utilisabilité** porte sur la **perception**. Dans l’étude de Kurosu et Kashimura (Hitachi, 1995), menée sur 26 variantes d’écran de distributeur de billets, l’attrait esthétique était plus fortement lié à la facilité d’usage *perçue* qu’à la facilité réelle.
+      explanation: `Faux. L’**effet esthétique-utilisabilité** porte sur la **perception**. Dans l’étude de Kurosu et Kashimura (Hitachi, 1995), menée sur 26 variantes d’écran de distributeur de billets, l’attrait esthétique était plus fortement lié à la facilité d’usage *perçue* qu’à la facilité réelle.
 
 Un beau design peut aussi aider pour de vrai : sur un téléphone simulé, la version attrayante a donné des tâches plus rapides (Sonderegger et Sauer, 2010). Mais ce gain se mesure ; il ne se déduit pas des avis.
 

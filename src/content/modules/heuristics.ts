@@ -12,7 +12,7 @@ const HEURISTICS = [
   'Reconnaissance plutôt que rappel',
   'Flexibilité et efficacité',
   'Esthétique et minimalisme',
-  'Aider à reconnaître et corriger les erreurs',
+  'Aider à reconnaître, diagnostiquer et corriger les erreurs',
   'Aide et documentation',
 ];
 
@@ -477,7 +477,7 @@ Le bandeau d’erreur est un vrai défaut, mais d’une autre heuristique. Savoi
         { id: 'h5', left: '5 · Prévention des erreurs', right: '« Supprimer le projet » ne s’active qu’une fois son nom retapé' },
         { id: 'h6', left: '6 · Reconnaissance plutôt que rappel', right: 'Un libellé sous chaque icône de la barre d’onglets' },
         { id: 'h7', left: '7 · Flexibilité et efficacité', right: '`Ctrl+K` ouvre une palette de commandes' },
-        { id: 'h9', left: '9 · Aider à reconnaître et corriger les erreurs', right: '« Ce fichier fait 12 Mo ; la limite est de 10 Mo. Compressez-le ou choisissez-en un autre. »' },
+        { id: 'h9', left: '9 · Aider à reconnaître, diagnostiquer et corriger les erreurs', right: '« Ce fichier fait 12 Mo ; la limite est de 10 Mo. Compressez-le ou choisissez-en un autre. »' },
         { id: 'h10', left: '10 · Aide et documentation', right: 'Un centre d’aide cherchable, organisé par tâche' },
       ],
       explanation: `Chaque pratique répond à une question différente :

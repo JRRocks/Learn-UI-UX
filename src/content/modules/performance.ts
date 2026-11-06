@@ -174,7 +174,7 @@ const performanceModule: ModuleContent = {
     'Rendre une interface rapide pour de vrai, mesurée par les Core Web Vitals, et rapide à l’œil : squelettes, progression honnête, UI optimiste, polices et images bien chargées. Toujours en mesurant d’abord sur des appareils réalistes.',
   minutes: 11,
   commands: ['optimize', 'harden'],
-  sources: ['imp:optimize', 'imp:harden', 'web.dev:cwv', 'lawsofux', NNG_RESPONSE, NNG_SKELETON, WEBDEV_INP_CWV, WEBDEV_FONTS],
+  sources: ['imp:optimize', 'imp:harden', 'web.dev:cwv', 'lawsofux', NNG_RESPONSE, NNG_SKELETON, WEBDEV_INP_CWV, WEBDEV_FONTS, WEBDEV_RAIL],
   sections: [
     {
       id: 'mesurer',
@@ -307,7 +307,7 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
     {
       id: 'rendu',
       title: 'Un rendu fluide',
-      body: `Pour tenir **60 images par seconde**, chaque image dispose d’environ **16 ms** (1000 ÷ 60 ≈ 16,7 ms) pour tout le travail du navigateur.
+      body: `Pour tenir **60 images par seconde**, chaque image dure environ **16 ms** (1000 ÷ 60 ≈ 16,7 ms). Le navigateur en garde environ 6 pour la rendre : le travail de la page doit tenir en **10 ms** environ.
 
 - **Anime \`transform\` et \`opacity\`** pour le mouvement : le navigateur les traite sans recalculer la mise en page. Flou, masques et ombres restent permis quand ils apportent quelque chose et restent fluides, sur une zone limitée.
 - **Évite d’animer les propriétés de mise en page** (\`width\`, \`height\`, \`top\`, \`left\`, marges) : chaque image recalcule la page.
@@ -324,13 +324,12 @@ Pour les **connexions lentes** : chargement progressif des images, squelettes, m
     { id: 'lazy-hero', front: 'Faut-il charger en différé l’image d’en-tête ?', back: 'Non : jamais de `loading="lazy"` au-dessus de la ligne de flottaison. L’image principale doit partir au plus tôt.' },
     { id: 'long-task', front: 'Qu’est-ce qu’une tâche longue, et que faire ?', back: 'Une tâche de plus de 50 ms sur le fil principal. La découper, différer le JavaScript non critique, déplacer le calcul dans un web worker.' },
     { id: 'nielsen', front: 'Quelles sont les trois limites de temps de réponse de Nielsen ?', back: '0,1 s : instantané ; 1 s : le fil de la pensée tient ; 10 s : limite de l’attention.' },
-    { id: 'doherty', front: 'Que dit le seuil de Doherty ?', back: 'Sous 400 ms de réponse, l’échange reste fluide et la productivité grimpe ; au-delà, l’attention se disperse.' },
     { id: 'indicators', front: 'Squelette, spinner ou barre de progression ?', back: 'Rien sous 1 s ; squelette pour charger une page ; spinner pour une attente courte et locale (2 à 10 s) ; barre déterminée au-delà de 10 s.' },
     { id: 'optimistic', front: 'Qu’est-ce qu’une UI optimiste ?', back: 'Montrer le résultat tout de suite, synchroniser en arrière-plan, revenir en arrière avec un message clair en cas d’échec. Jamais pour un paiement.' },
     { id: 'will-change', front: 'Peut-on poser `will-change` partout ?', back: 'Non : chaque déclaration crée une couche et consomme de la mémoire. À réserver à une opération coûteuse connue.' },
     { id: 'fonts', front: 'Comment charger une police web sans texte invisible ?', back: '`font-display: swap` (ou `optional`), sous-ensemble, préchargement, et une police de repli aux métriques proches.' },
     { id: 'devices', front: 'Sur quoi mesurer la performance ?', back: 'Sur un vrai téléphone d’entrée de gamme et un réseau bridé, avec des données de terrain ; pas sur un ordinateur rapide en fibre.' },
-    { id: 'frame', front: 'Combien de temps dure une image à 60 images par seconde ?', back: 'Environ 16 ms (1000 ÷ 60), pour tout le travail du navigateur : script, style, mise en page, peinture.' },
+    { id: 'frame', front: 'Combien de temps dure une image à 60 images par seconde ?', back: 'Environ 16 ms (1000 ÷ 60). Le navigateur en garde environ 6 pour rendre l’image : le travail de la page doit tenir en 10 ms environ.' },
   ],
   exercises: [
     {
@@ -604,9 +603,9 @@ Les autres blocs sont de bons réflexes : élévation en \`transform\`, \`font-d
       id: 'performance-fid-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Le FID (First Input Delay) est l’indicateur de réactivité des Core Web Vitals.',
+      prompt: 'En 2026, l’indicateur de réactivité des Core Web Vitals à surveiller pour un site est le FID (*First Input Delay*).',
       answer: false,
-      explanation: `Depuis le **12 mars 2024**, l’**INP** (*Interaction to Next Paint*) a remplacé le FID parmi les Core Web Vitals. Le FID ne mesurait que le délai avant le traitement de la **première** interaction ; l’INP observe **toutes** les interactions de la visite, jusqu’à l’affichage qui suit, et retient la **plus lente** (en écartant une valeur extrême toutes les 50 interactions).
+      explanation: `Faux. Depuis le **12 mars 2024**, l’**INP** (*Interaction to Next Paint*) a remplacé le FID parmi les Core Web Vitals. Le FID ne mesurait que le délai avant le traitement de la **première** interaction ; l’INP observe **toutes** les interactions de la visite, jusqu’à l’affichage qui suit, et retient la **plus lente** (en écartant une valeur extrême toutes les 50 interactions).
 
 Un bon INP est **inférieur ou égal à 200 ms**, au 75e centile des visites. On l’améliore en découpant les tâches longues, en différant le JavaScript non critique et en déplaçant les calculs lourds hors du fil principal.`,
       takeaway: 'L’INP (≤ 200 ms) a remplacé le FID en mars 2024 : il observe toutes les interactions de la visite et retient la plus lente.',

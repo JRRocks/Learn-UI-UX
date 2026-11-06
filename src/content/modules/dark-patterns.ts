@@ -662,7 +662,7 @@ Un badge adossé à des ventes réelles et un rappel avant la fin d’un essai a
       difficulty: 1,
       prompt: 'Ajouter une étape de confirmation avant de partager tes contacts avec une application partenaire est un motif trompeur.',
       answer: false,
-      explanation: `Une friction n’est pas trompeuse en soi : tout dépend de sa **direction**. Le motif trompeur freine ce qui protège la personne — refuser, résilier, régler sa confidentialité. La CNIL range d’ailleurs « créer de la friction aux actions de protection des données » parmi les pratiques de design potentiellement trompeur.
+      explanation: `Faux. Une friction n’est pas trompeuse en soi : tout dépend de sa **direction**. Le motif trompeur freine ce qui protège la personne — refuser, résilier, régler sa confidentialité. La CNIL range d’ailleurs « créer de la friction aux actions de protection des données » parmi les pratiques de design potentiellement trompeur.
 
 Une confirmation avant un partage fait l’inverse : elle ralentit au moment qui engage, pour laisser le temps de comprendre ce qui sera transmis. C’est une **friction désirable** (*La forme des choix*, 2019) : dire non n’y coûte pas plus que dire oui, et la personne l’approuverait si elle voyait tout.`,
       takeaway: 'Une friction n’est pas trompeuse en soi : ralentir avant un partage de données ou un paiement protège ; freiner le refus ou la sortie piège.',
@@ -674,7 +674,7 @@ Une confirmation avant un partage fait l’inverse : elle ralentit au moment qui
       difficulty: 2,
       prompt: 'En France, un abonnement qui peut être souscrit en ligne doit pouvoir être résilié en ligne.',
       answer: true,
-      explanation: `Depuis le **1er juin 2023**, un contrat qui peut être conclu par voie électronique doit pouvoir être résilié de la même façon, grâce à une fonction **gratuite, facile d’accès et clairement signalée** sur le site ou l’application : la « résiliation en trois clics ». Elle vaut même pour un contrat signé en boutique, dès lors que l’entreprise propose la souscription en ligne.
+      explanation: `Vrai. Depuis le **1er juin 2023**, un contrat qui peut être conclu par voie électronique doit pouvoir être résilié de la même façon, grâce à une fonction **gratuite, facile d’accès et clairement signalée** sur le site ou l’application : la « résiliation en trois clics ». Elle vaut même pour un contrat signé en boutique, dès lors que l’entreprise propose la souscription en ligne.
 
 Cette règle ne supprime pas les préavis ou durées d’engagement prévus au contrat ; elle supprime l’obstacle du canal (lettre recommandée, téléphone).`,
       takeaway: 'Ce qui se souscrit en ligne se résilie en ligne, par une fonction gratuite et visible (France, depuis le 1er juin 2023).',

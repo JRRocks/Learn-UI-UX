@@ -892,7 +892,7 @@ On ne livre que lorsque la fonctionnalité est complète et finie de façon homo
       id: 'polish-hover-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Un changement de couleur au survol suffit à montrer qu’un élément est cliquable.',
+      prompt: 'Sur une liste de produits, un changement de couleur au survol suffit à montrer que chaque carte est cliquable.',
       answer: false,
       explanation: `Faux. Le survol n’existe qu’avec une souris : au doigt et au clavier, il n’y en a pas. Si l’élément ne ressemble à rien de cliquable au repos, une partie des gens ne le découvrira jamais — Nielsen Norman Group a montré que les éléments trop « plats » attirent moins l’attention et créent de l’incertitude.
 

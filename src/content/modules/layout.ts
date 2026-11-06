@@ -250,7 +250,7 @@ Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clai
 - Teste les extrêmes : textes longs, traductions, zoom, états vides, éléments collants, encoches. Un contenu qui déborde de son conteneur, ou une colonne qui s’étire loin sous la ligne de flottaison pendant que sa voisine flotte dans le vide, sont des défauts de structure.
 - Le texte courant ne touche jamais le bord de l’écran : vise au moins 16 px de marge latérale, idéalement 24 à 32 px. Le détecteur signale moins de 12 px sur un écran de 480 px de large ou moins, moins de 16 px au-delà.
 
-**Cibles tactiles.** Une icône peut être petite à l’œil ; sa **cible tactile** (la zone qui reçoit le toucher), non. Le WCAG 2.2 (critère 2.5.8, niveau AA) exige au moins **24 × 24 px CSS**, ou un espacement suffisant. Au toucher, impeccable fixe le minimum à **44 × 44 px**, comme le niveau AAA (critère 2.5.5) ; iOS demande 44 × 44 pt, Android 48 × 48 dp. Agrandis la cible avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
+**Cibles tactiles.** Une icône peut être petite à l’œil ; sa **cible tactile** (la zone qui reçoit le toucher), non. Les WCAG 2.2 (critère 2.5.8, niveau AA) exigent au moins **24 × 24 px CSS**, ou un espacement suffisant. Au toucher, impeccable fixe le minimum à **44 × 44 px**, comme le niveau AAA (critère 2.5.5) ; iOS demande 44 × 44 pt, Android 48 × 48 dp. Agrandis la cible avec du \`padding\` ou un pseudo-élément, sans grossir le dessin.`,
       examples: [
         {
           title: 'Une barre d’outils sur téléphone',
@@ -516,7 +516,7 @@ La commande \`distill\` le dit simplement : les cartes ne sont pas nécessaires 
       },
       hotspots: [
         { id: 'body', label: 'Paragraphe de préparation', correct: true, why: 'Le texte touche les bords de l’écran : vise au moins 16 px de marge latérale, idéalement 24 à 32 (sur un téléphone, le détecteur signale moins de 12 px).' },
-        { id: 'tools', label: 'Rangée d’icônes', correct: true, why: 'Quatre cibles de 14 px espacées de 4 px : bien sous les 24 × 24 px du WCAG 2.2, et difficiles à toucher sans erreur.' },
+        { id: 'tools', label: 'Rangée d’icônes', correct: true, why: 'Quatre cibles de 14 px espacées de 4 px : bien sous les 24 × 24 px des WCAG 2.2, et difficiles à toucher sans erreur.' },
         { id: 'title', label: 'Titre de la recette', correct: false, why: 'Aligné sur la même marge de 16 px que la photo : cohérent.' },
         { id: 'photo', label: 'Photo', correct: false, why: 'Même retrait que le titre, proportions fixes : rien à corriger.' },
         { id: 'tabbar', label: 'Barre d’onglets', correct: false, why: 'Quatre onglets larges, icône et libellé : des cibles confortables.' },
@@ -524,8 +524,8 @@ La commande \`distill\` le dit simplement : les cartes ne sont pas nécessaires 
       explanation: `Deux contraintes physiques du mobile :
 
 - **Marges latérales** : un texte collé au bord de l’écran se lit mal et paraît coupé. Le détecteur d’impeccable le signale sous 16 px (12 px sur les écrans de 480 px ou moins) et recommande 24 à 32 px.
-- **Cibles tactiles** : le WCAG 2.2 exige au moins 24 × 24 px CSS par cible (critère 2.5.8, niveau AA), sauf espacement suffisant ; au toucher, impeccable fixe le minimum à 44 × 44 px. Le dessin peut rester petit : c’est la cible qu’on agrandit, avec du \`padding\`.`,
-      takeaway: 'Sur mobile : vise 16 px de marge latérale (jamais moins de 12) et des cibles tactiles de 44 × 44 px au toucher (24 × 24 px pour le WCAG 2.2 AA).',
+- **Cibles tactiles** : les WCAG 2.2 exigent au moins 24 × 24 px CSS par cible (critère 2.5.8, niveau AA), sauf espacement suffisant ; au toucher, impeccable fixe le minimum à 44 × 44 px. Le dessin peut rester petit : c’est la cible qu’on agrandit, avec du \`padding\`.`,
+      takeaway: 'Sur mobile : vise 16 px de marge latérale (jamais moins de 12) et des cibles tactiles de 44 × 44 px au toucher (24 × 24 px pour les WCAG 2.2 AA).',
       sources: ['imp:detector', 'wcag:target', 'imp:layout', 'imp:adapt'],
     },
     {
@@ -586,7 +586,7 @@ Impeccable l’autorise explicitement : des tableaux de nombreuses lignes, des p
       answer: 'structural',
       explanation: `Un responsive réussi est **structurel** : on réordonne, on replie, on fait refluer ou on révèle selon ce qui reste important sur un petit écran. Ici, la barre latérale devient un menu et des onglets, l’indicateur principal passe en tête, les colonnes s’empilent.
 
-Rétrécir l’ensemble rend tout illisible ; garder la mise en page d’ordinateur impose un défilement horizontal et cache la moitié du contenu (le WCAG demande qu’un contenu reste utilisable à 320 px de large sans devoir défiler à la fois horizontalement et verticalement).`,
+Rétrécir l’ensemble rend tout illisible ; garder la mise en page d’ordinateur impose un défilement horizontal et cache la moitié du contenu (les WCAG demandent qu’un contenu reste utilisable à 320 px de large sans devoir défiler à la fois horizontalement et verticalement).`,
       takeaway: 'Sur petit écran, change la structure — replier, empiler par priorité, révéler — au lieu de rétrécir ou de laisser déborder.',
       sources: ['imp:layout', 'imp:operate', { label: 'W3C — Comprendre le critère 1.4.10 (redistribution)', url: 'https://www.w3.org/WAI/WCAG22/Understanding/reflow.html' }],
     },
@@ -642,7 +642,7 @@ Ces valeurs varient selon la densité du produit ; l’**ordre**, lui, ne change
       id: 'layout-whitespace-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'L’espace vide est de l’espace perdu : mieux vaut le remplir avec plus d’information.',
+      prompt: 'Sur la page d’accueil d’une banque, l’espace vide est de l’espace perdu : mieux vaut le remplir avec plus d’informations et d’offres.',
       answer: false,
       explanation: `Faux. L’espace n’est pas du vide : c’est lui qui **groupe** et **sépare**. Sans intervalles différenciés, les éléments se mélangent et la hiérarchie disparaît — il faut lire pour comprendre ce qui va ensemble.
 
@@ -656,9 +656,9 @@ La bonne question n’est pas « plein ou vide » mais « quelle **densité** po
       difficulty: 2,
       prompt: 'Une icône dessinée en 16 px peut offrir une cible tactile de 44 × 44 px, sans que son dessin grossisse d’un pixel.',
       answer: true,
-      explanation: `Vrai. La **cible tactile** est la zone qui reçoit le toucher ; le **dessin** n’en est que la partie visible. Le WCAG définit d’ailleurs la cible comme la région de l’écran qui accepte l’action du pointeur, et le W3C évoque la possibilité d’agrandir cette zone active sans agrandir ce qu’on voit. Impeccable en fait une règle : garder les cibles utilisables même quand leur marque visible est petite. Du \`padding\` ou un pseudo-élément agrandit la cible ; l’icône garde ses 16 px.
+      explanation: `Vrai. La **cible tactile** est la zone qui reçoit le toucher ; le **dessin** n’en est que la partie visible. Les WCAG définissent d’ailleurs la cible comme la région de l’écran qui accepte l’action du pointeur, et le W3C évoque la possibilité d’agrandir cette zone active sans agrandir ce qu’on voit. Impeccable en fait une règle : garder les cibles utilisables même quand leur marque visible est petite. Du \`padding\` ou un pseudo-élément agrandit la cible ; l’icône garde ses 16 px.
 
-Les seuils portent donc sur la cible, pas sur le dessin : au moins **24 × 24 px CSS** pour le critère 2.5.8 du WCAG 2.2 (niveau AA), sauf espacement suffisant ; **44 × 44 px** au toucher pour impeccable, comme le critère 2.5.5 (niveau AAA) ; 44 × 44 pt sur iOS, 48 × 48 dp sur Android.`,
+Les seuils portent donc sur la cible, pas sur le dessin : au moins **24 × 24 px CSS** pour le critère 2.5.8 des WCAG 2.2 (niveau AA), sauf espacement suffisant ; **44 × 44 px** au toucher pour impeccable, comme le critère 2.5.5 (niveau AAA) ; 44 × 44 pt sur iOS, 48 × 48 dp sur Android.`,
       takeaway: 'Le dessin peut rester petit, pas la cible tactile : au moins 24 × 24 px (WCAG 2.2 AA), 44 × 44 px au toucher.',
       sources: ['imp:layout', 'imp:adapt', 'wcag:target', WCAG_255],
     },

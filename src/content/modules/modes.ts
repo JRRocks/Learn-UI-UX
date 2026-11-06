@@ -261,7 +261,7 @@ Le test : nom du produit masqué, l’écran se lit-il comme un produit de sa ca
       body: `Sur une surface Lire, **la question du lecteur mène**. La compréhension et l’orientation restent intactes à chaque étape : une documentation se lit comme une documentation, un guide comme un guide, un article comme un article.
 
 - **Le monde possède le cadre** : l’en-tête, le rail de navigation, le fond, le titre et les ouvertures de section, la façon de composer le code, les tableaux et les encadrés. Là, palette, typographie et geste signature s’engagent pleinement.
-- **La colonne de lecture reste calme** : une police de lecture, un vrai contraste, une vraie mesure (sur le web, environ 60 à 75 caractères, corps proche de 16 px), rien qui s’agite derrière le texte. Le monospace sert au code, aux paramètres et aux petits libellés, jamais au texte courant ni aux titres par défaut.
+- **La colonne de lecture reste calme** : une police de lecture, un vrai contraste, une vraie mesure (sur le web, environ 60 à 75 caractères, le haut de la plage de confort 45–75, corps proche de 16 px), rien qui s’agite derrière le texte. Le monospace sert au code, aux paramètres et aux petits libellés, jamais au texte courant ni aux titres par défaut.
 - **Le monde ne fournit jamais l’ordre de lecture** et ne remplace pas la navigation par un dispositif qu’il faudrait apprendre. Code, tableaux, notes et figures gardent les formes que les lecteurs connaissent.
 - **Le geste signature est un système**, utilisé là où il se justifie, pas un cadre répété autour de chaque élément.
 
@@ -338,7 +338,7 @@ Une section, un composant ou un état ajouté dans une surface établie en héri
     { id: 'four', front: 'En mode Opérer, que peut prêter l’univers visuel ?', back: 'Quatre choses : typographie, palette, densité, un geste signature. Jamais la mise en page, la navigation ni les contrôles.' },
     { id: 'costume', front: 'Qu’est-ce qu’un « costume » sur un écran de travail ?', back: 'L’interface d’un outil du monde rejouée à l’écran : touches de fonction, invite de commande, cadran, papier de registre. On n’en garde que typo, palette, densité et un geste.' },
     { id: 'grey', front: 'Un écran gris avec une seule couleur d’accent, est-ce de la retenue ?', back: 'Non : c’est le défaut de la catégorie sans sa finition. La Retenue, ce sont des neutres teintés par le monde et un accent, et la couleur y travaille : coque, états, séries de données, sélection.' },
-    { id: 'frame', front: 'En mode Lire, où le monde s’exprime-t-il ?', back: 'Dans le cadre : en-tête, rail, fond, ouvertures, code, tableaux, encadrés. La colonne reste calme : police de lecture, vrai contraste, 60 à 75 caractères.' },
+    { id: 'frame', front: 'En mode Lire, où le monde s’exprime-t-il ?', back: 'Dans le cadre : en-tête, rail, fond, ouvertures, code, tableaux, encadrés. La colonne reste calme : police de lecture, vrai contraste, 60 à 75 caractères (le haut de la plage 45–75).' },
     { id: 'action', front: 'Quelle action le premier écran d’une page Persuader doit-il montrer ?', back: 'Celle de la catégorie, sous sa forme opérante : recherche trajet et dates, créneaux libres, ajout au panier. Un lien décoratif ne compte pas.' },
     { id: 'traps', front: 'Quels sont les deux pièges d’une page Persuader ?', back: 'L’affiche peinte sans partie qui fonctionne, et la page générique : titre, sous-titre, bouton, rangée de cartes égales.' },
     { id: 'brief', front: 'Le brief impose un style que le détecteur classe parmi les clichés. Que faire ?', back: 'Honorer le brief, sauf un interdit marqué comme tel (le surtitre au-dessus d’un titre) : réorienter un brief clair vers son propre goût est un échec.' },
@@ -601,7 +601,7 @@ Se retirer ne veut pas dire disparaître : le nom de la photographe et le menu r
         },
       ],
       answer: 'framed',
-      explanation: `En mode Lire, **le monde possède le cadre et sert la colonne**. L’en-tête, le rail, le fond, les ouvertures de section et la façon de composer le code portent la palette et le geste signature. La colonne de lecture, elle, reste calme : police de lecture, vrai contraste, rien qui s’agite derrière le texte. À taille réelle, elle tient aussi une vraie mesure (environ 60 à 75 caractères, corps proche de 16 px).
+      explanation: `En mode Lire, **le monde possède le cadre et sert la colonne**. L’en-tête, le rail, le fond, les ouvertures de section et la façon de composer le code portent la palette et le geste signature. La colonne de lecture, elle, reste calme : police de lecture, vrai contraste, rien qui s’agite derrière le texte. À taille réelle, elle tient aussi une vraie mesure (environ 60 à 75 caractères, le haut de la plage de confort 45–75, corps proche de 16 px).
 
 Le monospace est réservé au code, aux paramètres et aux petits libellés. Quand le quadrillage, le monospace et une navigation « boussole » envahissent la colonne, la page se lit comme un objet du monde avant de se lire comme une documentation : il faut ramener le monde au cadre.`,
       takeaway: 'En Lire, engage le monde dans le cadre (en-tête, rail, code) et garde la colonne de lecture calme.',
@@ -831,7 +831,7 @@ Tout le reste peut, et doit, porter le monde : l’en-tête, la composition du c
       difficulty: 1,
       prompt: 'La documentation d’une maison de couture peut adopter le mode Persuader, puisque la marque vit de son image.',
       answer: false,
-      explanation: `Le mode se choisit d’après **la surface**, pas d’après la marque. impeccable cite justement la documentation d’une maison de mode comme exemple de surface **Lire** : le visiteur y vient pour comprendre (entretenir un tissu, connaître les conditions de retour), pas pour être convaincu.
+      explanation: `Faux. Le mode se choisit d’après **la surface**, pas d’après la marque. impeccable cite justement la documentation d’une maison de mode comme exemple de surface **Lire** : le visiteur y vient pour comprendre (entretenir un tissu, connaître les conditions de retour), pas pour être convaincu.
 
 La marque n’en disparaît pas : en mode Lire, son monde possède le cadre (en-tête, rail, fond, ouvertures de section). Seule la colonne de lecture reste calme.`,
       takeaway: 'Une documentation relève du mode Lire, même pour une marque très expressive : son monde s’exprime dans le cadre.',

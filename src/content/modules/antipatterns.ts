@@ -139,7 +139,7 @@ Quelques règles voisines appartiennent à la famille qualité : l’**ombre dur
       title: 'Mouvement et rédaction',
       body: `Côté mouvement :
 
-- **le rebond et l’élastique** font daté : les objets réels décélèrent en douceur, d’où la sortie exponentielle ;
+- **le rebond et l’élastique** font daté : les objets réels décélèrent en douceur, d’où la décélération exponentielle (*ease-out-expo*) ;
 - **le point qui pulse** simule une activité ; réserve-le aux données réellement en direct ;
 - **le curseur clignotant** décoratif simule une saisie là où aucun champ n’existe ;
 - **le bandeau défilant** réclame une attention qu’il n’a pas méritée et cache la moitié de son contenu à tout moment.
@@ -664,7 +664,7 @@ Le même motif est donc un tic sous un message marketing, et une fonction dans u
       leftTitle: 'Règle',
       rightTitle: 'Ce qu’elle repère',
       pairs: [
-        { id: 'eyebrow', left: 'Pastille du héros', right: 'Un minuscule libellé en capitales espacées, nu ou en gélule, posé juste au-dessus d’un titre géant' },
+        { id: 'eyebrow', left: 'Pastille du héros', right: 'Un minuscule libellé en capitales espacées, nu ou en pilule, posé juste au-dessus d’un titre géant' },
         { id: 'ghost', left: 'Carte fantôme', right: 'Un filet d’un pixel et une large ombre floue, répétés sur tous les blocs d’une rangée' },
         { id: 'halo', left: 'Halo radial', right: 'Une lueur colorée, saturée au centre, qui s’efface vers le transparent sur le fond d’une page sombre' },
         { id: 'cadence', left: 'Cadence aphoristique', right: 'Trois sections ou plus qui retombent sur « X. Pas de Y. »' },
@@ -696,9 +696,9 @@ Ce n’est pas un feu vert pour autant : le plancher de qualité la refuse **hor
       id: 'antipatterns-clean-report-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Si le détecteur ne signale plus rien, le design est réussi.',
+      prompt: 'Après une série de corrections, le détecteur d’impeccable ne signale plus rien sur la page d’accueil : son design est réussi.',
       answer: false,
-      explanation: `impeccable le précise dans sa documentation : un passage du détecteur sans résultat est **un indice, pas une preuve** de qualité visuelle ou d’accessibilité. Il ne remplace pas l’examen du rendu à toutes les tailles utiles.
+      explanation: `Faux. impeccable le précise dans sa documentation : un passage du détecteur sans résultat est **un indice, pas une preuve** de qualité visuelle ou d’accessibilité. Il ne remplace pas l’examen du rendu à toutes les tailles utiles.
 
 Le détecteur repère des formes précises. Il ne dit pas si la page sert son visiteur, si la hiérarchie suit la tâche, ni si le design pourrait appartenir à n’importe quel autre produit. Et le plancher de qualité rappelle que, même tout au vert, il reste à engager la page dans son monde.`,
       takeaway: 'Un rapport vide est un indice, pas une preuve : regarde toujours le rendu aux tailles réelles.',
@@ -776,7 +776,7 @@ Les deux seules règles de sévérité *erreur* (script cassé, contenu invisibl
       explanation: `La règle « Surtitre ou pastille au-dessus du titre de héros » (\`hero-eyebrow-chip\`) propose trois sorties : **supprimer** le libellé, **l’intégrer au titre**, ou en faire un **fil d’Ariane** de navigation. Le plancher de qualité ajoute que reconnaître un réflexe veut dire **réécrire l’élément, pas l’adoucir**.
 
 Retirer seulement la forme de pastille ne suffit pas : il reste un surtitre en capitales au-dessus du titre, et celui-là est un interdit absolu pour impeccable.`,
-      takeaway: 'Une pastille au-dessus du titre se supprime ou entre dans le titre ; l’atténuer ou la réduire à un surtitre sans capsule ne corrige rien.',
+      takeaway: 'Une pastille au-dessus du titre se supprime ou entre dans le titre ; l’atténuer ou la réduire à un surtitre nu ne corrige rien.',
       sources: ['imp:detector', 'imp:craft-floor'],
     },
     {

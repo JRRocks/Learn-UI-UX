@@ -670,7 +670,7 @@ La réponse robuste combine deux couches : **côté interface**, un état de cha
       id: 'harden-validation-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Si le formulaire vérifie l’adresse e-mail côté client, le serveur n’a pas besoin de la revérifier.',
+      prompt: 'Si le formulaire vérifie l’adresse e-mail côté client, le serveur peut se passer de la revérifier.',
       answer: false,
       explanation: `Faux. La validation côté client sert le **confort** : elle signale l’erreur tout de suite, près du champ. Mais n’importe qui peut contourner le navigateur et envoyer une requête directement au serveur.
 

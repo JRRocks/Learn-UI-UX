@@ -776,7 +776,7 @@ Plus bas, l’écran reste lisible, mais on retire plus de couleur que nécessai
       id: 'intensity-grayscale-tf',
       type: 'truefalse',
       difficulty: 1,
-      prompt: 'Passer une interface en niveaux de gris est un bon moyen de la rendre plus calme.',
+      prompt: 'Pour calmer une appli de budget criarde, aux catégories et aux graphiques très saturés, passer l’interface en niveaux de gris est un bon moyen.',
       answer: false,
       explanation: `Faux. Impeccable le dit explicitement : **calme ≠ niveaux de gris**. Retirer toute la couleur supprime aussi l’information qu’elle portait (statuts, sélection, actions) et produit le calme générique : du gris sur blanc, sans point de vue.
 
