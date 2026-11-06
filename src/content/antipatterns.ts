@@ -339,8 +339,8 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
         `.bc { padding: 30px 18px; background: #0f1115; color: #f1f2f4; }
 .bc-h { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
 .bc-form { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.bc-in { flex: 1; min-width: 180px; padding: 9px 12px; border-radius: 8px; background: #1c1f26; border: 1px solid #3a3f4b; font-size: 13px; color: #d5d8de; }
-.bc-btn { padding: 9px 14px; border-radius: 8px; background: #f1f2f4; color: #0f1115; font-weight: 650; font-size: 13px; }`,
+.bc-in { flex: 1; min-width: 180px; padding: 9px 12px; border-radius: 8px; background: #1c1f26; border: 1px solid #6b7280; font-size: 13px; color: #d5d8de; }
+.bc-btn { display: inline-flex; align-items: center; padding: 9px 14px; border-radius: 8px; background: #f1f2f4; color: #0f1115; font-weight: 650; font-size: 13px; }`,
       ),
     },
   },
@@ -614,7 +614,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
   },
   {
     id: 'hero-eyebrow-chip',
-    name: 'Sur-titre ou pastille au-dessus du titre de héros',
+    name: 'Surtitre ou pastille au-dessus du titre de héros',
     family: 'cliche',
     severity: 'avertissement',
     description:
@@ -635,11 +635,11 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
   },
   {
     id: 'kicker-above-heading',
-    name: 'Sur-titre au-dessus d’un titre',
+    name: 'Surtitre au-dessus d’un titre',
     family: 'cliche',
     severity: 'avertissement',
     description:
-      'Un petit libellé en capitales espacées (ou en petites capitales) posé en bloc juste au-dessus d’un titre est interdit sans exception, répété ou non. Un sur-titre généré ne mérite jamais sa place : le titre porte son propre poids.',
+      'Un petit libellé en capitales espacées (ou en petites capitales) posé en bloc juste au-dessus d’un titre est interdit sans exception, répété ou non. Un surtitre généré ne mérite jamais sa place : le titre porte son propre poids.',
     fix: 'Supprime le libellé et laisse parler le titre. Si ses mots comptent, intègre-les au titre ou au texte.',
     demo: {
       bad: v(
@@ -785,7 +785,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'cliche',
     severity: 'avertissement',
     description:
-      'Une approche (`letter-spacing`) resserrée au-delà du point où les caractères gardent leur forme coûte en lisibilité. Le détecteur la signale sous −0,07em sur du texte courant et sous −0,09em pour un affichage de 40 px ou plus.',
+      'Une approche (`letter-spacing`) resserrée au-delà du point où les caractères gardent leur forme coûte en lisibilité. Le détecteur la signale sous −0,07em en dessous de 40 px, et sous −0,09em à partir de 40 px.',
     fix: 'Resserre optiquement, sans détruire les lettres : le plancher de qualité s’arrête à −0,04em, et −0,02 à −0,03em se lit généralement mieux.',
     demo: {
       bad: v('Grand titre « Planifiez sans friction » dont les lettres se touchent.', `<div class="nt"><p style="letter-spacing:-0.1em">Planifiez sans friction</p></div>`, `.nt { padding: 30px 18px; } .nt p { font-size: 36px; line-height: 1.05; font-weight: 800; }`),
@@ -970,7 +970,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     severity: 'avertissement',
     description:
       'Au-delà d’environ 80 caractères par ligne, le texte devient difficile à lire : l’œil perd sa place en revenant au début de la ligne suivante. La règle mesure les lignes réellement rendues et se déclenche quand plusieurs d’entre elles sont trop longues.',
-    fix: 'Ajoute une largeur maximale de 65 à 75ch aux conteneurs de texte.',
+    fix: 'Ajoute une largeur maximale aux conteneurs de texte pour rester entre 45 et 75 caractères par ligne, soit environ 35 à 60ch selon la police (pars de `max-width: 50ch`, environ 65 caractères). Le « 65ch to 75ch » de la règle se lit en caractères : en unités `ch`, il donnerait 80 à 100 caractères, au-delà de son propre seuil.',
   },
   {
     id: 'cramped-padding',
@@ -1129,7 +1129,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'qualite',
     severity: 'avertissement',
     description: 'Un texte courant sous 12 px est difficile à lire, surtout sur les écrans haute densité.',
-    fix: 'Utilise au moins 14 px pour le contenu courant ; 16 px est l’idéal.',
+    fix: 'Utilise au moins 14 px pour le contenu courant ; 16 px est l’idéal. Le plancher qu’enseigne impeccable pour le corps reste pourtant 16 px (1rem) ; 14 px seulement pour un texte vraiment secondaire.',
     demo: {
       bad: para('Paragraphe sur les retours composé en 10 px.', 'font-size:10px;line-height:1.5'),
       good: para('Même paragraphe composé en 16 px.', 'font-size:16px;line-height:1.55'),
@@ -1172,7 +1172,7 @@ export const ANTIPATTERNS: AntipatternEntry[] = [
     family: 'qualite',
     severity: 'avertissement',
     description:
-      'De longs passages en capitales se lisent mal : on reconnaît les mots à leur silhouette (ascendantes, descendantes), que les capitales effacent. Seul compte un passage qui se lit comme une phrase, soit 80 caractères ou plus du texte propre d’un élément ; boutons, éléments de navigation et courts libellés en capitales relèvent de la convention et ne déclenchent pas cette règle.',
+      'De longs passages en capitales se lisent mal, 5 à 10 % plus lentement que le même texte en bas de casse. La règle l’explique par la silhouette des mots (ascendantes, descendantes) que les capitales effacent ; la recherche attribue plutôt l’écart à l’entraînement : on lit surtout du bas de casse. Seul compte un passage qui se lit comme une phrase, soit 80 caractères ou plus du texte propre d’un élément ; boutons, éléments de navigation et courts libellés en capitales relèvent de la convention et ne déclenchent pas cette règle.',
     fix: 'Réserve les capitales aux libellés courts et aux titres.',
     demo: {
       bad: para('Paragraphe sur les retours entièrement en capitales.', 'font-size:14px;line-height:1.6;text-transform:uppercase'),
