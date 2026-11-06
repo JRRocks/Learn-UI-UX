@@ -5,6 +5,7 @@
  *   (src/content/derive.ts, scripts/vite-plugins.mjs);
  * - the lessons themselves, one chunk each, downloaded when a page needs them (`useModule`,
  *   `useExercises`), plus two small chunks: every flashcard text and every true/false statement.
+ *   A page that no service worker stores downloads them all in the background (`preloadContent`).
  */
 import INDEX from 'virtual:content/index';
 import type { Exercise, KeyRule, ModuleContent, TrueFalseExercise } from '../engine/types';
@@ -102,7 +103,11 @@ export function preloadExercises(ids: readonly string[]): void {
 
 /* ---------------------------------------------------------------- flashcards and statements */
 
-const loadRuleCards = () => import('virtual:content/rules').then((m) => m.default);
+const ALL_RULE_TEXTS = 'rules:*';
+const allRuleTexts = async () => new Map((await import('virtual:content/rules')).default.map((c) => [c.key, c.rule]));
+
+const STATEMENTS = 'statements';
+const allStatements = async () => new Map((await import('virtual:content/statements')).default.map((s) => [s.id, s]));
 
 /**
  * The text of the flashcards: those of one lesson (often downloaded already, from its page), or all
@@ -110,11 +115,8 @@ const loadRuleCards = () => import('virtual:content/rules').then((m) => m.defaul
  */
 export function useRuleTexts(moduleId: string | null): LoadState<Map<string, KeyRule>> {
   return useLoadState(
-    `rules:${moduleId ?? '*'}`,
-    async () => {
-      if (moduleId) return new Map((await loadModule(moduleId)).rules.map((r) => [`${moduleId}/${r.id}`, r]));
-      return new Map((await loadRuleCards()).map((c) => [c.key, c.rule]));
-    },
+    moduleId ? `rules:${moduleId}` : ALL_RULE_TEXTS,
+    moduleId ? async () => new Map((await loadModule(moduleId)).rules.map((r) => [`${moduleId}/${r.id}`, r])) : allRuleTexts,
     () => {
       const m = moduleId ? LOADED.get(moduleId) : undefined;
       return m ? new Map(m.rules.map((r) => [`${m.id}/${r.id}`, r])) : undefined;
@@ -124,5 +126,46 @@ export function useRuleTexts(moduleId: string | null): LoadState<Map<string, Key
 
 /** Every true/false statement, for the timed challenge (one small chunk). */
 export function useStatements(): LoadState<Map<string, TrueFalseExercise>> {
-  return useLoadState('statements', async () => new Map((await import('virtual:content/statements')).default.map((s) => [s.id, s])));
+  return useLoadState(STATEMENTS, allStatements);
+}
+
+/* ---------------------------------------------------------------- everything, in the background */
+
+/** Resolves in an idle moment of the page (or after a short delay where the browser cannot tell). */
+const idle = () =>
+  new Promise<void>((resolve) => {
+    if (typeof requestIdleCallback === 'function') requestIdleCallback(() => resolve(), { timeout: 2000 });
+    else setTimeout(resolve, 50);
+  });
+
+/**
+ * Download every flashcard text, every statement and every lesson (in curriculum order) and keep
+ * them in memory, so that the lessons, sessions, flashcards and the timed challenge no longer need
+ * the network: for a page that no service worker stores. Two downloads at a time, each started in an
+ * idle moment, so a view asked for meanwhile is not queued behind them all and no lesson is read
+ * while the page is busy.
+ *
+ * The browser keeps a module that failed to download as failed until the page is reloaded: so
+ * nothing starts offline, and the first failure (a dropped connection) stops the rest, which starts
+ * again once the browser says it is back online. Whatever is left is downloaded when a view needs it.
+ */
+export function preloadContent(): Promise<void> {
+  const jobs: (() => Promise<unknown>)[] = [() => load(ALL_RULE_TEXTS, allRuleTexts), () => load(STATEMENTS, allStatements)];
+  for (const m of MODULES) if (LOADERS.has(m.id)) jobs.push(() => loadModule(m.id));
+  const run = async (): Promise<void> => {
+    let stopped = false;
+    const lane = async () => {
+      while (jobs.length && !stopped) {
+        await idle();
+        const job = !stopped && navigator.onLine ? jobs.shift() : undefined;
+        if (!job) return;
+        await job().catch(() => {
+          stopped = true;
+        });
+      }
+    };
+    await Promise.all([lane(), lane()]);
+    if (jobs.length) window.addEventListener('online', () => void run(), { once: true });
+  };
+  return run();
 }

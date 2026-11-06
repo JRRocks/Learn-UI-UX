@@ -9,7 +9,9 @@
 //   stalled connection) or fails: this build's copy answers then. That copy is the one stored at
 //   install, which names only files of this build; never a later answer of the network, which may
 //   come from a newer build whose files are not stored (yet, or ever if its install fails);
-// - files whose name holds a hash never change: stored copy first. Other files: network first.
+// - files whose name holds a hash never change: stored copy first. Other files: network first;
+// - a page asks whether this worker stores its files (src/main.tsx): if not, it keeps its lessons in
+//   memory instead.
 const PREFIX = 'epreuves-';
 const CACHE = PREFIX + BUILD.version;
 const PAGE_TIMEOUT = 3000;
@@ -116,6 +118,13 @@ async function fresh(event) {
     throw error;
   }
 }
+
+// « Do you store this file? » (the entry script of a page): yes when it is a file of this build, all
+// of which were stored at install.
+self.addEventListener('message', (event) => {
+  const url = event.data?.stores;
+  if (typeof url === 'string') event.ports[0]?.postMessage(FILES.has(url));
+});
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;

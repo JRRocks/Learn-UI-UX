@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import RULES from 'virtual:content/rules';
 import STATEMENTS from 'virtual:content/statements';
 import { newBadges } from '../engine/badges';
@@ -6,9 +6,10 @@ import { emptyProgress, recordAttempt, type ProgressState } from '../engine/prog
 import { seeded } from '../engine/random';
 import { buildSession, isDuel, matchesType, type PracticeType, type SessionSpec } from '../engine/session';
 import type { ModuleContent } from '../engine/types';
+import { load } from '../lib/useLoad';
 import { ALL_MODULES } from './all';
 import { contentIndex, fileId, modulesFromFiles, ruleCards, statements } from './derive';
-import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, exercisesOf, loadModule } from './index';
+import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, exercisesOf, loadModule, preloadContent } from './index';
 import { MODULE_ORDER } from './order';
 
 /**
@@ -105,4 +106,30 @@ describe('lessons on demand', () => {
     expect(fileId('./modules/craft-floor.ts')).toBe('craft-floor');
     expect(() => modulesFromFiles({ './modules/craft-floor.ts': { default: m } })).toThrow(/nom du fichier/);
   });
+});
+
+describe('everything in the background (a page that no service worker stores)', () => {
+  afterEach(() => vi.unstubAllGlobals());
+  // `load` resolves at once with what is in memory; otherwise it runs this loader, which fails.
+  const absent = () => Promise.reject(new Error('absent'));
+  const atHand = async () => {
+    const lessons = await Promise.all(MODULES.map((m) => load(`module:${m.id}`, absent)));
+    const cards = await load<Map<string, unknown>>('rules:*', absent);
+    const tf = await load<Map<string, unknown>>('statements', absent);
+    return { lessons: lessons.map((m) => (m as ModuleContent).id), cards: cards.size, statements: tf.size };
+  };
+  const ALL = { lessons: MODULES.map((m) => m.id), cards: RULES.length, statements: STATEMENTS.length };
+
+  it('starts nothing offline, and downloads every lesson, flashcard and statement once back online', async () => {
+    const browser = { onLine: false };
+    let online: (() => void) | undefined;
+    vi.stubGlobal('navigator', browser);
+    vi.stubGlobal('window', { addEventListener: (type: string, fn: () => void) => type === 'online' && (online = fn) });
+    await preloadContent();
+    await expect(load('statements', absent)).rejects.toThrow('absent');
+    expect(online).toBeTypeOf('function');
+    browser.onLine = true;
+    online?.();
+    await vi.waitFor(async () => expect(await atHand()).toEqual(ALL), { timeout: 10000, interval: 200 });
+  }, 15000);
 });
