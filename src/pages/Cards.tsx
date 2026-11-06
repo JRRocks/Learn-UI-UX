@@ -138,7 +138,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
               <MdInline text={card.rule.back} />
             </p>
           )}
-          <p className="flashcard-from">Leçon : {from?.title}</p>
+          <p className="flashcard-from">Leçon{'\u00A0'}: {from?.title}</p>
         </div>
         {!shown ? (
           <div className="btn-row">
