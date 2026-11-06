@@ -16,6 +16,19 @@ const HEURISTICS = [
   'Aide et documentation',
 ];
 
+/** Jakob Nielsen (1994) : la part des problèmes trouvés par un évaluateur seul, et pourquoi en réunir plusieurs. */
+const NNG_THEORY = {
+  label: 'Nielsen Norman Group — The Theory Behind Heuristic Evaluations (Jakob Nielsen)',
+  url: 'https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/theory-heuristic-evaluations/',
+};
+
+/** Février 2027 commence un lundi : jours barrés avant l’arrivée (le départ ne peut pas la précéder), séjour du 13 au 20. */
+const STAY_DAYS = Array.from({ length: 28 }, (_, i) => {
+  const d = i + 1;
+  const cls = d < 13 ? 'rv-off' : d === 13 || d === 20 ? 'rv-sel' : d < 20 ? 'rv-in' : '';
+  return cls ? `<span class="${cls}">${d}</span>` : `<span>${d}</span>`;
+}).join('');
+
 /** Une ligne de grille : heuristique n (1–10), note de l’expert, justification visible dans la maquette. */
 const crit = (n: number, expert: number, why: string): GridCriterion => ({
   id: `h${n}`,
@@ -36,7 +49,7 @@ const BOOKING: Visual = {
 .bk-bar span { display: block; width: 50%; height: 100%; background: #1f4fd8; }
 .bk-trip { padding: 10px 12px; border: 1px solid #e1e4ea; border-radius: 10px; background: #f6f7f9; }
 .bk-alert { padding: 8px 12px; border-radius: 8px; background: #fdecea; color: #8c1d18; font-weight: 600; font-size: 13px; }
-.bk-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid #c7cedb; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.bk-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid #868d9c; border-radius: 999px; font-size: 12px; font-weight: 600; }
 .bk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
 .bk-ph { color: #6b7280; }
 .bk-help { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; }
@@ -67,12 +80,13 @@ const BOOKING: Visual = {
 
 const DASHBOARD: Visual = {
   frame: 'browser',
-  alt: 'Tableau de bord du logiciel de facturation Facturo : recherche « Rechercher une facture, un client… » avec la touche « / », lien Aide, onglets Tableau de bord (actif), Factures, Clients et Dépenses, mention « Dernière synchronisation bancaire réussie : hier à 18:02 », bouton « Nouvelle facture » avec la touche « N », bandeau rouge « Échec de la synchro (BNK_401). », promotion « Passez à Facturo Pro : −30 % ce mois-ci », quatre tuiles chiffrées avec mini-courbes, dont « CA de novembre » suivi d’une icône d’information, vues enregistrées Toutes, En retard, À relancer et « + Nouvelle vue », barre « 2 sélectionnées » avec Relancer, Exporter et Supprimer dans le même style, tableau de trois factures dont les échéances s’affichent 12/11/2026, 2026-11-15 et 02/11/2026, notification « Relance envoyée à 2 clients » avec Annuler.',
+  alt: 'Tableau de bord du logiciel de facturation Facturo : champ de recherche de factures et de clients, avec la touche « / », lien Aide, onglets Tableau de bord (actif), Factures, Clients et Dépenses, mention « Dernière synchronisation bancaire réussie : hier à 18:02 », bouton « Nouvelle facture » avec la touche « N », bandeau rouge « Échec de la synchro (BNK_401). », promotion « Passez à Facturo Pro : −30 % ce mois-ci », quatre tuiles chiffrées avec mini-courbes, dont « CA de novembre » suivi d’une icône d’information, vues enregistrées Toutes, En retard, À relancer et « + Nouvelle vue », barre « 2 sélectionnées » avec Relancer, Exporter et Supprimer dans le même style, tableau de trois factures dont les échéances s’affichent 12/11/2026, 2026-11-15 et 02/11/2026, notification « Relance envoyée à 2 clients » avec Annuler.',
   css: `.fa { container: fa / inline-size; }
 .fa-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .fa-logo { font-weight: 800; letter-spacing: -0.01em; }
 .fa-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #8b92a1; border-radius: 8px; color: #5a6172; font-size: 13px; }
 .fa-ph { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fa-ph-s { display: none; }
 kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border: 1px solid #c7cedb; border-bottom-width: 2px; border-radius: 4px; color: #36405a; background: #fff; }
 .fa-kbd { background: transparent; color: #fff; border-color: rgb(255 255 255 / 0.6); }
 .fa-help { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: #1f4fd8; }
@@ -87,7 +101,7 @@ kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border:
 .fa-spark { width: 100%; height: 16px; margin-top: 4px; }
 .fa-spark polyline { fill: none; stroke: #8aa4ec; stroke-width: 1.5; }
 .fa-views { display: flex; flex-wrap: wrap; gap: 6px; }
-.fa-view { padding: 4px 10px; border-radius: 999px; border: 1px solid #c7cedb; font-size: 12px; font-weight: 600; color: #36405a; }
+.fa-view { padding: 4px 10px; border-radius: 999px; border: 1px solid #868d9c; font-size: 12px; font-weight: 600; color: #36405a; }
 .fa-view--on { background: #1d2230; border-color: #1d2230; color: #fff; }
 .fa-view--add { border-style: dashed; color: #1f4fd8; }
 .fa-bulk { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; background: #eef3ff; font-size: 13px; }
@@ -102,6 +116,8 @@ kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border:
 .fa-undo { font-weight: 700; color: #9db4ff; }
 @container fa (max-width: 470px) {
   .fa-search { order: 3; flex-basis: 100%; }
+  .fa-ph-l { display: none; }
+  .fa-ph-s { display: inline; }
   .fa-th { display: none; }
   .fa-tr { grid-template-columns: 20px minmax(0, 1fr) auto; grid-template-areas: "k c s" "k d a"; row-gap: 2px; }
   .c-num { display: none; }
@@ -110,7 +126,7 @@ kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border:
   html: `<div class="fa">
   <div class="fa-top">
     <span class="fa-logo">Facturo</span>
-    <div class="fa-search"><i data-icon="search" style="--ico:15px"></i><span class="fa-ph">Rechercher une facture, un client…</span><kbd>/</kbd></div>
+    <div class="fa-search"><i data-icon="search" style="--ico:15px"></i><span class="fa-ph"><span class="fa-ph-l">Rechercher une facture, un client…</span><span class="fa-ph-s">Facture ou client…</span></span><kbd>/</kbd></div>
     <span class="fa-help"><i data-icon="info" style="--ico:15px"></i> Aide</span>
   </div>
   <div class="mk-tabs fa-nav"><span class="mk-tab mk-tab--on">Tableau de bord</span><span class="mk-tab">Factures</span><span class="mk-tab">Clients</span><span class="mk-tab">Dépenses</span></div>
@@ -148,7 +164,13 @@ const heuristics: ModuleContent = {
     'Inspecter un écran avec les dix heuristiques de Nielsen, le noter de 0 à 4 sans complaisance, lire le total en bandes et classer chaque problème de P0 à P3.',
   minutes: 11,
   commands: ['critique'],
-  sources: ['imp:critique', 'nng:heuristics', 'nng:severity', { label: 'Nielsen Norman Group — How to Conduct a Heuristic Evaluation', url: 'https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/' }],
+  sources: [
+    'imp:critique',
+    'nng:heuristics',
+    'nng:severity',
+    { label: 'Nielsen Norman Group — How to Conduct a Heuristic Evaluation', url: 'https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/' },
+    NNG_THEORY,
+  ],
   sections: [
     {
       id: 'dix-heuristiques',
@@ -252,7 +274,7 @@ Le Nielsen Norman Group fonde la sévérité sur trois facteurs : la **fréquenc
     {
       id: 'mener',
       title: 'Mener l’évaluation',
-      body: `- **Plusieurs regards indépendants** : chaque évaluateur inspecte seul, sans voir les notes des autres, puis on consolide. NN/g recommande trois à cinq personnes, environ une à deux heures chacune.
+      body: `- **Plusieurs regards indépendants** : un évaluateur seul ne trouve en moyenne que 35 % environ des problèmes, et chacun en trouve de différents. Chaque évaluateur inspecte donc seul, sans voir les notes des autres, puis on consolide. NN/g recommande trois à cinq personnes, environ une à deux heures chacune.
 - **Deux passages** : un premier pour comprendre le parcours, un second pour l’inspecter élément par élément.
 - **Être précis** : « le bouton Payer », pas « certains éléments ». Dis ce qui ne va pas *et* pourquoi ça gêne, puis propose un correctif concret.
 - **Dire aussi ce qui marche** : deux ou trois points forts précis, et pourquoi ils fonctionnent, pour qu’on ne les casse pas en corrigeant le reste.
@@ -452,7 +474,7 @@ Le bandeau d’erreur est un vrai défaut, mais d’une autre heuristique. Savoi
       pairs: [
         { id: 'h1', left: '1 · Visibilité de l’état du système', right: 'L’éditeur affiche « Enregistré il y a 5 s »' },
         { id: 'h3', left: '3 · Contrôle et liberté', right: 'Un lien « Effacer tous les filtres » au-dessus des résultats' },
-        { id: 'h5', left: '5 · Prévention des erreurs', right: 'Le calendrier grise les dates déjà passées' },
+        { id: 'h5', left: '5 · Prévention des erreurs', right: '« Supprimer le projet » ne s’active qu’une fois son nom retapé' },
         { id: 'h6', left: '6 · Reconnaissance plutôt que rappel', right: 'Un libellé sous chaque icône de la barre d’onglets' },
         { id: 'h7', left: '7 · Flexibilité et efficacité', right: '`Ctrl+K` ouvre une palette de commandes' },
         { id: 'h9', left: '9 · Aider à reconnaître et corriger les erreurs', right: '« Ce fichier fait 12 Mo ; la limite est de 10 Mo. Compressez-le ou choisissez-en un autre. »' },
@@ -462,7 +484,7 @@ Le bandeau d’erreur est un vrai défaut, mais d’une autre heuristique. Savoi
 
 - **1** : que se passe-t-il ? → l’état est affiché.
 - **3** : comment revenir en arrière ? → une sortie simple.
-- **5** : comment éviter l’erreur ? → une contrainte qui la rend impossible.
+- **5** : comment éviter l’erreur ? → un garde-fou placé avant l’action irréversible.
 - **6** : que dois-je retenir ? → rien, tout est sous les yeux.
 - **7** : comment aller plus vite ? → un accélérateur pour les habitués.
 - **9** : que faire après l’erreur ? → un diagnostic précis et une solution.
@@ -575,7 +597,7 @@ La version recommandée combine trois signaux : un indicateur d’étapes, un ti
             css: `.ml-row { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eceef2; }`,
             html: `<div class="mk-pad mk-stack" style="--gap:6px"><div class="mk-row mk-between"><p class="mk-h3">Boîte de réception</p><span class="mk-small mk-muted">3 conversations</span></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Banque Arpège</p><p class="mk-small mk-muted">Votre relevé d’octobre est disponible</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Léa Martin</p><p class="mk-small mk-muted">Les photos du week-end</p></div></div><div class="ml-row"><span class="mk-avatar"></span><div class="mk-grow"><p class="mk-strong">Mairie de Lyon</p><p class="mk-small mk-muted">Rendez-vous confirmé le 3 décembre</p></div></div></div>`,
           },
-          why: 'La conversation a disparu sans un mot : pas de confirmation, pas d’annulation. Il faut chercher la corbeille, si elle existe.',
+          why: 'La conversation a disparu sans un mot : rien ne dit ce qui s’est passé, rien ne permet de l’annuler. Il faut chercher la corbeille, si elle existe.',
         },
         {
           id: 'undo',
@@ -588,43 +610,59 @@ La version recommandée combine trois signaux : un indicateur d’étapes, un ti
         },
       ],
       answer: 'undo',
-      explanation: `L’heuristique 3, **contrôle et liberté**, demande une « sortie de secours » clairement signalée : les gens se trompent, et doivent pouvoir revenir en arrière sans parcours compliqué.
+      explanation: `Deux heuristiques sont en jeu. La 1, **visibilité de l’état du système**, veut que chaque action reçoive un retour : une suppression muette laisse la personne se demander ce qui a disparu, et si c’était la bonne conversation. La 3, **contrôle et liberté**, demande une « sortie de secours » clairement signalée : les gens se trompent, et doivent pouvoir revenir en arrière sans parcours compliqué.
 
-Pour une action réversible comme celle-ci, l’annulation après coup vaut mieux qu’une confirmation avant chaque suppression : la confirmation ralentit tout le monde et, à force, on clique dessus sans la lire. La notification avec « Annuler » confirme l’action et offre la réparation au même endroit.`,
-      takeaway: 'Pour une action réversible, préfère l’annulation après coup à la confirmation préalable : confirme ce qui s’est passé et offre « Annuler ».',
+La version silencieuse manque les deux : pour réparer, il faut deviner qu’une corbeille existe, puis la trouver. La notification règle les deux d’un coup : elle nomme ce qui vient de se passer et offre « Annuler » au même endroit, au moment où l’on remarque l’erreur.`,
+      takeaway: 'Après une action, dis ce qui s’est passé et offre une sortie : « Conversation supprimée — Annuler » (heuristiques 1 et 3).',
       sources: ['imp:critique', 'nng:heuristics', 'imp:clarify'],
     },
     {
-      id: 'heuristics-memory-duel',
+      id: 'heuristics-prevention-duel',
       type: 'choice',
       difficulty: 1,
-      prompt: 'Quelle dernière étape demande le moins d’effort de mémoire ?',
-      context: 'Demande de retour d’un article sur une boutique en ligne, étape 3 sur 3.',
+      prompt: 'Quel formulaire de réservation protège le mieux des erreurs de dates ?',
+      context: 'Une famille réserve une semaine à l’hôtel, du samedi 13 au samedi 20 février.',
       options: [
         {
-          id: 'recall',
+          id: 'typed',
           visual: {
-            alt: 'Étape « Confirmez votre demande » qui demande de saisir le numéro de commande vu à l’étape 1 et la référence de l’article vue à l’étape 2.',
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Retour d’un article · Étape 3 sur 3</p><p class="mk-h3">Confirmez votre demande</p><div class="mk-field"><span class="mk-label">Numéro de commande (indiqué à l’étape 1)</span><div class="mk-input"></div></div><div class="mk-field"><span class="mk-label">Référence de l’article (voir étape 2)</span><div class="mk-input"></div></div><span class="mk-btn mk-btn--block">Envoyer la demande</span></div>`,
+            alt: 'Formulaire « Choisissez vos dates » de l’hôtel Les Mélèzes : deux champs à remplir au format JJ/MM/AAAA, Arrivée 20/02/2027 et Départ 13/02/2027. Le champ Départ est encadré en rouge et le message « La date de départ doit être postérieure à la date d’arrivée. » s’affiche sous les champs, au-dessus du bouton « Voir les chambres ».',
+            css: `.rv-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.rv-err { display: flex; align-items: flex-start; gap: 6px; }
+.rv-err .mk-ico { margin-top: 1px; }`,
+            html: `<div class="mk-pad mk-stack" style="--gap:12px"><div><p class="mk-small mk-muted">Hôtel Les Mélèzes · Savoie</p><p class="mk-h3">Choisissez vos dates</p></div><div class="rv-fields"><div class="mk-field"><span class="mk-label">Arrivée</span><div class="mk-input">20/02/2027</div><span class="mk-help">JJ/MM/AAAA</span></div><div class="mk-field"><span class="mk-label">Départ</span><div class="mk-input mk-input--error">13/02/2027</div><span class="mk-help">JJ/MM/AAAA</span></div></div><p class="mk-error rv-err"><i data-icon="circle-alert" style="--ico:14px"></i> La date de départ doit être postérieure à la date d’arrivée.</p><span class="mk-btn mk-btn--block">Voir les chambres</span></div>`,
           },
-          why: 'Il faut se souvenir de deux codes vus plus tôt, ou revenir en arrière les chercher.',
+          why: 'Le message est clair et placé sous les champs (heuristique 9), mais il arrive après coup : rien n’empêchait d’inverser les deux dates, ni d’en taper une déjà passée. Il faut relire, corriger, puis renvoyer.',
         },
         {
-          id: 'recognize',
+          id: 'calendar',
           visual: {
-            alt: 'Même étape avec un récapitulatif : photo et nom de l’article, numéro de commande, motif du retour et conditions de remboursement.',
-            css: `.mr-sum { padding: 10px; border: 1px solid #e1e4ea; border-radius: 10px; background: #f6f7f9; }`,
-            html: `<div class="mk-pad mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Retour d’un article · Étape 3 sur 3</p><p class="mk-h3">Confirmez votre demande</p><div class="mr-sum mk-row"><div class="mk-img" style="--ratio:1;width:44px"></div><div class="mk-grow"><p class="mk-strong">Sac à dos Alto 28 L</p><p class="mk-small mk-muted">Commande n° 48213 · Motif : ne convient pas</p></div></div><p class="mk-small">Remboursement de 89,00 € sur la carte utilisée, sous 5 jours après réception.</p><span class="mk-btn mk-btn--block">Envoyer la demande</span></div>`,
+            alt: 'Même formulaire rempli depuis un calendrier de février 2027 : Arrivée samedi 13 février, Départ samedi 20 février. Les jours du 1er au 12 sont grisés et barrés, le séjour du 13 au 20 est surligné en bleu ; sous le calendrier, la mention « 7 nuits » et un lien « Effacer les dates », puis le bouton « Voir les chambres ».',
+            css: `.rv-sum { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.rv-box { display: flex; flex-direction: column; padding: 6px 10px; border: 1px solid #868d9c; border-radius: 6px; }
+.rv-cal { display: flex; flex-direction: column; gap: 6px; padding: 10px; border: 1px solid #e1e4ea; border-radius: 10px; }
+.rv-head { display: flex; align-items: center; justify-content: space-between; }
+.rv-head .rv-prev { color: #b0b6c3; }
+.rv-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 2px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.rv-grid > span { display: grid; place-items: center; height: 28px; }
+.rv-grid > .rv-wd { height: 20px; font-size: 11px; font-weight: 600; color: #5a6172; }
+.rv-grid > .rv-off { color: #6b7280; text-decoration: line-through; }
+.rv-grid > .rv-in { background: #e8eefc; }
+.rv-grid > .rv-sel { background: #1f4fd8; color: #fff; font-weight: 700; border-radius: 8px; }
+.rv-clear { color: #1f4fd8; font-weight: 600; }`,
+            html: `<div class="mk-pad mk-stack" style="--gap:10px"><div><p class="mk-small mk-muted">Hôtel Les Mélèzes · Savoie</p><p class="mk-h3">Choisissez vos dates</p></div><div class="rv-sum"><div class="rv-box"><span class="mk-small mk-muted">Arrivée</span><span class="mk-strong">sam. 13 févr.</span></div><div class="rv-box"><span class="mk-small mk-muted">Départ</span><span class="mk-strong">sam. 20 févr.</span></div></div><div class="rv-cal"><div class="rv-head"><i data-icon="chevron-left" class="rv-prev" style="--ico:16px"></i><span class="mk-strong">Février 2027</span><i data-icon="chevron-right" style="--ico:16px"></i></div><div class="rv-grid"><span class="rv-wd">L</span><span class="rv-wd">M</span><span class="rv-wd">M</span><span class="rv-wd">J</span><span class="rv-wd">V</span><span class="rv-wd">S</span><span class="rv-wd">D</span>${STAY_DAYS}</div></div><div class="mk-row mk-between"><span class="mk-strong">7 nuits</span><span class="mk-small rv-clear">Effacer les dates</span></div><span class="mk-btn mk-btn--block">Voir les chambres</span></div>`,
           },
-          why: 'Tout ce qui a été choisi est rappelé à l’écran : il suffit de reconnaître et de confirmer.',
+          why: 'Le calendrier rend l’erreur impossible : les jours passés et ceux qui précèdent l’arrivée ne se sélectionnent pas, et « 7 nuits » confirme la durée du séjour d’un coup d’œil.',
         },
       ],
-      answer: 'recognize',
-      explanation: `L’heuristique 6, **reconnaissance plutôt que rappel**, part d’un constat : reconnaître une information affichée coûte beaucoup moins que s’en souvenir. La mémoire de travail est limitée ; chaque code à retenir d’un écran à l’autre est une occasion d’erreur ou d’abandon.
+      answer: 'calendar',
+      explanation: `L’heuristique 5, **prévention des erreurs**, part d’un constat de Nielsen : un bon message d’erreur est utile, mais la meilleure conception empêche le problème de se produire.
 
-Le système connaît déjà la commande et l’article : les redemander, c’est transférer sa propre mémoire à l’utilisateur. Le récapitulatif lui permet de vérifier d’un coup d’œil, et d’envoyer.`,
-      takeaway: 'Ne demande jamais de retenir une information d’un écran à l’autre : affiche-la là où elle sert.',
-      sources: ['imp:critique', 'nng:heuristics'],
+Le message des champs libres est pourtant bien écrit : il nomme le problème, juste sous les champs. Mais il arrive **après** l’erreur : il faut relire, corriger, renvoyer, et rien n’empêche ensuite de taper une date déjà passée. Le calendrier agit **avant** : ce qui est impossible ne se sélectionne pas, et le nombre de nuits, affiché en permanence, fait repérer d’un coup d’œil une semaine de trop.
+
+NN/g le résume ainsi : contre les erreurs d’inattention, des **contraintes** et de **bonnes valeurs par défaut**. Garde les messages d’erreur (heuristique 9) pour ce qu’aucune contrainte ne peut empêcher.`,
+      takeaway: 'Prévention des erreurs (heuristique 5) : des contraintes et des valeurs par défaut sûres empêchent l’erreur avant qu’un message n’ait à la signaler.',
+      sources: ['nng:heuristics', 'imp:critique'],
     },
     {
       id: 'heuristics-band-choice',
@@ -690,7 +728,7 @@ Le problème relève de l’heuristique 1 : une action (saisir un code) doit rec
       difficulty: 1,
       prompt: 'Une interface réelle bien conçue obtient en général 36/40 ou plus aux heuristiques de Nielsen.',
       answer: false,
-      explanation: `La plupart des interfaces réelles obtiennent **entre 20 et 32 sur 40**. La bande 36–40 signifie « finitions seulement » : c’est rare.
+      explanation: `Faux. La plupart des interfaces réelles obtiennent **entre 20 et 32 sur 40**. La bande 36–40 signifie « finitions seulement » : c’est rare.
 
 Le barème réserve le 4 à ce qui est vraiment excellent. Gonfler les notes rend l’évaluation inutile : elle ne dit plus où agir. Une note honnête de 2 ou 3 est une information ; un 4 de complaisance n’en est pas une.`,
       takeaway: 'La plupart des interfaces réelles obtiennent entre 20 et 32 sur 40 : note honnêtement, un 4 doit être mérité.',
@@ -700,13 +738,15 @@ Le barème réserve le 4 à ce qui est vraiment excellent. Gonfler les notes ren
       id: 'heuristics-evaluators-tf',
       type: 'truefalse',
       difficulty: 2,
-      prompt: 'Pour une évaluation heuristique fiable, un seul évaluateur expérimenté qui parcourt l’interface une fois suffit.',
-      answer: false,
-      explanation: `Chaque évaluateur rate des problèmes que d’autres voient. NN/g recommande **trois à cinq évaluateurs**, qui inspectent **chacun de leur côté** (environ une à deux heures) sans voir les notes des autres, puis mettent en commun.
+      prompt: 'En moyenne, un évaluateur qui inspecte seul une interface n’y trouve qu’environ un tiers des problèmes d’utilisabilité.',
+      answer: true,
+      explanation: `Vrai. Sur six de ses projets, Jakob Nielsen a mesuré qu’un évaluateur seul trouvait en moyenne **35 %** des problèmes d’utilisabilité. Les évaluateurs ne trouvent pas les mêmes problèmes, et l’on ne peut pas se reposer sur « le meilleur » : certains des problèmes les plus difficiles à repérer sont trouvés par des évaluateurs qui, par ailleurs, en trouvent peu.
 
-Chacun fait **deux passages** : un pour comprendre le parcours, un pour l’inspecter. Et pour la sévérité, la note d’un seul évaluateur n’est pas fiable ; la moyenne de trois suffit dans la plupart des cas.`,
-      takeaway: 'Évaluation heuristique : trois à cinq évaluateurs indépendants, deux passages chacun, puis une mise en commun.',
-      sources: [{ label: 'Nielsen Norman Group — How to Conduct a Heuristic Evaluation', url: 'https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/' }, 'nng:severity'],
+D’où la méthode recommandée par NN/g : **trois à cinq évaluateurs**, qui inspectent **chacun de leur côté** (environ une à deux heures) sans voir les notes des autres, puis mettent en commun. Chacun fait **deux passages** : un pour comprendre le parcours, un pour l’inspecter.
+
+La sévérité suit la même logique : la note d’un seul évaluateur n’est pas fiable ; la moyenne de trois suffit dans bien des cas.`,
+      takeaway: 'Un évaluateur seul ne trouve qu’environ un tiers des problèmes : fais inspecter l’interface par trois à cinq évaluateurs indépendants, puis mets leurs constats en commun.',
+      sources: [NNG_THEORY, { label: 'Nielsen Norman Group — How to Conduct a Heuristic Evaluation', url: 'https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/' }, 'nng:severity'],
     },
   ],
 };
