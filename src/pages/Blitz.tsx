@@ -7,10 +7,10 @@ import { eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/
 import { EXERCISES, MODULE_BY_ID } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
-import { shuffle } from '../engine/random';
 import type { TrueFalseExercise } from '../engine/types';
 import { MdInline } from '../lib/markdown';
 import { pauseClock, remaining, resumeClock, secondsLeft, startClock, type Clock } from './blitzClock';
+import { alternateTrueFalse } from './trueFalseMix';
 
 const DURATION = 90;
 const RECORD_ID = 'blitz';
@@ -24,7 +24,8 @@ interface Answered {
 /** Timed true/false sprint: the clock stops while the correction is on screen. */
 export function Blitz() {
   const progress = useProgress();
-  const pool = useMemo(() => shuffle(EXERCISES.filter((e): e is TrueFalseExercise => e.type === 'truefalse')), []);
+  // « Vrai » and « faux » come as often as each other while both remain (tf-balance-1).
+  const pool = useMemo(() => alternateTrueFalse(EXERCISES.filter((e): e is TrueFalseExercise => e.type === 'truefalse')), []);
   const [clock, setClock] = useState<Clock | null>(null);
   const [now, setNow] = useState(() => performance.now());
   const [index, setIndex] = useState(0);

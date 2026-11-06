@@ -8,8 +8,8 @@ import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import type { GradeResult } from '../engine/grade';
 import { addSession, recordAttempt } from '../engine/progress';
-import { buildSession, isDuel, type PracticeType, type SessionSpec } from '../engine/session';
-import type { Exercise } from '../engine/types';
+import { SESSION_SIZE, buildSession, isDuel, type PracticeType, type SessionSpec } from '../engine/session';
+import type { Exercise, TrueFalseExercise } from '../engine/types';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import {
   answeredCurrent,
@@ -25,6 +25,7 @@ import {
   type Played,
   type Run,
 } from './sessionState';
+import { evenTrueFalse } from './trueFalseMix';
 
 const TYPES: PracticeType[] = ['duel', 'choice', 'multi', 'truefalse', 'hotspot', 'order', 'match', 'slider', 'grid'];
 
@@ -147,6 +148,18 @@ function typeOf(ex: Exercise): string {
   return isDuel(ex) ? TYPE_LABEL.duel : TYPE_LABEL[ex.type];
 }
 
+/** The exercises of a new run. « Vrai ou faux » draws true and false statements evenly (tf-balance-1). */
+function newRun(spec: SessionSpec): Exercise[] {
+  const state = store.get();
+  if (spec.kind !== 'type' || spec.type !== 'truefalse') return buildSession(spec, EXERCISES, state);
+  // Each side in the engine's order (due first, then new ones).
+  const side = (answer: boolean) =>
+    buildSession(spec, EXERCISES.filter((e) => e.type === 'truefalse' && e.answer === answer), state).filter(
+      (e): e is TrueFalseExercise => e.type === 'truefalse',
+    );
+  return evenTrueFalse(side(true), side(false), SESSION_SIZE.type);
+}
+
 /** Restore the run named in the URL, or build a new one for an entry link. */
 function boot(raw: string, query: URLSearchParams, spec: SessionSpec): { id: string; run: Run } {
   const route = routeOf(raw);
@@ -157,7 +170,7 @@ function boot(raw: string, query: URLSearchParams, spec: SessionSpec): { id: str
     const skip = answeredCurrent(saved) && (spec.kind === 'exam' || !saved.played[saved.index].draft);
     return { id: named, run: skip ? { ...saved, index: saved.played.length } : saved };
   }
-  const ids = buildSession(spec, EXERCISES, store.get()).map((e) => e.id);
+  const ids = newRun(spec).map((e) => e.id);
   return { id: newRunId(), run: { route, ids, index: 0, played: [], t: Date.now() } };
 }
 
