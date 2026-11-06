@@ -141,65 +141,65 @@ export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy,
   const motion = useOptionMotion();
   return (
     <>
-      <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy} aria-describedby={describedBy}>
-        {options.map((o, i) => {
-          const selected = draft.optionId === o.id;
-          const right = o.id === ex.answer;
-          const state = optionState(selected, right, revealed);
-          return (
-            <label key={o.id} className={visual ? 'option option--visual' : 'option'} data-state={state}>
-              <input
-                type="radio"
-                className="visually-hidden"
-                name={`opt-${ex.id}`}
-                value={o.id}
-                checked={selected}
-                disabled={revealed}
-                onChange={() => setDraft({ type: 'choice', optionId: o.id })}
-              />
-              {visual ? (
-                <>
-                  <span className="option-top">
-                    <span className="option-key" aria-hidden="true">
-                      {i + 1}
-                    </span>
-                    {revealed && (right || selected) && (
-                      <span className="option-badge">
-                        {right ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}
-                        {right ? 'Recommandé' : 'Ton choix'}
-                      </span>
-                    )}
-                  </span>
-                  <span className="stage">
-                    <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
-                  </span>
-                  {o.label && (
-                    <span className="option-label">
-                      <MdInline text={o.label} />
-                    </span>
-                  )}
-                </>
-              ) : (
-                <>
+    <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy} aria-describedby={describedBy}>
+      {options.map((o, i) => {
+        const selected = draft.optionId === o.id;
+        const right = o.id === ex.answer;
+        const state = optionState(selected, right, revealed);
+        return (
+          <label key={o.id} className={visual ? 'option option--visual' : 'option'} data-state={state}>
+            <input
+              type="radio"
+              className="visually-hidden"
+              name={`opt-${ex.id}`}
+              value={o.id}
+              checked={selected}
+              disabled={revealed}
+              onChange={() => setDraft({ type: 'choice', optionId: o.id })}
+            />
+            {visual ? (
+              <>
+                <span className="option-top">
                   <span className="option-key" aria-hidden="true">
                     {i + 1}
                   </span>
-                  <span className="option-text">
-                    <MdInline text={o.label ?? ''} />
-                    {revealed && (right || selected) && (
-                      <span className="option-badge" style={{ marginInlineStart: 8 }}>
-                        {right ? 'Recommandé' : 'Ton choix'}
-                      </span>
-                    )}
+                  {revealed && (right || selected) && (
+                    <span className="option-badge">
+                      {right ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}
+                      {right ? 'Recommandé' : 'Ton choix'}
+                    </span>
+                  )}
+                </span>
+                <span className="stage">
+                  <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
+                </span>
+                {o.label && (
+                  <span className="option-label">
+                    <MdInline text={o.label} />
                   </span>
-                </>
-              )}
-              {revealed && o.why && <span className="option-why"><MdInline text={o.why} /></span>}
-            </label>
-          );
-        })}
-      </fieldset>
-      {motion.controls}
+                )}
+              </>
+            ) : (
+              <>
+                <span className="option-key" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span className="option-text">
+                  <MdInline text={o.label ?? ''} />
+                  {revealed && (right || selected) && (
+                    <span className="option-badge" style={{ marginInlineStart: 8 }}>
+                      {right ? 'Recommandé' : 'Ton choix'}
+                    </span>
+                  )}
+                </span>
+              </>
+            )}
+            {revealed && o.why && <span className="option-why"><MdInline text={o.why} /></span>}
+          </label>
+        );
+      })}
+    </fieldset>
+    {motion.controls}
     </>
   );
 }
@@ -214,54 +214,54 @@ export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy, 
     setDraft({ type: 'multi', optionIds: draft.optionIds.includes(id) ? draft.optionIds.filter((x) => x !== id) : [...draft.optionIds, id] });
   return (
     <>
-      <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy} aria-describedby={describedBy}>
-        {options.map((o) => {
-          const selected = draft.optionIds.includes(o.id);
-          const right = ex.answers.includes(o.id);
-          const state = !revealed ? (selected ? 'selected' : 'idle') : right ? 'right' : selected ? 'wrong' : 'dim';
-          const badge = right ? (selected ? 'À cocher — trouvé' : 'À cocher — oublié') : selected ? 'Ne s’applique pas' : '';
-          const box = (
-            <span className="check-box" aria-hidden="true">
-              {selected && <Check />}
-            </span>
-          );
-          return (
-            <label key={o.id} className={visual ? 'option option--visual' : 'option'} data-state={state}>
-              <input type="checkbox" className="visually-hidden" checked={selected} disabled={revealed} onChange={() => toggle(o.id)} />
-              {visual ? (
-                <>
-                  <span className="option-top">
-                    {box}
-                    {revealed && badge && <span className="option-badge">{badge}</span>}
+    <fieldset className={visual ? 'options options--visual' : 'options'} data-count={options.length} aria-labelledby={labelledBy} aria-describedby={describedBy}>
+      {options.map((o) => {
+        const selected = draft.optionIds.includes(o.id);
+        const right = ex.answers.includes(o.id);
+        const state = !revealed ? (selected ? 'selected' : 'idle') : right ? 'right' : selected ? 'wrong' : 'dim';
+        const badge = right ? (selected ? 'À cocher — trouvé' : 'À cocher — oublié') : selected ? 'Ne s’applique pas' : '';
+        const box = (
+          <span className="check-box" aria-hidden="true">
+            {selected && <Check />}
+          </span>
+        );
+        return (
+          <label key={o.id} className={visual ? 'option option--visual' : 'option'} data-state={state}>
+            <input type="checkbox" className="visually-hidden" checked={selected} disabled={revealed} onChange={() => toggle(o.id)} />
+            {visual ? (
+              <>
+                <span className="option-top">
+                  {box}
+                  {revealed && badge && <span className="option-badge">{badge}</span>}
+                </span>
+                <span className="stage">
+                  <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
+                </span>
+                {o.label && (
+                  <span className="option-label">
+                    <MdInline text={o.label} />
                   </span>
-                  <span className="stage">
-                    <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
-                  </span>
-                  {o.label && (
-                    <span className="option-label">
-                      <MdInline text={o.label} />
+                )}
+              </>
+            ) : (
+              <>
+                {box}
+                <span className="option-text">
+                  <MdInline text={o.label ?? ''} />
+                  {revealed && badge && (
+                    <span className="option-badge" style={{ marginInlineStart: 8 }}>
+                      {badge}
                     </span>
                   )}
-                </>
-              ) : (
-                <>
-                  {box}
-                  <span className="option-text">
-                    <MdInline text={o.label ?? ''} />
-                    {revealed && badge && (
-                      <span className="option-badge" style={{ marginInlineStart: 8 }}>
-                        {badge}
-                      </span>
-                    )}
-                  </span>
-                </>
-              )}
-              {revealed && o.why && <span className="option-why"><MdInline text={o.why} /></span>}
-            </label>
-          );
-        })}
-      </fieldset>
-      {motion.controls}
+                </span>
+              </>
+            )}
+            {revealed && o.why && <span className="option-why"><MdInline text={o.why} /></span>}
+          </label>
+        );
+      })}
+    </fieldset>
+    {motion.controls}
     </>
   );
 }
