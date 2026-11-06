@@ -320,6 +320,21 @@
   gap: var(--s4);
 }
 
+/* A heading sits closer to what it introduces than to what precedes it (craft-floor Spacing):
+   inside a section, 40 px above a later heading for 16 below; a sub-group (h3 and its content,
+   as in Cultures) keeps 8 px under its heading and 32 px from the previous group. */
+.section > :is(h2, h3):not(:first-child) {
+  margin-top: var(--s5);
+}
+
+.section > .section {
+  gap: var(--s2);
+}
+
+.section > .section + .section {
+  margin-top: var(--s4);
+}
+
 .section-head {
   display: flex;
   flex-wrap: wrap;
@@ -757,8 +772,9 @@
   background: color-mix(in oklch, var(--hero-fg) 22%, var(--hero-bg));
 }
 
+/* Progress toward the goal, not an error: the hero's own ink (7:1 against the track). */
 .today-main .meter > span {
-  background: var(--mark);
+  background: var(--hero-fg);
 }
 
 .today-side {
@@ -838,7 +854,7 @@
   content: counter(step);
   font-weight: 750;
   font-size: var(--t-h2);
-  color: var(--mark);
+  color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
 
@@ -864,7 +880,7 @@
 }
 
 .streak-strip i[data-level='3'] {
-  background: var(--mark);
+  background: var(--heat-3);
 }
 
 /* =========================================================================
@@ -890,8 +906,14 @@
   }
 }
 
+/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire);
+   the Atlas, one level lower (h3 under « Atlas de maîtrise »), sets its rows at body size. */
 .toc-group-head h2 {
-  font-size: var(--t-h3);
+  font-size: var(--t-h2);
+}
+
+.toc-group:has(> .toc-group-head > h3) .toc-title {
+  font-size: var(--t-body);
 }
 
 .toc-group-head p {
@@ -1499,7 +1521,22 @@
   color: var(--on-ink);
 }
 
+/* Options neither chosen nor recommended, after validation: the frame and the key recede, the
+   text keeps its token colours (opacity 0.72 put the « pourquoi » at 4.04:1). */
 .option[data-state='dim'] {
+  border-color: var(--rule-strong);
+}
+
+.option[data-state='dim'] .option-key {
+  border-color: var(--rule-strong);
+  color: var(--ink-3);
+}
+
+.option[data-state='dim'] .option-text {
+  color: var(--ink-2);
+}
+
+.option[data-state='dim'] > .stage {
   opacity: 0.72;
 }
 
@@ -1697,6 +1734,13 @@
 .order-moves .icon-btn:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+@media (pointer: coarse) {
+  .order-moves .icon-btn {
+    width: var(--tap);
+    height: var(--tap);
+  }
 }
 
 .order-correct {
@@ -1928,7 +1972,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--mark);
+  border: 2px solid var(--ink-3);
   flex: none;
 }
 
@@ -2098,6 +2142,56 @@
   }
 }
 
+/* « Les marchés »: the regions share one grid, so that a region with a single market takes one
+   column and the next region starts beside it (four one-market regions left 9 empty cells). */
+@media (min-width: 700px) {
+  .section:has(> .section > .markets) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s6) var(--s3);
+  }
+
+  .section:has(> .section > .markets) > :not(.section) {
+    grid-column: 1 / -1;
+  }
+
+  /* Cards of one band share its height: the card rows stretch under the region heading. */
+  .section:has(> .section > .markets) > .section {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: auto;
+    grid-auto-rows: 1fr;
+    gap: var(--s2) var(--s3);
+    margin-top: 0;
+  }
+
+  .section:has(> .section > .markets) > .section:has(.market:nth-child(2)) {
+    grid-column: 1 / -1;
+  }
+
+  .section:has(> .section > .markets) > .section > h3 {
+    grid-column: 1 / -1;
+  }
+
+  .section:has(> .section > .markets) .markets {
+    display: contents;
+  }
+}
+
+@media (min-width: 1100px) {
+  .section:has(> .section > .markets) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .section:has(> .section > .markets) > .section:has(.market:nth-child(2)) {
+    grid-column: span 2;
+  }
+
+  .section:has(> .section > .markets) > .section:has(.market:nth-child(3)) {
+    grid-column: 1 / -1;
+  }
+}
+
 .market {
   display: flex;
   flex-direction: column;
@@ -2151,6 +2245,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--s3);
+  max-width: 40rem;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -2181,6 +2276,7 @@
 
 .dim-note {
   grid-column: 1 / -1;
+  max-width: var(--measure);
   font-size: var(--t-meta);
   color: var(--ink-2);
 }
@@ -2276,8 +2372,10 @@
   width: 38%;
 }
 
+/* Format samples are set in the interface face, as a localized product would show them: the mono
+   turned names, addresses and day names into code and spread them over three or four lines. */
 .formats-table td {
-  font-family: var(--font-mono);
+  overflow-wrap: break-word;
 }
 
 /* A region that scrolls sideways shows it: edge shadows appear on the side where there is more
@@ -2594,7 +2692,7 @@
 }
 
 .heatmap i[data-level='3'] {
-  background: var(--mark);
+  background: var(--heat-3);
 }
 
 .heatmap i[data-future] {
@@ -2624,6 +2722,35 @@
 
 .mastery-table .meter {
   width: 6rem;
+}
+
+/* Phones: the four columns fit in the screen (366 px of table at 390 px before). */
+@media (max-width: 479.98px) {
+  .mastery-table th,
+  .mastery-table td {
+    padding-inline-end: var(--s2);
+  }
+
+  .mastery-table .meter {
+    width: 3.5rem;
+  }
+}
+
+/* Touch: text links standing alone in lists and tables get a 44 px target (WCAG 2.5.5, --tap). */
+@media (pointer: coarse) {
+  .mastery-table a,
+  .sources a,
+  .section-head a,
+  .recap-body > a,
+  .note > a,
+  .section > a:not(.btn) {
+    display: inline-block;
+    padding-block: 10px;
+  }
+
+  .lesson-toc a {
+    padding-block: 10px;
+  }
 }
 
 .badges {
@@ -2664,7 +2791,7 @@
 }
 
 .badge[data-earned] svg {
-  color: var(--mark);
+  color: var(--ok);
 }
 
 .badge:not([data-earned]) {

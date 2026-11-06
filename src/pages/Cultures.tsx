@@ -297,7 +297,7 @@ export function CultureDetail({ id }: { id: string }) {
         <h2 id="conv-title">Conventions et attentes</h2>
         {topics.map((t) => (
           <div key={t} className="section">
-            <h3 className="small muted">{TOPIC_LABEL[t] ?? t}</h3>
+            <h3>{TOPIC_LABEL[t] ?? t}</h3>
             <div className="conventions">
               {c.conventions
                 .filter((x) => x.topic === t)

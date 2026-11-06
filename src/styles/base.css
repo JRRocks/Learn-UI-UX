@@ -28,6 +28,12 @@ body {
   color: var(--ink);
 }
 
+/* Example text in fields: the browser grey (#757575) falls to 3.6:1 on the dark sheet. */
+::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+}
+
 h1,
 h2,
 h3,

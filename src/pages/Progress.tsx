@@ -83,7 +83,7 @@ export function Progress() {
             </span>
           )}
         </p>
-        <div className="meter meter--mark" style={pct(lvl.progress)} aria-hidden="true">
+        <div className="meter" style={pct(lvl.progress)} aria-hidden="true">
           <span />
         </div>
       </header>
