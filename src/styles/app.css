@@ -1012,6 +1012,17 @@
   color: var(--ink-2);
 }
 
+/* Side by side, both stages share one row: the captions start on the same line even when only one
+   mock gets « Rejouer » or « Mettre en pause » under it. */
+@supports (grid-template-rows: subgrid) {
+  .example-pair figure {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: var(--s2);
+  }
+}
+
 .verdict-tag {
   display: inline-flex;
   align-items: center;
