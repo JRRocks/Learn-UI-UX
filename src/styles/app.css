@@ -2880,6 +2880,10 @@
 }
 
 @media (max-width: 359.98px) {
+  .mastery-table {
+    font-size: var(--t-meta);
+  }
+
   .mastery-table th,
   .mastery-table td {
     padding-inline-end: var(--s1);
