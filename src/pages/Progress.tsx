@@ -1,12 +1,14 @@
-import { Award, Download, Trash2, Upload } from 'lucide-react';
-import { useRef, type CSSProperties } from 'react';
-import { Link } from '../app/router';
+import { Award, CircleAlert, Download, Trash2, Upload } from 'lucide-react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
-import { EXERCISES, MODULES, RULE_CARDS, exercisesOf } from '../content';
+import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exercisesOf } from '../content';
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
-import { emptyProgress, mastery, masteryLabel, normalizeProgress, streak } from '../engine/progress';
+import { emptyProgress, mastery, masteryLabel, parseBackup, streak, type ProgressState } from '../engine/progress';
+import { count, longDay, shortDay } from '../lib/french';
+import { frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
 
@@ -26,7 +28,24 @@ export function levelOf(xp: number) {
   return { n: i + 1, title: LEVELS[i].title, next, progress: next ? (xp - LEVELS[i].xp) / (next.xp - LEVELS[i].xp) : 1 };
 }
 
-const fmtDate = (iso: string) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+const DATE_TIME = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const fmtDate = (iso: string) => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? '—' : DATE_TIME.format(d);
+};
+const isDayKey = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s);
+const LIST = new Intl.ListFormat('fr-FR', { type: 'conjunction' });
+
+/** « 640 XP, 12 épreuves suivies et 3 fiches programmées »: what a reset or an import would replace. */
+function describe(s: ProgressState): string {
+  // Only what the learner can see: ids removed from the content no longer count.
+  const items = Object.keys(s.items).filter((id) => EXERCISE_BY_ID.has(id)).length;
+  const cards = Object.keys(s.cards).filter((k) => RULE_CARD_BY_KEY.has(k)).length;
+  const parts = [`${s.xp} XP`];
+  if (items) parts.push(count(items, 'épreuve suivie', 'épreuves suivies'));
+  if (cards) parts.push(count(cards, 'fiche programmée', 'fiches programmées'));
+  return LIST.format(parts);
+}
 
 export function Progress() {
   const p = useProgress();
@@ -34,15 +53,30 @@ export function Progress() {
   const lvl = levelOf(p.xp);
   const today = dayKey();
   const fileRef = useRef<HTMLInputElement>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const resetRef = useRef<HTMLDialogElement>(null);
+  const keepRef = useRef<HTMLButtonElement>(null);
+  const importRef = useRef<HTMLDialogElement>(null);
+  const cancelImportRef = useRef<HTMLButtonElement>(null);
+  const [pending, setPending] = useState<ProgressState | null>(null);
+  const [undo, setUndo] = useState<ProgressState | null>(null);
+  const [importError, setImportError] = useState(false);
   const seen = EXERCISES.filter((e) => p.items[e.id]).length;
   const active30 = Array.from({ length: 30 }, (_, i) => addDays(today, -i)).filter((d) => (p.days[d]?.xp ?? 0) > 0).length;
+  const activity = `${count(active30, 'jour', 'jours')} d’activité sur les 30 derniers`;
+  usePageTitle(pageTitle('Progression'));
 
   // 12 weeks of activity, columns = weeks starting Monday.
   const todayDate = new Date();
   const mondayOffset = (todayDate.getDay() + 6) % 7;
   const start = addDays(today, -mondayOffset - 7 * 11);
   const cells = Array.from({ length: 84 }, (_, i) => addDays(start, i));
+
+  // A valid backup was picked: ask before replacing anything, the safe answer focused.
+  useEffect(() => {
+    if (!pending) return;
+    importRef.current?.showModal();
+    cancelImportRef.current?.focus();
+  }, [pending]);
 
   const exportData = () => {
     const blob = new Blob([JSON.stringify(store.get(), null, 2)], { type: 'application/json' });
@@ -56,13 +90,35 @@ export function Progress() {
 
   const importData = async (file: File | undefined) => {
     if (!file) return;
+    let data: ProgressState | null = null;
     try {
-      const data = normalizeProgress(JSON.parse(await file.text()));
-      store.replace(data);
-      toast('Progression importée.');
+      data = parseBackup(JSON.parse(await file.text()));
     } catch {
-      toast('Ce fichier n’est pas une sauvegarde valide : rien n’a été modifié.');
+      data = null;
     }
+    setUndo(null);
+    setImportError(!data);
+    if (data) setPending(data);
+  };
+
+  const confirmImport = () => {
+    if (!pending) return;
+    setUndo(store.get());
+    store.replace(pending);
+    toast(frenchSpacing(`Sauvegarde importée : ${describe(pending)}.`));
+  };
+
+  const undoImport = () => {
+    if (!undo) return;
+    store.replace(undo);
+    setUndo(null);
+    toast('Ta progression d’avant l’import est rétablie.');
+  };
+
+  const openReset = () => {
+    resetRef.current?.showModal();
+    // React does not write `autoFocus` as an attribute, so showModal() would focus the destructive button.
+    keepRef.current?.focus();
   };
 
   const setTheme = (theme: 'system' | 'light' | 'dark') => store.update((s) => ({ ...s, settings: { ...s.settings, theme } }));
@@ -75,13 +131,9 @@ export function Progress() {
           Progression
         </h1>
         <p className="lead">
-          Niveau {lvl.n} — <strong>{lvl.title}</strong> · <span className="num">{p.xp}</span> XP
-          {lvl.next && (
-            <span className="muted">
-              {' '}
-              · encore {lvl.next.xp - p.xp} XP avant « {lvl.next.title} »
-            </span>
-          )}
+          Niveau {lvl.n} — <strong>{lvl.title}</strong> · <span className="num">{p.xp}</span>
+          {' '}XP
+          {lvl.next && <span className="muted">{frenchSpacing(` · encore ${lvl.next.xp - p.xp} XP avant « ${lvl.next.title} »`)}</span>}
         </p>
         <div className="meter meter--mark" style={pct(lvl.progress)} aria-hidden="true">
           <span />
@@ -92,15 +144,16 @@ export function Progress() {
         <section className="section" aria-labelledby="act-title">
           <h2 id="act-title">Activité</h2>
           <p className="muted">
-            Série : <strong className="num">{st.current}</strong> jour{st.current > 1 ? 's' : ''} (record {st.best}) · actif {active30} jours sur
-            les 30 derniers.
+            Série{' '}: <strong className="num">{st.current}</strong>
+            {' '}
+            {st.current > 1 ? 'jours' : 'jour'} (record{' '}: {st.best}) · {activity}.
           </p>
           <div className="table-scroll">
-            <div className="heatmap" role="img" aria-label={`Activité des 12 dernières semaines : actif ${active30} jours sur les 30 derniers`}>
+            <div className="heatmap" role="img" aria-label={`Activité des 12 dernières semaines : ${activity}`}>
               {cells.map((d) => {
                 const xp = p.days[d]?.xp ?? 0;
                 const level = xp === 0 ? 0 : xp < p.settings.dailyGoal / 2 ? 1 : xp < p.settings.dailyGoal ? 2 : 3;
-                return <i key={d} data-level={level} data-future={d > today ? '' : undefined} title={`${d} : ${xp} XP`} />;
+                return <i key={d} data-level={level} data-future={d > today ? '' : undefined} title={`${shortDay(d)} : ${xp} XP`} />;
               })}
             </div>
           </div>
@@ -117,18 +170,18 @@ export function Progress() {
             <div>
               <dt>Leçons lues</dt>
               <dd className="num">
-                {Object.keys(p.lessons).length} sur {MODULES.length}
+                {MODULES.filter((m) => p.lessons[m.id]).length} sur {MODULES.length}
               </dd>
             </div>
             <div>
               <dt>Fiches programmées</dt>
               <dd className="num">
-                {Object.keys(p.cards).length} sur {RULE_CARDS.length}
+                {RULE_CARDS.filter((c) => p.cards[c.key]).length} sur {RULE_CARDS.length}
               </dd>
             </div>
             <div>
               <dt>Sessions terminées</dt>
-              <dd className="num">{p.sessions.length}</dd>
+              <dd className="num">{p.sessionsDone}</dd>
             </div>
           </dl>
         </section>
@@ -141,7 +194,7 @@ export function Progress() {
             <thead>
               <tr>
                 <th scope="col">Leçon</th>
-                <th scope="col">Niveau</th>
+                <th scope="col">État</th>
                 <th scope="col">Maîtrise</th>
                 <th scope="col" className="num">
                   Vues
@@ -156,11 +209,11 @@ export function Progress() {
                 return (
                   <tr key={m.id}>
                     <th scope="row">
-                      <Link to={`/apprendre/${m.id}`}>{m.title}</Link>
+                      <Link to={`/apprendre/${m.id}`}>{frenchSpacing(m.title)}</Link>
                     </th>
                     <td>{masteryLabel(v, touched)}</td>
                     <td>
-                      <span className="meter" style={pct(v)} role="img" aria-label={`${Math.round(v * 100)} %`}>
+                      <span className="meter" style={pct(v)} role="img" aria-label={`${Math.round(v * 100)} %`}>
                         <span />
                       </span>
                     </td>
@@ -178,16 +231,19 @@ export function Progress() {
       <section className="section" aria-labelledby="badges-title">
         <h2 id="badges-title">Badges</h2>
         <ul className="badges">
-          {BADGES.map((b) => (
-            <li key={b.id} className="badge" data-earned={p.badges[b.id] ? '' : undefined}>
-              <Award aria-hidden="true" />
-              <strong>{b.title}</strong>
-              <small>
-                {b.description}
-                {p.badges[b.id] ? ` Obtenu le ${p.badges[b.id]}.` : ''}
-              </small>
-            </li>
-          ))}
+          {BADGES.map((b) => {
+            const on = p.badges[b.id];
+            return (
+              <li key={b.id} className="badge" data-earned={on ? '' : undefined}>
+                <Award aria-hidden="true" />
+                <strong>{b.title}</strong>
+                <small>
+                  {frenchSpacing(b.description)}
+                  {on ? ` Obtenu le ${isDayKey(on) ? longDay(on) : on}.` : ''}
+                </small>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
@@ -212,10 +268,10 @@ export function Progress() {
                 {p.sessions
                   .slice(-10)
                   .reverse()
-                  .map((s) => (
-                    <tr key={s.id}>
+                  .map((s, i) => (
+                    <tr key={`${s.id}-${i}`}>
                       <td>{fmtDate(s.at)}</td>
-                      <td>{s.label}</td>
+                      <td>{frenchSpacing(s.label)}</td>
                       <td className="num">
                         {s.correct}/{s.total}
                       </td>
@@ -255,14 +311,19 @@ export function Progress() {
           <div className="segmented" role="group" aria-labelledby="goal-label">
             {[30, 60, 100, 150].map((g) => (
               <button key={g} type="button" aria-pressed={p.settings.dailyGoal === g} onClick={() => setGoal(g)}>
-                {g} XP
+                {g}
+                {' '}XP
               </button>
             ))}
           </div>
         </div>
         <div className="field">
           <span className="field-label">Mes données</span>
-          <p className="small muted">Tout reste dans ce navigateur : aucun compte, aucun serveur. Exporte une sauvegarde pour changer d’appareil.</p>
+          <p className="small muted">
+            {frenchSpacing(
+              'Tout reste dans ce navigateur : aucun compte, aucun serveur. Exporte une sauvegarde pour changer d’appareil ; l’importer remplace la progression de ce navigateur, après confirmation.',
+            )}
+          </p>
           <div className="btn-row">
             <button type="button" className="btn btn-secondary" onClick={exportData}>
               <Download aria-hidden="true" /> Exporter ma progression
@@ -283,21 +344,42 @@ export function Progress() {
               }}
             />
           </div>
+          <div aria-live="polite">
+            {importError && (
+              <p className="small" style={{ color: 'var(--mark-ink)' }}>
+                <CircleAlert aria-hidden="true" width={16} height={16} style={{ display: 'inline', verticalAlign: '-3px', marginInlineEnd: 'var(--s1)' }} />
+                {frenchSpacing(
+                  'Ce fichier n’est pas une sauvegarde d’Épreuves : rien n’a été modifié. Choisis un fichier créé avec « Exporter ma progression ».',
+                )}
+              </p>
+            )}
+          </div>
+          {undo && (
+            <div className="btn-row">
+              <p className="small muted">Tu viens de remplacer ta progression par la sauvegarde.</p>
+              <button type="button" className="btn btn-secondary" onClick={undoImport}>
+                Annuler l’import
+              </button>
+            </div>
+          )}
         </div>
         <div className="danger-zone">
           <span className="field-label">Repartir de zéro</span>
           <p className="small muted">Efface l’XP, les séries, les révisions programmées et les badges de ce navigateur.</p>
-          <button type="button" className="btn btn-secondary" style={{ alignSelf: 'flex-start' }} onClick={() => dialogRef.current?.showModal()}>
+          <button type="button" className="btn btn-secondary" style={{ alignSelf: 'flex-start' }} onClick={openReset}>
             <Trash2 aria-hidden="true" /> Effacer ma progression…
           </button>
         </div>
+        <p className="small">
+          <Link to="/a-propos">{frenchSpacing('À propos : contenu, crédits, licences et confidentialité')}</Link>
+        </p>
       </section>
 
-      <dialog ref={dialogRef} className="dialog" aria-labelledby="reset-title">
-        <h2 id="reset-title">Effacer toute ta progression ?</h2>
-        <p>
-          {p.xp} XP, {Object.keys(p.items).length} épreuves suivies et {Object.keys(p.cards).length} fiches programmées seront supprimées de ce
-          navigateur. Exporte une sauvegarde d’abord si tu veux pouvoir revenir en arrière.
+      <dialog ref={resetRef} className="dialog" aria-labelledby="reset-title" aria-describedby="reset-desc">
+        <h2 id="reset-title">{frenchSpacing('Effacer toute ta progression ?')}</h2>
+        <p id="reset-desc">
+          {frenchSpacing(`Seront effacés de ce navigateur : ${describe(p)}, avec tes séries et tes badges.`)} Exporte une sauvegarde d’abord si tu veux
+          pouvoir revenir en arrière.
         </p>
         <form method="dialog" className="btn-row">
           <button
@@ -305,13 +387,32 @@ export function Progress() {
             className="btn btn-danger"
             onClick={() => {
               store.replace({ ...emptyProgress(), settings: store.get().settings });
+              setUndo(null);
               toast('Progression effacée.');
             }}
           >
             Effacer ma progression
           </button>
-          <button type="submit" className="btn btn-secondary" autoFocus>
+          <button ref={keepRef} type="submit" className="btn btn-secondary">
             Garder ma progression
+          </button>
+        </form>
+      </dialog>
+
+      <dialog ref={importRef} className="dialog" aria-labelledby="import-title" aria-describedby="import-desc" onClose={() => setPending(null)}>
+        <h2 id="import-title">{frenchSpacing('Remplacer ta progression actuelle ?')}</h2>
+        <p id="import-desc">
+          {pending &&
+            frenchSpacing(
+              `Ta progression actuelle (${describe(p)}) et tes réglages seront remplacés par ceux du fichier (${describe(pending)}).`,
+            )}
+        </p>
+        <form method="dialog" className="btn-row">
+          <button type="submit" className="btn btn-danger" onClick={confirmImport}>
+            Remplacer ma progression
+          </button>
+          <button ref={cancelImportRef} type="submit" className="btn btn-secondary">
+            Annuler
           </button>
         </form>
       </dialog>
