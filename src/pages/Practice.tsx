@@ -17,13 +17,15 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useState } from 'react';
-import { Link, navigate } from '../app/router';
+import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
-import { EXERCISES, MODULES, RULE_CARDS } from '../content';
+import { EXERCISES, MODULES, RULE_CARDS, RULE_CARD_BY_KEY } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import { dayKey } from '../engine/dates';
 import { dueCardKeys } from '../engine/progress';
-import { matchesType, type PracticeType } from '../engine/session';
+import { SESSION_SIZE, matchesType, type PracticeType } from '../engine/session';
+import { count } from '../lib/french';
+import { frenchSpacing } from '../lib/markdown';
 
 const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIcon }[] = [
   { type: 'duel', title: 'Comparaison visuelle', text: 'Deux à quatre versions d’une même interface : choisis celle qu’un expert recommanderait.', Icon: Columns2 },
@@ -42,9 +44,11 @@ export function Practice() {
   const today = dayKey();
   const due = EXERCISES.filter((e) => (p.items[e.id]?.due ?? '9999') <= today).length;
   const mistakes = EXERCISES.filter((e) => p.items[e.id]?.last === 'wrong').length;
-  const cardsDue = dueCardKeys(p, today).length;
+  const cardsDue = dueCardKeys(p, today, RULE_CARD_BY_KEY).length;
+  const cardsScheduled = RULE_CARDS.some((c) => p.cards[c.key]);
   const [moduleId, setModuleId] = useState(MODULES[0]?.id ?? '');
   const cultureCount = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
+  usePageTitle(pageTitle('S’entraîner'));
 
   return (
     <div className="page">
@@ -71,25 +75,27 @@ export function Practice() {
             <Repeat aria-hidden="true" />
             <span>
               Révisions espacées
-              <small>Épreuves programmées pour aujourd’hui</small>
+              <small>{due ? 'Épreuves à revoir aujourd’hui' : 'Rien à revoir aujourd’hui'}</small>
             </span>
-            <strong>{due}</strong>
+            {due > 0 && <strong>{due}</strong>}
           </Link>
           <Link to="/session?mode=mistakes" className="side-link">
             <RotateCcw aria-hidden="true" />
             <span>
               Mes erreurs
-              <small>Jusqu’à ce qu’elles soient réussies</small>
+              <small>{mistakes ? 'Épreuves ratées, jusqu’à ce que tu les réussisses' : 'Aucune erreur en attente'}</small>
             </span>
-            <strong>{mistakes}</strong>
+            {mistakes > 0 && <strong>{mistakes}</strong>}
           </Link>
           <Link to="/fiches" className="side-link">
             <Layers aria-hidden="true" />
             <span>
               Fiches de révision
-              <small>{RULE_CARDS.length} règles d’or, à se réciter</small>
+              <small>
+                {cardsDue ? 'Fiches à réviser aujourd’hui' : cardsScheduled ? 'Rien à réviser aujourd’hui' : `${RULE_CARDS.length} règles d’or à découvrir`}
+              </small>
             </span>
-            <strong>{cardsDue}</strong>
+            {cardsDue > 0 && <strong>{cardsDue}</strong>}
           </Link>
         </div>
       </section>
@@ -101,14 +107,14 @@ export function Practice() {
         </div>
         <ul className="formats">
           {FORMATS.map((f) => {
-            const count = EXERCISES.filter((e) => matchesType(e, f.type)).length;
+            const n = EXERCISES.filter((e) => matchesType(e, f.type)).length;
             return (
               <li key={f.type} className="format">
                 <f.Icon aria-hidden="true" />
                 <div>
                   <h3>{f.title}</h3>
                   <p>
-                    {f.text} <span className="num">({count})</span>
+                    {frenchSpacing(f.text)} <span className="num">({n})</span>
                   </p>
                 </div>
                 <Link to={`/session?mode=type&id=${f.type}`} className="btn btn-secondary" aria-label={`Lancer : ${f.title}`}>
@@ -123,7 +129,7 @@ export function Practice() {
       <div className="split">
         <section className="section" aria-labelledby="module-title">
           <h2 id="module-title">Par leçon</h2>
-          <p className="muted">Toutes les épreuves d’une leçon, les nouvelles d’abord.</p>
+          <p className="muted">{SESSION_SIZE.module} épreuves d’une leçon à la fois, les nouvelles d’abord.</p>
           <form
             className="btn-row"
             onSubmit={(e) => {
@@ -153,7 +159,7 @@ export function Practice() {
             {cultureCount} épreuves sur les différences d’interface entre {Object.keys(CULTURE_NAMES).length} marchés et la façon de s’y adapter.
           </p>
           <div className="btn-row">
-            <Link to="/session?mode=culture" className="btn btn-secondary">
+            <Link to="/session?mode=culture" className="btn btn-secondary" aria-label="Lancer : Cultures">
               Lancer
             </Link>
             <Link to="/cultures" className="btn btn-ghost">
@@ -172,8 +178,8 @@ export function Practice() {
           <div>
             <h3>Défi chrono</h3>
             <p>
-              90 secondes de vrai ou faux, toutes leçons confondues. Le chrono s’arrête pendant la correction.
-              {p.records.blitz ? ` Ton record : ${p.records.blitz}.` : ''}
+              90{'\u00A0'}secondes de vrai ou faux, toutes leçons confondues. Le chrono s’arrête pendant la correction.
+              {p.records.blitz ? frenchSpacing(` Ton record : ${count(p.records.blitz, 'bonne réponse', 'bonnes réponses')}.`) : ''}
             </p>
           </div>
           <Link to="/session?mode=blitz" className="btn btn-secondary">
@@ -184,15 +190,19 @@ export function Practice() {
           <GraduationCap aria-hidden="true" />
           <div>
             <h3>Examen blanc</h3>
-            <p>30 épreuves de toutes les leçons, sans correction pendant l’examen : tout est expliqué dans le bilan. 80 % de réussite débloque un badge.</p>
+            <p>
+              {frenchSpacing(
+                `${SESSION_SIZE.exam} épreuves de toutes les leçons, sans correction pendant l’examen : tout est expliqué dans le bilan. 80 % de réussite débloque un badge.`,
+              )}
+            </p>
           </div>
           <Link to="/session?mode=exam" className="btn btn-primary">
             Passer l’examen
           </Link>
         </div>
         <p className="small muted">
-          <CalendarCheck aria-hidden="true" width={14} height={14} style={{ display: 'inline', verticalAlign: '-2px' }} /> Astuce : une session
-          par jour vaut mieux qu’un marathon par semaine — la répétition espacée fait le reste.
+          <CalendarCheck aria-hidden="true" width={14} height={14} style={{ display: 'inline', verticalAlign: '-2px' }} />{' '}
+          {frenchSpacing('Astuce : une session par jour vaut mieux qu’un marathon par semaine — la répétition espacée fait le reste.')}
         </p>
       </section>
     </div>
