@@ -11,7 +11,7 @@ import { SOURCES, resolveSource } from '../content/sources';
 import type { AntipatternEntry, Source } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
 import { SEP, count } from '../lib/french';
-import { MdInline, frenchSpacing } from '../lib/markdown';
+import { MdInline, frenchSpacing, plainText } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
 
 const TABS = [
@@ -49,7 +49,8 @@ function Cheatsheet() {
                 {g.rows.map(([k, v]) => (
                   <tr key={k}>
                     <th scope="row">{frenchSpacing(k)}</th>
-                    <td>{frenchSpacing(v)}</td>
+                    {/* As the content's text: a unit in full may split at a syllable on a narrow screen (« 45–75 carac-tères »). */}
+                    <td>{plainText(v)}</td>
                   </tr>
                 ))}
               </tbody>

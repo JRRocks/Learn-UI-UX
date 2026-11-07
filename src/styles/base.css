@@ -232,6 +232,13 @@ li::marker {
   h4 {
     hyphenate-limit-chars: 12 4 4;
   }
+
+  /* A unit written in full stays with its number (a no-break space: « 45–75 caractères »), in an element
+     of its own (markdown.tsx). Wider than the line together, they split at a syllable of the unit, from 9
+     letters (« 45–75 carac-tères »), rather than anywhere in it (« caractère|s »). */
+  .unit {
+    hyphenate-limit-chars: 9 5 4;
+  }
 }
 
 @media (max-width: 11.99875em) {

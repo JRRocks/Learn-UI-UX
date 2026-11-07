@@ -8,7 +8,7 @@ import { LAB_LOCALES } from '../content/cultures/lab';
 import { CULTURE_PAIRS } from '../content/cultures/pairs';
 import { CULTURES } from '../content/cultures/profiles';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
-import { Md, frenchSpacing, openQuotes, parseBlocks } from './markdown';
+import { Md, frenchSpacing, openQuotes, parseBlocks, units } from './markdown';
 
 /** Text as rendered by Md, without its code spans. */
 function renderedText(md: string): string {
@@ -79,18 +79,20 @@ describe('markdown subset', () => {
   });
 
   it('keeps numbers attached to their unit', () => {
-    expect(frenchSpacing('1 280 px, 44 × 44 pt, 18 h 30, 50 % et 3 s')).toBe(
-      '1\u00A0280\u00A0px, 44\u00A0×\u00A044\u00A0pt, 18\u00A0h\u00A030, 50\u00A0% et 3\u00A0s',
+    expect(frenchSpacing('1 280 px, 44 × 44 pt, 18 h 30, 50 % et 75 caractères')).toBe(
+      '1\u00A0280\u00A0px, 44\u00A0×\u00A044\u00A0pt, 18\u00A0h\u00A030, 50\u00A0% et 75\u00A0caractères',
     );
     // Not a unit: a word that merely starts like one.
     expect(frenchSpacing('3 points, 2 semaines, 4 heures')).toBe('3 points, 2 semaines, 4 heures');
   });
 
-  it('lets a unit written in full go to the next line, its number kept whole', () => {
-    // Glued to « 45–75 », « caractères » broke inside the word on a narrow line (« caractère|s »).
-    expect(frenchSpacing('45–75 caractères, 15 000 caractères, 3 secondes, 2 jours et 5 mots')).toBe(
-      '45–\u206075 caractères, 15\u00A0000 caractères, 3 secondes, 2 jours et 5 mots',
-    );
+  it('sets each unit written in full apart, so that it can split at a syllable and keep its number', () => {
+    const html = renderToStaticMarkup(createElement(Md, { text: 'De 45–75 caractères, 15 000 caractères ou 2 jours, et 5 secondes.' }));
+    expect(html).toContain('45–\u206075\u00A0<span class="unit">caractères</span>, 15\u00A0000\u00A0<span class="unit">caractères</span>');
+    expect(html).toContain('2\u00A0<span class="unit">jours</span>, et 5\u00A0<span class="unit">secondes</span>.');
+    // The text itself is unchanged; a word that merely starts like a unit, or a unit without its number, is left alone.
+    expect(renderedText('De 45–75 caractères et 2 jours.')).toBe('De 45–\u206075\u00A0caractères et 2\u00A0jours.');
+    expect(units('3\u00A0journées, des secondes')).toEqual(['3\u00A0journées, des secondes']);
   });
 
   it('sets each opening guillemet apart, so that the word it leads to can split at a syllable', () => {
