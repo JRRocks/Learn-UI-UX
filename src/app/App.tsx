@@ -18,7 +18,7 @@ import { Resources } from '../pages/Resources';
 import { SessionPage, parseSpec, specLabel } from '../pages/Session';
 import { Link, pageTitle, useRoute, type Route } from './router';
 import { STORAGE_KEY, store, useProgress } from './store';
-import { dismissAllToasts, dismissToast, holdToasts, keyMoves, toastsOver, useToasts } from './toasts';
+import { dismissAllToasts, dismissToast, holdToasts, keyMoves, toastRoom, toastsOver, useToasts } from './toasts';
 
 store.setBadgeContext({ exercises: EXERCISES, moduleIds: MODULES.map((m) => m.id) });
 
@@ -122,22 +122,61 @@ function Toasts() {
   const region = useRef<HTMLDivElement>(null);
   /** Where the toast held back would show: it comes once the keyboard focus has left that place. */
   const heldAt = useRef<DOMRect | null>(null);
+  /** Where a tap or a click has just closed a toast: the next one waits for the next click if it would show there. */
+  const tappedAt = useRef<{ x: number; y: number } | null>(null);
+  const heldForTap = useRef(false);
 
   // A toast never hides the control that has the focus (WCAG 2.4.11): those lying over a control
   // reached with Tab or the arrows go away (the status region has read them out already), and Escape
   // dismisses them all. A tap or a click closes the toast it lands on, and nothing under it. They show
   // one at a time (toasts.ts), and one that has waited its turn never comes up over the control that
-  // has the keyboard focus: it waits until the focus leaves that place.
+  // has the keyboard focus: it waits until the focus leaves that place. Nor under the finger that has
+  // just closed the one before: it waits for the next tap, which reaches what lay under them (an option
+  // of the exam's next question took three taps, two badges closed first).
   useLayoutEffect(() => {
     const t = toasts[0];
     const el = region.current?.querySelector('.toast');
-    const focus = keyboardFocus();
-    if (!t?.queued || !el || !focus) return;
+    if (!t?.queued || !el) return;
     const box = el.getBoundingClientRect();
-    if (!toastsOver(focusBox(focus), [{ id: t.id, box }]).length) return;
+    const tap = tappedAt.current;
+    if (tap && toastsOver({ left: tap.x, top: tap.y, right: tap.x + 1, bottom: tap.y + 1 }, [{ id: t.id, box }]).length) {
+      heldForTap.current = true;
+      holdToasts(true);
+      return;
+    }
+    const focus = keyboardFocus();
+    if (!focus || !toastsOver(focusBox(focus), [{ id: t.id, box }]).length) return;
     heldAt.current = box;
     holdToasts(true);
   }, [toasts]);
+
+  // The page keeps room at its end for the toasts (--toast-room, app.css): from the top of the toast on
+  // screen to the bottom of the screen. It grows with a taller toast, and goes back to none with the page.
+  // Measured on the region, which the toast's entrance (a slide of 8 px) does not move.
+  useEffect(() => {
+    const el = region.current;
+    if (!el) return;
+    let room = 0;
+    const measure = () => {
+      const top = el.querySelector('.toast') ? el.getBoundingClientRect().top : null;
+      const next = toastRoom(room, top, window.innerHeight);
+      if (next === room) return;
+      room = next;
+      document.documentElement.style.setProperty('--toast-room', `${room}px`);
+    };
+    const reset = () => {
+      room = 0;
+      document.documentElement.style.removeProperty('--toast-room');
+      measure();
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    window.addEventListener('hashchange', reset);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('hashchange', reset);
+    };
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -145,6 +184,18 @@ function Toasts() {
     const release = () => {
       heldAt.current = null;
       holdToasts(false);
+    };
+    // The next click after the one that closed a toast, or a key, lets the toast held back come, once the
+    // control under it has had that click.
+    const releaseTap = () => {
+      tappedAt.current = null;
+      if (!heldForTap.current) return;
+      heldForTap.current = false;
+      window.setTimeout(() => holdToasts(false), 0);
+    };
+    const onClick = (e: MouseEvent) => {
+      if (region.current && e.composedPath().includes(region.current)) return;
+      releaseTap();
     };
     const onFocus = (e: FocusEvent) => {
       const el = e.composedPath()[0];
@@ -169,23 +220,34 @@ function Toasts() {
     };
     // Captured: the key is noted before any widget handles it, and before the focus moves.
     const onKey = (e: KeyboardEvent) => {
+      releaseTap();
       if (e.key === 'Escape') dismissAllToasts();
       else keys.key(e.key);
     };
     document.addEventListener('focusin', onFocus);
     document.addEventListener('focusout', onBlur);
     document.addEventListener('keydown', onKey, true);
+    document.addEventListener('click', onClick);
     return () => {
       cancelAnimationFrame(frame);
       document.removeEventListener('focusin', onFocus);
       document.removeEventListener('focusout', onBlur);
       document.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('click', onClick);
     };
   }, []);
   return (
     <div ref={region} className="toasts" role="status" aria-live="polite">
       {toasts.map((t) => (
-        <div key={t.id} className="toast" data-id={t.id} onClick={() => dismissToast(t.id)}>
+        <div
+          key={t.id}
+          className="toast"
+          data-id={t.id}
+          onClick={(e) => {
+            tappedAt.current = { x: e.clientX, y: e.clientY };
+            dismissToast(t.id);
+          }}
+        >
           {t.tone === 'badge' && <Sparkles aria-hidden="true" />}
           {t.text}
         </div>

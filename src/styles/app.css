@@ -3535,9 +3535,11 @@ fieldset.tf {
 /* Without the « Valider » bar (a session's summary, an empty selection, the flashcards, the start and
    the end of the challenge), the toasts go down to the edge of the screen and the page ends with room
    for one of two lines under its last buttons: they sat where the bar would be, on « Nouvelle session
-   du jour », and a tap there closed the toast instead of starting the session. */
+   du jour », and a tap there closed the toast instead of starting the session. A taller toast (a large
+   text on a phone) gets the room it takes, measured by Toasts (App.tsx, --toast-room): scrolled to its
+   end, the page shows its last control clear of it. */
 .shell[data-focus] .main:not(:has(.task-actions)) {
-  padding-bottom: calc(var(--s9) + var(--s3) + env(safe-area-inset-bottom));
+  padding-bottom: max(calc(var(--s9) + var(--s3) + env(safe-area-inset-bottom)), calc(var(--toast-room, 0px) + var(--s3)));
 }
 
 .shell[data-focus]:not(:has(.task-actions)) .toasts {
@@ -3611,9 +3613,14 @@ fieldset.tf {
   }
 
   /* No bar stays at the bottom of a session: the toasts go down to the edge, into the 64 px that end
-     the page under « Épreuve suivante » (.shell[data-focus] .main). */
+     the page under « Épreuve suivante » (.shell[data-focus] .main), or the room a taller toast takes
+     (--toast-room): with a 32 px text, 266 px of toast covered the button in its 64 px. */
   .shell[data-focus] .toasts {
     bottom: calc(var(--s3) + env(safe-area-inset-bottom));
+  }
+
+  .shell[data-focus] .main {
+    padding-bottom: max(var(--s8), calc(var(--toast-room, 0px) + var(--s3)));
   }
 }
 
@@ -3882,6 +3889,16 @@ fieldset.tf {
   .btn {
     hyphenate-limit-chars: 10 4 4;
   }
+
+  /* A toast sets its icon above its words, which take its width: beside the icon they kept 148 px at
+     320 px with a 32 px text, four lines for « Badge obtenu : Première épreuve » (320 px of toast, 278
+     now). From 15em the words have room enough beside it, and the icon on its own line would cost one. */
+  .toast {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s1);
+    padding: var(--s2) var(--s3);
+  }
 }
 
 /* Under 12em (384 px at 32 px), a box set beside an icon, a key, a count or two arrows holds ten letters
@@ -4058,7 +4075,7 @@ fieldset.tf {
   }
 
   .shell[data-focus] .main:has(.task-actions) {
-    padding-bottom: calc(var(--s8) + env(safe-area-inset-bottom));
+    padding-bottom: max(calc(var(--s8) + env(safe-area-inset-bottom)), calc(var(--toast-room, 0px) + var(--s3)));
   }
 
   .shell[data-focus] .toasts {

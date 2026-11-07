@@ -112,8 +112,21 @@ export function keyMoves(defer: (done: () => void) => void = (done) => window.se
 }
 
 /**
- * The toasts lying over `target`, the control that has just received the keyboard focus: they go
- * away, so that it never ends up hidden under one (WCAG 2.4.11). Boxes that only touch do not overlap.
+ * The room the page keeps at its end for the toasts, in px: from the top of the toast on screen to the
+ * bottom edge of the screen (`viewport`), where the toasts stand once the « Valider » bar no longer sticks
+ * there (app.css). Scrolled to its end, the page then shows its last control clear of a toast: at 320 px
+ * with a 32 px text, a toast 266 to 320 px tall covered « Épreuve suivante » in the 64 px kept for it.
+ * The room only grows (`current`): shrunk when the toast goes, the page would jump under the reader.
+ */
+export function toastRoom(current: number, toastTop: number | null, viewport: number): number {
+  if (toastTop === null) return current;
+  return Math.max(current, Math.ceil(viewport - toastTop));
+}
+
+/**
+ * The toasts lying over `target`, the control that has just received the keyboard focus, or the point
+ * of a tap: they go away, or the next one waits, so that a control never ends up hidden under one
+ * (WCAG 2.4.11). Boxes that only touch do not overlap.
  */
 export function toastsOver(target: Box, shown: readonly { id: number; box: Box }[]): number[] {
   return shown

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { TOAST_MS, dismissAllToasts, dismissToast, holdToasts, keyMoves, shownToasts, toast, toastsOver, type Box } from './toasts';
+import { TOAST_MS, dismissAllToasts, dismissToast, holdToasts, keyMoves, shownToasts, toast, toastRoom, toastsOver, type Box } from './toasts';
 
 describe('a focus moved by the learner with the keyboard', () => {
   // The tasks after the key's event: the browser has moved the focus before they run.
@@ -54,6 +54,12 @@ describe('toasts over the focused control', () => {
   it('leaves a toast that only touches it', () => {
     expect(toastsOver(box(16, 430, 288, 24), [toast])).toEqual([]);
     expect(toastsOver(box(304, 460, 40, 24), [toast])).toEqual([]);
+  });
+
+  it('names the toast that lies under the point of a tap', () => {
+    // A tap closed the toast above; the next one in turn would show under the same finger.
+    expect(toastsOver(box(150, 480, 1, 1), [toast])).toEqual([1]);
+    expect(toastsOver(box(150, 560, 1, 1), [toast])).toEqual([]);
   });
 
   it('names only the toasts of the stack that cover it', () => {
@@ -165,5 +171,18 @@ describe('toasts in turn', () => {
     const shown = shownToasts();
     toast('deux', 'badge');
     expect(shownToasts()).toBe(shown);
+  });
+});
+
+describe('room kept at the end of the page for the toasts', () => {
+  it('reaches from the top of the toast on screen to the bottom of the screen', () => {
+    // 390 × 844 with a 32 px text: a toast 266 px tall, 24 px above the bottom edge.
+    expect(toastRoom(0, 844 - 24 - 266, 844)).toBe(290);
+  });
+
+  it('only grows, so that the page does not jump when a toast goes or a shorter one comes', () => {
+    expect(toastRoom(290, 844 - 24 - 180, 844)).toBe(290);
+    expect(toastRoom(290, null, 844)).toBe(290);
+    expect(toastRoom(290, 844 - 24 - 320, 844)).toBe(344);
   });
 });
