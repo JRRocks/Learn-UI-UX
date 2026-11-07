@@ -1183,6 +1183,23 @@
   margin: var(--s2) var(--s4) var(--s4);
 }
 
+/* Once « Marquer comme lue » is done: the state it set, at its place and the height of the row. */
+.read-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--tap);
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.read-note svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--ok);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .lesson-jump summary svg,
   .recap summary > svg:last-child {

@@ -1,5 +1,5 @@
 import { ArrowLeft, Check, ChevronDown, CircleCheck, CircleX } from 'lucide-react';
-import type { CSSProperties, MouseEvent } from 'react';
+import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
@@ -89,6 +89,37 @@ function ReviewCards({ moduleId, cards, onStart }: { moduleId: string; cards: Le
     );
   if (cards.next) return <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(cards.next)}.`)}</p>;
   return null;
+}
+
+/**
+ * « Marquer comme lue », then, at the same place, the state it set. The note takes the focus from the
+ * button that goes away, which would leave it to the page (and screen readers lose their place).
+ */
+function MarkRead({ read, onMark }: { read: boolean; onMark: () => void }) {
+  const noteRef = useRef<HTMLSpanElement>(null);
+  const marked = useRef(false);
+  useEffect(() => {
+    if (read && marked.current) noteRef.current?.focus();
+    marked.current = false;
+  }, [read]);
+  if (read)
+    return (
+      <span ref={noteRef} className="read-note" tabIndex={-1}>
+        <Check aria-hidden="true" /> Leçon marquée comme lue
+      </span>
+    );
+  return (
+    <button
+      type="button"
+      className="btn btn-secondary"
+      onClick={() => {
+        marked.current = true;
+        onMark();
+      }}
+    >
+      Marquer comme lue
+    </button>
+  );
 }
 
 /** The text of the lesson, once its chunk has arrived. */
@@ -258,11 +289,7 @@ export function Lesson({ id }: { id: string }) {
                 <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
                   S’entraîner sur cette leçon
                 </Link>
-                {!read && (
-                  <button type="button" className="btn btn-secondary" onClick={markRead}>
-                    Marquer comme lue
-                  </button>
-                )}
+                <MarkRead read={read} onMark={markRead} />
                 {next && (
                   <Link to={`/apprendre/${next.id}`} className="btn btn-ghost">
                     {frenchSpacing(`Leçon suivante : ${next.title}`)}

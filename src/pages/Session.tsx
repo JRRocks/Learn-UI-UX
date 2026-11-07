@@ -236,10 +236,11 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
   useEffect(() => {
     // Back on a correction (after « Revoir la leçon », a reload…): ExerciseView brings it into view.
     if (current && answeredCurrent(state)) return;
+    // The prompt of the exercise; the title of the summary, or of the view when the exercise cannot be downloaded.
     document.getElementById(current ? `prompt-${current.id}` : 'main-title')?.focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
     // Only when the exercise changes, not after each answer.
-  }, [current, done]);
+  }, [current, done, failed]);
 
   if (items.length === 0) return <EmptySession spec={spec} />;
 
@@ -308,7 +309,13 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
           nextLabel={last ? 'Voir le bilan' : 'Épreuve suivante'}
         />
       ) : failed ? (
-        <LoadFailed what="cette épreuve" />
+        // The view keeps a title, which takes the focus in place of the exercise's prompt.
+        <>
+          <h1 id="main-title" className="task-prompt" tabIndex={-1}>
+            <MdInline text={label} />
+          </h1>
+          <LoadFailed what="cette épreuve" />
+        </>
       ) : (
         <Loading what="de l’épreuve" />
       )}
