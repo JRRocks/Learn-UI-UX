@@ -80,8 +80,11 @@ function Catalog() {
   const [family, setFamily] = useState<'all' | 'cliche' | 'qualite'>('all');
   const searchRef = useRef<HTMLInputElement>(null);
   const { value: loaded, failed } = useLoadState('catalog', loadCatalog);
-  // The detector's own (English) names stand in only when the French catalog cannot be fetched.
-  const list = loaded?.length ? loaded : failed ? FALLBACK : null;
+  // The detector's own (English) names stand in only when the French catalog cannot be fetched. The
+  // list (62 rules, a hundred mocks) is drawn after the page, in a render the browser can interrupt:
+  // already in memory (preloaded without a service worker), it was drawn with the page in one long
+  // task of 200 to 350 ms on a slow processor, and Enter on the tab answered that late.
+  const list = useDeferredValue(loaded?.length ? loaded : failed ? FALLBACK : null, null);
   // The field answers each key at once; the list (up to a hundred mocks) follows when the browser has time.
   const query = useDeferredValue(q);
   const shownFamily = useDeferredValue(family);
