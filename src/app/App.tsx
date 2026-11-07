@@ -17,7 +17,7 @@ import { Resources } from '../pages/Resources';
 import { SessionPage, parseSpec, specLabel } from '../pages/Session';
 import { Link, pageTitle, useRoute, type Route } from './router';
 import { STORAGE_KEY, store, useProgress } from './store';
-import { dismissAllToasts, dismissToast, toastsOver, useToasts } from './toasts';
+import { dismissAllToasts, dismissToast, keyMoves, toastsOver, useToasts } from './toasts';
 
 store.setBadgeContext({ exercises: EXERCISES, moduleIds: MODULES.map((m) => m.id) });
 
@@ -104,13 +104,14 @@ function Toasts() {
   const toasts = useToasts();
   const region = useRef<HTMLDivElement>(null);
   // A toast never hides the control that has the focus (WCAG 2.4.11): those lying over a control
-  // reached with the keyboard go away (the status region has read them out already), and Escape
+  // reached with Tab or the arrows go away (the status region has read them out already), and Escape
   // dismisses them all. Taps and clicks go through them to the page (app.css).
   useEffect(() => {
     let frame = 0;
+    const keys = keyMoves();
     const onFocus = (e: FocusEvent) => {
       const el = e.composedPath()[0];
-      if (!(el instanceof HTMLElement) || el.tabIndex < 0) return;
+      if (!(el instanceof HTMLElement) || el.tabIndex < 0 || !keys.moving) return;
       // The toasts on screen now, not one that the same action shows next (« Annuler l’import »).
       const shown = [...(region.current?.querySelectorAll<HTMLElement>('.toast') ?? [])];
       cancelAnimationFrame(frame);
@@ -121,15 +122,17 @@ function Toasts() {
         toastsOver(target.getBoundingClientRect(), boxes).forEach(dismissToast);
       });
     };
+    // Captured: the key is noted before any widget handles it, and before the focus moves.
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') dismissAllToasts();
+      else keys.key(e.key);
     };
     document.addEventListener('focusin', onFocus);
-    document.addEventListener('keydown', onKey);
+    document.addEventListener('keydown', onKey, true);
     return () => {
       cancelAnimationFrame(frame);
       document.removeEventListener('focusin', onFocus);
-      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('keydown', onKey, true);
     };
   }, []);
   return (

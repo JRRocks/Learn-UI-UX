@@ -1,5 +1,35 @@
 import { describe, expect, it } from 'vitest';
-import { toastsOver, type Box } from './toasts';
+import { keyMoves, toastsOver, type Box } from './toasts';
+
+describe('a focus moved by the learner with the keyboard', () => {
+  // The tasks after the key's event: the browser has moved the focus before they run.
+  const later: (() => void)[] = [];
+  const nextTask = () => later.splice(0).forEach((done) => done());
+
+  it('counts the focus change that Tab, Shift+Tab or an arrow makes, in the same task', () => {
+    const keys = keyMoves((done) => later.push(done));
+    expect(keys.moving).toBe(false);
+    for (const key of ['Tab', 'ArrowDown', 'ArrowLeft']) {
+      keys.key(key);
+      expect(keys.moving).toBe(true);
+      nextTask();
+      expect(keys.moving).toBe(false);
+    }
+  });
+
+  it('leaves a focus given back by a closing dialog or set by the page', () => {
+    const keys = keyMoves((done) => later.push(done));
+    // Shift+Tab to « Remplacer ma progression », then Enter: the dialog closes and gives the focus
+    // back to the import button, under the toast « Sauvegarde importée » that Enter has just shown.
+    keys.key('Tab');
+    nextTask();
+    keys.key('Enter');
+    expect(keys.moving).toBe(false);
+    keys.key(' ');
+    keys.key('Escape');
+    expect(keys.moving).toBe(false);
+  });
+});
 
 const box = (left: number, top: number, width: number, height: number): Box => ({ left, top, right: left + width, bottom: top + height });
 
