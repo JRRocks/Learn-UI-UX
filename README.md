@@ -51,9 +51,11 @@ npm run validate         # types + validation du contenu seulement
 npm run check:overflow   # aucune page ni épreuve à choix visuel (question puis correction) ne
                          # défile horizontalement à 320, 360 et 390 px ; puis, texte du navigateur
                          # agrandi à 20, 24 et 32 px (de 320 à 768 px, à la souris) : pages, deux
-                         # épreuves de chaque format avant et après « Valider », défi chrono, fiches,
-                         # sans plus de trois fins de ligne coupées de suite ni mot d’un libellé
-                         # (élément à ordonner, option, bouton, badge, titre…) coupé sans trait d’union
+                         # épreuves de chaque format avant et après « Valider » puis leur bilan, défi
+                         # chrono, fiches ; partout, sans plus de trois fins de ligne coupées de suite,
+                         # ni mot d’un libellé (élément à ordonner, option, bouton, badge, titre, bilan…)
+                         # ni unité en toutes lettres coupés sans trait d’union, ni nombre séparé de son
+                         # unité en fin de ligne
                          # (-- --texte : cette passe seule ; -- --sans-texte : sans elle)
 npm run check:mocks      # maquettes : texte coupé, superposé, trop petit ou trop pâle
 npm run shots -- <id>    # captures de chaque exemple et épreuve d’un module (--mobile, --dark)

@@ -3,13 +3,15 @@
 // the width of the tiles) is played in a session: measured on the question, then on its correction.
 // Then the same with a larger default text size, as a reader sets it in the browser (20, 24 and 32 px
 // instead of 16, WCAG 1.4.4), at 320, 360, 390 and 768 px with a mouse (the keyboard hints show):
-// every page, two exercises of each format before and after « Valider », the timed challenge and the
-// cards. Everywhere, a bar that stays on screen must fit in the room kept for it (scroll-padding),
-// or a control reached with Tab could end up under it (WCAG 2.4.11), no more than three lines in a
-// row may end on a hyphen the browser added (French typography; long words split under 15em), and no
-// French word of a label (an item to order, an option, a button, a badge, a toast, a title…) may be
-// broken without a hyphen, anywhere in its letters, where overflow-wrap lets a word too long for its
-// line break as a last resort (« Aj|ou|te|r » in a 44 px column).
+// every page, two exercises of each format before and after « Valider », then their session's summary,
+// the timed challenge and the cards. Everywhere, a bar that stays on screen must fit in the room kept
+// for it (scroll-padding), or a control reached with Tab could end up under it (WCAG 2.4.11), no more
+// than three lines in a row may end on a hyphen the browser added (French typography; long words split
+// under 15em), no French word of a label (an item to order, an option, a button, a badge, a toast, a
+// title, an exercise of a session's summary…) nor any unit written in full may be broken without a
+// hyphen, anywhere in its letters, where overflow-wrap lets a word too long for its line break as a last
+// resort (« Aj|ou|te|r » in a 44 px column), and no number may end a line without its unit
+// (« 45–75 ⏎ caractères »).
 // Prints the elements that stick out; exits with 1 if any.
 //   npm run check:overflow
 //   npm run check:overflow -- 320          → only this width
@@ -38,7 +40,8 @@ const TEXT_WIDTHS = asked.length ? asked : [320, 360, 390, 768];
 const RUN = 'overflow';
 
 /** Runs in the page: how far it scrolls sideways, what sticks out, and the bars taller than their room. */
-function measure(LABELS) {
+function measure([LABELS, units]) {
+  const UNITS = new RegExp(units, 'u');
   const vw = document.documentElement.clientWidth;
   const sw = document.documentElement.scrollWidth;
   const tabs = [...document.querySelectorAll('.tabbar a')].map((a) => {
@@ -120,24 +123,62 @@ function measure(LABELS) {
           const range = document.createRange();
           range.setStart(node, token.index + word.index);
           range.setEnd(node, token.index + word.index + word[0].length);
-          const boxes = [...range.getClientRects()].filter((r) => r.width > 0);
-          const lines = new Set(boxes.map((r) => Math.round(r.top))).size;
-          if (lines > 1 && boxes.length === lines) split.push(word[0]);
+          // The boxes of each line the word takes: a line but its last with a single box broke the word
+          // there without a hyphen, even when another of its lines ends on one (« pro- / gressio|n… »).
+          const lines = [];
+          for (const r of [...range.getClientRects()].filter((q) => q.width > 0).sort((p, q) => p.top - q.top)) {
+            const line = lines.at(-1);
+            if (line && r.top < line.top + line.height / 2) line.boxes++;
+            else lines.push({ top: r.top, height: r.height, boxes: 1 });
+          }
+          if (lines.slice(0, -1).some((line) => line.boxes === 1)) split.push(word[0]);
         }
       }
     }
   }
-  return { vw, sw, touching, culprits: [...new Set(culprits)].slice(0, 3), bars, ladder, split: [...new Set(split)] };
+  // A number at the end of a line, its unit at the start of the next (« 45–75 ⏎ caractères »): French
+  // text keeps them together (frenchSpacing, a no-break space). The unit may stand in the next text, an
+  // element of its own when written in full (markdown.tsx).
+  const parted = [];
+  const nodes = [];
+  const all = document.createTreeWalker(document.getElementById('root'), NodeFilter.SHOW_TEXT);
+  for (let node = all.nextNode(); node; node = all.nextNode()) nodes.push(node);
+  const charBox = (node, at, last) => {
+    const range = document.createRange();
+    range.setStart(node, at);
+    range.setEnd(node, at + 1);
+    const boxes = [...range.getClientRects()].filter((r) => r.width > 0);
+    return last ? boxes.at(-1) : boxes[0];
+  };
+  nodes.forEach((node, k) => {
+    const el = node.parentElement;
+    if (!el || el.closest('code, kbd, samp, [role="img"], .stage, .visually-hidden')) return;
+    if (!/^fr\b/.test(el.closest('[lang]')?.getAttribute('lang') ?? 'fr')) return;
+    for (const m of node.data.matchAll(/\d[ \u00a0\u202f]/g)) {
+      let next = node;
+      let at = m.index + 2;
+      if (at === node.data.length) [next, at] = [nodes[k + 1], 0];
+      const unit = next && UNITS.exec(next.data.slice(at));
+      if (!unit) continue;
+      const a = charBox(node, m.index, true);
+      const b = charBox(next, at, false);
+      if (a && b && b.top > a.top + a.height / 2) parted.push(`${node.data.slice(Math.max(0, m.index - 8), m.index + 1).trim()} ⏎ ${unit[0]}`);
+    }
+  });
+  return { vw, sw, touching, culprits: [...new Set(culprits)].slice(0, 3), bars, ladder, split: [...new Set(split)], parted: [...new Set(parted)] };
 }
 
 /** The labels whose words must never break without a hyphen (measure): set beside a key, an icon, a count or
  * arrows, they are the narrowest boxes of the page; with them, the question and the key sentence of a
- * correction (« 45–75 caractère|s »). Running text has the width of its line. */
+ * correction, the exercises of a session's summary (« changeme|nt » beside its verdict), and the units
+ * written in full, which keep their number (« 45–75 caractère|s »). Running text has the width of its line. */
 const LABELS = [
   '.order-label', '.option-text', '.option-why', '.option-badge', '.option-label', '.match-row', '.zones li',
   '.task-prompt', '.takeaway', '.flashcard-q', '.slider-head', '.btn', '.toast', '.badge', '.side-link',
-  '.lesson-jump', '.toc-title', '.market-formats', 'h1', 'h2', 'h3', 'h4',
+  '.lesson-jump', '.toc-title', '.market-formats', '.recap', '.unit', 'h1', 'h2', 'h3', 'h4',
 ].join(', ');
+/** The units a number keeps (src/lib/markdown.tsx, frenchSpacing), at the start of a text. */
+const UNITS = '^(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\\p{L}\\d])';
 
 /** Some complete answer to the exercise on screen, through the DOM (a badge toast may lie over a control). */
 async function answer(page) {
@@ -247,7 +288,7 @@ try {
     ...ids.cultures.map((c) => `/cultures/${c}`),
     ...ids.pairs.map((p) => `/cultures/paire/${p}`),
   ];
-  const fails = (m) => m.sw > m.vw || m.touching || m.bars.length || m.ladder.lines > 3 || m.split.length;
+  const fails = (m) => m.sw > m.vw || m.touching || m.bars.length || m.ladder.lines > 3 || m.split.length || m.parted.length;
   const describe = (m) =>
     [
       m.sw > m.vw ? `${m.sw} px de large pour ${m.vw}` : '',
@@ -255,6 +296,7 @@ try {
       ...m.bars,
       m.ladder.lines > 3 ? `${m.ladder.lines} lignes de suite finies par une coupure (« ${m.ladder.text} »)` : '',
       m.split.length ? `mots coupés sans trait d’union : ${m.split.slice(0, 6).map((w) => `« ${w} »`).join(', ')}` : '',
+      m.parted.length ? `nombres séparés de leur unité : ${m.parted.slice(0, 6).map((w) => `« ${w} »`).join(', ')}` : '',
     ]
       .filter(Boolean)
       .join(' ; ');
@@ -275,7 +317,7 @@ try {
     for (const route of routes) {
       await page.goto(`${base}?w=${width}#${route}`);
       await loaded(page);
-      const m = await page.evaluate(measure, LABELS);
+      const m = await page.evaluate(measure, [LABELS, UNITS]);
       if (fails(m)) {
         bad++;
         show(`${width} px ${route}`, m);
@@ -292,7 +334,7 @@ try {
     let bad = 0;
     const seen = new Set();
     await playRun(context, 0, base, ids.visual, async (page, step, id) => {
-      const m = await page.evaluate(measure, LABELS);
+      const m = await page.evaluate(measure, [LABELS, UNITS]);
       if (!fails(m)) return;
       if (!seen.has(id)) bad++;
       seen.add(id);
@@ -313,7 +355,7 @@ try {
     const lines = [];
     let bad = 0;
     const check = async (page, label) => {
-      const m = await page.evaluate(measure, LABELS);
+      const m = await page.evaluate(measure, [LABELS, UNITS]);
       if (!fails(m)) return;
       bad++;
       lines.push(`✗ ${tag} ${label} : ${describe(m)}`, ...m.culprits.map((c) => `    ${c}`));
@@ -329,6 +371,13 @@ try {
     }
     if (EXERCISES) {
       const page = await playRun(context, size, base, ids.sample, (p, step, id) => check(p, `épreuve ${id} (${step})`), { answerAll: true });
+      // The session's summary, each exercise opened: its question beside its verdict, then its correction.
+      await press(page);
+      await page.waitForSelector('.recap details', { timeout: 30000 });
+      await page.evaluate(() => document.querySelectorAll('.recap details').forEach((d) => (d.open = true)));
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(300);
+      await check(page, 'bilan');
       // The timed challenge: its start, then three statements, each before and after the answer.
       await page.goto(`${base}?t=${size}#/session?mode=blitz`);
       await loaded(page);
