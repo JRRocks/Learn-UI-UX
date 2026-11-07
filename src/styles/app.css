@@ -281,6 +281,12 @@
   max-width: var(--measure);
 }
 
+/* A line of short facts, not a text to read: it takes the width of the page (33em of its 15 px
+   gave 495 px and broke it in two at 1366 px). */
+.page-head > .meta {
+  max-width: none;
+}
+
 .page-head h1 {
   max-width: 18em;
   font-size: var(--t-h1);
@@ -307,9 +313,10 @@
   color: var(--ink-2);
 }
 
-.meta > * + *::before {
+/* The dot follows each fact but the last: a wrapped line ends with it and never starts with it. */
+.meta > :not(:last-child)::after {
   content: '·';
-  margin-inline-end: var(--s3);
+  margin-inline-start: var(--s3);
   color: var(--ink-3);
 }
 
@@ -391,7 +398,9 @@
   color: var(--ink-3);
 }
 
-.md h3 {
+/* A heading in a text, whatever its level: « Comment adapter » is an h2 on a pair's page and an h3
+   in Comparer, the same 17 px with 24 px above it and 12 below on both. */
+.md :is(h2, h3, h4) {
   margin-top: var(--s3);
   font-size: var(--t-body);
 }
@@ -2415,6 +2424,7 @@
     grid-column: 1 / -1;
   }
 
+/* 17 px under its 19 px region (h3): the region outranks the markets it gathers. */
   .section:has(> .section > .markets) > .section > h3 {
     grid-column: 1 / -1;
   }
@@ -2460,7 +2470,7 @@
   justify-content: space-between;
   gap: var(--s2);
   font-weight: 700;
-  font-size: var(--t-lead);
+  font-size: var(--t-body);
 }
 
 .market-name code {
@@ -2963,7 +2973,8 @@
   font-weight: 650;
 }
 
-.mastery-table td.num {
+/* Figures line up on their right edge, and so do their headers (« Vues », « Score », « XP »). */
+.mastery-table :is(th, td).num {
   text-align: end;
 }
 
@@ -2994,11 +3005,14 @@
   }
 
   .mastery-table .meter {
+/* Stretched to the height of its row, a short card keeps its description 4 px under its title: the
+   spare room goes below (align-content), not between its two rows. */
     width: 2.5rem;
   }
 }
 
 /* Touch: text links standing alone in lists and tables, or alone in their paragraph (.standalone-link,
+  align-content: start;
    « À propos » under the settings), get a 44 px target (WCAG 2.5.5, --tap). */
 @media (pointer: coarse) {
   .mastery-table a,
