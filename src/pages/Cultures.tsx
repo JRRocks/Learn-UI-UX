@@ -9,7 +9,7 @@ import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type
 import { LAB_LOCALES } from '../content/cultures/lab';
 import type { CulturePair, CultureProfile } from '../engine/types';
 import { SEP } from '../lib/french';
-import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import { Md, MdInline, frenchSpacing, plainText } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
 import { LoadFailed, Loading as LoadingLine } from './LoadFailed';
 import { NotFound } from './NotFound';
@@ -327,7 +327,7 @@ export function CultureDetail({ id }: { id: string }) {
                 .filter((x) => x.topic === t)
                 .map((x, i) => (
                   <div key={i} className="convention">
-                    <h4>{frenchSpacing(x.title)}</h4>
+                    <h4>{plainText(x.title)}</h4>
                     <Md text={x.body} className="small" />
                   </div>
                 ))}
@@ -391,7 +391,7 @@ export function CultureDetail({ id }: { id: string }) {
         <p className="btn-row">
           {c.ecosystem.map((x) => (
             <span key={x} className="chip">
-              {x}
+              {plainText(x)}
             </span>
           ))}
         </p>
@@ -551,7 +551,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                           .filter((x) => x.topic === t)
                           .map((x, i) => (
                             <li key={i}>
-                              <strong>{frenchSpacing(x.title)}.</strong> <MdInline text={x.body.split('\n')[0]} />
+                              <strong>{plainText(x.title)}.</strong> <MdInline text={x.body.split('\n')[0]} />
                             </li>
                           ))}
                       </ul>
