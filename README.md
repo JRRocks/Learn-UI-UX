@@ -48,7 +48,8 @@ npm run dev              # serveur de développement
 npm test                 # tests du moteur, de l’app et validation de tout le contenu
 npm run build            # vérification des types + build de production dans dist/
 npm run validate         # types + validation du contenu seulement
-npm run check:overflow   # aucune page ne défile horizontalement à 320, 360 et 390 px
+npm run check:overflow   # aucune page ni épreuve à choix visuel (question puis correction) ne
+                         # défile horizontalement à 320, 360 et 390 px
 npm run check:mocks      # maquettes : texte coupé, superposé, trop petit ou trop pâle
 npm run shots -- <id>    # captures de chaque exemple et épreuve d’un module (--mobile, --dark)
 ```
