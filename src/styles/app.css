@@ -2982,9 +2982,10 @@
   color: var(--ink-2);
 }
 
-/* A list of terms is measured on its own width too: in a half column (Critique, from 900 px), the 14rem
-   of the term left its definition 48 px at 960 px, and its words ran past the screen. Side by side
-   from 26rem, where the definition keeps 10rem (as at 1200 px). */
+/* Each term beside its definition from 760 px. A definition in words also needs room in the list
+   itself: in a half column (Critique, from 900 px), the 14rem of the term left it 48 px at 960 px, and
+   its words ran past the screen. So it goes beside its term from 26rem of list, where it keeps 10rem
+   (as at 1200 px). A figure (Progression, « En chiffres ») holds in the room left beside its term. */
 .defs {
   display: flex;
   flex-direction: column;
@@ -3000,6 +3001,11 @@
 }
 
 @media (min-width: 47.5em) {
+  .defs:not(:has(> div > dd:not(.num))) > div {
+    grid-template-columns: 14rem minmax(0, 1fr);
+    gap: var(--s5);
+  }
+
   @container (min-width: 26rem) {
     .defs > div {
       grid-template-columns: 14rem minmax(0, 1fr);
