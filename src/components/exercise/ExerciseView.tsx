@@ -35,7 +35,8 @@ export const TYPE_LABEL: Record<Exercise['type'] | 'duel', string> = {
   grid: 'Grille de critique',
 };
 
-function displayOrder(ex: Exercise, rng: Rng): string[] {
+/** Order of the options, items or right-hand labels on screen; the same seed gives the same order. */
+export function displayOrder(ex: Exercise, rng: Rng): string[] {
   switch (ex.type) {
     case 'choice':
     case 'multi':
@@ -154,35 +155,6 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
     return () => window.removeEventListener('keydown', onKey);
   });
 
-  const common = { revealed, order, labelledBy: promptId, describedBy: contextId };
-  let body: ReactNode = null;
-  switch (ex.type) {
-    case 'choice':
-      body = <ChoicePlayer ex={ex} draft={draft as Extract<Draft, { type: 'choice' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'multi':
-      body = <MultiPlayer ex={ex} draft={draft as Extract<Draft, { type: 'multi' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'truefalse':
-      body = <TrueFalsePlayer ex={ex} draft={draft as Extract<Draft, { type: 'truefalse' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'hotspot':
-      body = <HotspotPlayer ex={ex} draft={draft as Extract<Draft, { type: 'hotspot' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'order':
-      body = <OrderPlayer ex={ex} draft={draft as Extract<Draft, { type: 'order' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'match':
-      body = <MatchPlayer ex={ex} draft={draft as Extract<Draft, { type: 'match' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'slider':
-      body = <SliderPlayer ex={ex} draft={draft as Extract<Draft, { type: 'slider' }>} setDraft={setDraft} {...common} />;
-      break;
-    case 'grid':
-      body = <GridPlayer ex={ex} draft={draft as Extract<Draft, { type: 'grid' }>} setDraft={setDraft} {...common} />;
-      break;
-  }
-
   const hint =
     ex.type === 'choice'
       ? 'Raccourcis\u00A0: 1–\u2060' + order.length + ' pour choisir, Entrée pour valider.'
@@ -209,14 +181,10 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
         <h1 id={promptId} className="task-prompt" tabIndex={-1} aria-describedby={[aboutId, contextId].filter(Boolean).join(' ') || undefined}>
           <MdInline text={ex.prompt} />
         </h1>
-        {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && ex.type !== 'grid' && (
-          <div className="stage">
-            <MockFor ex={ex} />
-          </div>
-        )}
+        <QuestionStage ex={ex} />
       </header>
 
-      {body}
+      <ExercisePlayer ex={ex} draft={draft} setDraft={setDraft} revealed={revealed} order={order} labelledBy={promptId} describedBy={contextId} />
 
       {revealed && result && <Feedback ref={feedbackRef} ex={ex} result={result} draft={draft} xp={xp} />}
 
@@ -246,6 +214,45 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
   );
 }
 
-function MockFor({ ex }: { ex: Exercise }) {
-  return ex.visual ? <Mock visual={ex.visual} /> : null;
+/** The question's mock, above the answers, unless the player draws it itself (hotspot, slider, grid). */
+export function QuestionStage({ ex }: { ex: Exercise }) {
+  if (!ex.visual || ex.type === 'hotspot' || ex.type === 'slider' || ex.type === 'grid') return null;
+  return (
+    <div className="stage">
+      <Mock visual={ex.visual} />
+    </div>
+  );
+}
+
+interface PlayerProps {
+  ex: Exercise;
+  draft: Draft;
+  setDraft: (d: Draft) => void;
+  /** Once validated: the correction, on the answer given (`draft`). */
+  revealed: boolean;
+  order: string[];
+  labelledBy: string;
+  describedBy?: string;
+}
+
+/** The answers of an exercise, in the player of its type. */
+export function ExercisePlayer({ ex, draft, setDraft, ...common }: PlayerProps): ReactNode {
+  switch (ex.type) {
+    case 'choice':
+      return <ChoicePlayer ex={ex} draft={draft as Extract<Draft, { type: 'choice' }>} setDraft={setDraft} {...common} />;
+    case 'multi':
+      return <MultiPlayer ex={ex} draft={draft as Extract<Draft, { type: 'multi' }>} setDraft={setDraft} {...common} />;
+    case 'truefalse':
+      return <TrueFalsePlayer ex={ex} draft={draft as Extract<Draft, { type: 'truefalse' }>} setDraft={setDraft} {...common} />;
+    case 'hotspot':
+      return <HotspotPlayer ex={ex} draft={draft as Extract<Draft, { type: 'hotspot' }>} setDraft={setDraft} {...common} />;
+    case 'order':
+      return <OrderPlayer ex={ex} draft={draft as Extract<Draft, { type: 'order' }>} setDraft={setDraft} {...common} />;
+    case 'match':
+      return <MatchPlayer ex={ex} draft={draft as Extract<Draft, { type: 'match' }>} setDraft={setDraft} {...common} />;
+    case 'slider':
+      return <SliderPlayer ex={ex} draft={draft as Extract<Draft, { type: 'slider' }>} setDraft={setDraft} {...common} />;
+    case 'grid':
+      return <GridPlayer ex={ex} draft={draft as Extract<Draft, { type: 'grid' }>} setDraft={setDraft} {...common} />;
+  }
 }

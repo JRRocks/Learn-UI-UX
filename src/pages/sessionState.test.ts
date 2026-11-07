@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { scheduleExercise } from '../engine/srs';
 import { seeded } from '../engine/random';
+import type { Exercise } from '../engine/types';
 import {
   answeredCurrent,
+  draftFits,
   isUnfinished,
   newRunId,
   parseRun,
@@ -99,5 +101,43 @@ describe('session summary', () => {
 
   it('uses French typography', () => {
     expect(summaryMessage(tally([p('a'), p('b'), p('c'), p('a'), p('b', 'wrong', 1)]))).toContain('corrections :');
+  });
+});
+
+describe('answers shown again in an exam summary (parcours-2)', () => {
+  const base = { id: 'x', difficulty: 1, prompt: 'Q', explanation: 'E', takeaway: 'T' } as const;
+  const choice: Exercise = { ...base, type: 'choice', options: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], answer: 'a' };
+  const order: Exercise = { ...base, type: 'order', items: [{ id: '1', label: 'Un' }, { id: '2', label: 'Deux' }, { id: '3', label: 'Trois' }] };
+  const hotspot: Exercise = {
+    ...base,
+    type: 'hotspot',
+    visual: { html: '<div></div>', alt: 'Une maquette' },
+    hotspots: [{ id: 'z1', label: 'Zone', correct: true, why: 'Parce que' }, { id: 'z2', label: 'Autre', correct: false, why: 'Non' }],
+  };
+  const match: Exercise = { ...base, type: 'match', leftTitle: 'G', rightTitle: 'D', pairs: [{ id: 'p', left: 'L1', right: 'R1' }, { id: 'q', left: 'L2', right: 'R2' }] };
+
+  it('shows the answer given when it fits the exercise', () => {
+    expect(draftFits(choice, { type: 'choice', optionId: 'b' })).toBe(true);
+    expect(draftFits(order, { type: 'order', ids: ['3', '1', '2'] })).toBe(true);
+    expect(draftFits(hotspot, { type: 'hotspot', ids: ['z2'] })).toBe(true);
+    expect(draftFits(match, { type: 'match', pairs: { p: 'q', q: 'p' } })).toBe(true);
+    expect(draftFits({ ...base, type: 'truefalse', answer: false }, { type: 'truefalse', value: true })).toBe(true);
+  });
+
+  it('shows nothing for a run saved before answers were kept, or an answer of another type', () => {
+    expect(draftFits(choice, undefined)).toBe(false);
+    expect(draftFits(choice, { type: 'multi', optionIds: ['a'] })).toBe(false);
+    expect(draftFits({ ...base, type: 'truefalse', answer: true }, { type: 'truefalse', value: null })).toBe(false);
+    expect(draftFits(choice, { type: 'choice', optionId: null })).toBe(false);
+  });
+
+  it('shows nothing once the exercise has changed: an option, a zone, an item or a pair it no longer has', () => {
+    expect(draftFits(choice, { type: 'choice', optionId: 'c' })).toBe(false);
+    expect(draftFits(hotspot, { type: 'hotspot', ids: ['z3'] })).toBe(false);
+    // The order player shows each item of the answer: one missing, or one too many, would break it.
+    expect(draftFits(order, { type: 'order', ids: ['1', '2'] })).toBe(false);
+    expect(draftFits(order, { type: 'order', ids: ['1', '2', '4'] })).toBe(false);
+    expect(draftFits(match, { type: 'match', pairs: { p: 'r' } })).toBe(false);
+    expect(draftFits(match, { type: 'match', pairs: { r: 'p' } })).toBe(false);
   });
 });

@@ -1,19 +1,23 @@
 import { ChevronDown, CircleCheck, CircleDot, CircleX, X } from 'lucide-react';
-import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import { Link, navigate } from '../app/router';
 import { store } from '../app/store';
-import { ExerciseView, TYPE_LABEL } from '../components/exercise/ExerciseView';
+import { ExercisePlayer, ExerciseView, QuestionStage, TYPE_LABEL, displayOrder } from '../components/exercise/ExerciseView';
+import { Recommended } from '../components/exercise/Feedback';
 import type { Draft } from '../components/exercise/players';
 import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID, preloadExercises, useExercises, type ExerciseEntry } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import type { GradeResult } from '../engine/grade';
 import { addSession, recordAttempt } from '../engine/progress';
+import { seeded } from '../engine/random';
 import { SESSION_SIZE, buildSession, isDuel, type PracticeType, type SessionItem, type SessionSpec } from '../engine/session';
 import type { Exercise } from '../engine/types';
+import { keepFocusInView } from '../lib/focusInView';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { LoadFailed, Loading } from './LoadFailed';
 import {
   answeredCurrent,
+  draftFits,
   isUnfinished,
   newRunId,
   parseRun,
@@ -239,14 +243,15 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
   useEffect(() => {
     // Back on a correction (after « Revoir la leçon », a reload…): ExerciseView brings it into view.
     if (current && answeredCurrent(state)) return;
+    // The prompt of the exercise; the title of the summary, or of the view when the exercise cannot be downloaded.
     document.getElementById(current ? `prompt-${current.id}` : 'main-title')?.focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
     // Only when the exercise changes, not after each answer.
-  }, [current, done]);
+  }, [current, done, failed]);
 
   if (items.length === 0) return <EmptySession spec={spec} />;
 
-  if (done) return <Summary label={label} exercises={loaded} failed={failed} played={state.played} exam={exam} spec={spec} />;
+  if (done) return <Summary label={label} exercises={loaded} failed={failed} played={state.played} exam={exam} spec={spec} runId={runId} />;
 
   const onAnswered = (r: GradeResult, draft: Draft) => {
     // One attempt per exercise and run: XP and spaced repetition never count an answer twice.
@@ -323,7 +328,13 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
           nextLabel={last ? 'Voir le bilan' : 'Épreuve suivante'}
         />
       ) : failed ? (
-        <LoadFailed what="cette épreuve" />
+        // The view keeps a title, which takes the focus in place of the exercise's prompt.
+        <>
+          <h1 id="main-title" className="task-prompt" tabIndex={-1}>
+            <MdInline text={label} />
+          </h1>
+          <LoadFailed what="cette épreuve" />
+        </>
       ) : (
         <Loading what="de l’épreuve" />
       )}
@@ -362,6 +373,95 @@ const ICON = { correct: CircleCheck, partial: CircleDot, wrong: CircleX };
 const CLASS = { correct: 'ok', partial: 'partial', wrong: 'ko' };
 const WORD = { correct: 'Juste', partial: 'Presque', wrong: 'À reprendre' };
 
+/** The answers of a summary are read, not changed. */
+const keepDraft = () => {};
+
+/**
+ * The answer given, marked as its correction marks it (the right option, the zones found and missed,
+ * the expected order…), with the options in the order they were shown, then the recommended answer.
+ */
+function RecapCorrection({ id, ex, draft, seed }: { id: string; ex: Exercise; draft: Draft; seed: number }) {
+  const order = useMemo(() => displayOrder(ex, seeded(seed)), [ex, seed]);
+  const contextId = ex.context ? `${id}-context` : undefined;
+  return (
+    <div className="recap-correction">
+      {ex.context && (
+        <div id={contextId}>
+          <Md text={ex.context} className="task-context" />
+        </div>
+      )}
+      <QuestionStage ex={ex} />
+      <ExercisePlayer ex={ex} draft={draft} setDraft={keepDraft} revealed order={order} labelledBy={`${id}-prompt`} describedBy={contextId} />
+      <div className="recap-recommended">
+        <p>
+          <strong>Choix recommandé{'\u00A0'}:</strong>
+        </p>
+        <Recommended ex={ex} draft={draft} />
+      </div>
+    </div>
+  );
+}
+
+/** True once `ref` has come within a screen's height of the screen, while `watch` holds. */
+function useNearScreen(ref: RefObject<Element | null>, watch: boolean): boolean {
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!watch || near || !el) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setNear(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setNear(true);
+      },
+      { rootMargin: '100% 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, watch, near]);
+  return near;
+}
+
+/** One exercise of the summary: its verdict, its question and, opened, its correction. */
+function RecapItem({ id, ex, played: p, seed, startOpen }: { id: string; ex: Exercise; played: Played; seed: number; startOpen: boolean }) {
+  const [open, setOpen] = useState(startOpen);
+  const ref = useRef<HTMLLIElement>(null);
+  // The correction draws mocks: only once open and near the screen. An exam's summary opens every
+  // wrong answer, up to 30 with some 70 mocks: drawn at once, they blocked the page 180 ms on a
+  // computer, several times longer on a phone.
+  const near = useNearScreen(ref, open);
+  const Icon = ICON[p.verdict];
+  return (
+    <li ref={ref}>
+      <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
+        <summary>
+          <Icon className={CLASS[p.verdict]} aria-label={WORD[p.verdict]} />
+          <span id={`${id}-prompt`}>
+            <MdInline text={ex.prompt} />
+          </span>
+          <ChevronDown aria-hidden="true" />
+        </summary>
+        <div className="recap-body">
+          <p className="small muted">
+            <MdInline text={MODULE_BY_ID.get(ex.module ?? '')?.title ?? ''} /> · {typeOf(ex)}
+          </p>
+          {/* A run saved before the answers were kept, or an exercise changed since, has only its text. */}
+          {open && near && draftFits(ex, p.draft) && <RecapCorrection id={id} ex={ex} draft={p.draft} seed={seed} />}
+          <p>
+            <strong>À retenir{'\u00A0'}:</strong> <MdInline text={ex.takeaway} />
+          </p>
+          <Md text={ex.explanation} className="prose small" />
+          <Link to={`/apprendre/${ex.module}`} className="small">
+            Revoir la leçon
+          </Link>
+        </div>
+      </details>
+    </li>
+  );
+}
+
 const AGAIN_STYLE: CSSProperties = { whiteSpace: 'normal', textAlign: 'center', textWrap: 'balance', paddingBlock: 'var(--s2)' };
 
 /** The same kind of session again, named for what it starts (an empty review would lead nowhere). */
@@ -391,9 +491,11 @@ interface SummaryProps {
   played: Played[];
   exam: boolean;
   spec: SessionSpec;
+  /** The run, whose seeds put the options of each exercise back in the order they were shown. */
+  runId: string;
 }
 
-function Summary({ label, exercises, failed, played, exam, spec }: SummaryProps) {
+function Summary({ label, exercises, failed, played, exam, spec, runId }: SummaryProps) {
   const t = tally(played);
   const parts = scoreParts(t);
   const message = summaryMessage(t);
@@ -426,36 +528,13 @@ function Summary({ label, exercises, failed, played, exam, spec }: SummaryProps)
       <section className="section" aria-labelledby="recap-title">
         <h2 id="recap-title">{exam ? 'Corrections' : 'Revoir les épreuves'}</h2>
         {!exercises && (failed ? <LoadFailed what="les corrections" /> : <Loading what="des corrections" />)}
-        <ul className="recap">
+        {/* A correction drawn as it nears the screen can push the focused control away (keepFocusInView). */}
+        <ul className="recap" onFocus={keepFocusInView}>
           {played.map((p, i) => {
             const ex = exercises?.get(p.id);
             if (!ex) return null;
-            const Icon = ICON[p.verdict];
-            return (
-              <li key={`${p.id}-${i}`}>
-                <details open={exam && p.verdict !== 'correct'}>
-                  <summary>
-                    <Icon className={CLASS[p.verdict]} aria-label={WORD[p.verdict]} />
-                    <span>
-                      <MdInline text={ex.prompt} />
-                    </span>
-                    <ChevronDown aria-hidden="true" />
-                  </summary>
-                  <div className="recap-body">
-                    <p className="small muted">
-                      <MdInline text={MODULE_BY_ID.get(ex.module ?? '')?.title ?? ''} /> · {typeOf(ex)}
-                    </p>
-                    <p>
-                      <strong>À retenir{'\u00A0'}:</strong> <MdInline text={ex.takeaway} />
-                    </p>
-                    <Md text={ex.explanation} className="prose small" />
-                    <Link to={`/apprendre/${ex.module}`} className="small">
-                      Revoir la leçon
-                    </Link>
-                  </div>
-                </details>
-              </li>
-            );
+            // An exam showed no correction: the ones it got wrong are open.
+            return <RecapItem key={`${p.id}-${i}`} id={`recap-${i}`} ex={ex} played={p} seed={seedOf(runId, i)} startOpen={exam && p.verdict !== 'correct'} />;
           })}
         </ul>
       </section>

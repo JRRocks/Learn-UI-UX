@@ -1,18 +1,20 @@
 import { ArrowLeft, Check, ChevronDown, CircleCheck, CircleX } from 'lucide-react';
-import type { CSSProperties, MouseEvent } from 'react';
+import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
 import { Mock } from '../components/Mock';
+import { SourceList } from '../components/SourceLink';
 import { MODULES, MODULE_BY_ID, exercisesOf, useModule } from '../content';
-import { resolveSource } from '../content/sources';
 import { dayKey } from '../engine/dates';
 import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
 import { SESSION_SIZE } from '../engine/session';
 import type { LessonExample, ModuleContent } from '../engine/types';
+import { keepFocusInView } from '../lib/focusInView';
 import { count, longDay } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { Commands } from './Learn';
+import { lessonCards, type LessonCards } from './lessonCards';
 import { LoadFailed, Loading } from './LoadFailed';
 import { NotFound } from './NotFound';
 
@@ -74,6 +76,53 @@ function goTo(e: MouseEvent, headingId: string) {
 /** Its sections, then its key rules: the parts the contents list jumps to. */
 const partsOf = (m: ModuleContent) => [...m.sections.map((s) => ({ id: s.id, title: s.title })), { id: 'regles', title: 'Règles d’or' }];
 
+/**
+ * « Réviser » with the number of cards the review will show, or the day they come back once they are
+ * all up to date. One component for the aside and for the folded contents that replace it below
+ * 1100 px, so that both always say the same.
+ */
+function ReviewCards({ moduleId, cards, onStart }: { moduleId: string; cards: LessonCards; onStart: () => void }) {
+  if (cards.toReview > 0)
+    return (
+      <Link to={`/fiches?module=${moduleId}`} className="btn btn-secondary" onClick={onStart}>
+        Réviser {count(cards.toReview, 'fiche', 'fiches')}
+      </Link>
+    );
+  if (cards.next) return <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(cards.next)}.`)}</p>;
+  return null;
+}
+
+/**
+ * « Marquer comme lue », then, at the same place, the state it set. The note takes the focus from the
+ * button that goes away, which would leave it to the page (and screen readers lose their place).
+ */
+function MarkRead({ read, onMark }: { read: boolean; onMark: () => void }) {
+  const noteRef = useRef<HTMLSpanElement>(null);
+  const marked = useRef(false);
+  useEffect(() => {
+    if (read && marked.current) noteRef.current?.focus();
+    marked.current = false;
+  }, [read]);
+  if (read)
+    return (
+      <span ref={noteRef} className="read-note" tabIndex={-1}>
+        <Check aria-hidden="true" /> Leçon marquée comme lue
+      </span>
+    );
+  return (
+    <button
+      type="button"
+      className="btn btn-secondary"
+      onClick={() => {
+        marked.current = true;
+        onMark();
+      }}
+    >
+      Marquer comme lue
+    </button>
+  );
+}
+
 /** The text of the lesson, once its chunk has arrived. */
 function Article({ m }: { m: ModuleContent }) {
   return (
@@ -114,22 +163,7 @@ function Article({ m }: { m: ModuleContent }) {
 
       <section className="lesson-section" aria-labelledby="h-sources">
         <h2 id="h-sources">Sources</h2>
-        <ul className="sources">
-          {m.sources.map((s, i) => {
-            const r = resolveSource(s);
-            return (
-              <li key={i}>
-                {r.url ? (
-                  <a href={r.url} target="_blank" rel="noopener noreferrer">
-                    {frenchSpacing(r.label)}
-                  </a>
-                ) : (
-                  frenchSpacing(r.label)
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        <SourceList sources={m.sources} />
       </section>
     </>
   );
@@ -152,9 +186,7 @@ export function Lesson({ id }: { id: string }) {
   const next = MODULES[idx + 1];
   const today = dayKey();
   // What « Réviser » will really show: the lesson's cards due today, or never reviewed yet.
-  const cardKeys = m.rules.map((r) => `${m.id}/${r}`);
-  const cardsToReview = cardKeys.filter((k) => !p.cards[k] || p.cards[k].due <= today).length;
-  const nextCard = cardKeys.map((k) => p.cards[k]?.due).filter((d): d is string => Boolean(d)).sort()[0];
+  const cards = lessonCards(p.cards, m.rules.map((r) => `${m.id}/${r}`), today);
   const sessionSize = Math.min(exercises.length, SESSION_SIZE.module);
 
   const markRead = () => {
@@ -229,15 +261,14 @@ export function Lesson({ id }: { id: string }) {
                 </li>
               ))}
             </ol>
-            <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-              Réviser les {m.rules.length} fiches
-            </Link>
+            <ReviewCards moduleId={m.id} cards={cards} onStart={scheduleCards} />
           </details>
         </nav>
       )}
 
       <div className="lesson">
-        <article className="lesson-article">
+        {/* Any control after an example far from the screen can be pushed away once it is laid out. */}
+        <article className="lesson-article" onFocus={keepFocusInView}>
           {full ? (
             <>
               <Article m={full} />
@@ -245,11 +276,7 @@ export function Lesson({ id }: { id: string }) {
                 <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
                   S’entraîner sur cette leçon
                 </Link>
-                {!read && (
-                  <button type="button" className="btn btn-secondary" onClick={markRead}>
-                    Marquer comme lue
-                  </button>
-                )}
+                <MarkRead read={read} onMark={markRead} />
                 {next && (
                   <Link to={`/apprendre/${next.id}`} className="btn btn-ghost">
                     {frenchSpacing(`Leçon suivante : ${next.title}`)}
@@ -293,13 +320,7 @@ export function Lesson({ id }: { id: string }) {
               <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
                 S’entraîner ({count(sessionSize, 'épreuve', 'épreuves')})
               </Link>
-              {cardsToReview > 0 ? (
-                <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-                  Réviser {count(cardsToReview, 'fiche', 'fiches')}
-                </Link>
-              ) : nextCard ? (
-                <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(nextCard)}.`)}</p>
-              ) : null}
+              <ReviewCards moduleId={m.id} cards={cards} onStart={scheduleCards} />
             </div>
           </aside>
         )}

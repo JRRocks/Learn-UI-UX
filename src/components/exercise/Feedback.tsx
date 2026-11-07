@@ -2,7 +2,7 @@ import { CircleCheck, CircleDot, CircleX } from 'lucide-react';
 import { forwardRef } from 'react';
 import { Link } from '../../app/router';
 import { MODULE_BY_ID } from '../../content';
-import { resolveSource } from '../../content/sources';
+import { SourceList } from '../SourceLink';
 import type { GradeResult } from '../../engine/grade';
 import type { Exercise } from '../../engine/types';
 import { Md, MdInline, frenchSpacing } from '../../lib/markdown';
@@ -16,8 +16,8 @@ const VERDICT = {
 
 const fmt = (n: number) => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 3 }).format(n);
 
-/** What an expert would have answered, in one glance. */
-function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
+/** What an expert would have answered, in one glance (the correction, and an exam's summary). */
+export function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
   switch (ex.type) {
     case 'choice': {
       const o = ex.options.find((x) => x.id === ex.answer)!;
@@ -156,24 +156,7 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
           </div>
           {(ex.sources?.length || module) && (
             <div className="note small">
-              {ex.sources && ex.sources.length > 0 && (
-                <ul className="sources" aria-label="Sources">
-                  {ex.sources.map((s, i) => {
-                    const ref = resolveSource(s);
-                    return (
-                      <li key={i}>
-                        {ref.url ? (
-                          <a href={ref.url} target="_blank" rel="noopener noreferrer">
-                            {frenchSpacing(ref.label)}
-                          </a>
-                        ) : (
-                          frenchSpacing(ref.label)
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+              {ex.sources && ex.sources.length > 0 && <SourceList sources={ex.sources} label="Sources" />}
               {module && <Link to={`/apprendre/${module.id}`}>{frenchSpacing(`Revoir la leçon « ${module.title} »`)}</Link>}
             </div>
           )}

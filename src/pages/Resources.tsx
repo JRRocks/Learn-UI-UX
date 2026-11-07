@@ -4,10 +4,12 @@ import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { ScrollRegion } from '../components/ScrollRegion';
 import { loadCatalog } from '../content/catalog';
+import { SourceLink, SourceList } from '../components/SourceLink';
 import { DETECTOR_RULES } from '../content/detectorRules';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
 import { SOURCES, resolveSource } from '../content/sources';
 import type { AntipatternEntry, Source } from '../engine/types';
+import { keepFocusInView } from '../lib/focusInView';
 import { count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
@@ -32,17 +34,6 @@ const slug = (s: string) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
-
-function SourceLink({ k }: { k: Source }) {
-  const r = resolveSource(k);
-  return r.url ? (
-    <a href={r.url} target="_blank" rel="noopener noreferrer">
-      {frenchSpacing(r.label)}
-    </a>
-  ) : (
-    <>{frenchSpacing(r.label)}</>
-  );
-}
 
 function Cheatsheet() {
   return (
@@ -69,7 +60,7 @@ function Cheatsheet() {
               {sources.map((s, i) => (
                 <span key={i}>
                   {i > 0 && ' · '}
-                  <SourceLink k={s} />
+                  <SourceLink source={s} />
                 </span>
               ))}
             </p>
@@ -167,7 +158,7 @@ function Catalog() {
           </>
         )}
       </div>
-      <ul className="catalog">
+      <ul className="catalog" onFocus={keepFocusInView}>
         {shown.map((a) => (
           <li key={a.id}>
             <div className="catalog-head">
@@ -308,7 +299,7 @@ function Commands() {
         </table>
       </ScrollRegion>
       <p className="small">
-        Projet{' '}: <SourceLink k="imp:site" /> · code source sur{' '}
+        Projet{' '}: <SourceLink source="imp:site" /> · code source sur{' '}
         <a href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener noreferrer">
           github.com/pbakaus/impeccable
         </a>{' '}
@@ -344,13 +335,7 @@ function Links() {
         {groups.map(([title, keys]) => (
           <section key={title} className="section" aria-labelledby={`l-${slug(title)}`}>
             <h2 id={`l-${slug(title)}`}>{title}</h2>
-            <ul className="sources">
-              {keys.map((k) => (
-                <li key={k}>
-                  <SourceLink k={k} />
-                </li>
-              ))}
-            </ul>
+            <SourceList sources={keys} />
           </section>
         ))}
       </div>

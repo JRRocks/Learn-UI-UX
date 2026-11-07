@@ -152,6 +152,12 @@
   color: var(--mark);
 }
 
+/* Progression has no tab: its button in the top bar marks the page shown as the tabs do. */
+.topbar .icon-btn[aria-current='page'] {
+  color: var(--mark);
+  background: var(--paper-2);
+}
+
 /* Below 360 px a fifth of the bar is 64 px: « Apprendre » and « S’entraîner » would touch. */
 @media (max-width: 359.98px) {
   .tabbar a {
@@ -1153,8 +1159,27 @@
   text-decoration-color: var(--mark);
 }
 
-.lesson-jump .btn {
+/* « Réviser N fiches », or the day the cards come back once they are all up to date. */
+.lesson-jump .btn,
+.lesson-jump details > p {
   margin: var(--s2) var(--s4) var(--s4);
+}
+
+/* Once « Marquer comme lue » is done: the state it set, at its place and the height of the row. */
+.read-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--tap);
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.read-note svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--ok);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2297,6 +2322,33 @@
   flex-direction: column;
   gap: var(--s3);
   padding: 0 0 var(--s4) var(--s6);
+}
+
+/* An opened item of the summary: the answer given, marked as in its correction, then the
+   recommended one, before what to remember. */
+.recap-correction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+  padding-block: var(--s2);
+}
+
+.recap-recommended {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+/* The summary is narrower than the player: one mock per row on phones, two side by side at most
+   (three got 174 px at 1366 px and cut the recommended one; mocks are drawn for 320 to 520 px). */
+.recap-correction .options--visual[data-count] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 760px) {
+  .recap-correction .options--visual[data-count] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ---------- Flashcards ---------- */

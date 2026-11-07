@@ -3,10 +3,10 @@ import { useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { ScrollRegion } from '../components/ScrollRegion';
+import { SourceList } from '../components/SourceLink';
 import { EXERCISES, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
-import { resolveSource } from '../content/sources';
 import type { CulturePair, CultureProfile } from '../engine/types';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
@@ -44,18 +44,6 @@ function sampleNumber(locale: string) {
   } catch {
     return '';
   }
-}
-
-function Sources({ list }: { list: CultureProfile['sources'] }) {
-  return (
-    <ul className="sources">
-      {list.map((s, i) => {
-        const r = resolveSource(s);
-        const label = frenchSpacing(r.label);
-        return <li key={i}>{r.url ? <a href={r.url} target="_blank" rel="noopener noreferrer">{label}</a> : label}</li>;
-      })}
-    </ul>
-  );
 }
 
 /* ------------------------------------------------------------------ overview */
@@ -423,7 +411,7 @@ export function CultureDetail({ id }: { id: string }) {
 
       <section className="section" aria-labelledby="src-title">
         <h2 id="src-title">Sources</h2>
-        <Sources list={c.sources} />
+        <SourceList sources={c.sources} />
       </section>
 
       <div className="btn-row">
