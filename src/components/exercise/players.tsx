@@ -426,8 +426,8 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
     const [it] = ids.splice(from, 1);
     ids.splice(to, 0, it);
     setDraft({ type: 'order', ids });
-    // The focused button moves with its item: the page follows it.
-    followFocus();
+    // The focused button moves with its item: the page follows them.
+    followFocus('.order-item');
     const label = ex.items.find((x) => x.id === it)?.label ?? '';
     setSaid(frenchSpacing(`« ${plain(label)} » en position ${to + 1} sur ${ids.length}.`));
   };

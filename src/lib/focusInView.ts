@@ -26,18 +26,25 @@ export function keepFocusInView() {
  * down the list with its item, « Voir la valeur experte » goes down as the mock above it grows. The
  * page did not follow, and the button ended under the « Valider » bar or off the screen. Once the page
  * is laid out again, before it is painted, bring the button back between the bars (and once more a
- * moment later, for what is laid out late). The same conditions as `keepFocusInView`.
+ * moment later, for what is laid out late), with the whole of its `around` ancestor when it fits (the
+ * item moved, so that its text shows too). The same conditions as `keepFocusInView`.
  */
-export function followFocus() {
+export function followFocus(around?: string) {
   const el = focused();
   if (!el?.matches(':focus-visible')) return;
-  requestAnimationFrame(() => bringBack(el));
-  window.setTimeout(() => bringBack(el), SETTLE_MS);
+  const bring = () => bringBack(el, around ? el.closest(around) : null);
+  requestAnimationFrame(bring);
+  window.setTimeout(bring, SETTLE_MS);
 }
 
-/** Scroll `el` into the band the bars leave free (scroll-padding), if it still has the focus and is hidden. */
-function bringBack(el: Element) {
-  if (focused() === el && hidden(el)) el.scrollIntoView({ block: 'nearest' });
+/**
+ * Scroll `el`, or `whole` when it fits between the bars, into the band they leave free (scroll-padding),
+ * if `el` still has the focus and one of them is hidden.
+ */
+function bringBack(el: Element, whole: Element | null = null) {
+  if (focused() !== el) return;
+  const target = whole && fits(whole) ? whole : el;
+  if (hidden(target)) target.scrollIntoView({ block: 'nearest' });
 }
 
 /** The element that has the focus, inside a mock's shadow root too. */
@@ -52,11 +59,23 @@ function focused(): Element | null {
  * session bars), looked for where they are: at the top and bottom edges of the window, above and below it.
  */
 function hidden(el: Element): boolean {
+  const { r, top, bottom } = band(el);
+  return outsideBand(r, top, bottom);
+}
+
+/** Whether `el` is no taller than the band the bars leave free. */
+function fits(el: Element): boolean {
+  const { r, top, bottom } = band(el);
+  return r.height <= bottom - top;
+}
+
+/** The box of `el`, and the top and bottom of the band that the bars leave free around it. */
+function band(el: Element): { r: DOMRect; top: number; bottom: number } {
   const r = el.getBoundingClientRect();
   const x = Math.min(Math.max(r.left + r.width / 2, 0), window.innerWidth - 1);
   const top = barEdge(el, x, 0, 'bottom') ?? 0;
   const bottom = barEdge(el, x, window.innerHeight - 1, 'top') ?? window.innerHeight;
-  return outsideBand(r, top, bottom);
+  return { r, top, bottom };
 }
 
 /**
