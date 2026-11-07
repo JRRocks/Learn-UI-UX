@@ -10,6 +10,7 @@ import { dayKey } from '../engine/dates';
 import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
 import { SESSION_SIZE } from '../engine/session';
 import type { LessonExample, ModuleContent } from '../engine/types';
+import { keepFocusInView } from '../lib/focusInView';
 import { count, longDay } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { Commands } from './Learn';
@@ -281,7 +282,8 @@ export function Lesson({ id }: { id: string }) {
       )}
 
       <div className="lesson">
-        <article className="lesson-article">
+        {/* Any control after an example far from the screen can be pushed away once it is laid out. */}
+        <article className="lesson-article" onFocus={keepFocusInView}>
           {full ? (
             <>
               <Article m={full} />

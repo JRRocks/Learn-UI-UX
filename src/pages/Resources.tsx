@@ -6,6 +6,7 @@ import { DETECTOR_RULES } from '../content/detectorRules';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
 import { SOURCES, resolveSource } from '../content/sources';
 import type { AntipatternEntry, Source } from '../engine/types';
+import { keepFocusInView } from '../lib/focusInView';
 import { count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
@@ -172,7 +173,7 @@ function Catalog() {
           </>
         )}
       </div>
-      <ul className="catalog">
+      <ul className="catalog" onFocus={keepFocusInView}>
         {shown.map((a) => (
           <li key={a.id}>
             <div className="catalog-head">
