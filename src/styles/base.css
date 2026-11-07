@@ -216,8 +216,8 @@ li::marker {
    anywhere. There, a long word splits at a syllable, with a hyphen: from 14 letters in the text and 12
    in a title (app.css: the question too, and a button's label from 10), 4 or 5 kept on either side;
    under 12em (384 px at 32 px), where a line holds 15 letters, from 12 and 9. Shorter words stay whole,
-   so that a line seldom ends on a hyphen (check:overflow allows three in a row at most); from 15em,
-   words fit their lines and nothing splits. */
+   so that a line seldom ends on a hyphen (check:overflow allows three in a row at most). From 15em,
+   words fit their lines: only the labels of the tabs split, onto two lines (app.css). */
 @media (max-width: 14.99875em) {
   body {
     hyphens: auto;
