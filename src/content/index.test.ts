@@ -8,6 +8,8 @@ import { buildSession, isDuel, matchesType, type PracticeType, type SessionSpec 
 import type { ModuleContent } from '../engine/types';
 import { load } from '../lib/useLoad';
 import { ALL_MODULES } from './all';
+import { ANTIPATTERNS } from './antipatterns';
+import { CULTURES } from './cultures/profiles';
 import { contentIndex, fileId, modulesFromFiles, ruleCards, statements } from './derive';
 import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, exercisesOf, loadModule, preloadContent } from './index';
 import { MODULE_ORDER } from './order';
@@ -116,15 +118,18 @@ describe('everything in the background (a page that no service worker stores)', 
     const lessons = await Promise.all(MODULES.map((m) => load(`module:${m.id}`, absent)));
     const cards = await load<Map<string, unknown>>('rules:*', absent);
     const tf = await load<Map<string, unknown>>('statements', absent);
-    return { lessons: lessons.map((m) => (m as ModuleContent).id), cards: cards.size, statements: tf.size };
+    const markets = await load<{ profiles: unknown[] }>('cultures', absent);
+    const catalog = await load<unknown[]>('catalog', absent);
+    return { lessons: lessons.map((m) => (m as ModuleContent).id), cards: cards.size, statements: tf.size, markets: markets.profiles.length, catalog: catalog.length };
   };
-  const ALL = { lessons: MODULES.map((m) => m.id), cards: RULES.length, statements: STATEMENTS.length };
+  const ALL = { lessons: MODULES.map((m) => m.id), cards: RULES.length, statements: STATEMENTS.length, markets: CULTURES.length, catalog: ANTIPATTERNS.length };
 
-  it('starts nothing offline, and downloads every lesson, flashcard and statement once back online', async () => {
+  it('starts nothing offline, and downloads every lesson, flashcard, statement, market and the catalog once back online', async () => {
     const browser = { onLine: false };
     let online: (() => void) | undefined;
     vi.stubGlobal('navigator', browser);
-    vi.stubGlobal('window', { addEventListener: (type: string, fn: () => void) => type === 'online' && (online = fn) });
+    vi.stubGlobal('window', { addEventListener: (type: string, fn: () => void) => type === 'online' && (online = fn), removeEventListener: () => {} });
+    vi.stubGlobal('document', { visibilityState: 'visible', addEventListener: () => {}, removeEventListener: () => {} });
     await preloadContent();
     await expect(load('statements', absent)).rejects.toThrow('absent');
     expect(online).toBeTypeOf('function');

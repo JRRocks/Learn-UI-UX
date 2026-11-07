@@ -111,6 +111,11 @@ export function serviceWorker() {
  * A deep link to a lesson, the markets or the anti-pattern catalog downloads its chunk along with the
  * app, instead of once the app has started and asked for it: index.html maps these routes to their
  * chunks and preloads the one the address names.
+ *
+ * The same script gives the page, as `window.__contentFiles`, the address of every part of the
+ * content downloaded on demand and of every font file: a page that no service worker stores
+ * downloads them in the background (preloadContent, src/content/index.ts), each file in full before
+ * importing it, because the browser keeps a failed import() as failed until the page is reloaded.
  */
 export function deepLinks() {
   return {
@@ -120,20 +125,31 @@ export function deepLinks() {
       order: 'post',
       handler(_, { bundle }) {
         if (!bundle) return;
-        const chunks = Object.values(bundle).filter((c) => c.type === 'chunk');
-        const holding = (pattern) => chunks.find((c) => c.moduleIds.some((id) => pattern.test(id)))?.fileName;
-        const map = {};
+        const files = Object.values(bundle);
+        const chunks = files.filter((c) => c.type === 'chunk');
+        const holding = (pattern) => {
+          const chunk = chunks.find((c) => c.moduleIds.some((id) => pattern.test(id)));
+          return chunk ? `./${chunk.fileName}` : null;
+        };
+        const routes = {};
         for (const c of chunks) {
           const lesson = c.facadeModuleId?.match(/[\\/]src[\\/]content[\\/]modules[\\/]([^\\/]+)\.ts$/);
-          if (lesson) map[`apprendre/${lesson[1]}`] = `./${c.fileName}`;
+          if (lesson) routes[`apprendre/${lesson[1]}`] = `./${c.fileName}`;
         }
         const cultures = holding(/[\\/]src[\\/]content[\\/]cultures[\\/]profiles\.ts$/);
         const catalog = holding(/[\\/]src[\\/]content[\\/]antipatterns\.ts$/);
         // Every market page reads the profiles, except the localisation lab.
-        if (cultures) Object.assign(map, { cultures: `./${cultures}`, 'cultures/labo': null });
-        if (catalog) map['ressources/anti-patterns'] = `./${catalog}`;
+        if (cultures) Object.assign(routes, { cultures, 'cultures/labo': null });
+        if (catalog) routes['ressources/anti-patterns'] = catalog;
+        // The flashcards and the statements belong to no single route: they are not preloaded here.
+        const content = {
+          routes,
+          rules: holding(/virtual:content\/rules$/),
+          statements: holding(/virtual:content\/statements$/),
+          fonts: files.filter((f) => f.type === 'asset' && f.fileName.endsWith('.woff2')).map((f) => `./${f.fileName}`).sort(),
+        };
         const code =
-          `(function(){var m=${JSON.stringify(map)};` +
+          `(function(){var m=(window.__contentFiles=${JSON.stringify(content)}).routes;` +
           `var p=location.hash.replace(/^#\\/?/,'').split('?')[0].split('/'),k=p[0]+'/'+p[1];` +
           `var f=k in m?m[k]:m[p[0]];` +
           `if(!f)return;var l=document.createElement('link');l.rel='modulepreload';l.crossOrigin='';l.href=f;document.head.appendChild(l);})();`;
