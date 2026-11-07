@@ -1584,8 +1584,14 @@
   gap: var(--s2);
 }
 
+/* Mocks are drawn for 320 to 520 px (docs/CONTENU.md). One column on phones: minmax(0, 1fr) keeps a
+   mock that overflows on purpose inside the screen (an implicit auto track took its min-content
+   width, up to 689 px, and the page scrolled sideways under 760 px). Two columns from 760 px; three
+   only once the player has its full width, where each mock keeps 280 px (from 760 px, three mocks
+   of 182 px cut the recommended one). */
 .options--visual {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
 }
 
@@ -1593,7 +1599,9 @@
   .options--visual {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
+@media (min-width: 1120px) {
   .options--visual[data-count='3'] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1713,9 +1721,13 @@
   opacity: 0.72;
 }
 
+/* Alone in its row, a tile stops at the widest mock (520 px, plus the stage's padding and its own):
+   a mock never gets more room than it is drawn for, so a duel about a lack of room (a 60-character
+   name) still shows the difference up to 759 px. */
 .option--visual {
   flex-direction: column;
   align-items: stretch;
+  max-inline-size: calc(520px + 4 * var(--s3) + 3px);
   padding: var(--s3);
 }
 
