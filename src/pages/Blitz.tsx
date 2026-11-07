@@ -155,6 +155,10 @@ export function Blitz() {
 
   useEffect(() => {
     document.getElementById(current && started && !over ? `blitz-q-${current.id}` : 'main-title')?.focus({ preventScroll: true });
+    // Each statement starts at the top, under the clock, as each exercise of a session does: on a short
+    // screen (200 % zoom and more), the page stayed where the last correction had taken it, the new
+    // statement and the clock above the screen.
+    window.scrollTo({ top: 0 });
   }, [current, started, over]);
 
   // The answer buttons switch off once used: the focus moves to the correction instead of being lost.
