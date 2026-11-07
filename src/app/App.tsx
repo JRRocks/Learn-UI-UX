@@ -17,7 +17,7 @@ import { Resources } from '../pages/Resources';
 import { SessionPage, parseSpec, specLabel } from '../pages/Session';
 import { Link, pageTitle, useRoute, type Route } from './router';
 import { STORAGE_KEY, store, useProgress } from './store';
-import { dismissAllToasts, dismissToast, keyMoves, toastsOver, useToasts } from './toasts';
+import { dismissAllToasts, dismissToast, holdToasts, keyMoves, toastsOver, useToasts } from './toasts';
 
 store.setBadgeContext({ exercises: EXERCISES, moduleIds: MODULES.map((m) => m.id) });
 
@@ -104,27 +104,67 @@ function hexColor(css: string): string | null {
   return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
+/** Where a focused control shows its focus: a hidden radio shows it on its tile. */
+function focusBox(el: Element): DOMRect {
+  return (el.classList.contains('visually-hidden') ? (el.closest('label') ?? el) : el).getBoundingClientRect();
+}
+
+/** The control that has the keyboard focus (a mock's shadow root pierced), if the focus shows. */
+function keyboardFocus(): Element | null {
+  let el = document.activeElement;
+  while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
+  return el && el !== document.body && el.matches(':focus-visible') ? el : null;
+}
+
 function Toasts() {
   const toasts = useToasts();
   const region = useRef<HTMLDivElement>(null);
+  /** Where the toast held back would show: it comes once the keyboard focus has left that place. */
+  const heldAt = useRef<DOMRect | null>(null);
+
   // A toast never hides the control that has the focus (WCAG 2.4.11): those lying over a control
   // reached with Tab or the arrows go away (the status region has read them out already), and Escape
-  // dismisses them all. A tap or a click closes the toast it lands on, and nothing under it.
+  // dismisses them all. A tap or a click closes the toast it lands on, and nothing under it. They show
+  // one at a time (toasts.ts), and one that has waited its turn never comes up over the control that
+  // has the keyboard focus: it waits until the focus leaves that place.
+  useLayoutEffect(() => {
+    const t = toasts[0];
+    const el = region.current?.querySelector('.toast');
+    const focus = keyboardFocus();
+    if (!t?.queued || !el || !focus) return;
+    const box = el.getBoundingClientRect();
+    if (!toastsOver(focusBox(focus), [{ id: t.id, box }]).length) return;
+    heldAt.current = box;
+    holdToasts(true);
+  }, [toasts]);
+
   useEffect(() => {
     let frame = 0;
     const keys = keyMoves();
+    const release = () => {
+      heldAt.current = null;
+      holdToasts(false);
+    };
     const onFocus = (e: FocusEvent) => {
       const el = e.composedPath()[0];
-      if (!(el instanceof HTMLElement) || el.tabIndex < 0 || !keys.moving) return;
+      if (!(el instanceof HTMLElement)) return;
+      const moved = el.tabIndex >= 0 && keys.moving;
       // The toasts on screen now, not one that the same action shows next (« Annuler l’import »).
-      const shown = [...(region.current?.querySelectorAll<HTMLElement>('.toast') ?? [])];
+      const shown = moved ? [...(region.current?.querySelectorAll<HTMLElement>('.toast') ?? [])] : [];
       cancelAnimationFrame(frame);
-      // Once the browser has scrolled the control into view. A hidden radio shows its focus on its tile.
+      // Once the browser has scrolled the control into view.
       frame = requestAnimationFrame(() => {
-        const target = el.classList.contains('visually-hidden') ? (el.closest('label') ?? el) : el;
+        const box = focusBox(el);
+        const held = heldAt.current;
+        if (held && !toastsOver(box, [{ id: 0, box: held }]).length) release();
+        if (!moved) return;
         const boxes = shown.filter((t) => t.isConnected).map((t) => ({ id: Number(t.dataset.id), box: t.getBoundingClientRect() }));
-        toastsOver(target.getBoundingClientRect(), boxes).forEach(dismissToast);
+        toastsOver(box, boxes).forEach(dismissToast);
       });
+    };
+    // The focus left for no control (a click on the page's text): nothing is under the held toast any more.
+    const onBlur = (e: FocusEvent) => {
+      if (!e.relatedTarget && heldAt.current) release();
     };
     // Captured: the key is noted before any widget handles it, and before the focus moves.
     const onKey = (e: KeyboardEvent) => {
@@ -132,10 +172,12 @@ function Toasts() {
       else keys.key(e.key);
     };
     document.addEventListener('focusin', onFocus);
+    document.addEventListener('focusout', onBlur);
     document.addEventListener('keydown', onKey, true);
     return () => {
       cancelAnimationFrame(frame);
       document.removeEventListener('focusin', onFocus);
+      document.removeEventListener('focusout', onBlur);
       document.removeEventListener('keydown', onKey, true);
     };
   }, []);
