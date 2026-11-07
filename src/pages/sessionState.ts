@@ -1,5 +1,6 @@
 import type { Draft } from '../components/exercise/players';
 import type { Verdict } from '../engine/grade';
+import type { Exercise } from '../engine/types';
 import { frenchSpacing } from '../lib/markdown';
 
 /** One answered exercise of a run. The draft lets a reload or a Back show its correction again. */
@@ -68,6 +69,45 @@ export function parseRun(value: unknown, known: (id: string) => boolean): Run | 
     recorded: r.recorded === true,
     t: typeof r.t === 'number' && Number.isFinite(r.t) ? r.t : 0,
   };
+}
+
+/**
+ * A saved answer can be shown as it was given: it is of the exercise's type and names only options,
+ * zones, items or criteria the exercise has (an exercise can change between two visits).
+ */
+export function draftFits(ex: Exercise, d: Draft | undefined): d is Draft {
+  if (!d) return false;
+  const known = (list: { id: string }[], id: string) => list.some((x) => x.id === id);
+  switch (d.type) {
+    case 'choice':
+      return ex.type === 'choice' && d.optionId !== null && known(ex.options, d.optionId);
+    case 'multi':
+      return ex.type === 'multi' && Array.isArray(d.optionIds) && d.optionIds.every((id) => known(ex.options, id));
+    case 'truefalse':
+      return ex.type === 'truefalse' && typeof d.value === 'boolean';
+    case 'hotspot':
+      return ex.type === 'hotspot' && Array.isArray(d.ids) && d.ids.every((id) => known(ex.hotspots, id));
+    case 'order':
+      return ex.type === 'order' && Array.isArray(d.ids) && d.ids.length === ex.items.length && ex.items.every((i) => d.ids.includes(i.id));
+    case 'match':
+      return (
+        ex.type === 'match' &&
+        typeof d.pairs === 'object' &&
+        d.pairs !== null &&
+        Object.entries(d.pairs).every(([left, right]) => known(ex.pairs, left) && (right === '' || known(ex.pairs, right)))
+      );
+    case 'slider':
+      return ex.type === 'slider' && typeof d.value === 'number' && Number.isFinite(d.value);
+    case 'grid':
+      return (
+        ex.type === 'grid' &&
+        typeof d.scores === 'object' &&
+        d.scores !== null &&
+        Object.entries(d.scores).every(([id, score]) => known(ex.criteria, id) && typeof score === 'number')
+      );
+    default:
+      return false;
+  }
 }
 
 /** The exercise on screen has been answered (its correction is showing). */

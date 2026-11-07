@@ -16,8 +16,8 @@ const VERDICT = {
 
 const fmt = (n: number) => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 3 }).format(n);
 
-/** What an expert would have answered, in one glance. */
-function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
+/** What an expert would have answered, in one glance (the correction, and an exam's summary). */
+export function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
   switch (ex.type) {
     case 'choice': {
       const o = ex.options.find((x) => x.id === ex.answer)!;

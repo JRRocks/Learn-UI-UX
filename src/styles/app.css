@@ -2284,6 +2284,33 @@
   padding: 0 0 var(--s4) var(--s6);
 }
 
+/* An opened item of the summary: the answer given, marked as in its correction, then the
+   recommended one, before what to remember. */
+.recap-correction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+  padding-block: var(--s2);
+}
+
+.recap-recommended {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+/* The summary is narrower than the player: one mock per row on phones, two side by side at most
+   (three got 174 px at 1366 px and cut the recommended one; mocks are drawn for 320 to 520 px). */
+.recap-correction .options--visual[data-count] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 760px) {
+  .recap-correction .options--visual[data-count] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* ---------- Flashcards ---------- */
 
 .card-stack {
