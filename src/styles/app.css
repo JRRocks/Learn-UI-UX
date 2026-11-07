@@ -3558,8 +3558,9 @@ fieldset.tf {
     overflow-wrap: anywhere;
   }
 
-  /* A row of choices (Réglages, the catalog's families) wraps rather than squeeze its labels: each
-     choice keeps 6em, two by two or one under the other. */
+  /* A row of choices (Réglages, the catalog's families) wraps rather than squeeze its labels: a choice
+     goes to the next row when its label no longer fits on one line beside the others (« Comme le
+     système » above « Clair » and « Sombre »). */
   .field > .segmented,
   .catalog-filters > .segmented {
     display: flex;
@@ -3568,7 +3569,18 @@ fieldset.tf {
 
   .field > .segmented > *,
   .catalog-filters > .segmented > * {
-    flex: 1 1 6em;
+    flex: 1 1 auto;
+  }
+
+  /* Four choices (the daily goal): always two by two, « 100 XP » on one line (4 px of padding). */
+  .field > .segmented:has(> :nth-child(4):last-child) {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .segmented button {
+    padding-inline: var(--s1);
   }
 
   /* The mastery meter of a lesson goes under its figure when they no longer fit side by side. */
