@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
+import { ScrollRegion } from '../components/ScrollRegion';
 import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exercisesOf } from '../content';
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
@@ -152,7 +153,7 @@ export function Progress() {
             {' '}
             {st.current > 1 ? 'jours' : 'jour'} (record{' '}: {st.best}) · {activity}.
           </p>
-          <div className="table-scroll">
+          <ScrollRegion label="Activité">
             <div className="heatmap" role="img" aria-label={`Activité des 12 dernières semaines : ${activity}`}>
               {cells.map((d) => {
                 const xp = p.days[d]?.xp ?? 0;
@@ -160,7 +161,7 @@ export function Progress() {
                 return <i key={d} data-level={level} data-future={d > today ? '' : undefined} title={`${shortDay(d)} : ${xp} XP`} />;
               })}
             </div>
-          </div>
+          </ScrollRegion>
         </section>
         <section className="section" aria-labelledby="sum-title">
           <h2 id="sum-title">En chiffres</h2>
@@ -193,7 +194,7 @@ export function Progress() {
 
       <section className="section" aria-labelledby="mastery-title">
         <h2 id="mastery-title">Maîtrise par leçon</h2>
-        <div className="table-scroll">
+        <ScrollRegion label="Maîtrise par leçon">
           <table className="mastery-table">
             <thead>
               <tr>
@@ -229,7 +230,7 @@ export function Progress() {
               })}
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
       </section>
 
       <section className="section" aria-labelledby="badges-title">
@@ -254,7 +255,7 @@ export function Progress() {
       {p.sessions.length > 0 && (
         <section className="section" aria-labelledby="hist-title">
           <h2 id="hist-title">Dernières sessions</h2>
-          <div className="table-scroll">
+          <ScrollRegion label="Dernières sessions">
             <table className="mastery-table">
               <thead>
                 <tr>
@@ -284,7 +285,7 @@ export function Progress() {
                   ))}
               </tbody>
             </table>
-          </div>
+          </ScrollRegion>
         </section>
       )}
 

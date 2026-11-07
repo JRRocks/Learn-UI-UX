@@ -2,6 +2,7 @@ import { CircleCheck, CircleX } from 'lucide-react';
 import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
+import { ScrollRegion } from '../components/ScrollRegion';
 import { DETECTOR_RULES } from '../content/detectorRules';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
 import { SOURCES, resolveSource } from '../content/sources';
@@ -288,7 +289,7 @@ function Commands() {
       <p className="muted" style={{ maxWidth: 'var(--measure)' }}>
         <MdInline text="impeccable donne un vocabulaire commun pour parler de design avec un agent de code : chaque commande correspond à une intention. Les leçons de cette application suivent le même découpage." />
       </p>
-      <div className="table-scroll">
+      <ScrollRegion label="Commandes impeccable">
         <table className="compare-table">
           <thead>
             <tr>
@@ -311,7 +312,7 @@ function Commands() {
             ))}
           </tbody>
         </table>
-      </div>
+      </ScrollRegion>
       <p className="small">
         Projet{' '}: <SourceLink k="imp:site" /> · code source sur{' '}
         <a href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener noreferrer">

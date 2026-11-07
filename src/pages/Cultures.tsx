@@ -2,6 +2,7 @@ import { ArrowLeft, CircleCheck, CircleX, FlaskConical, Target } from 'lucide-re
 import { useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
+import { ScrollRegion } from '../components/ScrollRegion';
 import { EXERCISES, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
@@ -538,7 +539,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
 
       <section className="section" aria-labelledby="h-conv">
         <h2 id="h-conv">Conventions</h2>
-        <div className="table-scroll">
+        <ScrollRegion label="Conventions">
           <table className="compare-table">
             <thead>
               <tr>
@@ -600,7 +601,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
               </tr>
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
       </section>
     </div>
   );

@@ -5,6 +5,8 @@
 // content (`overflow: hidden`) hides it from the learner: the defect it teaches, or
 // the fix it recommends, may simply not be visible. Deliberate truncation (an
 // ellipsis being taught, a fold, a scrolling row) shows up too: judge each line.
+// Two accessibility checks as well: a box that still scrolls inside a picture (Tab would stop in
+// the image), and a hotspot zone a screen reader would only announce as « Zone N ».
 import { createRequire } from 'node:module';
 import { readdirSync } from 'node:fs';
 import { createServer } from 'vite';
@@ -103,7 +105,8 @@ function scan() {
         const x = Math.round(Math.max(c.left - rect.left, rect.right - c.right));
         const y = Math.round(Math.max(c.top - rect.top, rect.bottom - c.bottom));
         if (x <= 2 && y <= 2) return;
-        const scrolls = /auto|scroll/.test(s.overflowX) || /auto|scroll/.test(s.overflowY);
+        // A box drawn as scrolling holds still in a picture (Mock.tsx clips it): it still « défile ».
+        const scrolls = /auto|scroll/.test(s.overflowX) || /auto|scroll/.test(s.overflowY) || clip.hasAttribute('data-mk-still');
         found.push({ label, x, y, how: scrolls ? 'défile' : 'coupé' });
       };
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -178,6 +181,15 @@ function scan() {
         const label = el.getAttribute('aria-label') || el.getAttribute('placeholder') || el.textContent.trim().slice(0, 30) || el.tagName.toLowerCase();
         check(`<${el.tagName.toLowerCase()}> ${label}`, el.getBoundingClientRect(), el, el.parentElement);
       });
+      // A box left scrolling in a picture: Tab stops on it, inside an image whose content is not
+      // exposed (Mock.tsx should have made it hold still).
+      if (host.getAttribute('role') === 'img')
+        root.querySelectorAll('.mk-root *').forEach((el) => {
+          const s = getComputedStyle(el);
+          if (!/auto|scroll/.test(s.overflowX + s.overflowY)) return;
+          if (el.scrollWidth <= el.clientWidth && el.scrollHeight <= el.clientHeight) return;
+          found.push({ label: `<${el.tagName.toLowerCase()} class="${el.getAttribute('class') ?? ''}">`, x: 0, y: 0, how: 'défileur' });
+        });
       // Labels shortened with an ellipsis (other clipping is covered above).
       root.querySelectorAll('*').forEach((el) => {
         const s = getComputedStyle(el);
@@ -221,6 +233,20 @@ try {
           }
       });
       const res = await page.evaluate(scan);
+      // Hotspot zones: each answer button is named after what its zone shows (zoneName in Mock.tsx).
+      // A zone that shows no text needs data-hotspot-name, or a screen reader only hears « Zone 2 ».
+      const unnamed = await page.evaluate(async () => {
+        const { zoneName } = await import('/src/components/Mock.tsx');
+        const out = [];
+        for (const shot of document.querySelectorAll('[data-shot]'))
+          for (const host of shot.querySelectorAll('.mock'))
+            [...(host.shadowRoot?.querySelectorAll('[data-hotspot]') ?? [])].forEach((z, i) => {
+              if (/^Zone \d+$/.test(zoneName(z, i + 1))) out.push({ id: shot.getAttribute('data-shot'), zone: z.getAttribute('data-hotspot') });
+            });
+        return out;
+      });
+      for (const id of new Set(unnamed.map((u) => u.id)))
+        res.push({ id, where: 'zones', found: unnamed.filter((u) => u.id === id).map((u) => ({ label: `data-hotspot="${u.zone}"`, x: 0, y: 0, how: 'zone sans nom' })) });
       for (const r of res) {
         total += r.found.length;
         console.log(`${target} · ${vp.name} · ${r.id} · ${r.where}`);
@@ -228,6 +254,10 @@ try {
           console.log(
             f.how === 'chevauchement'
               ? `    textes superposés (${f.x} × ${f.y} px) : ${f.label}`
+              : f.how === 'défileur'
+                ? `    défile encore dans une image, et Tab s’y arrête : ${f.label}`
+              : f.how === 'zone sans nom'
+                ? `    zone annoncée « Zone N » seulement (ajoute data-hotspot-name) : ${f.label}`
               : f.how.startsWith('texte de')
                 ? `    ${f.how} (moins de 11 px) : ${f.label}`
                 : f.how.startsWith('contraste')
