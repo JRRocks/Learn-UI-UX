@@ -4082,6 +4082,34 @@ fieldset.tf {
   .market-sep {
     display: none;
   }
+
+  /* An exercise of a session's summary: its verdict and its chevron on a row, its question under them,
+     across the item, and what opens under it without the indent. Between them, the question kept 168 px
+     at 320 px (« changeme|nt », « paragraph|e »), and the correction 192 px (« accompagn|e »). */
+  .recap summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--s1);
+  }
+
+  .recap summary > svg:first-child {
+    grid-area: 1 / 1;
+  }
+
+  .recap summary > svg:last-child {
+    grid-area: 1 / 2;
+  }
+
+  .recap summary > span {
+    grid-area: 2 / 1 / 3 / -1;
+  }
+
+  .recap-body {
+    padding-inline-start: 0;
+  }
+
+  .recap-correction {
+    margin-inline-start: 0;
+  }
 }
 
 /* With a touch screen the keyboard hint is hidden: the count, if any, stays beside the button as long
