@@ -3378,6 +3378,18 @@ fieldset.tf {
   padding-bottom: var(--s8);
 }
 
+/* Without the « Valider » bar (a session's summary, an empty selection, the flashcards, the start and
+   the end of the challenge), the toasts go down to the edge of the screen and the page ends with room
+   for one of two lines under its last buttons: they sat where the bar would be, on « Nouvelle session
+   du jour », and a tap there closed the toast instead of starting the session. */
+.shell[data-focus] .main:not(:has(.task-actions)) {
+  padding-bottom: calc(var(--s9) + var(--s3) + env(safe-area-inset-bottom));
+}
+
+.shell[data-focus]:not(:has(.task-actions)) .toasts {
+  bottom: calc(var(--s3) + env(safe-area-inset-bottom));
+}
+
 /* Phones held upright: the toasts sit just above the sticky « Valider » bar, so the bar ends the page
    where it sticks, at the bottom of the screen (lifted 64 px at the end, it slid under them). Wider,
    the toasts sit in the bar; on short screens it no longer sticks, and the 64 px keep it above them. */
