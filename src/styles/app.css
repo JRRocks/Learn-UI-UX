@@ -2347,6 +2347,15 @@
   padding-block: var(--s2);
 }
 
+/* Phones: the correction takes back the indent of the item (32 px), so that its mocks get the width
+   they have in the exercise (254 px at 320, not 222, which cut the recommended plan table's last
+   column, « Rechercher » or « 3 · Paiement »). */
+@media (max-width: 29.99875em) {
+  .recap-correction {
+    margin-inline-start: calc(-1 * var(--s6));
+  }
+}
+
 .recap-recommended {
   display: flex;
   flex-direction: column;
