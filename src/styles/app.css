@@ -3035,7 +3035,9 @@
 /* Each term beside its definition from 760 px. A definition in words also needs room in the list
    itself: in a half column (Critique, from 900 px), the 14rem of the term left it 48 px at 960 px, and
    its words ran past the screen. So it goes beside its term from 26rem of list, where it keeps 10rem
-   (as at 1200 px). A figure (Progression, « En chiffres ») holds in the room left beside its term. */
+   (as at 1200 px). A list of figures (Progression, « En chiffres ») keeps them beside their terms from
+   760 px, in one column for all its rows: each figure on one line, the terms giving up room down to their
+   longest word (in a half column at 960 px, 14rem of term left « 4 sur 408 » 48 px, on two lines). */
 .defs {
   display: flex;
   flex-direction: column;
@@ -3050,10 +3052,21 @@
   border-bottom: 1px solid var(--rule);
 }
 
+.defs dd.num {
+  white-space: nowrap;
+}
+
 @media (min-width: 47.5em) {
+  .defs:not(:has(> div > dd:not(.num))) {
+    display: grid;
+    grid-template-columns: minmax(min-content, 14rem) minmax(max-content, 1fr);
+    column-gap: var(--s5);
+  }
+
   .defs:not(:has(> div > dd:not(.num))) > div {
-    grid-template-columns: 14rem minmax(0, 1fr);
-    gap: var(--s5);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    column-gap: var(--s5);
   }
 
   @container (min-width: 26rem) {
