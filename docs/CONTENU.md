@@ -45,7 +45,10 @@ même dans une version recommandée ne l’est pas.
   Quand la partie dans cette langue n’est pas seulement le titre (une précision dans la même
   langue, un éditeur écrit dans la même écriture), `quote` la recopie telle qu’elle figure dans
   `label` : `{ label: 'Planalto — Lei Geral de Proteção de Dados (Lei 13.709/2018)', lang: 'pt',
-  quote: 'Lei Geral de Proteção de Dados (Lei 13.709/2018)', url: … }`.
+  quote: 'Lei Geral de Proteção de Dados (Lei 13.709/2018)', url: … }`. Les titres que le contenu
+  cite déjà sans traduction sont déclarés une fois dans `QUOTED_TITLES` (même fichier) : une source
+  qui cite l’un d’eux prend sa langue sans `lang`. `npm run validate` signale un titre qui se lit
+  comme de l’anglais sans langue, et une entrée de `QUOTED_TITLES` qu’aucune source ne cite plus.
 - Pas de stéréotypes culturels présentés comme des lois : on parle de tendances observées,
   de conventions et de contraintes, avec leurs limites.
 

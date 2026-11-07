@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { Source } from '../engine/types';
+import type { Source, SourceRef } from '../engine/types';
 import { frenchSpacing } from '../lib/markdown';
 import { ALL_MODULES } from './all';
 import { CULTURES } from './cultures/profiles';
-import { SOURCES, labelParts, quotedParts, resolveSource } from './sources';
+import { CHEATSHEET } from './resources';
+import { QUOTED_TITLES, SOURCES, labelParts, quotedParts, resolveSource } from './sources';
 import { checkSources } from './validate';
 
 describe('labelParts: only the title of a source is in its own language (a11y-final-8)', () => {
@@ -71,7 +72,16 @@ const ALL_SOURCES: Source[] = [
   ...Object.values(SOURCES),
   ...ALL_MODULES.flatMap((m) => [...m.sources, ...m.exercises.flatMap((e) => e.sources ?? [])]),
   ...CULTURES.flatMap((c) => c.sources),
+  ...CHEATSHEET.flatMap((g) => [g.source, ...g.rows.flatMap(([, , s]) => (s ? [s] : []))]),
 ];
+
+/** A source as written in the content: a key stands for its shared reference. */
+const written = (s: Source): SourceRef => (typeof s === 'string' ? (SOURCES[s] ?? { label: s }) : s);
+
+/** Words of an English title that a French one hardly holds… */
+const ENGLISH = /\b(?:the|of|and|for|to|in|on|with|your|how|why|what|when|is|are|vs|from|by|over|or|do|than|its|into|an|really)\b/i;
+/** …and what makes a title French: accents, guillemets, elisions, its common words. */
+const FRENCH = /[àâäçéèêëîïôöùûüÿœæ«»]|\b[cdjlns]’|\b(?:le|la|les|des|du|de|et|pour|sur|une?|dans|avec|aux?|par|est|sont|qui|que|ne|pas|ou|ses|son|sa|ce|cette|leurs?)\b/i;
 
 describe('source languages (a11y-final-8)', () => {
   it('names the language of the shared references quoted untranslated, and only of those', () => {
@@ -83,10 +93,46 @@ describe('source languages (a11y-final-8)', () => {
     expect(resolveSource('web.dev:cwv').lang).toBeUndefined();
   });
 
-  it('gives the shared references a well-formed language, and a quote found in their label', () => {
+  it('gives the titles quoted in the content their language, unless their source names its own', () => {
+    expect(resolveSource({ label: 'Nielsen Norman Group — Response Times: The 3 Important Limits' }).lang).toBe('en');
+    expect(resolveSource({ label: 'Nielsen Norman Group — Response Times: The 3 Important Limits (Jakob Nielsen)' }).lang).toBe('en');
+    expect(quotedParts(resolveSource({ label: 'Cowan (2001) — The magical number 4 in short-term memory' }))?.quote).toBe(
+      'The magical number 4 in short-term memory',
+    );
+    expect(quotedParts(resolveSource({ label: '§ 312j BGB — Button-Lösung' }))).toEqual({ before: '§ 312j BGB — ', quote: 'Button-Lösung', after: '' });
+    expect(quotedParts(resolveSource({ label: 'Gesetze im Internet — § 312j BGB (Button-Lösung)' }))).toEqual({
+      before: 'Gesetze im Internet — § 312j BGB (',
+      quote: 'Button-Lösung',
+      after: ')',
+    });
+    expect(quotedParts(resolveSource({ label: '消費者庁 — 特定商取引法ガイド（通信販売）' }))?.before).toBe('');
+    // A translated title; a source that names its language; a title that is not a key of the table.
+    expect(resolveSource({ label: 'Laws of UX — Loi de Fitts' }).lang).toBeUndefined();
+    expect(resolveSource({ label: 'Nielsen Norman Group — Response Times: The 3 Important Limits', lang: 'en-US' }).lang).toBe('en-US');
+    expect(resolveSource({ label: 'Nielsen Norman Group — constructor' }).lang).toBeUndefined();
+  });
+
+  it('declares only titles that a source of the content quotes without naming their language', () => {
+    const quoted = new Set(ALL_SOURCES.map(written).filter((r) => !r.lang).map((r) => labelParts(r.label).title));
+    // A title reworded in the content, or now declared on its source: its entry goes.
+    expect(Object.keys(QUOTED_TITLES).filter((t) => !quoted.has(t))).toEqual([]);
+  });
+
+  it('gives every source a well-formed language, and a part in it found in its label', () => {
+    const resolved = ALL_SOURCES.map(resolveSource);
     const errors: string[] = [];
-    checkSources(Object.values(SOURCES), 'SOURCES', errors);
+    checkSources(resolved, 'sources', errors);
     expect(errors).toEqual([]);
+    expect(resolved.filter((r) => r.lang && !quotedParts(r)).map((r) => r.label)).toEqual([]);
+  });
+
+  it('names the language of every title that reads as English', () => {
+    const titles = ALL_SOURCES.map(resolveSource)
+      .filter((r) => !r.lang)
+      .map((r) => labelParts(r.label).title);
+    const unnamed = [...new Set(titles)].filter((t) => /\s/.test(t) && ENGLISH.test(t) && !FRENCH.test(t));
+    // Declare it on the source (`lang`, CONTENU.md), or here in QUOTED_TITLES.
+    expect(unnamed).toEqual([]);
   });
 
   it('never changes the text shown: the parts of every label read as the label', () => {
