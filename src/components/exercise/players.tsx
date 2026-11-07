@@ -129,10 +129,27 @@ function useOptionMotion() {
 
 /* ---------------------------------------------------------------- choice */
 
-function optionState(selected: boolean, right: boolean, revealed: boolean): string {
+export type OptionState = 'idle' | 'selected' | 'right' | 'wrong' | 'dim';
+
+/**
+ * State of a single-answer tile (Le bon choix, Vrai ou faux, Défi chrono): before validation, chosen
+ * or not; after it, the recommended answer, the learner's wrong choice, or an option nobody picked.
+ */
+export function optionState(selected: boolean, right: boolean, revealed: boolean): OptionState {
   if (!revealed) return selected ? 'selected' : 'idle';
   if (right) return 'right';
   return selected ? 'wrong' : 'dim';
+}
+
+/** What a marked tile is, once validated: said in words and drawn as an icon, never by its color alone. */
+export function OptionBadge({ state }: { state: OptionState }) {
+  if (state !== 'right' && state !== 'wrong') return null;
+  return (
+    <span className="option-badge">
+      {state === 'right' ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}
+      {state === 'right' ? 'Recommandé' : 'Ton choix'}
+    </span>
+  );
 }
 
 export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy, describedBy }: P<ChoiceExercise, Extract<Draft, { type: 'choice' }>>) {
@@ -163,12 +180,7 @@ export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy,
                   <span className="option-key" aria-hidden="true">
                     {i + 1}
                   </span>
-                  {revealed && (right || selected) && (
-                    <span className="option-badge">
-                      {right ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}
-                      {right ? 'Recommandé' : 'Ton choix'}
-                    </span>
-                  )}
+                  <OptionBadge state={state} />
                 </span>
                 <span className="stage">
                   <Mock visual={o.visual!} {...motion.mockProps(o.id)} />
@@ -292,6 +304,7 @@ export function TrueFalsePlayer({ ex, draft, setDraft, revealed, labelledBy, des
               {c.key}
             </span>
             {c.label}
+            <OptionBadge state={state} />
           </label>
         );
       })}

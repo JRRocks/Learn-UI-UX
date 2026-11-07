@@ -1794,9 +1794,17 @@
 .tf .option {
   justify-content: center;
   align-items: center;
+  row-gap: var(--s1);
   font-weight: 700;
   font-size: var(--t-lead);
   min-height: 64px;
+}
+
+/* Once validated, a marked tile says what it is on a line of its own, under its label: the same in
+   both tiles, whatever their width (one badge used to fit beside its label, the other not). */
+.tf .option-badge {
+  flex-basis: 100%;
+  justify-content: center;
 }
 
 /* Hotspot */
