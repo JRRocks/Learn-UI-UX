@@ -351,10 +351,10 @@ Pour que Sam soit réellement averti, son lecteur d’écran doit annoncer l’a
 .vl-warn { display: flex; gap: 6px; align-items: flex-start; padding: 8px 10px; border-radius: 8px; background: #fff4d6; color: #5c4400; font-size: 12px; font-weight: 600; }
 .vl-tabs { font-size: 11px; }`,
         html: `<div class="vl-head"><span class="mk-strong" data-hotspot="title">Réserver un vélo</span><span class="vl-ok" data-hotspot="validate">Valider</span></div>
-<div class="vl-map" data-hotspot="map"><span class="vl-road" style="left:0;right:0;top:52px;height:10px"></span><span class="vl-road" style="top:0;bottom:0;left:120px;width:10px"></span><span class="vl-pin" style="left:96px;top:24px"></span><span class="vl-pin" style="left:190px;top:70px"></span></div>
+<div class="vl-map" data-hotspot="map" data-hotspot-name="Carte"><span class="vl-road" style="left:0;right:0;top:52px;height:10px"></span><span class="vl-road" style="top:0;bottom:0;left:120px;width:10px"></span><span class="vl-pin" style="left:96px;top:24px"></span><span class="vl-pin" style="left:190px;top:70px"></span></div>
 <div class="mk-pad mk-stack" style="--gap:10px">
   <div class="vl-station" data-hotspot="station"><p class="mk-strong">Station Bellecour</p><p class="mk-small mk-muted">7 vélos dont 3 électriques · à 120&nbsp;m</p></div>
-  <div class="mk-row mk-between"><span class="mk-small mk-muted">Options</span><div class="vl-tiny" data-hotspot="tiny"><span><i data-icon="bike" style="--ico:12px"></i></span><span><i data-icon="zap" style="--ico:12px"></i></span><span><i data-icon="lock" style="--ico:12px"></i></span><span><i data-icon="heart" style="--ico:12px"></i></span></div></div>
+  <div class="mk-row mk-between"><span class="mk-small mk-muted">Options</span><div class="vl-tiny" data-hotspot="tiny" data-hotspot-name="Rangée d’icônes"><span><i data-icon="bike" style="--ico:12px"></i></span><span><i data-icon="zap" style="--ico:12px"></i></span><span><i data-icon="lock" style="--ico:12px"></i></span><span><i data-icon="heart" style="--ico:12px"></i></span></div></div>
   <p class="vl-warn" data-hotspot="warn"><i data-icon="triangle-alert" style="--ico:14px"></i> Ne quittez pas l’application : la réservation serait annulée.</p>
 </div>
 <div class="mk-tabbar vl-tabs" data-hotspot="tabs"><span class="on"><i data-icon="map-pin" style="--ico:20px"></i>Carte</span><span><i data-icon="ticket" style="--ico:20px"></i>Trajets</span><span><i data-icon="user" style="--ico:20px"></i>Profil</span></div>`,
@@ -393,7 +393,7 @@ Le correctif : un bouton « Réserver ce vélo » pleine largeur dans le bas de 
 .cr-err .mk-ico { margin-top: 2px; }
 .cr-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eceef2; }`,
         html: `<div class="cr">
-  <div class="cr-side" data-hotspot="sidebar"><i data-icon="house" style="--ico:18px"></i><i class="on" data-icon="users" style="--ico:18px"></i><i data-icon="mail" style="--ico:18px"></i><i data-icon="chart-column" style="--ico:18px"></i><i data-icon="settings" style="--ico:18px"></i></div>
+  <div class="cr-side" data-hotspot="sidebar" data-hotspot-name="Barre latérale"><i data-icon="house" style="--ico:18px"></i><i class="on" data-icon="users" style="--ico:18px"></i><i data-icon="mail" style="--ico:18px"></i><i data-icon="chart-column" style="--ico:18px"></i><i data-icon="settings" style="--ico:18px"></i></div>
   <div class="mk-grow mk-pad mk-stack" style="--gap:12px">
     <div class="mk-row mk-between mk-wrap" style="--gap:8px"><p class="mk-h2" data-hotspot="title">Contacts</p><span class="mk-btn mk-btn--s" data-hotspot="import"><i data-icon="upload" style="--ico:15px"></i> Importer des contacts</span></div>
     <div class="mk-field" data-hotspot="search"><span class="mk-label">Rechercher un contact</span><div class="mk-input" style="display:flex;align-items:center;gap:6px"><i data-icon="search" style="--ico:15px"></i><span class="mk-muted">Nom, entreprise, e&#8209;mail…</span></div></div>

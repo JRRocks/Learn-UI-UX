@@ -124,6 +124,16 @@ function loopPath(x: number, y: number, w: number, h: number, seed: number): str
 /** Links, fields and buttons drawn in a mock depict another product: never followed, filled or tabbed to. */
 const DRAWN_CONTROLS = 'a[href], button, input, select, textarea, summary, iframe, [tabindex], [contenteditable]';
 
+/**
+ * Only a mock whose own CSS or markup lets a box scroll can draw one (six visuals out of 600): the
+ * others never have their styles read for it.
+ */
+export const declaresScroll = (visual: Pick<Visual, 'css' | 'html'>): boolean =>
+  /overflow(?:-[a-z]+)?\s*:[^;{}"'<>]*\b(?:auto|scroll)\b/i.test(`${visual.css ?? ''}\n${visual.html}`);
+
+/** A box the browser lets the keyboard scroll: Chromium and Firefox stop on it with Tab. */
+const scrolls = (s: CSSStyleDeclaration) => /auto|scroll/.test(s.overflowX) || /auto|scroll/.test(s.overflowY);
+
 /* ---------------------------------------------------------------- hotspot answer layer */
 
 /** Accessible name of a zone: what it shows (WCAG 2.5.3), or `data-hotspot-name` when it shows no text. */
@@ -462,6 +472,32 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
     });
   }, [markup, interactive]);
 
+  // A box drawn as scrolling, in a picture, holds still: the kit clips it ([data-mk-still]). Left to
+  // scroll, it was a Tab stop inside an image that exposes nothing; only taken out of the tab order,
+  // the mouse alone could still scroll it (WCAG 2.1.1). At rest it looks the same. The mock's media
+  // queries may make another box scroll at another width: each new width looks again.
+  const scrolling = useMemo(() => declaresScroll(visual), [visual]);
+  useLayoutEffect(() => {
+    const host = hostRef.current;
+    const root = host?.shadowRoot;
+    if (!host || !root || interactive || !scrolling) return;
+    let width = -1;
+    const still = () => {
+      if (host.offsetWidth === width) return;
+      width = host.offsetWidth;
+      const boxes = [...root.querySelectorAll<HTMLElement>('.mk-root *')];
+      boxes.forEach((el) => el.removeAttribute('data-mk-still'));
+      for (const el of boxes) if (!el.matches(DRAWN_CONTROLS) && scrolls(getComputedStyle(el))) el.setAttribute('data-mk-still', '');
+    };
+    still();
+    const ro = new ResizeObserver(still);
+    ro.observe(host);
+    return () => {
+      ro.disconnect();
+      root.querySelectorAll('[data-mk-still]').forEach((el) => el.removeAttribute('data-mk-still'));
+    };
+  }, [markup, interactive, scrolling]);
+
   // Never follow a drawn link or submit a drawn form, even after the correction (logic-10).
   useEffect(() => {
     const root = hostRef.current?.shadowRoot;
@@ -508,6 +544,8 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
       b.className = 'mk-hit';
       b.dataset.for = zone.dataset.hotspot as string;
       b.setAttribute('aria-label', zoneName(zone, i + 1));
+      // A name written for the zone is in French, whatever the language of the product drawn.
+      if (zone.dataset.hotspotName) b.lang = document.documentElement.lang;
       b.setAttribute('aria-pressed', 'false');
       b.innerHTML = badge;
       layer.appendChild(b);

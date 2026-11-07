@@ -652,8 +652,8 @@ Impeccable est explicite : ne cache jamais une fonction essentielle sur mobile ;
       visual: {
         alt: 'Téléphone : fiche d’un hôtel à Arles avec bouton retour, photo, note, une ligne de trois liens, une information sur la taxe de séjour, un tableau de tarifs et un bouton « Réserver ».',
         frame: 'phone',
-        html: fr(`<div class="ht-bar"><span class="ht-ico" data-hotspot="back"><i data-icon="arrow-left"></i></span><p class="mk-strong">Hôtel des Lices</p></div>
-<div class="mk-img" data-hotspot="photo" style="--ratio:16/9;border-radius:0"></div>
+        html: fr(`<div class="ht-bar"><span class="ht-ico" data-hotspot="back" data-hotspot-name="Bouton retour"><i data-icon="arrow-left"></i></span><p class="mk-strong">Hôtel des Lices</p></div>
+<div class="mk-img" data-hotspot="photo" data-hotspot-name="Photo" style="--ratio:16/9;border-radius:0"></div>
 <div class="mk-pad mk-stack" style="--gap:10px">
   <div><p class="mk-h3">Hôtel des Lices, Arles</p><p class="mk-small mk-muted">4,6 sur 5 · 312 avis</p></div>
   <p class="ht-links" data-hotspot="links"><a href="#">Modifier les dates</a> · <a href="#">Annuler</a> · <a href="#">Partager</a></p>

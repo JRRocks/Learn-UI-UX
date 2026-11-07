@@ -38,6 +38,9 @@ a { color: #1f4fd8; }
 .mk-phone-status { display: flex; justify-content: space-between; align-items: center; height: 24px; padding: 0 18px; font-size: 11px; font-weight: 600; }
 .mk-phone-status i { display: inline-block; width: 34px; height: 9px; border-radius: 3px; border: 1.5px solid currentColor; }
 .mk-screen { position: relative; }
+/* A box drawn as scrolling, in a picture (Mock.tsx marks it): clipped, it is no longer a Tab stop.
+   hidden stands in where clip is unknown. */
+[data-mk-still] { overflow: hidden !important; overflow: clip !important; }
 
 /* ---------- Layout helpers ---------- */
 .mk-pad { padding: 16px; }

@@ -4,6 +4,7 @@ import { Link, navigate } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { keepInView } from '../components/exercise/ExerciseView';
 import { eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
+import { OptionBadge, optionState } from '../components/exercise/players';
 import { EXERCISES, MODULE_BY_ID, useStatements } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
@@ -19,6 +20,8 @@ const RECORD_ID = 'blitz';
 
 interface Answered {
   ex: TrueFalseExercise;
+  /** The learner's answer: a wrong one stays marked during the correction. */
+  value: boolean;
   ok: boolean;
   xp: number;
 }
@@ -81,7 +84,7 @@ export function Blitz() {
       xp = out.xp;
       return out.state;
     });
-    const a = { ex: current, ok: r.verdict === 'correct', xp };
+    const a = { ex: current, value, ok: r.verdict === 'correct', xp };
     setClock(pauseClock(clock, t));
     setNow(t);
     setAnswered((x) => [...x, a]);
@@ -281,13 +284,14 @@ export function Blitz() {
         </h1>
         <div className="tf" role="group" aria-label="Ta réponse">
           {[true, false].map((v) => {
-            const state = last ? (v === current.answer ? 'right' : 'dim') : 'idle';
+            const state = optionState(last?.value === v, v === current.answer, last !== null);
             return (
               <button key={String(v)} type="button" className="option" data-state={state} disabled={Boolean(last)} onClick={() => answer(v)}>
                 <span className="option-key" aria-hidden="true">
                   {v ? 'V' : 'F'}
                 </span>
                 {v ? 'Vrai' : 'Faux'}
+                <OptionBadge state={state} />
               </button>
             );
           })}

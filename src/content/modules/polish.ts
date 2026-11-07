@@ -665,7 +665,7 @@ Impeccable le formule simplement : si le bouton « Enregistrer » a deux apparen
   <p class="mk-h2" data-hotspot="title" style="align-self:flex-start">Panier (2)</p>
   <ul class="mk-list">
     <li><span class="mk-img" style="--ratio:1;width:44px;flex:none"></span><div class="mk-grow"><p class="mk-strong" data-hotspot="case">CASQUE ARIA STUDIO</p><p class="mk-small mk-muted">Noir mat · Qté 1</p></div><div class="mk-stack" style="--gap:4px;align-items:flex-end"><span class="mk-price">79,90&nbsp;€</span><span class="mk-muted"><i data-icon="trash" style="--ico:16px"></i></span></div></li>
-    <li><span class="mk-img" style="--ratio:1;width:44px;flex:none"></span><div class="mk-grow"><p class="mk-strong">Câble USB-C tressé</p><p class="mk-small mk-muted">2 m · Qté 1</p></div><div class="mk-stack" style="--gap:4px;align-items:flex-end"><span class="mk-price">10,00&nbsp;€</span><span class="pol-icon-odd" data-hotspot="icon"><i data-icon="trash" class="pol-fill" data-stroke="2.6" style="--ico:20px"></i></span></div></li>
+    <li><span class="mk-img" style="--ratio:1;width:44px;flex:none"></span><div class="mk-grow"><p class="mk-strong">Câble USB-C tressé</p><p class="mk-small mk-muted">2 m · Qté 1</p></div><div class="mk-stack" style="--gap:4px;align-items:flex-end"><span class="mk-price">10,00&nbsp;€</span><span class="pol-icon-odd" data-hotspot="icon" data-hotspot-name="Corbeille du câble"><i data-icon="trash" class="pol-fill" data-stroke="2.6" style="--ico:20px"></i></span></div></li>
   </ul>
   <div class="mk-row mk-between"><span class="mk-strong">Total</span><span class="mk-price">89,90&nbsp;€</span></div>
   <div class="pol-paywrap" data-hotspot="promo">

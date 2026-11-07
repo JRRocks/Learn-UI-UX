@@ -1345,8 +1345,8 @@ Localiser pour « l’anglais » ne suffit pas : \`en-IN\`, \`en-US\`, \`en-GB\`
 .st-done .mk-ico{--ico:16px}
 .st-help{margin:0 14px;font-size:13px;color:#5a6172}`,
         html: `<div class="st">
-  <div class="st-bar"><span class="st-ico" data-hotspot="back"><i data-icon="arrow-left"></i></span><span class="st-title">مسلسلات رمضان</span><span class="st-logo" data-hotspot="logo">شاشة</span></div>
-  <div class="st-video"><span class="st-play" data-hotspot="play"><i data-icon="play" style="transform:scaleX(-1)"></i></span></div>
+  <div class="st-bar"><span class="st-ico" data-hotspot="back" data-hotspot-name="Flèche retour"><i data-icon="arrow-left"></i></span><span class="st-title">مسلسلات رمضان</span><span class="st-logo" data-hotspot="logo">شاشة</span></div>
+  <div class="st-video"><span class="st-play" data-hotspot="play" data-hotspot-name="Bouton de lecture"><i data-icon="play" style="transform:scaleX(-1)"></i></span></div>
   <p class="st-ep">الحلقة 3 · بيت الجدة</p>
   <div class="st-row"><span class="st-h">تابع المشاهدة</span><span class="st-more" data-hotspot="more">عرض الكل<i data-icon="chevron-right"></i></span></div>
   <div class="st-cards"><div class="mk-img" style="--ratio:16/10"></div><div class="mk-img" style="--ratio:16/10"></div></div>

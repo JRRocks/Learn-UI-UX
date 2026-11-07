@@ -517,7 +517,7 @@ Le mouvement y sert l’état, le retour et la continuité, avec des transitions
     <span class="mk-btn" data-hotspot="cta">Essayer 30 jours</span>
   </div>
   <div class="lp-logos" data-hotspot="marquee"><div class="lp-track">${[...LOGOS, ...LOGOS].map((l) => `<span>${l}</span>`).join('')}</div></div>
-  <div class="mk-img" data-hotspot="shot" style="--ratio:16 / 5;max-height:120px"></div>
+  <div class="mk-img" data-hotspot="shot" data-hotspot-name="Capture du produit" style="--ratio:16 / 5;max-height:120px"></div>
 </div>`,
         css: `.lp-nav { padding: 10px 16px; border-bottom: 1px solid #e3e6ec; }
 .lp-new { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 3px 10px; border-radius: 999px; background: #eef1f7; font-size: 12px; font-weight: 600; color: #36405a; }
