@@ -146,7 +146,7 @@ export function unfinishedSession(): { raw: string; label: string; index: number
 /* ---------------------------------------------------------------- page */
 
 /** Between the session, the lesson and the type: a wrapped line never starts with the dot. */
-const SEP = ' · ';
+const SEP = '\u00A0· ';
 
 function typeOf(ex: SessionItem): string {
   return isDuel(ex) ? TYPE_LABEL.duel : TYPE_LABEL[ex.type];
