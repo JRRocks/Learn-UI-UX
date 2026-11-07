@@ -3562,10 +3562,25 @@ fieldset.tf {
     font-size: min(0.6875rem, calc(4.85vw - 1px));
     line-height: 1.15;
     text-align: center;
+    hyphens: auto;
+    hyphenate-limit-chars: auto;
+  }
+
+  /* So do the labels of the Ressources tabs, three or two to a row (« Heuris-tiques », « Com-mandes »). */
+  .segmented :is(a, button) {
+    hyphens: auto;
+    hyphenate-limit-chars: auto;
+  }
+
+  /* A market's name and its locale share a row while they fit there; the locale goes under it otherwise
+     (« Allemagn|e » broke beside « de-DE »). */
+  .market-name {
+    flex-wrap: wrap;
   }
 
   /* Titles step down once, as from the desktop to the phone: a 68 px word no longer takes three lines of
-     a 320 px screen. */
+     a 320 px screen (the title of a page, or of a pair of screens in Cultures). */
+  h1,
   .page-head h1 {
     font-size: var(--t-h2);
   }
@@ -3716,6 +3731,28 @@ fieldset.tf {
     display: flex;
     flex-direction: column;
     gap: 2px;
+  }
+}
+
+/* Under 15em, the question splits its words as the titles do (base.css), from 12 letters, and the label
+   of a button from 10, in its narrower box: « Effacer ma progres-sion… » instead of « progressi|on… ».
+   Under 12em, all from 9. */
+@media (max-width: 14.99875em) {
+  .task-prompt,
+  .flashcard-q {
+    hyphenate-limit-chars: 12 4 4;
+  }
+
+  .btn {
+    hyphenate-limit-chars: 10 4 4;
+  }
+}
+
+@media (max-width: 11.99875em) {
+  .task-prompt,
+  .flashcard-q,
+  .btn {
+    hyphenate-limit-chars: 9 4 3;
   }
 }
 
