@@ -194,19 +194,24 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
             <button type="button" className="btn btn-primary" onClick={validate} disabled={!complete} aria-describedby={remaining ? `left-${ex.id}` : undefined}>
               Valider
             </button>
-            {remaining && (
-              <span id={`left-${ex.id}`} className="task-remaining">
-                {remaining}
-              </span>
-            )}
-            <span className="shortcut-hint">{hint}</span>
+            {/* One block beside the button, or under it when a large text size leaves it too little room (app.css). */}
+            <span className="task-actions-text">
+              {remaining && (
+                <span id={`left-${ex.id}`} className="task-remaining">
+                  {remaining}
+                </span>
+              )}
+              <span className="shortcut-hint">{hint}</span>
+            </span>
           </>
         ) : (
           <>
             <button type="button" className="btn btn-primary" onClick={onNext}>
               {nextLabel} <ArrowRight aria-hidden="true" />
             </button>
-            <span className="shortcut-hint">Entrée pour continuer.</span>
+            <span className="task-actions-text">
+              <span className="shortcut-hint">Entrée pour continuer.</span>
+            </span>
           </>
         )}
       </div>

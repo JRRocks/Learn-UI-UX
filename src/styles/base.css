@@ -189,3 +189,26 @@ li::marker {
     scroll-behavior: auto !important;
   }
 }
+
+/* Narrower than 20em, the narrowest layout drawn (320 px at the default 16 px; 400 px at 20 px,
+   640 px at 32 px, with a larger default text size): a word longer than its line, « développeurs » in a
+   48 px question, splits at its syllables with a hyphen, and is broken anywhere only as a last resort,
+   also where flex and grid layouts size a box after its longest word (a button, a link, a table cell);
+   a short code may wrap at its spaces. Wider, the layouts keep their room (breakpoints in em) and
+   nothing breaks inside a word. */
+@media (max-width: 19.99875em) {
+  body {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  code,
+  kbd,
+  samp {
+    hyphens: manual;
+  }
+
+  code.code-short {
+    white-space: normal;
+  }
+}

@@ -152,9 +152,16 @@
 }
 
 /* Under 480 px the counter and the keyboard hint of the « Valider » bar can take three lines. */
-@media (max-width: 479.98px) {
+@media (max-width: 29.99875em) {
   :root {
     --actions-h: 6rem;
+  }
+}
+
+/* Narrower than 20em (a large text size, app.css): the score of a session's bar may take a second row. */
+@media (max-width: 19.99875em) {
+  :root {
+    --player-top-h: calc(var(--tap) + 3rem + 1px);
   }
 }
 
