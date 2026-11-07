@@ -703,7 +703,14 @@
   width: var(--value, 0%);
   border-radius: inherit;
   background: var(--ink);
-  transition: width var(--dur) var(--ease-out);
+}
+
+/* The bar slides to its new length, unless the learner asked for less motion: then it takes it at once
+   (it slid 300 px wide across a computer's screen after each exercise). */
+@media (prefers-reduced-motion: no-preference) {
+  .meter > span {
+    transition: width var(--dur) var(--ease-out);
+  }
 }
 
 .meter--mark > span {
