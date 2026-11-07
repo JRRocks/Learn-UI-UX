@@ -152,6 +152,12 @@
   color: var(--mark);
 }
 
+/* Progression has no tab: its button in the top bar marks the page shown as the tabs do. */
+.topbar .icon-btn[aria-current='page'] {
+  color: var(--mark);
+  background: var(--paper-2);
+}
+
 /* Below 360 px a fifth of the bar is 64 px: « Apprendre » and « S’entraîner » would touch. */
 @media (max-width: 359.98px) {
   .tabbar a {

@@ -48,14 +48,15 @@ function BrandMark() {
   );
 }
 
+/** Its name is the text it shows, then where it leads: « cliquer atelier UI/UX » works by voice too (WCAG 2.5.3). */
 function Brand() {
   return (
-    <Link to="/" className="brand" aria-label="Épreuves, accueil">
+    <Link to="/" className="brand">
       <BrandMark />
       <span>
-        Épreuves
-        <small>atelier UI/UX</small>
+        Épreuves <small>atelier UI/UX</small>
       </span>
+      <span className="visually-hidden">, accueil</span>
     </Link>
   );
 }
@@ -324,7 +325,8 @@ function Shell() {
           <Brand />
           <div className="topbar-actions">
             <ThemeToggle />
-            <Link to="/progression" className="icon-btn" aria-label="Progression">
+            {/* Below 960 px the only way to Progression: it says when it is the page shown, as the tabs do. */}
+            <Link to="/progression" className="icon-btn" aria-label="Progression" aria-current={current === 'progression' ? 'page' : undefined}>
               <ChartColumn aria-hidden="true" />
             </Link>
           </div>
