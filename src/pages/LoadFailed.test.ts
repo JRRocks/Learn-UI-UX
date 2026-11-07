@@ -17,6 +17,10 @@ function network(answer: (init: RequestInit) => Promise<Answer>) {
   return requests;
 }
 
+/** A connection that never answers: the request ends only when aborted. */
+const stalled = (init: RequestInit) =>
+  new Promise<Answer>((_, reject) => init.signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError'))));
+
 describe('reloading after a failed download: does the site answer?', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -49,12 +53,30 @@ describe('reloading after a failed download: does the site answer?', () => {
 
   it('gives up after 6 s on a stalled connection', async () => {
     vi.useFakeTimers();
-    network((init) => new Promise((_, reject) => init.signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')))));
+    network(stalled);
     let answer: boolean | undefined;
     void siteAnswers().then((a) => (answer = a));
     await vi.advanceTimersByTimeAsync(5999);
     expect(answer).toBeUndefined();
     await vi.advanceTimersByTimeAsync(1);
     expect(answer).toBe(false);
+  });
+
+  it('stops its request when cancelled, as when the learner leaves the view: the answer is no', async () => {
+    const requests = network(stalled);
+    const cancel = new AbortController();
+    const answer = siteAnswers(cancel.signal);
+    cancel.abort();
+    expect(await answer).toBe(false);
+    expect(requests).toHaveLength(1);
+    expect(requests[0][1].signal?.aborted).toBe(true);
+  });
+
+  it('asks nothing once cancelled', async () => {
+    const requests = network(async () => ({ type: 'basic', status: 200 }));
+    const cancel = new AbortController();
+    cancel.abort();
+    expect(await siteAnswers(cancel.signal)).toBe(false);
+    expect(requests).toHaveLength(0);
   });
 });
