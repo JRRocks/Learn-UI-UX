@@ -5,8 +5,11 @@
 // instead of 16, WCAG 1.4.4), at 320, 360, 390 and 768 px with a mouse (the keyboard hints show):
 // every page, two exercises of each format before and after « Valider », the timed challenge and the
 // cards. Everywhere, a bar that stays on screen must fit in the room kept for it (scroll-padding),
-// or a control reached with Tab could end up under it (WCAG 2.4.11), and no more than three lines in a
-// row may end on a hyphen the browser added (French typography; long words split under 15em).
+// or a control reached with Tab could end up under it (WCAG 2.4.11), no more than three lines in a
+// row may end on a hyphen the browser added (French typography; long words split under 15em), and no
+// French word of a label (an item to order, an option, a button, a badge, a toast, a title…) may be
+// broken without a hyphen, anywhere in its letters, where overflow-wrap lets a word too long for its
+// line break as a last resort (« Aj|ou|te|r » in a 44 px column).
 // Prints the elements that stick out; exits with 1 if any.
 //   npm run check:overflow
 //   npm run check:overflow -- 320          → only this width
@@ -35,7 +38,7 @@ const TEXT_WIDTHS = asked.length ? asked : [320, 360, 390, 768];
 const RUN = 'overflow';
 
 /** Runs in the page: how far it scrolls sideways, what sticks out, and the bars taller than their room. */
-function measure() {
+function measure(LABELS) {
   const vw = document.documentElement.clientWidth;
   const sw = document.documentElement.scrollWidth;
   const tabs = [...document.querySelectorAll('.tabbar a')].map((a) => {
@@ -97,8 +100,43 @@ function measure() {
       if (run > ladder.lines) Object.assign(ladder, { lines: run, text: block.textContent.trim().slice(0, 50) });
     }
   }
-  return { vw, sw, touching, culprits: [...new Set(culprits)].slice(0, 3), bars, ladder };
+  // Words of a label broken in their letters without a hyphen: the word's range takes several lines,
+  // one box on each (a hyphen the browser adds is a box of its own). French words only: not a code, a
+  // number, a file name or a pattern (« PRODUCT.md », « JJ/MM/AAAA »), nor a phrase in another language.
+  const split = [];
+  const seen = new Set();
+  for (const box of document.querySelectorAll(LABELS)) {
+    const texts = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+    for (let node = texts.nextNode(); node; node = texts.nextNode()) {
+      if (seen.has(node)) continue;
+      seen.add(node);
+      const el = node.parentElement;
+      if (!el || el.closest('code, kbd, samp, [role="img"], .stage, .visually-hidden')) continue;
+      if (!/^fr\b/.test(el.closest('[lang]')?.getAttribute('lang') ?? 'fr')) continue;
+      for (const token of node.textContent.matchAll(/[^\s\u00a0\u202f]+/g)) {
+        if (/[\d_@/]|\.\p{L}/u.test(token[0])) continue;
+        for (const word of token[0].matchAll(/\p{L}[\p{L}\p{M}’']*/gu)) {
+          if (word[0].length < 2) continue;
+          const range = document.createRange();
+          range.setStart(node, token.index + word.index);
+          range.setEnd(node, token.index + word.index + word[0].length);
+          const boxes = [...range.getClientRects()].filter((r) => r.width > 0);
+          const lines = new Set(boxes.map((r) => Math.round(r.top))).size;
+          if (lines > 1 && boxes.length === lines) split.push(word[0]);
+        }
+      }
+    }
+  }
+  return { vw, sw, touching, culprits: [...new Set(culprits)].slice(0, 3), bars, ladder, split: [...new Set(split)] };
 }
+
+/** The labels whose words must never break without a hyphen (measure): set beside a key, an icon, a count or
+ * arrows, they are the narrowest boxes of the page; running text has the width of its line. */
+const LABELS = [
+  '.order-label', '.option-text', '.option-why', '.option-badge', '.option-label', '.match-row', '.zones li',
+  '.task-prompt', '.flashcard-q', '.slider-head', '.btn', '.toast', '.badge', '.side-link', '.lesson-jump',
+  '.toc-title', '.market-formats', 'h1', 'h2', 'h3', 'h4',
+].join(', ');
 
 /** Some complete answer to the exercise on screen, through the DOM (a badge toast may lie over a control). */
 async function answer(page) {
@@ -208,13 +246,14 @@ try {
     ...ids.cultures.map((c) => `/cultures/${c}`),
     ...ids.pairs.map((p) => `/cultures/paire/${p}`),
   ];
-  const fails = (m) => m.sw > m.vw || m.touching || m.bars.length || m.ladder.lines > 3;
+  const fails = (m) => m.sw > m.vw || m.touching || m.bars.length || m.ladder.lines > 3 || m.split.length;
   const describe = (m) =>
     [
       m.sw > m.vw ? `${m.sw} px de large pour ${m.vw}` : '',
       m.touching ? 'libellés de la barre d’onglets collés' : '',
       ...m.bars,
       m.ladder.lines > 3 ? `${m.ladder.lines} lignes de suite finies par une coupure (« ${m.ladder.text} »)` : '',
+      m.split.length ? `mots coupés sans trait d’union : ${m.split.slice(0, 6).map((w) => `« ${w} »`).join(', ')}` : '',
     ]
       .filter(Boolean)
       .join(' ; ');
@@ -235,7 +274,7 @@ try {
     for (const route of routes) {
       await page.goto(`${base}?w=${width}#${route}`);
       await loaded(page);
-      const m = await page.evaluate(measure);
+      const m = await page.evaluate(measure, LABELS);
       if (fails(m)) {
         bad++;
         show(`${width} px ${route}`, m);
@@ -252,7 +291,7 @@ try {
     let bad = 0;
     const seen = new Set();
     await playRun(context, 0, base, ids.visual, async (page, step, id) => {
-      const m = await page.evaluate(measure);
+      const m = await page.evaluate(measure, LABELS);
       if (!fails(m)) return;
       if (!seen.has(id)) bad++;
       seen.add(id);
@@ -273,7 +312,7 @@ try {
     const lines = [];
     let bad = 0;
     const check = async (page, label) => {
-      const m = await page.evaluate(measure);
+      const m = await page.evaluate(measure, LABELS);
       if (!fails(m)) return;
       bad++;
       lines.push(`✗ ${tag} ${label} : ${describe(m)}`, ...m.culprits.map((c) => `    ${c}`));

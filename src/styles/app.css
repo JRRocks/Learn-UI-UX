@@ -3764,6 +3764,37 @@ fieldset.tf {
     padding-inline: var(--s4);
   }
 
+  /* « Mise en ordre »: the arrows go under their label, at its end, and the label takes the width of the
+     item. Between its position and two 40 px buttons, it kept 44 px at 320 px with a 32 px text, two or
+     three letters a line (« Aj|ou|te|r »). The position stays beside the first line. */
+  .order-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--s2);
+    row-gap: var(--s1);
+    padding-inline-start: var(--s3);
+  }
+
+  .order-moves {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  /* A text option gives its words the room of its tile: 12 px of padding instead of 16, 8 px between the
+     key and the text; « Pourquoi » stays aligned on the text. */
+  .option:not(.option--visual) {
+    padding-inline: var(--s3);
+    column-gap: var(--s2);
+  }
+
+  .option:not(.option--visual) .option-why {
+    padding-inline-start: calc(28px + var(--s2));
+  }
+
+  .option:has(> .check-box) .option-why {
+    padding-inline-start: calc(24px + var(--s2));
+  }
+
   /* The « Valider » bar: what it waits for and the keyboard hint stay beside the button while they get
      10em there (and never less than their longest word); otherwise they go under it, across the bar. */
   .task-actions {
@@ -3785,12 +3816,15 @@ fieldset.tf {
   }
 }
 
-/* Under 15em, the question splits its words as the titles do (base.css), from 12 letters, and the label
-   of a button from 10, in its narrower box: « Effacer ma progres-sion… » instead of « progressi|on… ».
-   Under 12em, all from 9. */
+/* Under 15em, the question, the text of an option and the label of an item to order split their words as
+   the titles do (base.css), from 12 letters, in their narrower boxes (« rappro-chement » in a 232 px
+   option at 390 px with a 32 px text), and the label of a button from 10. */
 @media (max-width: 14.99875em) {
   .task-prompt,
-  .flashcard-q {
+  .flashcard-q,
+  .option-text,
+  .option-why,
+  .order-label {
     hyphenate-limit-chars: 12 4 4;
   }
 
@@ -3799,11 +3833,141 @@ fieldset.tf {
   }
 }
 
+/* Under 12em (384 px at 32 px), a box set beside an icon, a key, a count or two arrows holds ten letters
+   a line, or fewer: a word of 7 to 11 letters no longer fitted there, and broke anywhere (« Premièr|e »,
+   « Comme|ncer », « Efface|r ma progr|essio|n… », « contrainte|s »). These boxes first give their words
+   the width of the line: the key, the position and the arrows, the icon and the count go on a row of their
+   own, above. Then a word longer than its line splits at a syllable: in a label or a title from 9 letters,
+   3 kept on either side (« Com-mencer », « Res-sources » in base.css; 4 before the hyphen ruled them out),
+   in a text of several lines from 10 letters, as running text does from 12 (base.css), so that few of
+   its lines end on a hyphen. Some words have no syllable to split at in the browser's dictionary
+   (« contraintes », « Construire »): only the width of the line keeps them whole. */
 @media (max-width: 11.99875em) {
+  .btn,
+  .toast,
+  .badge,
+  .side-link,
+  .lesson-jump,
+  .toc-title,
+  .option-badge {
+    hyphenate-limit-chars: 9 3 3;
+  }
+
   .task-prompt,
   .flashcard-q,
-  .btn {
-    hyphenate-limit-chars: 9 4 3;
+  .takeaway,
+  .order-label,
+  .option-text,
+  .option-why,
+  .match-row,
+  .zones li {
+    hyphenate-limit-chars: 10 4 3;
+  }
+
+  .btn,
+  .match-row {
+    padding-inline: var(--s2);
+  }
+
+  .danger-zone {
+    padding: var(--s3);
+  }
+
+  /* An item to order: its position and its arrows on a row, its label under them, across the item. */
+  .order-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .order-pos {
+    grid-area: 1 / 1;
+  }
+
+  .order-moves {
+    grid-area: 1 / 2;
+  }
+
+  .order-label {
+    grid-area: 2 / 1 / 3 / -1;
+  }
+
+  /* A zone of a correction (Chasse aux erreurs): its number above its words. */
+  .zones li {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--s1);
+  }
+
+  /* A text option: its key (or its box) above its text, and « Pourquoi » under it, across the tile. */
+  .options > .option:not(.option--visual) {
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: var(--s2);
+  }
+
+  .options > .option:not(.option--visual) > .option-text {
+    flex: none;
+    padding-top: 0;
+  }
+
+  .options > .option:not(.option--visual) > .option-why {
+    padding-inline-start: 0;
+  }
+
+  /* A side link: its icon and its count on a row, its words under them. */
+  .side-link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s1) var(--s2);
+    padding-inline: var(--s3);
+  }
+
+  .side-link > svg {
+    grid-area: 1 / 1;
+  }
+
+  .side-link > strong {
+    grid-area: 1 / 2;
+  }
+
+  .side-link > span {
+    grid-area: 2 / 1 / 3 / -1;
+  }
+
+  /* A badge: its icon above its title. */
+  .badge {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: var(--s3);
+  }
+
+  .badge svg {
+    grid-row: auto;
+  }
+
+  .lesson-jump summary {
+    gap: var(--s2);
+    padding-inline: var(--s3);
+  }
+
+  .lesson-jump ol {
+    padding-inline: var(--s3);
+  }
+
+  /* Section titles step down once more, as the page's title did under 20em: at 48 px, a word of ten
+     letters no longer fitted the line, and some have no syllable to split at (« connexio|ns »). */
+  h2,
+  .lesson-section > h2,
+  .toc-group-head h2 {
+    font-size: var(--t-lead);
+  }
+
+  /* Lists and quotes in a text keep more of the line for their words. */
+  .md :is(ul, ol) {
+    padding-inline-start: 1em;
+  }
+
+  .md blockquote {
+    padding-inline: var(--s3);
   }
 }
 

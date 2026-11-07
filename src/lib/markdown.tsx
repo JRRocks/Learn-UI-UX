@@ -55,18 +55,37 @@ export function languageRuns(text: string): { text: string; lang?: string }[] {
   return runs;
 }
 
+const OPEN_QUOTE = '«\u202F';
+
+/**
+ * Each opening guillemet that leads to a word, with its no-break space, in an element of its own. Chrome
+ * takes them for the start of that word, and never splits such a word at a syllable: in a narrow box, it
+ * broke anywhere instead (« Notificati|ons »). Apart, the word splits with a hyphen (« Notifi-cations »);
+ * the no-break space still keeps the guillemet on its line.
+ */
+export function openQuotes(text: string, keyPrefix = 'q'): ReactNode[] {
+  const parts = text.split(/«\u202F(?=\p{L})/u);
+  if (parts.length === 1) return [text];
+  const out: ReactNode[] = [];
+  parts.forEach((part, i) => {
+    if (i) out.push(<span key={`${keyPrefix}-${i}`}>{OPEN_QUOTE}</span>);
+    if (part) out.push(part);
+  });
+  return out;
+}
+
 /**
  * Plain text, without Markdown: French spacing, and each phrase quoted in another language read in that
  * language (WCAG 3.1.2), set apart from the French when it reads right to left.
  */
 export function plainText(text: string, keyPrefix = 't'): ReactNode[] {
-  return languageRuns(frenchSpacing(text)).map((r, i) =>
+  return languageRuns(frenchSpacing(text)).flatMap((r, i) =>
     r.lang ? (
       <span key={`${keyPrefix}-${i}`} lang={r.lang} dir={RTL_LANGS.has(r.lang.split('-')[0]) ? 'auto' : undefined}>
         {r.text}
       </span>
     ) : (
-      r.text
+      openQuotes(r.text, `${keyPrefix}-${i}`)
     ),
   );
 }

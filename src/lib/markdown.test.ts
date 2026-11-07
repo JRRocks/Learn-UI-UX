@@ -8,7 +8,7 @@ import { LAB_LOCALES } from '../content/cultures/lab';
 import { CULTURE_PAIRS } from '../content/cultures/pairs';
 import { CULTURES } from '../content/cultures/profiles';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
-import { Md, frenchSpacing, parseBlocks } from './markdown';
+import { Md, frenchSpacing, openQuotes, parseBlocks } from './markdown';
 
 /** Text as rendered by Md, without its code spans. */
 function renderedText(md: string): string {
@@ -84,6 +84,17 @@ describe('markdown subset', () => {
     );
     // Not a unit: a word that merely starts like one.
     expect(frenchSpacing('3 points, 2 semaines, 4 heures')).toBe('3 points, 2 semaines, 4 heures');
+  });
+
+  it('sets each opening guillemet apart, so that the word it leads to can split at a syllable', () => {
+    const html = renderToStaticMarkup(createElement(Md, { text: 'Ajouter une rubrique « Notifications » à l’écran' }));
+    expect(html).toContain('<span>«\u202F</span>Notifications\u202F»');
+    // The text itself is unchanged.
+    expect(renderedText('« un » et « deux »')).toBe('«\u202Fun\u202F» et «\u202Fdeux\u202F»');
+    expect(openQuotes('sans guillemet')).toEqual(['sans guillemet']);
+    // Before a number, or a phrase in another language (an element of its own already), nothing to split.
+    expect(openQuotes('«\u202F12\u202F»')).toEqual(['«\u202F12\u202F»']);
+    expect(openQuotes('(«\u202F')).toEqual(['(«\u202F']);
   });
 });
 

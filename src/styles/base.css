@@ -214,10 +214,12 @@ li::marker {
 /* Under 15em (240 px at 16 px, 360 px at 24 px, 480 px at 32 px), a line holds some 20 letters of text,
    12 of a title: « Internationalisation » in a sentence, « Comparaisons » in a title would break
    anywhere. There, a long word splits at a syllable, with a hyphen: from 14 letters in the text and 12
-   in a title (app.css: the question too, and a button's label from 10), 4 or 5 kept on either side;
-   under 12em (384 px at 32 px), where a line holds 15 letters, from 12 and 9. Shorter words stay whole,
-   so that a line seldom ends on a hyphen (check:overflow allows three in a row at most). From 15em,
-   words fit their lines: only the labels of the tabs split, onto two lines (app.css). */
+   in a title (app.css: the question, an option, an item to order too, and a button's label from 10),
+   4 or 5 kept on either side; under 12em (384 px at 32 px), where a line holds 15 letters, from 12 in
+   the text, and from 9 in a title, 3 kept on either side (« Res-sources »), as in the narrow boxes of
+   app.css. Shorter words stay whole in the text, so that a line seldom ends on a hyphen (check:overflow
+   allows three in a row at most). From 15em, the boxes are drawn wide enough for their words (an item to
+   order, an option: app.css, under 20em); only the labels of the tabs split, onto two lines. */
 @media (max-width: 14.99875em) {
   body {
     hyphens: auto;
@@ -241,6 +243,6 @@ li::marker {
   h2,
   h3,
   h4 {
-    hyphenate-limit-chars: 9 4 3;
+    hyphenate-limit-chars: 9 3 3;
   }
 }
