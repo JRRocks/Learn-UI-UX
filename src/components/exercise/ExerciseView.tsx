@@ -78,9 +78,11 @@ interface Props {
   onAnswered: (result: GradeResult, draft: Draft) => number | undefined;
   onNext: () => void;
   nextLabel: string;
+  /** Where the exercise comes from (« leçon · type »), on a line above it: the top bar of a session has no room for it on phones. */
+  about?: ReactNode;
 }
 
-export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nextLabel }: Props) {
+export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nextLabel, about }: Props) {
   const order = useMemo(() => displayOrder(ex, seed === undefined ? Math.random : seeded(seed)), [ex, seed]);
   const [draft, setDraft] = useState<Draft>(() => answered?.draft ?? initialDraft(ex, order));
   const [result, setResult] = useState<GradeResult | null>(answered?.result ?? null);
@@ -90,6 +92,7 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
   const settledAt = useRef(0);
   const promptId = `prompt-${ex.id}`;
   const contextId = ex.context ? `context-${ex.id}` : undefined;
+  const aboutId = about ? `about-${ex.id}` : undefined;
   const revealed = result !== null && mode === 'practice';
   const complete = isComplete(ex, draft);
   const remaining = revealed ? null : completionHint(ex, draft);
@@ -192,13 +195,18 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
   return (
     <article className="task" ref={articleRef}>
       <header className="task-head">
-        {/* The scenario comes first on screen; the prompt, which gets the focus, points to it. */}
+        {/* Where it comes from and the scenario come first on screen; the prompt, which gets the focus, points to them. */}
+        {about && (
+          <p id={aboutId} className="task-about">
+            {about}
+          </p>
+        )}
         {ex.context && (
           <div id={contextId}>
             <Md text={ex.context} className="task-context" />
           </div>
         )}
-        <h1 id={promptId} className="task-prompt" tabIndex={-1} aria-describedby={contextId}>
+        <h1 id={promptId} className="task-prompt" tabIndex={-1} aria-describedby={[aboutId, contextId].filter(Boolean).join(' ') || undefined}>
           <MdInline text={ex.prompt} />
         </h1>
         {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && ex.type !== 'grid' && (

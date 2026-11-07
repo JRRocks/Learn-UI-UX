@@ -1486,6 +1486,26 @@
   text-overflow: ellipsis;
 }
 
+/* The count stays at the end of the bar, above the end of the meter, with or without a label. */
+.player-progress-label .num {
+  margin-inline-start: auto;
+}
+
+/* A session keeps its name in the bar where every name fits (from 35rem). On phones the bar kept
+   100 to 200 px for it and cut « session · leçon · type » short, with no other way to read it
+   (WCAG 1.4.10): the name now leads the line above the question (.task-about-session), which wraps. */
+@media (max-width: 34.99rem) {
+  .player-session {
+    display: none;
+  }
+}
+
+@media (min-width: 35rem) {
+  .task-about-session {
+    display: none;
+  }
+}
+
 .player-xp {
   font-size: var(--t-small);
   font-weight: 700;
@@ -1506,6 +1526,18 @@
   flex-direction: column;
   gap: var(--s3);
   max-width: 44rem;
+}
+
+/* Where the exercise comes from (« leçon · type »), above the scenario and the question. */
+.task-about {
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* In the timed challenge it sits in the task itself: it stays 12 px from its question, not 24. */
+.task > .task-about {
+  margin-block-end: calc(var(--s3) - var(--s5));
 }
 
 .task-context {

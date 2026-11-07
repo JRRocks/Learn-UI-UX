@@ -145,6 +145,9 @@ export function unfinishedSession(): { raw: string; label: string; index: number
 
 /* ---------------------------------------------------------------- page */
 
+/** Between the session, the lesson and the type: a wrapped line never starts with the dot. */
+const SEP = ' · ';
+
 function typeOf(ex: SessionItem): string {
   return isDuel(ex) ? TYPE_LABEL.duel : TYPE_LABEL[ex.type];
 }
@@ -262,6 +265,9 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
 
   const next = () => setState((st) => (st.index < st.ids.length && answeredCurrent(st) ? { ...st, index: st.index + 1 } : st));
   const module = MODULE_BY_ID.get(item.module);
+  // The exercise's lesson and type, above it, unless the session's name says it already. The top bar
+  // only keeps that name, and only where it fits: on phones it leads this line instead (app.css).
+  const about = [spec.kind === 'module' ? null : module?.title, spec.kind === 'type' ? null : typeOf(item)].filter(Boolean).join(SEP);
   const last = state.index === items.length - 1;
   const answered = answeredCurrent(state) ? state.played[state.index] : undefined;
 
@@ -273,8 +279,8 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         </button>
         <div className="player-progress">
           <div className="player-progress-label">
-            <span>
-              <MdInline text={[spec.kind === 'module' ? null : label, module?.title, spec.kind === 'type' ? null : typeOf(item)].filter(Boolean).join(' · ')} />
+            <span className="player-session">
+              <MdInline text={label} />
             </span>
             <span className="num">
               {state.index + 1} / {items.length}
@@ -300,6 +306,15 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         <ExerciseView
           key={`${current.id}-${state.index}`}
           ex={current}
+          about={
+            <>
+              <span className="task-about-session">
+                <MdInline text={label} />
+                {SEP}
+              </span>
+              <MdInline text={about} />
+            </>
+          }
           mode={exam ? 'exam' : 'practice'}
           seed={seedOf(runId, state.index)}
           answered={answered?.draft ? { result: { verdict: answered.verdict, score: answered.score }, draft: answered.draft, xp: answered.xp } : undefined}
