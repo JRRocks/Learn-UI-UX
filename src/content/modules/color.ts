@@ -383,7 +383,7 @@ Le texte indicatif du champ (*placeholder*) obéit à la même règle : c’est 
   <div class="mk-row mk-between"><p class="mk-h3">Déploiements · boutique-web</p><span class="mk-btn mk-btn--s" data-hotspot="deploy">Déployer</span></div>
   <div class="mk-stack" style="--gap:6px">
     <p class="mk-small mk-muted">Disponibilité, 30 derniers jours</p>
-    <div class="dp-bars" data-hotspot="uptime"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="ko"></span><span></span><span></span><span></span><span></span><span></span><span class="warn"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="ko"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="dp-bars" data-hotspot="uptime" data-hotspot-name="Barre de disponibilité"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="ko"></span><span></span><span></span><span></span><span></span><span></span><span class="warn"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="ko"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   </div>
   <div class="mk-row mk-between"><span>v2.14.0 · main · il y a 12 min</span><span class="dp-badge" data-hotspot="badge"><i data-icon="circle-x" style="--ico:14px"></i>Échec · 3 tests</span></div>
   <div class="mk-field"><span class="mk-label">Branche à déployer</span><div class="mk-input dp-err" data-hotspot="branch">feature/paiement-</div></div>

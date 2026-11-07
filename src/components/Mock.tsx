@@ -543,6 +543,8 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
       b.className = 'mk-hit';
       b.dataset.for = zone.dataset.hotspot as string;
       b.setAttribute('aria-label', zoneName(zone, i + 1));
+      // A name written for the zone is in French, whatever the language of the product drawn.
+      if (zone.dataset.hotspotName) b.lang = document.documentElement.lang;
       b.setAttribute('aria-pressed', 'false');
       b.innerHTML = badge;
       layer.appendChild(b);

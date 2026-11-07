@@ -602,7 +602,7 @@ La marque passe d’une plateforme à l’autre par le système de thème (palet
         alt: 'Écran Android d’une liste de courses : bouton retour textuel « ‹ Listes » avec un titre centré, menu à trois points, articles à cocher, un interrupteur de partage vert et un bouton flottant d’ajout.',
         frame: 'phone',
         html: fr(`<div class="m3" style="min-height:430px">
-  <div class="ios-head"><span class="ios-back" data-hotspot="back"><i data-icon="chevron-left"></i>Listes</span><span class="ios-title">Courses</span><span class="m3-ib" data-hotspot="menu" style="margin-left:auto"><i data-icon="ellipsis" class="kebab"></i></span></div>
+  <div class="ios-head"><span class="ios-back" data-hotspot="back"><i data-icon="chevron-left"></i>Listes</span><span class="ios-title">Courses</span><span class="m3-ib" data-hotspot="menu" data-hotspot-name="Menu à trois points" style="margin-left:auto"><i data-icon="ellipsis" class="kebab"></i></span></div>
   <div data-hotspot="list">
     <div class="m3-row"><span class="mk-check mk-check--on"></span><p class="mk-grow">Lait d’avoine</p></div>
     <div class="m3-row"><span class="mk-check"></span><p class="mk-grow">Pommes Golden × 6</p></div>
@@ -610,7 +610,7 @@ La marque passe d’une plateforme à l’autre par le système de thème (palet
     <div class="m3-row"><span class="mk-check"></span><p class="mk-grow">Lessive</p></div>
   </div>
   <div class="m3-row" data-hotspot="share"><div class="mk-grow"><p>Partager avec Léa</p><p class="mk-small" style="color:#42474e">Elle verra tes modifications en direct</p></div><span class="ios-sw"></span></div>
-  <span class="m3-fab" data-hotspot="fab"><i data-icon="plus"></i></span>
+  <span class="m3-fab" data-hotspot="fab" data-hotspot-name="Bouton flottant d’ajout"><i data-icon="plus"></i></span>
   <div class="m3-handle" style="position:absolute;left:0;right:0;bottom:0"></div>
 </div>`),
         css: M3_CSS,
@@ -792,7 +792,7 @@ Depuis Android 15, une appli qui cible le SDK 35 s’affiche bord à bord par d�
       visual: {
         alt: 'Écran iPhone d’une appli de trajets : menu hamburger avec un logo, grand titre « Mes trajets », une consigne de survol, une liste groupée, de petits liens « Modifier | Supprimer » et un interrupteur d’alertes.',
         frame: 'phone',
-        html: fr(`<div class="wp-top"><span class="io-btn" data-hotspot="burger"><i data-icon="menu"></i></span><span class="mk-strong">TrajetPlus</span><span class="io-btn"><i data-icon="user"></i></span></div>
+        html: fr(`<div class="wp-top"><span class="io-btn" data-hotspot="burger" data-hotspot-name="Menu hamburger"><i data-icon="menu"></i></span><span class="mk-strong">TrajetPlus</span><span class="io-btn"><i data-icon="user"></i></span></div>
 <p class="io-lt" data-hotspot="title" style="padding-top:10px">Mes trajets</p>
 <p class="wp-hint" data-hotspot="hover">Survolez un trajet pour afficher ses actions.</p>
 <div class="wp-g" data-hotspot="list">

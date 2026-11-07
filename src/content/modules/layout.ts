@@ -503,8 +503,8 @@ La commande \`distill\` le dit simplement : les cartes ne sont pas nécessaires 
         frame: 'phone',
         html: `<div class="rc">
   <p class="mk-h3 rc-title" data-hotspot="title">Tarte fine aux pommes</p>
-  <div class="mk-img rc-img" data-hotspot="photo" style="--ratio:16 / 9"></div>
-  <div class="rc-tools" data-hotspot="tools">${TOOL_ICONS.map((i) => `<i data-icon="${i}" style="--ico:14px"></i>`).join('')}</div>
+  <div class="mk-img rc-img" data-hotspot="photo" data-hotspot-name="Photo" style="--ratio:16 / 9"></div>
+  <div class="rc-tools" data-hotspot="tools" data-hotspot-name="Rangée d’icônes">${TOOL_ICONS.map((i) => `<i data-icon="${i}" style="--ico:14px"></i>`).join('')}</div>
   <p class="rc-body" data-hotspot="body">Étalez la pâte feuilletée, piquez-la à la fourchette puis disposez les pommes en rosace. Enfournez 25 minutes à 200 °C, jusqu’à ce que les bords soient dorés.</p>
   <div class="mk-tabbar" data-hotspot="tabbar"><span class="on"><i data-icon="house" style="--ico:20px"></i>Accueil</span><span><i data-icon="search" style="--ico:20px"></i>Chercher</span><span><i data-icon="bookmark" style="--ico:20px"></i>Carnet</span><span><i data-icon="user" style="--ico:20px"></i>Profil</span></div>
 </div>`,

@@ -570,7 +570,7 @@ Innover sur la navigation coûte de l’attention sans rien apporter. Garde l’
         frame: 'phone',
         alt: 'Écran « Modifier l’adresse » sur téléphone : titre et croix de fermeture en haut, champs Adresse, Code postal et Ville, puis les boutons « Enregistrer » et « Supprimer » (rouge) côte à côte en bas.',
         html: fr(`<div class="ad">
-<div class="mk-row mk-between ad-top"><p class="mk-h3" data-hotspot="title">Modifier l’adresse</p><span class="ad-x" data-hotspot="close"><i data-icon="x" style="--ico:14px"></i></span></div>
+<div class="mk-row mk-between ad-top"><p class="mk-h3" data-hotspot="title">Modifier l’adresse</p><span class="ad-x" data-hotspot="close" data-hotspot-name="Croix de fermeture"><i data-icon="x" style="--ico:14px"></i></span></div>
 <div class="mk-pad mk-stack" style="--gap:12px">
 <div class="mk-field" data-hotspot="street"><span class="mk-label">Adresse</span><span class="mk-input">14 rue des Lilas</span></div>
 <div class="mk-field" data-hotspot="zip"><span class="mk-label">Code postal</span><span class="mk-input">69003</span></div>
