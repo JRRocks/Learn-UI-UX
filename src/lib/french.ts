@@ -24,9 +24,9 @@ const SHORT = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' 
 /** French writes the first day of a month as an ordinal: « 1er janvier ». */
 const first = (s: string) => s.replace(/^1(?=\s)/, '1er');
 
-/** `2026-10-27` → « 27 octobre 2026 ». */
+/** `2026-10-27` → « 27 octobre 2026 », the day kept with its month (a line never ends on « 27 »). */
 export function longDay(key: string): string {
-  return first(LONG.format(dayDate(key)));
+  return first(LONG.format(dayDate(key))).replace(/^(\d+(?:er)?) /, '$1\u00A0');
 }
 
 /** `2026-10-27` → « 27 oct. ». */

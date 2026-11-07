@@ -13,6 +13,7 @@ import type { LessonExample, ModuleContent } from '../engine/types';
 import { count, longDay } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { Commands } from './Learn';
+import { lessonCards, type LessonCards } from './lessonCards';
 import { LoadFailed, Loading } from './LoadFailed';
 import { NotFound } from './NotFound';
 
@@ -73,6 +74,22 @@ function goTo(e: MouseEvent, headingId: string) {
 
 /** Its sections, then its key rules: the parts the contents list jumps to. */
 const partsOf = (m: ModuleContent) => [...m.sections.map((s) => ({ id: s.id, title: s.title })), { id: 'regles', title: 'Règles d’or' }];
+
+/**
+ * « Réviser » with the number of cards the review will show, or the day they come back once they are
+ * all up to date. One component for the aside and for the folded contents that replace it below
+ * 1100 px, so that both always say the same.
+ */
+function ReviewCards({ moduleId, cards, onStart }: { moduleId: string; cards: LessonCards; onStart: () => void }) {
+  if (cards.toReview > 0)
+    return (
+      <Link to={`/fiches?module=${moduleId}`} className="btn btn-secondary" onClick={onStart}>
+        Réviser {count(cards.toReview, 'fiche', 'fiches')}
+      </Link>
+    );
+  if (cards.next) return <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(cards.next)}.`)}</p>;
+  return null;
+}
 
 /** The text of the lesson, once its chunk has arrived. */
 function Article({ m }: { m: ModuleContent }) {
@@ -152,9 +169,7 @@ export function Lesson({ id }: { id: string }) {
   const next = MODULES[idx + 1];
   const today = dayKey();
   // What « Réviser » will really show: the lesson's cards due today, or never reviewed yet.
-  const cardKeys = m.rules.map((r) => `${m.id}/${r}`);
-  const cardsToReview = cardKeys.filter((k) => !p.cards[k] || p.cards[k].due <= today).length;
-  const nextCard = cardKeys.map((k) => p.cards[k]?.due).filter((d): d is string => Boolean(d)).sort()[0];
+  const cards = lessonCards(p.cards, m.rules.map((r) => `${m.id}/${r}`), today);
   const sessionSize = Math.min(exercises.length, SESSION_SIZE.module);
 
   const markRead = () => {
@@ -229,9 +244,7 @@ export function Lesson({ id }: { id: string }) {
                 </li>
               ))}
             </ol>
-            <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-              Réviser les {m.rules.length} fiches
-            </Link>
+            <ReviewCards moduleId={m.id} cards={cards} onStart={scheduleCards} />
           </details>
         </nav>
       )}
@@ -293,13 +306,7 @@ export function Lesson({ id }: { id: string }) {
               <Link to={`/session?mode=module&id=${m.id}`} className="btn btn-primary">
                 S’entraîner ({count(sessionSize, 'épreuve', 'épreuves')})
               </Link>
-              {cardsToReview > 0 ? (
-                <Link to={`/fiches?module=${m.id}`} className="btn btn-secondary" onClick={scheduleCards}>
-                  Réviser {count(cardsToReview, 'fiche', 'fiches')}
-                </Link>
-              ) : nextCard ? (
-                <p className="small muted">{frenchSpacing(`Fiches à jour : prochaine révision le ${longDay(nextCard)}.`)}</p>
-              ) : null}
+              <ReviewCards moduleId={m.id} cards={cards} onStart={scheduleCards} />
             </div>
           </aside>
         )}

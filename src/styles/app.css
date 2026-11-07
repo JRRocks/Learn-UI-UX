@@ -1177,7 +1177,9 @@
   text-decoration-color: var(--mark);
 }
 
-.lesson-jump .btn {
+/* « Réviser N fiches », or the day the cards come back once they are all up to date. */
+.lesson-jump .btn,
+.lesson-jump details > p {
   margin: var(--s2) var(--s4) var(--s4);
 }
 
