@@ -390,8 +390,10 @@ export function CultureDetail({ id }: { id: string }) {
         <h2 id="eco-title">Écosystème</h2>
         <p className="btn-row">
           {c.ecosystem.map((x) => (
+            // One flex item, its text in one line: a phrase in another language, a span of its own,
+            // made an item of the chip took its gap on each side (« PASS ( 본인인증 ) »).
             <span key={x} className="chip">
-              {plainText(x)}
+              <span>{plainText(x)}</span>
             </span>
           ))}
         </p>
