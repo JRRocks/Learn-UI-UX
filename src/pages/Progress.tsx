@@ -375,7 +375,7 @@ export function Progress() {
             <Trash2 aria-hidden="true" /> Effacer ma progression…
           </button>
         </div>
-        <p className="small">
+        <p className="small standalone-link">
           <Link to="/a-propos">{frenchSpacing('À propos : contenu, crédits, licences et confidentialité')}</Link>
         </p>
       </section>

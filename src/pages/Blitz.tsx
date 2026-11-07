@@ -260,7 +260,7 @@ export function Blitz() {
         </button>
         <div className="player-progress">
           <div className="player-progress-label">
-            <span>Défi chrono · {frenchSpacing(module?.title ?? '')}</span>
+            <span>Défi chrono</span>
             <span className="num" aria-live="off">
               {Math.floor(left / 60)}:{String(left % 60).padStart(2, '0')}
             </span>
@@ -279,7 +279,13 @@ export function Blitz() {
         </span>
       </div>
       <article className="task" ref={taskRef}>
-        <h1 id={`blitz-q-${current.id}`} className="task-prompt" tabIndex={-1}>
+        {/* The statement's lesson: in the top bar, it was cut short on phones. The prompt, which gets the focus, points to it. */}
+        {module && (
+          <p id={`blitz-about-${current.id}`} className="task-about">
+            <MdInline text={module.title} />
+          </p>
+        )}
+        <h1 id={`blitz-q-${current.id}`} className="task-prompt" tabIndex={-1} aria-describedby={module ? `blitz-about-${current.id}` : undefined}>
           <MdInline text={current.prompt} />
         </h1>
         <div className="tf" role="group" aria-label="Ta réponse">

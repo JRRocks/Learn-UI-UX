@@ -281,6 +281,12 @@
   max-width: var(--measure);
 }
 
+/* A line of short facts, not a text to read: it takes the width of the page (33em of its 15 px
+   gave 495 px and broke it in two at 1366 px). */
+.page-head > .meta {
+  max-width: none;
+}
+
 .page-head h1 {
   max-width: 18em;
   font-size: var(--t-h1);
@@ -307,9 +313,10 @@
   color: var(--ink-2);
 }
 
-.meta > * + *::before {
+/* The dot follows each fact but the last: a wrapped line ends with it and never starts with it. */
+.meta > :not(:last-child)::after {
   content: '·';
-  margin-inline-end: var(--s3);
+  margin-inline-start: var(--s3);
   color: var(--ink-3);
 }
 
@@ -391,7 +398,9 @@
   color: var(--ink-3);
 }
 
-.md h3 {
+/* A heading in a text, whatever its level: « Comment adapter » is an h2 on a pair's page and an h3
+   in Comparer, the same 17 px with 24 px above it and 12 below on both. */
+.md :is(h2, h3, h4) {
   margin-top: var(--s3);
   font-size: var(--t-body);
 }
@@ -672,10 +681,6 @@
   background: var(--mark);
 }
 
-.meter--ok > span {
-  background: var(--ok);
-}
-
 .chip {
   display: inline-flex;
   align-items: center;
@@ -696,33 +701,9 @@
   height: 14px;
 }
 
-.dots {
-  display: inline-flex;
-  gap: 3px;
-  vertical-align: middle;
-}
-
-.dots i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--rule-strong);
-}
-
-.dots i.on {
-  background: var(--ink-2);
-}
-
 /* =========================================================================
-   Panels (used sparingly: one elevation, a rule border, no shadow)
+   Stage: the tinted ground a mock sits on
    ========================================================================= */
-
-.panel {
-  padding: var(--s5);
-  border-radius: var(--r-panel);
-  background: var(--sheet);
-  border: 1px solid var(--rule);
-}
 
 .stage {
   padding: var(--s4);
@@ -929,14 +910,9 @@
   }
 }
 
-/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire);
-   the Atlas, one level lower (h3 under « Atlas de maîtrise »), sets its rows at body size. */
+/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire). */
 .toc-group-head h2 {
   font-size: var(--t-h2);
-}
-
-.toc-group:has(> .toc-group-head > h3) .toc-title {
-  font-size: var(--t-body);
 }
 
 .toc-group-head p {
@@ -1486,6 +1462,26 @@
   text-overflow: ellipsis;
 }
 
+/* The count stays at the end of the bar, above the end of the meter, with or without a label. */
+.player-progress-label .num {
+  margin-inline-start: auto;
+}
+
+/* A session keeps its name in the bar where every name fits (from 35rem). On phones the bar kept
+   100 to 200 px for it and cut « session · leçon · type » short, with no other way to read it
+   (WCAG 1.4.10): the name now leads the line above the question (.task-about-session), which wraps. */
+@media (max-width: 34.99rem) {
+  .player-session {
+    display: none;
+  }
+}
+
+@media (min-width: 35rem) {
+  .task-about-session {
+    display: none;
+  }
+}
+
 .player-xp {
   font-size: var(--t-small);
   font-weight: 700;
@@ -1506,6 +1502,18 @@
   flex-direction: column;
   gap: var(--s3);
   max-width: 44rem;
+}
+
+/* Where the exercise comes from (« leçon · type »), above the scenario and the question. */
+.task-about {
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* In the timed challenge it sits in the task itself: it stays 12 px from its question, not 24. */
+.task > .task-about {
+  margin-block-end: calc(var(--s3) - var(--s5));
 }
 
 .task-context {
@@ -1584,8 +1592,14 @@
   gap: var(--s2);
 }
 
+/* Mocks are drawn for 320 to 520 px (docs/CONTENU.md). One column on phones: minmax(0, 1fr) keeps a
+   mock that overflows on purpose inside the screen (an implicit auto track took its min-content
+   width, up to 689 px, and the page scrolled sideways under 760 px). Two columns from 760 px; three
+   only once the player has its full width, where each mock keeps 280 px (from 760 px, three mocks
+   of 182 px cut the recommended one). */
 .options--visual {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
 }
 
@@ -1593,7 +1607,9 @@
   .options--visual {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
+@media (min-width: 1120px) {
   .options--visual[data-count='3'] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1713,9 +1729,13 @@
   opacity: 0.72;
 }
 
+/* Alone in its row, a tile stops at the widest mock (520 px, plus the stage's padding and its own):
+   a mock never gets more room than it is drawn for, so a duel about a lack of room (a 60-character
+   name) still shows the difference up to 759 px. */
 .option--visual {
   flex-direction: column;
   align-items: stretch;
+  max-inline-size: calc(520px + 4 * var(--s3) + 3px);
   padding: var(--s3);
 }
 
@@ -1728,6 +1748,16 @@
 
 .option--visual .stage {
   padding: var(--s3);
+}
+
+/* Phones: the mock takes back part of the margins around it (8 px instead of 12, in the tile and on
+   its stage). 324 px at 390, inside the 320 to 520 px it is drawn for, instead of 308; 254 px at
+   320 instead of 238, where the recommended plan table of a duel lost its last column. */
+@media (max-width: 479.98px) {
+  .option--visual,
+  .option--visual .stage {
+    padding: var(--s2);
+  }
 }
 
 .option-label {
@@ -1777,12 +1807,6 @@
 .check-box svg {
   width: 16px;
   height: 16px;
-}
-
-.option[aria-checked='true'] .check-box {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--on-ink);
 }
 
 /* True / false */
@@ -2426,13 +2450,14 @@
   border-color: var(--rule-strong);
 }
 
+/* 17 px under its 19 px region (h3): the region outranks the markets it gathers. */
 .market-name {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s2);
   font-weight: 700;
-  font-size: var(--t-lead);
+  font-size: var(--t-body);
 }
 
 .market-name code {
@@ -2522,13 +2547,9 @@
   gap: var(--s1);
 }
 
-.convention h3 {
+/* Each convention's title, under its topic (h3, 19 px). */
+.convention h4 {
   font-size: var(--t-body);
-}
-
-.convention-topic {
-  font-size: var(--t-meta);
-  color: var(--ink-3);
 }
 
 .dodont {
@@ -2935,7 +2956,8 @@
   font-weight: 650;
 }
 
-.mastery-table td.num {
+/* Figures line up on their right edge, and so do their headers (« Vues », « Score », « XP »). */
+.mastery-table :is(th, td).num {
   text-align: end;
 }
 
@@ -2970,14 +2992,16 @@
   }
 }
 
-/* Touch: text links standing alone in lists and tables get a 44 px target (WCAG 2.5.5, --tap). */
+/* Touch: text links standing alone in lists and tables, or alone in their paragraph (.standalone-link,
+   « À propos » under the settings), get a 44 px target (WCAG 2.5.5, --tap). */
 @media (pointer: coarse) {
   .mastery-table a,
   .sources a,
   .section-head a,
   .recap-body > a,
   .note > a,
-  .section > a:not(.btn) {
+  .section > a:not(.btn),
+  .standalone-link > a {
     display: inline-block;
     padding-block: 10px;
   }
@@ -3007,11 +3031,14 @@
   }
 }
 
+/* Stretched to the height of its row, a short card keeps its description 4 px under its title: the
+   spare room goes below (align-content), not between its two rows. */
 .badge {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--s1) var(--s3);
   align-items: start;
+  align-content: start;
   padding: var(--s3) var(--s4);
   border-radius: var(--r-panel);
   border: 1px solid var(--rule);
@@ -3108,6 +3135,9 @@
   }
 }
 
+/* A tap or a click on a toast closes it and goes no further: let through, it checked an option of the
+   exam's next question or opened the lesson link lying under it. A toast also goes away by itself,
+   with Escape, or when Tab or an arrow brings the focus onto what it covers (Toasts, App.tsx). */
 .toast {
   display: flex;
   align-items: center;
@@ -3129,13 +3159,14 @@
   color: var(--mark);
 }
 
+/* Within the 150 to 250 ms of every other movement (--dur): they took 320 and 360 ms. */
 @media (prefers-reduced-motion: no-preference) {
   .toast {
-    animation: toast-in 320ms var(--ease-out-expo);
+    animation: toast-in var(--dur) var(--ease-out-expo);
   }
 
   .feedback {
-    animation: note-in 360ms var(--ease-out-expo);
+    animation: note-in var(--dur) var(--ease-out-expo);
   }
 }
 
@@ -3281,6 +3312,15 @@ fieldset.tf {
   padding-bottom: var(--s8);
 }
 
+/* Phones held upright: the toasts sit just above the sticky « Valider » bar, so the bar ends the page
+   where it sticks, at the bottom of the screen (lifted 64 px at the end, it slid under them). Wider,
+   the toasts sit in the bar; on short screens it no longer sticks, and the 64 px keep it above them. */
+@media (min-height: 30rem) and (max-width: 719.98px) {
+  .shell[data-focus] .main:has(.task-actions) {
+    padding-bottom: 0;
+  }
+}
+
 /* The validate / continue bar stays within thumb reach while reading long tasks and corrections. */
 .task-actions {
   position: sticky;
@@ -3303,6 +3343,16 @@ fieldset.tf {
   bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
 }
 
+/* From 720 px the toasts take the end of the « Valider » bar, which its button and its count leave
+   free: above the bar, they hid the end of the correction (« Revoir la leçon », the sources) or the
+   options of the exam's next question. */
+@media (min-width: 720px) and (min-height: 30rem) {
+  .shell[data-focus]:has(.task-actions) .toasts {
+    bottom: calc(var(--s2) + env(safe-area-inset-bottom));
+    align-items: flex-end;
+  }
+}
+
 /* Session bars: the focused control stays clear of them (WCAG 2.4.11). */
 @media (min-height: 30rem) {
   html:has(.player-top) {
@@ -3314,11 +3364,33 @@ fieldset.tf {
   }
 }
 
-/* Short viewports (phone held sideways, 200 % zoom and more): the session bars scroll away with the
-   page instead of keeping a third of the screen. */
+/* Short viewports (phone held sideways, 200 % zoom and more): the session bars and the top bar
+   scroll away with the page instead of keeping a third of the screen (the top and tab bars took
+   125 px of 390). */
 @media (max-height: 29.99rem) {
   .player-top,
-  .task-actions {
+  .task-actions,
+  .topbar {
     position: static;
+  }
+
+  html:has(.topbar) {
+    scroll-padding-top: var(--s3);
+  }
+
+  /* No bar stays at the bottom of a session: the toasts go down to the edge, into the 64 px that end
+     the page under « Épreuve suivante » (.shell[data-focus] .main). */
+  .shell[data-focus] .toasts {
+    bottom: calc(var(--s3) + env(safe-area-inset-bottom));
+  }
+}
+
+/* Wide enough, the tab bar sets each icon beside its label: 45 px tall instead of 57 (--tabbar-h).
+   Under 560 px the labels would touch. */
+@media (max-height: 29.99rem) and (min-width: 35rem) {
+  .tabbar a {
+    flex-direction: row;
+    gap: var(--s2);
+    font-size: var(--t-meta);
   }
 }

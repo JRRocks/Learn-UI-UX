@@ -157,3 +157,11 @@
     --actions-h: 6rem;
   }
 }
+
+/* Short and wide screens (phone held sideways, 200 % zoom): the tab bar sets each icon beside its
+   label (app.css), one tap target tall. */
+@media (max-height: 29.99rem) and (min-width: 35rem) {
+  :root {
+    --tabbar-h: var(--tap);
+  }
+}

@@ -1,7 +1,11 @@
 // Reflow check (WCAG 1.4.10): no page may scroll sideways at 320, 360 or 390 px, and the labels
-// of the bottom tab bar must not touch. Prints the elements that stick out; exits with 1 if any.
+// of the bottom tab bar must not touch. Then every exercise with visual options (their mocks set
+// the width of the tiles) is played in a session: measured on the question, then on its correction.
+// Prints the elements that stick out; exits with 1 if any.
 //   npm run check:overflow
 //   npm run check:overflow -- 320          → only this width
+//   npm run check:overflow -- --pages      → only the pages
+//   npm run check:overflow -- --exercises  → only the exercises
 import { createRequire } from 'node:module';
 import { realpathSync } from 'node:fs';
 import { createServer } from 'vite';
@@ -9,8 +13,13 @@ import { createServer } from 'vite';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 
-const asked = process.argv.slice(2).map(Number).filter(Boolean);
+const args = process.argv.slice(2);
+const asked = args.map(Number).filter(Boolean);
 const WIDTHS = asked.length ? asked : [320, 360, 390];
+const PAGES = !args.includes('--exercises');
+const EXERCISES = !args.includes('--pages');
+/** The run the exercises are played in, restored by the session from this tab's storage. */
+const RUN = 'overflow';
 
 /** Runs in the page: how far it scrolls sideways, and what sticks out. */
 function measure() {
@@ -49,6 +58,7 @@ const server = await createServer({
 await server.listen();
 const base = `http://127.0.0.1:${server.httpServer.address().port}/`;
 const browser = await chromium.launch();
+const phone = (width) => browser.newContext({ viewport: { width, height: 800 }, isMobile: true, hasTouch: true, locale: 'fr-FR' });
 let failures = 0;
 try {
   const probe = await browser.newPage();
@@ -58,7 +68,12 @@ try {
     const content = await import('/src/content/index.ts');
     const cultures = await import('/src/content/cultures/index.ts');
     const data = await cultures.loadCultures();
-    return { modules: content.MODULES.map((m) => m.id), cultures: data.profiles.map((c) => c.id), pairs: data.pairs.map((p) => p.id) };
+    // Choices between mocks: each tile is as wide as its mock wants unless the grid holds it.
+    const visual = [];
+    for (const m of content.MODULES)
+      for (const e of (await content.loadModule(m.id)).exercises)
+        if ((e.type === 'choice' || e.type === 'multi') && e.options.some((o) => o.visual)) visual.push(e.id);
+    return { modules: content.MODULES.map((m) => m.id), cultures: data.profiles.map((c) => c.id), pairs: data.pairs.map((p) => p.id), visual };
   });
   await probe.close();
   const routes = [
@@ -69,8 +84,8 @@ try {
     ...ids.cultures.map((c) => `/cultures/${c}`),
     ...ids.pairs.map((p) => `/cultures/paire/${p}`),
   ];
-  for (const width of WIDTHS) {
-    const context = await browser.newContext({ viewport: { width, height: 800 }, isMobile: true, hasTouch: true, locale: 'fr-FR' });
+  for (const width of PAGES ? WIDTHS : []) {
+    const context = await phone(width);
     const page = await context.newPage();
     let bad = 0;
     for (const route of routes) {
@@ -86,6 +101,39 @@ try {
       }
     }
     console.log(`${width} px : ${bad ? `${bad} page(s) en défaut` : 'aucun débordement'} sur ${routes.length}.`);
+    failures += bad;
+    await context.close();
+  }
+  // The exercises in one « Mes erreurs » run: question, first option, « Valider », correction, next.
+  // The page is driven through the DOM: a badge toast may lie over « Valider » for a few seconds.
+  const press = (page) => page.evaluate(() => document.querySelector('.task-actions .btn-primary')?.click());
+  for (const width of EXERCISES ? WIDTHS : []) {
+    const context = await phone(width);
+    const run = JSON.stringify({ route: '/session?mode=mistakes', ids: ids.visual, index: 0, played: [], t: Date.now() });
+    await context.addInitScript(([key, value]) => sessionStorage.getItem(key) || sessionStorage.setItem(key, value), [`learn-ui-ux:run:${RUN}`, run]);
+    const page = await context.newPage();
+    await page.goto(`${base}?w=${width}#/session?mode=mistakes&run=${RUN}`);
+    let bad = 0;
+    for (const id of ids.visual) {
+      await page.waitForSelector(`[id="prompt-${id}"]`, { timeout: 60000 });
+      await page.evaluate(() => document.fonts.ready);
+      const states = [];
+      states.push(['question', await page.evaluate(measure)]);
+      await page.evaluate(() => document.querySelector('.task fieldset input')?.click());
+      await press(page);
+      await page.waitForSelector('.feedback', { timeout: 30000 });
+      states.push(['correction', await page.evaluate(measure)]);
+      const over = states.filter(([, m]) => m.sw > m.vw);
+      if (over.length) {
+        bad++;
+        for (const [step, m] of over) {
+          console.log(`✗ ${width} px épreuve ${id} (${step}) : ${m.sw} px de large pour ${m.vw}`);
+          for (const c of m.culprits) console.log(`    ${c}`);
+        }
+      }
+      if (id !== ids.visual.at(-1)) await press(page);
+    }
+    console.log(`${width} px : ${bad ? `${bad} épreuve(s) en défaut` : 'aucun débordement'} sur ${ids.visual.length} épreuves à choix visuel, avant et après « Valider ».`);
     failures += bad;
     await context.close();
   }
