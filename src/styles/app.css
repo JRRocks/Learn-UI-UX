@@ -3968,6 +3968,18 @@ fieldset.tf {
     grid-area: 2 / 1 / 3 / -1;
   }
 
+  /* A flashcard: its question and its answer at the size of the text, 12 px from its edges. In 16 px of
+     padding and at 20 px, a line held eight letters: 202 of the 307 cards broke a word anywhere
+     (« Persuade|r », « typograph|ie »). The answer splits its words as running text does. */
+  .flashcard {
+    padding-inline: var(--s3);
+  }
+
+  .flashcard-q,
+  .flashcard-a {
+    font-size: var(--t-body);
+  }
+
   /* A zone of a correction (Chasse aux erreurs): its number above its words. */
   .zones li {
     grid-template-columns: minmax(0, 1fr);
