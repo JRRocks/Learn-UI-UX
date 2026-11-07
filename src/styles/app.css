@@ -3120,8 +3120,8 @@
 }
 
 /* A toast lets taps and clicks through (pointer-events stays none, as on .toasts): over « Épreuve
-   suivante », a tap closed it instead of moving on. It goes away by itself, with Escape, or when the
-   keyboard focus reaches what it covers (Toasts, App.tsx). */
+   suivante », a tap closed it instead of moving on. It goes away by itself, with Escape, or when Tab
+   or an arrow brings the focus onto what it covers (Toasts, App.tsx). */
 .toast {
   display: flex;
   align-items: center;
