@@ -73,7 +73,9 @@
   --topbar-h: 4.25rem;
   --tabbar-h: 3.5rem;
   --player-top-h: calc(var(--tap) + 2 * var(--s3) + 1px);
-  --actions-h: calc(var(--tap) + 2 * var(--s3) + var(--s1));
+  /* The « Valider » bar holds its 44 px button, or, above a 21 px text size, its count over its hint
+     (2.8rem and 2 px), which grow with the text when the button does not. */
+  --actions-h: max(calc(var(--tap) + 2 * var(--s3) + var(--s1)), calc(3.75rem + 2px));
 
   --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -152,9 +154,18 @@
 }
 
 /* Under 480 px the counter and the keyboard hint of the « Valider » bar can take three lines. */
-@media (max-width: 479.98px) {
+@media (max-width: 29.99875em) {
   :root {
     --actions-h: 6rem;
+  }
+}
+
+/* Narrower than 20em (a large text size, app.css): the score of a session's bar may take a second row,
+   and on a touch screen the count of the « Valider » bar two lines under its button. */
+@media (max-width: 19.99875em) {
+  :root {
+    --player-top-h: calc(var(--tap) + 3rem + 1px);
+    --actions-h: 7rem;
   }
 }
 

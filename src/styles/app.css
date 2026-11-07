@@ -1,3 +1,8 @@
+/* Breakpoints are in em, the reader's default text size (16 px unless they changed it in their
+   browser): with a larger text, each layout keeps the room it was drawn for (60em is 960 px at 16 px,
+   1200 px at 20 px). The widths quoted in the comments are those at 16 px. Narrower than 20em (320 px
+   at 16 px), the narrowest layout drawn, a few rules at the end of this file take over. */
+
 /* =========================================================================
    Shell
    ========================================================================= */
@@ -83,6 +88,7 @@
   background: color-mix(in oklch, var(--paper) 92%, transparent);
   backdrop-filter: saturate(1.2) blur(10px);
   border-bottom: 1px solid var(--rule);
+  container: topbar / inline-size;
 }
 
 .topbar-actions {
@@ -158,8 +164,29 @@
   background: var(--paper-2);
 }
 
+/* The name of the app stays beside its mark as long as the bar has room for it and for its two buttons:
+   118 px (the 30 px mark, two 44 px buttons) and 6.38rem (the name, 5.13rem of « Épreuves » in bold, and
+   the gaps, 1.25rem where the bar is tight). Narrower, with a large text size on a phone, the mark stays
+   alone, in a 44 px link that keeps the whole name for screen readers and voice control. */
+@container topbar (width < calc(118px + 6.38rem)) {
+  .topbar .brand {
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+
+  .topbar .brand > span:not(.visually-hidden) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 /* Below 360 px a fifth of the bar is 64 px: « Apprendre » and « S’entraîner » would touch. */
-@media (max-width: 359.98px) {
+@media (max-width: 22.49875em) {
   .tabbar a {
     font-size: 0.6875rem;
     letter-spacing: -0.01em;
@@ -168,7 +195,7 @@
 
 /* Keep a focused control clear of the bars that stay on screen (WCAG 2.4.11): the browser
    scrolls it into the region left free by scroll-padding. */
-@media (max-width: 959.98px) {
+@media (max-width: 59.99875em) {
   html:has(.topbar) {
     scroll-padding-top: calc(var(--topbar-h) + env(safe-area-inset-top) + var(--s3));
   }
@@ -184,7 +211,7 @@
   display: none;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .topbar,
   .tabbar {
     display: none;
@@ -298,7 +325,7 @@
   font-size: var(--t-h1);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .page-head h1 {
     font-size: var(--t-display);
   }
@@ -624,7 +651,7 @@
 }
 
 /* Phones: one row of equal options across the width, the six Ressources tabs on two rows. */
-@media (max-width: 599.98px) {
+@media (max-width: 37.49875em) {
   .segmented {
     display: grid;
     grid-auto-columns: minmax(0, 1fr);
@@ -656,7 +683,7 @@
   }
 }
 
-@media (max-width: 359.98px) {
+@media (max-width: 22.49875em) {
   nav.segmented {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -717,6 +744,13 @@
   background: var(--stage);
 }
 
+/* A mock draws another product, at its own size: the app's word breaks with a large text size (base.css)
+   stop at its edge, and a mock that runs out of room on purpose keeps showing it. */
+.mock {
+  overflow-wrap: normal;
+  hyphens: manual;
+}
+
 /* « Rejouer l’animation » / « Mettre en pause » under an animated mock. */
 .mock-motion {
   display: flex;
@@ -736,7 +770,7 @@
   gap: var(--s5);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .today {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     align-items: start;
@@ -847,7 +881,7 @@
   counter-reset: step;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .welcome ol {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -909,7 +943,7 @@
   gap: var(--s3);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .toc-group {
     grid-template-columns: 14rem minmax(0, 1fr);
     gap: var(--s6);
@@ -1007,7 +1041,7 @@
   width: 100%;
 }
 
-@media (max-width: 759.98px) {
+@media (max-width: 47.49875em) {
   .toc-row a {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1037,7 +1071,7 @@
   gap: var(--s7);
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 68.75em) {
   .lesson {
     grid-template-columns: minmax(0, 1fr) 16rem;
     align-items: start;
@@ -1068,7 +1102,7 @@
   gap: var(--s5);
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 68.75em) {
   .lesson-aside {
     position: sticky;
     top: var(--s6);
@@ -1081,7 +1115,7 @@
 
 /* Below 1100 px the aside would only come after the whole article: .lesson-jump opens the lesson
    with the same contents, folded, and the second « S’entraîner » button goes away. */
-@media (max-width: 1099.98px) {
+@media (max-width: 68.74875em) {
   .lesson-aside {
     display: none;
   }
@@ -1330,14 +1364,16 @@
   border-top: 1px solid var(--rule);
 }
 
+/* minmax(0, 1fr): an implicit auto column took the width of the longest word of a rule. */
 .rules-list li {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s1);
   padding: var(--s4) 0;
   border-bottom: 1px solid var(--rule);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .rules-list li {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     gap: var(--s5);
@@ -1385,7 +1421,7 @@
   border-bottom: 1px solid var(--rule);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .format {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
@@ -1411,7 +1447,7 @@
   justify-self: start;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .format .btn {
     grid-column: 3;
   }
@@ -1424,7 +1460,7 @@
   gap: var(--s6);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .split {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1458,7 +1494,7 @@
   border-bottom: 1px solid var(--rule);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .player-top {
     margin: calc(var(--s7) * -1) 0 0;
     padding: var(--s3) 0;
@@ -1551,7 +1587,7 @@
   line-height: 1.25;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .task-prompt {
     font-size: 1.75rem;
   }
@@ -1574,11 +1610,18 @@
   flex: none;
 }
 
-.task-actions > span {
+.task-actions > span,
+.task-actions-text > span {
   min-width: 0;
 }
 
-@media (max-width: 639.98px) {
+/* The count and the hint as one block (ExerciseView): laid out here as if they stood in the bar on
+   their own; narrower than 20em, it goes under the button as a whole (end of this file). */
+.task-actions-text {
+  display: contents;
+}
+
+@media (max-width: 39.99875em) {
   .task-actions {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -1590,9 +1633,12 @@
   }
 }
 
+/* Its words stay whole, also where words may break anywhere (narrower than 20em): there the hint gets
+   10em beside the button, or a line of its own under it (end of this file). */
 .shortcut-hint {
   font-size: var(--t-meta);
   color: var(--ink-3);
+  overflow-wrap: normal;
 }
 
 /* « 7 / 10 critères notés »: says why « Valider » is still unavailable (grid, match). */
@@ -1628,13 +1674,13 @@
   gap: var(--s4);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .options--visual {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 1120px) {
+@media (min-width: 70em) {
   .options--visual[data-count='3'] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1778,7 +1824,7 @@
 /* Phones: the mock takes back part of the margins around it (8 px instead of 12, in the tile and on
    its stage). 324 px at 390, inside the 320 to 520 px it is drawn for, instead of 308; 254 px at
    320 instead of 238, where the recommended plan table of a duel lost its last column. */
-@media (max-width: 479.98px) {
+@media (max-width: 29.99875em) {
   .option--visual,
   .option--visual .stage {
     padding: var(--s2);
@@ -1869,7 +1915,7 @@
   padding: var(--s4);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .hotspot-stage {
     padding: var(--s6);
   }
@@ -2010,7 +2056,7 @@
   background: var(--sheet);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .match-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
@@ -2095,7 +2141,7 @@
   border-bottom: 1px solid var(--rule);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .grid-row {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -2146,8 +2192,11 @@
 
 /* ---------- Feedback (the margin note) ---------- */
 
+/* One column as wide as the task: an implicit auto track grew to the widest word of the takeaway (the
+   timed challenge sets it straight in here), past a phone with a large text size. */
 .feedback {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s5);
   padding-top: var(--s5);
   border-top: 2px solid var(--ink);
@@ -2194,7 +2243,7 @@
   gap: var(--s6);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .feedback-grid {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   }
@@ -2345,7 +2394,7 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .recap-correction .options--visual[data-count] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2397,7 +2446,7 @@
   gap: var(--s2);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40em) {
   .grades {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -2424,13 +2473,13 @@
   gap: var(--s3);
 }
 
-@media (min-width: 700px) {
+@media (min-width: 43.75em) {
   .markets {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 68.75em) {
   .markets {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -2438,7 +2487,7 @@
 
 /* « Les marchés »: the regions share one grid, so that a region with a single market takes one
    column and the next region starts beside it (four one-market regions left 9 empty cells). */
-@media (min-width: 700px) {
+@media (min-width: 43.75em) {
   .section:has(> .section > .markets) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2472,7 +2521,7 @@
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 68.75em) {
   .section:has(> .section > .markets) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -2546,9 +2595,11 @@
   list-style: none;
 }
 
+/* The value's column holds « 100 » in bold (3ch of the regular face did not: it ran 11 px into the gap,
+   and a larger text broke it). */
 .dim {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 3ch;
+  grid-template-columns: minmax(0, 1fr) minmax(3ch, max-content);
   gap: var(--s1) var(--s3);
   align-items: center;
 }
@@ -2586,7 +2637,7 @@
   gap: var(--s4);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 50em) {
   .conventions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--s5) var(--s6);
@@ -2610,7 +2661,7 @@
   gap: var(--s5);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 50em) {
   .dodont {
     grid-template-columns: 1fr 1fr;
   }
@@ -2770,7 +2821,7 @@
   gap: var(--s5);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .pair-view {
     grid-template-columns: 1fr 1fr;
   }
@@ -2793,7 +2844,7 @@
   gap: var(--s6);
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 62.5em) {
   .lab {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
@@ -2835,7 +2886,7 @@
   gap: var(--s6);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .cheats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2878,6 +2929,12 @@
 
 .catalog-filters .input {
   min-width: min(100%, 18rem);
+}
+
+/* The field holds its input's 18rem only within the screen: with a large text size, 18rem was wider
+   than a phone. */
+.catalog-filters .field {
+  max-width: 100%;
 }
 
 .catalog {
@@ -2925,10 +2982,15 @@
   color: var(--ink-2);
 }
 
+/* Each term beside its definition from 760 px. A definition in words also needs room in the list
+   itself: in a half column (Critique, from 900 px), the 14rem of the term left it 48 px at 960 px, and
+   its words ran past the screen. So it goes beside its term from 26rem of list, where it keeps 10rem
+   (as at 1200 px). A figure (Progression, « En chiffres ») holds in the room left beside its term. */
 .defs {
   display: flex;
   flex-direction: column;
   border-top: 1px solid var(--rule);
+  container-type: inline-size;
 }
 
 .defs > div {
@@ -2938,10 +3000,17 @@
   border-bottom: 1px solid var(--rule);
 }
 
-@media (min-width: 760px) {
-  .defs > div {
+@media (min-width: 47.5em) {
+  .defs:not(:has(> div > dd:not(.num))) > div {
     grid-template-columns: 14rem minmax(0, 1fr);
     gap: var(--s5);
+  }
+
+  @container (min-width: 26rem) {
+    .defs > div {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      gap: var(--s5);
+    }
   }
 }
 
@@ -3018,7 +3087,7 @@
 }
 
 /* Phones: the four columns fit in the screen (366 px of table at 390 px before). */
-@media (max-width: 479.98px) {
+@media (max-width: 29.99875em) {
   .mastery-table th,
   .mastery-table td {
     padding-inline-end: var(--s2);
@@ -3029,7 +3098,7 @@
   }
 }
 
-@media (max-width: 359.98px) {
+@media (max-width: 22.49875em) {
   .mastery-table {
     font-size: var(--t-meta);
   }
@@ -3071,13 +3140,13 @@
   list-style: none;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40em) {
   .badges {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 62.5em) {
   .badges {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -3179,7 +3248,7 @@
   pointer-events: none;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .toasts {
     inset-inline: auto var(--s5);
     bottom: var(--s5);
@@ -3322,6 +3391,30 @@
   vertical-align: top;
 }
 
+/* Narrower than 390 px at the default text size (24.375em, so also 390 px with a 32 px text), the
+   300 px columns ran past the screen: one column, as wide as the screen, with a phone's margins, and a
+   long value or a short code breaks inside its cell. From 390 px at 16 px, where check:mocks and
+   shots measure the mocks, the columns keep their 300 px. */
+@media (max-width: 24.37375em) {
+  .preview,
+  .preview-item {
+    padding: var(--s3);
+  }
+
+  .preview-options--visual,
+  .preview-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preview-table :is(td, th) {
+    overflow-wrap: anywhere;
+  }
+
+  .preview-table code.code-short {
+    white-space: normal;
+  }
+}
+
 /* Native inputs stay in the tiles for keyboard and screen readers; the tile shows focus. */
 .option:has(input:focus-visible) {
   outline: 2px solid var(--focus);
@@ -3350,7 +3443,7 @@ fieldset.tf {
 }
 
 /* Sessions and flashcards hide the navigation: one task on screen. */
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .shell[data-focus] {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -3367,7 +3460,7 @@ fieldset.tf {
 /* Phones held upright: the toasts sit just above the sticky « Valider » bar, so the bar ends the page
    where it sticks, at the bottom of the screen (lifted 64 px at the end, it slid under them). Wider,
    the toasts sit in the bar; on short screens it no longer sticks, and the 64 px keep it above them. */
-@media (min-height: 30rem) and (max-width: 719.98px) {
+@media (min-height: 30rem) and (max-width: 44.99875em) {
   .shell[data-focus] .main:has(.task-actions) {
     padding-bottom: 0;
   }
@@ -3384,7 +3477,7 @@ fieldset.tf {
   box-shadow: 0 -1px 0 var(--rule);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .task-actions {
     margin-inline: 0;
     padding-inline: 0;
@@ -3398,7 +3491,7 @@ fieldset.tf {
 /* From 720 px the toasts take the end of the « Valider » bar, which its button and its count leave
    free: above the bar, they hid the end of the correction (« Revoir la leçon », the sources) or the
    options of the exam's next question. */
-@media (min-width: 720px) and (min-height: 30rem) {
+@media (min-width: 45em) and (min-height: 30rem) {
   .shell[data-focus]:has(.task-actions) .toasts {
     bottom: calc(var(--s2) + env(safe-area-inset-bottom));
     align-items: flex-end;
@@ -3444,5 +3537,250 @@ fieldset.tf {
     flex-direction: row;
     gap: var(--s2);
     font-size: var(--t-meta);
+  }
+}
+
+/* =========================================================================
+   Narrower than 20em: a large text size on a small screen
+   ========================================================================= */
+
+/* Everything above is drawn down to 20em, 320 px at the default 16 px. A larger default text size
+   (browser settings) makes a screen narrower than that: 320 to 400 px at 20 px, up to 640 px at
+   32 px. There, the pieces below wrap or give up some room, so that nothing runs past the screen. */
+@media (max-width: 19.99875em) {
+  /* The name of the app keeps 8 px from the buttons of the top bar when they are tight (12 px wider): it
+     stays beside its mark at 320 px with a 24 px text (see the container query of the top bar). */
+  .topbar {
+    gap: var(--s2);
+  }
+
+  /* A tab label splits at its syllables onto two lines (« Res-sources »), 2 px from its neighbours.
+     It shrinks only as far as a fifth of the screen needs: « Cultures » (4.1em) on one line, « sources »
+     (3.85em) on the second; 14.5 px at least, at 320 px wide. The bar keeps its height (--tabbar-h). */
+  .tabbar a {
+    padding-inline: 2px;
+    font-size: min(0.6875rem, calc(4.85vw - 1px));
+    line-height: 1.15;
+    text-align: center;
+    hyphens: auto;
+    hyphenate-limit-chars: auto;
+  }
+
+  /* So do the labels of the Ressources tabs, three or two to a row (« Heuris-tiques », « Com-mandes »). */
+  .segmented :is(a, button) {
+    hyphens: auto;
+    hyphenate-limit-chars: auto;
+  }
+
+  /* A market's name and its locale share a row while they fit there; the locale goes under it otherwise
+     (« Allemagn|e » broke beside « de-DE »). */
+  .market-name {
+    flex-wrap: wrap;
+  }
+
+  /* Titles step down once, as from the desktop to the phone: a 68 px word no longer takes three lines of
+     a 320 px screen (the title of a page, or of a pair of screens in Cultures). */
+  h1,
+  .page-head h1 {
+    font-size: var(--t-h2);
+  }
+
+  .task-prompt,
+  .flashcard-q {
+    font-size: var(--t-lead);
+  }
+
+  /* The bar of a session, the challenge or the cards: the score goes under the count when both no
+     longer fit beside it (the count and the timer keep 3.5rem, « 10 / 10 »), instead of being cut. */
+  .player-top {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: var(--s1);
+  }
+
+  .player-top > .icon-btn {
+    flex: none;
+  }
+
+  .player-progress {
+    flex: 1 1 3.5rem;
+  }
+
+  .player-xp {
+    margin-inline-start: auto;
+  }
+
+  /* 12 px on either side of a label instead of 24: « Épreuve suivante » keeps its words. */
+  .btn {
+    padding-inline: var(--s3);
+  }
+
+  .chip {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* The tables of labels and values (a market's formats, the cheat sheet): each label above its value,
+     both across the column. Beside its value, a label kept 85 px at 320 px (« Grands nombres » broke in
+     the middle of a word), and a value broke between its figures (« ≥ 16 p|x », « 1,125–1,|2 »). */
+  .formats-table,
+  .formats-table tbody,
+  .formats-table tr,
+  .formats-table th,
+  .formats-table td,
+  .cheat table,
+  .cheat tbody,
+  .cheat tr,
+  .cheat th,
+  .cheat td {
+    display: block;
+  }
+
+  .formats-table tr,
+  .cheat tr {
+    padding-block: var(--s2);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .formats-table :is(th, td),
+  .cheat :is(th, td) {
+    width: auto;
+    padding: 0;
+    border: 0;
+  }
+
+  /* Progression's tables keep their words and figures whole: narrower than its columns, a table scrolls
+     sideways in its region (ScrollRegion), as a table of data may (WCAG 1.4.10). Squeezed into the
+     screen, « Vues » took four lines and 16 read « 1 » over « 6 ». */
+  .mastery-table :is(th, td) {
+    overflow-wrap: normal;
+    hyphens: manual;
+  }
+
+  .mastery-table .num {
+    white-space: nowrap;
+  }
+
+  /* A row of choices (Réglages, the catalog's families) wraps rather than squeeze its labels: a choice
+     goes to the next row when its label no longer fits on one line beside the others (« Comme le
+     système » above « Clair » and « Sombre »). */
+  .field > .segmented,
+  .catalog-filters > .segmented {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .field > .segmented > *,
+  .catalog-filters > .segmented > * {
+    flex: 1 1 auto;
+  }
+
+  /* Four choices (the daily goal): always two by two, « 100 XP » on one line (4 px of padding). */
+  .field > .segmented:has(> :nth-child(4):last-child) {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .segmented button {
+    padding-inline: var(--s1);
+  }
+
+  /* The mastery meter of a lesson goes under its figure when they no longer fit side by side. */
+  .toc-mastery {
+    flex-wrap: wrap;
+  }
+
+  .toc-mastery .meter {
+    width: min(6rem, 100%);
+  }
+
+  /* Label above value: 11rem of label left no room for the value. */
+  .lab-facts div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  /* The four grades of a card two by two while each keeps its label on one line (« À revoir », 4.1rem,
+     and its 12 px on either side), one under the other below that. */
+  .grades {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.75rem), 1fr));
+  }
+
+  /* Panels give their text back part of their side margins (16 px instead of 24). */
+  .flashcard,
+  .today-main {
+    padding-inline: var(--s4);
+  }
+
+  /* The « Valider » bar: what it waits for and the keyboard hint stay beside the button while they get
+     10em there (and never less than their longest word); otherwise they go under it, across the bar. */
+  .task-actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* Its words whole here (no break anywhere), so that its width says whether it fits beside. */
+  .task-actions > span {
+    flex: 1 1 10em;
+    min-width: auto;
+    overflow-wrap: break-word;
+  }
+
+  .task-actions-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* Under 15em, the question splits its words as the titles do (base.css), from 12 letters, and the label
+   of a button from 10, in its narrower box: « Effacer ma progres-sion… » instead of « progressi|on… ».
+   Under 12em, all from 9. */
+@media (max-width: 14.99875em) {
+  .task-prompt,
+  .flashcard-q {
+    hyphenate-limit-chars: 12 4 4;
+  }
+
+  .btn {
+    hyphenate-limit-chars: 10 4 4;
+  }
+}
+
+@media (max-width: 11.99875em) {
+  .task-prompt,
+  .flashcard-q,
+  .btn {
+    hyphenate-limit-chars: 9 4 3;
+  }
+}
+
+/* With a touch screen the keyboard hint is hidden: the count, if any, stays beside the button as long
+   as its longest word fits there, and an empty block never takes a line of its own. */
+@media (max-width: 19.99875em) and (pointer: coarse) {
+  .task-actions > span {
+    flex-basis: 0;
+  }
+}
+
+/* Without a touch screen the hint shows, and goes under the button: a bar still stuck to the bottom of
+   the screen would keep up to a third of it. It stays at the end of the task instead, as on short
+   screens; the toasts go down to the edge, into the room that ends the page. */
+@media (max-width: 19.99875em) and (pointer: fine), (max-width: 19.99875em) and (pointer: none) {
+  .task-actions {
+    position: static;
+  }
+
+  html:has(.task-actions) {
+    scroll-padding-bottom: var(--s3);
+  }
+
+  .shell[data-focus] .main:has(.task-actions) {
+    padding-bottom: calc(var(--s8) + env(safe-area-inset-bottom));
+  }
+
+  .shell[data-focus] .toasts {
+    bottom: calc(var(--s3) + env(safe-area-inset-bottom));
   }
 }

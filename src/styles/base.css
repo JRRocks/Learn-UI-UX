@@ -189,3 +189,58 @@ li::marker {
     scroll-behavior: auto !important;
   }
 }
+
+/* Narrower than 20em, the narrowest layout drawn (320 px at the default 16 px; 400 px at 20 px,
+   640 px at 32 px, with a larger default text size): a word longer than its line breaks there rather
+   than run past the screen, also where flex and grid layouts size a box after its longest word (a
+   button, a link); a short code may wrap at its spaces. Wider, the layouts keep their room
+   (breakpoints in em) and nothing breaks inside a word. */
+@media (max-width: 19.99875em) {
+  body {
+    overflow-wrap: anywhere;
+  }
+
+  code,
+  kbd,
+  samp {
+    hyphens: manual;
+  }
+
+  code.code-short {
+    white-space: normal;
+  }
+}
+
+/* Under 15em (240 px at 16 px, 360 px at 24 px, 480 px at 32 px), a line holds some 20 letters of text,
+   12 of a title: « Internationalisation » in a sentence, « Comparaisons » in a title would break
+   anywhere. There, a long word splits at a syllable, with a hyphen: from 14 letters in the text and 12
+   in a title (app.css: the question too, and a button's label from 10), 4 or 5 kept on either side;
+   under 12em (384 px at 32 px), where a line holds 15 letters, from 12 and 9. Shorter words stay whole,
+   so that a line seldom ends on a hyphen (check:overflow allows three in a row at most). From 15em,
+   words fit their lines: only the labels of the tabs split, onto two lines (app.css). */
+@media (max-width: 14.99875em) {
+  body {
+    hyphens: auto;
+    hyphenate-limit-chars: 14 5 5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    hyphenate-limit-chars: 12 4 4;
+  }
+}
+
+@media (max-width: 11.99875em) {
+  body {
+    hyphenate-limit-chars: 12 5 4;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    hyphenate-limit-chars: 9 4 3;
+  }
+}
