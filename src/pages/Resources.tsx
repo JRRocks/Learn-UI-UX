@@ -2,6 +2,7 @@ import { CircleCheck, CircleX } from 'lucide-react';
 import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
+import { loadCatalog } from '../content/catalog';
 import { DETECTOR_RULES } from '../content/detectorRules';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
 import { SOURCES, resolveSource } from '../content/sources';
@@ -9,13 +10,6 @@ import type { AntipatternEntry, Source } from '../engine/types';
 import { count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
-
-// The catalog (with its demo mocks) is its own chunk, fetched when the tab opens.
-const catalogFile = import.meta.glob<{ ANTIPATTERNS?: AntipatternEntry[] }>('../content/antipatterns.ts');
-const loadCatalog = async (): Promise<AntipatternEntry[]> => {
-  const [load] = Object.values(catalogFile);
-  return load ? ((await load()).ANTIPATTERNS ?? []) : [];
-};
 
 const TABS = [
   { id: 'aide-memoire', label: 'Aide-mémoire' },
