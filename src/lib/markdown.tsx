@@ -24,7 +24,10 @@ export function frenchSpacing(text: string): string {
     .replace(/([≤≥≈<>±]) (?=\d)/g, '$1\u00A0')
     // A separator dot stays with what it follows: a wrapped line never starts with « · ».
     .replace(/ ·(?=\s|$)/g, '\u00A0·')
-    .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\p{L}\d]))/gu, '$1\u00A0');
+    // A unit written as a symbol stays with its number. One written in full (« 75 caractères ») may go to
+    // the next line: kept with its number, the group was wider than a narrow line and broke inside the
+    // word (« 45–75 caractère|s »).
+    .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°)(?![\p{L}\d]))/gu, '$1\u00A0');
 }
 
 /** The phrases quoted in another language, as they read once spaced, and the language of each. */

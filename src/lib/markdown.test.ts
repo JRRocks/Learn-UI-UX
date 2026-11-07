@@ -79,11 +79,18 @@ describe('markdown subset', () => {
   });
 
   it('keeps numbers attached to their unit', () => {
-    expect(frenchSpacing('1 280 px, 44 × 44 pt, 18 h 30, 50 % et 75 caractères')).toBe(
-      '1\u00A0280\u00A0px, 44\u00A0×\u00A044\u00A0pt, 18\u00A0h\u00A030, 50\u00A0% et 75\u00A0caractères',
+    expect(frenchSpacing('1 280 px, 44 × 44 pt, 18 h 30, 50 % et 3 s')).toBe(
+      '1\u00A0280\u00A0px, 44\u00A0×\u00A044\u00A0pt, 18\u00A0h\u00A030, 50\u00A0% et 3\u00A0s',
     );
     // Not a unit: a word that merely starts like one.
     expect(frenchSpacing('3 points, 2 semaines, 4 heures')).toBe('3 points, 2 semaines, 4 heures');
+  });
+
+  it('lets a unit written in full go to the next line, its number kept whole', () => {
+    // Glued to « 45–75 », « caractères » broke inside the word on a narrow line (« caractère|s »).
+    expect(frenchSpacing('45–75 caractères, 15 000 caractères, 3 secondes, 2 jours et 5 mots')).toBe(
+      '45–\u206075 caractères, 15\u00A0000 caractères, 3 secondes, 2 jours et 5 mots',
+    );
   });
 
   it('sets each opening guillemet apart, so that the word it leads to can split at a syllable', () => {

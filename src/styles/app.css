@@ -2124,14 +2124,25 @@
 
 .slider-head {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
-  gap: var(--s3);
+  gap: var(--s1) var(--s3);
 }
 
+/* The label stays beside the value while it gets 10em there; with a large text on a phone, the value goes
+   under it, and the label takes the line (« Saturati|on » broke beside « 100 % »). */
+.slider-head > .field-label {
+  flex: 1 1 10em;
+}
+
+/* The value keeps its unit on its line (« 4 px »): its label wraps instead. With a large text on a phone,
+   the value took as little room as its widest letter and read « 4 p » over « x ». */
 .slider-value {
+  flex: none;
   font-size: var(--t-lead);
   font-weight: 650;
+  white-space: nowrap;
 }
 
 .slider-box input[type='range'] {
