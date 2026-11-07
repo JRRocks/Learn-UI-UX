@@ -1737,7 +1737,7 @@ Le riyal a depuis février 2025 un symbole officiel (encodé dans Unicode 17), e
       { label: 'Date', value: '27/10/2026' },
       { label: 'Date longue', value: 'Tuesday, 27 October 2026' },
       { label: 'Heure', value: keep('13:30 · 1:30 pm') },
-      { label: 'Heure swahilie (13\u00a0h\u00a030)', value: 'saa saba na nusu mchana' },
+      { label: 'Heure swahilie (13\u00a0h\u00a030)', value: 'saa saba na nusu mchana', lang: 'sw' },
       { label: 'Nombre', value: '1,234,567.89' },
       { label: 'Monnaie', value: keep('KSh 1,250 · KES 1,250.00') },
       { label: 'Téléphone', value: keep('0712 345 678 · +254 712 345 678') },
