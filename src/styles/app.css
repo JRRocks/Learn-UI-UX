@@ -3945,8 +3945,18 @@ fieldset.tf {
     padding-inline: var(--s2);
   }
 
+  /* A button that opens with an icon sets it above its label once the label no longer holds on one line
+     beside it: there, « Effacer ma progression… » kept 138 px at 320 px (« pro- / gressio|n… »), and
+     « Exporter ma progression » took four lines. An icon that follows its label (« Épreuve suivante → »,
+     .icon-end) stays beside it. */
+  .btn:has(> svg:first-child:not(.icon-end)) {
+    flex-wrap: wrap;
+    row-gap: var(--s1);
+  }
+
+  /* The danger zone keeps 16 px of padding: its button gets the room of « Effacer ma » on a line. */
   .danger-zone {
-    padding: var(--s3);
+    padding: var(--s2);
   }
 
   /* An item to order: its position and its arrows on a row, its label under them, across the item. */
