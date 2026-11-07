@@ -2963,10 +2963,14 @@
   color: var(--ink-2);
 }
 
+/* A list of terms is measured on its own width too: in a half column (Critique, from 900 px), the 14rem
+   of the term left its definition 48 px at 960 px, and its words ran past the screen. Side by side
+   from 26rem, where the definition keeps 10rem (as at 1200 px). */
 .defs {
   display: flex;
   flex-direction: column;
   border-top: 1px solid var(--rule);
+  container-type: inline-size;
 }
 
 .defs > div {
@@ -2977,9 +2981,11 @@
 }
 
 @media (min-width: 47.5em) {
-  .defs > div {
-    grid-template-columns: 14rem minmax(0, 1fr);
-    gap: var(--s5);
+  @container (min-width: 26rem) {
+    .defs > div {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      gap: var(--s5);
+    }
   }
 }
 
