@@ -2966,14 +2966,16 @@
   }
 }
 
-/* Touch: text links standing alone in lists and tables get a 44 px target (WCAG 2.5.5, --tap). */
+/* Touch: text links standing alone in lists and tables, or alone in their paragraph (.standalone-link,
+   « À propos » under the settings), get a 44 px target (WCAG 2.5.5, --tap). */
 @media (pointer: coarse) {
   .mastery-table a,
   .sources a,
   .section-head a,
   .recap-body > a,
   .note > a,
-  .section > a:not(.btn) {
+  .section > a:not(.btn),
+  .standalone-link > a {
     display: inline-block;
     padding-block: 10px;
   }
