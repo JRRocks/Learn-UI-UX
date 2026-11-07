@@ -219,7 +219,7 @@
 }
 
 /* A short window, where the rail would scroll: tighter, it holds whole down to some 460 px. */
-@media (min-width: 960px) and (max-height: 34rem) {
+@media (min-width: 60em) and (max-height: 34rem) {
   .rail {
     gap: var(--s3);
     padding-block: var(--s3);
