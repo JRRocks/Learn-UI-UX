@@ -23,6 +23,30 @@ export function dismissToast(id: number) {
   emit();
 }
 
+/** Escape: every toast goes away at once. */
+export function dismissAllToasts() {
+  if (!toasts.length) return;
+  toasts = [];
+  emit();
+}
+
+export interface Box {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+/**
+ * The toasts lying over `target`, the control that has just received the keyboard focus: they go
+ * away, so that it never ends up hidden under one (WCAG 2.4.11). Boxes that only touch do not overlap.
+ */
+export function toastsOver(target: Box, shown: readonly { id: number; box: Box }[]): number[] {
+  return shown
+    .filter(({ box }) => box.left < target.right && target.left < box.right && box.top < target.bottom && target.top < box.bottom)
+    .map((t) => t.id);
+}
+
 export function useToasts(): Toast[] {
   return useSyncExternalStore(
     (fn) => {

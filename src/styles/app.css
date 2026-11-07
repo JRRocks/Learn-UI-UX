@@ -3104,6 +3104,9 @@
   }
 }
 
+/* A toast lets taps and clicks through (pointer-events stays none, as on .toasts): over « Épreuve
+   suivante », a tap closed it instead of moving on. It goes away by itself, with Escape, or when the
+   keyboard focus reaches what it covers (Toasts, App.tsx). */
 .toast {
   display: flex;
   align-items: center;
@@ -3115,7 +3118,6 @@
   color: var(--on-ink);
   box-shadow: var(--shadow-float);
   font-weight: 600;
-  pointer-events: auto;
 }
 
 .toast svg {
@@ -3277,6 +3279,12 @@ fieldset.tf {
   padding-bottom: var(--s8);
 }
 
+/* The « Valider » bar ends the page where it sticks, at the bottom of the screen: lifted 64 px at the
+   end, it slid under the toasts, which sit just above its sticky place. */
+.shell[data-focus] .main:has(.task-actions) {
+  padding-bottom: 0;
+}
+
 /* The validate / continue bar stays within thumb reach while reading long tasks and corrections. */
 .task-actions {
   position: sticky;
@@ -3322,6 +3330,11 @@ fieldset.tf {
 
   html:has(.topbar) {
     scroll-padding-top: var(--s3);
+  }
+
+  /* No bar stays at the bottom of a session: the toasts go down to the edge. */
+  .shell[data-focus] .toasts {
+    bottom: calc(var(--s3) + env(safe-area-inset-bottom));
   }
 }
 
