@@ -3581,32 +3581,45 @@ fieldset.tf {
     white-space: normal;
   }
 
-  /* These cells set their own word breaks: a long date or address breaks inside its cell too (the table
-     took the width of its longest unbroken string). */
-  .formats-table td,
-  .cheat td {
-    overflow-wrap: anywhere;
-  }
-
-  /* A market's formats: each label above its value, both across the column (beside its value, a label
-     kept 85 px at 320 px, and « Grands nombres » broke in the middle of a word). */
+  /* The tables of labels and values (a market's formats, the cheat sheet): each label above its value,
+     both across the column. Beside its value, a label kept 85 px at 320 px (« Grands nombres » broke in
+     the middle of a word), and a value broke between its figures (« ≥ 16 p|x », « 1,125–1,|2 »). */
   .formats-table,
   .formats-table tbody,
   .formats-table tr,
   .formats-table th,
-  .formats-table td {
+  .formats-table td,
+  .cheat table,
+  .cheat tbody,
+  .cheat tr,
+  .cheat th,
+  .cheat td {
     display: block;
   }
 
-  .formats-table tr {
+  .formats-table tr,
+  .cheat tr {
     padding-block: var(--s2);
     border-bottom: 1px solid var(--rule);
   }
 
-  .formats-table :is(th, td) {
+  .formats-table :is(th, td),
+  .cheat :is(th, td) {
     width: auto;
     padding: 0;
     border: 0;
+  }
+
+  /* Progression's tables keep their words and figures whole: narrower than its columns, a table scrolls
+     sideways in its region (ScrollRegion), as a table of data may (WCAG 1.4.10). Squeezed into the
+     screen, « Vues » took four lines and 16 read « 1 » over « 6 ». */
+  .mastery-table :is(th, td) {
+    overflow-wrap: normal;
+    hyphens: manual;
+  }
+
+  .mastery-table .num {
+    white-space: nowrap;
   }
 
   /* A row of choices (Réglages, the catalog's families) wraps rather than squeeze its labels: a choice
