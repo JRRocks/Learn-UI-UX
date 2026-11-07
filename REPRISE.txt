@@ -1,7 +1,35 @@
 REPRISE DU TRAVAIL — Épreuves (Learn-UI-UX)
-État au 27 octobre 2026, 18 h 10 UTC. À lire en entier avant de relancer.
-Les données de travail citées ici sont dans docs/reprise/ (ce dossier et ce fichier
-pourront être supprimés une fois tout terminé).
+État au 27 octobre 2026, 18 h 10 UTC (sections 1 à 6), complété le 7 novembre 2026
+(section 0, à lire d’abord). Les données de travail citées ici sont dans docs/reprise/
+(ce dossier et ce fichier pourront être supprimés une fois tout terminé).
+
+======================================================================
+0. ÉTAT AU 7 NOVEMBRE 2026, 8 h 30 UTC (prime sur les sections suivantes)
+======================================================================
+Tout ce que décrivent les sections 3 à 5 est FAIT et poussé : vagues 1 et 2 de l’app,
+passe de cohérence du contenu (vrai/faux 30/27), vérification finale (31 constats),
+puis vague finale en quatre groupes (styles, pages, épreuves, hors-ligne), chacun
+corrigé → contredit → réparé, et fusionnés dans claude/charming-bell-vrm1id
+(626de82), plus « Ma malle » à 11 px (263f780). Sur 263f780 : tsc OK, 169 tests,
+build OK, check:overflow 0 débordement (59 routes + 117 choix visuels, 320/360/390),
+check:mocks 307 éléments à examiner (tous voulus ; seul écart avec la base : le
+bandeau animé ap-marquee figé à un autre instant).
+
+En cours au moment de cette note (deux workflows, scripts dans
+docs/reprise/workflows/ une fois copiés, sinon à réécrire d’après leur description) :
+a) final-integration (args { head: "263f780", base: "e00241d" }) : deux auditeurs
+   d’intégration en lecture seule (sessions ; pages + hors-ligne) sur le worktree
+   détaché scratchpad/wt/integ-head, comparés à scratchpad/wt/base-e00241d →
+   contradicteur par lot → un correcteur pour tous les constats confirmés dans
+   scratchpad/wt/final-integ (branche fix/final-integ) → contradicteur → réparation.
+b) fix-app (args { base: "263f780", groups: [{ key: "final-text", … }] }) : texte
+   agrandi (taille de police par défaut 20 à 32 px) qui fait défiler la page en
+   largeur à 320–480 px (.task-actions, .shortcut-hint, .task-prompt, .takeaway),
+   constat décrit dans scratchpad/appfix/final-text.json ; branche fix/final-text.
+Reste à faire ensuite : fusionner fix/final-integ et fix/final-text (git merge
+--no-ff, messages terminés par les lignes d’attribution, sans « # Conflicts »),
+tsc, vitest, build, check:overflow, check:mocks, pousser ; supprimer REPRISE.txt et
+docs/reprise/ ; pousser ; écrire le récapitulatif final (section 5.E).
 
 ======================================================================
 1. LA DEMANDE D’ORIGINE
