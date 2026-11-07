@@ -5,6 +5,7 @@ import { Mock } from '../components/Mock';
 import { CULTURE_NAMES } from '../content/cultures';
 import { LAB_LOCALES, type LabLocale } from '../content/cultures/lab';
 import type { Visual } from '../engine/types';
+import { SEP } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -97,7 +98,7 @@ export function Lab() {
 
   const plural = safe(() => {
     const pr = new Intl.PluralRules(l.locale);
-    return [0, 1, 2, 5, 21].map((n) => `${n} → ${pr.select(n)}`).join(' · ');
+    return [0, 1, 2, 5, 21].map((n) => `${n} → ${pr.select(n)}`).join(SEP);
   }, '—');
   const weekStart = safe(() => {
     const loc = new Intl.Locale(l.locale) as Intl.Locale & { getWeekInfo?: () => { firstDay: number }; weekInfo?: { firstDay: number } };

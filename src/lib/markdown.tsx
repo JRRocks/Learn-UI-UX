@@ -1,4 +1,5 @@
 import { Fragment, type ReactNode } from 'react';
+import { QUOTED_PHRASES, RTL_LANGS } from '../content/quotedPhrases';
 
 /**
  * Minimal, safe Markdown subset used by all content (no raw HTML):
@@ -21,7 +22,53 @@ export function frenchSpacing(text: string): string {
     .replace(/(\d) h (?=\d)/g, '$1\u00A0h\u00A0')
     // A comparison stays with its number: « ≥ 16 px », « < 2,5 s ».
     .replace(/([≤≥≈<>±]) (?=\d)/g, '$1\u00A0')
+    // A separator dot stays with what it follows: a wrapped line never starts with « · ».
+    .replace(/ ·(?=\s|$)/g, '\u00A0·')
     .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\p{L}\d]))/gu, '$1\u00A0');
+}
+
+/** The phrases quoted in another language, as they read once spaced, and the language of each. */
+const PHRASES = new Map(Object.entries(QUOTED_PHRASES).map(([text, lang]) => [frenchSpacing(text), lang]));
+/** All of them, the longest first: a phrase wins over a shorter one inside it. */
+const PHRASE = new RegExp(
+  [...PHRASES.keys()]
+    .sort((a, b) => b.length - a.length)
+    .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|'),
+  'gu',
+);
+/** A character that may start one: most texts have none, and skip the search. */
+const MAY_QUOTE = /[\p{sc=Han}\p{sc=Hiragana}\p{sc=Katakana}\p{sc=Hangul}\p{sc=Arabic}\u3000-\u303f\u30fc\uff00-\uffef]/u;
+
+/** A text cut around the phrases it quotes in another language (src/content/quotedPhrases.ts). */
+export function languageRuns(text: string): { text: string; lang?: string }[] {
+  if (!MAY_QUOTE.test(text)) return [{ text }];
+  const runs: { text: string; lang?: string }[] = [];
+  let last = 0;
+  for (const m of text.matchAll(PHRASE)) {
+    const at = m.index ?? 0;
+    if (at > last) runs.push({ text: text.slice(last, at) });
+    runs.push({ text: m[0], lang: PHRASES.get(m[0]) });
+    last = at + m[0].length;
+  }
+  if (last < text.length) runs.push({ text: text.slice(last) });
+  return runs;
+}
+
+/**
+ * Plain text, without Markdown: French spacing, and each phrase quoted in another language read in that
+ * language (WCAG 3.1.2), set apart from the French when it reads right to left.
+ */
+export function plainText(text: string, keyPrefix = 't'): ReactNode[] {
+  return languageRuns(frenchSpacing(text)).map((r, i) =>
+    r.lang ? (
+      <span key={`${keyPrefix}-${i}`} lang={r.lang} dir={RTL_LANGS.has(r.lang.split('-')[0]) ? 'auto' : undefined}>
+        {r.text}
+      </span>
+    ) : (
+      r.text
+    ),
+  );
 }
 
 // Bold may hold italics (**Un sur-titre (*kicker*)**); a lone run of asterisks (139****5678) stays literal.
@@ -34,7 +81,7 @@ export function inline(text: string, keyPrefix = 'i'): ReactNode[] {
   for (const m of text.matchAll(INLINE)) {
     const tok = m[0];
     const at = m.index ?? 0;
-    if (at > last) out.push(frenchSpacing(text.slice(last, at)));
+    if (at > last) out.push(...plainText(text.slice(last, at), `${keyPrefix}-t${n++}`));
     const key = `${keyPrefix}-${n++}`;
     if (tok.startsWith('**')) out.push(<strong key={key}>{inline(tok.slice(2, -2), key)}</strong>);
     else if (tok.startsWith('`')) {
@@ -56,7 +103,7 @@ export function inline(text: string, keyPrefix = 'i'): ReactNode[] {
     } else out.push(<em key={key}>{inline(tok.slice(1, -1), key)}</em>);
     last = at + tok.length;
   }
-  if (last < text.length) out.push(frenchSpacing(text.slice(last)));
+  if (last < text.length) out.push(...plainText(text.slice(last), `${keyPrefix}-t${n}`));
   return out;
 }
 

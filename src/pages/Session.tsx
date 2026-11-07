@@ -13,6 +13,7 @@ import { seeded } from '../engine/random';
 import { SESSION_SIZE, buildSession, isDuel, type PracticeType, type SessionItem, type SessionSpec } from '../engine/session';
 import type { Exercise } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
+import { SEP } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { LoadFailed, Loading } from './LoadFailed';
 import {
@@ -148,9 +149,6 @@ export function unfinishedSession(): { raw: string; label: string; index: number
 }
 
 /* ---------------------------------------------------------------- page */
-
-/** Between the session, the lesson and the type: a wrapped line never starts with the dot. */
-const SEP = '\u00A0· ';
 
 function typeOf(ex: SessionItem): string {
   return isDuel(ex) ? TYPE_LABEL.duel : TYPE_LABEL[ex.type];
@@ -445,7 +443,9 @@ function RecapItem({ id, ex, played: p, seed, startOpen }: { id: string; ex: Exe
         </summary>
         <div className="recap-body">
           <p className="small muted">
-            <MdInline text={MODULE_BY_ID.get(ex.module ?? '')?.title ?? ''} /> · {typeOf(ex)}
+            <MdInline text={MODULE_BY_ID.get(ex.module ?? '')?.title ?? ''} />
+            {SEP}
+            {typeOf(ex)}
           </p>
           {/* A run saved before the answers were kept, or an exercise changed since, has only its text. */}
           {open && near && draftFits(ex, p.draft) && <RecapCorrection id={id} ex={ex} draft={p.draft} seed={seed} />}

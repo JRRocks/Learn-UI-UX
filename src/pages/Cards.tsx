@@ -32,6 +32,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<CardGrade[]>([]);
   const stackRef = useRef<HTMLDivElement>(null);
+  const questionRef = useRef<HTMLParagraphElement>(null);
   const answerRef = useRef<HTMLParagraphElement>(null);
   const shownAt = useRef(0);
   const card = cards[index];
@@ -83,9 +84,28 @@ export function Cards({ query }: { query: URLSearchParams }) {
     document.getElementById('main-title')?.focus({ preventScroll: true });
   }, [index]);
 
+  // The flashcards open at their top, the title that has the focus in view: the app leaves the pages
+  // without navigation where they are, and from a page scrolled down they opened at their bottom on a
+  // short screen. Nothing moves when the texts arrive: the learner may have scrolled in the meantime.
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  // Once a card is graded, the next one shows its question, and a turned card its answer: on a short
+  // screen (200 % zoom and more) the page kept its place, the next question above the screen and the
+  // answer below it. Only as far as needed (the header above would push the card out of a short screen).
+  // The end of the set starts at its top, as the results of the challenge do: its title has the focus.
+  useEffect(() => {
+    if (index === 0) return;
+    if (questionRef.current) questionRef.current.scrollIntoView({ block: 'nearest' });
+    else window.scrollTo({ top: 0 });
+  }, [index]);
+
   // « Retourner la fiche » disappears once used: the focus moves to the answer instead of being lost.
   useEffect(() => {
-    if (shown) answerRef.current?.focus({ preventScroll: true });
+    if (!shown) return;
+    answerRef.current?.focus({ preventScroll: true });
+    answerRef.current?.scrollIntoView({ block: 'nearest' });
   }, [shown]);
 
   const title = module ? `Fiches — ${module.title}` : 'Fiches de révision';
@@ -168,7 +188,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
         <div className="card-stack" ref={stackRef}>
           <div className="flashcard">
             {/* Each new question is announced; the answer gets the focus when the card turns. */}
-            <p className="flashcard-q" aria-live="polite">
+            <p ref={questionRef} className="flashcard-q" aria-live="polite">
               <MdInline text={rule.front} />
             </p>
             {shown && (

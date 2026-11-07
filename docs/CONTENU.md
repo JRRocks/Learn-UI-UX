@@ -32,8 +32,9 @@ même dans une version recommandée ne l’est pas.
 
 - Français, tutoiement, phrases courtes. Vocabulaire précis du métier ; un terme technique est
   défini à sa première apparition.
-- Apostrophe typographique `’`, guillemets « … ». Les espaces insécables avant `: ; ! ?` sont
-  ajoutées automatiquement au rendu : écris des espaces normales.
+- Apostrophe typographique `’`, guillemets « … ». Les espaces insécables avant `: ; ! ?` et avant
+  un point médian séparateur (« 12 min · 16 épreuves ») sont ajoutées automatiquement au rendu :
+  écris des espaces normales.
 - Markdown restreint (pas de HTML) : paragraphes, `- ` listes, `1. ` listes, `### ` titres,
   `> ` citations, `**gras**`, `*italique*`, `` `code` ``, `[lien](url)`.
 - **Exactitude avant tout** : chaque chiffre (contraste, tailles, durées, seuils) doit être
@@ -49,6 +50,13 @@ même dans une version recommandée ne l’est pas.
   cite déjà sans traduction sont déclarés une fois dans `QUOTED_TITLES` (même fichier) : une source
   qui cite l’un d’eux prend sa langue sans `lang`. `npm run validate` signale un titre qui se lit
   comme de l’anglais sans langue, et une entrée de `QUOTED_TITLES` qu’aucune source ne cite plus.
+- Un mot ou une phrase cités en chinois, japonais, coréen, arabe ou persan dans le texte
+  (« 获取验证码 », 본인인증, « متابعة ») se déclarent avec leur langue dans
+  `src/content/quotedPhrases.ts` : le rendu leur donne ce `lang` partout où ils apparaissent, pour
+  que les lecteurs d’écran les lisent avec la bonne voix. Déclare la phrase entière, telle qu’elle
+  est écrite (« 8,980円（税込） »), et choisis la langue d’après le sens, jamais d’après l’écriture :
+  un terme japonais écrit en kanji seuls reste `ja`. `npm run validate` signale une lettre de ces
+  écritures qu’aucune phrase déclarée ne couvre, et une phrase que le contenu ne cite plus.
 - Pas de stéréotypes culturels présentés comme des lois : on parle de tendances observées,
   de conventions et de contraintes, avec leurs limites.
 

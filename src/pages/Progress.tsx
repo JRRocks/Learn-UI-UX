@@ -2,13 +2,13 @@ import { Award, CircleAlert, Download, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
-import { toast } from '../app/toasts';
+import { toast, toastsOver } from '../app/toasts';
 import { ScrollRegion } from '../components/ScrollRegion';
 import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exercisesOf } from '../content';
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
 import { emptyProgress, mastery, masteryLabel, parseBackup, streak, type ProgressState } from '../engine/progress';
-import { count, longDay, shortDay } from '../lib/french';
+import { SEP, count, longDay, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -46,6 +46,21 @@ function summarize(s: ProgressState): string {
   if (items) parts.push(count(items, 'épreuve suivie', 'épreuves suivies'));
   if (cards) parts.push(count(cards, 'fiche programmée', 'fiches programmées'));
   return LIST.format(parts);
+}
+
+/**
+ * A closing dialog gives the focus back to the button that opened it. On phones that button often sits
+ * right above the tab bar, where the toast of the dialog's action shows (« Progression effacée. »,
+ * « Sauvegarde importée : … ») and hid most of it: the button is brought up to the middle of the screen,
+ * the toast kept as the action's answer. Only the keyboard focus, and only when a toast lies over it.
+ */
+function clearOfToasts() {
+  requestAnimationFrame(() => {
+    const el = document.activeElement;
+    if (!(el instanceof HTMLElement) || !el.matches(':focus-visible')) return;
+    const toasts = [...document.querySelectorAll('.toast')].map((t, i) => ({ id: i, box: t.getBoundingClientRect() }));
+    if (toastsOver(el.getBoundingClientRect(), toasts).length) el.scrollIntoView({ block: 'center' });
+  });
 }
 
 export function Progress() {
@@ -136,7 +151,9 @@ export function Progress() {
           Progression
         </h1>
         <p className="lead">
-          Niveau {lvl.n} — <strong>{lvl.title}</strong> · <span className="num">{p.xp}</span>
+          Niveau {lvl.n} — <strong>{lvl.title}</strong>
+          {SEP}
+          <span className="num">{p.xp}</span>
           {' '}XP
           {lvl.next && <span className="muted">{frenchSpacing(` · encore ${lvl.next.xp - p.xp} XP avant « ${lvl.next.title} »`)}</span>}
         </p>
@@ -151,7 +168,9 @@ export function Progress() {
           <p className="muted">
             Série{' '}: <strong className="num">{st.current}</strong>
             {' '}
-            {st.current > 1 ? 'jours' : 'jour'} (record{' '}: {st.best}) · {activity}.
+            {st.current > 1 ? 'jours' : 'jour'} (record{' '}: {st.best})
+            {SEP}
+            {activity}.
           </p>
           <ScrollRegion label="Activité">
             <div className="heatmap" role="img" aria-label={`Activité des 12 dernières semaines : ${activity}`}>
@@ -380,7 +399,7 @@ export function Progress() {
         </p>
       </section>
 
-      <dialog ref={resetRef} className="dialog" aria-labelledby="reset-title" aria-describedby="reset-desc">
+      <dialog ref={resetRef} className="dialog" aria-labelledby="reset-title" aria-describedby="reset-desc" onClose={clearOfToasts}>
         <h2 id="reset-title">{frenchSpacing('Effacer toute ta progression ?')}</h2>
         <p id="reset-desc">
           {frenchSpacing(`Seront effacés de ce navigateur : ${summarize(p)}, avec tes séries et tes badges.`)} Exporte une sauvegarde d’abord si tu veux
@@ -404,7 +423,16 @@ export function Progress() {
         </form>
       </dialog>
 
-      <dialog ref={importRef} className="dialog" aria-labelledby="import-title" aria-describedby="import-desc" onClose={() => setPending(null)}>
+      <dialog
+        ref={importRef}
+        className="dialog"
+        aria-labelledby="import-title"
+        aria-describedby="import-desc"
+        onClose={() => {
+          setPending(null);
+          clearOfToasts();
+        }}
+      >
         <h2 id="import-title">{frenchSpacing('Remplacer ta progression actuelle ?')}</h2>
         <p id="import-desc">
           {pending &&

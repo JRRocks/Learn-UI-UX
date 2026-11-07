@@ -9,7 +9,7 @@ import { EXERCISES, MODULE_BY_ID, useStatements } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
 import type { TrueFalseExercise } from '../engine/types';
-import { count } from '../lib/french';
+import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { pauseClock, remaining, resumeClock, secondsLeft, startClock, type Clock } from './blitzClock';
 import { LoadFailed, Loading } from './LoadFailed';
@@ -153,8 +153,18 @@ export function Blitz() {
     );
   }, [over, answered, score]);
 
+  // The challenge opens at its top: the app leaves the pages without navigation where they are.
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   useEffect(() => {
     document.getElementById(current && started && !over ? `blitz-q-${current.id}` : 'main-title')?.focus({ preventScroll: true });
+    // Each statement starts at the top, under the clock, as each exercise of a session does, and so do
+    // the results: on a short screen (200 % zoom and more), the page stayed where the last correction had
+    // taken it, the new statement and the clock above the screen. Not when the statements arrive before
+    // the start: the learner may have scrolled the page in the meantime.
+    if (started) window.scrollTo({ top: 0 });
   }, [current, started, over]);
 
   // The answer buttons switch off once used: the focus moves to the correction instead of being lost.
@@ -176,7 +186,9 @@ export function Blitz() {
             {frenchSpacing(`${DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la correction.`)}
           </p>
           <p className="muted">
-            Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
+            Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''}
+            {SEP}
+            {pool.length} affirmations
             disponibles. Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
           </p>
         </header>
@@ -216,7 +228,7 @@ export function Blitz() {
               bonne{score > 1 ? 's' : ''} réponse{score > 1 ? 's' : ''} sur {answered.length}
               {score > record
                 ? ` — nouveau record${record > 0 ? ` (ancien\u00A0: ${record})` : ''}`
-                : ` · record\u00A0: ${Math.max(best, score)}`}
+                : `${SEP}record\u00A0: ${Math.max(best, score)}`}
             </span>
           </p>
         </header>

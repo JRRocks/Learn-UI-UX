@@ -51,7 +51,9 @@ const LINE = { marginTop: 'var(--s2)' } as const;
  * (src/sw.js). Without one, the button first checks that the site answers; until it does, the page
  * stays open and says so under the button. The check belongs to this view: leaving it, or going
  * offline, cancels it, so that a late answer never reloads the view the learner has moved on to.
- * Offline, there is no button: the message asks to wait for the connection.
+ * Offline, the button stays in its place, focusable but inactive (aria-disabled), and the message asks
+ * to wait for the connection: taken out of the page, it took the focus with it, which fell on the body
+ * and stayed there once the connection was back.
  */
 export function LoadFailed({ what, children }: { what: string; children?: ReactNode }) {
   const online = useOnline();
@@ -77,7 +79,7 @@ export function LoadFailed({ what, children }: { what: string; children?: ReactN
     line.current?.scrollIntoView({ block: 'nearest' });
   }, [check]);
   const reload = async () => {
-    if (pending.current) return;
+    if (!online || pending.current) return;
     if (navigator.serviceWorker?.controller) return window.location.reload();
     const abort = new AbortController();
     pending.current = abort;
@@ -100,11 +102,9 @@ export function LoadFailed({ what, children }: { what: string; children?: ReactN
       {/* The buttons and the line under them, in one block: empty, the line adds no gap to the section. */}
       <div>
         <div className="btn-row">
-          {online && (
-            <button type="button" className="btn btn-primary" onClick={() => void reload()}>
-              Recharger la page
-            </button>
-          )}
+          <button type="button" className="btn btn-primary" aria-disabled={online ? undefined : true} onClick={() => void reload()}>
+            Recharger la page
+          </button>
           {children}
         </div>
         {/* Under the buttons, so that the one just pressed does not move. A polite region of its own,

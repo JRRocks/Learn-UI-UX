@@ -4,30 +4,81 @@ export interface Toast {
   id: number;
   text: string;
   tone: 'info' | 'badge';
+  /** It waited for another toast to go: it does not answer the learner's last action. */
+  queued: boolean;
 }
 
-let toasts: Toast[] = [];
+/** How long a toast stays on screen, counted from when it shows. */
+export const TOAST_MS = 4500;
+
+/**
+ * One toast on screen at a time; the others wait their turn, in order. Two badges earned by the same
+ * answer used to stack up: from 720 px, the second rose above the « Valider » bar, over the end of the
+ * correction (the band of the bar holds one toast, app.css).
+ */
+let queue: Toast[] = [];
+/** The toast next in turn waits: it would come up over the control that has the keyboard focus. */
+let held = false;
+let timer: ReturnType<typeof setTimeout> | undefined;
+const NONE: readonly Toast[] = [];
+/** What is on screen, kept as the same array while it does not change (useSyncExternalStore). */
+let shown: readonly Toast[] = NONE;
 let seq = 0;
 const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((l) => l());
 
+function update() {
+  if (!queue.length) held = false;
+  const first = held ? undefined : queue[0];
+  if (shown[0] !== first) {
+    clearTimeout(timer);
+    timer = first ? setTimeout(() => dismissToast(first.id), TOAST_MS) : undefined;
+    shown = first ? [first] : NONE;
+  }
+  listeners.forEach((l) => l());
+}
+
+/**
+ * Show a toast. A badge waits its turn behind the toasts already there. A message (`info`) answers the
+ * learner's last action: it shows at once, in place of the answer to an earlier action (« Sauvegarde
+ * importée » once « Annuler l’import » is pressed), and ahead of the badges, even those the same action
+ * has just earned (« Leçon lue » before « Lecture complète »), which wait their turn again.
+ */
 export function toast(text: string, tone: Toast['tone'] = 'info') {
-  const id = ++seq;
-  toasts = [...toasts, { id, text, tone }];
-  emit();
-  window.setTimeout(() => dismissToast(id), 4500);
+  const t: Toast = { id: ++seq, text, tone, queued: false };
+  if (tone === 'info') {
+    queue = [t, ...queue.filter((x) => x.tone !== 'info').map((x) => (x.queued ? x : { ...x, queued: true }))];
+    held = false;
+  } else queue = [...queue, { ...t, queued: queue.length > 0 }];
+  update();
 }
 
+/** Its time is up, it was tapped, or the keyboard focus came under it: the next one in turn shows. */
 export function dismissToast(id: number) {
-  toasts = toasts.filter((t) => t.id !== id);
-  emit();
+  if (!queue.some((t) => t.id === id)) return;
+  queue = queue.filter((t) => t.id !== id);
+  update();
 }
 
-/** Escape: every toast goes away at once. */
+/** Escape: every toast goes away at once, those waiting their turn included. */
 export function dismissAllToasts() {
-  if (!toasts.length) return;
-  toasts = [];
-  emit();
+  if (!queue.length) return;
+  queue = [];
+  update();
+}
+
+/**
+ * Keep back the toast next in turn (`true`) while the control that has the keyboard focus lies where it
+ * would show, then let it come (`false`): its time on screen starts again when it shows.
+ */
+export function holdToasts(on: boolean) {
+  if (held === on) return;
+  held = on;
+  update();
+}
+
+/** The toast on screen, if any: none while the next one is held back. */
+export function shownToasts(): readonly Toast[] {
+  return shown;
 }
 
 export interface Box {
@@ -70,13 +121,13 @@ export function toastsOver(target: Box, shown: readonly { id: number; box: Box }
     .map((t) => t.id);
 }
 
-export function useToasts(): Toast[] {
+export function useToasts(): readonly Toast[] {
   return useSyncExternalStore(
     (fn) => {
       listeners.add(fn);
       return () => listeners.delete(fn);
     },
-    () => toasts,
-    () => toasts,
+    shownToasts,
+    shownToasts,
   );
 }

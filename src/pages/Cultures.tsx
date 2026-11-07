@@ -8,7 +8,8 @@ import { EXERCISES, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
 import type { CulturePair, CultureProfile } from '../engine/types';
-import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import { SEP } from '../lib/french';
+import { Md, MdInline, frenchSpacing, plainText } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
 import { LoadFailed, Loading as LoadingLine } from './LoadFailed';
 import { NotFound } from './NotFound';
@@ -147,7 +148,9 @@ export function Cultures() {
                     <MdInline text={c.summary} />
                   </p>
                   <span className="market-formats" lang={c.locale}>
-                    {sampleDate(c.locale)} · {sampleNumber(c.locale)}
+                    {sampleDate(c.locale)}
+                    {SEP}
+                    {sampleNumber(c.locale)}
                   </span>
                 </Link>
               ))}
@@ -324,7 +327,7 @@ export function CultureDetail({ id }: { id: string }) {
                 .filter((x) => x.topic === t)
                 .map((x, i) => (
                   <div key={i} className="convention">
-                    <h4>{frenchSpacing(x.title)}</h4>
+                    <h4>{plainText(x.title)}</h4>
                     <Md text={x.body} className="small" />
                   </div>
                 ))}
@@ -387,8 +390,10 @@ export function CultureDetail({ id }: { id: string }) {
         <h2 id="eco-title">Écosystème</h2>
         <p className="btn-row">
           {c.ecosystem.map((x) => (
+            // One flex item, its text in one line: a phrase in another language, a span of its own,
+            // made an item of the chip took its gap on each side (« PASS ( 본인인증 ) »).
             <span key={x} className="chip">
-              {x}
+              <span>{plainText(x)}</span>
             </span>
           ))}
         </p>
@@ -512,7 +517,8 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                   <span />
                 </span>
                 <span className="dim-note">
-                  {a.name} {a.hofstede![d.key] ?? 'non publié'} ·{' '}
+                  {a.name} {a.hofstede![d.key] ?? 'non publié'}
+                  {SEP}
                   <span style={{ color: 'var(--mark-ink)' }}>
                     {b.name} {b.hofstede![d.key] ?? 'non publié'}
                   </span>{' '}
@@ -547,7 +553,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                           .filter((x) => x.topic === t)
                           .map((x, i) => (
                             <li key={i}>
-                              <strong>{frenchSpacing(x.title)}.</strong> <MdInline text={x.body.split('\n')[0]} />
+                              <strong>{plainText(x.title)}.</strong> <MdInline text={x.body.split('\n')[0]} />
                             </li>
                           ))}
                       </ul>
