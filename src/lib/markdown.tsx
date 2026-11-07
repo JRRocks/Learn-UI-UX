@@ -7,6 +7,10 @@ import { QUOTED_PHRASES, RTL_LANGS } from '../content/quotedPhrases';
  * **bold**, *italic*, `code`, [label](url).
  */
 
+/** The units written in full that a number keeps, as it keeps a symbol: « 75 caractères », « 5 secondes ». */
+const UNIT_WORDS = 'caractères?|mots?|jours?|secondes?|minutes?';
+const UNIT = new RegExp(`(\\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|${UNIT_WORDS})(?![\\p{L}\\d]))`, 'gu');
+
 /** French typography: no-break spaces before high punctuation and inside guillemets. */
 export function frenchSpacing(text: string): string {
   return text
@@ -24,7 +28,7 @@ export function frenchSpacing(text: string): string {
     .replace(/([≤≥≈<>±]) (?=\d)/g, '$1\u00A0')
     // A separator dot stays with what it follows: a wrapped line never starts with « · ».
     .replace(/ ·(?=\s|$)/g, '\u00A0·')
-    .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\p{L}\d]))/gu, '$1\u00A0');
+    .replace(UNIT, '$1\u00A0');
 }
 
 /** The phrases quoted in another language, as they read once spaced, and the language of each. */
@@ -55,18 +59,64 @@ export function languageRuns(text: string): { text: string; lang?: string }[] {
   return runs;
 }
 
+const OPEN_QUOTE = '«\u202F';
+
+/**
+ * Each opening guillemet that leads to a word, with its no-break space, in an element of its own. Chrome
+ * takes them for the start of that word, and never splits such a word at a syllable: in a narrow box, it
+ * broke anywhere instead (« Notificati|ons »). Apart, the word splits with a hyphen (« Notifi-cations »);
+ * the no-break space still keeps the guillemet on its line.
+ */
+export function openQuotes(text: string, keyPrefix = 'q'): ReactNode[] {
+  const parts = text.split(/«\u202F(?=\p{L})/u);
+  if (parts.length === 1) return [text];
+  const out: ReactNode[] = [];
+  parts.forEach((part, i) => {
+    if (i) out.push(<span key={`${keyPrefix}-${i}`}>{OPEN_QUOTE}</span>);
+    if (part) out.push(part);
+  });
+  return out;
+}
+
+/** A unit written in full, after the number and the no-break space that keep it (frenchSpacing). */
+const UNIT_WORD = new RegExp(`(?<=\\d\\u00A0)(?:${UNIT_WORDS})(?![\\p{L}\\d])`, 'gu');
+
+/**
+ * Each unit written in full, in an element of its own. It stays with its number, and on a narrow screen
+ * with a large text, where the two may be wider than the line, it splits at a syllable (base.css: « 45–75
+ * carac-tères »): Chrome never splits a word glued to a number, and broke it anywhere instead
+ * (« 45–75 caractère|s »).
+ */
+export function units(text: string, keyPrefix = 'u'): ReactNode[] {
+  const out: ReactNode[] = [];
+  let last = 0;
+  for (const m of text.matchAll(UNIT_WORD)) {
+    const at = m.index ?? 0;
+    if (at > last) out.push(text.slice(last, at));
+    out.push(
+      <span key={`${keyPrefix}-${at}`} className="unit">
+        {m[0]}
+      </span>,
+    );
+    last = at + m[0].length;
+  }
+  if (!out.length) return [text];
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
+
 /**
  * Plain text, without Markdown: French spacing, and each phrase quoted in another language read in that
  * language (WCAG 3.1.2), set apart from the French when it reads right to left.
  */
 export function plainText(text: string, keyPrefix = 't'): ReactNode[] {
-  return languageRuns(frenchSpacing(text)).map((r, i) =>
+  return languageRuns(frenchSpacing(text)).flatMap((r, i) =>
     r.lang ? (
       <span key={`${keyPrefix}-${i}`} lang={r.lang} dir={RTL_LANGS.has(r.lang.split('-')[0]) ? 'auto' : undefined}>
         {r.text}
       </span>
     ) : (
-      r.text
+      openQuotes(r.text, `${keyPrefix}-${i}`).flatMap((part, j) => (typeof part === 'string' ? units(part, `${keyPrefix}-${i}-${j}`) : [part]))
     ),
   );
 }

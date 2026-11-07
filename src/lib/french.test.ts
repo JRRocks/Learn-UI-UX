@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { count, longDay, plural, shortDay } from './french';
+import { count, formatVariants, longDay, plural, shortDay } from './french';
 
 describe('French plurals', () => {
   it('keeps 0 and 1 singular', () => {
@@ -17,5 +17,18 @@ describe('calendar days', () => {
     expect(shortDay('2026-11-01')).toBe('1er nov.');
     expect(longDay('2026-11-11')).toBe('11\u00A0novembre 2026');
     expect(shortDay('2026-10-27')).toBe('27 oct.');
+  });
+});
+
+describe('variants of a format value', () => {
+  it('parts « a · b » at its dot, with or without a no-break space before it', () => {
+    expect(formatVariants('1,284,500원 · ₩1,284,500')).toEqual(['1,284,500원', '₩1,284,500']);
+    expect(formatVariants('0712\u00A0345\u00A0678\u00A0· +254\u00A0712')).toEqual(['0712\u00A0345\u00A0678', '+254\u00A0712']);
+    expect(formatVariants('WIB (UTC+7) · WITA (UTC+8) · WIT (UTC+9)')).toEqual(['WIB (UTC+7)', 'WITA (UTC+8)', 'WIT (UTC+9)']);
+  });
+
+  it('leaves a value with one variant, or a dot inside a word, whole', () => {
+    expect(formatVariants('13:30 Uhr')).toEqual(['13:30 Uhr']);
+    expect(formatVariants('1·2')).toEqual(['1·2']);
   });
 });

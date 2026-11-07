@@ -207,7 +207,7 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
         ) : (
           <>
             <button type="button" className="btn btn-primary" onClick={onNext}>
-              {nextLabel} <ArrowRight aria-hidden="true" />
+              {nextLabel} <ArrowRight aria-hidden="true" className="icon-end" />
             </button>
             <span className="task-actions-text">
               <span className="shortcut-hint">Entrée pour continuer.</span>

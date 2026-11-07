@@ -8,7 +8,7 @@ import { LAB_LOCALES } from '../content/cultures/lab';
 import { CULTURE_PAIRS } from '../content/cultures/pairs';
 import { CULTURES } from '../content/cultures/profiles';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
-import { Md, frenchSpacing, parseBlocks } from './markdown';
+import { Md, frenchSpacing, openQuotes, parseBlocks, units } from './markdown';
 
 /** Text as rendered by Md, without its code spans. */
 function renderedText(md: string): string {
@@ -84,6 +84,26 @@ describe('markdown subset', () => {
     );
     // Not a unit: a word that merely starts like one.
     expect(frenchSpacing('3 points, 2 semaines, 4 heures')).toBe('3 points, 2 semaines, 4 heures');
+  });
+
+  it('sets each unit written in full apart, so that it can split at a syllable and keep its number', () => {
+    const html = renderToStaticMarkup(createElement(Md, { text: 'De 45–75 caractères, 15 000 caractères ou 2 jours, et 5 secondes.' }));
+    expect(html).toContain('45–\u206075\u00A0<span class="unit">caractères</span>, 15\u00A0000\u00A0<span class="unit">caractères</span>');
+    expect(html).toContain('2\u00A0<span class="unit">jours</span>, et 5\u00A0<span class="unit">secondes</span>.');
+    // The text itself is unchanged; a word that merely starts like a unit, or a unit without its number, is left alone.
+    expect(renderedText('De 45–75 caractères et 2 jours.')).toBe('De 45–\u206075\u00A0caractères et 2\u00A0jours.');
+    expect(units('3\u00A0journées, des secondes')).toEqual(['3\u00A0journées, des secondes']);
+  });
+
+  it('sets each opening guillemet apart, so that the word it leads to can split at a syllable', () => {
+    const html = renderToStaticMarkup(createElement(Md, { text: 'Ajouter une rubrique « Notifications » à l’écran' }));
+    expect(html).toContain('<span>«\u202F</span>Notifications\u202F»');
+    // The text itself is unchanged.
+    expect(renderedText('« un » et « deux »')).toBe('«\u202Fun\u202F» et «\u202Fdeux\u202F»');
+    expect(openQuotes('sans guillemet')).toEqual(['sans guillemet']);
+    // Before a number, or a phrase in another language (an element of its own already), nothing to split.
+    expect(openQuotes('«\u202F12\u202F»')).toEqual(['«\u202F12\u202F»']);
+    expect(openQuotes('(«\u202F')).toEqual(['(«\u202F']);
   });
 });
 

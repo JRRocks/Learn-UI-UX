@@ -1,5 +1,5 @@
 import { ArrowLeft, CircleCheck, CircleX, FlaskConical, Target } from 'lucide-react';
-import { useMemo, useState, type CSSProperties } from 'react';
+import { Fragment, useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { ScrollRegion } from '../components/ScrollRegion';
@@ -8,7 +8,7 @@ import { EXERCISES, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
 import type { CulturePair, CultureProfile } from '../engine/types';
-import { SEP } from '../lib/french';
+import { SEP, formatVariants } from '../lib/french';
 import { Md, MdInline, frenchSpacing, plainText } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
 import { LoadFailed, Loading as LoadingLine } from './LoadFailed';
@@ -45,6 +45,26 @@ function sampleNumber(locale: string) {
   } catch {
     return '';
   }
+}
+
+/**
+ * A format value: each of its variants a block of its own, the dot that parts them at the end of the
+ * first. A line breaks between two variants, never before the dot nor inside a variant while it fits
+ * the line: in a narrow column, « 1,284,500원 » went on one line and « · ₩1,284,500 » on the next.
+ * Narrower than 20em, the variants go one under the other, without the dot (app.css).
+ */
+function FormatValue({ value }: { value: string }) {
+  const variants = formatVariants(value);
+  if (variants.length === 1) return <>{value}</>;
+  return variants.map((v, i) => (
+    <Fragment key={i}>
+      {i > 0 && ' '}
+      <span className="format-variant">
+        {v}
+        {i < variants.length - 1 && <span className="format-sep">{'\u00a0·'}</span>}
+      </span>
+    </Fragment>
+  ));
 }
 
 /* ------------------------------------------------------------------ overview */
@@ -147,10 +167,12 @@ export function Cultures() {
                   <p>
                     <MdInline text={c.summary} />
                   </p>
+                  {/* The date and the number, each whole: side by side, or one under the other when the
+                      card is narrow (app.css), without the dot that would start the second line. */}
                   <span className="market-formats" lang={c.locale}>
-                    {sampleDate(c.locale)}
-                    {SEP}
-                    {sampleNumber(c.locale)}
+                    <span>{sampleDate(c.locale)}</span>
+                    <span className="market-sep">{SEP}</span>
+                    <span>{sampleNumber(c.locale)}</span>
                   </span>
                 </Link>
               ))}
@@ -372,7 +394,7 @@ export function CultureDetail({ id }: { id: string }) {
                 <tr key={i}>
                   <th scope="row">{frenchSpacing(f.label)}</th>
                   <td lang={f.lang ?? c.locale} dir="auto">
-                    {f.value}
+                    <FormatValue value={f.value} />
                   </td>
                 </tr>
               ))}
@@ -585,7 +607,7 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                           {frenchSpacing(f.label)}
                           {'\u00A0'}:{' '}
                           <code lang={f.lang ?? c.locale} dir="auto">
-                            {f.value}
+                            <FormatValue value={f.value} />
                           </code>
                         </li>
                       ))}

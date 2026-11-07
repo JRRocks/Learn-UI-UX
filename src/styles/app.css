@@ -2124,14 +2124,25 @@
 
 .slider-head {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
-  gap: var(--s3);
+  gap: var(--s1) var(--s3);
 }
 
+/* The label stays beside the value while it gets 10em there; with a large text on a phone, the value goes
+   under it, and the label takes the line (« Saturati|on » broke beside « 100 % »). */
+.slider-head > .field-label {
+  flex: 1 1 10em;
+}
+
+/* The value keeps its unit on its line (« 4 px »): its label wraps instead. With a large text on a phone,
+   the value took as little room as its widest letter and read « 4 p » over « x ». */
 .slider-value {
+  flex: none;
   font-size: var(--t-lead);
   font-weight: 650;
+  white-space: nowrap;
 }
 
 .slider-box input[type='range'] {
@@ -2624,6 +2635,22 @@
   color: var(--ink-2);
 }
 
+/* A variant of a format value (« 1,284,500원 · ₩1,284,500 », Cultures.tsx): one block, the dot at the
+   end of the first. A line breaks between variants, never before the dot nor inside a variant that fits.
+   The code that holds them in the comparator is a block of its own too, so that a variant as wide as the
+   line is measured within the code's padding: against the item, « Paybill 567890, account SOKO4821 · »
+   ran 4 px past it at 320 px, and the table of every pair with Kenya scrolled sideways. */
+.format-variant,
+code:has(> .format-variant) {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Korean keeps its words whole (« 홍 ⏎ 길동 » broke a name), as the profile of the market teaches. */
+:is(.formats-table td, .compare-table code, .market-formats):lang(ko) {
+  word-break: keep-all;
+}
+
 .dims {
   display: flex;
   flex-direction: column;
@@ -3024,7 +3051,9 @@
 /* Each term beside its definition from 760 px. A definition in words also needs room in the list
    itself: in a half column (Critique, from 900 px), the 14rem of the term left it 48 px at 960 px, and
    its words ran past the screen. So it goes beside its term from 26rem of list, where it keeps 10rem
-   (as at 1200 px). A figure (Progression, « En chiffres ») holds in the room left beside its term. */
+   (as at 1200 px). A list of figures (Progression, « En chiffres ») keeps them beside their terms from
+   760 px, in one column for all its rows: each figure on one line, the terms giving up room down to their
+   longest word (in a half column at 960 px, 14rem of term left « 4 sur 408 » 48 px, on two lines). */
 .defs {
   display: flex;
   flex-direction: column;
@@ -3039,10 +3068,21 @@
   border-bottom: 1px solid var(--rule);
 }
 
+.defs dd.num {
+  white-space: nowrap;
+}
+
 @media (min-width: 47.5em) {
+  .defs:not(:has(> div > dd:not(.num))) {
+    display: grid;
+    grid-template-columns: minmax(min-content, 14rem) minmax(max-content, 1fr);
+    column-gap: var(--s5);
+  }
+
   .defs:not(:has(> div > dd:not(.num))) > div {
-    grid-template-columns: 14rem minmax(0, 1fr);
-    gap: var(--s5);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    column-gap: var(--s5);
   }
 
   @container (min-width: 26rem) {
@@ -3499,9 +3539,11 @@ fieldset.tf {
 /* Without the « Valider » bar (a session's summary, an empty selection, the flashcards, the start and
    the end of the challenge), the toasts go down to the edge of the screen and the page ends with room
    for one of two lines under its last buttons: they sat where the bar would be, on « Nouvelle session
-   du jour », and a tap there closed the toast instead of starting the session. */
+   du jour », and a tap there closed the toast instead of starting the session. A taller toast (a large
+   text on a phone) gets the room it takes, measured by Toasts (App.tsx, --toast-room): scrolled to its
+   end, the page shows its last control clear of it. */
 .shell[data-focus] .main:not(:has(.task-actions)) {
-  padding-bottom: calc(var(--s9) + var(--s3) + env(safe-area-inset-bottom));
+  padding-bottom: max(calc(var(--s9) + var(--s3) + env(safe-area-inset-bottom)), calc(var(--toast-room, 0px) + var(--s3)));
 }
 
 .shell[data-focus]:not(:has(.task-actions)) .toasts {
@@ -3549,6 +3591,15 @@ fieldset.tf {
   }
 }
 
+/* Up to 56em the bar is too narrow for its keyboard hint and a toast side by side: the toast lay over the
+   end of the hint (« …Entrée po[ur valider.] », up to 210 px of « …(touches 1–6), puis Entrée. »). The
+   hint steps aside while a toast is there, and comes back with it gone; the bar keeps its height. */
+@media (min-width: 45em) and (max-width: 55.99875em) and (min-height: 30rem) {
+  .shell[data-focus]:has(.toast) .task-actions .shortcut-hint {
+    visibility: hidden;
+  }
+}
+
 /* Session bars: the focused control stays clear of them (WCAG 2.4.11). */
 @media (min-height: 30rem) {
   html:has(.player-top) {
@@ -3575,9 +3626,14 @@ fieldset.tf {
   }
 
   /* No bar stays at the bottom of a session: the toasts go down to the edge, into the 64 px that end
-     the page under « Épreuve suivante » (.shell[data-focus] .main). */
+     the page under « Épreuve suivante » (.shell[data-focus] .main), or the room a taller toast takes
+     (--toast-room): with a 32 px text, 266 px of toast covered the button in its 64 px. */
   .shell[data-focus] .toasts {
     bottom: calc(var(--s3) + env(safe-area-inset-bottom));
+  }
+
+  .shell[data-focus] .main {
+    padding-bottom: max(var(--s8), calc(var(--toast-room, 0px) + var(--s3)));
   }
 }
 
@@ -3669,6 +3725,16 @@ fieldset.tf {
   .chip {
     max-width: 100%;
     white-space: normal;
+  }
+
+  /* The variants of a format value one under the other, without the dot: a variant may be as wide as the
+     line (« 0712 345 678 · » at 32 px), and the dot then went to a line of its own. */
+  .format-variant {
+    display: block;
+  }
+
+  .format-sep {
+    display: none;
   }
 
   /* The tables of labels and values (a market's formats, the cheat sheet): each label above its value,
@@ -3764,6 +3830,37 @@ fieldset.tf {
     padding-inline: var(--s4);
   }
 
+  /* « Mise en ordre »: the arrows go under their label, at its end, and the label takes the width of the
+     item. Between its position and two 40 px buttons, it kept 44 px at 320 px with a 32 px text, two or
+     three letters a line (« Aj|ou|te|r »). The position stays beside the first line. */
+  .order-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--s2);
+    row-gap: var(--s1);
+    padding-inline-start: var(--s3);
+  }
+
+  .order-moves {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  /* A text option gives its words the room of its tile: 12 px of padding instead of 16, 8 px between the
+     key and the text; « Pourquoi » stays aligned on the text. */
+  .option:not(.option--visual) {
+    padding-inline: var(--s3);
+    column-gap: var(--s2);
+  }
+
+  .option:not(.option--visual) .option-why {
+    padding-inline-start: calc(28px + var(--s2));
+  }
+
+  .option:has(> .check-box) .option-why {
+    padding-inline-start: calc(24px + var(--s2));
+  }
+
   /* The « Valider » bar: what it waits for and the keyboard hint stay beside the button while they get
      10em there (and never less than their longest word); otherwise they go under it, across the bar. */
   .task-actions {
@@ -3785,25 +3882,233 @@ fieldset.tf {
   }
 }
 
-/* Under 15em, the question splits its words as the titles do (base.css), from 12 letters, and the label
-   of a button from 10, in its narrower box: « Effacer ma progres-sion… » instead of « progressi|on… ».
-   Under 12em, all from 9. */
+/* Under 15em, the question, the text of an option and the label of an item to order split their words as
+   the titles do (base.css), from 12 letters, in their narrower boxes (« rappro-chement » in a 232 px
+   option at 390 px with a 32 px text), and the label of a button from 10. */
 @media (max-width: 14.99875em) {
   .task-prompt,
-  .flashcard-q {
+  .flashcard-q,
+  .option-text,
+  .option-why,
+  .order-label {
     hyphenate-limit-chars: 12 4 4;
   }
 
   .btn {
     hyphenate-limit-chars: 10 4 4;
   }
+
+  /* A toast sets its icon above its words, which take its width: beside the icon they kept 148 px at
+     320 px with a 32 px text, four lines for « Badge obtenu : Première épreuve » (320 px of toast, 278
+     now). From 15em the words have room enough beside it, and the icon on its own line would cost one. */
+  .toast {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s1);
+    padding: var(--s2) var(--s3);
+  }
 }
 
+/* Under 12em (384 px at 32 px), a box set beside an icon, a key, a count or two arrows holds ten letters
+   a line, or fewer: a word of 7 to 11 letters no longer fitted there, and broke anywhere (« Premièr|e »,
+   « Comme|ncer », « Efface|r ma progr|essio|n… », « contrainte|s »). These boxes first give their words
+   the width of the line: the key, the position and the arrows, the icon and the count go on a row of their
+   own, above. Then a word longer than its line splits at a syllable: in a label or a title from 9 letters,
+   3 kept on either side (« Com-mencer », « Res-sources » in base.css; 4 before the hyphen ruled them out),
+   in a text of several lines from 10 letters, as running text does from 12 (base.css), so that few of
+   its lines end on a hyphen. Some words have no syllable to split at in the browser's dictionary
+   (« contraintes », « Construire »): only the width of the line keeps them whole. */
 @media (max-width: 11.99875em) {
+  .btn,
+  .toast,
+  .badge,
+  .side-link,
+  .lesson-jump,
+  .toc-title,
+  .option-badge {
+    hyphenate-limit-chars: 9 3 3;
+  }
+
   .task-prompt,
   .flashcard-q,
-  .btn {
-    hyphenate-limit-chars: 9 4 3;
+  .takeaway,
+  .order-label,
+  .option-text,
+  .option-why,
+  .match-row,
+  .zones li {
+    hyphenate-limit-chars: 10 4 3;
+  }
+
+  .btn,
+  .match-row {
+    padding-inline: var(--s2);
+  }
+
+  /* A button that opens with an icon sets it above its label once the label no longer holds on one line
+     beside it: there, « Effacer ma progression… » kept 138 px at 320 px (« pro- / gressio|n… »), and
+     « Exporter ma progression » took four lines. An icon that follows its label (« Épreuve suivante → »,
+     .icon-end) stays beside it. */
+  .btn:has(> svg:first-child:not(.icon-end)) {
+    flex-wrap: wrap;
+    row-gap: var(--s1);
+  }
+
+  /* The danger zone keeps 16 px of padding: its button gets the room of « Effacer ma » on a line. */
+  .danger-zone {
+    padding: var(--s2);
+  }
+
+  /* An item to order: its position and its arrows on a row, its label under them, across the item. */
+  .order-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .order-pos {
+    grid-area: 1 / 1;
+  }
+
+  .order-moves {
+    grid-area: 1 / 2;
+  }
+
+  .order-label {
+    grid-area: 2 / 1 / 3 / -1;
+  }
+
+  /* A flashcard: its question and its answer at the size of the text, 12 px from its edges. In 16 px of
+     padding and at 20 px, a line held eight letters: 202 of the 307 cards broke a word anywhere
+     (« Persuade|r », « typograph|ie »). The answer splits its words as running text does. */
+  .flashcard {
+    padding-inline: var(--s3);
+  }
+
+  .flashcard-q,
+  .flashcard-a {
+    font-size: var(--t-body);
+  }
+
+  /* A zone of a correction (Chasse aux erreurs): its number above its words. */
+  .zones li {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--s1);
+  }
+
+  /* A text option: its key (or its box) above its text, and « Pourquoi » under it, across the tile. */
+  .options > .option:not(.option--visual) {
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: var(--s2);
+  }
+
+  .options > .option:not(.option--visual) > .option-text {
+    flex: none;
+    padding-top: 0;
+  }
+
+  .options > .option:not(.option--visual) > .option-why {
+    padding-inline-start: 0;
+  }
+
+  /* A side link: its icon and its count on a row, its words under them. */
+  .side-link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s1) var(--s2);
+    padding-inline: var(--s3);
+  }
+
+  .side-link > svg {
+    grid-area: 1 / 1;
+  }
+
+  .side-link > strong {
+    grid-area: 1 / 2;
+  }
+
+  .side-link > span {
+    grid-area: 2 / 1 / 3 / -1;
+  }
+
+  /* A badge: its icon above its title. */
+  .badge {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: var(--s3);
+  }
+
+  .badge svg {
+    grid-row: auto;
+  }
+
+  .lesson-jump summary {
+    gap: var(--s2);
+    padding-inline: var(--s3);
+  }
+
+  .lesson-jump ol {
+    padding-inline: var(--s3);
+  }
+
+  /* Section titles step down once more, as the page's title did under 20em: at 48 px, a word of ten
+     letters no longer fitted the line, and some have no syllable to split at (« connexio|ns »). */
+  h2,
+  .lesson-section > h2,
+  .toc-group-head h2 {
+    font-size: var(--t-lead);
+  }
+
+  /* Lists and quotes in a text keep more of the line for their words. */
+  .md :is(ul, ol) {
+    padding-inline-start: 1em;
+  }
+
+  .md blockquote {
+    padding-inline: var(--s3);
+  }
+
+  /* A market's date and number, one under the other without the dot: side by side, « 27/10/2026 · »
+     no longer fitted the card, and broke before the dot or inside the number (« 1,234,567.8|9 »). */
+  .market {
+    padding: var(--s3);
+  }
+
+  .market-formats {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .market-sep {
+    display: none;
+  }
+
+  /* An exercise of a session's summary: its verdict and its chevron on a row, its question under them,
+     across the item, and what opens under it without the indent. Between them, the question kept 168 px
+     at 320 px (« changeme|nt », « paragraph|e »), and the correction 192 px (« accompagn|e »). */
+  .recap summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--s1);
+  }
+
+  .recap summary > svg:first-child {
+    grid-area: 1 / 1;
+  }
+
+  .recap summary > svg:last-child {
+    grid-area: 1 / 2;
+  }
+
+  .recap summary > span {
+    grid-area: 2 / 1 / 3 / -1;
+  }
+
+  .recap-body {
+    padding-inline-start: 0;
+  }
+
+  .recap-correction {
+    margin-inline-start: 0;
   }
 }
 
@@ -3828,7 +4133,7 @@ fieldset.tf {
   }
 
   .shell[data-focus] .main:has(.task-actions) {
-    padding-bottom: calc(var(--s8) + env(safe-area-inset-bottom));
+    padding-bottom: max(calc(var(--s8) + env(safe-area-inset-bottom)), calc(var(--toast-room, 0px) + var(--s3)));
   }
 
   .shell[data-focus] .toasts {

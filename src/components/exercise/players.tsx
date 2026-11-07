@@ -200,10 +200,15 @@ export function ChoicePlayer({ ex, draft, setDraft, revealed, order, labelledBy,
                 </span>
                 <span className="option-text">
                   <MdInline text={o.label ?? ''} />
+                  {/* A space before the badge: glued to the text, it made one block with its last word, which
+                      then broke anywhere on a narrow line, a guillemet starting the next one. */}
                   {revealed && (right || selected) && (
-                    <span className="option-badge" style={{ marginInlineStart: 8 }}>
-                      {right ? 'Recommandé' : 'Ton choix'}
-                    </span>
+                    <>
+                      {' '}
+                      <span className="option-badge" style={{ marginInlineStart: 4 }}>
+                        {right ? 'Recommandé' : 'Ton choix'}
+                      </span>
+                    </>
                   )}
                 </span>
               </>
@@ -263,9 +268,12 @@ export function MultiPlayer({ ex, draft, setDraft, revealed, order, labelledBy, 
                 <span className="option-text">
                   <MdInline text={o.label ?? ''} />
                   {revealed && badge && (
-                    <span className="option-badge" style={{ marginInlineStart: 8 }}>
-                      {badge}
-                    </span>
+                    <>
+                      {' '}
+                      <span className="option-badge" style={{ marginInlineStart: 4 }}>
+                        {badge}
+                      </span>
+                    </>
                   )}
                 </span>
               </>
@@ -443,7 +451,7 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
               <span className="order-pos" aria-hidden="true">
                 {i + 1}
               </span>
-              <span>
+              <span className="order-label">
                 <MdInline text={item.label} />
                 {revealed && correct[i] !== id && (
                   <span className="order-correct"> — à placer en position {correct.indexOf(id) + 1}</span>
