@@ -3143,13 +3143,14 @@
   color: var(--mark);
 }
 
+/* Within the 150 to 250 ms of every other movement (--dur): they took 320 and 360 ms. */
 @media (prefers-reduced-motion: no-preference) {
   .toast {
-    animation: toast-in 320ms var(--ease-out-expo);
+    animation: toast-in var(--dur) var(--ease-out-expo);
   }
 
   .feedback {
-    animation: note-in 360ms var(--ease-out-expo);
+    animation: note-in var(--dur) var(--ease-out-expo);
   }
 }
 
