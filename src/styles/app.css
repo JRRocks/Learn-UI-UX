@@ -1750,6 +1750,16 @@
   padding: var(--s3);
 }
 
+/* Phones: the mock takes back part of the margins around it (8 px instead of 12, in the tile and on
+   its stage). 324 px at 390, inside the 320 to 520 px it is drawn for, instead of 308; 254 px at
+   320 instead of 238, where the recommended plan table of a duel lost its last column. */
+@media (max-width: 479.98px) {
+  .option--visual,
+  .option--visual .stage {
+    padding: var(--s2);
+  }
+}
+
 .option-label {
   font-size: var(--t-small);
   color: var(--ink-2);
