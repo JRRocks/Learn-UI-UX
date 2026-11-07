@@ -3310,11 +3310,27 @@ fieldset.tf {
   }
 }
 
-/* Short viewports (phone held sideways, 200 % zoom and more): the session bars scroll away with the
-   page instead of keeping a third of the screen. */
+/* Short viewports (phone held sideways, 200 % zoom and more): the session bars and the top bar
+   scroll away with the page instead of keeping a third of the screen (the top and tab bars took
+   125 px of 390). */
 @media (max-height: 29.99rem) {
   .player-top,
-  .task-actions {
+  .task-actions,
+  .topbar {
     position: static;
+  }
+
+  html:has(.topbar) {
+    scroll-padding-top: var(--s3);
+  }
+}
+
+/* Wide enough, the tab bar sets each icon beside its label: 45 px tall instead of 57 (--tabbar-h).
+   Under 560 px the labels would touch. */
+@media (max-height: 29.99rem) and (min-width: 35rem) {
+  .tabbar a {
+    flex-direction: row;
+    gap: var(--s2);
+    font-size: var(--t-meta);
   }
 }
