@@ -3391,6 +3391,30 @@
   vertical-align: top;
 }
 
+/* Narrower than 390 px at the default text size (24.375em, so also 390 px with a 32 px text), the
+   300 px columns ran past the screen: one column, as wide as the screen, with a phone's margins, and a
+   long value or a short code breaks inside its cell. From 390 px at 16 px, where check:mocks and
+   shots measure the mocks, the columns keep their 300 px. */
+@media (max-width: 24.37375em) {
+  .preview,
+  .preview-item {
+    padding: var(--s3);
+  }
+
+  .preview-options--visual,
+  .preview-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preview-table :is(td, th) {
+    overflow-wrap: anywhere;
+  }
+
+  .preview-table code.code-short {
+    white-space: normal;
+  }
+}
+
 /* Native inputs stay in the tiles for keyboard and screen readers; the tile shows focus. */
 .option:has(input:focus-visible) {
   outline: 2px solid var(--focus);
