@@ -5,7 +5,8 @@
 // instead of 16, WCAG 1.4.4), at 320, 360, 390 and 768 px with a mouse (the keyboard hints show):
 // every page, two exercises of each format before and after « Valider », the timed challenge and the
 // cards. Everywhere, a bar that stays on screen must fit in the room kept for it (scroll-padding),
-// or a control reached with Tab could end up under it (WCAG 2.4.11).
+// or a control reached with Tab could end up under it (WCAG 2.4.11), and no more than three lines in a
+// row may end on a hyphen the browser added (French typography; long words split under 15em).
 // Prints the elements that stick out; exits with 1 if any.
 //   npm run check:overflow
 //   npm run check:overflow -- 320          → only this width
@@ -69,7 +70,34 @@ function measure() {
     if (cs.display === 'none' || !h || !/sticky|fixed/.test(cs.position)) continue;
     if (h > room[edge] + 0.5) bars.push(`${selector} de ${Math.round(h)} px, ${Math.round(room[edge])} px gardés en ${edge === 'top' ? 'haut' : 'bas'}`);
   }
-  return { vw, sw, touching, culprits: [...new Set(culprits)].slice(0, 3), bars };
+  // Lines ending on a hyphen the browser added (hyphens: auto): a split word has one box per line it
+  // takes, plus one for that hyphen. The longest run of such lines in one block of text.
+  const hyphenated = new Map();
+  const walker = document.createTreeWalker(document.getElementById('root'), NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (!node.parentElement || getComputedStyle(node.parentElement).hyphens !== 'auto') continue;
+    let block = node.parentElement;
+    while (['inline', 'contents'].includes(getComputedStyle(block).display) && block.parentElement) block = block.parentElement;
+    for (const word of node.textContent.matchAll(/[^\s\u00a0\u202f]{5,}/g)) {
+      const range = document.createRange();
+      range.setStart(node, word.index);
+      range.setEnd(node, word.index + word[0].length);
+      const boxes = [...range.getClientRects()].filter((r) => r.width > 0);
+      const tops = [...new Set(boxes.map((r) => Math.round(r.top)))];
+      if (tops.length > 1 && boxes.length > tops.length) hyphenated.set(block, [...(hyphenated.get(block) ?? []), tops[0]]);
+    }
+  }
+  const ladder = { lines: 0, text: '' };
+  for (const [block, ends] of hyphenated) {
+    const cs = getComputedStyle(block);
+    const line = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2;
+    const tops = [...new Set(ends)].sort((a, b) => a - b);
+    for (let i = 0, run = 1; i < tops.length; i++) {
+      run = i && Math.abs(tops[i] - tops[i - 1] - line) < 4 ? run + 1 : 1;
+      if (run > ladder.lines) Object.assign(ladder, { lines: run, text: block.textContent.trim().slice(0, 50) });
+    }
+  }
+  return { vw, sw, touching, culprits: [...new Set(culprits)].slice(0, 3), bars, ladder };
 }
 
 /** Some complete answer to the exercise on screen, through the DOM (a badge toast may lie over a control). */
@@ -180,9 +208,16 @@ try {
     ...ids.cultures.map((c) => `/cultures/${c}`),
     ...ids.pairs.map((p) => `/cultures/paire/${p}`),
   ];
-  const fails = (m) => m.sw > m.vw || m.touching || m.bars.length;
+  const fails = (m) => m.sw > m.vw || m.touching || m.bars.length || m.ladder.lines > 3;
   const describe = (m) =>
-    [m.sw > m.vw ? `${m.sw} px de large pour ${m.vw}` : '', m.touching ? 'libellés de la barre d’onglets collés' : '', ...m.bars].filter(Boolean).join(' ; ');
+    [
+      m.sw > m.vw ? `${m.sw} px de large pour ${m.vw}` : '',
+      m.touching ? 'libellés de la barre d’onglets collés' : '',
+      ...m.bars,
+      m.ladder.lines > 3 ? `${m.ladder.lines} lignes de suite finies par une coupure (« ${m.ladder.text} »)` : '',
+    ]
+      .filter(Boolean)
+      .join(' ; ');
   const show = (label, m) => {
     console.log(`✗ ${label} : ${describe(m)}`);
     for (const c of m.culprits) console.log(`    ${c}`);
