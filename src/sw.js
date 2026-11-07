@@ -8,7 +8,9 @@
 // - the page comes from the network, so it is fresh, unless the network takes more than 3 s (slow or
 //   stalled connection) or fails: this build's copy answers then. That copy is the one stored at
 //   install, which names only files of this build; never a later answer of the network, which may
-//   come from a newer build whose files are not stored (yet, or ever if its install fails);
+//   come from a newer build whose files are not stored (yet, or ever if its install fails). A
+//   redirect is passed on, so the browser follows it: when the site moves to a new address, the
+//   learners who have this worker reach it too;
 // - files whose name holds a hash never change: stored copy first. Other files: network first;
 // - a page asks whether this worker stores its files (src/main.tsx): if not, it keeps its lessons in
 //   memory instead.
@@ -77,16 +79,22 @@ self.addEventListener('activate', (event) => {
 });
 
 /**
- * The app's page: fresh from the network, or this build's copy if the network fails or takes too
- * long. The network's answer is never stored: only this build's copy is sure to name files that are
- * all in the cache.
+ * The app's page: fresh from the network, or this build's copy if the network fails, answers with an
+ * error or takes too long. The network's answer is never stored: only this build's copy is sure to
+ * name files that are all in the cache.
+ *
+ * A navigation leaves redirects to the browser: the network answers one with an opaque redirect,
+ * passed on as it is, so the browser goes to the new address (a site moved to a custom domain or
+ * renamed: every path of the old address redirects, this script included, so this worker could not
+ * even be replaced; serving the copy instead would keep its learners at the old address for good).
  */
 async function page(event) {
   const network = fetch(event.request);
   const kept = await caches.match(SHELL, { cacheName: CACHE });
   if (!kept) return network;
   const late = new Promise((resolve) => setTimeout(() => resolve(kept), PAGE_TIMEOUT));
-  return Promise.race([network.then((res) => (res.ok ? res : kept), () => kept), late]);
+  const answer = (res) => (res.ok || res.type === 'opaqueredirect' ? res : kept);
+  return Promise.race([network.then(answer, () => kept), late]);
 }
 
 /** A file whose name holds a hash: the stored copy, else the network (stored for next time). */
