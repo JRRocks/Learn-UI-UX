@@ -478,7 +478,7 @@
   flex: none;
 }
 
-.btn:active:not(:disabled) {
+.btn:active:not(:disabled, [aria-disabled='true']) {
   transform: translateY(1px);
 }
 
@@ -492,7 +492,7 @@
   color: var(--on-ink);
 }
 
-.btn-primary:hover:not(:disabled) {
+.btn-primary:hover:not(:disabled, [aria-disabled='true']) {
   background: color-mix(in oklch, var(--ink) 86%, var(--paper));
 }
 
@@ -502,7 +502,7 @@
   color: var(--ink);
 }
 
-.btn-secondary:hover:not(:disabled) {
+.btn-secondary:hover:not(:disabled, [aria-disabled='true']) {
   background: var(--paper-2);
   border-color: var(--ink-3);
 }
@@ -516,7 +516,7 @@
   text-align: start;
 }
 
-.btn-ghost:hover:not(:disabled) {
+.btn-ghost:hover:not(:disabled, [aria-disabled='true']) {
   background: var(--paper-2);
   color: var(--ink);
 }
@@ -524,6 +524,15 @@
 .btn-danger {
   background: var(--mark-ink);
   color: var(--on-ink);
+}
+
+/* A button kept focusable while it cannot act (aria-disabled), so that the focus is never lost:
+   « Recharger la page » offline. It looks as a disabled one does, its colors mixed with the page rather
+   than its opacity lowered, so that its focus ring keeps its full contrast. */
+.btn-primary[aria-disabled='true'] {
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--ink) 45%, var(--paper));
+  color: color-mix(in srgb, var(--on-ink) 45%, var(--paper));
 }
 
 .btn-row {

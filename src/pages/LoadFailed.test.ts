@@ -1,5 +1,11 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { siteAnswers } from './LoadFailed';
+import { LoadFailed, siteAnswers } from './LoadFailed';
+
+/** What the browser believes of the connection, as the view reads it. */
+const net = vi.hoisted(() => ({ online: true }));
+vi.mock('../lib/useLoad', async (original) => ({ ...(await original<typeof import('../lib/useLoad')>()), useOnline: () => net.online }));
 
 /** What the check reads of an answer. */
 type Answer = Pick<Response, 'type' | 'status'>;
@@ -78,5 +84,24 @@ describe('reloading after a failed download: does the site answer?', () => {
     cancel.abort();
     expect(await siteAnswers(cancel.signal)).toBe(false);
     expect(requests).toHaveLength(0);
+  });
+});
+
+describe('the reload button when the connection drops', () => {
+  afterEach(() => {
+    net.online = true;
+  });
+
+  it('stays in its place offline, focusable but inactive, so that the focus it has is never lost', () => {
+    net.online = false;
+    const html = renderToStaticMarkup(createElement(LoadFailed, { what: 'cette leçon' }));
+    expect(html).toMatch(/<button type="button" class="btn btn-primary" aria-disabled="true">Recharger la page<\/button>/);
+    expect(html).not.toContain('disabled=""');
+    expect(html).toContain('tu es hors ligne');
+  });
+
+  it('acts again once online', () => {
+    const html = renderToStaticMarkup(createElement(LoadFailed, { what: 'cette leçon' }));
+    expect(html).toContain('<button type="button" class="btn btn-primary">Recharger la page</button>');
   });
 });
