@@ -195,10 +195,16 @@
     grid-template-columns: var(--rail-w) minmax(0, 1fr);
   }
 
+  /* Taller than a short window (200 % zoom), the rail scrolls by itself: the browser brings a control
+     reached with Tab into its view, ring included (scroll-padding), where the page would scroll under a
+     rail stuck in place. The wheel still scrolls the page once the rail has nothing left to scroll. */
   .rail {
     position: sticky;
     top: 0;
     height: 100dvh;
+    overflow-y: auto;
+    scroll-padding-block: var(--s3);
+    scrollbar-width: thin;
     display: flex;
     flex-direction: column;
     gap: var(--s6);
@@ -209,6 +215,14 @@
 
   .main {
     padding: var(--s7) var(--s7) var(--s8);
+  }
+}
+
+/* A short window, where the rail would scroll: tighter, it holds whole down to some 460 px. */
+@media (min-width: 960px) and (max-height: 34rem) {
+  .rail {
+    gap: var(--s3);
+    padding-block: var(--s3);
   }
 }
 
