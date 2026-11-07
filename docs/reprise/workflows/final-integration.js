@@ -154,8 +154,8 @@ function fixPrompt(list) {
 
 TA MISSION : corriger les constats d’intégration CONFIRMÉS ci-dessous (un auditeur les a trouvés, un contradicteur les a reproduits).
 ESPACE DE TRAVAIL : crée ton worktree avec \`git -C ${REPO} worktree add ${FIX_WT} -b fix/final-integ ${args.head}\` puis \`ln -s ${REPO}/node_modules ${FIX_WT}/node_modules\` (s’il existe déjà, reprends-le tel quel). Travaille UNIQUEMENT dans ${FIX_WT}. Commite au fil de l’eau, messages en anglais à l’impératif, sans nom de modèle, terminés par ces deux lignes précédées d’une ligne vide :
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01EL3qoSvc2Q5ZPuKJcjJHox
+<ligne Co-Authored-By imposée par la session>
+<ligne Claude-Session imposée par la session>
 Jamais de push, jamais de rebase. Tes scripts et captures vont dans ${RUN}/fix/.
 Tu peux modifier src/ et scripts/, sauf : le texte enseigné des fichiers de contenu (src/content/modules/*, src/content/cultures/*.ts, src/content/antipatterns.ts : seuls des attributs non textuels y sont permis), et les règles du texte agrandi que fix/final-text modifie en même temps (grille de .task-actions sous 640 px, .shortcut-hint, .task-prompt, .takeaway, passe « texte agrandi » de scripts/check-overflow.mjs).
 Pour chaque constat : corrige à la racine (du P1 au P3), ajoute un test vitest pour toute logique testable, rejoue le scénario sur ton worktree, et pour tout changement visuel fais des captures avant/après à 1366, 390 et 320 px en clair ET en sombre, et OUVRE-les. À la fin : \`npx tsc --noEmit\`, \`npx vitest run\`, \`npx vite build --outDir ${RUN}/fix/dist\`, \`npm run check:overflow\` et, si tu touches au rendu des maquettes, \`npm run check:mocks\`, tous verts, et rien n’a régressé sur les écrans touchés (clavier compris).
@@ -180,7 +180,7 @@ Rends results, regressions, checks.`
 function repairPrompt(check) {
   return `${PROJECT}
 
-Un contradicteur a contrôlé ta branche fix/final-integ (worktree ${FIX_WT}). Corrige ce qui reste, commite, et prouve-le comme avant (scénario rejoué, captures ouvertes, tsc, vitest, build, check:overflow). Mêmes règles d’espace de travail et de périmètre qu’avant : uniquement ${FIX_WT}, pas de push, pas de rebase, messages terminés par les deux lignes d’attribution (Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com> puis Claude-Session: https://claude.ai/code/session_01EL3qoSvc2Q5ZPuKJcjJHox).
+Un contradicteur a contrôlé ta branche fix/final-integ (worktree ${FIX_WT}). Corrige ce qui reste, commite, et prouve-le comme avant (scénario rejoué, captures ouvertes, tsc, vitest, build, check:overflow). Mêmes règles d’espace de travail et de périmètre qu’avant : uniquement ${FIX_WT}, pas de push, pas de rebase, messages terminés par les deux lignes d’attribution (<ligne Co-Authored-By imposée par la session> puis <ligne Claude-Session imposée par la session>).
 Constats non corrigés selon lui (JSON) :
 ${JSON.stringify(check.results.filter((r) => !r.ok), null, 1)}
 Régressions trouvées (JSON) :

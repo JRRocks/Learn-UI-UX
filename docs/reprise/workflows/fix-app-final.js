@@ -46,8 +46,8 @@ ESPACE DE TRAVAIL ISOLÉ — obligatoire :
 - Travaille UNIQUEMENT dans ${wt} (chemins absolus). Ne modifie RIEN dans ${REPO} : d’autres agents y corrigent le contenu en ce moment, et d’autres groupes corrigent d’autres fichiers de l’app dans leurs propres worktrees.
 - Ne touche jamais aux fichiers de contenu : src/content/modules/*, src/content/cultures/profiles.ts, src/content/cultures/pairs.ts, src/content/antipatterns.ts.
 - Commite dans ta branche au fil de l’eau (\`git -C ${wt} add -A && git -C ${wt} commit -m "…"\`), messages en anglais à l’impératif, sans nom de modèle ; termine chaque message par ces deux lignes, précédées d’une ligne vide :
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01EL3qoSvc2Q5ZPuKJcjJHox
+<ligne Co-Authored-By imposée par la session>
+<ligne Claude-Session imposée par la session>
   Jamais de push, jamais de rebase.
 - Fichiers que tu possèdes : ${g.owns}. Si un correctif exige un autre fichier, fais le changement minimal et liste-le dans « outside » (les branches seront fusionnées ensuite).
 
