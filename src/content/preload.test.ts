@@ -189,6 +189,15 @@ describe('everything in the background, on a dropped connection (a page that no 
     expect(app.requests).toHaveLength(sent);
   }, 20_000);
 
+  it('goes on when a part throws, here the fonts of a browser that cannot load them', async () => {
+    const app = await start();
+    Object.assign(app.page, { fonts: undefined });
+    await app.preloadContent();
+    for (const key of app.keyOf.values()) expect(await app.inMemory(key), key).toBe(true);
+    expect(app.loadedFaces).toEqual([]);
+    expect(app.retries.size).toBe(0);
+  }, 20_000);
+
   it('downloads nothing already in memory', async () => {
     const app = await start();
     await app.loadModule('typography');

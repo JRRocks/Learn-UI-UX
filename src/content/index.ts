@@ -277,7 +277,7 @@ export function preloadContent(): Promise<void> {
         await idle();
         const job = !stopped && navigator.onLine ? jobs.shift() : undefined;
         if (!job) return;
-        const outcome = await job();
+        const outcome = await job().catch((): Outcome => 'failed');
         if (outcome === 'done') progressed = true;
         else if (outcome === 'cut') {
           // Never imported, so not failed for good: first in line next time.
