@@ -48,7 +48,10 @@ function BrandMark() {
   );
 }
 
-/** Its name is the text it shows, then where it leads: « cliquer atelier UI/UX » works by voice too (WCAG 2.5.3). */
+/**
+ * Its name is the text it shows, then where it leads (« Épreuves atelier UI/UX — accueil »): « cliquer
+ * atelier UI/UX » works by voice too (WCAG 2.5.3).
+ */
 function Brand() {
   return (
     <Link to="/" className="brand">
@@ -56,7 +59,7 @@ function Brand() {
       <span>
         Épreuves <small>atelier UI/UX</small>
       </span>
-      <span className="visually-hidden">, accueil</span>
+      <span className="visually-hidden"> — accueil</span>
     </Link>
   );
 }
