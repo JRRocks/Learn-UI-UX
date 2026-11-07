@@ -144,7 +144,7 @@ const JK_CONTENT = `<div class="mk-pad mk-stack" style="--gap:8px">
 const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #e6e9ef; }
 .jk-logo { font-size: 14px; font-weight: 800; letter-spacing: 0.01em; white-space: nowrap; }
 .jk-odd .jk-logo { margin-inline-start: auto; }
-.jk-cart { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #5a6172; }
+.jk-cart { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #5a6172; }
 .jk-explore { font-size: 13px; font-weight: 600; color: #1f2a44; }
 .jk-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #868d9c; border-radius: 999px; color: #5a6172; font-size: 13px; overflow: hidden; white-space: nowrap; }
 .jk-icons { display: flex; align-items: center; gap: 12px; }
