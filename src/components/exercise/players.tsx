@@ -12,6 +12,7 @@ import type {
   SliderExercise,
   TrueFalseExercise,
 } from '../../engine/types';
+import { SEP } from '../../lib/french';
 import { MdInline, frenchSpacing } from '../../lib/markdown';
 import { Mock, MotionControls, type HotspotState, type Mark, type MotionInfo } from '../Mock';
 
@@ -597,7 +598,7 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
         <Mock visual={ex.visual} />
       </div>
       <p className="task-hint">
-        Échelle{'\u00A0'}: {ex.scale.labels.join(' · ')}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
+        Échelle{'\u00A0'}: {ex.scale.labels.join(SEP)}. Tes notes comptent comme justes à {tol} point près de celles de l’expert.
       </p>
       <div className="grid-score">
         {ex.criteria.map((c, i) => {

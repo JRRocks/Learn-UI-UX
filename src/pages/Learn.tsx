@@ -4,7 +4,7 @@ import { Link, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
 import { CATEGORIES, MODULES, exercisesOf } from '../content';
 import { mastery, masteryLabel } from '../engine/progress';
-import { count } from '../lib/french';
+import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -71,10 +71,11 @@ export function Learn() {
                         </span>
                         <span className="toc-meta">
                           {m.minutes}
-                          {' '}min de lecture · {count(ids.length, 'épreuve', 'épreuves')}
+                          {' '}min de lecture{SEP}
+                          {count(ids.length, 'épreuve', 'épreuves')}
                           {m.commands?.length ? (
                             <>
-                              {' · '}
+                              {SEP}
                               <Commands list={m.commands} />
                             </>
                           ) : null}

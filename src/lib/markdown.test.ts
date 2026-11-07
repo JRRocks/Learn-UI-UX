@@ -72,6 +72,12 @@ describe('markdown subset', () => {
     expect(renderToStaticMarkup(createElement(Md, { text: '### Comment adapter', headingLevel: 2 }))).toContain('<h2>Comment adapter</h2>');
   });
 
+  it('keeps a separator dot with what it follows: a wrapped line never starts with « · »', () => {
+    expect(frenchSpacing('Doser l’intensité · Comparaison visuelle')).toBe('Doser l’intensité\u00A0· Comparaison visuelle');
+    expect(frenchSpacing('Score ·')).toBe('Score\u00A0·');
+    expect(frenchSpacing('déjà\u00A0· collé, et 1·2')).toBe('déjà\u00A0· collé, et 1·2');
+  });
+
   it('keeps numbers attached to their unit', () => {
     expect(frenchSpacing('1 280 px, 44 × 44 pt, 18 h 30, 50 % et 75 caractères')).toBe(
       '1\u00A0280\u00A0px, 44\u00A0×\u00A044\u00A0pt, 18\u00A0h\u00A030, 50\u00A0% et 75\u00A0caractères',

@@ -9,7 +9,7 @@ import { EXERCISES, MODULE_BY_ID, useStatements } from '../content';
 import { grade } from '../engine/grade';
 import { addSession, recordAttempt, setRecord } from '../engine/progress';
 import type { TrueFalseExercise } from '../engine/types';
-import { count } from '../lib/french';
+import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { pauseClock, remaining, resumeClock, secondsLeft, startClock, type Clock } from './blitzClock';
 import { LoadFailed, Loading } from './LoadFailed';
@@ -176,7 +176,9 @@ export function Blitz() {
             {frenchSpacing(`${DURATION} secondes pour trancher le plus d’affirmations possible : vrai ou faux ? Le chronomètre s’arrête pendant que tu lis la correction.`)}
           </p>
           <p className="muted">
-            Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''} · {pool.length} affirmations
+            Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''}
+            {SEP}
+            {pool.length} affirmations
             disponibles. Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
           </p>
         </header>
@@ -216,7 +218,7 @@ export function Blitz() {
               bonne{score > 1 ? 's' : ''} réponse{score > 1 ? 's' : ''} sur {answered.length}
               {score > record
                 ? ` — nouveau record${record > 0 ? ` (ancien\u00A0: ${record})` : ''}`
-                : ` · record\u00A0: ${Math.max(best, score)}`}
+                : `${SEP}record\u00A0: ${Math.max(best, score)}`}
             </span>
           </p>
         </header>

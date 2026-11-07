@@ -8,6 +8,7 @@ import { EXERCISES, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
 import type { CulturePair, CultureProfile } from '../engine/types';
+import { SEP } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
 import { LoadFailed, Loading as LoadingLine } from './LoadFailed';
@@ -147,7 +148,9 @@ export function Cultures() {
                     <MdInline text={c.summary} />
                   </p>
                   <span className="market-formats" lang={c.locale}>
-                    {sampleDate(c.locale)} · {sampleNumber(c.locale)}
+                    {sampleDate(c.locale)}
+                    {SEP}
+                    {sampleNumber(c.locale)}
                   </span>
                 </Link>
               ))}
@@ -512,7 +515,8 @@ function Compare({ data, query }: { data: CultureData; query: URLSearchParams })
                   <span />
                 </span>
                 <span className="dim-note">
-                  {a.name} {a.hofstede![d.key] ?? 'non publié'} ·{' '}
+                  {a.name} {a.hofstede![d.key] ?? 'non publié'}
+                  {SEP}
                   <span style={{ color: 'var(--mark-ink)' }}>
                     {b.name} {b.hofstede![d.key] ?? 'non publié'}
                   </span>{' '}

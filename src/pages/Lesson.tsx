@@ -11,7 +11,7 @@ import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
 import { SESSION_SIZE } from '../engine/session';
 import type { LessonExample, ModuleContent } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
-import { count, longDay } from '../lib/french';
+import { SEP, count, longDay } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 import { Commands } from './Learn';
 import { lessonCards, type LessonCards } from './lessonCards';
@@ -247,7 +247,7 @@ export function Lesson({ id }: { id: string }) {
               <span>
                 <strong>Dans cette leçon</strong>{' '}
                 <small>
-                  {parts.length} parties · maîtrise&nbsp;: {masteryLabel(v, touched).toLowerCase()}
+                  {parts.length} parties{SEP}maîtrise&nbsp;: {masteryLabel(v, touched).toLowerCase()}
                 </small>
               </span>
               <ChevronDown aria-hidden="true" />

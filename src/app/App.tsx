@@ -2,6 +2,7 @@ import { BookOpen, ChartColumn, Globe, House, Library, Moon, Sparkles, Sun, Targ
 import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { EXERCISES, MODULES, MODULE_BY_ID } from '../content';
 import { emptyProgress, streak } from '../engine/progress';
+import { SEP } from '../lib/french';
 import { About } from '../pages/About';
 import { Blitz } from '../pages/Blitz';
 import { Cards } from '../pages/Cards';
@@ -430,7 +431,8 @@ function Shell() {
         <div className="rail-foot">
           <div className="rail-streak">
             <strong>{st.current}</strong>
-            {st.current > 1 ? 'jours' : 'jour'} de série · {progress.xp}
+            {st.current > 1 ? 'jours' : 'jour'} de série{SEP}
+            {progress.xp}
             {'\u00A0'}XP
           </div>
           <div className="btn-row">

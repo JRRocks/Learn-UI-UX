@@ -10,7 +10,7 @@ import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '
 import { SOURCES, resolveSource } from '../content/sources';
 import type { AntipatternEntry, Source } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
-import { count } from '../lib/french';
+import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 import { useLoadState } from '../lib/useLoad';
 
@@ -59,7 +59,7 @@ function Cheatsheet() {
               {' '}:{' '}
               {sources.map((s, i) => (
                 <span key={i}>
-                  {i > 0 && ' · '}
+                  {i > 0 && SEP}
                   <SourceLink source={s} />
                 </span>
               ))}
@@ -299,7 +299,8 @@ function Commands() {
         </table>
       </ScrollRegion>
       <p className="small">
-        Projet{' '}: <SourceLink source="imp:site" /> · code source sur{' '}
+        Projet{' '}: <SourceLink source="imp:site" />
+        {SEP}code source sur{' '}
         <a href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener noreferrer">
           github.com/pbakaus/impeccable
         </a>{' '}

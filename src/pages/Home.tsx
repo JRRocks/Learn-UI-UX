@@ -6,7 +6,7 @@ import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exerc
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
 import { dueCardKeys, dueExerciseIds, mastery, masteryLabel, streak, type ProgressState } from '../engine/progress';
-import { count, shortDay } from '../lib/french';
+import { SEP, count, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
 import { cardsHint } from './Practice';
 import { unfinishedSession } from './Session';
@@ -180,10 +180,10 @@ export function Home() {
             {' '}
             {st.current > 1 ? 'jours' : 'jour'}
             <span className="muted">
-              {' '}
-              · record{' '}: {st.best}
+              {SEP}
+              record{' '}: {st.best}
             </span>
-            {!st.activeToday && st.current > 0 && <span className="muted"> · une épreuve aujourd’hui prolonge la série</span>}
+            {!st.activeToday && st.current > 0 && <span className="muted">{SEP}une épreuve aujourd’hui prolonge la série</span>}
           </p>
           <div
             className="streak-strip"
@@ -230,7 +230,7 @@ export function Home() {
         <section className="section" aria-labelledby="badges-title">
           <h2 id="badges-title">Badges</h2>
           <p className="muted">
-            {earned.map((b) => b.title).join(' · ')} — {earned.length} sur {BADGES.length}.
+            {earned.map((b) => b.title).join(SEP)} — {earned.length} sur {BADGES.length}.
           </p>
         </section>
       )}

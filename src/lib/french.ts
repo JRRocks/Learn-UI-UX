@@ -1,4 +1,7 @@
-/** Small helpers for interface text in French: plurals and calendar days. */
+/** Small helpers for interface text in French: plurals, calendar days and separators. */
+
+/** Between two facts on a line (« 12 min de lecture · 16 épreuves »): a wrapped line never starts with the dot. */
+export const SEP = '\u00A0· ';
 
 const rules = new Intl.PluralRules('fr-FR');
 

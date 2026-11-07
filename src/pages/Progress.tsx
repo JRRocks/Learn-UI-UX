@@ -8,7 +8,7 @@ import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exerc
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
 import { emptyProgress, mastery, masteryLabel, parseBackup, streak, type ProgressState } from '../engine/progress';
-import { count, longDay, shortDay } from '../lib/french';
+import { SEP, count, longDay, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -136,7 +136,9 @@ export function Progress() {
           Progression
         </h1>
         <p className="lead">
-          Niveau {lvl.n} — <strong>{lvl.title}</strong> · <span className="num">{p.xp}</span>
+          Niveau {lvl.n} — <strong>{lvl.title}</strong>
+          {SEP}
+          <span className="num">{p.xp}</span>
           {' '}XP
           {lvl.next && <span className="muted">{frenchSpacing(` · encore ${lvl.next.xp - p.xp} XP avant « ${lvl.next.title} »`)}</span>}
         </p>
@@ -151,7 +153,9 @@ export function Progress() {
           <p className="muted">
             Série{' '}: <strong className="num">{st.current}</strong>
             {' '}
-            {st.current > 1 ? 'jours' : 'jour'} (record{' '}: {st.best}) · {activity}.
+            {st.current > 1 ? 'jours' : 'jour'} (record{' '}: {st.best})
+            {SEP}
+            {activity}.
           </p>
           <ScrollRegion label="Activité">
             <div className="heatmap" role="img" aria-label={`Activité des 12 dernières semaines : ${activity}`}>

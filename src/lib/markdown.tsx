@@ -21,6 +21,8 @@ export function frenchSpacing(text: string): string {
     .replace(/(\d) h (?=\d)/g, '$1\u00A0h\u00A0')
     // A comparison stays with its number: « ≥ 16 px », « < 2,5 s ».
     .replace(/([≤≥≈<>±]) (?=\d)/g, '$1\u00A0')
+    // A separator dot stays with what it follows: a wrapped line never starts with « · ».
+    .replace(/ ·(?=\s|$)/g, '\u00A0·')
     .replace(/(\d) (?=(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\p{L}\d]))/gu, '$1\u00A0');
 }
 
