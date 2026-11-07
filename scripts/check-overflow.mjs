@@ -131,11 +131,12 @@ function measure(LABELS) {
 }
 
 /** The labels whose words must never break without a hyphen (measure): set beside a key, an icon, a count or
- * arrows, they are the narrowest boxes of the page; running text has the width of its line. */
+ * arrows, they are the narrowest boxes of the page; with them, the question and the key sentence of a
+ * correction (« 45–75 caractère|s »). Running text has the width of its line. */
 const LABELS = [
   '.order-label', '.option-text', '.option-why', '.option-badge', '.option-label', '.match-row', '.zones li',
-  '.task-prompt', '.flashcard-q', '.slider-head', '.btn', '.toast', '.badge', '.side-link', '.lesson-jump',
-  '.toc-title', '.market-formats', 'h1', 'h2', 'h3', 'h4',
+  '.task-prompt', '.takeaway', '.flashcard-q', '.slider-head', '.btn', '.toast', '.badge', '.side-link',
+  '.lesson-jump', '.toc-title', '.market-formats', 'h1', 'h2', 'h3', 'h4',
 ].join(', ');
 
 /** Some complete answer to the exercise on screen, through the DOM (a badge toast may lie over a control). */
