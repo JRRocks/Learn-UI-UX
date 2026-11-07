@@ -2635,6 +2635,18 @@
   color: var(--ink-2);
 }
 
+/* A variant of a format value (« 1,284,500원 · ₩1,284,500 », Cultures.tsx): one block, the dot at the
+   end of the first. A line breaks between variants, never before the dot nor inside a variant that fits. */
+.format-variant {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Korean keeps its words whole (« 홍 ⏎ 길동 » broke a name), as the profile of the market teaches. */
+:is(.formats-table td, .compare-table code, .market-formats):lang(ko) {
+  word-break: keep-all;
+}
+
 .dims {
   display: flex;
   flex-direction: column;
@@ -3695,6 +3707,21 @@ fieldset.tf {
     white-space: normal;
   }
 
+  /* The variants of a format value one under the other, without the dot: a variant may be as wide as the
+     line (« 0712 345 678 · » at 32 px), and the dot then went to a line of its own. */
+  .format-variant {
+    display: block;
+  }
+
+  code:has(> .format-variant) {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .format-sep {
+    display: none;
+  }
+
   /* The tables of labels and values (a market's formats, the cheat sheet): each label above its value,
      both across the column. Beside its value, a label kept 85 px at 320 px (« Grands nombres » broke in
      the middle of a word), and a value broke between its figures (« ≥ 16 p|x », « 1,125–1,|2 »). */
@@ -3992,6 +4019,21 @@ fieldset.tf {
 
   .md blockquote {
     padding-inline: var(--s3);
+  }
+
+  /* A market's date and number, one under the other without the dot: side by side, « 27/10/2026 · »
+     no longer fitted the card, and broke before the dot or inside the number (« 1,234,567.8|9 »). */
+  .market {
+    padding: var(--s3);
+  }
+
+  .market-formats {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .market-sep {
+    display: none;
   }
 }
 

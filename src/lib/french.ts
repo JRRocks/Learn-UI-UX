@@ -3,6 +3,14 @@
 /** Between two facts on a line (« 12 min de lecture · 16 épreuves »): a wrapped line never starts with the dot. */
 export const SEP = '\u00A0· ';
 
+/**
+ * The variants of a format value, « a · b » as the market profiles write them (with a no-break space
+ * before the dot or not): « 1,284,500원 · ₩1,284,500 » → « 1,284,500원 », « ₩1,284,500 ».
+ */
+export function formatVariants(value: string): string[] {
+  return value.split(/[ \u00A0]·[ \u00A0]/);
+}
+
 const rules = new Intl.PluralRules('fr-FR');
 
 /** The singular for 0 and 1, the plural from 2 (French rules, not English ones). */
