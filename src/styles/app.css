@@ -3558,6 +3558,27 @@ fieldset.tf {
     overflow-wrap: anywhere;
   }
 
+  /* A market's formats: each label above its value, both across the column (beside its value, a label
+     kept 85 px at 320 px, and « Grands nombres » broke in the middle of a word). */
+  .formats-table,
+  .formats-table tbody,
+  .formats-table tr,
+  .formats-table th,
+  .formats-table td {
+    display: block;
+  }
+
+  .formats-table tr {
+    padding-block: var(--s2);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .formats-table :is(th, td) {
+    width: auto;
+    padding: 0;
+    border: 0;
+  }
+
   /* A row of choices (Réglages, the catalog's families) wraps rather than squeeze its labels: a choice
      goes to the next row when its label no longer fits on one line beside the others (« Comme le
      système » above « Clair » and « Sombre »). */
