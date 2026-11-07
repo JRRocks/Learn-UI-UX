@@ -3587,6 +3587,15 @@ fieldset.tf {
   }
 }
 
+/* Up to 56em the bar is too narrow for its keyboard hint and a toast side by side: the toast lay over the
+   end of the hint (« …Entrée po[ur valider.] », up to 210 px of « …(touches 1–6), puis Entrée. »). The
+   hint steps aside while a toast is there, and comes back with it gone; the bar keeps its height. */
+@media (min-width: 45em) and (max-width: 55.99875em) and (min-height: 30rem) {
+  .shell[data-focus]:has(.toast) .task-actions .shortcut-hint {
+    visibility: hidden;
+  }
+}
+
 /* Session bars: the focused control stays clear of them (WCAG 2.4.11). */
 @media (min-height: 30rem) {
   html:has(.player-top) {
