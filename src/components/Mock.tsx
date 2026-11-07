@@ -473,8 +473,9 @@ export function Mock({ visual, onPick, states, marks, vars, className, controls 
   }, [markup, interactive]);
 
   // A box drawn as scrolling, in a picture, holds still: the kit clips it ([data-mk-still]). Left to
-  // scroll, it took the focus inside an image whose content is not exposed, and only the mouse could
-  // scroll it (WCAG 2.1.1). At rest it looks the same. Its media queries may differ at another width.
+  // scroll, it was a Tab stop inside an image that exposes nothing; only taken out of the tab order,
+  // the mouse alone could still scroll it (WCAG 2.1.1). At rest it looks the same. The mock's media
+  // queries may make another box scroll at another width: each new width looks again.
   const scrolling = useMemo(() => declaresScroll(visual), [visual]);
   useLayoutEffect(() => {
     const host = hostRef.current;
