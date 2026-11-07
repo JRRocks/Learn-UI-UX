@@ -681,10 +681,6 @@
   background: var(--mark);
 }
 
-.meter--ok > span {
-  background: var(--ok);
-}
-
 .chip {
   display: inline-flex;
   align-items: center;
@@ -705,33 +701,9 @@
   height: 14px;
 }
 
-.dots {
-  display: inline-flex;
-  gap: 3px;
-  vertical-align: middle;
-}
-
-.dots i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--rule-strong);
-}
-
-.dots i.on {
-  background: var(--ink-2);
-}
-
 /* =========================================================================
-   Panels (used sparingly: one elevation, a rule border, no shadow)
+   Stage: the tinted ground a mock sits on
    ========================================================================= */
-
-.panel {
-  padding: var(--s5);
-  border-radius: var(--r-panel);
-  background: var(--sheet);
-  border: 1px solid var(--rule);
-}
 
 .stage {
   padding: var(--s4);
@@ -938,14 +910,9 @@
   }
 }
 
-/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire);
-   the Atlas, one level lower (h3 under « Atlas de maîtrise »), sets its rows at body size. */
+/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire). */
 .toc-group-head h2 {
   font-size: var(--t-h2);
-}
-
-.toc-group:has(> .toc-group-head > h3) .toc-title {
-  font-size: var(--t-body);
 }
 
 .toc-group-head p {
@@ -1830,12 +1797,6 @@
   height: 16px;
 }
 
-.option[aria-checked='true'] .check-box {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--on-ink);
-}
-
 /* True / false */
 .tf {
   display: grid;
@@ -2424,7 +2385,6 @@
     grid-column: 1 / -1;
   }
 
-/* 17 px under its 19 px region (h3): the region outranks the markets it gathers. */
   .section:has(> .section > .markets) > .section > h3 {
     grid-column: 1 / -1;
   }
@@ -2464,6 +2424,7 @@
   border-color: var(--rule-strong);
 }
 
+/* 17 px under its 19 px region (h3): the region outranks the markets it gathers. */
 .market-name {
   display: flex;
   align-items: baseline;
@@ -2560,13 +2521,9 @@
   gap: var(--s1);
 }
 
-.convention h3 {
+/* Each convention's title, under its topic (h3, 19 px). */
+.convention h4 {
   font-size: var(--t-body);
-}
-
-.convention-topic {
-  font-size: var(--t-meta);
-  color: var(--ink-3);
 }
 
 .dodont {
@@ -3005,14 +2962,11 @@
   }
 
   .mastery-table .meter {
-/* Stretched to the height of its row, a short card keeps its description 4 px under its title: the
-   spare room goes below (align-content), not between its two rows. */
     width: 2.5rem;
   }
 }
 
 /* Touch: text links standing alone in lists and tables, or alone in their paragraph (.standalone-link,
-  align-content: start;
    « À propos » under the settings), get a 44 px target (WCAG 2.5.5, --tap). */
 @media (pointer: coarse) {
   .mastery-table a,
@@ -3051,11 +3005,14 @@
   }
 }
 
+/* Stretched to the height of its row, a short card keeps its description 4 px under its title: the
+   spare room goes below (align-content), not between its two rows. */
 .badge {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--s1) var(--s3);
   align-items: start;
+  align-content: start;
   padding: var(--s3) var(--s4);
   border-radius: var(--r-panel);
   border: 1px solid var(--rule);

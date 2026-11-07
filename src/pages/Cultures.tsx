@@ -335,7 +335,7 @@ export function CultureDetail({ id }: { id: string }) {
                 .filter((x) => x.topic === t)
                 .map((x, i) => (
                   <div key={i} className="convention">
-                    <h4 style={{ fontSize: 'var(--t-body)' }}>{frenchSpacing(x.title)}</h4>
+                    <h4>{frenchSpacing(x.title)}</h4>
                     <Md text={x.body} className="small" />
                   </div>
                 ))}
