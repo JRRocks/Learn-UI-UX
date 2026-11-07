@@ -90,8 +90,8 @@ describe('toasts in turn', () => {
   });
 
   it('brings the next one as soon as the one on screen is tapped or cleared by the focus', () => {
-    toast('un');
-    toast('deux');
+    toast('un', 'badge');
+    toast('deux', 'badge');
     vi.advanceTimersByTime(3000);
     dismissToast(shownToasts()[0].id);
     expect(texts()).toEqual(['deux']);
@@ -100,16 +100,16 @@ describe('toasts in turn', () => {
   });
 
   it('tells a toast that waited its turn from one that answers the last action', () => {
-    toast('un');
-    toast('deux');
+    toast('un', 'badge');
+    toast('deux', 'badge');
     expect(shownToasts()[0].queued).toBe(false);
     dismissToast(shownToasts()[0].id);
     expect(shownToasts()[0].queued).toBe(true);
   });
 
   it('clears the toasts waiting their turn with Escape', () => {
-    toast('un');
-    toast('deux');
+    toast('un', 'badge');
+    toast('deux', 'badge');
     dismissAllToasts();
     expect(texts()).toEqual([]);
     vi.advanceTimersByTime(2 * TOAST_MS);
@@ -117,8 +117,8 @@ describe('toasts in turn', () => {
   });
 
   it('holds back the next one, its time stopped, until the keyboard focus has left its place', () => {
-    toast('un');
-    toast('deux');
+    toast('un', 'badge');
+    toast('deux', 'badge');
     dismissToast(shownToasts()[0].id);
     holdToasts(true);
     expect(texts()).toEqual([]);
@@ -132,10 +132,38 @@ describe('toasts in turn', () => {
     expect(texts()).toEqual([]);
   });
 
+  it('shows the answer to the last action at once, in place of the answer to an earlier one', () => {
+    toast('Sauvegarde importée : 2 222 XP.');
+    vi.advanceTimersByTime(1000);
+    toast('Ta progression d’avant l’import est rétablie.');
+    expect(texts()).toEqual(['Ta progression d’avant l’import est rétablie.']);
+    vi.advanceTimersByTime(TOAST_MS);
+    expect(texts()).toEqual([]);
+  });
+
+  it('shows the answer to an action before the badges it has earned, which wait their turn', () => {
+    // « Marquer comme lue »: the store awards the badge, then the page says the lesson is read.
+    toast('Badge obtenu : Lecture complète', 'badge');
+    toast('Leçon lue : +10 XP');
+    expect(texts()).toEqual(['Leçon lue : +10 XP']);
+    vi.advanceTimersByTime(TOAST_MS);
+    expect(texts()).toEqual(['Badge obtenu : Lecture complète']);
+    expect(shownToasts()[0].queued).toBe(true);
+  });
+
+  it('shows the answer to an action even while a badge is held back', () => {
+    toast('un', 'badge');
+    toast('deux', 'badge');
+    dismissToast(shownToasts()[0].id);
+    holdToasts(true);
+    toast('Progression effacée.');
+    expect(texts()).toEqual(['Progression effacée.']);
+  });
+
   it('keeps the same list while the toast on screen stays (useSyncExternalStore)', () => {
-    toast('un');
+    toast('un', 'badge');
     const shown = shownToasts();
-    toast('deux');
+    toast('deux', 'badge');
     expect(shownToasts()).toBe(shown);
   });
 });

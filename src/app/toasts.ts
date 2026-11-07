@@ -37,8 +37,18 @@ function update() {
   listeners.forEach((l) => l());
 }
 
+/**
+ * Show a toast. A badge waits its turn behind the toasts already there. A message (`info`) answers the
+ * learner's last action: it shows at once, in place of the answer to an earlier action (« Sauvegarde
+ * importée » once « Annuler l’import » is pressed), and ahead of the badges, even those the same action
+ * has just earned (« Leçon lue » before « Lecture complète »), which wait their turn again.
+ */
 export function toast(text: string, tone: Toast['tone'] = 'info') {
-  queue = [...queue, { id: ++seq, text, tone, queued: queue.length > 0 }];
+  const t: Toast = { id: ++seq, text, tone, queued: false };
+  if (tone === 'info') {
+    queue = [t, ...queue.filter((x) => x.tone !== 'info').map((x) => (x.queued ? x : { ...x, queued: true }))];
+    held = false;
+  } else queue = [...queue, { ...t, queued: queue.length > 0 }];
   update();
 }
 
