@@ -12,6 +12,7 @@ import type {
   SliderExercise,
   TrueFalseExercise,
 } from '../../engine/types';
+import { followFocus } from '../../lib/focusInView';
 import { SEP } from '../../lib/french';
 import { MdInline, frenchSpacing } from '../../lib/markdown';
 import { Mock, MotionControls, type HotspotState, type Mark, type MotionInfo } from '../Mock';
@@ -425,6 +426,8 @@ export function OrderPlayer({ ex, draft, setDraft, revealed }: P<OrderExercise, 
     const [it] = ids.splice(from, 1);
     ids.splice(to, 0, it);
     setDraft({ type: 'order', ids });
+    // The focused button moves with its item: the page follows it.
+    followFocus();
     const label = ex.items.find((x) => x.id === it)?.label ?? '';
     setSaid(frenchSpacing(`« ${plain(label)} » en position ${to + 1} sur ${ids.length}.`));
   };
@@ -577,7 +580,16 @@ export function SliderPlayer({ ex, draft, setDraft, revealed }: P<SliderExercise
             </button>
           )}
           {revealed && (
-            <button type="button" className="btn btn-secondary" aria-pressed={showIdeal} onClick={() => setShowIdeal((v) => !v)}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              aria-pressed={showIdeal}
+              onClick={() => {
+                setShowIdeal((v) => !v);
+                // The mock above changes height (a type size, a spacing): the page follows the button.
+                followFocus();
+              }}
+            >
               {showIdeal ? 'Revoir ma valeur' : 'Voir la valeur experte'}
             </button>
           )}
