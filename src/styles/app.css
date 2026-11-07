@@ -3119,9 +3119,9 @@
   }
 }
 
-/* A toast lets taps and clicks through (pointer-events stays none, as on .toasts): over « Épreuve
-   suivante », a tap closed it instead of moving on. It goes away by itself, with Escape, or when Tab
-   or an arrow brings the focus onto what it covers (Toasts, App.tsx). */
+/* A tap or a click on a toast closes it and goes no further: let through, it checked an option of the
+   exam's next question or opened the lesson link lying under it. A toast also goes away by itself,
+   with Escape, or when Tab or an arrow brings the focus onto what it covers (Toasts, App.tsx). */
 .toast {
   display: flex;
   align-items: center;
@@ -3133,6 +3133,7 @@
   color: var(--on-ink);
   box-shadow: var(--shadow-float);
   font-weight: 600;
+  pointer-events: auto;
 }
 
 .toast svg {
@@ -3294,10 +3295,13 @@ fieldset.tf {
   padding-bottom: var(--s8);
 }
 
-/* The « Valider » bar ends the page where it sticks, at the bottom of the screen: lifted 64 px at the
-   end, it slid under the toasts, which sit just above its sticky place. */
-.shell[data-focus] .main:has(.task-actions) {
-  padding-bottom: 0;
+/* Phones held upright: the toasts sit just above the sticky « Valider » bar, so the bar ends the page
+   where it sticks, at the bottom of the screen (lifted 64 px at the end, it slid under them). Wider,
+   the toasts sit in the bar; on short screens it no longer sticks, and the 64 px keep it above them. */
+@media (min-height: 30rem) and (max-width: 719.98px) {
+  .shell[data-focus] .main:has(.task-actions) {
+    padding-bottom: 0;
+  }
 }
 
 /* The validate / continue bar stays within thumb reach while reading long tasks and corrections. */
@@ -3320,6 +3324,16 @@ fieldset.tf {
 
 .shell[data-focus] .toasts {
   bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
+}
+
+/* From 720 px the toasts take the end of the « Valider » bar, which its button and its count leave
+   free: above the bar, they hid the end of the correction (« Revoir la leçon », the sources) or the
+   options of the exam's next question. */
+@media (min-width: 720px) and (min-height: 30rem) {
+  .shell[data-focus]:has(.task-actions) .toasts {
+    bottom: calc(var(--s2) + env(safe-area-inset-bottom));
+    align-items: flex-end;
+  }
 }
 
 /* Session bars: the focused control stays clear of them (WCAG 2.4.11). */
@@ -3347,7 +3361,8 @@ fieldset.tf {
     scroll-padding-top: var(--s3);
   }
 
-  /* No bar stays at the bottom of a session: the toasts go down to the edge. */
+  /* No bar stays at the bottom of a session: the toasts go down to the edge, into the 64 px that end
+     the page under « Épreuve suivante » (.shell[data-focus] .main). */
   .shell[data-focus] .toasts {
     bottom: calc(var(--s3) + env(safe-area-inset-bottom));
   }

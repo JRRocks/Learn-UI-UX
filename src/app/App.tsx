@@ -105,7 +105,7 @@ function Toasts() {
   const region = useRef<HTMLDivElement>(null);
   // A toast never hides the control that has the focus (WCAG 2.4.11): those lying over a control
   // reached with Tab or the arrows go away (the status region has read them out already), and Escape
-  // dismisses them all. Taps and clicks go through them to the page (app.css).
+  // dismisses them all. A tap or a click closes the toast it lands on, and nothing under it.
   useEffect(() => {
     let frame = 0;
     const keys = keyMoves();
@@ -138,7 +138,7 @@ function Toasts() {
   return (
     <div ref={region} className="toasts" role="status" aria-live="polite">
       {toasts.map((t) => (
-        <div key={t.id} className="toast" data-id={t.id}>
+        <div key={t.id} className="toast" data-id={t.id} onClick={() => dismissToast(t.id)}>
           {t.tone === 'badge' && <Sparkles aria-hidden="true" />}
           {t.text}
         </div>
