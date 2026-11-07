@@ -3320,10 +3320,9 @@
   padding-inline-start: var(--s5);
 }
 
-/* Columns of at least 300 px, or one as wide as the screen when it has less. */
 .preview-options--visual {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   padding: 0;
   list-style: none;
 }
@@ -3343,7 +3342,7 @@
 
 .preview-pair {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--s4);
 }
 
@@ -3359,12 +3358,6 @@
   padding: var(--s2) var(--s3);
   text-align: start;
   vertical-align: top;
-  /* A long value or a short code breaks inside its cell: the table no longer runs past a phone. */
-  overflow-wrap: anywhere;
-}
-
-.preview-table code.code-short {
-  white-space: normal;
 }
 
 /* Native inputs stay in the tiles for keyboard and screen readers; the tile shows focus. */
