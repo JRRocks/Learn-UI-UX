@@ -79,7 +79,6 @@
   top: 0;
   z-index: 20;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--s3);
@@ -89,14 +88,13 @@
   background: color-mix(in oklch, var(--paper) 92%, transparent);
   backdrop-filter: saturate(1.2) blur(10px);
   border-bottom: 1px solid var(--rule);
+  container: topbar / inline-size;
 }
 
-/* At the end of the bar, also on a second row should a text size leave no room beside the name. */
 .topbar-actions {
   display: flex;
   align-items: center;
   gap: var(--s1);
-  margin-inline-start: auto;
 }
 
 .icon-btn {
@@ -164,6 +162,27 @@
 .topbar .icon-btn[aria-current='page'] {
   color: var(--mark);
   background: var(--paper-2);
+}
+
+/* The name of the app stays beside its mark as long as the bar has room for it and for its two buttons:
+   118 px (the 30 px mark, two 44 px buttons) and 6.38rem (the name, 5.13rem of « Épreuves » in bold, and
+   the gaps, 1.25rem where the bar is tight). Narrower, with a large text size on a phone, the mark stays
+   alone, in a 44 px link that keeps the whole name for screen readers and voice control. */
+@container topbar (width < calc(118px + 6.38rem)) {
+  .topbar .brand {
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+
+  .topbar .brand > span:not(.visually-hidden) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }
 
 /* Below 360 px a fifth of the bar is 64 px: « Apprendre » and « S’entraîner » would touch. */
@@ -3499,6 +3518,12 @@ fieldset.tf {
    (browser settings) makes a screen narrower than that: 320 to 400 px at 20 px, up to 640 px at
    32 px. There, the pieces below wrap or give up some room, so that nothing runs past the screen. */
 @media (max-width: 19.99875em) {
+  /* The name of the app keeps 8 px from the buttons of the top bar when they are tight (12 px wider): it
+     stays beside its mark at 320 px with a 24 px text (see the container query of the top bar). */
+  .topbar {
+    gap: var(--s2);
+  }
+
   /* A tab label splits at its syllables onto two lines (« Res-sources »), 2 px from its neighbours.
      It shrinks only as far as a fifth of the screen needs: « Cultures » (4.1em) on one line, « sources »
      (3.85em) on the second; 14.5 px at least, at 320 px wide. The bar keeps its height (--tabbar-h). */
@@ -3648,20 +3673,6 @@ fieldset.tf {
     display: flex;
     flex-direction: column;
     gap: 2px;
-  }
-}
-
-/* Under 15em even the name of the app does not fit beside the two buttons of the top bar: the mark
-   alone stays there, and the link keeps its whole name for screen readers and voice control. */
-@media (max-width: 14.99875em) {
-  .topbar .brand > span:not(.visually-hidden) {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
   }
 }
 
