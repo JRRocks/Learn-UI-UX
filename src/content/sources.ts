@@ -7,7 +7,10 @@ const imp = (file: string, label?: string): SourceRef => ({
   url: `${IMP}${file}`,
 });
 
-/** Named references used across content (`sources: ['imp:typeset', 'nng:heuristics']`). */
+/**
+ * Named references used across content (`sources: ['imp:typeset', 'nng:heuristics']`). A title quoted
+ * untranslated names its language (`lang`); names of people, sites and products need none.
+ */
 export const SOURCES: Record<string, SourceRef> = {
   // impeccable (Paul Bakaus, Apache-2.0) — https://github.com/pbakaus/impeccable
   'imp:skill': { label: 'impeccable — SKILL (modes, principes)', url: 'https://github.com/pbakaus/impeccable/blob/main/skill/SKILL.src.md' },
@@ -73,19 +76,22 @@ export const SOURCES: Record<string, SourceRef> = {
   'mozilla:rtl': {
     label: 'Mozilla — RTL Guidelines',
     url: 'https://firefox-source-docs.mozilla.org/code-quality/coding-style/rtl_guidelines.html',
+    lang: 'en',
   },
   'hig': { label: 'Apple — Human Interface Guidelines', url: 'https://developer.apple.com/design/human-interface-guidelines/' },
   'material3': { label: 'Material Design 3', url: 'https://m3.material.io/' },
-  'butterick': { label: 'Matthew Butterick — Practical Typography', url: 'https://practicaltypography.com/' },
+  'butterick': { label: 'Matthew Butterick — Practical Typography', url: 'https://practicaltypography.com/', lang: 'en' },
   'hofstede': {
     label: 'The Culture Factor (Hofstede) — Country comparison',
     url: 'https://www.theculturefactor.com/country-comparison-tool',
+    lang: 'en',
   },
   'marcus2000': {
     label: 'Marcus & Gould (2000) — Crosscurrents: Cultural Dimensions and Global Web UI Design',
     url: 'https://dl.acm.org/doi/10.1145/345190.345238',
+    lang: 'en',
   },
-  'hall': { label: 'Edward T. Hall — Beyond Culture (1976), contexte fort / faible' },
+  'hall': { label: 'Edward T. Hall — Beyond Culture (1976), contexte fort / faible', lang: 'en', quote: 'Beyond Culture' },
   'cnil:cookies': {
     label: 'CNIL — Refuser les cookies doit être aussi simple qu’accepter',
     url: 'https://www.cnil.fr/fr/refuser-les-cookies-doit-etre-aussi-simple-quaccepter-mise-en-conformite-de-tous-les-organismes',
@@ -97,10 +103,12 @@ export const SOURCES: Record<string, SourceRef> = {
   'palo-it:china': {
     label: 'PALO IT — The UX design of Chinese and Western apps',
     url: 'https://www.palo-it.com/en/blog/the-ux-design-of-chinese-and-western-apps-why-are-they-so-different',
+    lang: 'en',
   },
   'hitabis:japan': {
     label: 'Hitabis — Safety over aesthetics: why Japanese websites are so cluttered',
     url: 'https://www.hitabis.de/en-us/safety-over-aesthetics-why-japanese-websites-are-so-cluttered/',
+    lang: 'en',
   },
   'mdn:intl': {
     label: 'MDN — Intl (formats de dates, nombres, pluriels)',
@@ -110,14 +118,43 @@ export const SOURCES: Record<string, SourceRef> = {
     label: 'MDN — Propriétés logiques CSS',
     url: 'https://developer.mozilla.org/fr/docs/Web/CSS/CSS_logical_properties_and_values',
   },
-  'w3c:i18n': { label: 'W3C — Internationalization (i18n) Activity', url: 'https://www.w3.org/International/' },
-  'w3c:clreq': { label: 'W3C — Requirements for Chinese Text Layout', url: 'https://www.w3.org/TR/clreq/' },
-  'w3c:jlreq': { label: 'W3C — Requirements for Japanese Text Layout', url: 'https://www.w3.org/TR/jlreq/' },
-  'w3c:alreq': { label: 'W3C — Arabic & Persian Layout Requirements', url: 'https://www.w3.org/TR/alreq/' },
+  'w3c:i18n': { label: 'W3C — Internationalization (i18n) Activity', url: 'https://www.w3.org/International/', lang: 'en' },
+  'w3c:clreq': { label: 'W3C — Requirements for Chinese Text Layout', url: 'https://www.w3.org/TR/clreq/', lang: 'en' },
+  'w3c:jlreq': { label: 'W3C — Requirements for Japanese Text Layout', url: 'https://www.w3.org/TR/jlreq/', lang: 'en' },
+  'w3c:alreq': { label: 'W3C — Arabic & Persian Layout Requirements', url: 'https://www.w3.org/TR/alreq/', lang: 'en' },
   'refactoring-ui': { label: 'Refactoring UI — Adam Wathan & Steve Schoger', url: 'https://www.refactoringui.com/' },
 };
 
 export function resolveSource(s: Source): SourceRef {
   if (typeof s !== 'string') return s;
   return SOURCES[s] ?? { label: s };
+}
+
+/**
+ * A label in three parts: « Publisher — », the title, and a final « (note) ». The publisher and the
+ * note are in the page's French; only the title is in the source's `lang`. Without « — », the label
+ * is a title.
+ */
+export function labelParts(label: string): { publisher: string; title: string; note: string } {
+  const dash = label.indexOf(' — ');
+  const publisher = dash < 0 ? '' : label.slice(0, dash + 3);
+  const rest = label.slice(publisher.length);
+  const note = /\s\([^()]*\)$/.exec(rest);
+  if (!note || note.index === 0) return { publisher, title: rest, note: '' };
+  return { publisher, title: rest.slice(0, note.index), note: rest.slice(note.index) };
+}
+
+/**
+ * The label of a source cut around its part in another language: `quote` when it says which, the
+ * title otherwise. Null when the whole label is in the page's French.
+ */
+export function quotedParts(ref: SourceRef): { before: string; quote: string; after: string } | null {
+  if (!ref.lang) return null;
+  if (ref.quote === undefined) {
+    const { publisher, title, note } = labelParts(ref.label);
+    return title ? { before: publisher, quote: title, after: note } : null;
+  }
+  const at = ref.quote ? ref.label.indexOf(ref.quote) : -1;
+  if (at < 0) return null;
+  return { before: ref.label.slice(0, at), quote: ref.quote, after: ref.label.slice(at + ref.quote.length) };
 }

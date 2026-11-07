@@ -4,8 +4,8 @@ import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
 import { Mock } from '../components/Mock';
+import { SourceList } from '../components/SourceLink';
 import { MODULES, MODULE_BY_ID, exercisesOf, useModule } from '../content';
-import { resolveSource } from '../content/sources';
 import { dayKey } from '../engine/dates';
 import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
 import { SESSION_SIZE } from '../engine/session';
@@ -163,22 +163,7 @@ function Article({ m }: { m: ModuleContent }) {
 
       <section className="lesson-section" aria-labelledby="h-sources">
         <h2 id="h-sources">Sources</h2>
-        <ul className="sources">
-          {m.sources.map((s, i) => {
-            const r = resolveSource(s);
-            return (
-              <li key={i}>
-                {r.url ? (
-                  <a href={r.url} target="_blank" rel="noopener noreferrer">
-                    {frenchSpacing(r.label)}
-                  </a>
-                ) : (
-                  frenchSpacing(r.label)
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        <SourceList sources={m.sources} />
       </section>
     </>
   );

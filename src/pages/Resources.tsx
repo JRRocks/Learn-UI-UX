@@ -2,6 +2,7 @@ import { CircleCheck, CircleX } from 'lucide-react';
 import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
+import { SourceLink, SourceList } from '../components/SourceLink';
 import { DETECTOR_RULES } from '../content/detectorRules';
 import { CHEATSHEET, COMMANDS, GLOSSARY, HEURISTICS, PERSONAS, SEVERITY } from '../content/resources';
 import { SOURCES, resolveSource } from '../content/sources';
@@ -39,17 +40,6 @@ const slug = (s: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-function SourceLink({ k }: { k: Source }) {
-  const r = resolveSource(k);
-  return r.url ? (
-    <a href={r.url} target="_blank" rel="noopener noreferrer">
-      {frenchSpacing(r.label)}
-    </a>
-  ) : (
-    <>{frenchSpacing(r.label)}</>
-  );
-}
-
 function Cheatsheet() {
   return (
     <div className="cheats">
@@ -75,7 +65,7 @@ function Cheatsheet() {
               {sources.map((s, i) => (
                 <span key={i}>
                   {i > 0 && ' · '}
-                  <SourceLink k={s} />
+                  <SourceLink source={s} />
                 </span>
               ))}
             </p>
@@ -314,7 +304,7 @@ function Commands() {
         </table>
       </div>
       <p className="small">
-        Projet{' '}: <SourceLink k="imp:site" /> · code source sur{' '}
+        Projet{' '}: <SourceLink source="imp:site" /> · code source sur{' '}
         <a href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener noreferrer">
           github.com/pbakaus/impeccable
         </a>{' '}
@@ -350,13 +340,7 @@ function Links() {
         {groups.map(([title, keys]) => (
           <section key={title} className="section" aria-labelledby={`l-${slug(title)}`}>
             <h2 id={`l-${slug(title)}`}>{title}</h2>
-            <ul className="sources">
-              {keys.map((k) => (
-                <li key={k}>
-                  <SourceLink k={k} />
-                </li>
-              ))}
-            </ul>
+            <SourceList sources={keys} />
           </section>
         ))}
       </div>

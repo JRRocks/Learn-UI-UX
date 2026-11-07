@@ -26,8 +26,19 @@ export interface Visual {
 }
 
 export interface SourceRef {
+  /** « Publisher — Title », and if needed a final note in French in parentheses: « (janvier 2023) ». */
   label: string;
   url?: string;
+  /**
+   * Language of the title when the label quotes it untranslated (`en`, `de`, `ja`…), so that a screen
+   * reader reads it with the right voice (WCAG 3.1.2). Not for names of people, sites or products.
+   */
+  lang?: string;
+  /**
+   * The part of the label in `lang` when it is not just the title (what follows « — », up to a final
+   * note in parentheses): a note in the same language, a publisher written in the same script…
+   */
+  quote?: string;
 }
 
 /** A source reference can be a key of `SOURCES` (src/content/sources.ts) or an inline reference. */

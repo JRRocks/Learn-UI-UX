@@ -21,10 +21,19 @@ export function checkText(text: string | undefined, where: string, errors: strin
     errors.push(`${where}: référence à une option par sa lettre (les options sont mélangées à l'affichage)`);
 }
 
+/** A BCP 47 language tag: `en`, `de`, `pt-BR`, `zh-Hant`… */
+const LANG_TAG = /^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/;
+
 export function checkSources(sources: Source[] | undefined, where: string, errors: string[]) {
   for (const s of sources ?? []) {
-    if (typeof s === 'string' && !SOURCES[s]) errors.push(`${where}: source inconnue « ${s} » (clé absente de src/content/sources.ts)`);
-    if (typeof s !== 'string' && !s.label) errors.push(`${where}: source sans label`);
+    if (typeof s === 'string') {
+      if (!SOURCES[s]) errors.push(`${where}: source inconnue « ${s} » (clé absente de src/content/sources.ts)`);
+      continue;
+    }
+    if (!s.label) errors.push(`${where}: source sans label`);
+    if (s.lang !== undefined && !LANG_TAG.test(s.lang)) errors.push(`${where}: langue « ${s.lang} » mal écrite (code BCP 47 : en, de, pt-BR…)`);
+    if (s.quote !== undefined && !s.lang) errors.push(`${where}: « quote » sans « lang » dans « ${s.label} »`);
+    if (s.quote !== undefined && !(s.quote && s.label?.includes(s.quote))) errors.push(`${where}: « quote » absente du label « ${s.label} »`);
   }
 }
 

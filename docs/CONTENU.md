@@ -38,7 +38,14 @@ même dans une version recommandée ne l’est pas.
   `> ` citations, `**gras**`, `*italique*`, `` `code` ``, `[lien](url)`.
 - **Exactitude avant tout** : chaque chiffre (contraste, tailles, durées, seuils) doit être
   juste et sourcé. Les références impeccable sont dans `src/content/sources.ts` (`imp:typeset`…).
-  Pour une source web absente de ce fichier, utilise un objet `{ label, url }`.
+  Pour une source web absente de ce fichier, utilise un objet `{ label, url }` : `label` vaut
+  « Éditeur — Titre », suivi au besoin d’une précision en français entre parenthèses. Un titre
+  cité sans traduction indique sa langue (`lang: 'en'`, `'de'`…) pour que les lecteurs d’écran
+  le lisent avec la bonne voix ; pas de `lang` pour un nom de personne, de site ou de produit.
+  Quand la partie dans cette langue n’est pas seulement le titre (une précision dans la même
+  langue, un éditeur écrit dans la même écriture), `quote` la recopie telle qu’elle figure dans
+  `label` : `{ label: 'Planalto — Lei Geral de Proteção de Dados (Lei 13.709/2018)', lang: 'pt',
+  quote: 'Lei Geral de Proteção de Dados (Lei 13.709/2018)', url: … }`.
 - Pas de stéréotypes culturels présentés comme des lois : on parle de tendances observées,
   de conventions et de contraintes, avec leurs limites.
 
