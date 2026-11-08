@@ -4124,6 +4124,17 @@ fieldset.tf {
   }
 }
 
+/* Under 11em (352 px at 32 px), the running text keeps its 15 letters a line (base.css), but a text of
+   40 px holds 12: the question, its key sentence, the question of a card. */
+@media (max-width: 10.99875em) {
+  /* A unit written in full splits at its first syllable when the next one no longer fits after a long
+     number (base.css): « 15 000 carac- » needed 258 px of a 256 px question, and the unit broke anywhere
+     (« caract|ères »). */
+  :is(.task-prompt, .takeaway, .flashcard-q) .unit {
+    hyphenate-limit-chars: 9 2 4;
+  }
+}
+
 /* With a touch screen the keyboard hint is hidden: the count, if any, stays beside the button as long
    as its longest word fits there, and an empty block never takes a line of its own. */
 @media (max-width: 19.99875em) and (pointer: coarse) {
