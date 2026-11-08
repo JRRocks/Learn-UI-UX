@@ -2636,14 +2636,21 @@
 }
 
 /* A variant of a format value (« 1,284,500원 · ₩1,284,500 », Cultures.tsx): one block, the dot at the
-   end of the first. A line breaks between variants, never before the dot nor inside a variant that fits.
-   The code that holds them in the comparator is a block of its own too, so that a variant as wide as the
-   line is measured within the code's padding: against the item, « Paybill 567890, account SOKO4821 · »
-   ran 4 px past it at 320 px, and the table of every pair with Kenya scrolled sideways. */
-.format-variant,
-code:has(> .format-variant) {
+   end of the first. A line breaks between variants, never before the dot nor inside a variant that fits. */
+.format-variant {
   display: inline-block;
   max-width: 100%;
+}
+
+/* In the comparator, the variants stand in a code that runs in the item's lines: its padding (0.3em on
+   either side, base.css) shares a line with the first variant and with the last. As wide as the item, a
+   variant ran past it by that padding (« Paybill 567890, account SOKO4821 · », 4 px at 320 px), and the
+   table of every pair with Kenya scrolled sideways: a variant keeps the code's padding off its width.
+   Under 20em, the code is a box of its own around variants set one under the other (below). */
+@media (min-width: 20em) {
+  code > .format-variant {
+    max-width: calc(100% - 0.6em);
+  }
 }
 
 /* Korean keeps its words whole (« 홍 ⏎ 길동 » broke a name), as the profile of the market teaches. */
@@ -3731,6 +3738,11 @@ fieldset.tf {
      line (« 0712 345 678 · » at 32 px), and the dot then went to a line of its own. */
   .format-variant {
     display: block;
+  }
+
+  code:has(> .format-variant) {
+    display: inline-block;
+    max-width: 100%;
   }
 
   .format-sep {
