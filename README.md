@@ -12,6 +12,20 @@ UX, Deceptive Patterns, Material, Apple HIG, web.dev, MDN, CNIL…). Un volet **
 enseigne les différences d’interface entre pays (Occident, Chine, Japon, Corée, Inde, monde
 arabe, Brésil…) et comment s’y adapter.
 
+## Lancer l’app sur Windows
+
+Téléchargez **[Epreuves.exe](https://github.com/JRRocks/Learn-UI-UX/releases/latest/download/Epreuves.exe)**
+et double-cliquez dessus : l’app s’ouvre dans sa propre fenêtre, sans installation ni connexion.
+Elle s’arrête quand on ferme la fenêtre, et la progression est retrouvée au lancement suivant.
+
+- Au premier lancement, Windows peut afficher « Windows a protégé votre ordinateur », car
+  l’exécutable n’est pas signé : **Informations complémentaires**, puis **Exécuter quand même**.
+- La fenêtre est celle d’Edge, de Chrome, de Brave ou de Vivaldi en mode application, sur un
+  profil à part (`%LOCALAPPDATA%\Epreuves`) qui garde la progression. Sans aucun de ces
+  navigateurs, l’app s’ouvre dans le navigateur par défaut.
+- Le fichier tient tout seul (1 Mo) : on peut le ranger n’importe où, l’épingler à la barre des
+  tâches ou le copier sur une clé USB.
+
 ## Les onglets
 
 | Onglet | Contenu |
@@ -60,6 +74,8 @@ npm run check:overflow   # aucune page ni épreuve à choix visuel (question pui
                          # (-- --texte : cette passe seule ; -- --sans-texte : sans elle)
 npm run check:mocks      # maquettes : texte coupé, superposé, trop petit ou trop pâle
 npm run shots -- <id>    # captures de chaque exemple et épreuve d’un module (--mobile, --dark)
+npm run exe              # Windows : build puis release/Epreuves.exe, l’app en un seul exécutable
+                         # (desktop/ ; le workflow « Application Windows » le publie à chaque push sur main)
 ```
 
 Node 20.19+ ou 22.12+. Le fichier `.npmrc` active `legacy-peer-deps` (nécessaire avec npm 10
