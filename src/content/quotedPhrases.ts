@@ -1,7 +1,7 @@
 /**
- * Words and phrases that the content quotes in Chinese, Japanese, Korean, Arabic or Persian, each with
- * the language it is read in (WCAG 3.1.2): left in the page's French, a screen reader spelled them out,
- * skipped them or read them wrong. The Markdown renderer gives each one its `lang` wherever the content
+ * Words and phrases that the content quotes in Chinese, Japanese, Korean, Arabic or Persian, or in German,
+ * each with the language it is read in (WCAG 3.1.2): left in the page's French, a screen reader spelled them
+ * out, skipped them or read them wrong. The Markdown renderer gives each one its `lang` wherever the content
  * shows it (src/lib/markdown.tsx), and a test checks that every letter of these scripts in the text of
  * the content lies in one of them (quotedPhrases.test.ts).
  *
@@ -158,6 +158,9 @@ export const QUOTED_PHRASES: Readonly<Record<string, string>> = {
   ک: 'fa',
   کتاب: 'fa',
   '۱٬۲۳۴': 'fa',
+  // German: a compound read in French was also split at French syllables (« Datenschutzeins-tellungen »)
+  Datenschutzeinstellungen: 'de',
+  'Datenschutzeinst…': 'de',
 };
 
 /** Letters of the scripts the table covers: each one in the content's text lies in a phrase of the table. */
