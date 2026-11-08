@@ -3,6 +3,7 @@ import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState
 import { EXERCISES, MODULES, MODULE_BY_ID } from '../content';
 import { emptyProgress, streak } from '../engine/progress';
 import { SEP } from '../lib/french';
+import { here, saveJson, syncSystemBars } from '../lib/native';
 import { About } from '../pages/About';
 import { Blitz } from '../pages/Blitz';
 import { Cards } from '../pages/Cards';
@@ -277,12 +278,7 @@ function PageError() {
     } catch {
       raw = JSON.stringify(store.get());
     }
-    const url = URL.createObjectURL(new Blob([raw], { type: 'application/json' }));
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'epreuves-donnees.json';
-    a.click();
-    URL.revokeObjectURL(url);
+    void saveJson('epreuves-donnees.json', raw);
   };
   const wipe = () => {
     store.replace(emptyProgress());
@@ -316,7 +312,7 @@ function PageError() {
       {confirming && (
         <div className="danger-zone" role="group" aria-labelledby="wipe-title">
           <p id="wipe-title" className="small">
-            Toute ta progression sera effacée de ce navigateur, sans retour possible. Télécharge tes données d’abord si tu veux les garder.
+            Toute ta progression sera effacée de {here}, sans retour possible. Télécharge tes données d’abord si tu veux les garder.
           </p>
           <div className="btn-row">
             <button type="button" className="btn btn-danger" onClick={wipe}>
@@ -409,6 +405,7 @@ function Shell() {
       meta.dataset.system ??= meta.content;
       meta.content = forced ?? meta.dataset.system;
     }
+    syncSystemBars(t);
   }, [progress.settings.theme]);
 
   // New page: start at the top and move focus to its title for screen readers.

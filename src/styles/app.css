@@ -3564,6 +3564,37 @@ fieldset.tf {
   .shell[data-focus] .main:has(.task-actions) {
     padding-bottom: 0;
   }
+
+  /* Under a short task too (a true or false, a choice of two), the bar sits at the bottom of the screen,
+     where the thumb finds it from one task to the next: it rose to the end of each task, at a height
+     that changed with every question (half-way up a 780 px phone after « Vrai | Faux »). The page, the
+     player and the task fill the screen and the bar takes the room left above it; a taller task still
+     scrolls under it, as before. */
+  .shell[data-focus]:has(.task-actions) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shell[data-focus] .main:has(.task-actions) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shell[data-focus] .main:has(.task-actions),
+  .shell[data-focus] .player:has(.task-actions),
+  .shell[data-focus] .task:has(.task-actions) {
+    flex: 1 0 auto;
+  }
+
+  /* Its auto margins (centred under its max-width) would size it to its content in a flex column: the
+     width of a wide mock, or of the keyboard hint in one line, 1280 px on a 360 px phone with a 20 px text. */
+  .shell[data-focus] .player:has(.task-actions) {
+    width: 100%;
+  }
+
+  .shell[data-focus] .task-actions {
+    margin-top: auto;
+  }
 }
 
 /* The validate / continue bar stays within thumb reach while reading long tasks and corrections. */

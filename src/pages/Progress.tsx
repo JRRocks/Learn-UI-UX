@@ -10,6 +10,7 @@ import { addDays, dayKey } from '../engine/dates';
 import { emptyProgress, mastery, masteryLabel, parseBackup, streak, type ProgressState } from '../engine/progress';
 import { SEP, count, longDay, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
+import { here, saveJson } from '../lib/native';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
 
@@ -96,15 +97,7 @@ export function Progress() {
     cancelImportRef.current?.focus();
   }, [pending]);
 
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(store.get(), null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `epreuves-progression-${today}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const exportData = () => void saveJson(`epreuves-progression-${today}.json`, JSON.stringify(store.get(), null, 2));
 
   const importData = async (file: File | undefined) => {
     if (!file) return;
@@ -345,7 +338,7 @@ export function Progress() {
           <span className="field-label">Mes données</span>
           <p className="small muted">
             {frenchSpacing(
-              'Tout reste dans ce navigateur : aucun compte, aucun serveur. Exporte une sauvegarde pour changer d’appareil ; l’importer remplace la progression de ce navigateur, après confirmation.',
+              `Tout reste dans ${here} : aucun compte, aucun serveur. Exporte une sauvegarde pour changer d’appareil ; l’importer remplace la progression de ${here}, après confirmation.`,
             )}
           </p>
           <div className="btn-row">
@@ -389,7 +382,7 @@ export function Progress() {
         </div>
         <div className="danger-zone">
           <span className="field-label">Repartir de zéro</span>
-          <p className="small muted">Efface l’XP, les séries, les révisions programmées et les badges de ce navigateur.</p>
+          <p className="small muted">Efface l’XP, les séries, les révisions programmées et les badges de {here}.</p>
           <button type="button" className="btn btn-secondary" style={{ alignSelf: 'flex-start' }} onClick={openReset}>
             <Trash2 aria-hidden="true" /> Effacer ma progression…
           </button>
@@ -402,7 +395,7 @@ export function Progress() {
       <dialog ref={resetRef} className="dialog" aria-labelledby="reset-title" aria-describedby="reset-desc" onClose={clearOfToasts}>
         <h2 id="reset-title">{frenchSpacing('Effacer toute ta progression ?')}</h2>
         <p id="reset-desc">
-          {frenchSpacing(`Seront effacés de ce navigateur : ${summarize(p)}, avec tes séries et tes badges.`)} Exporte une sauvegarde d’abord si tu veux
+          {frenchSpacing(`Seront effacés de ${here} : ${summarize(p)}, avec tes séries et tes badges.`)} Exporte une sauvegarde d’abord si tu veux
           pouvoir revenir en arrière.
         </p>
         <form method="dialog" className="btn-row">

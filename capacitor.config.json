@@ -1,0 +1,11 @@
+{
+  "appId": "io.github.jrrocks.epreuves",
+  "appName": "Épreuves",
+  "webDir": "dist",
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "native",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}
