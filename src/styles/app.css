@@ -4125,13 +4125,27 @@ fieldset.tf {
 }
 
 /* Under 11em (352 px at 32 px), the running text keeps its 15 letters a line (base.css), but a text of
-   40 px holds 12: the question, its key sentence, the question of a card. */
+   40 px holds 12: the question, its key sentence, the question of a card, the lead of a page; and an item
+   of a list, past its indent, 13. */
 @media (max-width: 10.99875em) {
   /* A unit written in full splits at its first syllable when the next one no longer fits after a long
      number (base.css): « 15 000 carac- » needed 258 px of a 256 px question, and the unit broke anywhere
      (« caract|ères »). */
   :is(.task-prompt, .takeaway, .flashcard-q) .unit {
     hyphenate-limit-chars: 9 2 4;
+  }
+
+  /* The lead takes the size of the text: a word of ten letters in guillemets no longer fitted its line,
+     too short to split at a syllable, and broke anywhere (« « Comprendr|e » » in Progression). */
+  .lead {
+    font-size: var(--t-body);
+  }
+
+  /* The words of an item split from 9 letters, 5 and 4 kept on either side as the text keeps them: one of
+     9 to 11 letters with what it holds to (a guillemet, a comma) no longer fitted the line, and broke
+     anywhere (« recommandé|e, », « « Chargemen|t », « Sauvegarde|r »). */
+  :is(.md, .dodont, .recommended-list) li {
+    hyphenate-limit-chars: 9 5 4;
   }
 }
 
