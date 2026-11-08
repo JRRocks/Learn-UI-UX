@@ -3906,6 +3906,14 @@ fieldset.tf {
     hyphenate-limit-chars: 12 4 4;
   }
 
+  /* Between its verdict and its chevron, the question of an exercise in a session's summary holds 13
+     letters a line (238 px at 390 px with a 32 px text): it splits its words as the text does under 12em
+     (base.css), from 12 letters, where « rembourseme|nt » and « recommandée|s » broke anywhere. Under
+     12em, it has the width of the item, and the text that rule already. */
+  .recap summary > span {
+    hyphenate-limit-chars: 12 5 4;
+  }
+
   .btn {
     hyphenate-limit-chars: 10 4 4;
   }
