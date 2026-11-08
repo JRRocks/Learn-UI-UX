@@ -209,6 +209,15 @@ li::marker {
   code.code-short {
     white-space: normal;
   }
+
+  /* A German compound quoted in the text (lang="de", quotedPhrases.ts) splits at its own syllables, from
+     20 letters, 8 kept on either side: at 15em, where the words of the text no longer split (below),
+     « Datenschutzeinstellungen » took more than a line of a correction (312 px at 360 px with a 24 px
+     text) and broke anywhere. */
+  span[lang='de'] {
+    hyphens: auto;
+    hyphenate-limit-chars: 20 8 8;
+  }
 }
 
 /* Under 15em (240 px at 16 px, 360 px at 24 px, 480 px at 32 px), a line holds some 20 letters of text,

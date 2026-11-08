@@ -3,15 +3,15 @@
 // the width of the tiles) is played in a session: measured on the question, then on its correction.
 // Then the same with a larger default text size, as a reader sets it in the browser (20, 24 and 32 px
 // instead of 16, WCAG 1.4.4), at 320, 360, 390 and 768 px with a mouse (the keyboard hints show):
-// every page, two exercises of each format before and after « Valider », then their session's summary,
-// the timed challenge and the cards. Everywhere, a bar that stays on screen must fit in the room kept
-// for it (scroll-padding), or a control reached with Tab could end up under it (WCAG 2.4.11), no more
-// than three lines in a row may end on a hyphen the browser added (French typography; long words split
-// under 15em), no French word of a label (an item to order, an option, a button, a badge, a toast, a
-// title, an exercise of a session's summary…) nor any unit written in full may be broken without a
-// hyphen, anywhere in its letters, where overflow-wrap lets a word too long for its line break as a last
-// resort (« Aj|ou|te|r » in a 44 px column), and no number may end a line without its unit
-// (« 45–75 ⏎ caractères »).
+// every page, two exercises of each format and every exercise with a unit written in full (« 15 000
+// caractères »), before and after « Valider », then their session's summary, the timed challenge and
+// the cards. Everywhere, a bar that stays on screen must fit in the room kept for it (scroll-padding),
+// or a control reached with Tab could end up under it (WCAG 2.4.11), no more than three lines in a row
+// may end on a hyphen the browser added (French typography; long words split under 15em), no French
+// word of a label (an item to order, an option, a button, a badge, a toast, a title, an exercise of a
+// session's summary…) nor any unit written in full may be broken without a hyphen, anywhere in its
+// letters, where overflow-wrap lets a word too long for its line break as a last resort (« Aj|ou|te|r »
+// in a 44 px column), and no number may end a line without its unit (« 45–75 ⏎ caractères »).
 // Prints the elements that stick out; exits with 1 if any.
 //   npm run check:overflow
 //   npm run check:overflow -- 320          → only this width
@@ -177,8 +177,10 @@ const LABELS = [
   '.task-prompt', '.takeaway', '.flashcard-q', '.slider-head', '.btn', '.toast', '.badge', '.side-link',
   '.lesson-jump', '.toc-title', '.market-formats', '.recap', '.unit', 'h1', 'h2', 'h3', 'h4',
 ].join(', ');
+/** The units written in full (src/lib/markdown.tsx, UNIT_WORDS). */
+const UNIT_WORDS = 'caractères?|mots?|jours?|secondes?|minutes?';
 /** The units a number keeps (src/lib/markdown.tsx, frenchSpacing), at the start of a text. */
-const UNITS = '^(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|caractères?|mots?|jours?|secondes?|minutes?)(?![\\p{L}\\d])';
+const UNITS = `^(?:px|pt|dp|sp|ms|s|min|h|ch|em|rem|%|€|Mo|Ko|Go|fps|°|${UNIT_WORDS})(?![\\p{L}\\d])`;
 
 /** Some complete answer to the exercise on screen, through the DOM (a badge toast may lie over a control). */
 async function answer(page) {
@@ -255,14 +257,17 @@ try {
   const probe = await browser.newPage();
   await probe.goto(`${base}#/`);
   await probe.waitForSelector('#main', { timeout: 60000 });
-  const ids = await probe.evaluate(async () => {
+  const ids = await probe.evaluate(async (unitWords) => {
     const content = await import('/src/content/index.ts');
     const cultures = await import('/src/content/cultures/index.ts');
     const data = await cultures.loadCultures();
     // Choices between mocks: each tile is as wide as its mock wants unless the grid holds it.
     const visual = [];
-    // Large text: for each format, the exercise with the longest word and the one with the most text.
+    // Large text: for each format, the exercise with the longest word and the one with the most text; then
+    // every exercise with a number and a unit written in full, which may be wider than a line together.
     const formats = {};
+    const units = [];
+    const unit = new RegExp(`\\d[ \\u00a0\\u202f](?:${unitWords})(?![\\p{L}\\d])`, 'u');
     for (const m of content.MODULES)
       for (const e of (await content.loadModule(m.id)).exercises) {
         const isVisual = (e.type === 'choice' || e.type === 'multi') && e.options.some((o) => o.visual);
@@ -270,6 +275,7 @@ try {
         const text = JSON.stringify(e, (k, v) => (k === 'html' || k === 'css' || k === 'visual' ? undefined : v));
         const word = Math.max(...text.split(/[\s"\\]+/).map((w) => w.length));
         (formats[isVisual ? 'duel' : e.type] ??= []).push({ id: e.id, word, length: text.length });
+        if (unit.test(text)) units.push(e.id);
       }
     const sample = [];
     for (const list of Object.values(formats))
@@ -277,8 +283,9 @@ try {
         const top = [...list].sort((a, b) => b[key] - a[key]).find((e) => !sample.includes(e.id));
         if (top) sample.push(top.id);
       }
+    sample.push(...units.filter((id) => !sample.includes(id)));
     return { modules: content.MODULES.map((m) => m.id), cultures: data.profiles.map((c) => c.id), pairs: data.pairs.map((p) => p.id), visual, sample };
-  });
+  }, UNIT_WORDS);
   await probe.close();
   const routes = [
     '/', '/apprendre', '/entrainement', '/fiches', '/progression', '/a-propos',

@@ -2636,14 +2636,21 @@
 }
 
 /* A variant of a format value (« 1,284,500원 · ₩1,284,500 », Cultures.tsx): one block, the dot at the
-   end of the first. A line breaks between variants, never before the dot nor inside a variant that fits.
-   The code that holds them in the comparator is a block of its own too, so that a variant as wide as the
-   line is measured within the code's padding: against the item, « Paybill 567890, account SOKO4821 · »
-   ran 4 px past it at 320 px, and the table of every pair with Kenya scrolled sideways. */
-.format-variant,
-code:has(> .format-variant) {
+   end of the first. A line breaks between variants, never before the dot nor inside a variant that fits. */
+.format-variant {
   display: inline-block;
   max-width: 100%;
+}
+
+/* In the comparator, the variants stand in a code that runs in the item's lines: its padding (0.3em on
+   either side, base.css) shares a line with the first variant and with the last. As wide as the item, a
+   variant ran past it by that padding (« Paybill 567890, account SOKO4821 · », 4 px at 320 px), and the
+   table of every pair with Kenya scrolled sideways: a variant keeps the code's padding off its width.
+   Under 20em, the code is a box of its own around variants set one under the other (below). */
+@media (min-width: 20em) {
+  code > .format-variant {
+    max-width: calc(100% - 0.6em);
+  }
 }
 
 /* Korean keeps its words whole (« 홍 ⏎ 길동 » broke a name), as the profile of the market teaches. */
@@ -3733,6 +3740,11 @@ fieldset.tf {
     display: block;
   }
 
+  code:has(> .format-variant) {
+    display: inline-block;
+    max-width: 100%;
+  }
+
   .format-sep {
     display: none;
   }
@@ -3892,6 +3904,14 @@ fieldset.tf {
   .option-why,
   .order-label {
     hyphenate-limit-chars: 12 4 4;
+  }
+
+  /* Between its verdict and its chevron, the question of an exercise in a session's summary holds 13
+     letters a line (238 px at 390 px with a 32 px text): it splits its words as the text does under 12em
+     (base.css), from 12 letters, where « rembourseme|nt » and « recommandée|s » broke anywhere. Under
+     12em, it has the width of the item, and the text that rule already. */
+  .recap summary > span {
+    hyphenate-limit-chars: 12 5 4;
   }
 
   .btn {
@@ -4109,6 +4129,31 @@ fieldset.tf {
 
   .recap-correction {
     margin-inline-start: 0;
+  }
+}
+
+/* Under 11em (352 px at 32 px), the running text keeps its 15 letters a line (base.css), but a text of
+   40 px holds 12: the question, its key sentence, the question of a card, the lead of a page; and an item
+   of a list, past its indent, 13. */
+@media (max-width: 10.99875em) {
+  /* A unit written in full splits at its first syllable when the next one no longer fits after a long
+     number (base.css): « 15 000 carac- » needed 258 px of a 256 px question, and the unit broke anywhere
+     (« caract|ères »). */
+  :is(.task-prompt, .takeaway, .flashcard-q) .unit {
+    hyphenate-limit-chars: 9 2 4;
+  }
+
+  /* The lead takes the size of the text: a word of ten letters in guillemets no longer fitted its line,
+     too short to split at a syllable, and broke anywhere (« « Comprendr|e » » in Progression). */
+  .lead {
+    font-size: var(--t-body);
+  }
+
+  /* The words of an item split from 9 letters, 5 and 4 kept on either side as the text keeps them: one of
+     9 to 11 letters with what it holds to (a guillemet, a comma) no longer fitted the line, and broke
+     anywhere (« recommandé|e, », « « Chargemen|t », « Sauvegarde|r »). */
+  :is(.md, .dodont, .recommended-list) li {
+    hyphenate-limit-chars: 9 5 4;
   }
 }
 

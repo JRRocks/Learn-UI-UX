@@ -67,6 +67,11 @@ describe('passages quoted in another language (WCAG 3.1.2)', () => {
     expect(html).toContain('<span lang="ar" dir="auto">متابعة</span>');
   });
 
+  it('reads a German compound in German, where it splits at its own syllables', () => {
+    const html = renderToStaticMarkup(createElement(Md, { text: '« Privacy settings » devient « Datenschutzeinstellungen », 24 lettres.' }));
+    expect(html).toContain('<span lang="de">Datenschutzeinstellungen</span>');
+  });
+
   it('leaves a text without a quoted phrase as it was', () => {
     expect(languageRuns('Écrire « 12 000 » et non « 12000 ».')).toEqual([{ text: 'Écrire « 12 000 » et non « 12000 ».' }]);
   });

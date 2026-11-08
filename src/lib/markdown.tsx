@@ -43,10 +43,12 @@ const PHRASE = new RegExp(
 );
 /** A character that may start one: most texts have none, and skip the search. */
 const MAY_QUOTE = /[\p{sc=Han}\p{sc=Hiragana}\p{sc=Katakana}\p{sc=Hangul}\p{sc=Arabic}\u3000-\u303f\u30fc\uff00-\uffef]/u;
+/** The phrases in the Latin script (a German compound), looked for as they are. */
+const LATIN_PHRASES = [...PHRASES.keys()].filter((p) => /\p{sc=Latin}/u.test(p));
 
 /** A text cut around the phrases it quotes in another language (src/content/quotedPhrases.ts). */
 export function languageRuns(text: string): { text: string; lang?: string }[] {
-  if (!MAY_QUOTE.test(text)) return [{ text }];
+  if (!MAY_QUOTE.test(text) && !LATIN_PHRASES.some((p) => text.includes(p))) return [{ text }];
   const runs: { text: string; lang?: string }[] = [];
   let last = 0;
   for (const m of text.matchAll(PHRASE)) {
