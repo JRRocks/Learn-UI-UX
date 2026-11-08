@@ -1,5 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Mock, type Mark } from '../components/Mock';
+import { measuredText, scenarioVars, settingText } from '../components/exercise/players';
+import { criterionMet, idealValues, initialValues } from '../engine/grade';
 import type { AntipatternEntry, CulturePair, CultureProfile, Exercise, ModuleContent, Visual } from '../engine/types';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
 
@@ -68,7 +70,7 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
       <p className="preview-prompt">
         <MdInline text={ex.prompt} />
       </p>
-      {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && ex.type !== 'grid' && <V visual={ex.visual} />}
+      {ex.visual && ex.type !== 'hotspot' && ex.type !== 'slider' && ex.type !== 'grid' && ex.type !== 'scenario' && <V visual={ex.visual} />}
 
       {(ex.type === 'choice' || ex.type === 'multi') && (
         <ol className={ex.options.some((o) => o.visual) ? 'preview-options preview-options--visual' : 'preview-options'}>
@@ -110,6 +112,30 @@ function ExercisePreview({ ex }: { ex: Exercise }) {
           <V visual={ex.visual} vars={{ '--v': `${ex.ideal}${ex.unit}`, '--n': String(ex.ideal) }} caption={`Idéal : ${ex.ideal}${ex.unit ? `\u00A0${ex.unit}` : ''} (cible ${ex.target[0]}–${ex.target[1]})`} />
         </div>
       )}
+      {ex.type === 'scenario' &&
+        (() => {
+          const start = initialValues(ex);
+          const ideal = idealValues(ex);
+          const values = (v: Record<string, number>) => ex.controls.map((c) => `${c.label} ${settingText(ex, c, v)}`).join(' · ');
+          return (
+            <>
+              <div className="preview-pair">
+                <V visual={ex.visual} vars={scenarioVars(ex, start)} caption={`Départ : ${values(start)}`} />
+                <V visual={ex.visual} vars={scenarioVars(ex, ideal)} caption={`Version experte : ${values(ideal)}`} />
+              </div>
+              <ul>
+                {ex.criteria.map((c) => (
+                  <li key={c.id}>
+                    <strong>
+                      {criterionMet(ex, c, start) ? '✔' : '✘'} → ✔ <MdInline text={c.label} />
+                    </strong>{' '}
+                    ({measuredText(ex, c, start)} → {measuredText(ex, c, ideal)}) — <MdInline text={c.why} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          );
+        })()}
       {ex.type === 'order' && (
         <ol>
           {ex.items.map((i) => (

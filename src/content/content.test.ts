@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AntipatternEntry, CulturePair, CultureProfile, ModuleContent } from '../engine/types';
 import { DETECTOR_RULES } from './detectorRules';
+import { CULTURE_NAMES, CULTURE_REGIONS } from './cultures';
 import { checkAntipatterns, checkCultures, checkModule } from './validate';
 
 /**
@@ -44,6 +45,10 @@ describe.runIf(!only.length || only.includes('cultures'))('cultures', () => {
     const profiles = mods.flatMap((m) => m.CULTURES ?? []);
     const pairs = mods.flatMap((m) => m.CULTURE_PAIRS ?? []);
     expect(report(checkCultures(profiles, pairs))).toBe('');
+
+    // The light lists of names and regions match the profiles.
+    expect(Object.keys(CULTURE_NAMES).sort()).toEqual(profiles.map((p) => p.id).sort());
+    expect(profiles.filter((p) => CULTURE_REGIONS[p.id] !== p.region.replace(/'/g, '’')).map((p) => p.id)).toEqual([]);
 
     // Exercises tagged with a culture must point to an existing profile.
     if (profiles.length) {

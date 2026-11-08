@@ -6,6 +6,7 @@ import {
   Grid3x3,
   Layers,
   Link2,
+  MonitorSmartphone,
   ListChecks,
   ListOrdered,
   ListTodo,
@@ -16,20 +17,36 @@ import {
   Timer,
   type LucideIcon,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
-import { EXERCISES, MODULES, RULE_CARDS, RULE_CARD_BY_KEY } from '../content';
+import { CountryQuizzes } from '../components/CountryQuizzes';
+import { JumpNav } from '../components/JumpNav';
+import { EXERCISES, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, THEMES } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import { dayKey } from '../engine/dates';
 import { dueCardKeys } from '../engine/progress';
-import { SESSION_SIZE, matchesType, type PracticeType } from '../engine/session';
-import { count } from '../lib/french';
+import { SESSION_SIZE, inCulture, matchesType, type PracticeType } from '../engine/session';
+import { SEP, count } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
+import { ThemeActions, themeExerciseIds, themeMastery } from './Learn';
 
-const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIcon }[] = [
+const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
+
+/** The sections of the page, for its links at the top. */
+const PARTS = [
+  { id: 'today-title', label: 'Recommandé' },
+  { id: 'themes-title', label: 'Par thème' },
+  { id: 'culture-title', label: 'Par pays' },
+  { id: 'module-title', label: 'Par leçon' },
+  { id: 'formats-title', label: 'Par format' },
+  { id: 'exam-title', label: 'Défis et examen' },
+];
+
+export const FORMATS: { type: PracticeType; title: string; text: string; Icon: LucideIcon }[] = [
   { type: 'duel', title: 'Comparaison visuelle', text: 'Deux à quatre versions d’une même interface : choisis celle qu’un expert recommanderait.', Icon: Columns2 },
   { type: 'hotspot', title: 'Chasse aux erreurs', text: 'Clique directement sur les défauts d’une maquette, comme un correcteur sur une épreuve.', Icon: Crosshair },
+  { type: 'scenario', title: 'Mise en situation', text: 'Une vraie page, un questionnaire ou une appli : règle tailles, espacements et couleurs, puis fais évaluer ton écran critère par critère.', Icon: MonitorSmartphone },
   { type: 'slider', title: 'Calibrage', text: 'Règle un interlignage, un contraste, une durée ou un espacement à l’œil, puis compare à la valeur experte.', Icon: SlidersHorizontal },
   { type: 'choice', title: 'Le bon choix', text: 'Une situation, plusieurs solutions : laquelle tient la route, et pourquoi les autres échouent.', Icon: ListTodo },
   { type: 'multi', title: 'Tout ce qui s’applique', text: 'Coche toutes les bonnes réponses, et seulement elles.', Icon: ListChecks },
@@ -58,7 +75,7 @@ export function Practice() {
   const cardsDue = dueCardKeys(p, today, RULE_CARD_BY_KEY).length;
   const cardsNew = RULE_CARDS.filter((c) => !p.cards[c.key]).length;
   const [moduleId, setModuleId] = useState(MODULES[0]?.id ?? '');
-  const cultureCount = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
+  const cultureCount = EXERCISES.filter((e) => inCulture(e)).length;
   usePageTitle(pageTitle('S’entraîner'));
 
   return (
@@ -71,11 +88,14 @@ export function Practice() {
           {EXERCISES.length} épreuves, chacune corrigée avec le choix recommandé, le pourquoi et la règle à retenir. Les erreurs reviennent
           automatiquement en révision.
         </p>
+        <JumpNav label="Aller à une façon de s’entraîner" items={PARTS} />
       </header>
 
-      <section className="today" aria-label="Sessions recommandées">
+      <section className="today" aria-labelledby="today-title">
         <div className="today-main">
-          <h2>Session du jour</h2>
+          <h2 id="today-title" tabIndex={-1}>
+            Session du jour
+          </h2>
           <p>{frenchSpacing(`${SESSION_SIZE.daily} épreuves équilibrées : d’abord ce qui est à revoir, puis de nouvelles notions, réparties sur plusieurs leçons.`)}</p>
           <Link to="/session?mode=daily" className="btn btn-primary">
             Commencer
@@ -109,9 +129,96 @@ export function Practice() {
         </div>
       </section>
 
+      <section className="section" aria-labelledby="themes-title">
+        <div className="section-head">
+          <h2 id="themes-title" tabIndex={-1}>
+            Par thème
+          </h2>
+          <p className="small">
+            {frenchSpacing(
+              `L’évaluation tire ${SESSION_SIZE.evaluation} épreuves de toutes les leçons du thème et ne corrige qu’à la fin ; l’entraînement en tire ${SESSION_SIZE.theme}, corrigées une à une.`,
+            )}
+          </p>
+        </div>
+        <ul className="themes">
+          {THEMES.map((t) => {
+            const tm = themeMastery(p, t);
+            return (
+              <li key={t.id} className="theme-row">
+                <div className="theme-text">
+                  <h3>{frenchSpacing(t.title)}</h3>
+                  <p>
+                    {count(MODULES.filter((m) => m.theme === t.id).length, 'leçon', 'leçons')}
+                    {SEP}
+                    {count(themeExerciseIds(t).length, 'épreuve', 'épreuves')}
+                    {SEP}
+                    {tm.label.toLowerCase()}
+                  </p>
+                  <span className="meter" style={pct(tm.value)} aria-hidden="true">
+                    <span />
+                  </span>
+                </div>
+                <ThemeActions theme={t} />
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      <section className="section" aria-labelledby="culture-title">
+        <div className="section-head">
+          <h2 id="culture-title" tabIndex={-1}>
+            Par pays
+          </h2>
+          <p className="small">
+            {frenchSpacing(
+              `${cultureCount} épreuves sur ${Object.keys(CULTURE_NAMES).length} marchés, séparées pays par pays : la France, puis les pays étrangers par région, et les notions communes à tous.`,
+            )}
+          </p>
+        </div>
+        <CountryQuizzes />
+        <p className="small">
+          <Link to="/cultures">Voir les profils des marchés</Link>
+        </p>
+      </section>
+
+      <section className="section" aria-labelledby="module-title">
+        <h2 id="module-title" tabIndex={-1}>
+          Par leçon
+        </h2>
+        <p className="muted">{SESSION_SIZE.module} épreuves d’une leçon à la fois, les nouvelles d’abord.</p>
+        <form
+          className="btn-row"
+          onSubmit={(e) => {
+            e.preventDefault();
+            navigate(`/session?mode=module&id=${moduleId}`);
+          }}
+        >
+          <label htmlFor="module-pick" className="visually-hidden">
+            Leçon
+          </label>
+          <select id="module-pick" className="select" value={moduleId} onChange={(e) => setModuleId(e.target.value)}>
+            {THEMES.map((t) => (
+              <optgroup key={t.id} label={t.title}>
+                {MODULES.filter((m) => m.theme === t.id).map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {frenchSpacing(m.title)}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <button type="submit" className="btn btn-secondary">
+            Lancer
+          </button>
+        </form>
+      </section>
+
       <section className="section" aria-labelledby="formats-title">
         <div className="section-head">
-          <h2 id="formats-title">Par format d’épreuve</h2>
+          <h2 id="formats-title" tabIndex={-1}>
+            Par format d’épreuve
+          </h2>
           <p className="small">{frenchSpacing('Chaque format entraîne un réflexe différent : voir, repérer, doser, décider.')}</p>
         </div>
         <ul className="formats">
@@ -135,52 +242,11 @@ export function Practice() {
         </ul>
       </section>
 
-      <div className="split">
-        <section className="section" aria-labelledby="module-title">
-          <h2 id="module-title">Par leçon</h2>
-          <p className="muted">{SESSION_SIZE.module} épreuves d’une leçon à la fois, les nouvelles d’abord.</p>
-          <form
-            className="btn-row"
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate(`/session?mode=module&id=${moduleId}`);
-            }}
-          >
-            <label htmlFor="module-pick" className="visually-hidden">
-              Leçon
-            </label>
-            <select id="module-pick" className="select" value={moduleId} onChange={(e) => setModuleId(e.target.value)}>
-              {MODULES.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {frenchSpacing(m.title)}
-                </option>
-              ))}
-            </select>
-            <button type="submit" className="btn btn-secondary">
-              Lancer
-            </button>
-          </form>
-        </section>
-
-        <section className="section" aria-labelledby="culture-title">
-          <h2 id="culture-title">Cultures</h2>
-          <p className="muted">
-            {cultureCount} épreuves sur les différences d’interface entre {Object.keys(CULTURE_NAMES).length} marchés et la façon de s’y adapter.
-          </p>
-          <div className="btn-row">
-            <Link to="/session?mode=culture" className="btn btn-secondary" aria-label="Lancer : Cultures">
-              Lancer
-            </Link>
-            <Link to="/cultures" className="btn btn-ghost">
-              Voir les marchés
-            </Link>
-          </div>
-        </section>
-      </div>
-
       <section className="section" aria-labelledby="exam-title">
         <div className="section-head">
-          <h2 id="exam-title">Défis</h2>
+          <h2 id="exam-title" tabIndex={-1}>
+            Défis et examen
+          </h2>
         </div>
         <div className="format" style={{ borderTop: '1px solid var(--rule)' }}>
           <Timer aria-hidden="true" />

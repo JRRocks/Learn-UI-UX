@@ -178,7 +178,6 @@ const FERRY_SEARCH: Visual = {
 const modes: ModuleContent = {
   id: 'modes',
   title: 'Les quatre modes de visite',
-  category: 'fondations',
   summary:
     'Reconnaître le mode d’une surface (Persuader, Opérer, Lire, Expérience) d’après la réussite de son visiteur, et en déduire la dose d’ambition, ce que le monde visuel a le droit de toucher, et ce qu’un affinage doit préserver.',
   minutes: 13,

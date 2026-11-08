@@ -159,7 +159,6 @@ kbd { font: 600 11px/1 ui-monospace, Menlo, monospace; padding: 3px 5px; border:
 const heuristics: ModuleContent = {
   id: 'heuristics',
   title: 'Heuristiques de Nielsen et sévérité',
-  category: 'evaluer',
   summary:
     'Inspecter un écran avec les dix heuristiques de Nielsen, le noter de 0 à 4 sans complaisance, lire le total en bandes et classer chaque problème de P0 à P3.',
   minutes: 11,

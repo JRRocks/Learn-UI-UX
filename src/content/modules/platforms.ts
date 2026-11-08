@@ -309,7 +309,6 @@ const WEBPORT_CSS = `${IOS_CSS}
 const platforms: ModuleContent = {
   id: 'platforms',
   title: 'iOS et Android',
-  category: 'corriger',
   summary:
     'Concevoir et auditer des applis natives qui respectent chaque plateforme : navigation, gestes, cibles, typographie, couleurs et composants d’iOS et d’Android, et la façon de traduire l’un vers l’autre.',
   minutes: 15,
@@ -516,6 +515,60 @@ Le rapport **commence par le verdict de conformité**, réussi ou échoué : l�
     { id: 'motion', front: 'Que faire quand « Réduire les animations » est activé ?', back: 'Remplacer la parallaxe et les grands glissements par un fondu enchaîné (ou une coupe franche sur Android).' },
   ],
   exercises: [
+    {
+      id: 'platforms-android-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'L’appli Android de Covoit’ Vercors liste les trajets du jour. Chaque ligne porte deux actions en icônes, Appeler et Écrire : d’après les retours de la bêta, on appelle souvent le conducteur en voulant lui écrire.',
+      prompt: 'Règle les icônes de la liste pour qu’on touche la bonne action à coup sûr, et qu’on les voie bien.',
+      visual: {
+        frame: 'phone',
+        alt: 'Écran d’appli Android : liste « Trajets du jour », trois trajets avec l’heure, le conducteur et les places libres, et sur chaque ligne deux icônes, un téléphone et une bulle de message, chacune dans un cercle qui montre sa zone tactile. La taille de ces zones, l’espace entre elles et la couleur des icônes suivent les réglages.',
+        css: `.cv { padding: 12px 16px 16px; }
+.cv-title { margin-bottom: 4px; font-size: 20px; font-weight: 700; }
+.cv-list { list-style: none; margin: 0; padding: 0; }
+.cv-list li { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #eceef2; }
+.cv-acts { display: flex; flex: none; gap: calc(var(--space-n) * 1px); }
+.cv-i { display: grid; place-items: center; width: calc(var(--target-n) * 1px); height: calc(var(--target-n) * 1px); border-radius: 50%; box-shadow: inset 0 0 0 1px #d5d9e2; color: var(--icon); }`,
+        html: `<div class="cv"><p class="cv-title">Trajets du jour</p><ul class="cv-list"><li><div class="mk-grow"><p class="mk-strong">Villard → Grenoble</p><p class="mk-small mk-muted">7 h 40 · Julien · 2 places</p></div><span class="cv-acts"><span class="cv-i"><i data-icon="phone" style="--ico:22px"></i></span><span class="cv-i"><i data-icon="message-circle" style="--ico:22px"></i></span></span></li><li><div class="mk-grow"><p class="mk-strong">Lans → Sassenage</p><p class="mk-small mk-muted">8 h 15 · Amandine · 1 place</p></div><span class="cv-acts"><span class="cv-i"><i data-icon="phone" style="--ico:22px"></i></span><span class="cv-i"><i data-icon="message-circle" style="--ico:22px"></i></span></span></li><li><div class="mk-grow"><p class="mk-strong">Autrans → Fontaine</p><p class="mk-small mk-muted">17 h 30 · Malik · 3 places</p></div><span class="cv-acts"><span class="cv-i"><i data-icon="phone" style="--ico:22px"></i></span><span class="cv-i"><i data-icon="message-circle" style="--ico:22px"></i></span></span></li></ul></div>`,
+      },
+      controls: [
+        { kind: 'range', id: 'target', label: 'Taille de la zone tactile de chaque icône', min: 24, max: 64, step: 4, initial: 28, unit: 'dp', ideal: 48 },
+        { kind: 'range', id: 'space', label: 'Espace entre les deux icônes', min: 0, max: 24, step: 2, initial: 0, unit: 'dp', ideal: 8 },
+        { kind: 'ramp', id: 'icon', label: 'Couleur des icônes', colors: ['#d1d5db', '#9ca3af', '#6b7280', '#4b5563', '#374151', '#1f2937'], initial: 1, ideal: 3 },
+      ],
+      readouts: [{ kind: 'contrast', label: 'Contraste des icônes', a: 'icon', b: '#ffffff' }],
+      criteria: [
+        {
+          id: 'size',
+          label: 'Zones tactiles d’au moins 48 × 48 dp',
+          check: { kind: 'range', control: 'target', min: 48 },
+          why: 'Google demande au moins 48 × 48 dp pour une cible tactile sur Android. Le dessin de l’icône peut rester à 24 dp : c’est la zone qui reçoit le toucher qui grandit.',
+        },
+        {
+          id: 'space',
+          label: 'Au moins 8 dp entre les deux zones',
+          check: { kind: 'range', control: 'space', min: 8 },
+          why: 'Google demande aussi 8 dp ou plus entre deux cibles. Collées, Appeler et Écrire se touchent l’une pour l’autre : c’est exactement l’erreur de la bêta.',
+        },
+        {
+          id: 'icon',
+          label: 'Icônes contrastées à 3:1 au moins',
+          check: { kind: 'contrast', a: 'icon', b: '#ffffff', min: 3 },
+          why: 'Une icône sans libellé est la seule trace de son action : WCAG 1.4.11 lui demande 3:1 face au fond. #9CA3AF n’offre que 2,53:1 sur blanc ; #6B7280 atteint 4,83:1.',
+        },
+      ],
+      explanation: `Deux icônes voisines aux actions opposées, c’est le terrain idéal de l’erreur de toucher. Android donne ses repères :
+
+- **48 × 48 dp par cible** : la zone touchable entoure l’icône, qui garde son dessin de 24 dp.
+- **8 dp entre deux cibles** : assez pour qu’un doigt qui vise l’une ne déclenche pas l’autre.
+- **3:1 pour l’icône** : sans libellé, l’icône porte seule l’action ; trop pâle, on ne sait plus qu’il y a quelque chose à toucher.
+
+En vrai, la zone tactile ne se voit pas : l’effet d’ondulation de Material la révèle au toucher. Ici, le cercle la montre pour que tu la règles.`,
+      takeaway: 'Sur Android : 48 × 48 dp par cible, 8 dp entre deux cibles, et des icônes à 3:1 sur leur fond. Le dessin reste petit, la zone touchable grandit.',
+      sources: [ANDROID_TARGETS, 'imp:android', { label: 'W3C — Comprendre le critère 1.4.11 (contraste du contenu non textuel)', url: 'https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html' }],
+    },
     {
       id: 'platforms-ios-tabbar-choice',
       type: 'choice',

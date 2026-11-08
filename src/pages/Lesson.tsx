@@ -4,11 +4,12 @@ import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast } from '../app/toasts';
 import { Mock } from '../components/Mock';
+import { CountryQuizzes } from '../components/CountryQuizzes';
 import { SourceList } from '../components/SourceLink';
-import { MODULES, MODULE_BY_ID, exercisesOf, useModule } from '../content';
+import { MODULES, MODULE_BY_ID, exercisesOf, themeOf, useModule } from '../content';
 import { dayKey } from '../engine/dates';
 import { markLessonRead, mastery, masteryLabel, XP } from '../engine/progress';
-import { SESSION_SIZE } from '../engine/session';
+import { CULTURE_MODULE, SESSION_SIZE } from '../engine/session';
 import type { LessonExample, ModuleContent } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
 import { SEP, count, longDay } from '../lib/french';
@@ -178,6 +179,7 @@ export function Lesson({ id }: { id: string }) {
   if (!m) return <NotFound />;
 
   const exercises = exercisesOf(m.id);
+  const theme = themeOf(m.id);
   const ids = exercises.map((e) => e.id);
   const v = mastery(p, ids);
   const touched = ids.some((x) => p.items[x]);
@@ -210,7 +212,7 @@ export function Lesson({ id }: { id: string }) {
   return (
     <div className="page">
       <Link to="/apprendre" className="back">
-        <ArrowLeft aria-hidden="true" /> Sommaire
+        <ArrowLeft aria-hidden="true" /> Leçons
       </Link>
 
       <header className="page-head">
@@ -221,6 +223,7 @@ export function Lesson({ id }: { id: string }) {
           <MdInline text={m.summary} />
         </p>
         <p className="meta">
+          {theme && <span>{frenchSpacing(theme.title)}</span>}
           <span>
             {m.minutes}
             {'\u00A0'}min de lecture
@@ -283,6 +286,13 @@ export function Lesson({ id }: { id: string }) {
                   </Link>
                 )}
               </div>
+              {/* Its exercises mix every market: here they come one market at a time. */}
+              {m.id === CULTURE_MODULE && (
+                <section className="lesson-section" aria-labelledby="h-pays">
+                  <h2 id="h-pays">S’entraîner pays par pays</h2>
+                  <CountryQuizzes />
+                </section>
+              )}
             </>
           ) : failed ? (
             <LoadFailed what="cette leçon" />

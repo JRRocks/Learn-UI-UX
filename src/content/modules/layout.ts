@@ -74,7 +74,6 @@ const SQUINT_DUEL_CSS = `.sd { filter: blur(2px); }`;
 const layout: ModuleContent = {
   id: 'layout',
   title: 'Espace, grille et rythme',
-  category: 'enrichir',
   summary:
     'Grouper par la proximité, rythmer l’espace avec une échelle, ajuster la densité à l’usage et faire évoluer la structure d’un écran à l’autre, cibles tactiles comprises.',
   minutes: 11,
@@ -288,6 +287,56 @@ Mais simplifier n’est pas amputer : cacher derrière un point d’entrée clai
     { id: 'targets', front: 'La cible tactile d’une icône doit-elle avoir la taille de son dessin ?', back: 'Non : le dessin peut rester petit. Agrandis la cible avec du `padding` ou un pseudo-élément : 24 × 24 px au moins (WCAG 2.2 AA), 44 × 44 px au toucher.' },
   ],
   exercises: [
+    {
+      id: 'layout-signup-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'Le club d’escalade Prises & Cordes ouvre ses inscriptions en ligne. Le formulaire est complet, mais tout y est espacé de 12 px : chaque étiquette flotte entre deux champs, et le texte frôle le bord de la carte.',
+      prompt: 'Règle les espacements du formulaire pour que chaque étiquette aille visiblement avec son champ.',
+      visual: {
+        alt: 'Formulaire d’inscription au club d’escalade Prises & Cordes, dans une carte blanche : nom et prénom, date de naissance, niveau en salle, téléphone d’urgence, puis un bouton Continuer. L’espace entre étiquettes et champs, l’espace entre les champs et la marge intérieure de la carte suivent les réglages.',
+        css: `.pc { padding: 16px; background: #f4f6f9; }
+.pc-card { display: flex; flex-direction: column; gap: var(--field); padding: var(--pad); border: 1px solid #c7cedb; border-radius: 12px; background: #ffffff; }
+.pc-form { display: flex; flex-direction: column; gap: var(--field); }
+.pc-field { display: flex; flex-direction: column; gap: var(--label); }`,
+        html: `<div class="pc"><div class="pc-card"><p class="mk-h3">Inscription — saison 2026-2027</p><div class="pc-form"><div class="pc-field"><span class="mk-label">Nom et prénom</span><div class="mk-input">Inès Marchal</div></div><div class="pc-field"><span class="mk-label">Date de naissance</span><div class="mk-input">14/02/1998</div></div><div class="pc-field"><span class="mk-label">Niveau en salle</span><div class="mk-input">6a à 6b</div></div><div class="pc-field"><span class="mk-label">Téléphone d’urgence</span><div class="mk-input">06 41 27 85 90</div></div></div><span class="mk-btn mk-btn--block">Continuer</span></div></div>`,
+      },
+      controls: [
+        { kind: 'range', id: 'label', label: 'Espace entre une étiquette et son champ', min: 0, max: 20, step: 2, initial: 12, unit: 'px', ideal: 4 },
+        { kind: 'range', id: 'field', label: 'Espace entre deux champs', min: 4, max: 40, step: 2, initial: 12, unit: 'px', ideal: 16 },
+        { kind: 'range', id: 'pad', label: 'Marge intérieure de la carte', min: 0, max: 32, step: 2, initial: 4, unit: 'px', ideal: 16 },
+      ],
+      criteria: [
+        {
+          id: 'proximity',
+          label: 'Champs au moins deux fois plus espacés entre eux que de leur étiquette',
+          check: { kind: 'ratio', a: 'field', b: 'label', min: 2 },
+          why: 'Loi de proximité : ce qui est proche va ensemble. À 12 px des deux côtés, une étiquette est aussi loin de son champ que du précédent, et l’œil hésite. Aucune norme ne chiffre l’écart : du simple au double, il se voit d’un coup d’œil.',
+        },
+        {
+          id: 'stuck',
+          label: 'Étiquette décollée de son champ : 4 px au moins',
+          check: { kind: 'range', control: 'label', min: 4 },
+          why: 'À 0 ou 2 px, l’étiquette touche la bordure du champ et se lit comme son contenu. Proche, oui ; collée, non.',
+        },
+        {
+          id: 'padding',
+          label: 'Marge intérieure d’au moins 8 px',
+          check: { kind: 'range', control: 'pad', min: 8 },
+          why: 'Une carte bordée dessine un bord : sous 8 px, le texte le touche. C’est la règle « Marge intérieure étriquée » (`cramped-padding`) du détecteur d’impeccable ; vise 12 à 16 px.',
+        },
+      ],
+      explanation: `Un formulaire se lit par paires : une étiquette, son champ. Quand tout est espacé pareil, ces paires disparaissent, et l’on se demande à quoi correspond chaque étiquette.
+
+- **Serré dans un groupe** : 4 px entre une étiquette et son champ, assez pour ne pas les coller.
+- **Généreux entre les groupes** : 16 px entre deux champs, quatre fois plus. La paire se voit avant les mots.
+- **De l’air dans la carte** : 12 à 16 px de marge intérieure ; sous 8 px, le texte frôle le bord.
+
+L’espacement fait le travail d’une bordure ou d’un fond, sans rien ajouter à l’écran : c’est l’outil de regroupement le plus léger.`,
+      takeaway: 'Serré dans un groupe, généreux entre les groupes : 4 px entre une étiquette et son champ, 16 px entre deux champs, et 12 à 16 px de marge dans la carte.',
+      sources: [PROXIMITY, 'imp:layout', 'imp:detector'],
+    },
     {
       id: 'layout-proximity-duel',
       type: 'choice',

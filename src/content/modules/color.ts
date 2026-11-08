@@ -67,7 +67,6 @@ const PRODUCT = `<div class="mk-pad mk-stack" style="--gap:10px">
 const color: ModuleContent = {
   id: 'color',
   title: 'Couleur et contraste',
-  category: 'enrichir',
   summary:
     'Construire une palette par rôles, vérifier les contrastes au calcul près, ne jamais coder une information par la seule couleur et composer un thème sombre au lieu de l’inverser.',
   minutes: 12,
@@ -311,6 +310,72 @@ Par exemple : \`oklch(97% 0.012 255)\` pour un fond teinté, \`oklch(55% 0.17 25
     { id: 'alpha', front: 'Couleur translucide ou explicite pour un texte ?', back: 'Explicite dès que le texte peut changer de fond : l’alpha rend le contraste dépendant de ce qu’il y a dessous. Un blanc translucide sur une surface fixe et connue reste possible, contraste vérifié.' },
   ],
   exercises: [
+    {
+      id: 'color-landing-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'Vélo Rousseau loue des vélos électriques au bord du lac d’Annecy. Sa page d’accueil sort de l’agence avec l’orange vif de la charte sur le bouton de réservation, un bouton assez bas et un gris très clair pour le texte d’accroche.',
+      prompt: 'Règle la page pour qu’elle se lise et que « Réserver un vélo » se voie et se touche facilement, au doigt comme à la souris.',
+      visual: {
+        frame: 'browser',
+        alt: 'Page d’accueil de Vélo Rousseau dans un navigateur : barre de navigation, surtitre « Location à la journée », titre « Le tour du lac à vélo électrique », texte d’accroche, bouton « Réserver un vélo » et lien « Voir les tarifs ». La couleur et la hauteur du bouton et la couleur du texte d’accroche suivent les réglages.',
+        css: `.vr-nav { padding: 12px 20px; border-bottom: 1px solid #eceef2; }
+.vr-logo { font-weight: 800; letter-spacing: -0.01em; }
+.vr-links { color: #4b5563; }
+.vr-hero { padding: 24px 20px 28px; }
+.vr-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9a3412; }
+.vr-title { font-size: 26px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; max-width: 16ch; }
+.vr-text { font-size: 15px; line-height: 1.55; color: var(--ink); max-width: 36ch; }
+.vr-actions { flex-wrap: wrap; }
+.vr-cta { display: inline-flex; align-items: center; min-height: var(--cta-h); padding: 0 20px; border-radius: 8px; background: var(--cta); color: #ffffff; font-size: 15px; font-weight: 700; }
+.vr-link { color: #1d2230; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }`,
+        html: `<div class="vr-nav mk-row mk-between"><span class="vr-logo">Vélo Rousseau</span><span class="mk-small vr-links">Tarifs · Itinéraires · Contact</span></div><div class="vr-hero mk-stack" style="--gap:12px"><p class="vr-kicker">Location à la journée</p><p class="vr-title">Le tour du lac à vélo électrique</p><p class="vr-text">42 km de piste cyclable, des vélos rechargés chaque matin et un antivol fourni. Retrait dès 8 h, place de la Gare.</p><div class="mk-row vr-actions" style="--gap:16px"><span class="vr-cta">Réserver un vélo</span><span class="vr-link">Voir les tarifs</span></div></div>`,
+      },
+      controls: [
+        {
+          kind: 'ramp',
+          id: 'cta',
+          label: 'Couleur du bouton « Réserver un vélo »',
+          colors: ['#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c', '#9a3412'],
+          initial: 3,
+          ideal: 5,
+        },
+        { kind: 'range', id: 'cta-h', label: 'Hauteur du bouton', min: 28, max: 60, step: 2, initial: 32, unit: 'px', ideal: 48 },
+        { kind: 'ramp', id: 'ink', label: 'Couleur du texte d’accroche', colors: ['#d1d5db', '#9ca3af', '#6b7280', '#4b5563', '#374151', '#1f2937'], initial: 1, ideal: 4 },
+      ],
+      readouts: [
+        { kind: 'contrast', label: 'Contraste du libellé du bouton', a: 'cta', b: '#ffffff' },
+        { kind: 'contrast', label: 'Contraste du texte d’accroche', a: 'ink', b: '#ffffff' },
+      ],
+      criteria: [
+        {
+          id: 'cta-text',
+          label: 'Libellé du bouton contrasté à 4,5:1 au moins',
+          check: { kind: 'contrast', a: 'cta', b: '#ffffff', min: 4.5 },
+          why: 'Un libellé de 15 px en gras n’est pas du grand texte (il faudrait 18,7 px en gras) : il lui faut 4,5:1 (WCAG 1.4.3). L’orange de la charte, #F97316, plafonne à 2,8:1 avec le blanc ; #C2410C, la même teinte plus sombre, atteint 5,17:1.',
+        },
+        {
+          id: 'cta-size',
+          label: 'Bouton d’au moins 44 px de haut',
+          check: { kind: 'range', control: 'cta-h', min: 44 },
+          why: 'La même page s’ouvre sur téléphone : le bouton principal se touche au doigt. 44 px, c’est le minimum d’impeccable au toucher et le seuil du critère WCAG 2.5.5 (AAA).',
+        },
+        {
+          id: 'text',
+          label: 'Texte d’accroche contrasté à 4,5:1 au moins',
+          check: { kind: 'contrast', a: 'ink', b: '#ffffff', min: 4.5 },
+          why: 'Le gris clair fait élégant sur l’écran du designer, mais l’accroche porte l’argument : #9CA3AF n’offre que 2,53:1 sur blanc ; #6B7280 passe à 4,83:1, #374151 à 10,3:1.',
+        },
+      ],
+      explanation: `Une page d’accueil se juge en quelques secondes : le titre, l’argument, le bouton. Trois réglages décident si on lit, puis si on réserve.
+
+- **La couleur du bouton** : l’orange vif reste la couleur de la marque, mais un libellé blanc s’y perd. Fonce la nuance jusqu’à **4,5:1** au moins ; l’orange vif garde sa place sur les grands aplats sans texte.
+- **La hauteur du bouton** : la page s’ouvre aussi sur téléphone. **44 px** au moins, et le bouton reste l’élément le plus visible de l’écran.
+- **Le gris du texte** : sous 4,5:1, l’accroche devient décoration. Un gris foncé reste discret à côté du titre presque noir.`,
+      takeaway: 'Libellé de bouton et texte courant à 4,5:1 au moins, bouton principal de 44 px de haut : fonce la nuance de la marque plutôt que d’éclaircir le texte.',
+      sources: ['wcag:contrast', 'wcag:target', 'imp:colorize', 'imp:craft-floor'],
+    },
     {
       id: 'color-gray-on-color-duel',
       type: 'choice',

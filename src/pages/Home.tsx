@@ -2,13 +2,15 @@ import { BookOpen, Layers, Play, Repeat } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
-import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exercisesOf } from '../content';
+import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, THEMES, exercisesOf } from '../content';
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
 import { dueCardKeys, dueExerciseIds, mastery, masteryLabel, streak, type ProgressState } from '../engine/progress';
 import { SEP, count, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
-import { cardsHint } from './Practice';
+import { FORMATS, cardsHint } from './Practice';
+
+const FORMAT_COUNT = FORMATS.length;
 import { unfinishedSession } from './Session';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
@@ -147,21 +149,26 @@ export function Home() {
             <li>
               <strong>Lis une leçon</strong>
               <span className="muted">
-                {MODULES.length} leçons couvrent la typographie, la couleur, l’espace, le mouvement, la rédaction, l’accessibilité, la critique… et les
-                différences d’interface entre pays.
+                {frenchSpacing(
+                  `${MODULES.length} leçons en ${THEMES.length} grands thèmes : la typographie, la couleur, l’espace, la rédaction, l’accessibilité et le RGAA, la critique… et les différences d’interface entre pays.`,
+                )}
               </span>
             </li>
             <li>
               <strong>Passe des épreuves</strong>
               <span className="muted">
                 {frenchSpacing(
-                  `${EXERCISES.length} épreuves en 9 formats : comparaisons visuelles, chasses aux erreurs, calibrage à l’œil, associations, grilles de critique…`,
+                  `${EXERCISES.length} épreuves en ${FORMAT_COUNT} formats : comparaisons visuelles, chasses aux erreurs, mises en situation à régler, calibrage à l’œil, grilles de critique…`,
                 )}
               </span>
             </li>
             <li>
-              <strong>Laisse la répétition faire son travail</strong>
-              <span className="muted">Les épreuves ratées et les règles d’or reviennent à intervalles croissants jusqu’à être acquises.</span>
+              <strong>Évalue-toi, laisse la répétition faire le reste</strong>
+              <span className="muted">
+                {frenchSpacing(
+                  'Une évaluation par thème dit où tu en es ; les épreuves ratées et les règles d’or reviennent à intervalles croissants jusqu’à être acquises.',
+                )}
+              </span>
             </li>
           </ol>
         </section>

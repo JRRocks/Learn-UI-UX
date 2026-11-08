@@ -55,7 +55,6 @@ const IRRADIATION: SourceRef = {
 const typography: ModuleContent = {
   id: 'typography',
   title: 'Typographie',
-  category: 'enrichir',
   summary:
     'Choisir des rôles typographiques nets, régler la mesure, l’interlignage et l’échelle, et vérifier que le texte tient avec du vrai contenu.',
   minutes: 10,
@@ -182,6 +181,55 @@ Ensuite, les **défauts de lisibilité**, quel que soit l’auteur :
     { id: 'wrap', front: '`text-wrap: balance` ou `pretty` ?', back: '`balance` pour les titres et blocs courts, `pretty` pour le corps de texte.' },
   ],
   exercises: [
+    {
+      id: 'typography-article-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'Le blog de la fromagerie Vallet se lit surtout sur téléphone, le soir. Le thème installé affiche les articles en petit corps gris clair, lignes serrées.',
+      prompt: 'Règle le texte de l’article pour qu’il se lise sans effort sur téléphone.',
+      visual: {
+        frame: 'phone',
+        alt: 'Écran de téléphone : article du blog de la fromagerie Vallet, « Pourquoi notre comté vieillit 18 mois », deux paragraphes. La taille, l’interlignage et la couleur du texte des paragraphes suivent les réglages.',
+        css: `.fv { padding: 16px; }
+.fv-title { font-size: 20px; line-height: 1.2; font-weight: 750; }
+.fv-p { font-size: var(--size); line-height: var(--leading); color: var(--ink); }`,
+        html: `<div class="fv mk-stack" style="--gap:10px"><p class="mk-small mk-muted">Fromagerie Vallet · Le blog</p><p class="fv-title">Pourquoi notre comté vieillit 18 mois</p><p class="fv-p">À quatre mois, un comté est déjà bon : doux, lactique, une pointe de noisette. C’est pourtant entre le douzième et le dix-huitième mois que ses arômes se croisent et que des cristaux apparaissent sous la dent.</p><p class="fv-p">Chaque meule est retournée et frottée deux fois par semaine dans notre cave des Rousses.</p></div>`,
+      },
+      controls: [
+        { kind: 'range', id: 'size', label: 'Taille du texte', min: 12, max: 22, step: 1, initial: 13, unit: 'px', ideal: 17 },
+        { kind: 'range', id: 'leading', label: 'Interlignage', min: 1, max: 2.2, step: 0.05, initial: 1.15, unit: '', ideal: 1.55 },
+        { kind: 'ramp', id: 'ink', label: 'Couleur du texte', colors: ['#d1d5db', '#9ca3af', '#6b7280', '#4b5563', '#374151', '#1f2937'], initial: 1, ideal: 4 },
+      ],
+      readouts: [{ kind: 'contrast', label: 'Contraste du texte', a: 'ink', b: '#ffffff' }],
+      criteria: [
+        {
+          id: 'size',
+          label: 'Texte d’au moins 16 px',
+          check: { kind: 'range', control: 'size', min: 16 },
+          why: 'Le corps de texte web ne descend pas sous 16 px sans raison ; sur téléphone, vise 16 à 18 px. À 13 px, on rapproche l’écran de ses yeux.',
+        },
+        {
+          id: 'leading',
+          label: 'Interlignage de 1,5 à 1,75',
+          check: { kind: 'range', control: 'leading', min: 1.5, max: 1.75 },
+          why: 'Pars de 1,5 à 1,7 pour un corps courant ; sous 1,3, l’œil saute de ligne en revenant à la marge. Trop d’air, à l’inverse, défait le paragraphe en lignes isolées.',
+        },
+        {
+          id: 'ink',
+          label: 'Texte contrasté à 4,5:1 au moins',
+          check: { kind: 'contrast', a: 'ink', b: '#ffffff', min: 4.5 },
+          why: '#9CA3AF sur blanc n’offre que 2,53:1 : le soir, luminosité baissée, ce gris s’efface. #6B7280 atteint 4,83:1, #374151 10,3:1, sans fatiguer davantage.',
+        },
+      ],
+      explanation: `Un article se lit sur la durée : chaque réglage mal posé se paie à chaque ligne.
+
+- **La taille** : 16 px est le plancher du corps de texte web ; sur un téléphone tenu à bout de bras, 17 ou 18 px se lisent sans plisser les yeux.
+- **L’interlignage** : de **1,5 à 1,7** pour commencer. Les lignes serrées à 1,15 font perdre le fil au retour à la ligne.
+- **Le contraste** : un gris clair passe pour raffiné, mais sous **4,5:1** il fatigue et disparaît en plein soleil comme le soir. Un gris foncé garde la douceur sans sacrifier la lecture.`,
+      takeaway: 'Sur téléphone, un texte courant se lit en 16 à 18 px, interligné de 1,5 à 1,75, dans un gris assez foncé pour 4,5:1 au moins.',
+      sources: ['imp:typeset', 'wcag:contrast'],
+    },
     {
       id: 'typography-measure-duel',
       type: 'choice',

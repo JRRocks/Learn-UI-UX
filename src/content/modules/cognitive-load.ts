@@ -90,7 +90,6 @@ const planMock = (plain: boolean) =>
 const cognitiveLoad: ModuleContent = {
   id: 'cognitive-load',
   title: 'Charge cognitive',
-  category: 'psychologie',
   summary:
     'Évaluer l’effort mental qu’impose un écran avec la check-list en 8 points d’impeccable, et supprimer la charge inutile : trop d’options, mémoire sollicitée, bruit visuel, jargon, allers-retours.',
   minutes: 11,

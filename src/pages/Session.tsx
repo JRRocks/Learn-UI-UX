@@ -5,12 +5,12 @@ import { store } from '../app/store';
 import { ExercisePlayer, ExerciseView, QuestionStage, TYPE_LABEL, displayOrder } from '../components/exercise/ExerciseView';
 import { Recommended } from '../components/exercise/Feedback';
 import type { Draft } from '../components/exercise/players';
-import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID, preloadExercises, useExercises, type ExerciseEntry } from '../content';
-import { CULTURE_NAMES } from '../content/cultures';
+import { EXERCISES, EXERCISE_BY_ID, MODULE_BY_ID, THEME_BY_ID, preloadExercises, useExercises, type ExerciseEntry, type ThemeId } from '../content';
+import { CULTURE_COMMON_LABEL, CULTURE_NAMES } from '../content/cultures';
 import type { GradeResult } from '../engine/grade';
 import { addSession, recordAttempt } from '../engine/progress';
 import { seeded } from '../engine/random';
-import { SESSION_SIZE, buildSession, isDuel, type PracticeType, type SessionItem, type SessionSpec } from '../engine/session';
+import { CULTURE_COMMON, SESSION_SIZE, buildSession, isDuel, isExam, type PracticeType, type SessionItem, type SessionSpec } from '../engine/session';
 import type { Exercise } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
 import { SEP } from '../lib/french';
@@ -33,7 +33,7 @@ import {
 } from './sessionState';
 import { evenTrueFalse } from './trueFalseMix';
 
-const TYPES: PracticeType[] = ['duel', 'choice', 'multi', 'truefalse', 'hotspot', 'order', 'match', 'slider', 'grid'];
+const TYPES: PracticeType[] = ['duel', 'choice', 'multi', 'truefalse', 'hotspot', 'order', 'match', 'slider', 'grid', 'scenario'];
 
 export function parseSpec(q: URLSearchParams): SessionSpec {
   const mode = q.get('mode');
@@ -41,6 +41,12 @@ export function parseSpec(q: URLSearchParams): SessionSpec {
   switch (mode) {
     case 'module':
       return { kind: 'module', moduleId: id };
+    case 'theme':
+    case 'evaluation': {
+      // An unknown theme draws from no lesson: the session says it is empty.
+      const theme = THEME_BY_ID.get(id as ThemeId);
+      return { kind: mode, themeId: id, moduleIds: theme?.modules ?? [] };
+    }
     case 'type':
       return { kind: 'type', type: (TYPES.includes(id as PracticeType) ? id : 'duel') as PracticeType };
     case 'review':
@@ -62,6 +68,13 @@ export function specLabel(spec: SessionSpec): string {
       return 'Session du jour';
     case 'module':
       return MODULE_BY_ID.get(spec.moduleId)?.title ?? 'Leçon introuvable';
+    case 'theme':
+      return THEME_BY_ID.get(spec.themeId as ThemeId)?.title ?? 'Thème introuvable';
+    case 'evaluation': {
+      const theme = THEME_BY_ID.get(spec.themeId as ThemeId);
+      // The dash stays with « Évaluation », as with « Cultures ».
+      return theme ? `Évaluation — ${theme.title}` : 'Thème introuvable';
+    }
     case 'type':
       return TYPE_LABEL[spec.type];
     case 'review':
@@ -72,6 +85,7 @@ export function specLabel(spec: SessionSpec): string {
       return 'Examen blanc';
     case 'culture':
       // The dash stays with « Cultures »: a wrapped label never starts a line with « — Brésil ».
+      if (spec.cultureId === CULTURE_COMMON) return `Cultures — ${CULTURE_COMMON_LABEL}`;
       return spec.cultureId ? `Cultures — ${CULTURE_NAMES[spec.cultureId] ?? spec.cultureId}` : 'Cultures';
   }
 }
@@ -174,7 +188,7 @@ function boot(raw: string, query: URLSearchParams, spec: SessionSpec): { id: str
   const saved = named ? readRun(named) : null;
   if (named && saved && saved.route === route) {
     // An exam never shows a correction; nor can a correction without its answer: move on.
-    const skip = answeredCurrent(saved) && (spec.kind === 'exam' || !saved.played[saved.index].draft);
+    const skip = answeredCurrent(saved) && (isExam(spec) || !saved.played[saved.index].draft);
     return { id: named, run: skip ? { ...saved, index: saved.played.length } : saved };
   }
   const ids = newRun(spec).map((e) => e.id);
@@ -183,7 +197,7 @@ function boot(raw: string, query: URLSearchParams, spec: SessionSpec): { id: str
 
 export function SessionPage({ query, raw }: { query: URLSearchParams; raw: string }) {
   const spec = useMemo(() => parseSpec(query), [query]);
-  const exam = spec.kind === 'exam';
+  const exam = isExam(spec);
   const [{ id: runId, run: first }] = useState(() => boot(raw, query, spec));
   const [state, setState] = useState<Run>(first);
   const recorded = useRef(first.recorded === true);
@@ -462,6 +476,43 @@ function RecapItem({ id, ex, played: p, seed, startOpen }: { id: string; ex: Exe
   );
 }
 
+/**
+ * An evaluation's or an exam's score lesson by lesson, the weakest first: where to go back to. A
+ * « presque » counts half, as in the session's score.
+ */
+function ByLesson({ played }: { played: Played[] }) {
+  const rows = new Map<string, { right: number; total: number }>();
+  for (const p of played) {
+    const module = EXERCISE_BY_ID.get(p.id)?.module;
+    if (!module) continue;
+    const row = rows.get(module) ?? { right: 0, total: 0 };
+    row.right += p.verdict === 'correct' ? 1 : p.verdict === 'partial' ? 0.5 : 0;
+    row.total += 1;
+    rows.set(module, row);
+  }
+  const list = [...rows.entries()].sort(([, a], [, b]) => a.right / a.total - b.right / b.total);
+  if (list.length < 2) return null;
+  return (
+    <section className="section" aria-labelledby="by-lesson-title">
+      <h2 id="by-lesson-title">Par leçon</h2>
+      <ul className="by-lesson">
+        {list.map(([id, r]) => (
+          <li key={id}>
+            <Link to={`/apprendre/${id}`}>{frenchSpacing(MODULE_BY_ID.get(id)?.title ?? id)}</Link>
+            <span className="num">
+              {String(r.right).replace('.', ',')}
+              {'\u00A0'}/ {r.total}
+            </span>
+            <span className="meter" style={{ '--value': `${Math.round((r.right / r.total) * 100)}%` } as CSSProperties} aria-hidden="true">
+              <span />
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 const AGAIN_STYLE: CSSProperties = { whiteSpace: 'normal', textAlign: 'center', textWrap: 'balance', paddingBlock: 'var(--s2)' };
 
 /** The same kind of session again, named for what it starts (an empty review would lead nowhere). */
@@ -471,6 +522,10 @@ function nextSession(spec: SessionSpec, label: string): { to: string; text: stri
       return { to: '/session?mode=daily', text: 'Nouvelle session du jour' };
     case 'module':
       return { to: `/session?mode=module&id=${encodeURIComponent(spec.moduleId)}`, text: `Nouvelle session : ${label}` };
+    case 'theme':
+      return { to: `/session?mode=theme&id=${encodeURIComponent(spec.themeId)}`, text: `Nouvelle session : ${label}` };
+    case 'evaluation':
+      return { to: `/session?mode=evaluation&id=${encodeURIComponent(spec.themeId)}`, text: `Nouvelle évaluation : ${THEME_BY_ID.get(spec.themeId as ThemeId)?.title ?? ''}` };
     case 'type':
       return { to: `/session?mode=type&id=${spec.type}`, text: `Nouvelle session : ${label}` };
     case 'culture':
@@ -524,6 +579,8 @@ function Summary({ label, exercises, failed, played, exam, spec, runId }: Summar
         </p>
         {message && <p className="muted">{message}</p>}
       </header>
+
+      {exam && <ByLesson played={played} />}
 
       <section className="section" aria-labelledby="recap-title">
         <h2 id="recap-title">{exam ? 'Corrections' : 'Revoir les épreuves'}</h2>

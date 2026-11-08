@@ -18,7 +18,6 @@ const fr = (html: string) =>
 const craftFloor: ModuleContent = {
   id: 'craft-floor',
   title: 'Le plancher de qualité',
-  category: 'fondations',
   summary:
     'Vérifier un rendu sur les points que tout visiteur remarque (contraste, profondeur, espacement, typo, mouvement, états, surfaces du navigateur, texte) et refuser les réflexes de la catégorie, sans oublier que le plancher n’est pas le plafond.',
   minutes: 12,

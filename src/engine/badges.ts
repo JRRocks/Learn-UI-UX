@@ -51,6 +51,12 @@ export const BADGES: Badge[] = [
     earned: (s, c) => correctWhere(s, c, (e) => e.type === 'slider') >= 8,
   },
   {
+    id: 'field',
+    title: 'Sur le terrain',
+    description: 'Réussir 5 mises en situation.',
+    earned: (s, c) => correctWhere(s, c, (e) => e.type === 'scenario') >= 5,
+  },
+  {
     id: 'wordsmith',
     title: 'Plume juste',
     description: 'Réussir 12 épreuves de rédaction UX.',
@@ -82,6 +88,12 @@ export const BADGES: Badge[] = [
     title: 'Examen réussi',
     description: 'Obtenir au moins 80 % à l’examen.',
     earned: (s) => s.sessions.some((r) => r.kind === 'exam' && r.total > 0 && r.correct / r.total >= 0.8),
+  },
+  {
+    id: 'theme',
+    title: 'Thème validé',
+    description: 'Obtenir au moins 80 % à l’évaluation d’un thème.',
+    earned: (s) => s.sessions.some((r) => r.kind === 'evaluation' && r.total >= 10 && r.correct / r.total >= 0.8),
   },
   {
     id: 'reader',

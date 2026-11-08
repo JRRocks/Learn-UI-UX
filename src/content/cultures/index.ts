@@ -17,6 +17,31 @@ export const CULTURE_NAMES: Record<string, string> = {
   sea: 'Asie du Sud-Est',
 };
 
+/**
+ * The region of each market, as its profile names it (checked by src/content/content.test.ts): the
+ * training lists the markets by region without loading the profiles.
+ */
+export const CULTURE_REGIONS: Record<string, string> = {
+  fr: 'Europe',
+  us: 'Amériques',
+  de: 'Europe',
+  nordics: 'Europe',
+  cn: 'Asie de l’Est',
+  jp: 'Asie de l’Est',
+  kr: 'Asie de l’Est',
+  in: 'Asie du Sud',
+  arab: 'Moyen-Orient',
+  br: 'Amériques',
+  ke: 'Afrique',
+  sea: 'Asie du Sud-Est',
+};
+
+/** The learner's own market, set apart from the foreign ones in the training by market. */
+export const HOME_CULTURE = 'fr';
+
+/** The culture exercises that name no market (engine/session.ts, `CULTURE_COMMON`). */
+export const CULTURE_COMMON_LABEL = 'Notions communes';
+
 export interface CultureData {
   profiles: CultureProfile[];
   pairs: CulturePair[];

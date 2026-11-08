@@ -192,7 +192,6 @@ const block = (id: string, lines: string[]) => `<div class="cd-b" data-hotspot="
 const responsive: ModuleContent = {
   id: 'responsive',
   title: 'Responsive et adaptation',
-  category: 'corriger',
   summary:
     'Repenser une interface pour chaque contexte (écran, mode de saisie, connexion, usage) au lieu de la mettre à l’échelle : mobile d’abord, points de rupture dictés par le contenu, cibles tactiles, zones sûres et images adaptées.',
   minutes: 11,
@@ -397,6 +396,58 @@ Pour un **contrôle sur mesure** (curseur, surface à glisser), vérifie au doig
     { id: 'devices', front: 'L’émulation des outils de développement suffit-elle ?', back: 'Non : teste sur un vrai iPhone et un vrai Android, dont un modèle d’entrée de gamme, en portrait et en paysage.' },
   ],
   exercises: [
+    {
+      id: 'responsive-product-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'La boutique en ligne Atelier Lin vend du linge de lit. Sur téléphone, sa fiche produit n’est que la version bureau rétrécie : chiffre minuscule dans le champ de quantité, bouton bas, texte presque collé aux bords de l’écran.',
+      prompt: 'Règle la fiche produit pour qu’elle s’utilise vraiment sur téléphone.',
+      visual: {
+        frame: 'phone',
+        alt: 'Écran de téléphone : fiche produit d’Atelier Lin, photo pleine largeur, « Parure en lin lavé, 240 × 220 cm », prix 129,00 €, champ Quantité, bouton « Ajouter au panier ». La taille du chiffre dans le champ, la hauteur du bouton et la marge latérale du texte suivent les réglages.',
+        css: `.al { display: flex; flex-direction: column; gap: 10px; padding: 0 var(--side) 16px; }
+.al .mk-img { margin-inline: calc(var(--side) * -1); border-radius: 0; }
+.al-name { font-size: 16px; font-weight: 650; line-height: 1.3; }
+.al-price { font-size: 18px; }
+.al-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.al-qty { display: flex; align-items: center; width: 64px; min-height: 40px; padding: 0 10px; border: 1px solid #868d9c; border-radius: 6px; font-size: var(--input); }
+.al-cta { display: flex; align-items: center; justify-content: center; min-height: var(--cta); border-radius: 8px; background: #1d2230; color: #ffffff; font-size: 15px; font-weight: 650; }`,
+        html: `<div class="al"><div class="mk-img" style="--ratio:16/9"></div><p class="al-name">Parure en lin lavé, 240 × 220 cm</p><p class="mk-price al-price">129,00 €</p><div class="al-row"><span class="mk-label">Quantité</span><span class="al-qty">1</span></div><span class="al-cta">Ajouter au panier</span></div>`,
+      },
+      controls: [
+        { kind: 'range', id: 'input', label: 'Taille du chiffre dans le champ « Quantité »', min: 11, max: 20, step: 1, initial: 12, unit: 'px', ideal: 16 },
+        { kind: 'range', id: 'cta', label: 'Hauteur du bouton « Ajouter au panier »', min: 28, max: 64, step: 2, initial: 32, unit: 'px', ideal: 52 },
+        { kind: 'range', id: 'side', label: 'Marge latérale du texte', min: 0, max: 32, step: 2, initial: 4, unit: 'px', ideal: 20 },
+      ],
+      criteria: [
+        {
+          id: 'input',
+          label: 'Texte du champ d’au moins 16 px',
+          check: { kind: 'range', control: 'input', min: 16 },
+          why: 'Sous 16 px, Safari sur iPhone zoome de force quand on touche le champ, et la mise en page se décale. À 16 px, le chiffre saisi se lit aussi d’un coup d’œil.',
+        },
+        {
+          id: 'cta',
+          label: 'Bouton d’au moins 44 px de haut',
+          check: { kind: 'range', control: 'cta', min: 44 },
+          why: 'Au doigt, 44 px se touchent sans viser : le minimum d’impeccable au toucher et le seuil du critère WCAG 2.5.5 (AAA). Le bouton principal d’une fiche produit gagne à être plus grand encore.',
+        },
+        {
+          id: 'side',
+          label: 'Au moins 16 px de marge de chaque côté',
+          check: { kind: 'range', control: 'side', min: 16 },
+          why: 'Le texte ne touche jamais le bord de l’écran : vise 16 px au moins, idéalement 24 à 32. Le détecteur d’impeccable signale moins de 12 px sur un écran de 480 px de large ou moins.',
+        },
+      ],
+      explanation: `Rétrécir la version bureau ne fait pas une version mobile : le doigt, la petite taille et les habitudes du téléphone changent les règles.
+
+- **Les champs** : 16 px au moins, sinon Safari sur iPhone zoome au moment de la saisie et casse la page.
+- **Le bouton d’achat** : 44 px de haut au moins, pleine largeur, à portée de pouce.
+- **Les marges** : 16 px au moins entre le texte et le bord ; la photo, elle, peut aller d’un bord à l’autre.`,
+      takeaway: 'Sur téléphone : des champs en 16 px au moins, un bouton principal de 44 px de haut au moins, et 16 px de marge entre le texte et le bord de l’écran.',
+      sources: ['imp:adapt', 'wcag:target', 'imp:detector', { label: 'CSS-Tricks — 16px or Larger Text Prevents iOS Form Zoom', url: 'https://css-tricks.com/16px-or-larger-text-prevents-ios-form-zoom/' }],
+    },
     {
       id: 'responsive-nav-duel',
       type: 'choice',

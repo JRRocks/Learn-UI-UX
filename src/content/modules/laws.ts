@@ -159,7 +159,6 @@ const JK_CSS = `.jk-bar { display: flex; align-items: center; gap: 10px; padding
 const laws: ModuleContent = {
   id: 'laws',
   title: 'Lois de l’UX',
-  category: 'psychologie',
   summary:
     'Savoir ce que prédisent vraiment les lois de l’UX — Fitts, Hick, Jakob, Miller et Cowan, Doherty, Gestalt… —, comment les appliquer, et repérer quand on les cite à tort.',
   minutes: 14,

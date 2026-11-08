@@ -106,7 +106,6 @@ const MEMBER_CSS = `
 const polish: ModuleContent = {
   id: 'polish',
   title: 'États et finition',
-  category: 'affiner',
   summary:
     'Mener la dernière passe avant la mise en ligne : classer la dérive, trier les défauts du fonctionnel au cosmétique, donner à chaque contrôle tous ses états et finir les surfaces qu’on oublie — sans refondre en douce.',
   minutes: 13,

@@ -62,7 +62,6 @@ ${inherit ? `.rs-body { background: #fff; }
 const processModule: ModuleContent = {
   id: 'process',
   title: 'Cadrer et systématiser',
-  category: 'construire',
   summary:
     'Cadrer un écran avant de le dessiner, consigner la vérité produit et le système visuel, décider ce qui fait autorité, et choisir la bonne commande d’impeccable pour chaque problème.',
   minutes: 11,

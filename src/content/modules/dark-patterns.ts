@@ -83,7 +83,6 @@ const ACCOUNT_HEAD = `<p class="mk-h3">Créer votre compte</p><div class="mk-fie
 const darkPatterns: ModuleContent = {
   id: 'dark-patterns',
   title: 'Design trompeur et éthique',
-  category: 'psychologie',
   summary:
     'Reconnaître les motifs trompeurs — fausse urgence, présélection, résiliation obstruée… —, savoir ce qu’en disent le RGPD, la CNIL et le DSA, et concevoir des choix honnêtes.',
   minutes: 13,
@@ -268,6 +267,67 @@ Impeccable va dans le même sens : ne jamais simuler un travail ni retarder un r
     { id: 'nagging', front: 'Comment éviter le harcèlement (nagging) ?', back: 'Offrir un vrai « non » (« Non merci », « Ne plus demander ») et ne pas redemander un choix déjà fait.' },
   ],
   exercises: [
+    {
+      id: 'dark-patterns-cookie-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'La librairie en ligne Les Mots Passants prépare son bandeau de cookies. « Tout accepter » est un bouton bleu franc de 44 px ; « Tout refuser », placé à côté, est plus bas, écrit plus petit, sur un bleu si pâle que son libellé blanc se devine à peine.',
+      prompt: 'Règle « Tout refuser » pour que refuser soit aussi simple et aussi visible qu’accepter.',
+      visual: {
+        frame: 'browser',
+        alt: 'Page de la librairie Les Mots Passants, en partie masquée par un bandeau de cookies : titre « Vos choix sur les cookies », court texte, deux boutons côte à côte, « Tout refuser » et « Tout accepter », puis un lien « Personnaliser mes choix ». La hauteur, la taille du libellé et la couleur du bouton « Tout refuser » suivent les réglages.',
+        css: `.mp { background: #f4f6f9; }
+.mp-page { padding: 16px; }
+.mp-banner { margin: 0 12px 12px; padding: 16px; border-radius: 12px; background: #ffffff; box-shadow: 0 6px 24px rgb(15 20 35 / 0.16); }
+.mp-btns { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 8px; }
+.mp-btn { display: flex; align-items: center; justify-content: center; padding: 0 10px; border-radius: 8px; color: #ffffff; font-weight: 600; text-align: center; }
+.mp-refuse { min-height: var(--refuse-h); background: var(--refuse); font-size: var(--refuse-size); }
+.mp-accept { min-height: 44px; background: #1f4fd8; font-size: 15px; }
+.mp-link { font-size: 13px; color: #1f4fd8; text-decoration: underline; }`,
+        html: `<div class="mp"><div class="mp-page mk-stack" style="--gap:8px"><p class="mk-h2">Les Mots Passants</p><div class="mk-line mk-line--m"></div><div class="mk-line"></div><div class="mk-line mk-line--s"></div></div><div class="mp-banner mk-stack" style="--gap:12px"><p class="mk-strong">Vos choix sur les cookies</p><p class="mk-small">Nous utilisons des cookies pour mesurer l’audience et vous proposer des livres selon vos lectures. Vous pouvez changer d’avis à tout moment.</p><div class="mp-btns"><span class="mp-btn mp-refuse">Tout refuser</span><span class="mp-btn mp-accept">Tout accepter</span></div><span class="mp-link">Personnaliser mes choix</span></div></div>`,
+      },
+      controls: [
+        { kind: 'range', id: 'refuse-h', label: 'Hauteur de « Tout refuser »', min: 24, max: 56, step: 2, initial: 30, unit: 'px', ideal: 44 },
+        { kind: 'range', id: 'refuse-size', label: 'Taille du libellé de « Tout refuser »', min: 10, max: 18, step: 1, initial: 12, unit: 'px', ideal: 15 },
+        {
+          kind: 'ramp',
+          id: 'refuse',
+          label: 'Couleur de « Tout refuser »',
+          colors: ['#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1f4fd8'],
+          initial: 2,
+          ideal: 6,
+        },
+      ],
+      readouts: [{ kind: 'contrast', label: 'Contraste du libellé « Tout refuser »', a: 'refuse', b: '#ffffff' }],
+      criteria: [
+        {
+          id: 'height',
+          label: '« Tout refuser » aussi haut que « Tout accepter » : 44 px',
+          check: { kind: 'range', control: 'refuse-h', min: 44 },
+          why: 'Même niveau, même format : un bouton plus bas que son voisin dit déjà lequel il faut choisir. Et 44 px, c’est aussi la taille d’une cible confortable au doigt.',
+        },
+        {
+          id: 'size',
+          label: 'Libellé aussi grand que celui de « Tout accepter » : 15 px',
+          check: { kind: 'range', control: 'refuse-size', min: 15 },
+          why: 'Un libellé plus petit relègue le refus au rang de mention. Les deux choix s’écrivent au même corps.',
+        },
+        {
+          id: 'label',
+          label: 'Libellé de « Tout refuser » contrasté à 4,5:1 au moins',
+          check: { kind: 'contrast', a: 'refuse', b: '#ffffff', min: 4.5 },
+          why: 'Blanc sur #93C5FD, le libellé n’atteint que 1,8:1 : on devine qu’il y a un bouton, pas ce qu’il fait. Le bleu de « Tout accepter », #1F4FD8, offre 6,62:1 ; #2563EB passe à 5,16:1.',
+        },
+      ],
+      explanation: `La CNIL le résume ainsi : « L’utilisateur doit pouvoir accepter ou refuser les cookies avec le même degré de simplicité. » Un bouton « Tout refuser » **au même niveau et au même format** que « Tout accepter » y répond.
+
+Le bandeau de départ respecte la lettre — le refus existe, au même niveau — mais pas l’esprit : plus bas, écrit plus petit, presque invisible, il pousse à accepter. C’est une **interface trompeuse** : la décision est orientée par la forme.
+
+La version juste donne aux deux boutons la même hauteur, le même corps, la même couleur. Le choix redevient un choix.`,
+      takeaway: '« Tout refuser » au même niveau et au même format que « Tout accepter » : même hauteur, même corps, même contraste. Un refus pâle et petit n’est pas un vrai choix.',
+      sources: ['cnil:cookies', CNIL_REFUS, 'deceptive', 'wcag:contrast'],
+    },
     {
       id: 'dark-patterns-cookie-choice',
       type: 'choice',

@@ -1,5 +1,7 @@
 import { MOCK_ICONS } from '../components/mockIcons';
-import type { AntipatternEntry, CulturePair, CultureProfile, Exercise, ModuleContent, Source, Visual } from '../engine/types';
+import { criterionMet, idealValues, initialValues } from '../engine/grade';
+import type { AntipatternEntry, CulturePair, CultureProfile, Exercise, ModuleContent, ScenarioExercise, Source, Visual } from '../engine/types';
+import { themeOf } from './order';
 import { SOURCES } from './sources';
 
 /**
@@ -8,7 +10,6 @@ import { SOURCES } from './sources';
  */
 
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const CATEGORIES = ['fondations', 'evaluer', 'affiner', 'enrichir', 'corriger', 'construire', 'psychologie', 'culture'];
 
 export function checkText(text: string | undefined, where: string, errors: string[], required = true) {
   if (text === undefined || text.trim() === '') {
@@ -143,7 +144,73 @@ export function checkExercise(ex: Exercise, moduleId: string, errors: string[]) 
       }
       break;
     }
+    case 'scenario':
+      checkScenario(ex, w, errors);
+      break;
   }
+}
+
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/**
+ * A scenario: settings the mock reads, criteria that name them, and an expert version that meets
+ * every criterion while the starting point misses at least one.
+ */
+function checkScenario(ex: ScenarioExercise, w: string, errors: string[]) {
+  const before = errors.length;
+  const ids = ex.controls.map((c) => c.id);
+  if (!ex.controls.length) errors.push(`${w}: au moins un réglage`);
+  if (new Set(ids).size !== ids.length) errors.push(`${w}: ids de réglages en double`);
+  const styles = `${ex.visual.css ?? ''}\n${ex.visual.html}`;
+  for (const c of ex.controls) {
+    const at = `${w}.controls.${c.id}`;
+    if (!KEBAB.test(c.id)) errors.push(`${at}: id non kebab-case (il nomme la propriété --${c.id})`);
+    checkText(c.label, `${at}.label`, errors);
+    if (!new RegExp(`var\\(--${c.id}(-n)?\\)`).test(styles)) errors.push(`${at}: la maquette ne lit jamais var(--${c.id})`);
+    if (c.kind === 'range') {
+      if (!(c.min < c.max) || !(c.step > 0)) errors.push(`${at}: min < max et step > 0 attendus`);
+      for (const [name, v] of [['initial', c.initial], ['ideal', c.ideal]] as const)
+        if (v < c.min || v > c.max) errors.push(`${at}: ${name} hors de [min, max]`);
+    } else {
+      if (c.colors.length < 3) errors.push(`${at}: au moins 3 nuances`);
+      for (const color of c.colors) if (!HEX.test(color)) errors.push(`${at}: couleur « ${color} » non hexadécimale (#rrggbb)`);
+      for (const [name, v] of [['initial', c.initial], ['ideal', c.ideal]] as const)
+        if (!Number.isInteger(v) || v < 0 || v >= c.colors.length) errors.push(`${at}: ${name} n’est pas le rang d’une nuance`);
+    }
+  }
+  const kind = (id: string) => ex.controls.find((c) => c.id === id)?.kind;
+  const color = (ref: string, at: string) => {
+    if (kind(ref) !== 'ramp' && !HEX.test(ref)) errors.push(`${at}: « ${ref} » n’est ni une rampe de couleurs ni une couleur #rrggbb`);
+  };
+  const number = (ref: string, at: string) => {
+    if (kind(ref) !== 'range') errors.push(`${at}: « ${ref} » n’est pas un réglage numérique (range)`);
+  };
+  if (ex.criteria.length < 2) errors.push(`${w}: au moins 2 critères`);
+  if (new Set(ex.criteria.map((c) => c.id)).size !== ex.criteria.length) errors.push(`${w}: ids de critères en double`);
+  for (const c of ex.criteria) {
+    const at = `${w}.criteria.${c.id}`;
+    checkText(c.label, `${at}.label`, errors);
+    checkText(c.why, `${at}.why`, errors);
+    const check = c.check;
+    if (check.kind === 'contrast') {
+      color(check.a, at);
+      color(check.b, at);
+    } else {
+      if (check.kind === 'range') number(check.control, at);
+      else (number(check.a, at), number(check.b, at));
+      if (check.min === undefined && check.max === undefined) errors.push(`${at}: min ou max attendu`);
+    }
+  }
+  for (const r of ex.readouts ?? []) {
+    checkText(r.label, `${w}.readouts.${r.label}`, errors);
+    color(r.a, `${w}.readouts`);
+    color(r.b, `${w}.readouts`);
+  }
+  // The values can only be evaluated on a well-formed scenario.
+  if (errors.length > before) return;
+  const missed = ex.criteria.filter((c) => !criterionMet(ex, c, idealValues(ex)));
+  for (const c of missed) errors.push(`${w}: la version experte ne respecte pas le critère « ${c.id} »`);
+  if (ex.criteria.every((c) => criterionMet(ex, c, initialValues(ex)))) errors.push(`${w}: les réglages de départ respectent déjà tous les critères`);
 }
 
 export function checkModule(m: ModuleContent, file: string): string[] {
@@ -152,7 +219,7 @@ export function checkModule(m: ModuleContent, file: string): string[] {
   if (!m || !m.id) return [`${file}: export default manquant ou sans id`];
   if (!KEBAB.test(m.id)) errors.push(`${w}: id non kebab-case`);
   if (!file.endsWith(`/${m.id}.ts`)) errors.push(`${w}: le fichier doit s'appeler ${m.id}.ts`);
-  if (!CATEGORIES.includes(m.category)) errors.push(`${w}: catégorie inconnue « ${m.category} »`);
+  if (!themeOf(m.id)) errors.push(`${w}: leçon rangée dans aucun thème (ajoute son id à THEMES, src/content/order.ts)`);
   checkText(m.title, `${w}.title`, errors);
   checkText(m.summary, `${w}.summary`, errors);
   checkSources(m.sources, w, errors);

@@ -169,7 +169,6 @@ const LIKE_CSS = `
 const performanceModule: ModuleContent = {
   id: 'performance',
   title: 'Performance perçue',
-  category: 'corriger',
   summary:
     'Rendre une interface rapide pour de vrai, mesurée par les Core Web Vitals, et rapide à l’œil : squelettes, progression honnête, UI optimiste, polices et images bien chargées. Toujours en mesurant d’abord sur des appareils réalistes.',
   minutes: 11,

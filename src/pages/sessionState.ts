@@ -105,6 +105,13 @@ export function draftFits(ex: Exercise, d: Draft | undefined): d is Draft {
         d.scores !== null &&
         Object.entries(d.scores).every(([id, score]) => known(ex.criteria, id) && typeof score === 'number')
       );
+    case 'scenario':
+      return (
+        ex.type === 'scenario' &&
+        typeof d.values === 'object' &&
+        d.values !== null &&
+        Object.entries(d.values).every(([id, v]) => known(ex.controls, id) && typeof v === 'number' && Number.isFinite(v))
+      );
     default:
       return false;
   }

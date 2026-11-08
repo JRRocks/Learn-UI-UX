@@ -4,14 +4,15 @@
  * exercise and flashcard without downloading them, and fetches a lesson only when it is opened.
  */
 import { isDuel, type ExerciseSummary } from '../engine/session';
-import type { KeyRule, ModuleCategory, ModuleContent, TrueFalseExercise } from '../engine/types';
-import { MODULE_ORDER } from './order';
+import type { KeyRule, ModuleContent, TrueFalseExercise } from '../engine/types';
+import { MODULE_ORDER, themeOf, type ThemeId } from './order';
 
 /** A lesson as the light index lists it: what menus, counts and badges need, without its text and mocks. */
 export interface ModuleSummary {
   id: string;
   title: string;
-  category: ModuleCategory;
+  /** Its theme (src/content/order.ts); a lesson left out of every theme falls under the last one. */
+  theme: ThemeId;
   summary: string;
   minutes: number;
   commands?: string[];
@@ -66,7 +67,7 @@ export function contentIndex(modules: ModuleContent[]): ContentIndex {
     modules: modules.map((m) => ({
       id: m.id,
       title: m.title,
-      category: m.category,
+      theme: themeOf(m.id)?.id ?? 'cultures',
       summary: m.summary,
       minutes: m.minutes,
       ...(m.commands ? { commands: m.commands } : {}),

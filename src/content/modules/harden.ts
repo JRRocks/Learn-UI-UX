@@ -93,7 +93,6 @@ const NOTE_BODY = `<p class="mk-h2">Notes de réunion — lancement</p>
 const harden: ModuleContent = {
   id: 'harden',
   title: 'Robustesse : cas limites, erreurs, i18n',
-  category: 'affiner',
   summary:
     'Rendre une interface prête pour la production : textes extrêmes, grands nombres, erreurs réseau et serveur, traductions, écritures de droite à gauche, formats locaux, double clic et gestes interrompus.',
   minutes: 13,

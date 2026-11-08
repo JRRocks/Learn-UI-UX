@@ -1,6 +1,6 @@
-import { ArrowDown, ArrowUp, Check, RotateCcw, X } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
-import { contrastRatio, grayHex, orderConcordance, type Answer } from '../../engine/grade';
+import { ArrowDown, ArrowUp, Check, Minus, Plus, RotateCcw, X } from 'lucide-react';
+import { useCallback, useMemo, useState, type CSSProperties } from 'react';
+import { contrastRatio, criterionMet, grayHex, idealValues, initialValues, measure, orderConcordance, scenarioColor, type Answer } from '../../engine/grade';
 import type {
   ChoiceExercise,
   Exercise,
@@ -9,6 +9,9 @@ import type {
   MatchExercise,
   MultiExercise,
   OrderExercise,
+  ScenarioControl,
+  ScenarioCriterion,
+  ScenarioExercise,
   SliderExercise,
   TrueFalseExercise,
 } from '../../engine/types';
@@ -26,7 +29,8 @@ export type Draft =
   | { type: 'order'; ids: string[] }
   | { type: 'match'; pairs: Record<string, string> }
   | { type: 'slider'; value: number }
-  | { type: 'grid'; scores: Record<string, number> };
+  | { type: 'grid'; scores: Record<string, number> }
+  | { type: 'scenario'; values: Record<string, number> };
 
 export function initialDraft(ex: Exercise, order: string[]): Draft {
   switch (ex.type) {
@@ -46,6 +50,8 @@ export function initialDraft(ex: Exercise, order: string[]): Draft {
       return { type: 'slider', value: ex.initial };
     case 'grid':
       return { type: 'grid', scores: {} };
+    case 'scenario':
+      return { type: 'scenario', values: initialValues(ex) };
   }
 }
 
@@ -61,6 +67,7 @@ export function isComplete(ex: Exercise, d: Draft): boolean {
       return ex.type === 'hotspot' && d.ids.length === ex.hotspots.filter((h) => h.correct).length;
     case 'order':
     case 'slider':
+    case 'scenario':
       return true;
     case 'match':
       return ex.type === 'match' && ex.pairs.every((p) => d.pairs[p.id]);
@@ -87,6 +94,8 @@ export function toAnswer(d: Draft): Answer {
       return { type: 'slider', value: d.value };
     case 'grid':
       return { type: 'grid', scores: d.scores };
+    case 'scenario':
+      return { type: 'scenario', values: d.values };
   }
 }
 
@@ -657,6 +666,215 @@ export function GridPlayer({ ex, draft, setDraft, revealed }: P<GridExercise, Ex
           );
         })}
       </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- scenario */
+
+/** The properties a scenario's mock reads: `--<id>`, and `--<id>-n` for a number. */
+export function scenarioVars(ex: ScenarioExercise, values: Record<string, number>): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const c of ex.controls) {
+    const v = values[c.id] ?? c.initial;
+    if (c.kind === 'range') {
+      out[`--${c.id}`] = `${v}${c.unit}`;
+      out[`--${c.id}-n`] = String(v);
+    } else out[`--${c.id}`] = scenarioColor(ex, c.id, values);
+  }
+  return out;
+}
+
+/** « 48 px », or the shade of a color ramp as its code (`#B45309`). */
+export function settingText(ex: ScenarioExercise, c: ScenarioControl, values: Record<string, number>): string {
+  const v = values[c.id] ?? c.initial;
+  return c.kind === 'range' ? `${fmt(v)}${c.unit ? ` ${c.unit}` : ''}` : scenarioColor(ex, c.id, values).toUpperCase();
+}
+
+/** A contrast ratio as WCAG reads it: cut, never rounded up (4,49:1 does not reach 4,5:1). */
+export const contrastText = (ratio: number) => `${fmt(Math.floor(ratio * 100) / 100)}:1`;
+
+/** What a criterion measured on the values set: « 36 px », « 1,5 », « 3,2:1 ». */
+export function measuredText(ex: ScenarioExercise, c: ScenarioCriterion, values: Record<string, number>): string {
+  const v = measure(ex, c, values);
+  const check = c.check;
+  if (check.kind === 'contrast') return contrastText(v);
+  if (check.kind === 'ratio') return Number.isFinite(v) ? fmt(Math.round(v * 100) / 100) : '—';
+  const control = ex.controls.find((x) => x.id === check.control);
+  return control ? settingText(ex, control, values) : fmt(v);
+}
+
+/** A color ramp drawn on its slider's track, one band per shade. */
+function rampTrack(colors: string[]): CSSProperties {
+  const step = 100 / colors.length;
+  const stops = colors.map((c, i) => `${c} ${(i * step).toFixed(3)}% ${((i + 1) * step).toFixed(3)}%`).join(', ');
+  return { '--ramp': `linear-gradient(to right, ${stops})` } as CSSProperties;
+}
+
+/**
+ * One setting: its name and value, then « − », the slider, « + ». The buttons change it a step at a
+ * time without dragging (WCAG 2.5.7), and with a finger, more precisely than the thumb.
+ */
+function Setting({
+  ex,
+  c,
+  values,
+  disabled,
+  onChange,
+}: {
+  ex: ScenarioExercise;
+  c: ScenarioControl;
+  values: Record<string, number>;
+  disabled: boolean;
+  onChange: (id: string, v: number) => void;
+}) {
+  const id = `sc-${ex.id}-${c.id}`;
+  const v = values[c.id] ?? c.initial;
+  const [min, max, step] = c.kind === 'range' ? [c.min, c.max, c.step] : [0, c.colors.length - 1, 1];
+  // Rounded to the step's decimals: 1.1 + 0.05 must give 1.15, not 1.1500000000000001.
+  const decimals = (String(step).split('.')[1] ?? '').length;
+  const set = (n: number) => onChange(c.id, Number(Math.min(max, Math.max(min, n)).toFixed(decimals)));
+  const text = settingText(ex, c, values);
+  const color = c.kind === 'ramp' ? scenarioColor(ex, c.id, values) : null;
+  const valueText = c.kind === 'ramp' ? `Nuance ${v + 1} sur ${c.colors.length}, de la plus claire à la plus foncée : ${text}` : text;
+  return (
+    <div className="setting" data-kind={c.kind}>
+      <div className="slider-head">
+        <label htmlFor={id} className="field-label">
+          {c.label}
+        </label>
+        <output htmlFor={id} className="slider-value">
+          {color && <span className="setting-swatch" style={{ background: color }} aria-hidden="true" />}
+          {text}
+        </output>
+      </div>
+      <div className="setting-row">
+        <button
+          type="button"
+          className="icon-btn setting-step"
+          onClick={() => set(v - step)}
+          disabled={disabled}
+          aria-disabled={v <= min || undefined}
+          aria-label={`Diminuer : ${c.label}`}
+        >
+          <Minus aria-hidden="true" />
+        </button>
+        <input
+          id={id}
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={v}
+          disabled={disabled}
+          aria-valuetext={valueText}
+          style={c.kind === 'ramp' ? rampTrack(c.colors) : undefined}
+          onChange={(e) => set(Number(e.target.value))}
+        />
+        <button
+          type="button"
+          className="icon-btn setting-step"
+          onClick={() => set(v + step)}
+          disabled={disabled}
+          aria-disabled={v >= max || undefined}
+          aria-label={`Augmenter : ${c.label}`}
+        >
+          <Plus aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * « Mise en situation »: a realistic screen and its settings, side by side where there is room. Once
+ * validated, the settings are evaluated criterion by criterion, and the expert version can be shown
+ * in place of the learner's.
+ */
+export function ScenarioPlayer({ ex, draft, setDraft, revealed }: P<ScenarioExercise, Extract<Draft, { type: 'scenario' }>>) {
+  const [showIdeal, setShowIdeal] = useState(false);
+  const ideal = useMemo(() => idealValues(ex), [ex]);
+  const shown = revealed && showIdeal ? ideal : draft.values;
+  const vars = useMemo(() => scenarioVars(ex, shown), [ex, shown]);
+  const met = ex.criteria.filter((c) => criterionMet(ex, c, draft.values)).length;
+  const onChange = (id: string, v: number) => setDraft({ type: 'scenario', values: { ...draft.values, [id]: v } });
+
+  return (
+    <div className="section scenario">
+      <div className="scenario-work">
+        <div className="stage scenario-stage">
+          <Mock visual={ex.visual} vars={vars} />
+          {/* Under the screen it changes: on a phone, the change shows right above the button. */}
+          {revealed && (
+            <div className="scenario-view">
+              <p className="scenario-shown">{showIdeal ? 'Version experte' : 'Tes réglages'}</p>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                aria-pressed={showIdeal}
+                onClick={() => {
+                  setShowIdeal((x) => !x);
+                  // The screen above changes size (a button, a spacing): the page follows the button.
+                  followFocus();
+                }}
+              >
+                {showIdeal ? 'Revoir mes réglages' : 'Voir la version experte'}
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="scenario-panel">
+          <div className="settings" role="group" aria-label="Réglages">
+            {ex.controls.map((c) => (
+              <Setting key={c.id} ex={ex} c={c} values={draft.values} disabled={revealed} onChange={onChange} />
+            ))}
+          </div>
+          {ex.readouts?.map((r) => {
+            const ratio = contrastRatio(scenarioColor(ex, r.a, shown), scenarioColor(ex, r.b, shown));
+            return (
+              <p key={r.label} className="slider-readout">
+                {r.label}
+                {' '}: <strong>{contrastText(ratio)}</strong>
+              </p>
+            );
+          })}
+          {!revealed && (
+            <p className="task-hint">
+              {frenchSpacing(`Règle l’écran comme tu le livrerais, puis valide : tes réglages seront évalués sur ${ex.criteria.length} critères.`)}
+            </p>
+          )}
+        </div>
+      </div>
+      {revealed && (
+        <section className="criteria" data-reveal-view="" aria-labelledby={`crit-${ex.id}`}>
+          <h2 id={`crit-${ex.id}`} className="criteria-title">
+            Évaluation par critères{' '}: {met} sur {ex.criteria.length}
+          </h2>
+          <ul className="criteria-list">
+            {ex.criteria.map((c) => {
+              const ok = criterionMet(ex, c, draft.values);
+              return (
+                <li key={c.id} data-state={ok ? 'right' : 'wrong'}>
+                  {ok ? <Check aria-hidden="true" /> : <X aria-hidden="true" />}
+                  <div>
+                    <p className="criteria-label">
+                      <span className="visually-hidden">{ok ? 'Respecté : ' : 'Non respecté : '}</span>
+                      <MdInline text={c.label} />
+                    </p>
+                    <p className="criteria-measure">
+                      Toi{' '}: <strong>{measuredText(ex, c, draft.values)}</strong>
+                      {SEP}expert{' '}: {measuredText(ex, c, ideal)}
+                    </p>
+                    <p className="criteria-why">
+                      <MdInline text={c.why} />
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

@@ -15,6 +15,7 @@ import {
   MatchPlayer,
   MultiPlayer,
   OrderPlayer,
+  ScenarioPlayer,
   SliderPlayer,
   TrueFalsePlayer,
   initialDraft,
@@ -33,6 +34,7 @@ export const TYPE_LABEL: Record<Exercise['type'] | 'duel', string> = {
   match: 'Associations',
   slider: 'Calibrage',
   grid: 'Grille de critique',
+  scenario: 'Mise en situation',
 };
 
 /** Order of the options, items or right-hand labels on screen; the same seed gives the same order. */
@@ -162,7 +164,9 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
         ? 'Coche toutes les bonnes réponses (touches 1–\u2060' + order.length + '), puis Entrée.'
         : ex.type === 'truefalse'
           ? 'Raccourcis\u00A0: V (vrai), F (faux), Entrée pour valider.'
-          : 'Entrée pour valider.';
+          : ex.type === 'scenario'
+            ? 'Flèches pour régler un curseur, Entrée pour valider.'
+            : 'Entrée pour valider.';
 
   return (
     <article className="task" ref={articleRef}>
@@ -219,9 +223,9 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
   );
 }
 
-/** The question's mock, above the answers, unless the player draws it itself (hotspot, slider, grid). */
+/** The question's mock, above the answers, unless the player draws it itself (hotspot, slider, grid, scenario). */
 export function QuestionStage({ ex }: { ex: Exercise }) {
-  if (!ex.visual || ex.type === 'hotspot' || ex.type === 'slider' || ex.type === 'grid') return null;
+  if (!ex.visual || ex.type === 'hotspot' || ex.type === 'slider' || ex.type === 'grid' || ex.type === 'scenario') return null;
   return (
     <div className="stage">
       <Mock visual={ex.visual} />
@@ -259,5 +263,7 @@ export function ExercisePlayer({ ex, draft, setDraft, ...common }: PlayerProps):
       return <SliderPlayer ex={ex} draft={draft as Extract<Draft, { type: 'slider' }>} setDraft={setDraft} {...common} />;
     case 'grid':
       return <GridPlayer ex={ex} draft={draft as Extract<Draft, { type: 'grid' }>} setDraft={setDraft} {...common} />;
+    case 'scenario':
+      return <ScenarioPlayer ex={ex} draft={draft as Extract<Draft, { type: 'scenario' }>} setDraft={setDraft} {...common} />;
   }
 }

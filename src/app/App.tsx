@@ -1,4 +1,4 @@
-import { BookOpen, ChartColumn, Globe, House, Library, Moon, Sparkles, Sun, Target, type LucideIcon } from 'lucide-react';
+import { BookOpen, ChartColumn, Globe, House, Library, Menu, Moon, Sparkles, Sun, Target, X, type LucideIcon } from 'lucide-react';
 import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { EXERCISES, MODULES, MODULE_BY_ID } from '../content';
 import { emptyProgress, streak } from '../engine/progress';
@@ -25,13 +25,35 @@ store.setBadgeContext({ exercises: EXERCISES, moduleIds: MODULES.map((m) => m.id
 // Authoring preview (#/apercu/<module>), used by `npm run shots`; left out of production builds.
 const Preview = import.meta.env.DEV ? lazy(() => import('../pages/Preview').then((m) => ({ default: m.Preview }))) : null;
 
-const NAV: { to: string; label: string; match: string; Icon: LucideIcon }[] = [
-  { to: '/', label: 'Accueil', match: '', Icon: House },
-  { to: '/apprendre', label: 'Apprendre', match: 'apprendre', Icon: BookOpen },
-  { to: '/entrainement', label: 'S’entraîner', match: 'entrainement', Icon: Target },
-  { to: '/cultures', label: 'Cultures', match: 'cultures', Icon: Globe },
-  { to: '/ressources', label: 'Ressources', match: 'ressources', Icon: Library },
+interface NavItem {
+  to: string;
+  /** The title of the page it opens, word for word. */
+  label: string;
+  /** What the page holds, under its name in the menu. */
+  hint: string;
+  match: string;
+  Icon: LucideIcon;
+}
+
+const HOME: NavItem = { to: '/', label: 'Accueil', hint: 'Ta session du jour et où tu en es', match: '', Icon: House };
+const LESSONS: NavItem = { to: '/apprendre', label: 'Leçons', hint: 'Les leçons, rangées en grands thèmes', match: 'apprendre', Icon: BookOpen };
+const CULTURES: NavItem = { to: '/cultures', label: 'Cultures', hint: 'Les marchés, pays par pays', match: 'cultures', Icon: Globe };
+const RESOURCES: NavItem = { to: '/ressources', label: 'Ressources', hint: 'Aide-mémoire, anti-patterns, glossaire', match: 'ressources', Icon: Library };
+const PRACTICE: NavItem = { to: '/entrainement', label: 'S’entraîner', hint: 'Par thème, par pays, par format, examen', match: 'entrainement', Icon: Target };
+const PROGRESS: NavItem = { to: '/progression', label: 'Progression', hint: 'Maîtrise, badges, réglages', match: 'progression', Icon: ChartColumn };
+
+/**
+ * The whole map of the app, grouped by what one comes to do: learn, then train and follow one's
+ * progress. The desktop rail and the menu of the phones show it; the tab bar of the phones keeps
+ * the five pages used most.
+ */
+const NAV_GROUPS: { id: string; title: string | null; items: NavItem[] }[] = [
+  { id: 'home', title: null, items: [HOME] },
+  { id: 'learn', title: 'Apprendre', items: [LESSONS, CULTURES, RESOURCES] },
+  { id: 'progress', title: 'Progresser', items: [PRACTICE, PROGRESS] },
 ];
+
+const TABS: NavItem[] = [HOME, LESSONS, PRACTICE, CULTURES, PROGRESS];
 
 function BrandMark() {
   return (
@@ -115,6 +137,103 @@ function keyboardFocus(): Element | null {
   let el = document.activeElement;
   while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
   return el && el !== document.body && el.matches(':focus-visible') ? el : null;
+}
+
+/** The groups of the map: a list of links each, named by its title. */
+function NavGroups({ current, prefix, hints }: { current: string; prefix: string; hints?: boolean }) {
+  return (
+    <>
+      {NAV_GROUPS.map((g) => (
+        <div key={g.id} className="nav-group">
+          {g.title && (
+            <p className="nav-group-title" id={`${prefix}-${g.id}`}>
+              {g.title}
+            </p>
+          )}
+          <ul className="rail-nav" aria-labelledby={g.title ? `${prefix}-${g.id}` : undefined}>
+            {g.items.map(({ to, label, hint, match, Icon }) => (
+              <li key={to}>
+                <Link to={to} aria-current={current === match ? 'page' : undefined}>
+                  <Icon aria-hidden="true" />
+                  <span className="nav-text">
+                    {label}
+                    {hints && <small>{hint}</small>}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </>
+  );
+}
+
+/**
+ * « Menu », in the top bar of the phones: the whole map, the pages the tab bar leaves out included
+ * (Ressources, À propos). A modal dialog: the focus stays in it, Escape or « Fermer » closes it and
+ * the focus goes back to the button; a link followed closes it too.
+ */
+function MenuButton({ current }: { current: string }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const route = useRoute();
+  useEffect(() => {
+    ref.current?.close();
+  }, [route.raw]);
+  // From 960 px the rail takes over and the top bar, menu included, is hidden: a menu left open there
+  // (a tablet turned sideways) would keep the page inert, out of sight.
+  useEffect(() => {
+    const wide = window.matchMedia('(min-width: 60em)');
+    const close = () => {
+      if (wide.matches) ref.current?.close();
+    };
+    wide.addEventListener('change', close);
+    return () => wide.removeEventListener('change', close);
+  }, []);
+  const p = useProgress();
+  const st = streak(p);
+  return (
+    <>
+      <button type="button" className="icon-btn menu-btn" aria-haspopup="dialog" onClick={() => ref.current?.showModal()}>
+        <Menu aria-hidden="true" />
+        <span>Menu</span>
+      </button>
+      <dialog
+        ref={ref}
+        className="menu-sheet"
+        aria-labelledby="menu-title"
+        onClick={(e) => {
+          // A tap on the shade around the sheet, or on a link (the page shown included), closes it.
+          const target = e.target as Element;
+          if (target === e.currentTarget || target.closest('a')) e.currentTarget.close();
+        }}
+      >
+        <div className="menu-body">
+          <div className="menu-head">
+            <p id="menu-title" className="menu-title">
+              Menu
+            </p>
+            <button type="button" className="icon-btn" aria-label="Fermer le menu" onClick={() => ref.current?.close()}>
+              <X aria-hidden="true" />
+            </button>
+          </div>
+          <nav aria-label="Toutes les pages">
+            <NavGroups current={current} prefix="menu" hints />
+          </nav>
+          <div className="menu-foot">
+            <p className="small">
+              <strong className="num">{st.current}</strong> {st.current > 1 ? 'jours' : 'jour'} de série{SEP}
+              {p.xp}
+              {'\u00A0'}XP
+            </p>
+            <Link to="/a-propos" className="small" aria-current={current === 'a-propos' ? 'page' : undefined}>
+              À propos
+            </Link>
+          </div>
+        </div>
+      </dialog>
+    </>
+  );
 }
 
 function Toasts() {
@@ -466,30 +585,14 @@ function Shell() {
           <Brand />
           <div className="topbar-actions">
             <ThemeToggle />
-            {/* Below 960 px the only way to Progression: it says when it is the page shown, as the tabs do. */}
-            <Link to="/progression" className="icon-btn" aria-label="Progression" aria-current={current === 'progression' ? 'page' : undefined}>
-              <ChartColumn aria-hidden="true" />
-            </Link>
+            <MenuButton current={current} />
           </div>
         </header>
       )}
 
       <nav className="rail" aria-label="Navigation principale">
         <Brand />
-        <div className="rail-nav">
-          {NAV.map(({ to, label, match, Icon }) => (
-            <Link key={to} to={to} aria-current={current === match ? 'page' : undefined}>
-              <Icon aria-hidden="true" />
-              {label}
-            </Link>
-          ))}
-        </div>
-        <div className="rail-nav">
-          <Link to="/progression" aria-current={current === 'progression' ? 'page' : undefined}>
-            <ChartColumn aria-hidden="true" />
-            Progression
-          </Link>
-        </div>
+        <NavGroups current={current} prefix="rail" />
         <div className="rail-foot">
           <div className="rail-streak">
             <strong>{st.current}</strong>
@@ -512,7 +615,7 @@ function Shell() {
 
       {!focusMode && (
         <nav className="tabbar" aria-label="Navigation principale">
-          {NAV.map(({ to, label, match, Icon }) => (
+          {TABS.map(({ to, label, match, Icon }) => (
             <Link key={to} to={to} aria-current={current === match ? 'page' : undefined}>
               <Icon aria-hidden="true" />
               {label}

@@ -104,7 +104,6 @@ const LOGOS = ['Boulangerie Masson', 'Studio Lumen', 'Garage Ferrand', 'Atelier 
 const motion: ModuleContent = {
   id: 'motion',
   title: 'Mouvement',
-  category: 'enrichir',
   summary:
     'Donner un rôle à chaque animation, choisir des durées et des courbes justes, animer les bonnes propriétés et prévoir un mode réduit qui garde le sens.',
   minutes: 10,

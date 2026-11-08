@@ -73,7 +73,6 @@ const SK_CSS = `.int-page { display: flex; flex-direction: column; gap: 18px; pa
 const intensity: ModuleContent = {
   id: 'intensity',
   title: 'Doser l’intensité : simplifier, intensifier, adoucir',
-  category: 'affiner',
   summary:
     'Retirer ce qui n’a pas sa place, amplifier une section terne sans sortir du système, et calmer une interface criarde sans la rendre générique.',
   minutes: 11,

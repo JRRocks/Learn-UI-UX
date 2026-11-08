@@ -15,7 +15,7 @@ import { loadCatalog } from './catalog';
 import { loadCultures } from './cultures';
 import { fileId, withModuleIds, type ExerciseEntry, type ModuleSummary } from './derive';
 
-export { CATEGORIES, MODULE_ORDER } from './order';
+export { MODULE_ORDER, THEMES, THEME_BY_ID, themeOf, type Theme, type ThemeId } from './order';
 export type { ExerciseEntry, ModuleSummary, RuleCard } from './derive';
 
 /* ---------------------------------------------------------------- light index */

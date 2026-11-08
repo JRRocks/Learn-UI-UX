@@ -3,7 +3,6 @@ import type { ModuleContent } from '../../engine/types';
 const antipatterns: ModuleContent = {
   id: 'antipatterns',
   title: 'Anti-patterns et clichés générés',
-  category: 'fondations',
   summary:
     'Reconnaître au premier coup d’œil les tics des interfaces générées par IA et les défauts de qualité, à partir des 62 règles du détecteur d’impeccable, puis savoir les corriger sans se tromper de combat.',
   minutes: 13,

@@ -56,7 +56,6 @@ const TASKS_CSS = `
 const onboarding: ModuleContent = {
   id: 'onboarding',
   title: 'Premier usage et états vides',
-  category: 'affiner',
   summary:
     'Amener les nouveaux utilisateurs le plus vite possible au moment qui prouve la valeur du produit, concevoir des états vides qui enseignent, et doser l’aide contextuelle sans l’imposer.',
   minutes: 13,

@@ -160,7 +160,6 @@ const KO_TEXT =
 const culture: ModuleContent = {
   id: 'culture',
   title: 'UI interculturelle',
-  category: 'culture',
   summary:
     'Adapter une interface à un marché au-delà de la traduction : grilles de lecture culturelles, densité, couleurs et symboles, écritures, droite à gauche, formats, paiements et obligations légales — et savoir quand tester plutôt que supposer.',
   minutes: 18,

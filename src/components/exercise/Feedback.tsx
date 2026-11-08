@@ -6,7 +6,8 @@ import { SourceList } from '../SourceLink';
 import type { GradeResult } from '../../engine/grade';
 import type { Exercise } from '../../engine/types';
 import { Md, MdInline, frenchSpacing } from '../../lib/markdown';
-import type { Draft } from './players';
+import { criterionMet, idealValues, scenarioColor } from '../../engine/grade';
+import { settingText, type Draft } from './players';
 
 const VERDICT = {
   correct: { label: 'Juste', Icon: CircleCheck },
@@ -98,6 +99,26 @@ export function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
         </p>
       );
     }
+    case 'scenario': {
+      const mine = draft.type === 'scenario' ? draft.values : {};
+      const ideal = idealValues(ex);
+      return (
+        <ul className="recommended-list">
+          {ex.controls.map((c) => {
+            const changed = settingText(ex, c, mine) !== settingText(ex, c, ideal);
+            return (
+              <li key={c.id}>
+                {c.label}
+                {'\u00A0'}:{' '}
+                {c.kind === 'ramp' && <span className="setting-swatch" style={{ background: scenarioColor(ex, c.id, ideal) }} aria-hidden="true" />}
+                <strong>{settingText(ex, c, ideal)}</strong>
+                {changed && <span className="muted"> (toi{'\u00A0'}: {settingText(ex, c, mine)})</span>}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
     case 'grid': {
       const tol = ex.tolerance ?? 1;
       const scores = draft.type === 'grid' ? draft.scores : {};
@@ -114,6 +135,16 @@ export function Recommended({ ex, draft }: { ex: Exercise; draft: Draft }) {
       );
     }
   }
+}
+
+/** What a « Presque » got right. */
+function partialText(ex: Exercise, result: GradeResult, draft: Draft): string {
+  if (ex.type === 'slider') return 'proche de la plage recommandée';
+  if (ex.type === 'scenario' && draft.type === 'scenario') {
+    const met = ex.criteria.filter((c) => criterionMet(ex, c, draft.values)).length;
+    return `${met}\u00A0critères sur ${ex.criteria.length}`;
+  }
+  return `${Math.round(result.score * 100)}\u00A0% de la réponse`;
 }
 
 interface FeedbackProps {
@@ -133,7 +164,7 @@ export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback
         {label}
         {result.verdict === 'partial' && (
           <span className="verdict-xp">
-            {ex.type === 'slider' ? 'proche de la plage recommandée' : `${Math.round(result.score * 100)}\u00A0% de la réponse`}
+            {partialText(ex, result, draft)}
           </span>
         )}
         {xp !== undefined && <span className="verdict-xp">+{xp} XP</span>}

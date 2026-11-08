@@ -116,7 +116,6 @@ const invoice = (status: string) =>
 const uxWriting: ModuleContent = {
   id: 'ux-writing',
   title: 'Rédaction UX',
-  category: 'corriger',
   summary:
     'Écrire des libellés, erreurs, états vides et confirmations qui disent ce qui se passe et quoi faire ensuite, dans une voix constante et des messages traduisibles.',
   minutes: 11,

@@ -2,15 +2,13 @@ import { Check } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
-import { CATEGORIES, MODULES, exercisesOf } from '../content';
-import { mastery, masteryLabel } from '../engine/progress';
+import { JumpNav } from '../components/JumpNav';
+import { MODULES, THEMES, exercisesOf, type Theme } from '../content';
+import { mastery, masteryLabel, type ProgressState } from '../engine/progress';
 import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
-
-/** impeccable's command families, in the order the curriculum shows them. */
-const FAMILIES = CATEGORIES.filter((c) => ['enrichir', 'affiner', 'corriger', 'evaluer', 'construire'].includes(c.id)).map((c) => c.title.toLowerCase());
 
 /** `/impeccable typeset`: the command as impeccable's own documentation writes it. */
 export function Commands({ list }: { list: string[] }) {
@@ -26,33 +24,80 @@ export function Commands({ list }: { list: string[] }) {
   );
 }
 
+/** The exercises of a theme's lessons, by id. */
+export const themeExerciseIds = (t: Theme): string[] => t.modules.flatMap((id) => exercisesOf(id).map((e) => e.id));
+
+/** Where the learner stands on a theme: its mastery, and whether they have started it. */
+export function themeMastery(p: ProgressState, t: Theme): { value: number; touched: boolean; label: string } {
+  const ids = themeExerciseIds(t);
+  const touched = ids.some((id) => p.items[id]);
+  const value = mastery(p, ids);
+  return { value, touched, label: masteryLabel(value, touched) };
+}
+
+/**
+ * « S’évaluer », then « S’entraîner », on a theme. Each says which theme it opens: several of them
+ * follow each other on a page (WCAG 2.4.4).
+ */
+export function ThemeActions({ theme }: { theme: Theme }) {
+  return (
+    <div className="btn-row">
+      <Link to={`/session?mode=evaluation&id=${theme.id}`} className="btn btn-primary" aria-label={`S’évaluer : ${theme.title}`}>
+        S’évaluer
+      </Link>
+      <Link to={`/session?mode=theme&id=${theme.id}`} className="btn btn-secondary" aria-label={`S’entraîner : ${theme.title}`}>
+        S’entraîner
+      </Link>
+    </div>
+  );
+}
+
 export function Learn() {
   const p = useProgress();
   const read = MODULES.filter((m) => p.lessons[m.id]).length;
-  usePageTitle(pageTitle('Sommaire'));
+  usePageTitle(pageTitle('Leçons'));
   return (
     <div className="page">
       <header className="page-head">
         <h1 id="main-title" tabIndex={-1}>
-          Sommaire
+          Leçons
         </h1>
         <p className="lead">
           {frenchSpacing(
-            `${MODULES.length} leçons : les fondations, la psychologie et l’éthique, puis les familles de commandes d’impeccable (${FAMILIES.join(', ')}) et les cultures.`,
+            `${MODULES.length} leçons rangées en ${THEMES.length} grands thèmes. Lis une leçon, entraîne-toi dessus, puis évalue-toi sur tout un thème : l’évaluation ne corrige qu’à la fin, comme un examen.`,
           )}
           {read > 0 && ` Tu en as lu ${read}.`}
         </p>
+        <JumpNav label="Aller à un thème" items={THEMES.map((t) => ({ id: `theme-${t.id}`, label: t.title }))} />
       </header>
 
       <div className="toc">
-        {CATEGORIES.map((cat) => {
-          const mods = MODULES.filter((m) => m.category === cat.id);
+        {THEMES.map((theme) => {
+          const mods = MODULES.filter((m) => m.theme === theme.id);
           if (!mods.length) return null;
+          const tm = themeMastery(p, theme);
+          const exercises = themeExerciseIds(theme).length;
           return (
-            <section key={cat.id} className="toc-group" aria-labelledby={`cat-${cat.id}`}>
+            <section key={theme.id} className="toc-group" aria-labelledby={`theme-${theme.id}`}>
               <div className="toc-group-head">
-                <h2 id={`cat-${cat.id}`}>{cat.title}</h2>
-                <p>{frenchSpacing(cat.description)}</p>
+                <h2 id={`theme-${theme.id}`} tabIndex={-1}>
+                  {frenchSpacing(theme.title)}
+                </h2>
+                <p>{frenchSpacing(theme.description)}</p>
+                <p className="toc-group-meta">
+                  {count(mods.length, 'leçon', 'leçons')}
+                  {SEP}
+                  {count(exercises, 'épreuve', 'épreuves')}
+                </p>
+                <div className="field theme-mastery">
+                  <span className="field-label">
+                    Maîtrise du thème{' '}: {tm.label.toLowerCase()}
+                  </span>
+                  <span className="meter" style={pct(tm.value)} aria-hidden="true">
+                    <span />
+                  </span>
+                </div>
+                <ThemeActions theme={theme} />
               </div>
               <ul className="toc-list">
                 {mods.map((m) => {
@@ -71,7 +116,7 @@ export function Learn() {
                         </span>
                         <span className="toc-meta">
                           {m.minutes}
-                          {' '}min de lecture{SEP}
+                          {' '}min de lecture{SEP}
                           {count(ids.length, 'épreuve', 'épreuves')}
                           {m.commands?.length ? (
                             <>

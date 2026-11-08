@@ -48,7 +48,6 @@ const COVER = `<div class="bk-cover"><span>Les Saisons du jardin</span></div>`;
 const delight: ModuleContent = {
   id: 'delight',
   title: 'Personnalité et délice',
-  category: 'enrichir',
   summary:
     'Révéler le caractère du produit aux moments qui le méritent, proportionner la célébration à l’effort et à la fréquence, et ne jamais ralentir ni brouiller la tâche.',
   minutes: 10,

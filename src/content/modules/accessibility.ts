@@ -6,6 +6,7 @@ const EAA = { label: 'EUR-Lex — Directive (UE) 2019/882, Acte européen sur l�
 const RGAA_LABELS = { label: 'DINUM — RGAA 4.1.2, critère 11.1 (étiquettes des champs)', url: 'https://accessibilite.numerique.gouv.fr/methode/criteres-et-tests/#11.1' };
 const ARIA22 = { label: 'W3C — Technique ARIA22 (role="status")', url: 'https://www.w3.org/WAI/WCAG22/Techniques/aria/ARIA22' };
 const IMP_AUDIT_NATIVE = { label: 'impeccable — audit.native.md', url: 'https://github.com/pbakaus/impeccable/blob/main/skill/reference/audit.native.md' };
+const ANDROID_TARGETS = { label: 'Google — Accessibilité Android : taille des cibles tactiles', url: 'https://support.google.com/accessibility/android/answer/7101858' };
 const U =(slug: string, label: string) => ({ label: `W3C — Comprendre le critère ${label}`, url: `https://www.w3.org/WAI/WCAG22/Understanding/${slug}.html` });
 
 /** Lecteur de podcast : commandes en icônes, très pâles ou bien contrastées. */
@@ -57,7 +58,6 @@ const focusStep = (visible: boolean): Visual => ({
 const accessibility: ModuleContent = {
   id: 'accessibility',
   title: 'Accessibilité et audit',
-  category: 'evaluer',
   summary:
     'Appliquer les critères clés des WCAG 2.2 (contraste, clavier, focus, cibles, sémantique, formulaires, annonces) et mener l’audit technique d’impeccable : cinq dimensions notées de 0 à 4, soit un total sur 20.',
   minutes: 14,
@@ -310,6 +310,69 @@ Ici, les centres des deux icônes sont écartés de 16 px plus l’espace qui le
 Ce n’est qu’un plancher, valable pour tous les pointeurs, souris comprise. Au doigt, vise une **cible tactile de 44 × 44 px** : le dessin peut rester à 16 px, c’est la cible qui grandit.`,
       takeaway: 'Sous 24 × 24 px, une cible passe 2.5.8 si son cercle de 24 px ne chevauche ni une autre cible ni le cercle d’une autre petite cible : 8 px entre deux icônes de 16 px. Au doigt, vise 44 px.',
       sources: ['wcag:target', 'imp:audit'],
+    },
+    {
+      id: 'accessibility-survey-scenario',
+      type: 'scenario',
+      difficulty: 2,
+      context:
+        'La médiathèque des Capucins envoie son questionnaire de satisfaction par SMS : on le remplit sur téléphone, souvent d’une main, dans le bus ou debout au guichet. La maquette de l’agence arrive avec des boutons serrés et le turquoise clair de la charte.',
+      prompt: 'Règle le questionnaire pour qu’il se remplisse au pouce sans erreur de toucher, et que « Suivant » se lise bien.',
+      visual: {
+        frame: 'phone',
+        alt: 'Écran de téléphone : questionnaire de satisfaction de la médiathèque des Capucins, question 2 sur 5, « Comment jugez-vous l’accueil à la banque de prêt ? », quatre réponses à cocher, puis les boutons Précédent et Suivant. La hauteur des réponses et des boutons, l’espace entre les deux boutons et la couleur du bouton Suivant suivent les réglages.',
+        css: `.qs { padding: 16px; }
+.qs-list { display: flex; flex-direction: column; gap: 6px; }
+.qs-opt { display: flex; align-items: center; gap: 10px; min-height: var(--size); padding: 0 12px; border: 1px solid #868d9c; border-radius: 8px; }
+.qs-opt::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #5a6172; flex: none; }
+.qs-on { border-color: #1d2230; box-shadow: inset 0 0 0 1px #1d2230; }
+.qs-on::before { border: 5px solid #1d2230; }
+.qs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-top: 4px; }
+.qs-btn { display: flex; align-items: center; justify-content: center; min-height: var(--size); border-radius: 8px; font-size: 15px; font-weight: 600; }
+.qs-prev { border: 1px solid #868d9c; color: #1d2230; background: #fff; }
+.qs-next { background: var(--next); color: #ffffff; }`,
+        html: `<div class="qs mk-stack" style="--gap:12px"><div class="mk-row mk-between mk-small mk-muted"><span>Médiathèque des Capucins</span><span>Question 2 sur 5</span></div><p class="mk-h3">Comment jugez-vous l’accueil à la banque de prêt ?</p><div class="qs-list"><span class="qs-opt">Très satisfaisant</span><span class="qs-opt qs-on">Satisfaisant</span><span class="qs-opt">Peu satisfaisant</span><span class="qs-opt">Pas du tout satisfaisant</span></div><div class="qs-nav"><span class="qs-btn qs-prev">Précédent</span><span class="qs-btn qs-next">Suivant</span></div></div>`,
+      },
+      controls: [
+        { kind: 'range', id: 'size', label: 'Hauteur des réponses et des boutons', min: 24, max: 64, step: 2, initial: 28, unit: 'px', ideal: 48 },
+        { kind: 'range', id: 'gap', label: 'Espace entre « Précédent » et « Suivant »', min: 0, max: 24, step: 2, initial: 2, unit: 'px', ideal: 12 },
+        {
+          kind: 'ramp',
+          id: 'next',
+          label: 'Couleur du bouton « Suivant »',
+          colors: ['#99f6e4', '#5eead4', '#2dd4bf', '#14b8a6', '#0d9488', '#0f766e', '#115e59'],
+          initial: 3,
+          ideal: 5,
+        },
+      ],
+      readouts: [{ kind: 'contrast', label: 'Contraste du libellé « Suivant »', a: 'next', b: '#ffffff' }],
+      criteria: [
+        {
+          id: 'target',
+          label: 'Réponses et boutons d’au moins 44 px de haut',
+          check: { kind: 'range', control: 'size', min: 44 },
+          why: 'Au doigt, une cible de 44 × 44 px se touche sans viser : c’est le minimum qu’impeccable demande au toucher et le seuil du critère WCAG 2.5.5 (AAA). Les 24 px du critère 2.5.8 (AA) ne sont qu’un plancher.',
+        },
+        {
+          id: 'spacing',
+          label: 'Au moins 8 px entre « Précédent » et « Suivant »',
+          check: { kind: 'range', control: 'gap', min: 8 },
+          why: 'Collés, deux boutons se confondent sous le pouce : on revient en arrière en voulant avancer. Google demande 8 dp d’espace au moins entre deux cibles tactiles.',
+        },
+        {
+          id: 'label',
+          label: 'Libellé « Suivant » contrasté à 4,5:1 au moins',
+          check: { kind: 'contrast', a: 'next', b: '#ffffff', min: 4.5 },
+          why: 'Un libellé de 15 px en demi-gras n’est pas du grand texte : il lui faut 4,5:1 (WCAG 1.4.3). Le turquoise de la charte, #14B8A6, n’offre que 2,48:1 avec le blanc ; #0F766E, la même teinte plus foncée, atteint 5,47:1.',
+        },
+      ],
+      explanation: `Un questionnaire rempli dans le bus se joue au pouce, d’une main, avec un écran qui bouge. Trois réglages décident s’il se termine :
+
+- **La taille des cibles** : à 28 px, on rate une réponse sur deux et l’on coche la voisine. Vise **44 px** de haut au moins pour chaque réponse et chaque bouton ; la ligne entière de la réponse est la cible, pas seulement le rond.
+- **L’espace entre les boutons** : « Précédent » et « Suivant » collés, c’est un retour en arrière par erreur, et les réponses déjà données à revérifier. **8 px** au moins les séparent.
+- **Le contraste du libellé** : la couleur de marque sert souvent telle quelle, trop claire pour un texte blanc. Garde la teinte, fonce la nuance jusqu’à **4,5:1**.`,
+      takeaway: 'Au pouce : cibles de 44 px au moins, 8 px entre deux boutons voisins, et un libellé à 4,5:1 sur sa couleur — quitte à foncer la couleur de marque.',
+      sources: ['wcag:target', U('target-size-enhanced', '2.5.5 (taille de la cible, AAA)'), 'wcag:contrast', ANDROID_TARGETS, 'imp:audit'],
     },
     {
       id: 'accessibility-login-hotspot',

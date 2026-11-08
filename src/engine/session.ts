@@ -23,9 +23,18 @@ export interface ExerciseSummary {
 /** A full exercise, or its summary in the light index. */
 export type SessionItem = Exercise | ExerciseSummary;
 
+/**
+ * What a session draws from.
+ * - `theme`: training on the lessons of a theme, the exercises to review and the new ones first;
+ *   `evaluation`: the same lessons as an exam, drawn evenly from each, corrected at the end.
+ * - `culture`: the exercises about one market (`cultureId`), those of the cultures lesson that name
+ *   no market (`CULTURE_COMMON`), or all of them.
+ */
 export type SessionSpec =
   | { kind: 'daily' }
   | { kind: 'module'; moduleId: string }
+  | { kind: 'theme'; themeId: string; moduleIds: readonly string[] }
+  | { kind: 'evaluation'; themeId: string; moduleIds: readonly string[] }
   | { kind: 'type'; type: PracticeType }
   | { kind: 'review' }
   | { kind: 'mistakes' }
@@ -35,12 +44,28 @@ export type SessionSpec =
 export const SESSION_SIZE: Record<SessionSpec['kind'], number> = {
   daily: 10,
   module: 12,
+  theme: 12,
+  evaluation: 20,
   type: 10,
   review: 20,
   mistakes: 20,
   exam: 30,
   culture: 12,
 };
+
+/** The lesson that teaches the cultures, and the id of its exercises that name no market. */
+export const CULTURE_MODULE = 'culture';
+export const CULTURE_COMMON = 'commun';
+
+/** An exercise of a culture session (see `SessionSpec`). */
+export function inCulture(ex: SessionItem, cultureId?: string): boolean {
+  if (cultureId === CULTURE_COMMON) return ex.module === CULTURE_MODULE && !ex.culture;
+  if (cultureId) return ex.culture === cultureId;
+  return Boolean(ex.culture) || ex.module === CULTURE_MODULE;
+}
+
+/** The sessions that hold back the corrections until their summary. */
+export const isExam = (spec: SessionSpec): boolean => spec.kind === 'exam' || spec.kind === 'evaluation';
 
 export function isDuel(ex: SessionItem): boolean {
   if ('duel' in ex) return ex.duel;
@@ -117,8 +142,18 @@ export function buildSession<E extends SessionItem>(
       return interleaveTypes(byPriority(all.filter((e) => e.module === spec.moduleId), state, today, rng).slice(0, size));
     case 'type':
       return byPriority(all.filter((e) => matchesType(e, spec.type)), state, today, rng).slice(0, size);
+    case 'theme': {
+      // Its lessons in turn, so that a session is not one lesson in a row.
+      const pool = all.filter((e) => spec.moduleIds.includes(e.module ?? ''));
+      return interleaveTypes(spreadAcrossModules(byPriority(pool, state, today, rng), size));
+    }
+    case 'evaluation': {
+      // Stratified like the exam, on the theme's lessons only.
+      const pool = all.filter((e) => spec.moduleIds.includes(e.module ?? ''));
+      return interleaveTypes(shuffle(spreadAcrossModules(shuffle(pool, rng), size), rng));
+    }
     case 'culture': {
-      const pool = all.filter((e) => (spec.cultureId ? e.culture === spec.cultureId : e.culture || e.module === 'culture'));
+      const pool = all.filter((e) => inCulture(e, spec.cultureId));
       return interleaveTypes(byPriority(pool, state, today, rng).slice(0, size));
     }
     case 'review': {

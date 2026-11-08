@@ -40,7 +40,6 @@ ${bottom ? '<div class="sl-foot"><span class="mk-btn mk-btn--block">Réserver 18
 const personas: ModuleContent = {
   id: 'personas',
   title: 'Personas de test',
-  category: 'evaluer',
   summary:
     'Parcourir une interface dans la peau d’Alex, Jordan, Sam, Riley et Casey, choisir les bons personas selon le type d’écran et rapporter des signaux d’alerte précis.',
   minutes: 10,

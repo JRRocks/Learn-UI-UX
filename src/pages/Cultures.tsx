@@ -2,11 +2,13 @@ import { ArrowLeft, CircleCheck, CircleX, FlaskConical, Target } from 'lucide-re
 import { Fragment, useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
+import { CountryQuizzes } from '../components/CountryQuizzes';
 import { ScrollRegion } from '../components/ScrollRegion';
 import { SourceList } from '../components/SourceLink';
 import { EXERCISES, MODULE_BY_ID } from '../content';
 import { CULTURE_NAMES, HOFSTEDE, REGIONS_ORDER, TOPIC_LABEL, loadCultures, type CultureData } from '../content/cultures';
 import { LAB_LOCALES } from '../content/cultures/lab';
+import { inCulture } from '../engine/session';
 import type { CulturePair, CultureProfile } from '../engine/types';
 import { SEP, formatVariants } from '../lib/french';
 import { Md, MdInline, frenchSpacing, plainText } from '../lib/markdown';
@@ -100,7 +102,7 @@ export function Cultures() {
   if (!data) return <Loading failed={failed} />;
   const { profiles: CULTURES, pairs: CULTURE_PAIRS } = data;
   const lesson = MODULE_BY_ID.get('culture');
-  const count = EXERCISES.filter((e) => e.culture || e.module === 'culture').length;
+  const count = EXERCISES.filter((e) => inCulture(e)).length;
 
   return (
     <div className="page">
@@ -133,8 +135,8 @@ export function Cultures() {
           <Link to="/session?mode=culture" className="side-link">
             <Target aria-hidden="true" />
             <span>
-              S’entraîner sur les cultures
-              <small>{frenchSpacing(`${count} épreuves : comparaisons visuelles, chasses aux erreurs, associations`)}</small>
+              S’entraîner sur tous les pays
+              <small>{frenchSpacing(`${count} épreuves mêlées : comparaisons visuelles, chasses aux erreurs, associations`)}</small>
             </span>
           </Link>
           <Link to="/cultures/labo" className="side-link">
@@ -145,6 +147,14 @@ export function Cultures() {
             </span>
           </Link>
         </div>
+      </section>
+
+      <section className="section" aria-labelledby="quizzes-title">
+        <div className="section-head">
+          <h2 id="quizzes-title">S’entraîner pays par pays</h2>
+          <p className="small">{frenchSpacing('La France, puis les pays étrangers région par région : chaque questionnaire ne porte que sur son marché.')}</p>
+        </div>
+        <CountryQuizzes />
       </section>
 
       <section className="section" aria-labelledby="markets-title">
