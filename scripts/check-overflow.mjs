@@ -68,7 +68,15 @@ function measure([LABELS, units]) {
   const root = getComputedStyle(document.documentElement);
   const room = { top: parseFloat(root.scrollPaddingTop) || 0, bottom: parseFloat(root.scrollPaddingBottom) || 0 };
   const bars = [];
-  for (const [selector, edge] of [['.topbar', 'top'], ['.player-top', 'top'], ['.task-actions', 'bottom'], ['.tabbar', 'bottom']]) {
+  // On a phone at the finger, the answers of the timed challenge and the actions of the cards stay at the bottom too.
+  for (const [selector, edge] of [
+    ['.topbar', 'top'],
+    ['.player-top', 'top'],
+    ['.task-actions', 'bottom'],
+    ['.task--blitz > .tf', 'bottom'],
+    ['.card-actions', 'bottom'],
+    ['.tabbar', 'bottom'],
+  ]) {
     const el = document.querySelector(selector);
     if (!el) continue;
     const cs = getComputedStyle(el);
@@ -350,6 +358,49 @@ try {
     console.log(`${width} px : ${bad ? `${bad} épreuve(s) en défaut` : 'aucun débordement'} sur ${ids.visual.length} épreuves à choix visuel, avant et après « Valider ».`);
     failures += bad;
     await context.close();
+  }
+
+  // At the finger, the timed challenge and the cards keep their actions in a bar at the bottom of the
+  // screen (« Vrai » and « Faux », « Retourner la fiche », the four grades): three statements and three
+  // cards, before and after the answer, at the default text size and at 18 px (a phone's text one notch up).
+  for (const width of EXERCISES ? WIDTHS : []) {
+    for (const size of [DEFAULT_TEXT ? 16 : 0, LARGE_TEXT ? 18 : 0].filter(Boolean)) {
+      const context = await phone(width);
+      const page = await newPage(context, size);
+      const tag = `${width} px au doigt, texte ${size} px`;
+      let bad = 0;
+      const check = async (label) => {
+        await page.evaluate(() => document.fonts.ready);
+        const m = await page.evaluate(measure, [LABELS, UNITS]);
+        if (!fails(m)) return;
+        bad++;
+        show(`${tag} ${label}`, m);
+      };
+      await page.goto(`${base}?w=${width}&t=${size}#/session?mode=blitz`);
+      await loaded(page);
+      await page.evaluate(() => [...document.querySelectorAll('button')].find((b) => /Lancer le chrono/.test(b.textContent))?.click());
+      for (let i = 1; i <= 3; i++) {
+        await page.waitForSelector('.tf .option:not(:disabled)', { timeout: 30000 });
+        await check(`défi chrono, affirmation ${i}`);
+        await page.evaluate(() => document.querySelector('.tf .option')?.click());
+        await page.waitForSelector('.feedback', { timeout: 30000 });
+        await check(`défi chrono, correction ${i}`);
+        await page.evaluate(() => document.querySelector('.task-actions .btn-primary')?.click());
+      }
+      await page.goto(`${base}?w=${width}&t=${size}#/fiches`);
+      for (let i = 1; i <= 3; i++) {
+        await page.waitForSelector('.flashcard', { timeout: 30000 });
+        await check(`fiche ${i}`);
+        await page.evaluate(() => [...document.querySelectorAll('button')].find((b) => /Retourner la fiche/.test(b.textContent))?.click());
+        await page.waitForSelector('.flashcard-a', { timeout: 30000 });
+        await check(`fiche ${i}, réponse`);
+        // A click within the settling delay is not a grade: Enter on the button is.
+        await page.locator('.grades .btn').first().press('Enter');
+      }
+      console.log(`${tag} : ${bad ? `${bad} écran(s) en défaut` : 'aucun débordement'} sur le défi chrono et les fiches.`);
+      failures += bad;
+      await context.close();
+    }
   }
 
   // A larger default text size (CDP Page.setFontSizes, as the browser's own setting), with a mouse.

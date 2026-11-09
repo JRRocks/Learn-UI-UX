@@ -1,9 +1,9 @@
 import { CircleCheck, CircleX, Timer, X } from 'lucide-react';
-import { useEffect, useEffectEvent, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useEffectEvent, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { Link, navigate } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { keepInView } from '../components/exercise/ExerciseView';
-import { eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
+import { SETTLE_MS, eventOrigin, handlesOwnKeys, hasModifier, within } from '../components/exercise/keys';
 import { OptionBadge, optionState } from '../components/exercise/players';
 import { EXERCISES, MODULE_BY_ID, useStatements } from '../content';
 import { grade } from '../engine/grade';
@@ -45,6 +45,7 @@ export function Blitz() {
   const startBest = useRef(0);
   const taskRef = useRef<HTMLElement>(null);
   const feedbackRef = useRef<HTMLElement>(null);
+  const answeredAt = useRef(0);
   const best = progress.records[RECORD_ID] ?? 0;
   const started = clock !== null;
   const left = clock ? secondsLeft(clock, now) : DURATION;
@@ -89,6 +90,7 @@ export function Blitz() {
     setNow(t);
     setAnswered((x) => [...x, a]);
     setLast(a);
+    answeredAt.current = t;
   };
 
   const next = () => {
@@ -97,6 +99,14 @@ export function Blitz() {
     setNow(t);
     setLast(null);
     setIndex((i) => i + 1);
+  };
+
+  // On a phone « Affirmation suivante » takes the place of « Vrai » and « Faux », at the bottom of the
+  // screen (app.css): the second tap of a doubled one lands on it and must not skip a correction that
+  // was never read. Only a pointer click can be that tap: Enter or Space on the button (detail 0) goes on.
+  const onNextClick = (e: MouseEvent) => {
+    if (e.detail > 1 || (e.detail > 0 && performance.now() - answeredAt.current < SETTLE_MS)) return;
+    next();
   };
 
   useEffect(() => {
@@ -188,8 +198,9 @@ export function Blitz() {
           <p className="muted">
             Record{'\u00A0'}: <strong className="num">{best}</strong> bonne{best > 1 ? 's' : ''} réponse{best > 1 ? 's' : ''}
             {SEP}
-            {pool.length} affirmations
-            disponibles. Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.
+            {pool.length} affirmations disponibles.
+            {/* The keys, where there is a keyboard: at the finger they are hidden, as the hints of the bars are (app.css). */}
+            <span className="keys-hint"> Clavier{'\u00A0'}: V ou ← pour vrai, F ou → pour faux, Entrée pour continuer.</span>
           </p>
         </header>
         {failed ? (
@@ -290,7 +301,7 @@ export function Blitz() {
           {score} juste{score > 1 ? 's' : ''}
         </span>
       </div>
-      <article className="task" ref={taskRef}>
+      <article className="task task--blitz" data-answered={last ? '' : undefined} ref={taskRef}>
         {/* The statement's lesson: in the top bar, it was cut short on phones. The prompt, which gets the focus, points to it. */}
         {module && (
           <p id={`blitz-about-${current.id}`} className="task-about">
@@ -327,7 +338,7 @@ export function Blitz() {
         )}
         <div className="task-actions">
           {last ? (
-            <button type="button" className="btn btn-primary" onClick={next}>
+            <button type="button" className="btn btn-primary" onClick={onNextClick}>
               Affirmation suivante
             </button>
           ) : (

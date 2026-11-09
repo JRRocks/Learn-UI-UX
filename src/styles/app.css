@@ -2010,8 +2010,10 @@ html:has(.menu-sheet[open]) {
   font-variant-numeric: tabular-nums;
 }
 
+/* So does a sentence about the keys within a text (the start of the timed challenge). */
 @media (pointer: coarse) {
-  .shortcut-hint {
+  .shortcut-hint,
+  .keys-hint {
     display: none;
   }
 }
@@ -4793,6 +4795,126 @@ fieldset.tf {
 
   .shell[data-focus] .toasts {
     bottom: calc(var(--s3) + env(safe-area-inset-bottom));
+  }
+}
+
+/* =========================================================================
+   Phones, at the finger: the actions of a task under the thumb
+   ========================================================================= */
+
+/* « Valider » then « Épreuve suivante » are the two taps of every exercise. On a phone the button takes
+   the width of the bar, within reach of either thumb (Fitts: the most frequent target is the largest
+   and the nearest); it was 110 px wide in the bottom left corner, the far end of a right thumb's arc.
+   What it still waits for (« 2 / 4 associations faites ») reads above it. Narrower than 20em the bar
+   keeps the layout above; with a mouse, the keyboard hint keeps its place beside the button. */
+@media (min-width: 20em) and (max-width: 39.99875em) and (pointer: coarse) {
+  .task-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--s2);
+  }
+
+  .task-actions > .btn {
+    order: 1;
+  }
+
+  .task-remaining {
+    text-align: center;
+  }
+}
+
+/* The flashcards, wider or with a mouse: their actions stand under the card, as items of its column. */
+.card-actions {
+  display: contents;
+}
+
+@media (min-width: 20em) and (max-width: 39.99875em) and (min-height: 30rem) and (pointer: coarse) {
+  /* The timed challenge: while a statement waits for its answer, « Vrai » and « Faux » stand at the
+     bottom of the screen, under the thumb and at the same place from one statement to the next. Under
+     the statement, they moved with its length (two to six lines) while the clock ran, above a bar left
+     empty. Once answered they go back under the statement, marked, with the correction, and
+     « Affirmation suivante » takes the bar (Blitz.tsx keeps a doubled tap from skipping the correction). */
+  .task--blitz:not([data-answered]) > .tf {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    order: 1;
+    max-width: none;
+    margin: auto calc(var(--s4) * -1) 0;
+    padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));
+    background: var(--paper);
+    box-shadow: 0 -1px 0 var(--rule);
+  }
+
+  .task--blitz:not([data-answered]) > .task-actions {
+    display: none;
+  }
+
+  /* The flashcards: « Retourner la fiche », then the four grades, in a bar at the bottom of the screen,
+     as « Valider » is in a session. Under the card, the button moved with the length of each question,
+     and the second row of grades (« Bien », « Facile ») fell below a 780 px screen once the answer took
+     five lines: half the choices, one scroll away, at each of the twenty cards. The page, the player
+     and the stack fill the screen, as they do around the « Valider » bar. */
+  .shell[data-focus]:has(.card-actions),
+  .shell[data-focus] .main:has(.card-actions) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shell[data-focus] .main:has(.card-actions) {
+    padding-bottom: 0;
+  }
+
+  .shell[data-focus] .main:has(.card-actions),
+  .shell[data-focus] .player:has(.card-actions),
+  .card-stack:has(.card-actions) {
+    flex: 1 0 auto;
+  }
+
+  .shell[data-focus] .player:has(.card-actions) {
+    width: 100%;
+  }
+
+  .card-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    margin: auto calc(var(--s4) * -1) 0;
+    padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));
+    background: var(--paper);
+    box-shadow: 0 -1px 0 var(--rule);
+  }
+
+  .card-actions .btn-row > .btn {
+    flex: 1 1 auto;
+  }
+
+  /* A grade keeps its hint on one line (« Retrouvé avec effort », 125 px) in half the bar of a 360 px phone. */
+  .card-actions .grades .btn {
+    padding-inline: var(--s2);
+  }
+
+  /* The toasts and a control reached with Tab stay clear of the bar: one button, or two rows of grades. */
+  .shell[data-focus]:has(.card-actions) .toasts {
+    bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
+  }
+
+  .shell[data-focus]:has(.card-actions .grades) .toasts {
+    bottom: calc(var(--grades-h) + var(--s3) + env(safe-area-inset-bottom));
+  }
+
+  html:has(.card-actions) {
+    scroll-padding-bottom: calc(var(--grades-h) + env(safe-area-inset-bottom) + var(--s3));
+  }
+
+  /* How the cards work is said with the first one; from the second, the card comes right under its
+     title (the count is in the bar at the top). */
+  .card-intro[data-seen] {
+    display: none;
   }
 }
 

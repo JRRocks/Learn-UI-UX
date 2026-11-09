@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { grade, type GradeResult } from '../../engine/grade';
 import { seeded, shuffle, shuffleAway, type Rng } from '../../engine/random';
 import type { Exercise } from '../../engine/types';
@@ -113,6 +113,14 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
     settledAt.current = performance.now();
   }, [revealed]);
 
+  // « Épreuve suivante » takes the place of « Valider »: the second tap of a doubled one landed on it and
+  // skipped a correction that was never shown (120 ms apart on a phone). Only a pointer click can be that
+  // tap: Enter or Space on the button (detail 0) goes on, as the Enter shortcut does once settled.
+  const onNextClick = (e: MouseEvent) => {
+    if (e.detail > 1 || (e.detail > 0 && performance.now() - settledAt.current < SETTLE_MS)) return;
+    onNext();
+  };
+
   // Once validated, show where the correction starts (`data-reveal-view`): the scene and its marks
   // for a hotspot, the value against the expert's for a slider (motion-1), the first rated row for a
   // grid; otherwise the verdict. The focus goes to the correction for screen readers.
@@ -210,7 +218,7 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
           </>
         ) : (
           <>
-            <button type="button" className="btn btn-primary" onClick={onNext}>
+            <button type="button" className="btn btn-primary" onClick={onNextClick}>
               {nextLabel} <ArrowRight aria-hidden="true" className="icon-end" />
             </button>
             <span className="task-actions-text">

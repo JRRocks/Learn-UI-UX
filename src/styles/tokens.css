@@ -76,6 +76,8 @@
   /* The « Valider » bar holds its 44 px button, or, above a 21 px text size, its count over its hint
      (2.8rem and 2 px), which grow with the text when the button does not. */
   --actions-h: max(calc(var(--tap) + 2 * var(--s3) + var(--s1)), calc(3.75rem + 2px));
+  /* The flashcards' bar on a phone: its four grades two by two, a label over its hint in each. */
+  --grades-h: 11rem;
 
   --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);

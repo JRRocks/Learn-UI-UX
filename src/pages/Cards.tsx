@@ -173,7 +173,8 @@ export function Cards({ query }: { query: URLSearchParams }) {
         <h1 id="main-title" tabIndex={-1}>
           <MdInline text={title} />
         </h1>
-        <p className="muted">
+        {/* On a phone, said with the first card only (app.css): from the second, the card comes under its title. */}
+        <p className="muted card-intro" data-seen={index > 0 ? '' : undefined}>
           Fiche {index + 1} sur {cards.length}. Essaie de répondre de tête avant de retourner la fiche, puis dis honnêtement comment ça s’est
           passé.
         </p>
@@ -200,32 +201,35 @@ export function Cards({ query }: { query: URLSearchParams }) {
               Leçon{'\u00A0'}: <MdInline text={from?.title ?? ''} />
             </p>
           </div>
-          {!shown ? (
-            <div className="btn-row">
-              <button type="button" className="btn btn-primary" onClick={flip}>
-                Retourner la fiche
-              </button>
-              <span className="shortcut-hint">Espace ou Entrée</span>
-            </div>
-          ) : (
-            <>
-              <div className="grades" role="group" aria-label="Comment ça s’est passé ?">
-                {CARD_GRADES.map((g, i) => (
-                  <button
-                    key={g.grade}
-                    type="button"
-                    className="btn btn-secondary"
-                    aria-keyshortcuts={String(i + 1)}
-                    onClick={(e) => onGradeClick(e, g.grade)}
-                  >
-                    {g.label}
-                    <small>{g.hint}</small>
-                  </button>
-                ))}
+          {/* On a phone, a bar at the bottom of the screen, under the thumb, as « Valider » is in a session (app.css). */}
+          <div className="card-actions">
+            {!shown ? (
+              <div className="btn-row">
+                <button type="button" className="btn btn-primary" onClick={flip}>
+                  Retourner la fiche
+                </button>
+                <span className="shortcut-hint">Espace ou Entrée</span>
               </div>
-              <span className="shortcut-hint">Touches 1 à 4</span>
-            </>
-          )}
+            ) : (
+              <>
+                <div className="grades" role="group" aria-label="Comment ça s’est passé ?">
+                  {CARD_GRADES.map((g, i) => (
+                    <button
+                      key={g.grade}
+                      type="button"
+                      className="btn btn-secondary"
+                      aria-keyshortcuts={String(i + 1)}
+                      onClick={(e) => onGradeClick(e, g.grade)}
+                    >
+                      {g.label}
+                      <small>{g.hint}</small>
+                    </button>
+                  ))}
+                </div>
+                <span className="shortcut-hint">Touches 1 à 4</span>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
