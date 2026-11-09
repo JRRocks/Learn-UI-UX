@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
 import { toast, toastsOver } from '../app/toasts';
+import { JumpNav } from '../components/JumpNav';
 import { ScrollRegion } from '../components/ScrollRegion';
 import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, exercisesOf } from '../content';
 import { BADGES } from '../engine/badges';
@@ -153,6 +154,16 @@ export function Progress() {
         <div className="meter" style={pct(lvl.progress)} aria-hidden="true">
           <span />
         </div>
+        {/* The settings end a page nine screens long on a phone: one tap away, as the sections of Leçons and S’entraîner are. */}
+        <JumpNav
+          label="Aller à une partie de la page"
+          items={[
+            { id: 'mastery-title', label: 'Maîtrise par leçon' },
+            { id: 'badges-title', label: 'Badges' },
+            ...(p.sessions.length > 0 ? [{ id: 'hist-title', label: 'Dernières sessions' }] : []),
+            { id: 'set-title', label: 'Réglages' },
+          ]}
+        />
       </header>
 
       <div className="split">
@@ -207,35 +218,45 @@ export function Progress() {
       <section className="section" aria-labelledby="mastery-title">
         <h2 id="mastery-title">Maîtrise par leçon</h2>
         <ScrollRegion label="Maîtrise par leçon">
-          <table className="mastery-table">
-            <thead>
-              <tr>
-                <th scope="col">Leçon</th>
-                <th scope="col">État</th>
-                <th scope="col">Maîtrise</th>
-                <th scope="col" className="num">
+          {/* On a phone each lesson is a block, its name over its state, its meter and its count (app.css).
+              The roles keep it a table for screen readers once its rows are laid out as grids. */}
+          <table className="mastery-table mastery-table--lessons" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th scope="col" role="columnheader">
+                  Leçon
+                </th>
+                <th scope="col" role="columnheader">
+                  État
+                </th>
+                <th scope="col" role="columnheader">
+                  Maîtrise
+                </th>
+                <th scope="col" role="columnheader" className="num">
                   Vues
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {MODULES.map((m) => {
                 const ids = exercisesOf(m.id).map((e) => e.id);
                 const touched = ids.some((id) => p.items[id]);
                 const v = mastery(p, ids);
                 return (
-                  <tr key={m.id}>
-                    <th scope="row">
+                  <tr key={m.id} role="row">
+                    <th scope="row" role="rowheader">
                       <Link to={`/apprendre/${m.id}`}>{frenchSpacing(m.title)}</Link>
                     </th>
-                    <td>{masteryLabel(v, touched)}</td>
-                    <td>
+                    <td role="cell">{masteryLabel(v, touched)}</td>
+                    <td role="cell">
                       <span className="meter" style={pct(v)} role="img" aria-label={`${Math.round(v * 100)} %`}>
                         <span />
                       </span>
                     </td>
-                    <td className="num">
+                    {/* Without its column header on a phone, the count says what it counts. */}
+                    <td role="cell" className="num">
                       {ids.filter((id) => p.items[id]).length}/{ids.length}
+                      <span className="mastery-unit"> vues</span>
                     </td>
                   </tr>
                 );

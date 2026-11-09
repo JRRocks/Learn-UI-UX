@@ -3765,6 +3765,63 @@ html:has(.menu-sheet[open]) {
   }
 }
 
+/* The count of a lesson names its unit only where its column header is out of sight (below). */
+.mastery-unit {
+  display: none;
+}
+
+/* Phones: a lesson of the mastery table is a block, its name on a line of its own, then its state, its
+   meter and its count (the lesson « Responsive » asks it of a wide table: each row becomes a card, or
+   the key columns stay). In four columns of a 360 px screen, a name took up to four lines (« Doser
+   l’intensité : simplifier, intensifier, adoucir ») and « Pas commencé » two, twenty-six times. The
+   header row leaves the screen, not the table: the state reads as one, the count says « vues ». */
+@media (min-width: 20em) and (max-width: 29.99875em) {
+  .mastery-table--lessons,
+  .mastery-table--lessons tbody {
+    display: block;
+  }
+
+  .mastery-table--lessons thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .mastery-table--lessons tbody tr {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--s3);
+    padding-block: var(--s2);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .mastery-table--lessons tbody :is(th, td) {
+    padding: 0;
+    border: 0;
+  }
+
+  .mastery-table--lessons tbody th {
+    grid-column: 1 / -1;
+    font-size: var(--t-body);
+  }
+
+  .mastery-table--lessons tbody td {
+    color: var(--ink-2);
+  }
+
+  .mastery-table--lessons tbody .meter {
+    width: 100%;
+  }
+
+  .mastery-unit {
+    display: inline;
+  }
+}
+
 @media (max-width: 22.49875em) {
   .mastery-table {
     font-size: var(--t-meta);

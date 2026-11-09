@@ -3,6 +3,7 @@ import { Fragment, useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
 import { CountryQuizzes } from '../components/CountryQuizzes';
+import { JumpNav } from '../components/JumpNav';
 import { ScrollRegion } from '../components/ScrollRegion';
 import { SourceList } from '../components/SourceLink';
 import { EXERCISES, MODULE_BY_ID } from '../content';
@@ -115,6 +116,17 @@ export function Cultures() {
             'Une interface n’est jamais neutre : densité, couleurs, formulaires, paiement, écriture et cadre légal changent d’un marché à l’autre. Localiser, ce n’est pas traduire — c’est adapter ce que les gens attendent, puis le vérifier avec eux.',
           )}
         </p>
+        {/* A long page (thirteen screens on a phone): its sections one tap away, as on Leçons and S’entraîner. */}
+        <JumpNav
+          label="Aller à une partie de la page"
+          items={[
+            { id: 'quizzes-title', label: 'S’entraîner pays par pays' },
+            { id: 'markets-title', label: 'Les marchés' },
+            ...(CULTURES.length > 1 ? [{ id: 'compare-title', label: 'Comparer deux marchés' }] : []),
+            ...(CULTURE_PAIRS.length > 0 ? [{ id: 'pairs-title', label: 'Côte à côte' }] : []),
+            { id: 'dims-title', label: 'Lire les dimensions culturelles' },
+          ]}
+        />
       </header>
 
       <section className="today" aria-label="Apprendre et s’entraîner">
