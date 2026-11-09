@@ -5,6 +5,7 @@ import { useProgress } from '../app/store';
 import { JumpNav } from '../components/JumpNav';
 import { MODULES, THEMES, exercisesOf, type Theme, type ThemeId } from '../content';
 import { mastery, masteryLabel, type ProgressState } from '../engine/progress';
+import { SESSION_SIZE } from '../engine/session';
 import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 
@@ -55,7 +56,7 @@ export function themeMastery(p: ProgressState, t: Theme): { value: number; touch
  */
 export function ThemeActions({ theme }: { theme: Theme }) {
   return (
-    <div className="btn-row">
+    <div className="btn-row theme-actions">
       <Link to={`/session?mode=theme&id=${theme.id}`} className="btn btn-secondary" aria-label={`S’entraîner : ${theme.title}`}>
         S’entraîner
       </Link>
@@ -76,10 +77,14 @@ export function Learn() {
         <h1 id="main-title" tabIndex={-1}>
           Leçons
         </h1>
-        {/* How the page is laid out shows; how a theme is trained or evaluated is said on its two buttons. */}
+        {/* How the page is laid out shows: its size takes four words. */}
         <p className="lead">
           {MODULES.length} leçons, {THEMES.length} thèmes
           {read > 0 && `${SEP}${count(read, 'lue', 'lues')}`}
+        </p>
+        {/* What tells apart the two buttons each theme carries, once, in the words of S’entraîner. */}
+        <p className="small muted">
+          {frenchSpacing(`S’entraîner : ${SESSION_SIZE.theme} épreuves corrigées une à une. S’évaluer : ${SESSION_SIZE.evaluation}, corrigées à la fin.`)}
         </p>
         <JumpNav label="Aller à un thème" items={THEMES.map((t) => ({ id: `theme-${t.id}`, label: t.title }))} />
       </header>

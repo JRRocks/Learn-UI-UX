@@ -188,6 +188,17 @@
   }
 }
 
+/* Narrower still (a 32 px text on a 320 or 360 px phone), the bar no longer holds the mark, the theme
+   switch and « Menu »: the word was squeezed and broke in two (« Me|nu »). The switch leaves the bar,
+   whose need is then 110 px (the mark's link, the switch, the icon and the border of « Menu ») and 5.9rem
+   (the word « Menu », its padding and gap, 4.9rem; the gaps of the bar, 1rem); the theme is still set in
+   Progression, under « Réglages ». */
+@container topbar (width < calc(114px + 5.9rem)) {
+  .topbar .theme-toggle {
+    display: none;
+  }
+}
+
 /* « Menu »: its icon and its word, a tap target as tall as the others. */
 .menu-btn {
   display: inline-flex;
@@ -579,6 +590,25 @@ html:has(.menu-sheet[open]) {
 
 .fold[open] > summary svg {
   rotate: 180deg;
+}
+
+/* Narrower than 20em (a large text), the chevron follows the last word instead of keeping a column
+   from the others. */
+@media (max-width: 19.99875em) {
+  .fold > summary {
+    display: block;
+    padding: var(--s3);
+  }
+
+  .fold > summary svg {
+    display: inline-block;
+    margin-inline-start: var(--s2);
+    vertical-align: -0.2em;
+  }
+
+  .fold > :not(summary) {
+    margin-inline: var(--s3);
+  }
 }
 
 .fold > :not(summary) {
@@ -1014,6 +1044,14 @@ html:has(.menu-sheet[open]) {
   font-weight: 800;
 }
 
+/* Narrower than 20em (a large text), the title keeps the size its longest word fits the card at
+   (« interculturelle », « Session » at 32 px on a 320 px screen). */
+@media (max-width: 19.99875em) {
+  .today-main h2 {
+    font-size: var(--t-h2);
+  }
+}
+
 /* On the colour, the second voice is a shade of it, never a grey. */
 .today-main p {
   color: color-mix(in oklch, var(--hero-fg) 82%, var(--hero-bg));
@@ -1181,6 +1219,31 @@ html:has(.menu-sheet[open]) {
   margin-inline-end: auto;
 }
 
+/* Narrower than 20em (a large text), a line no longer holds a name, a state and a chevron: the name
+   keeps the width of its longest word (it broke anywhere: « Fich|es » beside « 334 à découvrir »), the
+   state goes under it when it has to, and the chevron goes. Under 12em the line is laid out again (end
+   of this file). */
+@media (max-width: 19.99875em) {
+  .side-link {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .side-text {
+    flex: 1 1 0;
+    min-width: min-content;
+    overflow-wrap: normal;
+  }
+
+  .side-state {
+    overflow-wrap: normal;
+  }
+
+  .side-link::after {
+    display: none;
+  }
+}
+
 .welcome {
   display: grid;
   gap: var(--s5);
@@ -1225,6 +1288,17 @@ html:has(.menu-sheet[open]) {
 
 .welcome li > span {
   font-size: var(--t-small);
+}
+
+/* The series: its flame in the yellow of what is earned, then the days. */
+.streak-line svg {
+  display: inline-block;
+  width: 1.25em;
+  height: 1.25em;
+  margin-inline-end: var(--s1);
+  vertical-align: -0.25em;
+  fill: var(--gold);
+  color: var(--gold-ink);
 }
 
 .streak-strip {
@@ -1466,6 +1540,14 @@ html:has(.menu-sheet[open]) {
   color: var(--accent-ink);
 }
 
+/* Narrower than 20em (a large text), the name takes the line: beside the mark, « Psychologie » no longer
+   fitted a 390 px screen at 32 px. */
+@media (max-width: 19.99875em) {
+  .toc-group-head h2 svg {
+    display: none;
+  }
+}
+
 .theme-mastery {
   max-width: 20rem;
 }
@@ -1585,7 +1667,7 @@ html:has(.menu-sheet[open]) {
 /* On a phone a lesson takes two lines: its name, then its length at one end and where one stands at
    the other (its level by name, then its meter). A lesson without a length (« Tes leçons ») gives the
    line to its level. */
-@media (max-width: 47.49875em) {
+@media (min-width: 20em) and (max-width: 47.49875em) {
   .toc-row a {
     align-items: center;
   }
@@ -1611,6 +1693,28 @@ html:has(.menu-sheet[open]) {
   .toc-mastery .meter {
     flex: none;
     width: 4.5rem;
+  }
+}
+
+/* Narrower than 20em (a large text), a line no longer holds the length and the level side by side:
+   one under the other, the level's meter beside its name or under it (end of this file). */
+@media (max-width: 19.99875em) {
+  .toc-row a {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .toc-mastery {
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--s3);
+    width: auto;
+  }
+
+  .toc-mastery .meter {
+    flex: none;
+    width: 6rem;
   }
 }
 
@@ -2036,6 +2140,29 @@ html:has(.menu-sheet[open]) {
   }
 }
 
+/* Narrower than 20em (a large text): the name keeps the width of its longest word, the count goes
+   under it when it has to, the chevron goes; under 12em the line is laid out again (end of this file). */
+@media (max-width: 19.99875em) {
+  .pick {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .pick-text {
+    flex: 1 1 0;
+    min-width: min-content;
+    overflow-wrap: normal;
+  }
+
+  .pick-n {
+    margin-inline-start: auto;
+  }
+
+  .pick > .pick-go {
+    display: none;
+  }
+}
+
 /* minmax(0, 1fr): an implicit auto track grew to the longest <option> (411 px at 320 px). */
 /* The themes in the training: their name, size and mastery, then « S’évaluer » and « S’entraîner ». */
 .themes {
@@ -2065,6 +2192,16 @@ html:has(.menu-sheet[open]) {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--s5);
+  }
+}
+
+/* On a phone a theme's two buttons share its width, side by side down to 320 px: at their own widths
+   they went one under the other there, and each of eight themes took 60 px more. Narrower than 20em (a
+   large text), each keeps the width of its word, one under the other if need be. */
+@media (min-width: 20em) and (max-width: 39.99875em) {
+  .theme-actions > .btn {
+    flex: 1 1 0;
+    padding-inline: var(--s2);
   }
 }
 
@@ -2182,6 +2319,14 @@ html:has(.menu-sheet[open]) {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--ink-2);
+}
+
+/* The XP of a run: on the yellow of what is earned, in its deeper shade. */
+.player-xp[data-earned] {
+  padding: 0.125rem var(--s2);
+  border-radius: 999px;
+  background: var(--gold-wash);
+  color: var(--gold-ink);
 }
 
 /* ---------- The strip of a run (ProofBar): one patch an exercise ---------- */
@@ -4069,6 +4214,22 @@ html:has(.menu-sheet[open]) {
   font-variant-numeric: tabular-nums;
 }
 
+/* Narrower than 20em (a large text), half a line no longer holds « programmées »: one figure a line, on
+   the page itself, a rule between them. */
+@media (max-width: 19.99875em) {
+  .figures {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .figures > div {
+    padding: var(--s2) 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--rule);
+    background: none;
+  }
+}
+
 .heatmap {
   display: grid;
   grid-auto-flow: column;
@@ -4997,10 +5158,26 @@ fieldset.tf {
   .toast,
   .badge,
   .side-link,
+  .pick,
+  .quiz-chip,
+  .fold > summary,
   .lesson-jump,
   .toc-title,
   .option-badge {
     hyphenate-limit-chars: 9 3 3;
+  }
+
+  /* A market's chip gives its side margins, half its gap and a little of its count's patch to its name:
+     beside its count, « Allemagne » and « communes » were 10 px short of a 320 px screen at 32 px, and
+     broke anywhere. */
+  .quiz-chip {
+    gap: var(--s1);
+    padding-inline: var(--s2);
+  }
+
+  .quiz-chip-n {
+    min-width: 1.5rem;
+    height: 1.5rem;
   }
 
   .task-prompt,
@@ -5085,8 +5262,9 @@ fieldset.tf {
     padding-inline-start: 0;
   }
 
-  /* A side link: its icon and its count on a row, its words under them. */
-  .side-link {
+  /* A side link, a way to train: its icon and its count (or its state) on a row, its words under them. */
+  .side-link,
+  .pick {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -5094,16 +5272,22 @@ fieldset.tf {
     padding-inline: var(--s3);
   }
 
-  .side-link > svg {
+  .side-link > svg,
+  .pick > svg:first-child {
     grid-area: 1 / 1;
   }
 
-  .side-link > strong {
+  .side-link > strong,
+  .side-link > .side-state,
+  .pick > .pick-n {
     grid-area: 1 / 2;
   }
 
-  .side-link > span {
+  .side-link > .side-text,
+  .pick > .pick-text {
     grid-area: 2 / 1 / 3 / -1;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   /* A badge: its icon above its title. */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- The paper colour (tokens.css), dark. -->
-    <color name="paper">#11151C</color>
+    <color name="paper">#0C0F18</color>
 </resources>

@@ -56,15 +56,20 @@ const NAV_GROUPS: { id: string; title: string | null; items: NavItem[] }[] = [
 
 const TABS: NavItem[] = [HOME, LESSONS, PRACTICE, CULTURES, PROGRESS];
 
+/**
+ * The app's icon (public/favicon.svg), beside its name: the proof, a white sheet on the blue, and the
+ * correction's red loop round its last line. The same colours in both themes, as on the home screen.
+ */
 function BrandMark() {
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true">
-      <rect x="8" y="4.5" width="17" height="23" rx="2.5" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M12 11h9M12 15.5h9M12 20h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <rect width="32" height="32" rx="7" fill="#2442d9" />
+      <rect x="7" y="4.5" width="18" height="23" rx="2.5" fill="#fff" />
+      <path d="M11 10.5h10M11 15h10M11 19.5h5" stroke="#2442d9" strokeWidth="2" strokeLinecap="round" />
       <path
-        d="M10.5 17.2c-4.7-.6-6.9 2.2-4.4 4.1 3 2.3 11.9 2.3 16.3-.1 3.8-2.1 1.4-5.2-4.6-5.4"
+        d="M10.8 17.4c-3.2-.4-4.6 1.6-2.9 3 2.2 1.8 9.1 1.8 12.4-.1 2.9-1.6 1-4.1-3.5-4.3"
         fill="none"
-        stroke="var(--mark)"
+        stroke="#db2c2b"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -108,7 +113,7 @@ function ThemeToggle() {
   return (
     <button
       type="button"
-      className="icon-btn"
+      className="icon-btn theme-toggle"
       onClick={() => store.update((s) => ({ ...s, settings: { ...s.settings, theme: dark ? 'light' : 'dark' } }))}
       aria-label={dark ? 'Passer en thème clair' : 'Passer en thème sombre'}
       title={dark ? 'Thème clair' : 'Thème sombre'}

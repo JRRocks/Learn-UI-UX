@@ -308,7 +308,8 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
             <ProofBar total={items.length} played={state.played} now={state.index} blind={exam} />
           </div>
         </div>
-        <span className="player-xp">
+        {/* What the run has earned so far wears the yellow of what is earned; an exam shows none before its end. */}
+        <span className="player-xp" data-earned={exam ? undefined : ''}>
           {exam ? 'Examen' : `+${xpTotal} XP`}
         </span>
       </div>

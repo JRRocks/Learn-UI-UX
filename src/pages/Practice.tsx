@@ -127,7 +127,7 @@ export function Practice() {
             Session du jour
           </h2>
           <p className="today-facts">
-            {SESSION_SIZE.daily}{' '}épreuves{SEP}8{' '}min
+            {SESSION_SIZE.daily} épreuves{SEP}8{'\u00A0'}min
           </p>
           <Link to="/session?mode=daily" className="btn btn-primary">
             Commencer
@@ -258,7 +258,7 @@ export function Practice() {
             keep
             text={
               <>
-                90{' '}secondes de vrai ou faux
+                90{'\u00A0'}s de vrai ou faux
                 {p.records.blitz ? `${SEP}record : ${p.records.blitz}` : ''}
               </>
             }
@@ -268,7 +268,7 @@ export function Practice() {
             Icon={GraduationCap}
             title="Examen blanc"
             keep
-            text={`${SESSION_SIZE.exam} épreuves, corrigées à la fin`}
+            text={`${SESSION_SIZE.exam} épreuves, corrigées à la fin`}
           />
         </ul>
       </section>

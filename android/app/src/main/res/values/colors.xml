@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- The paper colour (tokens.css), light: the splash and the window behind the page start with it. -->
-    <color name="paper">#F8FAFC</color>
+    <color name="paper">#F9FAFD</color>
 </resources>

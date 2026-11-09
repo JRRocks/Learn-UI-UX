@@ -5,21 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="Atelier pour progresser en UI/UX : leçons, épreuves visuelles, critique, anti-patterns et règles d’interface selon les cultures." />
     <!-- --paper of tokens.css in each scheme; App rewrites both when the learner forces a theme. -->
-    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#11151c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f9fafd" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0f18" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <title>Épreuves — atelier UI/UX</title>
     <style>
-      /* Same colors as --ink, --paper and --mark in tokens.css, so the first paint matches the app. */
-      .boot { min-height: 100dvh; display: grid; place-content: center; justify-items: center; gap: 12px; font: 700 18px/1.2 system-ui, sans-serif; color: #171f2f; background: #f8fafc; }
-      .boot .mark { stroke: #cf3b1d; }
-      @media (prefers-color-scheme: dark) { .boot { color: #e6eaef; background: #11151c; } .boot .mark { stroke: #f07554; } }
-      :root[data-theme='dark'] .boot { color: #e6eaef; background: #11151c; }
-      :root[data-theme='dark'] .boot .mark { stroke: #f07554; }
-      :root[data-theme='light'] .boot { color: #171f2f; background: #f8fafc; }
-      :root[data-theme='light'] .boot .mark { stroke: #cf3b1d; }
+      /* Same colors as --ink and --paper in tokens.css, so the first paint matches the app; the mark is the app's icon. */
+      .boot { min-height: 100dvh; display: grid; place-content: center; justify-items: center; gap: 12px; font: 700 18px/1.2 system-ui, sans-serif; color: #141a2b; background: #f9fafd; }
+      @media (prefers-color-scheme: dark) { .boot { color: #eaedf2; background: #0c0f18; } }
+      :root[data-theme='dark'] .boot { color: #eaedf2; background: #0c0f18; }
+      :root[data-theme='light'] .boot { color: #141a2b; background: #f9fafd; }
     </style>
     <script>
       // Apply the saved theme before first paint to avoid a flash.
@@ -31,7 +28,7 @@
           // The browser chrome follows the forced theme too (App keeps it in sync afterwards).
           document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
             m.dataset.system = m.content;
-            m.content = t === 'dark' ? '#11151c' : '#f8fafc';
+            m.content = t === 'dark' ? '#0c0f18' : '#f9fafd';
           });
         }
       } catch (e) {}
@@ -41,7 +38,7 @@
     <div id="root">
       <!-- Painted before the app's JavaScript arrives; React replaces it on first render. -->
       <div class="boot" aria-hidden="true">
-        <svg viewBox="0 0 32 32" width="40" height="40"><rect x="8" y="4.5" width="17" height="23" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11h9M12 15.5h9M12 20h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="mark" d="M10.5 17.2c-4.7-.6-6.9 2.2-4.4 4.1 3 2.3 11.9 2.3 16.3-.1 3.8-2.1 1.4-5.2-4.6-5.4" fill="none" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 32 32" width="44" height="44"><rect width="32" height="32" rx="7" fill="#2442d9"/><rect x="7" y="4.5" width="18" height="23" rx="2.5" fill="#fff"/><path d="M11 10.5h10M11 15h10M11 19.5h5" stroke="#2442d9" stroke-width="2" stroke-linecap="round"/><path d="M10.8 17.4c-3.2-.4-4.6 1.6-2.9 3 2.2 1.8 9.1 1.8 12.4-.1 2.9-1.6 1-4.1-3.5-4.3" fill="none" stroke="#db2c2b" stroke-width="2" stroke-linecap="round"/></svg>
         <p>Épreuves</p>
       </div>
     </div>

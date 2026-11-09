@@ -185,6 +185,8 @@ const LABELS = [
   '.order-label', '.option-text', '.option-why', '.option-badge', '.option-label', '.match-row', '.zones li',
   '.task-prompt', '.takeaway', '.flashcard-q', '.slider-head', '.btn', '.toast', '.badge', '.side-link',
   '.lesson-jump', '.toc-title', '.market-formats', '.recap', '.unit', 'h1', 'h2', 'h3', 'h4',
+  // The lines one chooses from, a name beside a mark, a count or a state.
+  '.pick', '.quiz-chip', '.jump a', '.theme-row', '.toc-mastery', '.toc-meta', '.today-facts', '.fold > summary', '.figures',
 ].join(', ');
 /** The units written in full (src/lib/markdown.tsx, UNIT_WORDS). */
 const UNIT_WORDS = 'caractères?|mots?|jours?|secondes?|minutes?';

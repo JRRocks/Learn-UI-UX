@@ -1,4 +1,4 @@
-import { BookOpen, Check, Layers, Play, Repeat } from 'lucide-react';
+import { BookOpen, Check, Flame, Layers, Play, Repeat } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
@@ -70,7 +70,7 @@ export function Home() {
           <h2>Session du jour</h2>
           {/* Its size and its length, as facts: the sentence around them took four lines of the card. */}
           <p className="today-facts">
-            {SESSION_SIZE.daily}{' '}épreuves{SEP}8{' '}min
+            {SESSION_SIZE.daily} épreuves{SEP}8{'\u00A0'}min
           </p>
           <div className="goal">
             <span className="goal-line">
@@ -83,7 +83,7 @@ export function Home() {
               )}
               <span className="num">
                 <strong>{Math.min(todayStats.xp, goal)}</strong> / {goal}
-                {' '}XP
+                {'\u00A0'}XP
               </span>
             </span>
             <div
@@ -178,13 +178,14 @@ export function Home() {
               Toute ma progression
             </Link>
           </div>
-          <p>
+          <p className="streak-line">
+            <Flame aria-hidden="true" />
             <strong className="num">{st.current}</strong>
-            {' '}
+            {'\u00A0'}
             {st.current > 1 ? 'jours' : 'jour'}
             <span className="muted">
               {SEP}
-              record{' '}: {st.best}
+              record{'\u00A0'}: {st.best}
             </span>
             {!st.activeToday && st.current > 0 && <span className="muted">{SEP}une épreuve aujourd’hui prolonge la série</span>}
           </p>

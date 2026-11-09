@@ -71,6 +71,22 @@ en haut de chaque page : sa barre défile avec la page, seuls les onglets resten
 | **Ressources** | Aide-mémoire chiffré, catalogue des 62 anti-patterns, heuristiques de Nielsen et personas, commandes impeccable, glossaire, sources. |
 | **Progression** | Niveau, activité, maîtrise par leçon, badges, historique, réglages, export / import des données. |
 
+## L’apparence
+
+Chaque couleur tient un rôle, et un seul : le **bleu outremer** pour ce qu’on actionne et pour
+se repérer (bouton principal, session du jour, page affichée dans la barre d’onglets, réponse
+choisie), le **rouge** pour la correction, le **vert** pour le juste, le **jaune** pour ce qui est
+gagné (série, XP, badges). Les surfaces se distinguent par leur ton plutôt que par un filet : une
+liste est une seule feuille, ses lignes séparées par un trait. L’avancement d’une session se lit
+comme la barre de contrôle d’une épreuve d’imprimerie : une pastille par épreuve, pleine si la
+réponse est juste, à moitié pour un « presque », évidée et cerclée de rouge sinon.
+
+Sur téléphone, les écrans où l’on choisit se lisent d’un coup d’œil : un nom, puis un compte ou
+un état ; les descriptions restent sur ordinateur et sur la page qu’elles décrivent. Les jetons
+sont dans `src/styles/tokens.css` (clair et sombre) ; `styles.test.ts` calcule le contraste de
+chaque couple utilisé (4,5:1 pour le texte, 3:1 pour les formes) et refuse une couleur qu’un
+écran ne peut pas afficher.
+
 ## Les formats d’épreuve
 
 - **Mise en situation** : une vraie page, un questionnaire ou un écran d’appli Android, et
@@ -157,9 +173,11 @@ src/
   lib/          utilitaires ; native.ts (app Android), appUpdate.ts (recherche de la release
                 GitHub, téléchargement, installation) + tests
   pages/        les écrans
-  styles/       jetons de design (OKLCH, clair / sombre), base, composants
+  styles/       jetons de design par rôles (OKLCH, clair / sombre), base, composants ; leurs
+                contrastes sont calculés par styles.test.ts
 scripts/        plugins de build (index du contenu, service worker), contrôles visuels (shots,
-                check:mocks, check:overflow), icônes des maquettes, icônes de l’app (npm run icons)
+                check:mocks, check:overflow), icônes des maquettes, icônes de l’app et de l’exécutable
+                Windows (npm run icons, d’après public/favicon.svg)
 src/sw.js       service worker (cache hors ligne)
 android/        l’app Android (Capacitor) ; AppUpdatePlugin.java télécharge et vérifie la mise
                 à jour, puis la confie à l’installeur d’Android

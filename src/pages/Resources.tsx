@@ -360,7 +360,6 @@ export function Resources({ tab }: { tab?: string }) {
         <h1 id="main-title" tabIndex={-1}>
           Ressources
         </h1>
-        <p className="lead">Les chiffres à garder sous la main, le catalogue des anti-patterns, les grilles de critique et le vocabulaire.</p>
       </header>
       <nav className="segmented" aria-label="Rubriques des ressources" style={{ alignSelf: 'flex-start' }}>
         {TABS.map((t) => (

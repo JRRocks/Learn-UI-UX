@@ -133,8 +133,7 @@ export function Cultures() {
             <p className="today-facts">
               {lesson.minutes}
               {'\u00A0'}min{SEP}
-              {count}
-              {'\u00A0'}épreuves
+              {count} épreuves
             </p>
           )}
           {lesson && (
