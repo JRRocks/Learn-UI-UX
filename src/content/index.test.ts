@@ -12,7 +12,7 @@ import { ANTIPATTERNS } from './antipatterns';
 import { CULTURES } from './cultures/profiles';
 import { contentIndex, fileId, modulesFromFiles, ruleCards, statements } from './derive';
 import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, exercisesOf, loadModule, preloadContent } from './index';
-import { MODULE_ORDER } from './order';
+import { MODULE_ORDER, THEMES } from './order';
 
 /**
  * The light index is written by the build from the lessons (scripts/vite-plugins.mjs). These tests
@@ -32,6 +32,14 @@ describe('light index', () => {
     const known = MODULES.map((m) => m.id).filter((id) => MODULE_ORDER.includes(id));
     expect(known).toEqual(MODULE_ORDER.filter((id) => known.includes(id)));
     expect(MODULES).toHaveLength(ALL_MODULES.length);
+  });
+
+  it('puts every lesson in exactly one theme, and every theme’s lessons on disk', () => {
+    const onDisk = ALL_MODULES.map((m) => m.id);
+    const listed = THEMES.flatMap((t) => t.modules);
+    expect([...listed].sort()).toEqual([...onDisk].sort());
+    expect(new Set(listed).size).toBe(listed.length);
+    for (const m of MODULES) expect(THEMES.find((t) => t.modules.includes(m.id))?.id).toBe(m.theme);
   });
 
   it('lists every exercise with its lesson, type, difficulty, market and duel flag', () => {
