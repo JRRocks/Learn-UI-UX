@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- public/favicon.svg (32 x 32) without its tile, centred in the 66 dp safe zone of the adaptive icon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="2.5"
+        android:scaleY="2.5"
+        android:translateX="14"
+        android:translateY="14">
+        <path
+            android:pathData="M11,6H21A2,2 0,0 1,23 8V24A2,2 0,0 1,21 26H11A2,2 0,0 1,9 24V8A2,2 0,0 1,11 6Z"
+            android:strokeWidth="2"
+            android:strokeColor="#FFFFFF" />
+        <path
+            android:pathData="M12.5,11.5h7M12.5,15.5h7M12.5,19.5h4"
+            android:strokeWidth="2"
+            android:strokeColor="#FFFFFF"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M11,17.5c-4.2,-0.5 -6.1,1.9 -3.9,3.6c2.7,2 10.6,2 14.5,-0.1c3.4,-1.8 1.2,-4.6 -4.1,-4.8"
+            android:strokeWidth="2"
+            android:strokeColor="#FFFFFF"
+            android:strokeLineCap="round" />
+    </group>
+</vector>

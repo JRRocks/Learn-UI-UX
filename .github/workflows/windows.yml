@@ -1,0 +1,41 @@
+name: Application Windows
+
+# Builds Epreuves.exe (npm run exe) and, on main, publishes it as the latest release, so that
+# https://github.com/JRRocks/Learn-UI-UX/releases/latest/download/Epreuves.exe is always the last build.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-exe
+
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run exe
+      - name: Publier Epreuves.exe
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete windows --cleanup-tag --yes || true
+          gh release create windows release/Epreuves.exe --target "$GITHUB_SHA" --latest \
+            --title "Épreuves pour Windows" \
+            --notes "Téléchargez Epreuves.exe et double-cliquez dessus : l’app s’ouvre dans sa propre fenêtre, sans installation. Version construite depuis ${GITHUB_SHA::7}."
+      - uses: actions/upload-artifact@v4
+        if: github.ref != 'refs/heads/main'
+        with:
+          name: Epreuves
+          path: release/Epreuves.exe

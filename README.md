@@ -13,8 +13,39 @@ UX, Deceptive Patterns, Material, Apple HIG, web.dev, MDN, CNIL…). Deux leçon
 différences d’interface entre pays (Occident, Chine, Japon, Corée, Inde, monde arabe,
 Brésil…) et comment s’y adapter.
 
-L’app s’utilise sur ordinateur comme sur téléphone, et s’installe sur Android comme une
-application (icônes adaptatives, raccourcis, fonctionnement hors ligne).
+L’app s’utilise sur ordinateur comme sur téléphone : dans le navigateur, où elle s’installe
+aussi comme une application et fonctionne hors ligne, sous Windows avec un exécutable, et sur
+Android avec une APK qui se met à jour depuis GitHub.
+
+## Lancer l’app sur Windows
+
+Téléchargez **[Epreuves.exe](https://github.com/JRRocks/Learn-UI-UX/releases/latest/download/Epreuves.exe)**
+et double-cliquez dessus : l’app s’ouvre dans sa propre fenêtre, sans installation ni connexion.
+Elle s’arrête quand on ferme la fenêtre, et la progression est retrouvée au lancement suivant.
+
+- Au premier lancement, Windows peut afficher « Windows a protégé votre ordinateur », car
+  l’exécutable n’est pas signé : **Informations complémentaires**, puis **Exécuter quand même**.
+- La fenêtre est celle d’Edge, de Chrome, de Brave ou de Vivaldi en mode application, sur un
+  profil à part (`%LOCALAPPDATA%\Epreuves`) qui garde la progression. Sans aucun de ces
+  navigateurs, l’app s’ouvre dans le navigateur par défaut.
+- Le fichier tient tout seul (1 Mo) : on peut le ranger n’importe où, l’épingler à la barre des
+  tâches ou le copier sur une clé USB.
+
+## Sur un téléphone Android
+
+Depuis le téléphone, téléchargez
+**[Epreuves.apk](https://github.com/JRRocks/Learn-UI-UX/releases/download/android/Epreuves.apk)**
+(4 Mo) et ouvrez-le : Android propose de l’installer. L’app fonctionne hors connexion.
+
+- La première fois, Android demande d’autoriser l’installation depuis le navigateur (ou l’app
+  Fichiers) : **Paramètres**, puis **Autoriser cette source**. Play Protect peut signaler une app
+  inconnue : **Plus de détails**, puis **Installer quand même**.
+- Une nouvelle version s’installe par-dessus l’ancienne et garde la progression. Désinstaller
+  l’app l’efface : **Progression → Exporter ma progression** la sauvegarde avant (Fichiers, Drive,
+  envoi au PC…), **Importer une sauvegarde** la rétablit, d’un appareil à l’autre aussi.
+- Vérifiée aux formats du Galaxy S25 (360 × 780 px CSS) et du S25 Ultra (412 × 891 px CSS) :
+  barres système, encoche, navigation par gestes ou à trois boutons, police du téléphone agrandie,
+  thème clair ou sombre.
 
 ## Les pages
 
@@ -72,6 +103,12 @@ npm run check:overflow   # aucune page ni épreuve à choix visuel (question pui
                          # (-- --texte : cette passe seule ; -- --sans-texte : sans elle)
 npm run check:mocks      # maquettes : texte coupé, superposé, trop petit ou trop pâle
 npm run shots -- <id>    # captures de chaque exemple et épreuve d’un module (--mobile, --dark)
+npm run exe              # Windows : build puis release/Epreuves.exe, l’app en un seul exécutable
+                         # (desktop/ ; le workflow « Application Windows » le publie à chaque push sur main)
+npm run apk              # Windows avec Android Studio (JAVA_HOME sur son jbr) : build, Capacitor, puis
+                         # android/app/build/outputs/apk/release/app-release.apk, signé par la clé décrite
+                         # dans android/keystore.properties, hors du dépôt (« Application Android » publie
+                         # l’APK à chaque push sur main avec les secrets ANDROID_KEYSTORE*)
 ```
 
 Node 20.19+ ou 22.12+. Le fichier `.npmrc` active `legacy-peer-deps` (nécessaire avec npm 10
