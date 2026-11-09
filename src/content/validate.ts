@@ -1,4 +1,5 @@
 import { MOCK_ICONS } from '../components/mockIcons';
+import { MOCK_KIT } from '../components/mockKit';
 import { criterionMet, idealValues, initialValues } from '../engine/grade';
 import type { AntipatternEntry, CulturePair, CultureProfile, Exercise, ModuleContent, ScenarioExercise, Source, Visual } from '../engine/types';
 import { themeOf } from './order';
@@ -153,6 +154,13 @@ export function checkExercise(ex: Exercise, moduleId: string, errors: string[]) 
 const HEX = /^#[0-9a-f]{6}$/i;
 
 /**
+ * The properties the mock kit reads (`--gap` of `.mk-stack`, `--cols`…): a setting of the same name,
+ * written on the mock's host, would reach every element of the kit that reads it, and an element of
+ * the mock that sets its own would hide the setting.
+ */
+const KIT_PROPERTIES = new Set([...MOCK_KIT.matchAll(/var\(--([a-z][a-z0-9-]*)/g)].map((m) => m[1]));
+
+/**
  * A scenario: settings the mock reads, criteria that name them, and an expert version that meets
  * every criterion while the starting point misses at least one.
  */
@@ -165,6 +173,7 @@ function checkScenario(ex: ScenarioExercise, w: string, errors: string[]) {
   for (const c of ex.controls) {
     const at = `${w}.controls.${c.id}`;
     if (!KEBAB.test(c.id)) errors.push(`${at}: id non kebab-case (il nomme la propriété --${c.id})`);
+    if (KIT_PROPERTIES.has(c.id)) errors.push(`${at}: --${c.id} est déjà une propriété du kit des maquettes : choisis un autre id`);
     checkText(c.label, `${at}.label`, errors);
     if (!new RegExp(`var\\(--${c.id}(-n)?\\)`).test(styles)) errors.push(`${at}: la maquette ne lit jamais var(--${c.id})`);
     if (c.kind === 'range') {

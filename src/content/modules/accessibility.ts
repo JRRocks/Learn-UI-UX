@@ -327,7 +327,7 @@ Ce n’est qu’un plancher, valable pour tous les pointeurs, souris comprise. A
 .qs-opt::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #5a6172; flex: none; }
 .qs-on { border-color: #1d2230; box-shadow: inset 0 0 0 1px #1d2230; }
 .qs-on::before { border: 5px solid #1d2230; }
-.qs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-top: 4px; }
+.qs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--btn-gap); margin-top: 4px; }
 .qs-btn { display: flex; align-items: center; justify-content: center; min-height: var(--size); border-radius: 8px; font-size: 15px; font-weight: 600; }
 .qs-prev { border: 1px solid #868d9c; color: #1d2230; background: #fff; }
 .qs-next { background: var(--next); color: #ffffff; }`,
@@ -335,7 +335,7 @@ Ce n’est qu’un plancher, valable pour tous les pointeurs, souris comprise. A
       },
       controls: [
         { kind: 'range', id: 'size', label: 'Hauteur des réponses et des boutons', min: 24, max: 64, step: 2, initial: 28, unit: 'px', ideal: 48 },
-        { kind: 'range', id: 'gap', label: 'Espace entre « Précédent » et « Suivant »', min: 0, max: 24, step: 2, initial: 2, unit: 'px', ideal: 12 },
+        { kind: 'range', id: 'btn-gap', label: 'Espace entre « Précédent » et « Suivant »', min: 0, max: 24, step: 2, initial: 2, unit: 'px', ideal: 12 },
         {
           kind: 'ramp',
           id: 'next',
@@ -356,7 +356,7 @@ Ce n’est qu’un plancher, valable pour tous les pointeurs, souris comprise. A
         {
           id: 'spacing',
           label: 'Au moins 8 px entre « Précédent » et « Suivant »',
-          check: { kind: 'range', control: 'gap', min: 8 },
+          check: { kind: 'range', control: 'btn-gap', min: 8 },
           why: 'Collés, deux boutons se confondent sous le pouce : on revient en arrière en voulant avancer. Google demande 8 dp d’espace au moins entre deux cibles tactiles.',
         },
         {
