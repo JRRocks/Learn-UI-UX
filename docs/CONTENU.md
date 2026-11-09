@@ -7,8 +7,11 @@ Le module **`typography.ts` est l’étalon** : même ton, même densité, même
 
 L’application ne charge pas tout le contenu d’office : au build (et en développement), un
 index léger est calculé à partir des modules (`scripts/vite-plugins.mjs`), et chaque leçon se
-télécharge quand on l’ouvre. Rien à régénérer à la main ; seule contrainte : l’`id` d’un
-module est le nom de son fichier.
+télécharge quand on l’ouvre. Rien à régénérer à la main ; deux contraintes : l’`id` d’un
+module est le nom de son fichier, et chaque leçon est rangée dans un **grand thème** — ajoute
+son id à la liste `modules` d’un thème dans `src/content/order.ts`. L’ordre de ces listes est
+celui du parcours (« Leçon suivante ») ; un test vérifie que chaque leçon appartient à un thème
+et un seul.
 
 ## Vérifier son travail
 
@@ -81,6 +84,7 @@ Vise **12 à 16 épreuves par module**, réparties à peu près ainsi :
 | `order` | 1 | Priorités, étapes d’une méthode |
 | `match` | 1 | Concept ↔ définition, besoin ↔ réglage |
 | `slider` | 1 si une propriété continue s’y prête | Calibrer un espacement, une durée, un contraste… |
+| `scenario` | 1 si la leçon s’y prête | Mise en situation : régler un écran réaliste, évalué critère par critère |
 
 Difficulté : environ 40 % niveau 1, 40 % niveau 2, 20 % niveau 3.
 
@@ -110,6 +114,24 @@ Règles strictes :
   forme, image) reçoit un nom court et neutre avec `data-hotspot-name="…"`, sans trahir la réponse.
 - `slider` : la valeur `initial` est **hors** de la cible ; le CSS du visuel lit `var(--n)`
   (nombre brut) ou `var(--v)` (nombre + unité).
+- `scenario` (mise en situation) : un écran réaliste (`visual`, souvent `frame: 'phone'` ou
+  `'browser'`) et 2 à 4 réglages, chacun dessiné comme un curseur :
+  - `range` : un nombre et son unité (`px`, `dp`, `''`…), avec `min`, `max`, `step`, `initial`
+    et `ideal` ; le CSS lit `var(--<id>)` (nombre et unité) ou `var(--<id>-n)` (nombre seul, utile
+    pour une unité que le CSS ne connaît pas : `calc(var(--target-n) * 1px)` pour des dp) ;
+  - `ramp` : une rampe de couleurs hexadécimales, de la plus claire à la plus foncée ; `initial`
+    et `ideal` sont des rangs ; le CSS lit la couleur dans `var(--<id>)`.
+
+  Les `criteria` disent ce qui sera évalué, seuil compris dans le `label` (« Boutons d’au moins
+  44 px de haut ») : `range` (une valeur dans une plage), `contrast` (rapport WCAG minimal entre
+  deux couleurs, réglages ou hexadécimales, jamais arrondi : 4,49:1 échoue) et `ratio` (le
+  quotient de deux réglages, pour la proximité ou un interlignage). Chaque critère a son `why`,
+  sourcé. La validation exige que la version experte (`ideal`) respecte **tous** les critères et
+  que le départ (`initial`) en manque au moins un. Des `readouts` peuvent afficher en direct un
+  contraste, comme le ferait un outil de design ; les seuils, eux, restent à connaître. Le défaut
+  du départ est voulu : `check:mocks` le signale sur la capture « Départ », c’est normal.
+  Garde l’écran compact (environ 360 px de haut au réglage expert) : sur téléphone, il s’affiche
+  au-dessus des curseurs.
 - Une épreuve enseigne **une** idée. Pas de piège sur la formulation.
 
 ## Maquettes (`Visual`)

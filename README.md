@@ -8,23 +8,35 @@ Le contenu reprend les références de design du projet open source
 visite, plancher de qualité, typographie, couleur, espace, mouvement, rédaction UX,
 robustesse, critique heuristique, personas, audit et les 62 règles de son détecteur
 d’anti-patterns — enrichies de sources web reconnues (Nielsen Norman Group, WCAG 2.2, Laws of
-UX, Deceptive Patterns, Material, Apple HIG, web.dev, MDN, CNIL…). Un volet **Cultures**
-enseigne les différences d’interface entre pays (Occident, Chine, Japon, Corée, Inde, monde
-arabe, Brésil…) et comment s’y adapter.
+UX, Deceptive Patterns, Material, Apple HIG, web.dev, MDN, CNIL…). Deux leçons portent sur le
+**RGAA**, le référentiel français d’accessibilité. Un volet **Cultures** enseigne les
+différences d’interface entre pays (Occident, Chine, Japon, Corée, Inde, monde arabe,
+Brésil…) et comment s’y adapter.
 
-## Les onglets
+L’app s’utilise sur ordinateur comme sur téléphone, et s’installe sur Android comme une
+application (icônes adaptatives, raccourcis, fonctionnement hors ligne).
 
-| Onglet | Contenu |
+## Les pages
+
+Sur ordinateur, un rail les range par usage : **Accueil**, puis *Apprendre* (Leçons, Cultures,
+Ressources) et *Progresser* (S’entraîner, Progression). Sur téléphone, la barre d’onglets garde
+Accueil, Leçons, S’entraîner, Cultures et Progression ; le bouton **Menu** ouvre le plan complet.
+
+| Page | Contenu |
 |---|---|
 | **Accueil** | Session du jour, révisions et fiches dues, objectif quotidien, série, atlas de maîtrise. |
-| **Apprendre** | Le sommaire des leçons, rangées comme les commandes d’impeccable : fondations, psychologie et éthique, enrichir, affiner, corriger, évaluer, construire, cultures. Chaque leçon a ses exemples « À éviter / Préférer », ses règles d’or et ses sources. |
-| **S’entraîner** | Session du jour, révisions espacées, mes erreurs, fiches, entraînement par format ou par leçon, examen blanc. |
-| **Cultures** | Profils de 12 marchés (conventions, à faire / à éviter, formats, dimensions de Hofstede), comparateur de deux marchés, vues côte à côte du même composant, labo de localisation (API `Intl`). |
+| **Leçons** | Les leçons rangées en huit grands thèmes : les fondamentaux ; psychologie et éthique ; design visuel ; parcours et contenus ; écrans et plateformes ; accessibilité et RGAA ; méthode (cadrer et évaluer) ; cultures. Chaque thème se travaille (**S’entraîner**) ou s’évalue (**S’évaluer** : 20 épreuves corrigées à la fin, score par leçon). Chaque leçon a ses exemples « À éviter / Préférer », ses règles d’or et ses sources. |
+| **S’entraîner** | Session du jour, révisions espacées, mes erreurs, fiches ; puis par thème, par pays (la France, puis les pays étrangers région par région, et les notions communes), par leçon, par format ; défi chrono et examen blanc. |
+| **Cultures** | Profils de 12 marchés (conventions, à faire / à éviter, formats, dimensions de Hofstede), questionnaires pays par pays, comparateur de deux marchés, vues côte à côte du même composant, labo de localisation (API `Intl`). |
 | **Ressources** | Aide-mémoire chiffré, catalogue des 62 anti-patterns, heuristiques de Nielsen et personas, commandes impeccable, glossaire, sources. |
 | **Progression** | Niveau, activité, maîtrise par leçon, badges, historique, réglages, export / import des données. |
 
 ## Les formats d’épreuve
 
+- **Mise en situation** : une vraie page, un questionnaire ou un écran d’appli Android, et
+  plusieurs curseurs pour en régler les tailles, les espacements et les couleurs ; l’écran est
+  ensuite évalué critère par critère (cible de 44 px, contraste de 4,5:1, espace de 8 dp…),
+  avec la version experte à comparer.
 - **Comparaison visuelle** : deux à quatre maquettes, choisir celle qu’un expert recommanderait.
 - **Chasse aux erreurs** : cliquer sur les défauts d’une maquette ; la correction les entoure
   comme un correcteur sur une épreuve d’imprimerie.
@@ -76,7 +88,7 @@ depuis n’importe quel sous-dossier. La progression est stockée dans le naviga
 L’app fonctionne hors ligne : à la première visite, le service worker (`src/sw.js`, complété
 au build avec la liste des fichiers) met tout en cache ; chaque déploiement installe sa propre
 version et nettoie les anciennes. Les leçons se chargent à la demande à partir d’un index léger,
-si bien que la première page reste légère malgré les 24 leçons et leurs centaines de maquettes.
+si bien que la première page reste légère malgré les 26 leçons et leurs centaines de maquettes.
 
 ## Organisation du code
 
@@ -85,6 +97,7 @@ src/
   engine/       moteur d’entraînement, sans dépendance à React (types, correction, Leitner, SM-2,
                 progression, sessions, badges) + tests
   content/      tout le contenu, en données typées ; index.ts charge chaque leçon à la demande
+    order.ts    les grands thèmes et l’ordre des leçons
     modules/    une leçon et ses épreuves par fichier
     cultures/   profils de marchés, comparaisons, labo de localisation
     antipatterns.ts, resources.ts, sources.ts, detectorRules.ts
@@ -93,7 +106,7 @@ src/
   pages/        les écrans
   styles/       jetons de design (OKLCH, clair / sombre), base, composants
 scripts/        plugins de build (index du contenu, service worker), contrôles visuels (shots,
-                check:mocks, check:overflow), icônes des maquettes
+                check:mocks, check:overflow), icônes des maquettes, icônes de l’app (npm run icons)
 src/sw.js       service worker (cache hors ligne)
 docs/CONTENU.md guide pour écrire de nouvelles leçons et épreuves
 ```
