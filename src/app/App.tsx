@@ -1,9 +1,11 @@
 import { BookOpen, ChartColumn, Globe, House, Library, Menu, Moon, Sparkles, Sun, Target, X, type LucideIcon } from 'lucide-react';
 import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { UpdateAnnouncer, UpdateBanner } from '../components/AppUpdate';
 import { EXERCISES, MODULES, MODULE_BY_ID } from '../content';
 import { emptyProgress, streak } from '../engine/progress';
+import { watchForUpdates } from '../lib/appUpdate';
 import { SEP } from '../lib/french';
-import { here, saveJson, syncSystemBars } from '../lib/native';
+import { here, inApp, saveJson, syncSystemBars } from '../lib/native';
 import { About } from '../pages/About';
 import { Blitz } from '../pages/Blitz';
 import { Cards } from '../pages/Cards';
@@ -561,6 +563,9 @@ function Shell() {
     if (focusMode) document.title = focusModeTitle(route);
   }, [route, focusMode]);
 
+  // In the Android app: a newer version published on GitHub is offered at the top of the pages.
+  useEffect(() => watchForUpdates(), []);
+
   if (Preview && section === 'apercu' && param)
     return (
       <Suspense fallback={<p>Chargement…</p>}>
@@ -607,6 +612,8 @@ function Shell() {
       </nav>
 
       <main id="main" className="main" tabIndex={-1}>
+        {/* Not in sessions, which it would interrupt, nor in À propos, which has its own section. */}
+        {inApp && !focusMode && section !== 'a-propos' && <UpdateBanner />}
         <Boundary resetKey={route.raw}>{page(route)}</Boundary>
       </main>
 
@@ -621,6 +628,7 @@ function Shell() {
         </nav>
       )}
       <Toasts />
+      {inApp && <UpdateAnnouncer />}
     </div>
   );
 }

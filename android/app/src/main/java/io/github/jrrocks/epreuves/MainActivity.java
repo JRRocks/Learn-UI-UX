@@ -10,6 +10,8 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // The app's own plugin, which installs the updates published on GitHub (src/lib/appUpdate.ts).
+        registerPlugin(AppUpdatePlugin.class);
         super.onCreate(savedInstanceState);
         WebView webView = getBridge().getWebView();
         // The web view is white until the page paints: the paper of the app instead, light or dark,

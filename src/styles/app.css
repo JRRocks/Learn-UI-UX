@@ -4795,3 +4795,81 @@ fieldset.tf {
     bottom: calc(var(--s3) + env(safe-area-inset-bottom));
   }
 }
+
+/* =========================================================================
+   Updates of the Android app (components/AppUpdate.tsx)
+   ========================================================================= */
+
+/* Above the page, as wide as it, so that their edges line up from the phone to the tablet. */
+.update-banner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  max-width: 68rem;
+  margin: 0 auto var(--s5);
+  padding: var(--s4);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-panel);
+  background: var(--sheet);
+}
+
+.main:has(> .page--narrow) > .update-banner {
+  max-width: 46rem;
+}
+
+.update-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.update-banner > *,
+.update-panel > * {
+  max-width: var(--measure);
+}
+
+.update-banner > .btn-row,
+.update-panel > .btn-row {
+  margin-top: var(--s2);
+}
+
+/* The icon sits on the title's first line, at the size of its text. */
+.update-title {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s2);
+  font-weight: 650;
+}
+
+.update-icon {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  margin-top: 0.125em;
+  color: var(--ink-2);
+}
+
+.update-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+.update-progress progress {
+  width: 100%;
+  height: 0.5rem;
+  accent-color: var(--ink);
+}
+
+/* Narrower than 20em (320 px at 16 px, 640 px at 32 px), the banner gives its padding to the buttons, and
+   its icon to the title: at 320 px with a 32 px text, « Annuler » and « Téléchar-gement » kept their
+   letters together (split at a syllable, with a hyphen, as titles are under 15em). */
+@media (max-width: 19.99875em) {
+  .update-banner {
+    padding: var(--s3);
+  }
+
+  .update-icon {
+    display: none;
+  }
+}

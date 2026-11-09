@@ -38,4 +38,7 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Hands the update downloaded from GitHub to Android's installer (AppUpdatePlugin): the learner
+         still allows it once in Settings, then confirms each update. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 </manifest>

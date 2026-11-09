@@ -43,6 +43,14 @@ Depuis le téléphone, téléchargez
 - Une nouvelle version s’installe par-dessus l’ancienne et garde la progression. Désinstaller
   l’app l’efface : **Progression → Exporter ma progression** la sauvegarde avant (Fichiers, Drive,
   envoi au PC…), **Importer une sauvegarde** la rétablit, d’un appareil à l’autre aussi.
+- **Mises à jour** : à chaque lancement, l’app demande à GitHub la dernière version publiée
+  (la release `android`, titrée avec sa version : « Épreuves pour Android 1.0.312 »). Quand elle
+  est plus récente que la sienne, un bandeau propose de la télécharger, puis de l’installer
+  par-dessus ; **À propos → Mises à jour** donne la version installée et vérifie à la demande.
+  L’APK téléchargée est contrôlée avant l’installation : empreinte SHA-256 publiée par GitHub,
+  même app, version plus récente. La première fois, Android demande d’autoriser l’app à installer
+  ses mises à jour (**Autoriser cette source**), puis de confirmer chaque installation. Une APK
+  installée avant cette fonction ne la contient pas : installez une fois la nouvelle à la main.
 - Vérifiée aux formats du Galaxy S25 (360 × 780 px CSS) et du S25 Ultra (412 × 891 px CSS) :
   barres système, encoche, navigation par gestes ou à trois boutons, police du téléphone agrandie,
   thème clair ou sombre.
@@ -139,12 +147,18 @@ src/
     cultures/   profils de marchés, comparaisons, labo de localisation
     antipatterns.ts, resources.ts, sources.ts, detectorRules.ts
     validate.ts + content.test.ts   validation automatique du contenu
-  components/   rendu des maquettes en Shadow DOM isolé (Mock), lecteurs d’épreuves, correction
+  components/   rendu des maquettes en Shadow DOM isolé (Mock), lecteurs d’épreuves, correction,
+                bandeau et section des mises à jour de l’app Android (AppUpdate.tsx)
+  lib/          utilitaires ; native.ts (app Android), appUpdate.ts (recherche de la release
+                GitHub, téléchargement, installation) + tests
   pages/        les écrans
   styles/       jetons de design (OKLCH, clair / sombre), base, composants
 scripts/        plugins de build (index du contenu, service worker), contrôles visuels (shots,
                 check:mocks, check:overflow), icônes des maquettes, icônes de l’app (npm run icons)
 src/sw.js       service worker (cache hors ligne)
+android/        l’app Android (Capacitor) ; AppUpdatePlugin.java télécharge et vérifie la mise
+                à jour, puis la confie à l’installeur d’Android
+desktop/        l’exécutable Windows
 docs/CONTENU.md guide pour écrire de nouvelles leçons et épreuves
 ```
 

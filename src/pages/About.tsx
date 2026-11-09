@@ -1,4 +1,5 @@
 import { Link, pageTitle, usePageTitle } from '../app/router';
+import { UpdateSection } from '../components/AppUpdate';
 import { EXERCISES, MODULES, RULE_CARDS } from '../content';
 import { CULTURE_NAMES } from '../content/cultures';
 import { MdInline } from '../lib/markdown';
@@ -32,6 +33,7 @@ export function About() {
           <MdInline text="Chaque épreuve est corrigée avec le choix recommandé, le pourquoi et la règle à retenir. Les épreuves suivent un système de boîtes de Leitner, les fiches une variante de SM-2 : ce que tu rates revient vite, ce que tu maîtrises s’espace." />
         </p>
         <p>Ta progression reste {inApp ? 'dans l’app, sur ce téléphone' : 'dans ton navigateur'} (stockage local). Aucun compte, aucun suivi.</p>
+        {inApp && <UpdateSection />}
         <h2>Crédits</h2>
         <ul>
           <li>

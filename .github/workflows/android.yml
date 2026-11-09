@@ -55,11 +55,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # The versionName that Gradle gave the APK (1.0.<commits>). The app reads it in the title of the
+          # release and offers the update when it is newer than its own (src/lib/appUpdate.ts).
+          VERSION=$(jq -r '.elements[0].versionName' android/app/build/outputs/apk/release/output-metadata.json)
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Version de l’APK illisible : « $VERSION »."
+            exit 1
+          fi
           gh release delete android --cleanup-tag --yes || true
           # Not « latest »: that one stays the Windows .exe (README, releases/latest/download/Epreuves.exe).
           gh release create android Epreuves.apk --target "$GITHUB_SHA" --latest=false \
-            --title "Épreuves pour Android" \
-            --notes "Ouvrez ce lien depuis le téléphone, téléchargez Epreuves.apk et installez-le. Une nouvelle version s’installe par-dessus l’ancienne et garde la progression. Version construite depuis ${GITHUB_SHA::7}."
+            --title "Épreuves pour Android $VERSION" \
+            --notes "Ouvrez ce lien depuis le téléphone, téléchargez Epreuves.apk et installez-le. Une nouvelle version s’installe par-dessus l’ancienne et garde la progression. Une fois installée, l’app cherche elle-même les versions suivantes ici et propose de les installer. Version $VERSION, construite depuis ${GITHUB_SHA::7}."
       - uses: actions/upload-artifact@v4
         if: github.ref != 'refs/heads/main'
         with:
