@@ -159,12 +159,13 @@
 }
 
 
-/* The name of the app stays beside its mark as long as the bar has room for it and for its two buttons:
-   74 px (the 30 px mark, the 44 px theme button) and 10.88rem (the name, 5.13rem of « Épreuves » in bold;
-   « Menu », its icon and its padding, 4.5rem; the gaps, 1.25rem where the bar is tight). Narrower, with a
-   large text size on a phone, the mark stays alone, in a 44 px link that keeps the whole name for screen
-   readers and voice control. */
-@container topbar (width < calc(74px + 10.88rem)) {
+/* The name of the app stays beside its mark as long as the bar has room for it and for its two buttons,
+   as measured at 16, 20, 24 and 32 px of default text: 96 px (the 30 px mark, the 44 px theme button,
+   the 20 px icon and the border of « Menu ») and 11.53rem (the name, 5.13rem of « Épreuves » in bold;
+   the word « Menu », its padding and gap, 4.9rem; the gaps of the bar, 1.5rem), plus a little slack.
+   Narrower, with a large text size on a phone, the mark stays alone, in a 44 px link that keeps the
+   whole name for screen readers and voice control. */
+@container topbar (width < calc(98px + 11.6rem)) {
   .topbar .brand {
     min-width: var(--tap);
     min-height: var(--tap);
