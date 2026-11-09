@@ -128,7 +128,6 @@
   grid-template-columns: repeat(5, 1fr);
   padding-bottom: env(safe-area-inset-bottom);
   background: var(--paper-2);
-  border-top: 1px solid var(--rule);
 }
 
 .tabbar a {
@@ -141,13 +140,19 @@
   min-height: var(--tabbar-h);
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--ink-3);
+  color: var(--ink-2);
   text-decoration: none;
 }
 
+/* The icon sits in its mark: 30 px tall, as wide as a thumb's pad, empty on the other pages. The page
+   shown fills it with the blue, as an Android navigation bar marks its destination: a shape, at 3:1 and
+   more against the bar, where a red icon among grey ones was the only sign (and red is the correction). */
 .tabbar a svg {
+  box-sizing: content-box;
   width: 22px;
   height: 22px;
+  padding: 4px 18px;
+  border-radius: 999px;
 }
 
 .tabbar a[aria-current='page'] {
@@ -155,7 +160,8 @@
 }
 
 .tabbar a[aria-current='page'] svg {
-  color: var(--mark);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 
@@ -396,18 +402,6 @@ html:has(.menu-sheet[open]) {
   color: var(--ink-3);
 }
 
-.nav-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.nav-text small {
-  font-size: var(--t-meta);
-  font-weight: 500;
-  color: var(--ink-3);
-}
-
 .rail-nav a {
   display: flex;
   align-items: center;
@@ -431,14 +425,11 @@ html:has(.menu-sheet[open]) {
   color: var(--ink);
 }
 
+/* The page shown: the wash of the blue under its name, set in a heavier weight (a second sign). */
 .rail-nav a[aria-current='page'] {
-  background: var(--sheet);
-  color: var(--ink);
-  box-shadow: 0 0 0 1px var(--rule);
-}
-
-.rail-nav a[aria-current='page'] svg {
-  color: var(--mark);
+  background: var(--accent-wash);
+  color: var(--on-accent-wash);
+  font-weight: 750;
 }
 
 .rail-foot {
@@ -556,6 +547,57 @@ html:has(.menu-sheet[open]) {
   max-width: var(--measure);
 }
 
+/* ---------- A fold: reference text opened on demand ---------- */
+
+.fold {
+  border-radius: var(--r-panel);
+  background: var(--paper-2);
+}
+
+.fold > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  min-height: 56px;
+  padding: var(--s2) var(--s4);
+  font-weight: 650;
+  cursor: pointer;
+  list-style: none;
+}
+
+.fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.fold > summary svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--ink-3);
+}
+
+.fold[open] > summary svg {
+  rotate: 180deg;
+}
+
+.fold > :not(summary) {
+  margin: 0 var(--s4) var(--s4);
+}
+
+/* The lessons a fold names, each a link of its own line. */
+.fold-links {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  list-style: none;
+}
+
+.fold-links a {
+  display: block;
+  padding-block: var(--s2);
+}
+
 .back {
   display: inline-flex;
   align-items: center;
@@ -664,23 +706,24 @@ html:has(.menu-sheet[open]) {
 }
 
 .btn-primary {
-  background: var(--ink);
-  color: var(--on-ink);
+  background: var(--action);
+  color: var(--on-action);
 }
 
 .btn-primary:hover:not(:disabled, [aria-disabled='true']) {
-  background: color-mix(in oklch, var(--ink) 86%, var(--paper));
+  background: color-mix(in oklch, var(--action) 86%, var(--ink));
 }
 
+/* The second button of a pair: an outline, its label in the colour of what one acts on. */
 .btn-secondary {
   background: var(--sheet);
-  border-color: var(--rule-strong);
-  color: var(--ink);
+  border-color: var(--control-border);
+  color: var(--accent-ink);
 }
 
 .btn-secondary:hover:not(:disabled, [aria-disabled='true']) {
-  background: var(--paper-2);
-  border-color: var(--ink-3);
+  background: var(--accent-wash);
+  border-color: var(--accent-ink);
 }
 
 /* A ghost button reads as a link: when its label wraps, its lines start on the left. */
@@ -769,7 +812,6 @@ html:has(.menu-sheet[open]) {
   padding: 3px;
   border-radius: calc(var(--r-control) + 3px);
   background: var(--paper-2);
-  border: 1px solid var(--rule);
 }
 
 /* The track hugs its options instead of stretching across a column (.field, grid rows). */
@@ -806,13 +848,13 @@ html:has(.menu-sheet[open]) {
   cursor: default;
 }
 
-/* The chosen option is filled with ink, like a chosen answer key: well above 3:1 against the
+/* The chosen option is filled with the blue, like a chosen answer key: well above 3:1 against the
    track in both themes (a white chip on the grey track gave 1.12:1, and 1.02:1 in dark). */
 .segmented [aria-pressed='true'],
 .segmented [aria-selected='true'],
 .segmented [aria-current='page'] {
-  background: var(--ink);
-  color: var(--on-ink);
+  background: var(--action);
+  color: var(--on-action);
 }
 
 @media (pointer: coarse) {
@@ -866,8 +908,8 @@ html:has(.menu-sheet[open]) {
 .meter {
   position: relative;
   display: block;
-  height: 6px;
-  border-radius: 3px;
+  height: 8px;
+  border-radius: 4px;
   background: var(--rule);
   overflow: hidden;
 }
@@ -878,7 +920,7 @@ html:has(.menu-sheet[open]) {
   inset-inline-start: 0;
   width: var(--value, 0%);
   border-radius: inherit;
-  background: var(--ink);
+  background: var(--meter);
 }
 
 /* The bar slides to its new length, unless the learner asked for less motion: then it takes it at once
@@ -889,8 +931,9 @@ html:has(.menu-sheet[open]) {
   }
 }
 
+/* How far a run has got: the blue too (the red is the correction's). */
 .meter--mark > span {
-  background: var(--mark);
+  background: var(--accent);
 }
 
 .chip {
@@ -901,7 +944,6 @@ html:has(.menu-sheet[open]) {
   padding: 0 var(--s2);
   border-radius: 999px;
   background: var(--paper-2);
-  border: 1px solid var(--rule);
   font-size: var(--t-meta);
   font-weight: 600;
   color: var(--ink-2);
@@ -956,32 +998,55 @@ html:has(.menu-sheet[open]) {
   }
 }
 
+/* The one area of full colour on the page: what to do now. */
 .today-main {
   display: flex;
   flex-direction: column;
   gap: var(--s4);
-  padding: var(--s6) var(--s5);
+  padding: var(--s5);
   border-radius: var(--r-panel);
   background: var(--hero-bg);
   color: var(--hero-fg);
 }
 
 .today-main h2 {
-  font-size: var(--t-h2);
+  font-size: 1.625rem;
+  font-weight: 800;
 }
 
+/* On the colour, the second voice is a shade of it, never a grey. */
 .today-main p {
-  color: color-mix(in oklch, var(--hero-fg) 80%, var(--hero-bg));
+  color: color-mix(in oklch, var(--hero-fg) 82%, var(--hero-bg));
+}
+
+/* How much and how long: two facts under the title, in the weight of a label. */
+.today-facts {
+  margin-top: calc(var(--s3) * -1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .today-main .btn-primary {
   align-self: flex-start;
   background: var(--hero-fg);
   color: var(--hero-bg);
+  font-weight: 750;
 }
 
 .today-main .btn-primary:hover {
   background: color-mix(in oklch, var(--hero-fg) 88%, var(--hero-bg));
+}
+
+/* On the colour, the focus ring takes its ink (the blue ring was lost on the blue). */
+.today-main :focus-visible {
+  outline-color: var(--hero-fg);
+}
+
+/* On a phone the card's button takes its width: the first tap of the day, under either thumb. */
+@media (max-width: 39.99875em) {
+  .today-main .btn-primary {
+    align-self: stretch;
+  }
 }
 
 .today-main .goal {
@@ -991,8 +1056,29 @@ html:has(.menu-sheet[open]) {
   font-size: var(--t-small);
 }
 
+/* The goal's name, then where one stands, at either end of the meter they caption. */
+.goal-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--s3);
+}
+
+.goal-done {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  font-weight: 700;
+}
+
+.goal-done svg {
+  width: 16px;
+  height: 16px;
+}
+
 .today-main .meter {
-  background: color-mix(in oklch, var(--hero-fg) 22%, var(--hero-bg));
+  background: color-mix(in oklch, var(--hero-fg) 24%, var(--hero-bg));
 }
 
 /* Progress toward the goal, not an error: the hero's own ink (7:1 against the track). */
@@ -1000,37 +1086,50 @@ html:has(.menu-sheet[open]) {
   background: var(--hero-fg);
 }
 
+/* What else waits today: one sheet of lines, each a name then a count or a state. One surface a shade
+   under the page, its lines parted by a rule: three cards outlined one by one made three objects of one
+   list (and a border round each, the look of every generated page). */
 .today-side {
   display: flex;
   flex-direction: column;
-  gap: var(--s2);
+  border-radius: var(--r-panel);
+  background: var(--paper-2);
+  overflow: hidden;
 }
 
 .side-link {
   display: flex;
   align-items: center;
   gap: var(--s3);
-  min-height: 64px;
-  padding: var(--s3) var(--s4);
-  border-radius: var(--r-panel);
-  border: 1px solid var(--rule);
-  background: var(--sheet);
+  min-height: 60px;
+  padding: var(--s2) var(--s4);
   color: var(--ink);
+  font-weight: 650;
   text-decoration: none;
 }
 
+.side-link + .side-link {
+  border-top: 1px solid var(--rule);
+}
+
 .side-link:hover {
-  border-color: var(--rule-strong);
+  background: var(--accent-wash);
+}
+
+/* Inside the sheet, the ring of a line reached with Tab stays within its edges. */
+.side-link:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--r-control);
 }
 
 .side-link > svg {
   width: 22px;
   height: 22px;
-  color: var(--ink-2);
+  color: var(--accent-ink);
   flex: none;
 }
 
-.side-link span {
+.side-text {
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -1039,12 +1138,47 @@ html:has(.menu-sheet[open]) {
 .side-link small {
   color: var(--ink-2);
   font-size: var(--t-small);
+  font-weight: 400;
 }
 
+/* What waits: a count on the blue, as a badge; nothing: a quiet word. Then the sign that the line leads
+   somewhere, drawn (a chevron), since no hover says it at the finger. */
 .side-link strong {
+  flex: none;
   margin-inline-start: auto;
-  font-size: var(--t-lead);
+  min-width: 1.75rem;
+  padding: 0.125rem var(--s2);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: var(--t-small);
   font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.side-state {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--ink-2);
+  font-size: var(--t-small);
+  font-weight: 500;
+  text-align: end;
+}
+
+.side-link::after {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-block-start: 2px solid var(--ink-3);
+  border-inline-end: 2px solid var(--ink-3);
+  rotate: 45deg;
+}
+
+/* A line that ends on neither a count nor a state: the chevron goes to its end. */
+.side-text:nth-last-child(1) {
+  margin-inline-end: auto;
 }
 
 .welcome {
@@ -1054,7 +1188,7 @@ html:has(.menu-sheet[open]) {
 
 .welcome ol {
   display: grid;
-  gap: var(--s4);
+  gap: var(--s3);
   padding: 0;
   list-style: none;
   counter-reset: step;
@@ -1066,19 +1200,31 @@ html:has(.menu-sheet[open]) {
   }
 }
 
+/* A step: its number in a patch of the blue's wash, its name, then a few words. */
 .welcome li {
   counter-increment: step;
-  display: flex;
-  flex-direction: column;
-  gap: var(--s1);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--s3);
 }
 
 .welcome li::before {
   content: counter(step);
-  font-weight: 750;
-  font-size: var(--t-h2);
-  color: var(--ink-3);
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--r-control);
+  background: var(--accent-wash);
+  color: var(--on-accent-wash);
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
+}
+
+.welcome li > span {
+  font-size: var(--t-small);
 }
 
 .streak-strip {
@@ -1090,7 +1236,7 @@ html:has(.menu-sheet[open]) {
   flex: 1;
   max-width: 22px;
   aspect-ratio: 1;
-  border-radius: 4px;
+  border-radius: 3px;
   background: var(--rule);
 }
 
@@ -1156,15 +1302,15 @@ html:has(.menu-sheet[open]) {
   list-style: none;
 }
 
+/* A market to train on: a chip a shade under the page, its count in a patch of paper. */
 .quiz-chip {
   display: inline-flex;
   align-items: center;
   gap: var(--s2);
   min-height: var(--tap);
   padding: 0 var(--s2) 0 var(--s4);
-  border: 1px solid var(--control-border);
   border-radius: 999px;
-  background: var(--sheet);
+  background: var(--paper-2);
   color: var(--ink);
   font-size: var(--t-small);
   font-weight: 600;
@@ -1172,8 +1318,8 @@ html:has(.menu-sheet[open]) {
 }
 
 .quiz-chip:hover {
-  background: var(--paper-2);
-  border-color: var(--ink-3);
+  background: var(--accent-wash);
+  color: var(--on-accent-wash);
 }
 
 .quiz-chip-n {
@@ -1183,10 +1329,37 @@ html:has(.menu-sheet[open]) {
   height: 1.75rem;
   padding: 0 var(--s1);
   border-radius: 999px;
-  background: var(--paper-2);
+  background: var(--sheet);
   font-size: var(--t-meta);
   font-variant-numeric: tabular-nums;
   color: var(--ink-2);
+}
+
+/* On a phone the foreign markets follow each other in one run of chips, region after region: a title
+   over each of seven regions, most of them for one chip, made the list a screen and a half long. The
+   regions keep their names for a screen reader. */
+@media (max-width: 47.49875em) {
+  .quizzes-row--group > dd > .quizzes {
+    flex-flow: row wrap;
+    gap: var(--s2);
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+
+  .quizzes-row--group .quizzes-row,
+  .quizzes-row--group .quizzes-row > dd,
+  .quizzes-row--group .quizzes-row ul {
+    display: contents;
+  }
+
+  .quizzes-row--group .quizzes-row > dt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 /* ---------- Links to the sections of a long page (JumpNav) ---------- */
@@ -1211,9 +1384,8 @@ html:has(.menu-sheet[open]) {
   align-items: center;
   min-height: var(--tap);
   padding: 0 var(--s4);
-  border: 1px solid var(--control-border);
   border-radius: 999px;
-  background: var(--sheet);
+  background: var(--paper-2);
   color: var(--ink);
   font-size: var(--t-small);
   font-weight: 600;
@@ -1222,8 +1394,8 @@ html:has(.menu-sheet[open]) {
 }
 
 .jump a:hover {
-  background: var(--paper-2);
-  border-color: var(--ink-3);
+  background: var(--accent-wash);
+  color: var(--on-accent-wash);
 }
 
 /* On a phone the links take one row, which scrolls sideways from edge to edge of the screen: eight
@@ -1279,23 +1451,44 @@ html:has(.menu-sheet[open]) {
   gap: var(--s3);
 }
 
+/* The theme's mark beside its name, in the blue: a shape to tell eight names apart at a glance. */
 .toc-group-head h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
   scroll-margin-top: var(--s5);
 }
 
-.toc-group-head .toc-group-meta {
-  margin-top: 0;
-  font-size: var(--t-meta);
-  color: var(--ink-3);
+.toc-group-head h2 svg {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--accent-ink);
 }
 
 .theme-mastery {
-  max-width: 16rem;
+  max-width: 20rem;
 }
 
-/* A group title outranks the titles it gathers: 24 px over the 20 px lesson titles (Sommaire). */
+.theme-mastery .field-label {
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+/* A group title outranks the titles it gathers: 24 px over the 19 px lesson titles (Sommaire). */
 .toc-group-head h2 {
   font-size: var(--t-h2);
+}
+
+/* On a phone a theme is its name, where one stands and its two buttons, and a lesson its name, its
+   length and its mastery: what a theme gathers (its lessons, named just below) and what a lesson teaches
+   (five lines, on its own page) made the list fifteen screens long. */
+@media (max-width: 47.49875em) {
+  .toc-group-desc,
+  .toc-wide {
+    display: none;
+  }
 }
 
 .toc-group-head p {
@@ -1303,32 +1496,38 @@ html:has(.menu-sheet[open]) {
   color: var(--ink-2);
 }
 
+/* A list of lessons: one sheet a shade under the page, a line each, a rule between them. */
 .toc-list {
   display: flex;
   flex-direction: column;
   padding: 0;
   margin: 0;
   list-style: none;
-  border-top: 1px solid var(--rule);
+  border-radius: var(--r-panel);
+  background: var(--paper-2);
+  overflow: hidden;
 }
 
-.toc-row {
-  border-bottom: 1px solid var(--rule);
+.toc-row + .toc-row {
+  border-top: 1px solid var(--rule);
 }
 
 .toc-row a {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--s1) var(--s4);
-  padding: var(--s4) var(--s1);
+  padding: var(--s3) var(--s4);
   color: inherit;
   text-decoration: none;
 }
 
-.toc-row a:hover .toc-title {
-  text-decoration: underline;
-  text-decoration-color: var(--mark);
-  text-underline-offset: 0.22em;
+.toc-row a:hover {
+  background: var(--accent-wash);
+}
+
+.toc-row a:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--r-control);
 }
 
 .toc-title {
@@ -1336,7 +1535,7 @@ html:has(.menu-sheet[open]) {
   align-items: baseline;
   gap: var(--s2);
   font-weight: 700;
-  font-size: var(--t-lead);
+  font-size: var(--t-h3);
   letter-spacing: -0.01em;
 }
 
@@ -1383,23 +1582,35 @@ html:has(.menu-sheet[open]) {
   width: 100%;
 }
 
+/* On a phone a lesson takes two lines: its name, then its length at one end and where one stands at
+   the other (its level by name, then its meter). A lesson without a length (« Tes leçons ») gives the
+   line to its level. */
 @media (max-width: 47.49875em) {
   .toc-row a {
-    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .toc-title {
+    grid-column: 1 / -1;
   }
 
   .toc-mastery {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: auto;
     flex-direction: row;
     align-items: center;
-    gap: var(--s3);
+    gap: var(--s2);
     width: auto;
+  }
+
+  .toc-title + .toc-mastery {
+    grid-column: 1 / -1;
+    justify-content: space-between;
   }
 
   .toc-mastery .meter {
     flex: none;
-    width: 6rem;
+    width: 4.5rem;
   }
 }
 
@@ -1532,7 +1743,7 @@ html:has(.menu-sheet[open]) {
 
 .lesson-jump ol a:hover {
   text-decoration: underline;
-  text-decoration-color: var(--mark);
+  text-decoration-color: var(--accent-ink);
 }
 
 /* « Réviser N fiches », or the day the cards come back once they are all up to date. */
@@ -1745,53 +1956,83 @@ html:has(.menu-sheet[open]) {
    Practice (formats list)
    ========================================================================= */
 
-.formats {
+/* A way to train, as a line to tap (Pick): its mark, its name, what it holds, the sign that it leads
+   somewhere. One sheet for the lot, as for the lessons. */
+.picks {
   display: flex;
   flex-direction: column;
-  padding: 0;
   margin: 0;
+  padding: 0;
   list-style: none;
+  border-radius: var(--r-panel);
+  background: var(--paper-2);
+  overflow: hidden;
+}
+
+.picks > li + li {
   border-top: 1px solid var(--rule);
 }
 
-.format {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+.pick {
+  display: flex;
   align-items: center;
-  gap: var(--s2) var(--s4);
-  padding: var(--s4) 0;
-  border-bottom: 1px solid var(--rule);
+  gap: var(--s3);
+  min-height: 56px;
+  padding: var(--s2) var(--s4);
+  color: var(--ink);
+  text-decoration: none;
 }
 
-@media (min-width: 47.5em) {
-  .format {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-  }
+.pick:hover {
+  background: var(--accent-wash);
 }
 
-.format > svg {
-  width: 24px;
-  height: 24px;
-  color: var(--ink-2);
+.pick:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--r-control);
 }
 
-.format h3 {
-  font-size: var(--t-body);
+.pick > svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--accent-ink);
 }
 
-.format p {
+.pick > .pick-go {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-3);
+}
+
+.pick-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pick-title {
+  font-weight: 650;
+}
+
+.pick-desc {
   font-size: var(--t-small);
   color: var(--ink-2);
 }
 
-.format .btn {
-  grid-column: 2;
-  justify-self: start;
+.pick-n {
+  flex: none;
+  font-size: var(--t-small);
+  color: var(--ink-2);
 }
 
-@media (min-width: 47.5em) {
-  .format .btn {
-    grid-column: 3;
+/* On a phone the name of a format says what it is (« Comparaison visuelle », « Vrai ou faux »): its
+   two lines of description stay where there is room. The challenge and the exam keep theirs, a few
+   words on what one commits to. */
+@media (max-width: 47.49875em) {
+  .pick-desc:not(.pick-desc--keep) {
+    display: none;
   }
 }
 
@@ -1803,15 +2044,20 @@ html:has(.menu-sheet[open]) {
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--rule);
+  border-radius: var(--r-panel);
+  background: var(--paper-2);
+  overflow: hidden;
 }
 
 .theme-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--s3);
-  padding: var(--s4) 0;
-  border-bottom: 1px solid var(--rule);
+  padding: var(--s4);
+}
+
+.theme-row + .theme-row {
+  border-top: 1px solid var(--rule);
 }
 
 @media (min-width: 47.5em) {
@@ -1936,6 +2182,62 @@ html:has(.menu-sheet[open]) {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--ink-2);
+}
+
+/* ---------- The strip of a run (ProofBar): one patch an exercise ---------- */
+
+.proofbar-wrap {
+  display: block;
+}
+
+.proofbar {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.proofbar[data-dense] {
+  gap: 2px;
+}
+
+.proofbar i {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--rule);
+}
+
+.proofbar i[data-state='now'],
+.proofbar i[data-state='done'] {
+  background: var(--accent);
+}
+
+.proofbar i[data-state='correct'] {
+  background: var(--ok);
+}
+
+/* Half of the patch, and a ring to close it. */
+.proofbar i[data-state='partial'] {
+  background: linear-gradient(to right, var(--partial-ink) 50%, transparent 50%);
+  box-shadow: inset 0 0 0 1.5px var(--partial-ink);
+}
+
+.proofbar i[data-state='wrong'] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--mark);
+}
+
+/* In an exam, what is done recedes behind the exercise in hand. */
+.proofbar:has([data-state='now']) i[data-state='done'] {
+  background: var(--ink-3);
+}
+
+/* Under a summary's score, the strip is a line of the page, taller. */
+.page-head > .proofbar i {
+  height: 12px;
+  border-radius: 3px;
 }
 
 .task {
@@ -2130,15 +2432,18 @@ html:has(.menu-sheet[open]) {
   min-width: 0;
 }
 
+/* The answer chosen takes the blue: its border, its key, and its ground in the wash. Three signs, of
+   which two are not a colour (a filled key, a thicker frame would do as much in grey). */
 .option[data-state='selected'] {
-  border-color: var(--ink);
-  background: color-mix(in oklch, var(--ink) 4%, var(--sheet));
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--on-accent-wash);
 }
 
 .option[data-state='selected'] .option-key {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--on-ink);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .option[data-state='right'] {
@@ -3198,15 +3503,14 @@ html:has(.menu-sheet[open]) {
   flex-direction: column;
   gap: var(--s2);
   padding: var(--s4);
-  border: 1px solid var(--rule);
   border-radius: var(--r-panel);
-  background: var(--sheet);
+  background: var(--paper-2);
   color: inherit;
   text-decoration: none;
 }
 
 .market:hover {
-  border-color: var(--rule-strong);
+  background: var(--accent-wash);
 }
 
 /* 17 px under its 19 px region (h3): the region outranks the markets it gathers. */
@@ -3241,6 +3545,18 @@ html:has(.menu-sheet[open]) {
   font-family: var(--font-mono);
   font-size: var(--t-meta);
   color: var(--ink-2);
+}
+
+/* On a phone a market is its name, its locale and how it writes a date and a number, which tell it
+   from its neighbours at a glance: its three lines of profile, cut short there, are read on its page. */
+@media (max-width: 43.74875em) {
+  .market p {
+    display: none;
+  }
+
+  .markets {
+    gap: var(--s2);
+  }
 }
 
 /* A variant of a format value (« 1,284,500원 · ₩1,284,500 », Cultures.tsx): one block, the dot at the
@@ -3723,6 +4039,36 @@ html:has(.menu-sheet[open]) {
    Progress
    ========================================================================= */
 
+/* Progression's figures: four facts two by two, each on its sheet, the figure over its name. */
+.figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s2);
+  margin: 0;
+}
+
+.figures > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: var(--s3) var(--s4);
+  border-radius: var(--r-panel);
+  background: var(--paper-2);
+}
+
+.figures dt {
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.figures dd {
+  margin: 0;
+  font-size: var(--t-h3);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
 .heatmap {
   display: grid;
   grid-auto-flow: column;
@@ -3905,36 +4251,47 @@ html:has(.menu-sheet[open]) {
 
 /* Stretched to the height of its row, a short card keeps its description 4 px under its title: the
    spare room goes below (align-content), not between its two rows. */
+/* A badge: a sheet a shade under the page while it is to earn, the yellow of what was earned once it
+   is (and « Obtenu le… » in its text: the colour is not the only sign). */
 .badge {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--s1) var(--s3);
+  gap: 0 var(--s3);
   align-items: start;
   align-content: start;
   padding: var(--s3) var(--s4);
   border-radius: var(--r-panel);
-  border: 1px solid var(--rule);
+  background: var(--paper-2);
 }
 
 .badge svg {
   grid-row: span 2;
   width: 24px;
   height: 24px;
+  margin-top: 2px;
   color: var(--ink-3);
 }
 
+.badge[data-earned] {
+  background: var(--gold-wash);
+}
+
 .badge[data-earned] svg {
-  color: var(--ok);
+  color: var(--gold-ink);
 }
 
 .badge:not([data-earned]) {
   color: var(--ink-2);
-  border-style: dashed;
 }
 
 .badge small {
   font-size: var(--t-meta);
   color: var(--ink-2);
+}
+
+/* On the yellow, the second voice is a deeper shade of it, not a grey. */
+.badge[data-earned] small {
+  color: var(--gold-ink);
 }
 
 .settings {
@@ -4024,11 +4381,12 @@ html:has(.menu-sheet[open]) {
   pointer-events: auto;
 }
 
+/* The toast is ink under the page's colour: its mark takes the yellow that reads on it. */
 .toast svg {
   width: 20px;
   height: 20px;
   flex: none;
-  color: var(--mark);
+  color: var(--gold-on-ink);
 }
 
 /* Within the 150 to 250 ms of every other movement (--dur): they took 320 and 360 ms. */

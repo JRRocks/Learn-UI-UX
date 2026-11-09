@@ -1,18 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { cardsHint } from './Practice';
+import { cardsState } from './Practice';
 
-describe('« Fiches » legend (home page and S’entraîner)', () => {
-  it('names the cards due today first', () => {
-    expect(cardsHint(3, 300, 317)).toBe('Fiches à réviser aujourd’hui');
+describe('« Fiches » state when no card is due (home page and S’entraîner)', () => {
+  it('announces the new cards the link opens', () => {
+    expect(cardsState(317)).toBe('317\u00A0à découvrir');
+    expect(cardsState(1)).toBe('1\u00A0à découvrir');
   });
 
-  it('announces the new cards the link opens when none is due', () => {
-    expect(cardsHint(0, 317, 317)).toBe('317 règles d’or à découvrir');
-    expect(cardsHint(0, 306, 317)).toBe('Rien à réviser · 306 règles d’or à découvrir');
-    expect(cardsHint(0, 1, 317)).toBe('Rien à réviser · 1 règle d’or à découvrir');
-  });
-
-  it('says there is nothing to review only when every card waits for its date', () => {
-    expect(cardsHint(0, 0, 317)).toBe('Rien à réviser aujourd’hui');
+  it('says the cards are up to date only when every card waits for its date', () => {
+    expect(cardsState(0)).toBe('À jour');
   });
 });

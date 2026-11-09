@@ -1,4 +1,4 @@
-import { BookOpen, Layers, Play, Repeat } from 'lucide-react';
+import { BookOpen, Check, Layers, Play, Repeat } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
@@ -6,9 +6,10 @@ import { EXERCISES, EXERCISE_BY_ID, MODULES, RULE_CARDS, RULE_CARD_BY_KEY, THEME
 import { BADGES } from '../engine/badges';
 import { addDays, dayKey } from '../engine/dates';
 import { dueCardKeys, dueExerciseIds, mastery, masteryLabel, streak, type ProgressState } from '../engine/progress';
+import { SESSION_SIZE } from '../engine/session';
 import { SEP, count, shortDay } from '../lib/french';
 import { frenchSpacing } from '../lib/markdown';
-import { FORMATS, cardsHint } from './Practice';
+import { FORMATS, Pending, cardsState } from './Practice';
 
 const FORMAT_COUNT = FORMATS.length;
 import { unfinishedSession } from './Session';
@@ -36,6 +37,7 @@ export function Home() {
   const today = dayKey();
   const todayStats = p.days[today] ?? { xp: 0, answered: 0, correct: 0 };
   const goal = p.settings.dailyGoal;
+  const reached = todayStats.xp >= goal;
   const st = streak(p);
   // Same counts as S’entraîner and the sessions: ids gone from the content are left out.
   const due = dueExerciseIds(p, today, EXERCISE_BY_ID).length;
@@ -43,7 +45,6 @@ export function Home() {
   const cardsNew = RULE_CARDS.filter((c) => !p.cards[c.key]).length;
   const fresh = Object.keys(p.items).length === 0 && Object.keys(p.lessons).length === 0;
   const nextLesson = MODULES.find((m) => !p.lessons[m.id]);
-  const dateLabel = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   const last14 = Array.from({ length: 14 }, (_, i) => addDays(today, i - 13));
   const active14 = last14.filter((d) => (p.days[d]?.xp ?? 0) > 0).length;
   const goal14 = last14.filter((d) => (p.days[d]?.xp ?? 0) >= goal).length;
@@ -58,27 +59,32 @@ export function Home() {
         <h1 id="main-title" tabIndex={-1}>
           {fresh ? 'Deviens meilleur en UI/UX, une épreuve à la fois' : 'Aujourd’hui'}
         </h1>
-        <p className="lead">
-          {/* One sentence: with three, « Faire ma première session » started under the tab bar of a 360 × 780
-              phone (734 px for 723), the first action of a first visit one scroll away. « Comment ça marche »,
-              just below, says the rest. */}
-          {fresh
-            ? 'Des leçons courtes, puis des épreuves corrigées avec le choix recommandé et son pourquoi.'
-            : `${dateLabel.charAt(0).toUpperCase()}${dateLabel.slice(1)}.`}
-        </p>
+        {/* One sentence: with three, « Faire ma première session » started under the tab bar of a 360 × 780
+            phone (734 px for 723), the first action of a first visit one scroll away. Back another day, the
+            title says it all: the date read under it told nothing the phone's own clock does not. */}
+        {fresh && <p className="lead">Des leçons courtes, puis des épreuves corrigées avec le choix recommandé et son pourquoi.</p>}
       </header>
 
       <section className="today" aria-label="Entraînement du jour">
         <div className="today-main">
           <h2>Session du jour</h2>
-          <p>
-            10 épreuves mêlant tes révisions et de nouvelles notions, environ 8{' '}minutes. Chaque erreur revient plus tard, au bon moment.
+          {/* Its size and its length, as facts: the sentence around them took four lines of the card. */}
+          <p className="today-facts">
+            {SESSION_SIZE.daily}{' '}épreuves{SEP}8{' '}min
           </p>
           <div className="goal">
-            <span>
-              Objectif du jour{' '}: <strong className="num">{Math.min(todayStats.xp, goal)}</strong> / {goal}
-              {' '}XP
-              {todayStats.xp >= goal ? ' — atteint' : ''}
+            <span className="goal-line">
+              {reached ? (
+                <span className="goal-done">
+                  <Check aria-hidden="true" /> Objectif atteint
+                </span>
+              ) : (
+                <span>Objectif du jour</span>
+              )}
+              <span className="num">
+                <strong>{Math.min(todayStats.xp, goal)}</strong> / {goal}
+                {' '}XP
+              </span>
             </span>
             <div
               className="meter"
@@ -97,13 +103,15 @@ export function Home() {
           </Link>
         </div>
 
+        {/* A name, then a count or a state: the line under each name said what the name says
+            (« Révisions — Épreuves à revoir aujourd’hui »). */}
         <div className="today-side">
           {resume && (
             <Link to={resume.raw} className="side-link">
               <Play aria-hidden="true" />
-              <span>
-                {frenchSpacing(`Reprendre : ${resume.label}`)}
-                <small>Reprise à l’épreuve {resume.index + 1}</small>
+              <span className="side-text">
+                Reprendre
+                <small>{frenchSpacing(resume.label)}</small>
               </span>
               <strong>
                 {resume.index}/{resume.total}
@@ -112,25 +120,19 @@ export function Home() {
           )}
           <Link to="/session?mode=review" className="side-link">
             <Repeat aria-hidden="true" />
-            <span>
-              Révisions
-              <small>{due ? 'Épreuves à revoir aujourd’hui' : 'Rien à revoir aujourd’hui'}</small>
-            </span>
-            {due > 0 && <strong>{due}</strong>}
+            <span className="side-text">Révisions</span>
+            <Pending n={due} unit="à revoir" />
           </Link>
           <Link to="/fiches" className="side-link">
             <Layers aria-hidden="true" />
-            <span>
-              Fiches
-              <small>{cardsHint(cardsDue, cardsNew, RULE_CARDS.length)}</small>
-            </span>
-            {cardsDue > 0 && <strong>{cardsDue}</strong>}
+            <span className="side-text">Fiches</span>
+            <Pending n={cardsDue} unit="à réviser" none={cardsState(cardsNew)} />
           </Link>
           {nextLesson && (
             <Link to={`/apprendre/${nextLesson.id}`} className="side-link">
               <BookOpen aria-hidden="true" />
-              <span>
-                {fresh ? 'Commencer par la leçon' : 'Leçon suivante'}
+              <span className="side-text">
+                {fresh ? 'Première leçon' : 'Leçon suivante'}
                 <small>{frenchSpacing(`${nextLesson.title} · ${nextLesson.minutes} min`)}</small>
               </span>
             </Link>
@@ -146,30 +148,23 @@ export function Home() {
               Voir les {MODULES.length} leçons
             </Link>
           </div>
+          {/* Three steps, a few words each: the numbers say their order. */}
           <ol>
             <li>
               <strong>Lis une leçon</strong>
               <span className="muted">
-                {frenchSpacing(
-                  `${MODULES.length} leçons en ${THEMES.length} grands thèmes : la typographie, la couleur, l’espace, la rédaction, l’accessibilité et le RGAA, la critique… et les différences d’interface entre pays.`,
-                )}
+                {MODULES.length} leçons, {THEMES.length} thèmes
               </span>
             </li>
             <li>
               <strong>Passe des épreuves</strong>
               <span className="muted">
-                {frenchSpacing(
-                  `${EXERCISES.length} épreuves en ${FORMAT_COUNT} formats : comparaisons visuelles, chasses aux erreurs, mises en situation à régler, calibrage à l’œil, grilles de critique…`,
-                )}
+                {EXERCISES.length} épreuves, {FORMAT_COUNT} formats
               </span>
             </li>
             <li>
-              <strong>Évalue-toi, laisse la répétition faire le reste</strong>
-              <span className="muted">
-                {frenchSpacing(
-                  'Une évaluation par thème dit où tu en es ; les épreuves ratées et les règles d’or reviennent à intervalles croissants jusqu’à être acquises.',
-                )}
-              </span>
+              <strong>Révise au bon moment</strong>
+              <span className="muted">Tes erreurs reviennent d’elles-mêmes</span>
             </li>
           </ol>
         </section>
@@ -201,7 +196,7 @@ export function Home() {
             {last14.map((d) => {
               const xp = p.days[d]?.xp ?? 0;
               const level = xp === 0 ? 0 : xp < goal / 2 ? 1 : xp < goal ? 2 : 3;
-              return <i key={d} data-level={level} title={`${shortDay(d)} : ${xp} XP`} />;
+              return <i key={d} data-level={level} title={`${shortDay(d)} : ${xp} XP`} />;
             })}
           </div>
         </section>
@@ -215,7 +210,6 @@ export function Home() {
               Voir les {MODULES.length} leçons
             </Link>
           </div>
-          <p className="small muted">La maîtrise monte quand tu réussis une épreuve, puis la réussis encore quelques jours plus tard.</p>
           <ul className="toc-list">
             {continueWith.map(({ m, v, touched }) => (
               <li key={m.id} className="toc-row">

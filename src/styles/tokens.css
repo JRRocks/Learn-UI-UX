@@ -1,44 +1,68 @@
 /*
  * Design tokens — "Épreuves".
- * World: a proofing desk. Cool paper, blue-black ink, and one vermilion
- * correction red that marks what needs attention. Neutrals are tinted toward
- * the ink hue (258). Light/dark follow the system unless the learner picks one.
- * Type: Schibsted Grotesk (a newspaper grotesk, fitting the printer's-proof
- * world) for everything; Atkinson Hyperlegible Mono only for code and values.
+ * World: a printer's proofs, in colour. Bright paper, a deep blue-black ink, and the primaries of the
+ * workshop, each with one job: an ultramarine for what one acts on and where one is, a correction red
+ * for what is wrong, a green for what is right, a yellow for what was earned. Colour comes as flat
+ * areas (the day's session, the page shown in the tab bar, the patches of a run), never as a gradient
+ * or a glow. The first look (cool grey paper, hairlines round every block and one vermilion that was
+ * both the brand and the error) read as the default of the category: a restraint with no decision in it.
+ * Light/dark follow the system unless the learner picks one.
+ * Type: Schibsted Grotesk (a newspaper grotesk, fitting the printer's-proof world) for everything;
+ * Atkinson Hyperlegible Mono only for code and values.
  */
 :root {
   color-scheme: light;
 
-  --paper: oklch(0.984 0.004 258);
-  --paper-2: oklch(0.957 0.008 258);
-  --sheet: oklch(0.996 0.002 258);
-  --stage: oklch(0.935 0.01 258);
-  --ink: oklch(0.24 0.032 262);
-  --ink-2: oklch(0.42 0.026 262);
-  --ink-3: oklch(0.5 0.02 262);
-  --rule: oklch(0.885 0.008 258);
-  --rule-strong: oklch(0.79 0.012 258);
+  /* Paper: the page, then what is laid on it, each a shade deeper (tonal elevation: no line, no shadow). */
+  --paper: oklch(0.985 0.004 265);
+  --paper-2: oklch(0.955 0.012 265);
+  --sheet: oklch(1 0 0);
+  --stage: oklch(0.925 0.016 265);
+  /* Ink: the text, and what is as quiet as text. */
+  --ink: oklch(0.22 0.035 268);
+  --ink-2: oklch(0.42 0.03 268);
+  --ink-3: oklch(0.5 0.025 268);
+  --rule: oklch(0.885 0.014 265);
+  --rule-strong: oklch(0.79 0.018 265);
   /* Boundaries that identify a control (inputs, option tiles): ≥ 3:1 against the surface. */
-  --control-border: oklch(0.64 0.016 258);
+  --control-border: oklch(0.62 0.022 265);
 
-  --mark: oklch(0.57 0.19 33);
-  --mark-ink: oklch(0.5 0.17 32);
-  --mark-wash: oklch(0.955 0.025 35);
-  --ok: oklch(0.6 0.13 158);
-  --ok-ink: oklch(0.46 0.1 160);
-  --ok-wash: oklch(0.955 0.03 160);
+  /* Blue, what one acts on and where one is: the main button, the day's session, the page shown, the
+     answer chosen, how far one has got. --accent fills, --accent-ink writes on paper (≥ 4.5:1),
+     --accent-wash tints a surface under --on-accent-wash. */
+  --accent: oklch(0.47 0.23 267);
+  --on-accent: oklch(0.99 0.004 265);
+  --accent-ink: oklch(0.44 0.22 267);
+  --accent-wash: oklch(0.925 0.035 267);
+  --on-accent-wash: oklch(0.34 0.17 267);
+  --action: var(--accent);
+  --on-action: var(--on-accent);
+  --meter: var(--accent);
+  /* Yellow, what was earned: the series, the XP, the badges. A surface under ink, never a text on paper. */
+  --gold: oklch(0.86 0.165 90);
+  --gold-ink: oklch(0.47 0.098 75);
+  --gold-wash: oklch(0.955 0.055 95);
+  --on-gold: var(--ink);
+  --gold-on-ink: var(--gold);
+  /* Red, the correction, and only it; green, what is right. */
+  --mark: oklch(0.58 0.21 27);
+  --mark-ink: oklch(0.5 0.19 27);
+  --mark-wash: oklch(0.955 0.022 25);
+  --ok: oklch(0.6 0.14 155);
+  --ok-ink: oklch(0.44 0.105 155);
+  --ok-wash: oklch(0.955 0.035 155);
   --partial-ink: oklch(0.5 0.1 70);
   --partial-wash: oklch(0.96 0.04 85);
-  --focus: oklch(0.55 0.18 252);
-  /* Activity levels: tints of the success green, ending on --ok once the daily goal is reached.
-     The red stays for what is wrong or missed. Explicit values, so no hue drift through color-mix. */
-  --heat-1: oklch(0.82 0.06 160);
-  --heat-2: oklch(0.71 0.1 159);
-  --heat-3: var(--ok);
+  --focus: oklch(0.47 0.23 267);
+  /* Activity levels: tints of the blue, ending on --accent once the daily goal is reached. Explicit
+     values, so no hue drift through color-mix. */
+  --heat-1: oklch(0.86 0.065 267);
+  --heat-2: oklch(0.64 0.16 267);
+  --heat-3: var(--accent);
 
-  --on-ink: oklch(0.985 0.004 258);
-  --hero-bg: var(--ink);
-  --hero-fg: oklch(0.985 0.004 258);
+  --on-ink: oklch(0.985 0.004 265);
+  --hero-bg: var(--accent);
+  --hero-fg: var(--on-accent);
 
   --font-sans: 'Schibsted Grotesk Variable', 'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Atkinson Hyperlegible Mono Variable', 'Atkinson Hyperlegible Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -64,14 +88,16 @@
   --s8: 4rem;
   --s9: 6rem;
 
-  --r-control: 6px;
-  --r-panel: 12px;
+  /* Controls keep the square of a printed patch, softened; panels stay within 12 to 16 px. */
+  --r-control: 10px;
+  --r-panel: 16px;
   --tap: 44px;
 
   /* Bars that stay on screen. Their heights feed scroll-padding (app.css), so that a control
      reached with Tab never ends up hidden underneath one of them (WCAG 2.4.11). */
   --topbar-h: 4.25rem;
-  --tabbar-h: 3.5rem;
+  /* The icon in its 30 px mark, the label under it, and air around both. */
+  --tabbar-h: 4rem;
   --player-top-h: calc(var(--tap) + 2 * var(--s3) + 1px);
   /* The « Vérifier » bar holds its 44 px button, or, above a 21 px text size, its count over its hint
      (2.8rem and 2 px), which grow with the text when the button does not. */
@@ -96,30 +122,40 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
-    --paper: oklch(0.195 0.016 262);
-    --paper-2: oklch(0.225 0.018 262);
-    --sheet: oklch(0.235 0.018 262);
-    --stage: oklch(0.27 0.018 262);
-    --ink: oklch(0.935 0.008 258);
-    --ink-2: oklch(0.8 0.012 258);
-    --ink-3: oklch(0.72 0.014 258);
-    --rule: oklch(0.33 0.016 262);
-    --rule-strong: oklch(0.44 0.018 262);
-    --control-border: oklch(0.55 0.018 262);
-    --mark: oklch(0.7 0.16 36);
-    --mark-ink: oklch(0.76 0.14 38);
-    --mark-wash: oklch(0.29 0.045 36);
-    --ok: oklch(0.72 0.12 158);
-    --ok-ink: oklch(0.8 0.11 160);
-    --ok-wash: oklch(0.28 0.04 160);
+    --paper: oklch(0.17 0.02 268);
+    --paper-2: oklch(0.215 0.025 268);
+    --sheet: oklch(0.25 0.028 268);
+    --stage: oklch(0.29 0.028 268);
+    --ink: oklch(0.945 0.008 265);
+    --ink-2: oklch(0.8 0.016 265);
+    --ink-3: oklch(0.72 0.018 265);
+    --rule: oklch(0.31 0.025 268);
+    --rule-strong: oklch(0.42 0.028 268);
+    --control-border: oklch(0.56 0.03 268);
+    --accent: oklch(0.74 0.13 268);
+    --on-accent: oklch(0.18 0.05 268);
+    --accent-ink: oklch(0.8 0.098 268);
+    --accent-wash: oklch(0.32 0.09 268);
+    --on-accent-wash: oklch(0.91 0.04 268);
+    --gold: oklch(0.82 0.14 88);
+    --gold-ink: oklch(0.85 0.13 88);
+    --gold-wash: oklch(0.31 0.05 85);
+    --on-gold: oklch(0.2 0.03 85);
+    --gold-on-ink: oklch(0.48 0.098 80);
+    --mark: oklch(0.7 0.17 28);
+    --mark-ink: oklch(0.77 0.132 30);
+    --mark-wash: oklch(0.29 0.05 28);
+    --ok: oklch(0.72 0.13 155);
+    --ok-ink: oklch(0.8 0.12 157);
+    --ok-wash: oklch(0.28 0.04 157);
     --partial-ink: oklch(0.82 0.1 80);
     --partial-wash: oklch(0.3 0.045 80);
-    --focus: oklch(0.72 0.15 252);
-    --heat-1: oklch(0.42 0.06 160);
-    --heat-2: oklch(0.56 0.09 159);
-    --on-ink: oklch(0.2 0.016 262);
-    --hero-bg: oklch(0.3 0.05 262);
-    --hero-fg: oklch(0.96 0.008 258);
+    --focus: oklch(0.8 0.098 268);
+    --heat-1: oklch(0.36 0.08 268);
+    --heat-2: oklch(0.54 0.12 268);
+    --on-ink: oklch(0.18 0.02 268);
+    --hero-bg: oklch(0.37 0.16 267);
+    --hero-fg: oklch(0.97 0.01 265);
     --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
     --scroll-shadow: oklch(0 0 0 / 0.55);
   }
@@ -127,30 +163,40 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: oklch(0.195 0.016 262);
-  --paper-2: oklch(0.225 0.018 262);
-  --sheet: oklch(0.235 0.018 262);
-  --stage: oklch(0.27 0.018 262);
-  --ink: oklch(0.935 0.008 258);
-  --ink-2: oklch(0.8 0.012 258);
-  --ink-3: oklch(0.72 0.014 258);
-  --rule: oklch(0.33 0.016 262);
-  --rule-strong: oklch(0.44 0.018 262);
-  --control-border: oklch(0.55 0.018 262);
-  --mark: oklch(0.7 0.16 36);
-  --mark-ink: oklch(0.76 0.14 38);
-  --mark-wash: oklch(0.29 0.045 36);
-  --ok: oklch(0.72 0.12 158);
-  --ok-ink: oklch(0.8 0.11 160);
-  --ok-wash: oklch(0.28 0.04 160);
+  --paper: oklch(0.17 0.02 268);
+  --paper-2: oklch(0.215 0.025 268);
+  --sheet: oklch(0.25 0.028 268);
+  --stage: oklch(0.29 0.028 268);
+  --ink: oklch(0.945 0.008 265);
+  --ink-2: oklch(0.8 0.016 265);
+  --ink-3: oklch(0.72 0.018 265);
+  --rule: oklch(0.31 0.025 268);
+  --rule-strong: oklch(0.42 0.028 268);
+  --control-border: oklch(0.56 0.03 268);
+  --accent: oklch(0.74 0.13 268);
+  --on-accent: oklch(0.18 0.05 268);
+  --accent-ink: oklch(0.8 0.098 268);
+  --accent-wash: oklch(0.32 0.09 268);
+  --on-accent-wash: oklch(0.91 0.04 268);
+  --gold: oklch(0.82 0.14 88);
+  --gold-ink: oklch(0.85 0.13 88);
+  --gold-wash: oklch(0.31 0.05 85);
+  --on-gold: oklch(0.2 0.03 85);
+  --gold-on-ink: oklch(0.48 0.098 80);
+  --mark: oklch(0.7 0.17 28);
+  --mark-ink: oklch(0.77 0.132 30);
+  --mark-wash: oklch(0.29 0.05 28);
+  --ok: oklch(0.72 0.13 155);
+  --ok-ink: oklch(0.8 0.12 157);
+  --ok-wash: oklch(0.28 0.04 157);
   --partial-ink: oklch(0.82 0.1 80);
   --partial-wash: oklch(0.3 0.045 80);
-  --focus: oklch(0.72 0.15 252);
-  --heat-1: oklch(0.42 0.06 160);
-  --heat-2: oklch(0.56 0.09 159);
-  --on-ink: oklch(0.2 0.016 262);
-  --hero-bg: oklch(0.3 0.05 262);
-  --hero-fg: oklch(0.96 0.008 258);
+  --focus: oklch(0.8 0.098 268);
+  --heat-1: oklch(0.36 0.08 268);
+  --heat-2: oklch(0.54 0.12 268);
+  --on-ink: oklch(0.18 0.02 268);
+  --hero-bg: oklch(0.37 0.16 267);
+  --hero-fg: oklch(0.97 0.01 265);
   --shadow-float: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.3);
   --scroll-shadow: oklch(0 0 0 / 0.55);
 }

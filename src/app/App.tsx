@@ -32,18 +32,16 @@ interface NavItem {
   to: string;
   /** The title of the page it opens, word for word. */
   label: string;
-  /** What the page holds, under its name in the menu. */
-  hint: string;
   match: string;
   Icon: LucideIcon;
 }
 
-const HOME: NavItem = { to: '/', label: 'Accueil', hint: 'Ta session du jour et où tu en es', match: '', Icon: House };
-const LESSONS: NavItem = { to: '/apprendre', label: 'Leçons', hint: 'Les leçons, rangées en grands thèmes', match: 'apprendre', Icon: BookOpen };
-const CULTURES: NavItem = { to: '/cultures', label: 'Cultures', hint: 'Les marchés, pays par pays', match: 'cultures', Icon: Globe };
-const RESOURCES: NavItem = { to: '/ressources', label: 'Ressources', hint: 'Aide-mémoire, anti-patterns, glossaire', match: 'ressources', Icon: Library };
-const PRACTICE: NavItem = { to: '/entrainement', label: 'S’entraîner', hint: 'Par thème, par pays, par format, examen', match: 'entrainement', Icon: Target };
-const PROGRESS: NavItem = { to: '/progression', label: 'Progression', hint: 'Maîtrise, badges, réglages', match: 'progression', Icon: ChartColumn };
+const HOME: NavItem = { to: '/', label: 'Accueil', match: '', Icon: House };
+const LESSONS: NavItem = { to: '/apprendre', label: 'Leçons', match: 'apprendre', Icon: BookOpen };
+const CULTURES: NavItem = { to: '/cultures', label: 'Cultures', match: 'cultures', Icon: Globe };
+const RESOURCES: NavItem = { to: '/ressources', label: 'Ressources', match: 'ressources', Icon: Library };
+const PRACTICE: NavItem = { to: '/entrainement', label: 'S’entraîner', match: 'entrainement', Icon: Target };
+const PROGRESS: NavItem = { to: '/progression', label: 'Progression', match: 'progression', Icon: ChartColumn };
 
 /**
  * The whole map of the app, grouped by what one comes to do: learn, then train and follow one's
@@ -142,8 +140,12 @@ function keyboardFocus(): Element | null {
   return el && el !== document.body && el.matches(':focus-visible') ? el : null;
 }
 
-/** The groups of the map: a list of links each, named by its title. */
-function NavGroups({ current, prefix, hints }: { current: string; prefix: string; hints?: boolean }) {
+/**
+ * The groups of the map: a list of links each, named by its title. A page is named, not described:
+ * under each name, the menu of the phones carried a line on what the page holds (« Les leçons, rangées
+ * en grands thèmes »), six sentences to read before choosing among six names that say it already.
+ */
+function NavGroups({ current, prefix }: { current: string; prefix: string }) {
   return (
     <>
       {NAV_GROUPS.map((g) => (
@@ -154,14 +156,11 @@ function NavGroups({ current, prefix, hints }: { current: string; prefix: string
             </p>
           )}
           <ul className="rail-nav" aria-labelledby={g.title ? `${prefix}-${g.id}` : undefined}>
-            {g.items.map(({ to, label, hint, match, Icon }) => (
+            {g.items.map(({ to, label, match, Icon }) => (
               <li key={to}>
                 <Link to={to} aria-current={current === match ? 'page' : undefined}>
                   <Icon aria-hidden="true" />
-                  <span className="nav-text">
-                    {label}
-                    {hints && <small>{hint}</small>}
-                  </span>
+                  {label}
                 </Link>
               </li>
             ))}
@@ -221,7 +220,7 @@ function MenuButton({ current }: { current: string }) {
             </button>
           </div>
           <nav aria-label="Toutes les pages">
-            <NavGroups current={current} prefix="menu" hints />
+            <NavGroups current={current} prefix="menu" />
           </nav>
           <div className="menu-foot">
             <p className="small">

@@ -304,16 +304,8 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
               {state.index + 1} / {items.length}
             </span>
           </div>
-          <div
-            className="meter meter--mark"
-            role="progressbar"
-            aria-label="Avancement de la session"
-            aria-valuemin={0}
-            aria-valuemax={items.length}
-            aria-valuenow={state.index}
-            style={{ '--value': `${(state.index / items.length) * 100}%` } as CSSProperties}
-          >
-            <span />
+          <div className="proofbar-wrap" role="progressbar" aria-label="Avancement de la session" aria-valuemin={0} aria-valuemax={items.length} aria-valuenow={state.index}>
+            <ProofBar total={items.length} played={state.played} now={state.index} blind={exam} />
           </div>
         </div>
         <span className="player-xp">
@@ -352,6 +344,24 @@ export function SessionPage({ query, raw }: { query: URLSearchParams; raw: strin
         <Loading what="de l’épreuve" />
       )}
     </div>
+  );
+}
+
+/**
+ * A run as the control strip a printer leaves at the edge of a proof: one patch an exercise. A right
+ * answer fills its patch, a « presque » half of it, a wrong one leaves it hollow, ringed in the
+ * correction's red: a shape as well as a colour, for whoever tells red from green badly. The exercise
+ * in hand is the blue one. An exam shows no verdict before its end (`blind`): its patches are only done
+ * or to do. The strip is a picture of what the text beside it says (« 4 / 10 », the summary's score).
+ */
+function ProofBar({ total, played, now, blind }: { total: number; played: Played[]; now?: number; blind?: boolean }) {
+  return (
+    <span className="proofbar" aria-hidden="true" data-dense={total > 16 ? '' : undefined}>
+      {Array.from({ length: total }, (_, i) => {
+        const p = played[i];
+        return <i key={i} data-state={p ? (blind ? 'done' : p.verdict) : i === now ? 'now' : 'todo'} />;
+      })}
+    </span>
   );
 }
 
@@ -590,6 +600,8 @@ function Summary({ label, exercises, failed, played, exam, spec, runId }: Summar
           {/* Each number keeps its word, and a line never starts with « · ». */}
           sur&nbsp;{t.total}&nbsp;· +{t.xp}&nbsp;XP
         </p>
+        {/* The run at a glance, as its strip stood at the last exercise. */}
+        <ProofBar total={played.length} played={played} />
         {message && <p className="muted">{message}</p>}
       </header>
 

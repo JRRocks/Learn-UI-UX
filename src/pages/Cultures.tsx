@@ -1,4 +1,4 @@
-import { ArrowLeft, CircleCheck, CircleX, FlaskConical, Target } from 'lucide-react';
+import { ArrowLeft, ChevronDown, CircleCheck, CircleX, FlaskConical } from 'lucide-react';
 import { Fragment, useMemo, useState, type CSSProperties } from 'react';
 import { Link, navigate, pageTitle, usePageTitle } from '../app/router';
 import { Mock } from '../components/Mock';
@@ -111,11 +111,7 @@ export function Cultures() {
         <h1 id="main-title" tabIndex={-1}>
           Cultures
         </h1>
-        <p className="lead">
-          {frenchSpacing(
-            'Une interface n’est jamais neutre : densité, couleurs, formulaires, paiement, écriture et cadre légal changent d’un marché à l’autre. Localiser, ce n’est pas traduire — c’est adapter ce que les gens attendent, puis le vérifier avec eux.',
-          )}
-        </p>
+        <p className="lead">{frenchSpacing('Une interface change d’un marché à l’autre : localiser, ce n’est pas traduire.')}</p>
         {/* A long page (thirteen screens on a phone): its sections one tap away, as on Leçons and S’entraîner. */}
         <JumpNav
           label="Aller à une partie de la page"
@@ -132,49 +128,44 @@ export function Cultures() {
       <section className="today" aria-label="Apprendre et s’entraîner">
         <div className="today-main">
           <h2>{frenchSpacing(lesson ? lesson.title : 'UI interculturelle')}</h2>
-          <p>
-            <MdInline text={lesson?.summary ?? 'Les grilles de lecture (Hofstede, Hall), la densité, l’écriture de droite à gauche, les formats et les obligations locales.'} />
-          </p>
-          <div className="btn-row">
-            {lesson && (
-              <Link to="/apprendre/culture" className="btn btn-primary">
-                Lire la leçon
-              </Link>
-            )}
-          </div>
+          {/* The lesson's length and its exercises: its summary is read on its own page. */}
+          {lesson && (
+            <p className="today-facts">
+              {lesson.minutes}
+              {'\u00A0'}min{SEP}
+              {count}
+              {'\u00A0'}épreuves
+            </p>
+          )}
+          {lesson && (
+            <Link to="/apprendre/culture" className="btn btn-primary">
+              Lire la leçon
+            </Link>
+          )}
         </div>
         <div className="today-side">
-          <Link to="/session?mode=culture" className="side-link">
-            <Target aria-hidden="true" />
-            <span>
-              S’entraîner sur tous les pays
-              <small>{frenchSpacing(`${count} épreuves mêlées : comparaisons visuelles, chasses aux erreurs, associations`)}</small>
-            </span>
-          </Link>
           <Link to="/cultures/labo" className="side-link">
             <FlaskConical aria-hidden="true" />
-            <span>
+            <span className="side-text">
               Labo de localisation
-              <small>Un même panier dans {LAB_LOCALES.length} langues et formats</small>
+              <small>
+                Un panier, {LAB_LOCALES.length}
+                {'\u00A0'}langues
+              </small>
             </span>
           </Link>
         </div>
       </section>
 
       <section className="section" aria-labelledby="quizzes-title">
-        <div className="section-head">
-          <h2 id="quizzes-title">S’entraîner pays par pays</h2>
-          <p className="small">{frenchSpacing('La France, puis les pays étrangers région par région : chaque questionnaire ne porte que sur son marché.')}</p>
-        </div>
+        <h2 id="quizzes-title" tabIndex={-1}>S’entraîner pays par pays</h2>
         <CountryQuizzes />
       </section>
 
       <section className="section" aria-labelledby="markets-title">
         <div className="section-head">
-          <h2 id="markets-title">Les marchés</h2>
-          <p className="small">
-            {frenchSpacing('Des tendances observées et des contraintes réelles, pas des lois : chaque profil se vérifie avec des utilisateurs locaux.')}
-          </p>
+          <h2 id="markets-title" tabIndex={-1}>Les marchés</h2>
+          <p className="small">{frenchSpacing('Des tendances à vérifier avec des utilisateurs locaux, pas des lois.')}</p>
         </div>
         {CULTURES.length === 0 && <p className="muted">Les profils de marchés arrivent.</p>}
         {byRegion(CULTURES).map(([region, list]) => (
@@ -205,7 +196,7 @@ export function Cultures() {
 
       {CULTURES.length > 1 && (
         <section className="section" aria-labelledby="compare-title">
-          <h2 id="compare-title">Comparer deux marchés</h2>
+          <h2 id="compare-title" tabIndex={-1}>Comparer deux marchés</h2>
           <form
             className="btn-row"
             onSubmit={(e) => {
@@ -243,8 +234,8 @@ export function Cultures() {
       {CULTURE_PAIRS.length > 0 && (
         <section className="section" aria-labelledby="pairs-title">
           <div className="section-head">
-            <h2 id="pairs-title">Côte à côte</h2>
-            <p className="small">Le même composant conçu pour deux marchés, et chaque différence expliquée.</p>
+            <h2 id="pairs-title" tabIndex={-1}>Côte à côte</h2>
+            <p className="small">Le même composant, conçu pour deux marchés.</p>
           </div>
           <ul className="toc-list">
             {CULTURE_PAIRS.map((p) => (
@@ -263,31 +254,36 @@ export function Cultures() {
 
       <section className="section" aria-labelledby="dims-title">
         <div className="section-head">
-          <h2 id="dims-title">Lire les dimensions culturelles</h2>
-          <p className="small">
-            {frenchSpacing(
-              'Hofstede résume des valeurs moyennes par pays sur six axes ; Aaron Marcus en a tiré des pistes pour l’interface. Ce sont des hypothèses à tester, jamais des étiquettes à coller sur une personne.',
-            )}
-          </p>
+          <h2 id="dims-title" tabIndex={-1}>
+            Lire les dimensions culturelles
+          </h2>
+          <p className="small">{frenchSpacing('Des hypothèses à tester, jamais des étiquettes à coller sur une personne.')}</p>
         </div>
-        <dl className="defs">
-          {HOFSTEDE.map((d) => (
-            <div key={d.key}>
-              <dt>{d.label}</dt>
+        {/* Reference text, a page of it: read on demand, it no longer ends the list of the markets. */}
+        <details className="fold">
+          <summary>
+            Les six axes de Hofstede et le contexte selon Hall
+            <ChevronDown aria-hidden="true" />
+          </summary>
+          <dl className="defs">
+            {HOFSTEDE.map((d) => (
+              <div key={d.key}>
+                <dt>{d.label}</dt>
+                <dd>
+                  {d.low} ↔ {d.high}. <MdInline text={d.ui} />
+                </dd>
+              </div>
+            ))}
+            <div>
+              <dt>Contexte fort / faible</dt>
               <dd>
-                {d.low} ↔ {d.high}. <MdInline text={d.ui} />
+                {frenchSpacing(
+                  'Edward T. Hall : dans une culture à contexte fort, une grande partie du sens passe par l’implicite et l’environnement ; à contexte faible, on attend des messages explicites et autonomes. En interface, cela joue sur la densité, la place des signaux sociaux et le degré d’explication.',
+                )}
               </dd>
             </div>
-          ))}
-          <div>
-            <dt>Contexte fort / faible</dt>
-            <dd>
-              {frenchSpacing(
-                'Edward T. Hall : dans une culture à contexte fort, une grande partie du sens passe par l’implicite et l’environnement ; à contexte faible, on attend des messages explicites et autonomes. En interface, cela joue sur la densité, la place des signaux sociaux et le degré d’explication.',
-              )}
-            </dd>
-          </div>
-        </dl>
+          </dl>
+        </details>
       </section>
     </div>
   );

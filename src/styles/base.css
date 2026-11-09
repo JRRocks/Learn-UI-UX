@@ -20,12 +20,12 @@ body {
   line-height: 1.6;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
-  caret-color: var(--mark);
+  caret-color: var(--accent-ink);
 }
 
 ::selection {
-  background: var(--mark-wash);
-  color: var(--ink);
+  background: var(--accent-wash);
+  color: var(--on-accent-wash);
 }
 
 /* Example text in fields: the browser grey (#757575) falls to 3.6:1 on the dark sheet. */
@@ -82,7 +82,7 @@ a {
 }
 
 a:hover {
-  text-decoration-color: var(--mark);
+  text-decoration-color: var(--accent-ink);
 }
 
 code,
@@ -148,12 +148,12 @@ button {
 }
 
 input[type='range'] {
-  accent-color: var(--ink);
+  accent-color: var(--action);
 }
 
 input[type='checkbox'],
 input[type='radio'] {
-  accent-color: var(--ink);
+  accent-color: var(--action);
 }
 
 table {

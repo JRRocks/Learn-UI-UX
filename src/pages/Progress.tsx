@@ -1,4 +1,4 @@
-import { Award, CircleAlert, Download, Trash2, Upload } from 'lucide-react';
+import { Award, ChevronDown, CircleAlert, Download, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { store, useProgress } from '../app/store';
@@ -138,6 +138,14 @@ export function Progress() {
   const setTheme = (theme: 'system' | 'light' | 'dark') => store.update((s) => ({ ...s, settings: { ...s.settings, theme } }));
   const setGoal = (dailyGoal: number) => store.update((s) => ({ ...s, settings: { ...s.settings, dailyGoal } }));
 
+  // Each lesson with its exercises and where one stands: the ones begun, then the ones still to open.
+  const lessons = MODULES.map((m) => {
+    const ids = exercisesOf(m.id).map((e) => e.id);
+    return { m, ids, v: mastery(p, ids), touched: ids.some((id) => p.items[id]) };
+  });
+  const begun = lessons.filter((l) => l.touched);
+  const waiting = lessons.filter((l) => !l.touched);
+
   return (
     <div className="page">
       <header className="page-head">
@@ -188,7 +196,7 @@ export function Progress() {
         </section>
         <section className="section" aria-labelledby="sum-title">
           <h2 id="sum-title">En chiffres</h2>
-          <dl className="defs">
+          <dl className="figures">
             <div>
               <dt>Épreuves vues</dt>
               <dd className="num">
@@ -216,38 +224,37 @@ export function Progress() {
       </div>
 
       <section className="section" aria-labelledby="mastery-title">
-        <h2 id="mastery-title">Maîtrise par leçon</h2>
-        <ScrollRegion label="Maîtrise par leçon">
-          {/* On a phone each lesson is a block, its name over its state, its meter and its count (app.css).
-              The roles keep it a table for screen readers once its rows are laid out as grids. */}
-          <table className="mastery-table mastery-table--lessons" role="table">
-            <thead role="rowgroup">
-              <tr role="row">
-                <th scope="col" role="columnheader">
-                  Leçon
-                </th>
-                <th scope="col" role="columnheader">
-                  État
-                </th>
-                <th scope="col" role="columnheader">
-                  Maîtrise
-                </th>
-                <th scope="col" role="columnheader" className="num">
-                  Vues
-                </th>
-              </tr>
-            </thead>
-            <tbody role="rowgroup">
-              {MODULES.map((m) => {
-                const ids = exercisesOf(m.id).map((e) => e.id);
-                const touched = ids.some((id) => p.items[id]);
-                const v = mastery(p, ids);
-                return (
+        <h2 id="mastery-title" tabIndex={-1}>Maîtrise par leçon</h2>
+        {/* The lessons begun, each with where one stands; the others, which would all read « Pas commencé,
+            0/16 », are named in a fold: twenty-six identical lines told nothing on a first day. */}
+        {begun.length > 0 ? (
+          <ScrollRegion label="Maîtrise par leçon">
+            {/* On a phone each lesson is a block, its name over its state, its meter and its count (app.css).
+                The roles keep it a table for screen readers once its rows are laid out as grids. */}
+            <table className="mastery-table mastery-table--lessons" role="table">
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col" role="columnheader">
+                    Leçon
+                  </th>
+                  <th scope="col" role="columnheader">
+                    État
+                  </th>
+                  <th scope="col" role="columnheader">
+                    Maîtrise
+                  </th>
+                  <th scope="col" role="columnheader" className="num">
+                    Vues
+                  </th>
+                </tr>
+              </thead>
+              <tbody role="rowgroup">
+                {begun.map(({ m, ids, v }) => (
                   <tr key={m.id} role="row">
                     <th scope="row" role="rowheader">
                       <Link to={`/apprendre/${m.id}`}>{frenchSpacing(m.title)}</Link>
                     </th>
-                    <td role="cell">{masteryLabel(v, touched)}</td>
+                    <td role="cell">{masteryLabel(v, true)}</td>
                     <td role="cell">
                       <span className="meter" style={pct(v)} role="img" aria-label={`${Math.round(v * 100)} %`}>
                         <span />
@@ -259,15 +266,34 @@ export function Progress() {
                       <span className="mastery-unit"> vues</span>
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </ScrollRegion>
+                ))}
+              </tbody>
+            </table>
+          </ScrollRegion>
+        ) : (
+          <p className="muted">
+            Ta maîtrise s’affiche ici, leçon par leçon, dès ta première épreuve. <Link to="/session?mode=daily">Lancer la session du jour</Link>
+          </p>
+        )}
+        {waiting.length > 0 && (
+          <details className="fold">
+            <summary>
+              {count(waiting.length, 'leçon pas encore commencée', 'leçons pas encore commencées')}
+              <ChevronDown aria-hidden="true" />
+            </summary>
+            <ul className="fold-links">
+              {waiting.map(({ m }) => (
+                <li key={m.id}>
+                  <Link to={`/apprendre/${m.id}`}>{frenchSpacing(m.title)}</Link>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
       </section>
 
       <section className="section" aria-labelledby="badges-title">
-        <h2 id="badges-title">Badges</h2>
+        <h2 id="badges-title" tabIndex={-1}>Badges</h2>
         <ul className="badges">
           {BADGES.map((b) => {
             const on = p.badges[b.id];
@@ -287,7 +313,7 @@ export function Progress() {
 
       {p.sessions.length > 0 && (
         <section className="section" aria-labelledby="hist-title">
-          <h2 id="hist-title">Dernières sessions</h2>
+          <h2 id="hist-title" tabIndex={-1}>Dernières sessions</h2>
           <ScrollRegion label="Dernières sessions">
             <table className="mastery-table">
               <thead>
@@ -323,7 +349,7 @@ export function Progress() {
       )}
 
       <section className="section settings" aria-labelledby="set-title">
-        <h2 id="set-title">Réglages</h2>
+        <h2 id="set-title" tabIndex={-1}>Réglages</h2>
         <div className="field">
           <span className="field-label" id="theme-label">
             Apparence
@@ -357,11 +383,8 @@ export function Progress() {
         </div>
         <div className="field">
           <span className="field-label">Mes données</span>
-          <p className="small muted">
-            {frenchSpacing(
-              `Tout reste dans ${here} : aucun compte, aucun serveur. Exporte une sauvegarde pour changer d’appareil ; l’importer remplace la progression de ${here}, après confirmation.`,
-            )}
-          </p>
+          {/* Where the data lives; what an import replaces is said, and confirmed, when one imports. */}
+          <p className="small muted">{frenchSpacing(`Tout reste dans ${here} : ni compte, ni serveur.`)}</p>
           <div className="btn-row">
             <button type="button" className="btn btn-secondary" onClick={exportData}>
               <Download aria-hidden="true" /> Exporter ma progression

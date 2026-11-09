@@ -1,14 +1,26 @@
-import { Check } from 'lucide-react';
+import { Accessibility, Brain, Check, ClipboardCheck, Compass, Globe, Palette, Route, Smartphone, type LucideIcon } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link, pageTitle, usePageTitle } from '../app/router';
 import { useProgress } from '../app/store';
 import { JumpNav } from '../components/JumpNav';
-import { MODULES, THEMES, exercisesOf, type Theme } from '../content';
+import { MODULES, THEMES, exercisesOf, type Theme, type ThemeId } from '../content';
 import { mastery, masteryLabel, type ProgressState } from '../engine/progress';
 import { SEP, count } from '../lib/french';
 import { MdInline, frenchSpacing } from '../lib/markdown';
 
 const pct = (v: number): CSSProperties => ({ '--value': `${Math.round(v * 100)}%` }) as CSSProperties;
+
+/** A mark for each theme, beside its name: eight names in a row read faster with a shape to tell them apart. */
+export const THEME_ICON: Record<ThemeId, LucideIcon> = {
+  fondamentaux: Compass,
+  psychologie: Brain,
+  visuel: Palette,
+  parcours: Route,
+  supports: Smartphone,
+  accessibilite: Accessibility,
+  methode: ClipboardCheck,
+  cultures: Globe,
+};
 
 /** `/impeccable typeset`: the command as impeccable's own documentation writes it. */
 export function Commands({ list }: { list: string[] }) {
@@ -64,11 +76,10 @@ export function Learn() {
         <h1 id="main-title" tabIndex={-1}>
           Leçons
         </h1>
+        {/* How the page is laid out shows; how a theme is trained or evaluated is said on its two buttons. */}
         <p className="lead">
-          {frenchSpacing(
-            `${MODULES.length} leçons rangées en ${THEMES.length} grands thèmes. Lis une leçon, entraîne-toi dessus, puis évalue-toi sur tout un thème : l’évaluation ne corrige qu’à la fin, comme un examen.`,
-          )}
-          {read > 0 && ` Tu en as lu ${read}.`}
+          {MODULES.length} leçons, {THEMES.length} thèmes
+          {read > 0 && `${SEP}${count(read, 'lue', 'lues')}`}
         </p>
         <JumpNav label="Aller à un thème" items={THEMES.map((t) => ({ id: `theme-${t.id}`, label: t.title }))} />
       </header>
@@ -79,21 +90,23 @@ export function Learn() {
           if (!mods.length) return null;
           const tm = themeMastery(p, theme);
           const exercises = themeExerciseIds(theme).length;
+          const ThemeIcon = THEME_ICON[theme.id];
           return (
             <section key={theme.id} className="toc-group" aria-labelledby={`theme-${theme.id}`}>
               <div className="toc-group-head">
                 <h2 id={`theme-${theme.id}`} tabIndex={-1}>
+                  <ThemeIcon aria-hidden="true" />
                   {frenchSpacing(theme.title)}
                 </h2>
-                <p>{frenchSpacing(theme.description)}</p>
-                <p className="toc-group-meta">
-                  {count(mods.length, 'leçon', 'leçons')}
-                  {SEP}
-                  {count(exercises, 'épreuve', 'épreuves')}
-                </p>
+                {/* Where there is room: on a phone, the names of its lessons, just below, say it. */}
+                <p className="toc-group-desc">{frenchSpacing(theme.description)}</p>
                 <div className="field theme-mastery">
                   <span className="field-label">
-                    Maîtrise du thème{' '}: {tm.label.toLowerCase()}
+                    {count(mods.length, 'leçon', 'leçons')}
+                    {SEP}
+                    {count(exercises, 'épreuve', 'épreuves')}
+                    {SEP}
+                    {tm.label.toLowerCase()}
                   </span>
                   <span className="meter" style={pct(tm.value)} aria-hidden="true">
                     <span />
@@ -113,19 +126,25 @@ export function Learn() {
                           {frenchSpacing(m.title)}
                           {p.lessons[m.id] && <Check aria-label="Leçon lue" />}
                         </span>
-                        <span className="toc-summary">
+                        {/* On a phone a lesson is a name, its length and where one stands: its summary (five
+                            lines) and its commands are on its own page (app.css). */}
+                        <span className="toc-summary toc-wide">
                           <MdInline text={m.summary} />
                         </span>
                         <span className="toc-meta">
                           {m.minutes}
-                          {' '}min de lecture{SEP}
-                          {count(ids.length, 'épreuve', 'épreuves')}
-                          {m.commands?.length ? (
-                            <>
-                              {SEP}
-                              <Commands list={m.commands} />
-                            </>
-                          ) : null}
+                          {'\u00A0'}min
+                          <span className="toc-wide">
+                            {' '}
+                            de lecture{SEP}
+                            {count(ids.length, 'épreuve', 'épreuves')}
+                            {m.commands?.length ? (
+                              <>
+                                {SEP}
+                                <Commands list={m.commands} />
+                              </>
+                            ) : null}
+                          </span>
                         </span>
                         <span className="toc-mastery">
                           <span>{masteryLabel(v, touched)}</span>
