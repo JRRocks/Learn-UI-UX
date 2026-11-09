@@ -24,7 +24,7 @@ export function keepFocusInView() {
 /**
  * After an action that moves the very control the learner used with the keyboard: « Descendre » goes
  * down the list with its item, « Voir la valeur experte » goes down as the mock above it grows. The
- * page did not follow, and the button ended under the « Valider » bar or off the screen. Once the page
+ * page did not follow, and the button ended under the « Vérifier » bar or off the screen. Once the page
  * is laid out again, before it is painted, bring the button back between the bars (and once more a
  * moment later, for what is laid out late), with the whole of its `around` ancestor when it fits (the
  * item moved, so that its text shows too). The same conditions as `keepFocusInView`.

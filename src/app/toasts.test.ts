@@ -34,7 +34,7 @@ describe('a focus moved by the learner with the keyboard', () => {
 const box = (left: number, top: number, width: number, height: number): Box => ({ left, top, right: left + width, bottom: top + height });
 
 describe('toasts over the focused control', () => {
-  // 320 × 640, in a session: the badge toast sits just above the « Valider » bar, where the browser
+  // 320 × 640, in a session: the badge toast sits just above the « Vérifier » bar, where the browser
   // parks a link reached with Tab (scroll-padding-bottom).
   const toast = { id: 1, box: box(16, 454, 288, 78) };
 
@@ -81,7 +81,7 @@ describe('toasts in turn', () => {
   const texts = () => shownToasts().map((t) => t.text);
 
   it('shows one toast at a time, each for its full time from when it shows', () => {
-    // Two badges earned by the same answer: stacked, the second rose above the « Valider » bar.
+    // Two badges earned by the same answer: stacked, the second rose above the « Vérifier » bar.
     toast('Badge obtenu : Première épreuve', 'badge');
     toast('Badge obtenu : Trois jours d’affilée', 'badge');
     expect(texts()).toEqual(['Badge obtenu : Première épreuve']);

@@ -96,7 +96,8 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
   const promptId = `prompt-${ex.id}`;
   const contextId = ex.context ? `context-${ex.id}` : undefined;
   const aboutId = about ? `about-${ex.id}` : undefined;
-  const revealed = result !== null && mode === 'practice';
+  const exam = mode === 'exam';
+  const revealed = result !== null && !exam;
   const complete = isComplete(ex, draft);
   const remaining = revealed ? null : completionHint(ex, draft);
 
@@ -105,7 +106,7 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
     const r = grade(ex, toAnswer(draft));
     setResult(r);
     setXp(onAnswered(r, draft));
-    if (mode === 'exam') onNext();
+    if (exam) onNext();
   };
 
   // A new exercise or a new correction on screen: Enter waits a moment before acting again.
@@ -113,7 +114,7 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
     settledAt.current = performance.now();
   }, [revealed]);
 
-  // « Épreuve suivante » takes the place of « Valider »: the second tap of a doubled one landed on it and
+  // « Épreuve suivante » takes the place of « Vérifier »: the second tap of a doubled one landed on it and
   // skipped a correction that was never shown (120 ms apart on a phone). Only a pointer click can be that
   // tap: Enter or Space on the button (detail 0) goes on, as the Enter shortcut does once settled.
   const onNextClick = (e: MouseEvent) => {
@@ -165,16 +166,19 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
     return () => window.removeEventListener('keydown', onKey);
   });
 
+  // What Enter and the button do: the answer is checked and corrected; an exam corrects nothing before
+  // its end, and goes on to the next exercise.
+  const enter = exam ? 'continuer' : 'vérifier';
   const hint =
     ex.type === 'choice'
-      ? 'Raccourcis\u00A0: 1–\u2060' + order.length + ' pour choisir, Entrée pour valider.'
+      ? 'Raccourcis\u00A0: 1–\u2060' + order.length + ' pour choisir, Entrée pour ' + enter + '.'
       : ex.type === 'multi'
         ? 'Coche toutes les bonnes réponses (touches 1–\u2060' + order.length + '), puis Entrée.'
         : ex.type === 'truefalse'
-          ? 'Raccourcis\u00A0: V (vrai), F (faux), Entrée pour valider.'
+          ? 'Raccourcis\u00A0: V (vrai), F (faux), Entrée pour ' + enter + '.'
           : ex.type === 'scenario'
-            ? 'Flèches pour régler un curseur, Entrée pour valider.'
-            : 'Entrée pour valider.';
+            ? 'Flèches pour régler un curseur, Entrée pour ' + enter + '.'
+            : 'Entrée pour ' + enter + '.';
 
   return (
     <article className="task" ref={articleRef}>
@@ -196,15 +200,23 @@ export function ExerciseView({ ex, mode, seed, answered, onAnswered, onNext, nex
         <QuestionStage ex={ex} />
       </header>
 
-      <ExercisePlayer ex={ex} draft={draft} setDraft={setDraft} revealed={revealed} order={order} labelledBy={promptId} describedBy={contextId} />
+      <ExercisePlayer ex={ex} draft={draft} setDraft={setDraft} revealed={revealed} exam={exam} order={order} labelledBy={promptId} describedBy={contextId} />
 
       {revealed && result && <Feedback ref={feedbackRef} ex={ex} result={result} draft={draft} xp={xp} />}
 
       <div className="task-actions">
         {!revealed ? (
           <>
+            {/* The button says what it does (the lesson « Rédaction UX » on « Valider », the French Submit):
+                the answer is checked; in an exam, which corrects nothing before its end, the next exercise comes. */}
             <button type="button" className="btn btn-primary" onClick={validate} disabled={!complete} aria-describedby={remaining ? `left-${ex.id}` : undefined}>
-              Valider
+              {exam ? (
+                <>
+                  {nextLabel} <ArrowRight aria-hidden="true" className="icon-end" />
+                </>
+              ) : (
+                'Vérifier'
+              )}
             </button>
             {/* One block beside the button, or under it when a large text size leaves it too little room (app.css). */}
             <span className="task-actions-text">
@@ -247,6 +259,8 @@ interface PlayerProps {
   setDraft: (d: Draft) => void;
   /** Once validated: the correction, on the answer given (`draft`). */
   revealed: boolean;
+  /** In an exam, nothing is checked before its end: the instructions do not speak of « Vérifier ». */
+  exam?: boolean;
   order: string[];
   labelledBy: string;
   describedBy?: string;

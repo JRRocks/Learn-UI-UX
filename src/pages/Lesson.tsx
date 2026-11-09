@@ -124,7 +124,7 @@ function MarkRead({ read, onMark }: { read: boolean; onMark: () => void }) {
   );
 }
 
-/** The text of the lesson, once its chunk has arrived. */
+/** The text of the lesson and its key rules, once its chunk has arrived; what to do next, then its sources, follow. */
 function Article({ m }: { m: ModuleContent }) {
   return (
     <>
@@ -160,11 +160,6 @@ function Article({ m }: { m: ModuleContent }) {
             </li>
           ))}
         </ul>
-      </section>
-
-      <section className="lesson-section" aria-labelledby="h-sources">
-        <h2 id="h-sources">Sources</h2>
-        <SourceList sources={m.sources} />
       </section>
     </>
   );
@@ -293,6 +288,13 @@ export function Lesson({ id }: { id: string }) {
                   <CountryQuizzes />
                 </section>
               )}
+              {/* The sources close the lesson, as an appendix: before the buttons, their links (16 for
+                  « Lois de l’UX », 28 for « UI interculturelle ») put one to three screens of a phone
+                  between the end of the reading and « S’entraîner sur cette leçon ». */}
+              <section className="lesson-section" aria-labelledby="h-sources">
+                <h2 id="h-sources">Sources</h2>
+                <SourceList sources={full.sources} />
+              </section>
             </>
           ) : failed ? (
             <LoadFailed what="cette leçon" />

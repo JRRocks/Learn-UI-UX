@@ -59,10 +59,11 @@ export function Home() {
           {fresh ? 'Deviens meilleur en UI/UX, une épreuve à la fois' : 'Aujourd’hui'}
         </h1>
         <p className="lead">
+          {/* One sentence: with three, « Faire ma première session » started under the tab bar of a 360 × 780
+              phone (734 px for 723), the first action of a first visit one scroll away. « Comment ça marche »,
+              just below, says the rest. */}
           {fresh
-            ? frenchSpacing(
-                'Des leçons courtes tirées des références d’impeccable, puis des épreuves : choisir le meilleur visuel, repérer l’erreur, régler une valeur à l’œil. Chaque réponse est corrigée avec le choix recommandé et son pourquoi.',
-              )
+            ? 'Des leçons courtes, puis des épreuves corrigées avec le choix recommandé et son pourquoi.'
             : `${dateLabel.charAt(0).toUpperCase()}${dateLabel.slice(1)}.`}
         </p>
       </header>

@@ -13,7 +13,7 @@ export const TOAST_MS = 4500;
 
 /**
  * One toast on screen at a time; the others wait their turn, in order. Two badges earned by the same
- * answer used to stack up: from 720 px, the second rose above the « Valider » bar, over the end of the
+ * answer used to stack up: from 720 px, the second rose above the « Vérifier » bar, over the end of the
  * correction (the band of the bar holds one toast, app.css).
  */
 let queue: Toast[] = [];
@@ -113,7 +113,7 @@ export function keyMoves(defer: (done: () => void) => void = (done) => window.se
 
 /**
  * The room the page keeps at its end for the toasts, in px: from the top of the toast on screen to the
- * bottom edge of the screen (`viewport`), where the toasts stand once the « Valider » bar no longer sticks
+ * bottom edge of the screen (`viewport`), where the toasts stand once the « Vérifier » bar no longer sticks
  * there (app.css). Scrolled to its end, the page then shows its last control clear of a toast: at 320 px
  * with a 32 px text, a toast 266 to 320 px tall covered « Épreuve suivante » in the 64 px kept for it.
  * The room only grows (`current`): shrunk when the toast goes, the page would jump under the reader.

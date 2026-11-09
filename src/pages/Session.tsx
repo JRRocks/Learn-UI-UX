@@ -15,6 +15,7 @@ import type { Exercise } from '../engine/types';
 import { keepFocusInView } from '../lib/focusInView';
 import { SEP } from '../lib/french';
 import { Md, MdInline, frenchSpacing } from '../lib/markdown';
+import { PHONE_DOCK, useMedia } from '../lib/useMedia';
 import { LoadFailed, Loading } from './LoadFailed';
 import {
   answeredCurrent,
@@ -515,26 +516,34 @@ function ByLesson({ played }: { played: Played[] }) {
 
 const AGAIN_STYLE: CSSProperties = { whiteSpace: 'normal', textAlign: 'center', textWrap: 'balance', paddingBlock: 'var(--s2)' };
 
-/** The same kind of session again, named for what it starts (an empty review would lead nowhere). */
-function nextSession(spec: SessionSpec, label: string): { to: string; text: string } {
+/**
+ * The same kind of session again, named for what it starts (an empty review would lead nowhere). `short`
+ * names it in the bar of a phone, beside « Accueil », where the name of a lesson would take four lines:
+ * the summary's title says which session it is.
+ */
+function nextSession(spec: SessionSpec, label: string): { to: string; text: string; short: string } {
   switch (spec.kind) {
     case 'daily':
-      return { to: '/session?mode=daily', text: 'Nouvelle session du jour' };
+      return { to: '/session?mode=daily', text: 'Nouvelle session du jour', short: 'Nouvelle session du jour' };
     case 'module':
-      return { to: `/session?mode=module&id=${encodeURIComponent(spec.moduleId)}`, text: `Nouvelle session : ${label}` };
+      return { to: `/session?mode=module&id=${encodeURIComponent(spec.moduleId)}`, text: `Nouvelle session : ${label}`, short: 'Nouvelle session' };
     case 'theme':
-      return { to: `/session?mode=theme&id=${encodeURIComponent(spec.themeId)}`, text: `Nouvelle session : ${label}` };
+      return { to: `/session?mode=theme&id=${encodeURIComponent(spec.themeId)}`, text: `Nouvelle session : ${label}`, short: 'Nouvelle session' };
     case 'evaluation':
-      return { to: `/session?mode=evaluation&id=${encodeURIComponent(spec.themeId)}`, text: `Nouvelle évaluation : ${THEME_BY_ID.get(spec.themeId as ThemeId)?.title ?? ''}` };
+      return {
+        to: `/session?mode=evaluation&id=${encodeURIComponent(spec.themeId)}`,
+        text: `Nouvelle évaluation : ${THEME_BY_ID.get(spec.themeId as ThemeId)?.title ?? ''}`,
+        short: 'Nouvelle évaluation',
+      };
     case 'type':
-      return { to: `/session?mode=type&id=${spec.type}`, text: `Nouvelle session : ${label}` };
+      return { to: `/session?mode=type&id=${spec.type}`, text: `Nouvelle session : ${label}`, short: 'Nouvelle session' };
     case 'culture':
-      return { to: `/session?mode=culture${spec.cultureId ? `&id=${encodeURIComponent(spec.cultureId)}` : ''}`, text: `Nouvelle session : ${label}` };
+      return { to: `/session?mode=culture${spec.cultureId ? `&id=${encodeURIComponent(spec.cultureId)}` : ''}`, text: `Nouvelle session : ${label}`, short: 'Nouvelle session' };
     case 'exam':
-      return { to: '/session?mode=exam', text: 'Nouvel examen blanc' };
+      return { to: '/session?mode=exam', text: 'Nouvel examen blanc', short: 'Nouvel examen blanc' };
     case 'review':
     case 'mistakes':
-      return { to: '/session?mode=daily', text: 'Lancer la session du jour' };
+      return { to: '/session?mode=daily', text: 'Lancer la session du jour', short: 'Lancer la session du jour' };
   }
 }
 
@@ -557,6 +566,10 @@ function Summary({ label, exercises, failed, played, exam, spec, runId }: Summar
   // « Mes erreurs » only holds wrong answers: a « presque » is not one (engine/session.ts).
   const missed = t.wrong > 0;
   const again = nextSession(spec, label);
+  // On a phone the next step stays in a bar at the bottom of the screen, as « Vérifier » did all along
+  // the session: at the end of the page, it came after ten corrections (thirty for an exam), on a
+  // screen without tabs, no way out in sight.
+  const dock = useMedia(PHONE_DOCK);
 
   return (
     <div className="page page--narrow">
@@ -596,21 +609,49 @@ function Summary({ label, exercises, failed, played, exam, spec, runId }: Summar
         </ul>
       </section>
 
-      <div className="btn-row">
-        {missed && (
-          <Link to="/session?mode=mistakes" className="btn btn-primary">
-            Refaire mes erreurs
+      {dock ? (
+        <>
+          {/* What the bar leaves out, where the page ends. */}
+          {missed && (
+            <div className="btn-row">
+              <Link to={again.to} className="btn btn-secondary" style={AGAIN_STYLE}>
+                {frenchSpacing(again.text)}
+              </Link>
+            </div>
+          )}
+          <div className="summary-dock">
+            {missed ? (
+              <Link to="/session?mode=mistakes" className="btn btn-primary">
+                Refaire mes erreurs
+              </Link>
+            ) : (
+              // Its name starts with the words it shows (WCAG 2.5.3), then says which session.
+              <Link to={again.to} className="btn btn-primary" aria-label={again.text === again.short ? undefined : frenchSpacing(again.text)}>
+                {again.short}
+              </Link>
+            )}
+            <Link to="/" className="btn btn-secondary">
+              Accueil
+            </Link>
+          </div>
+        </>
+      ) : (
+        <div className="btn-row">
+          {missed && (
+            <Link to="/session?mode=mistakes" className="btn btn-primary">
+              Refaire mes erreurs
+            </Link>
+          )}
+          {/* It names the session it starts, which can be long: on narrow screens it wraps on two even
+              lines, clear of the button's edges. */}
+          <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'} style={AGAIN_STYLE}>
+            {frenchSpacing(again.text)}
           </Link>
-        )}
-        {/* It names the session it starts, which can be long: on narrow screens it wraps on two even
-            lines, clear of the button's edges. */}
-        <Link to={again.to} className={missed ? 'btn btn-secondary' : 'btn btn-primary'} style={AGAIN_STYLE}>
-          {frenchSpacing(again.text)}
-        </Link>
-        <Link to="/" className="btn btn-ghost">
-          Retour à l’accueil
-        </Link>
-      </div>
+          <Link to="/" className="btn btn-ghost">
+            Retour à l’accueil
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

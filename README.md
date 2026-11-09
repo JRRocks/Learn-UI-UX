@@ -59,7 +59,8 @@ Depuis le téléphone, téléchargez
 
 Sur ordinateur, un rail les range par usage : **Accueil**, puis *Apprendre* (Leçons, Cultures,
 Ressources) et *Progresser* (S’entraîner, Progression). Sur téléphone, la barre d’onglets garde
-Accueil, Leçons, S’entraîner, Cultures et Progression ; le bouton **Menu** ouvre le plan complet.
+Accueil, Leçons, S’entraîner, Cultures et Progression ; le bouton **Menu** ouvre le plan complet,
+en haut de chaque page : sa barre défile avec la page, seuls les onglets restent à l’écran.
 
 | Page | Contenu |
 |---|---|
@@ -89,10 +90,10 @@ Accueil, Leçons, S’entraîner, Cultures et Progression ; le bouton **Menu** o
 
 Une épreuve ratée revient en révision le jour même ; chaque réussite espace la suivante, selon
 des boîtes de Leitner (1, 3, 7, 16, 35, 90 jours). Tout est utilisable au clavier (1–6 pour
-choisir, Entrée pour valider, actifs quand le focus est dans l’épreuve) et au pouce : sur
-téléphone, l’action de l’écran reste en bas, sur toute la largeur (« Valider » puis « Épreuve
-suivante », « Vrai » et « Faux » du défi chrono, « Retourner la fiche » puis les quatre notes),
-et un double appui ne saute jamais une correction.
+choisir, Entrée pour vérifier, actifs quand le focus est dans l’épreuve) et au pouce : sur
+téléphone, l’action de l’écran reste en bas, sur toute la largeur (« Vérifier » puis « Épreuve
+suivante », « Vrai » et « Faux » du défi chrono, « Retourner la fiche » puis les quatre notes,
+la suite et « Accueil » dans le bilan), et un double appui ne saute jamais une correction.
 
 ## Lancer le projet
 
@@ -106,8 +107,8 @@ npm run check:overflow   # aucune page ni épreuve à choix visuel (question pui
                          # défile horizontalement à 320, 360 et 390 px ; puis, texte du navigateur
                          # agrandi à 20, 24 et 32 px (de 320 à 768 px, à la souris) : pages, deux
                          # épreuves de chaque format et toutes celles qui portent une unité en toutes
-                         # lettres, avant et après « Valider », puis leur bilan, défi chrono, fiches ;
-                         # au doigt (16 et 18 px) : défi chrono et fiches, dont les actions tiennent en bas ;
+                         # lettres, avant et après « Vérifier », puis leur bilan, défi chrono, fiches ;
+                         # au doigt (16 et 18 px) : défi chrono, fiches et bilan, dont les actions tiennent en bas ;
                          # partout, sans plus de trois fins de ligne coupées de suite,
                          # ni mot d’un libellé (élément à ordonner, option, bouton, badge, titre, bilan…)
                          # ni unité en toutes lettres coupés sans trait d’union, ni nombre séparé de son

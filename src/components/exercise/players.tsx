@@ -104,6 +104,8 @@ interface P<E extends Exercise, D extends Draft> {
   draft: D;
   setDraft: (d: D) => void;
   revealed: boolean;
+  /** In an exam the button goes on to the next exercise, and checks nothing before the end. */
+  exam?: boolean;
   /** Display order of options / items / right-hand labels. */
   order: string[];
   labelledBy: string;
@@ -333,7 +335,7 @@ export function TrueFalsePlayer({ ex, draft, setDraft, revealed, labelledBy, des
 
 /* ---------------------------------------------------------------- hotspot */
 
-export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExercise, Extract<Draft, { type: 'hotspot' }>>) {
+export function HotspotPlayer({ ex, draft, setDraft, revealed, exam }: P<HotspotExercise, Extract<Draft, { type: 'hotspot' }>>) {
   const needed = ex.hotspots.filter((h) => h.correct).length;
   // On a touch screen the instruction speaks of touching, not of clicking and tabbing.
   const coarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
@@ -385,8 +387,8 @@ export function HotspotPlayer({ ex, draft, setDraft, revealed }: P<HotspotExerci
           {full
             ? 'Tu as atteint le nombre de zones\u00A0: désélectionne-en une pour changer.'
             : coarse
-              ? 'Touche les éléments fautifs, puis valide.'
-              : 'Clique (ou Tab puis Entrée) sur les éléments fautifs, puis valide.'}
+              ? `Touche les éléments fautifs, puis ${exam ? 'passe à la suite' : 'vérifie'}.`
+              : `Clique (ou Tab puis Entrée) sur les éléments fautifs, puis ${exam ? 'passe à la suite' : 'vérifie'}.`}
         </p>
       )}
       {revealed && (
@@ -791,7 +793,7 @@ function Setting({
  * validated, the settings are evaluated criterion by criterion, and the expert version can be shown
  * in place of the learner's.
  */
-export function ScenarioPlayer({ ex, draft, setDraft, revealed }: P<ScenarioExercise, Extract<Draft, { type: 'scenario' }>>) {
+export function ScenarioPlayer({ ex, draft, setDraft, revealed, exam }: P<ScenarioExercise, Extract<Draft, { type: 'scenario' }>>) {
   const [showIdeal, setShowIdeal] = useState(false);
   const ideal = useMemo(() => idealValues(ex), [ex]);
   const shown = revealed && showIdeal ? ideal : draft.values;
@@ -840,7 +842,7 @@ export function ScenarioPlayer({ ex, draft, setDraft, revealed }: P<ScenarioExer
           })}
           {!revealed && (
             <p className="task-hint">
-              {frenchSpacing(`Règle l’écran comme tu le livrerais, puis valide : tes réglages seront évalués sur ${ex.criteria.length} critères.`)}
+              {frenchSpacing(`Règle l’écran comme tu le livrerais${exam ? '' : ', puis vérifie'} : tes réglages seront évalués sur ${ex.criteria.length} critères.`)}
             </p>
           )}
         </div>

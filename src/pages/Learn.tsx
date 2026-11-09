@@ -36,17 +36,19 @@ export function themeMastery(p: ProgressState, t: Theme): { value: number; touch
 }
 
 /**
- * « S’évaluer », then « S’entraîner », on a theme. Each says which theme it opens: several of them
- * follow each other on a page (WCAG 2.4.4).
+ * « S’entraîner », then « S’évaluer », on a theme, in the order one does them. Each says which theme it
+ * opens: several of them follow each other on a page (WCAG 2.4.4). Both are outlined: eight themes each
+ * with a filled « S’évaluer » put up to four filled buttons on a phone's screen, against « Commencer » of
+ * the day's session (one distinct element a screen, for its key action: the lesson « Lois de l’UX »).
  */
 export function ThemeActions({ theme }: { theme: Theme }) {
   return (
     <div className="btn-row">
-      <Link to={`/session?mode=evaluation&id=${theme.id}`} className="btn btn-primary" aria-label={`S’évaluer : ${theme.title}`}>
-        S’évaluer
-      </Link>
       <Link to={`/session?mode=theme&id=${theme.id}`} className="btn btn-secondary" aria-label={`S’entraîner : ${theme.title}`}>
         S’entraîner
+      </Link>
+      <Link to={`/session?mode=evaluation&id=${theme.id}`} className="btn btn-secondary" aria-label={`S’évaluer : ${theme.title}`}>
+        S’évaluer
       </Link>
     </div>
   );

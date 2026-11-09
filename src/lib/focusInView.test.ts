@@ -4,7 +4,7 @@ import { outsideBand } from './focusInView';
 const box = (top: number, height: number) => ({ top, bottom: top + height });
 
 describe('a focused control and the band the bars leave free', () => {
-  // 320 × 640 in a session: the top bar ends at 69, the « Valider » bar starts at 544.
+  // 320 × 640 in a session: the top bar ends at 69, the « Vérifier » bar starts at 544.
   const [top, bottom] = [69, 544];
 
   it('leaves a control wholly in the band', () => {
@@ -13,7 +13,7 @@ describe('a focused control and the band the bars leave free', () => {
     expect(outsideBand(box(500, 44), top, bottom)).toBe(false);
   });
 
-  it('finds a control that « Descendre » took under the « Valider » bar, even by a part, or off the screen', () => {
+  it('finds a control that « Descendre » took under the « Vérifier » bar, even by a part, or off the screen', () => {
     expect(outsideBand(box(520, 40), top, bottom)).toBe(true);
     expect(outsideBand(box(707, 40), top, bottom)).toBe(true);
     expect(outsideBand(box(40, 40), top, bottom)).toBe(true);

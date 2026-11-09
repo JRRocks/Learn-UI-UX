@@ -4,7 +4,7 @@
 // Then the same with a larger default text size, as a reader sets it in the browser (20, 24 and 32 px
 // instead of 16, WCAG 1.4.4), at 320, 360, 390 and 768 px with a mouse (the keyboard hints show):
 // every page, two exercises of each format and every exercise with a unit written in full (« 15 000
-// caractères »), before and after « Valider », then their session's summary, the timed challenge and
+// caractères »), before and after « Vérifier », then their session's summary, the timed challenge and
 // the cards. Everywhere, a bar that stays on screen must fit in the room kept for it (scroll-padding),
 // or a control reached with Tab could end up under it (WCAG 2.4.11), no more than three lines in a row
 // may end on a hyphen the browser added (French typography; long words split under 15em), no French
@@ -75,6 +75,7 @@ function measure([LABELS, units]) {
     ['.task-actions', 'bottom'],
     ['.task--blitz > .tf', 'bottom'],
     ['.card-actions', 'bottom'],
+    ['.summary-dock', 'bottom'],
     ['.tabbar', 'bottom'],
   ]) {
     const el = document.querySelector(selector);
@@ -342,8 +343,8 @@ try {
     failures += bad;
     await context.close();
   }
-  // The exercises in one « Mes erreurs » run: question, first option, « Valider », correction, next.
-  // The page is driven through the DOM: a badge toast may lie over « Valider » for a few seconds.
+  // The exercises in one « Mes erreurs » run: question, first option, « Vérifier », correction, next.
+  // The page is driven through the DOM: a badge toast may lie over « Vérifier » for a few seconds.
   for (const width of DEFAULT_TEXT && EXERCISES ? WIDTHS : []) {
     const context = await phone(width);
     let bad = 0;
@@ -355,23 +356,24 @@ try {
       seen.add(id);
       show(`${width} px épreuve ${id} (${step})`, m);
     });
-    console.log(`${width} px : ${bad ? `${bad} épreuve(s) en défaut` : 'aucun débordement'} sur ${ids.visual.length} épreuves à choix visuel, avant et après « Valider ».`);
+    console.log(`${width} px : ${bad ? `${bad} épreuve(s) en défaut` : 'aucun débordement'} sur ${ids.visual.length} épreuves à choix visuel, avant et après « Vérifier ».`);
     failures += bad;
     await context.close();
   }
 
-  // At the finger, the timed challenge and the cards keep their actions in a bar at the bottom of the
-  // screen (« Vrai » and « Faux », « Retourner la fiche », the four grades): three statements and three
-  // cards, before and after the answer, at the default text size and at 18 px (a phone's text one notch up).
+  // At the finger, the timed challenge, the cards and a session's summary keep their actions in a bar at
+  // the bottom of the screen (« Vrai » and « Faux », « Retourner la fiche », the four grades, the next
+  // step and « Accueil »): three statements and three cards, before and after the answer, then the summary
+  // of a run of two exercises, at the default text size and at 18 px (a phone's text one notch up).
   for (const width of EXERCISES ? WIDTHS : []) {
     for (const size of [DEFAULT_TEXT ? 16 : 0, LARGE_TEXT ? 18 : 0].filter(Boolean)) {
       const context = await phone(width);
       const page = await newPage(context, size);
       const tag = `${width} px au doigt, texte ${size} px`;
       let bad = 0;
-      const check = async (label) => {
-        await page.evaluate(() => document.fonts.ready);
-        const m = await page.evaluate(measure, [LABELS, UNITS]);
+      const check = async (label, on = page) => {
+        await on.evaluate(() => document.fonts.ready);
+        const m = await on.evaluate(measure, [LABELS, UNITS]);
         if (!fails(m)) return;
         bad++;
         show(`${tag} ${label}`, m);
@@ -397,7 +399,14 @@ try {
         // A click within the settling delay is not a grade: Enter on the button is.
         await page.locator('.grades .btn').first().press('Enter');
       }
-      console.log(`${tag} : ${bad ? `${bad} écran(s) en défaut` : 'aucun débordement'} sur le défi chrono et les fiches.`);
+      // The summary, at its top and at its end, where the bar ends the page.
+      const run = await playRun(context, size, base, ids.sample.slice(0, 2), async () => {}, { answerAll: true });
+      await press(run);
+      await run.waitForSelector('.recap details', { timeout: 30000 });
+      await check('bilan', run);
+      await run.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await check('bilan, fin de page', run);
+      console.log(`${tag} : ${bad ? `${bad} écran(s) en défaut` : 'aucun débordement'} sur le défi chrono, les fiches et le bilan.`);
       failures += bad;
       await context.close();
     }

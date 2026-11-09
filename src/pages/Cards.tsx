@@ -201,7 +201,7 @@ export function Cards({ query }: { query: URLSearchParams }) {
               Leçon{'\u00A0'}: <MdInline text={from?.title ?? ''} />
             </p>
           </div>
-          {/* On a phone, a bar at the bottom of the screen, under the thumb, as « Valider » is in a session (app.css). */}
+          {/* On a phone, a bar at the bottom of the screen, under the thumb, as « Vérifier » is in a session (app.css). */}
           <div className="card-actions">
             {!shown ? (
               <div className="btn-row">

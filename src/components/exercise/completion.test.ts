@@ -23,7 +23,7 @@ const match: Exercise = {
   pairs: ['a', 'b', 'c', 'd'].map((id) => ({ id, left: id, right: id.toUpperCase() })),
 };
 
-describe('completionHint (state-2: what « Valider » still waits for)', () => {
+describe('completionHint (state-2: what « Vérifier » still waits for)', () => {
   it('counts the rated criteria of a grid, 0 included', () => {
     expect(completionHint(grid, { type: 'grid', scores: {} })).toBe('0 / 3 critères notés');
     expect(completionHint(grid, { type: 'grid', scores: { a: 0, c: 4 } })).toBe('2 / 3 critères notés');

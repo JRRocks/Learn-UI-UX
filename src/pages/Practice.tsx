@@ -136,7 +136,7 @@ export function Practice() {
           </h2>
           <p className="small">
             {frenchSpacing(
-              `L’évaluation tire ${SESSION_SIZE.evaluation} épreuves de toutes les leçons du thème et ne corrige qu’à la fin ; l’entraînement en tire ${SESSION_SIZE.theme}, corrigées une à une.`,
+              `L’entraînement tire ${SESSION_SIZE.theme} épreuves de toutes les leçons du thème, corrigées une à une ; l’évaluation en tire ${SESSION_SIZE.evaluation} et ne corrige qu’à la fin.`,
             )}
           </p>
         </div>

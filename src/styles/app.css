@@ -296,6 +296,33 @@ html:has(.menu-sheet[open]) {
   }
 }
 
+/* Phones: the top bar leaves with the page. Stuck, it kept 68 px of the screen, and 125 px with the tab
+   bar (16 % of a 780 px phone), for a logo that leads where « Accueil » does, a theme switch that is in
+   the settings too and a menu that holds the five tabs, Ressources and À propos, while a lesson is 17 to
+   44 screens long. The tab bar stays; the menu and the theme are at the top of each page. Wider (a
+   tablet), the bar still sticks. */
+@media (max-width: 39.99875em) {
+  .topbar {
+    position: static;
+  }
+
+  html:has(.topbar) {
+    scroll-padding-top: calc(env(safe-area-inset-top) + var(--s3));
+  }
+
+  /* Edge to edge (the Android app, the app installed on iOS), the page would now scroll under the
+     clock and the battery of the status bar, which the bar used to back: a strip of the page's color
+     stays there, as tall as that inset (nothing in a browser's tab). */
+  .shell:has(> .topbar)::before {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    height: env(safe-area-inset-top);
+    background: var(--paper);
+  }
+}
+
 /* ---------- Desktop rail ---------- */
 
 .rail {
@@ -1959,7 +1986,7 @@ html:has(.menu-sheet[open]) {
   color: var(--ink-2);
 }
 
-/* One row: the button, then what « Valider » waits for and the keyboard hint, which wrap beside it
+/* One row: the button, then what « Vérifier » waits for and the keyboard hint, which wrap beside it
    (wrapped under it, they made the sticky bar up to 137 px tall). */
 .task-actions {
   display: flex;
@@ -2002,7 +2029,7 @@ html:has(.menu-sheet[open]) {
   overflow-wrap: normal;
 }
 
-/* « 7 / 10 critères notés »: says why « Valider » is still unavailable (grid, match). */
+/* « 7 / 10 critères notés »: says why « Vérifier » is still unavailable (grid, match). */
 .task-remaining {
   font-size: var(--t-small);
   font-weight: 600;
@@ -4181,7 +4208,7 @@ fieldset.tf {
   padding-bottom: var(--s8);
 }
 
-/* Without the « Valider » bar (a session's summary, an empty selection, the flashcards, the start and
+/* Without the « Vérifier » bar (a session's summary, an empty selection, the flashcards, the start and
    the end of the challenge), the toasts go down to the edge of the screen and the page ends with room
    for one of two lines under its last buttons: they sat where the bar would be, on « Nouvelle session
    du jour », and a tap there closed the toast instead of starting the session. A taller toast (a large
@@ -4195,7 +4222,7 @@ fieldset.tf {
   bottom: calc(var(--s3) + env(safe-area-inset-bottom));
 }
 
-/* Phones held upright: the toasts sit just above the sticky « Valider » bar, so the bar ends the page
+/* Phones held upright: the toasts sit just above the sticky « Vérifier » bar, so the bar ends the page
    where it sticks, at the bottom of the screen (lifted 64 px at the end, it slid under them). Wider,
    the toasts sit in the bar; on short screens it no longer sticks, and the 64 px keep it above them. */
 @media (min-height: 30rem) and (max-width: 44.99875em) {
@@ -4257,7 +4284,7 @@ fieldset.tf {
   bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
 }
 
-/* From 720 px the toasts take the end of the « Valider » bar, which its button and its count leave
+/* From 720 px the toasts take the end of the « Vérifier » bar, which its button and its count leave
    free: above the bar, they hid the end of the correction (« Revoir la leçon », the sources) or the
    options of the exam's next question. */
 @media (min-width: 45em) and (min-height: 30rem) {
@@ -4268,7 +4295,7 @@ fieldset.tf {
 }
 
 /* Up to 56em the bar is too narrow for its keyboard hint and a toast side by side: the toast lay over the
-   end of the hint (« …Entrée po[ur valider.] », up to 210 px of « …(touches 1–6), puis Entrée. »). The
+   end of the hint (« …Entrée po[ur vérifier.] », up to 210 px of « …(touches 1–6), puis Entrée. »). The
    hint steps aside while a toast is there, and comes back with it gone; the bar keeps its height. */
 @media (min-width: 45em) and (max-width: 55.99875em) and (min-height: 30rem) {
   .shell[data-focus]:has(.toast) .task-actions .shortcut-hint {
@@ -4542,7 +4569,7 @@ fieldset.tf {
     padding-inline-start: calc(24px + var(--s2));
   }
 
-  /* The « Valider » bar: what it waits for and the keyboard hint stay beside the button while they get
+  /* The « Vérifier » bar: what it waits for and the keyboard hint stay beside the button while they get
      10em there (and never less than their longest word); otherwise they go under it, across the bar. */
   .task-actions {
     display: flex;
@@ -4859,7 +4886,7 @@ fieldset.tf {
    Phones, at the finger: the actions of a task under the thumb
    ========================================================================= */
 
-/* « Valider » then « Épreuve suivante » are the two taps of every exercise. On a phone the button takes
+/* « Vérifier » then « Épreuve suivante » are the two taps of every exercise. On a phone the button takes
    the width of the bar, within reach of either thumb (Fitts: the most frequent target is the largest
    and the nearest); it was 110 px wide in the bottom left corner, the far end of a right thumb's arc.
    What it still waits for (« 2 / 4 associations faites ») reads above it. Narrower than 20em the bar
@@ -4909,10 +4936,10 @@ fieldset.tf {
   }
 
   /* The flashcards: « Retourner la fiche », then the four grades, in a bar at the bottom of the screen,
-     as « Valider » is in a session. Under the card, the button moved with the length of each question,
+     as « Vérifier » is in a session. Under the card, the button moved with the length of each question,
      and the second row of grades (« Bien », « Facile ») fell below a 780 px screen once the answer took
      five lines: half the choices, one scroll away, at each of the twenty cards. The page, the player
-     and the stack fill the screen, as they do around the « Valider » bar. */
+     and the stack fill the screen, as they do around the « Vérifier » bar. */
   .shell[data-focus]:has(.card-actions),
   .shell[data-focus] .main:has(.card-actions) {
     display: flex;
@@ -4972,6 +4999,65 @@ fieldset.tf {
      title (the count is in the bar at the top). */
   .card-intro[data-seen] {
     display: none;
+  }
+
+  /* A session's summary: its next step (« Refaire mes erreurs », or the same session again) and
+     « Accueil » in the bar where « Vérifier » stood (Session.tsx renders it there for these screens).
+     The page fills the screen, the bar ends it; the toasts (a badge often comes with the summary) and a
+     control reached with Tab stay clear of it. */
+  .shell[data-focus]:has(.summary-dock),
+  .shell[data-focus] .main:has(.summary-dock) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shell[data-focus] .main:has(.summary-dock) {
+    padding-bottom: 0;
+  }
+
+  .shell[data-focus] .main:has(.summary-dock),
+  .page:has(> .summary-dock) {
+    flex: 1 0 auto;
+  }
+
+  .page:has(> .summary-dock) {
+    width: 100%;
+  }
+
+  .summary-dock {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    gap: var(--s2);
+    margin: auto calc(var(--s4) * -1) 0;
+    padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));
+    background: var(--paper);
+    box-shadow: 0 -1px 0 var(--rule);
+  }
+
+  /* « Refaire mes erreurs » on one line beside « Accueil » at 360 px (165 px of text for 160 with the
+     24 px a button keeps on either side). */
+  .summary-dock > .btn {
+    padding-inline: var(--s4);
+  }
+
+  .summary-dock > .btn-primary {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-wrap: balance;
+  }
+
+  .summary-dock > .btn-secondary {
+    flex: none;
+  }
+
+  .shell[data-focus]:has(.summary-dock) .toasts {
+    bottom: calc(var(--actions-h) + var(--s3) + env(safe-area-inset-bottom));
+  }
+
+  html:has(.summary-dock) {
+    scroll-padding-bottom: calc(var(--actions-h) + env(safe-area-inset-bottom) + var(--s3));
   }
 }
 
